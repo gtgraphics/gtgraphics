@@ -9,6 +9,7 @@ gem 'devise'
 gem 'cancan'
 
 # Models
+gem 'paperclip'
 
 # Controllers
 

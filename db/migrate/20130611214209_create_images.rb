@@ -1,7 +1,8 @@
-class CreatePictures < ActiveRecord::Migration
+class CreateImages < ActiveRecord::Migration
   def change
-    create_table :pictures do |t|
+    create_table :images do |t|
       t.string :title
+      t.string :slug
       t.text :description
 
       t.timestamps
