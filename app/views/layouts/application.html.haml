@@ -1,0 +1,13 @@
+!!!
+%html
+  %head
+    %title
+      - if content_for? :title
+        = yield :title
+        &middot;
+      GT Graphics
+    = stylesheet_link_tag 'application', media: 'all', data: { turbolinks_track: true }
+    = csrf_meta_tags
+  %body
+    = yield
+    = javascript_include_tag 'application', data: { turbolinks_track: true }
