@@ -1,9 +1,9 @@
 GTGraphics::Application.routes.draw do
-  resources :pages
+  resources :redirections
 
   resources :images
-
-  resources :pictures
+  resources :testimonials
+  resources :pages, path: '/'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -1,0 +1,16 @@
+= form_for @redirection do |f|
+  - if @redirection.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@redirection.errors.count, "error")} prohibited this redirection from being saved:"
+      %ul
+        - @redirection.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :source_url
+    = f.text_field :source_url
+  .field
+    = f.label :destination_url
+    = f.text_field :destination_url
+  .actions
+    = f.submit 'Save'

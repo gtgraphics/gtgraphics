@@ -1,0 +1,21 @@
+%h1 Listing redirections
+
+%table
+  %tr
+    %th Source url
+    %th Destination url
+    %th
+    %th
+    %th
+
+  - @redirections.each do |redirection|
+    %tr
+      %td= redirection.source_url
+      %td= redirection.destination_url
+      %td= link_to 'Show', redirection
+      %td= link_to 'Edit', edit_redirection_path(redirection)
+      %td= link_to 'Destroy', redirection, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Redirection', new_redirection_path

@@ -2,7 +2,7 @@ class Page < ActiveRecord::Base
   validates :title, presence: true
   validates :slug, presence: true, uniqueness: true
 
-  before :save, :set_slug
+  before_save :set_slug
 
   private
   def set_slug

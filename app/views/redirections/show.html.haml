@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Source url:
+  = @redirection.source_url
+%p
+  %b Destination url:
+  = @redirection.destination_url
+
+= link_to 'Edit', edit_redirection_path(@redirection)
+\|
+= link_to 'Back', redirections_path

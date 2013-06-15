@@ -1,17 +1,15 @@
-development:
+defauls: &defaults
   adapter: postgresql
   encoding: unicode
-  database: gtgraphics_development
   pool: 5
   username: pgadmin
   password: devel
   host: localhost
 
+development:
+  <<: *defaults
+  database: gtgraphics_development
+
 test:
-  adapter: postgresql
-  encoding: unicode
+  <<: *defaults
   database: gtgraphics_test
-  pool: 5
-  username: pgadmin
-  password: devel
-  host: localhost
