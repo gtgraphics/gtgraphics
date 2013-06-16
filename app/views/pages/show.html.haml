@@ -17,6 +17,11 @@
   %b Content:
   = @page.content
 
+%h2 Parent Pages
+%ul
+  - @page.parents.each do |parent_page|
+    %li= link_to parent_page, "/#{parent_page.path}"
+
 %h2 Sub Pages
 %ul
   - @page.children.each do |sub_page|

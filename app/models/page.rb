@@ -11,6 +11,10 @@ class Page < ActiveRecord::Base
   before_validation :sanitize_path
   after_save :update_child_paths
 
+  def parents
+    ancestors.reverse
+  end
+
   def to_s
     title
   end
@@ -29,7 +33,7 @@ class Page < ActiveRecord::Base
   end
 
   def set_path
-    self.path = File.join(*ancestors.collect(&:slug).reverse, self.slug)
+    self.path = File.join(*parents.collect(&:slug), self.slug)
   end
 
   def update_child_paths
