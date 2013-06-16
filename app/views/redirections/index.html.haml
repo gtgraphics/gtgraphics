@@ -2,15 +2,15 @@
 
 %table
   %tr
-    %th Source url
-    %th Destination url
+    %th= Redirection.human_attribute_name :source_path
+    %th= Redirection.human_attribute_name :destination_url
     %th
     %th
     %th
 
   - @redirections.each do |redirection|
     %tr
-      %td= redirection.source_url
+      %td= link_to redirection.source_path, "/#{redirection.source_path}"
       %td= redirection.destination_url
       %td= link_to 'Show', redirection
       %td= link_to 'Edit', edit_redirection_path(redirection)

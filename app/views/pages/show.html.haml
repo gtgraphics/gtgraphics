@@ -6,9 +6,21 @@
 %p
   %b Slug:
   = @page.slug
+- if @page.parent
+  %p
+    %b Parent:
+    = link_to @page.parent, @page.parent
+%p
+  %b Path:
+  = link_to @page.path, "/#{@page.path}"
 %p
   %b Content:
   = @page.content
+
+%h2 Sub Pages
+%ul
+  - @page.children.each do |sub_page|
+    %li= link_to sub_page, "/#{sub_page.path}"
 
 = link_to 'Edit', edit_page_path(@page)
 \|

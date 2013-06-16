@@ -4,8 +4,8 @@ class CreateImages < ActiveRecord::Migration
       t.string :title
       t.string :slug
       t.text :description
-
       t.timestamps
     end
+    add_index :images, :slug, unique: true
   end
 end

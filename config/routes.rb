@@ -1,9 +1,14 @@
 GTGraphics::Application.routes.draw do
-  resources :redirections
-
+  root to: 'home#index'
+  
   resources :images
   resources :testimonials
-  resources :pages, path: '/'
+  resources :pages#, path: '/', constraints: PageConstraint.new
+  resources :redirections
+
+  get '*path' => 'pages#show', constraints: PageConstraint.new
+  get '*path' => 'redirections#invoke', constraints: RedirectionConstraint.new
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

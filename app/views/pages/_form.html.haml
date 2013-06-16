@@ -1,19 +1,14 @@
-= form_for @page do |f|
-  - if @page.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@page.errors.count, "error")} prohibited this page from being saved:"
-      %ul
-        - @page.errors.full_messages.each do |msg|
-          %li= msg
+= @page.path
 
-  .field
-    = f.label :title
-    = f.text_field :title
-  .field
-    = f.label :slug
-    = f.text_field :slug
-  .field
-    = f.label :content
-    = f.text_area :content
-  .actions
-    = f.submit 'Save'
+= semantic_form_for @page do |form|
+
+  = render 'errors', object: form.object
+
+  = form.inputs do
+    = form.input :title
+    = form.input :slug
+    = form.input :parent
+    = form.input :content
+
+  = form.actions do
+    = form.submit

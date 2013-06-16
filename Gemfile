@@ -9,12 +9,14 @@ gem 'devise'
 gem 'cancan'
 
 # Models
+gem 'acts_as_tree'
 gem 'paperclip'
 
 # Controllers
 
 # Views
 gem 'haml-rails'
+gem 'formtastic'
 
 # Assets
 gem 'sass-rails', '~> 4.0.0.rc1'
@@ -32,6 +34,10 @@ group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
 end
+
+# Debug
+gem 'better_errors'
+gem 'binding_of_caller'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
