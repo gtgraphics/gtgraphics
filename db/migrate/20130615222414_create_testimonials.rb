@@ -7,8 +7,8 @@ class CreateTestimonials < ActiveRecord::Migration
       t.date :launched_on
       t.string :client_name
       t.string :url
-
       t.timestamps
     end
+    add_index :testimonials, :slug, unique: true
   end
 end

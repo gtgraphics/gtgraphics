@@ -4,8 +4,8 @@ class CreatePages < ActiveRecord::Migration
       t.string :title
       t.string :slug
       t.text :content
-
       t.timestamps
     end
+    add_index :pages, :slug, unique: true
   end
 end

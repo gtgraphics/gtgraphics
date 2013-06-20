@@ -13,7 +13,7 @@ class PagesController < ApplicationController
   end
 
   def new
-    @page = Page.new
+    @page = Page.new(parent_id: params[:parent_id])
     respond_with @page
   end
 
@@ -38,10 +38,14 @@ class PagesController < ApplicationController
 
   private
   def set_page
-    @page = Page.find(params[:id])
+    if params[:path]
+      @page = Page.find_by_path!(params[:path])
+    else
+      @page = Page.find(params[:id])
+    end
   end
 
   def page_params
-    params.require(:page).permit(:title, :slug, :content)
+    params.require(:page).permit(:title, :parent_id, :slug, :content)
   end
 end
