@@ -10,6 +10,9 @@
   %b Last name:
   = @user.last_name
 
+- if @user.portfolio
+  %p= link_to 'Portfolio', @user.portfolio
+
 = link_to 'Edit', edit_user_path(@user)
 \|
 = link_to 'Back', users_path

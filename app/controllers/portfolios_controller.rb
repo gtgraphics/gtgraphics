@@ -4,7 +4,7 @@ class PortfoliosController < ApplicationController
   before_action :set_portfolio, only: [:show, :edit, :update, :destroy]
 
   def index
-    @portfolios = Portfolio.all
+    @portfolios = Portfolio.joins(:owner).order(['users.first_name'], 'users.last_name')
     respond_with @portfolios
   end
 

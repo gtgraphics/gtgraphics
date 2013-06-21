@@ -14,9 +14,11 @@
 class User < ActiveRecord::Base
   include Sluggable
 
-  acts_as_sluggable_on :username
+  acts_as_sluggable_on :username, unique: true
 
-  has_one :portfolio
+  has_one :portfolio, foreign_key: :owner_id
+
+  default_scope -> { order(:first_name, :last_name) }
 
   def full_name
     "#{first_name} #{last_name}".strip

@@ -13,7 +13,7 @@
 class Portfolio < ActiveRecord::Base
   include Sluggable
 
-  acts_as_sluggable_on ->(portfolio) { portfolio.owner.slug }
+  acts_as_sluggable_on ->(portfolio) { portfolio.owner.try(:slug) }, unique: true
 
   belongs_to :owner, class_name: 'User'
   has_many :testimonials, dependent: :destroy
