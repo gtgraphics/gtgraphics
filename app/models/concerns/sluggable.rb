@@ -5,19 +5,40 @@ module Sluggable
     cattr_accessor :slug_options
   end
 
+  class << self
+    def sanitize_slug(slug)
+      slug.try(:parameterize)
+    end
+  end
+
   module ClassMethods
+    def acts_as_sluggable(options = {})
+      field = options.fetch(:field, :slug)
+      class_variable_set("@@slug_options", { destination_attribute: field })
+      validates field, presence: true
+      before_validation :sanitize_slug
+    end
+
     def acts_as_sluggable_on(attribute, options = {})
-      class_variable_set("@@slug_options", { source_attribute: attribute, destination_attribute: options[:field] })
-      validates field, presence: true, uniqueness: true
+      field = options.fetch(:field, :slug)
+      class_variable_set("@@slug_options", { source_attribute: attribute, destination_attribute: field })
+      validates field, presence: true
       before_validation :set_slug
+      before_validation :sanitize_slug
     end
   end
 
   private
   def set_slug
-    source_attribute_value = send(slug_options[:source_attribute])
-    if send(slug_options[:destination_attribute].blank? and source_attribute_value.present?)
-      send("#{slug_options[:destination_attribute]}=", source_attribute_value.parameterize)
+    if send(slug_options[:destination_attribute]).blank?
+      send("#{slug_options[:destination_attribute]}=", send(slug_options[:source_attribute]))
+    end
+  end
+
+  def sanitize_slug
+    destination_attribute_value = send(slug_options[:destination_attribute])
+    if destination_attribute_value.present?
+      send("#{slug_options[:destination_attribute]}=", Sluggable.sanitize_slug(destination_attribute_value))
     end
   end
 end

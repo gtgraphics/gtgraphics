@@ -33,6 +33,39 @@ class Page < ActiveRecord::Base
   before_validation :sanitize_path
   after_save :update_descendant_paths
 
+  default_scope -> { order(:lft) }
+
+  class << self
+    def generate_path(page)
+      page.root? ? page.slug : PathHelper.join_path(page.parent.self_and_ancestors.pluck(:slug), page.slug) if page.slug.present?
+    end
+
+    def without_self_and_descendants_of(other_page)
+      without(other_page).without_descendants_of(other_page)
+    end
+
+    def without(other_page)
+      if other_page.persisted?
+        where('id != ?', other_page.id)
+      else
+        all
+      end
+    end
+
+    def without_descendants_of(other_page)
+      if other_page.persisted?
+        descendant_ids = other_page.descendants.pluck(:id)
+        if descendant_ids.empty?
+          all
+        else
+          where('id NOT IN (?)', descendant_ids)
+        end
+      else
+        all
+      end
+    end
+  end
+
   def to_s
     title
   end
@@ -55,7 +88,7 @@ class Page < ActiveRecord::Base
   end
 
   def set_path
-    self.path = root? ? slug : PathHelper.join_path(parent.self_and_ancestors.pluck(:slug), slug) if slug.present?
+    self.path = self.class.generate_path(self)
   end
 
   def update_descendant_paths

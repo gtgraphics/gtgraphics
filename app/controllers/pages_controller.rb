@@ -9,6 +9,7 @@ class PagesController < ApplicationController
   end
 
   def show
+    @parent_pages = @page.ancestors
     @sub_pages = @page.children
     respond_with @page
   end
@@ -20,7 +21,7 @@ class PagesController < ApplicationController
 
   def create
     @page = Page.create(page_params)
-    respond_with @page
+    respond_with @page, location: virtual_page_path(@page)
   end
 
   def edit
@@ -29,12 +30,23 @@ class PagesController < ApplicationController
 
   def update
     @page.update(page_params)
-    respond_with @page
+    respond_with @page, location: virtual_page_path(@page)
   end
 
   def destroy
     @page.destroy
     respond_with @page
+  end
+
+  def path_preview
+    slug = Sluggable.sanitize_slug(params[:slug].try(:strip))
+    parent_page = Page.find(params[:parent_id]) if params[:parent_id].present?
+    page = Page.new(parent: parent_page, slug: slug)
+    if slug.blank?
+      head :ok
+    else
+      render text: Page.generate_path(page)
+    end
   end
 
   private

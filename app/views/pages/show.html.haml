@@ -14,13 +14,14 @@
   %b Content:
   = @page.content
 
-%h2 Parent Pages
-%ul
-  - @page.ancestors.each do |ancestor|
-    %li= link_to ancestor, virtual_page_path(ancestor)
+- if @parent_pages.any?
+  %h2 Parent Pages
+  = render 'table', pages: @parent_pages
 
 %h2 Sub Pages
-= render 'table', pages: @sub_pages
+%p= link_to 'Create', new_page_path(parent_id: @page.id)
+- if @sub_pages.any?
+  = render 'table', pages: @sub_pages
 
 = link_to 'Edit', edit_page_path(@page)
 \|

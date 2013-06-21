@@ -7,7 +7,9 @@
         &middot;
       GT Graphics
     = stylesheet_link_tag 'application', media: 'all', data: { turbolinks_track: true }
+    = yield :stylesheets
     = javascript_include_tag 'application', data: { turbolinks_track: true }
+    = yield :javascripts
     = csrf_meta_tags
   %body
     %nav

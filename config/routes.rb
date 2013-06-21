@@ -3,7 +3,11 @@ GTGraphics::Application.routes.draw do
   
   resources :images
   resources :testimonials
-  resources :pages#, path: '/', constraints: PageConstraint.new
+  resources :pages do
+    collection do
+      get :path_preview
+    end
+  end
   resources :redirections
 
   get '*path' => 'pages#show', constraints: PageConstraint.new
