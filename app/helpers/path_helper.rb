@@ -5,7 +5,7 @@ module PathHelper
     end
 
     def sanitize_path(path)
-      sanitize_path(path.dup)
+      sanitize_path!(path.dup)
     end
 
     def sanitize_path!(path)
@@ -13,13 +13,5 @@ module PathHelper
       path.gsub!(/\A\/+|\/+\z/, '')
       path
     end
-  end
-
-  def sanitize_path(path)
-    self.class.sanitize_path(path)
-  end
-
-  def sanitize_path!(path)
-    self.class.sanitize_path!(path)
   end
 end
