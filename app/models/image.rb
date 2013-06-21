@@ -11,10 +11,11 @@
 #
 
 class Image < ActiveRecord::Base
-  validates :title, presence: true
-  validates :slug, presence: true, uniqueness: true
+  include Sluggable
 
-  before_save :set_slug
+  acts_as_sluggable_on :title
+
+  validates :title, presence: true
 
   private
   def set_slug

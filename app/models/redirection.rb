@@ -16,12 +16,16 @@ class Redirection < ActiveRecord::Base
 
   before_validation :sanitize_source_path
 
+  def to_s
+    source_path
+  end
+
   private
   def check_path_uniqueness
     errors.add(:source_path, :taken) if source_path.present? and Page.exists?(path: source_path)
   end
 
   def sanitize_source_path
-    self.source_path = source_path.strip.gsub(/\A\/+|\/+\z/, '') # strip leading and ending slashes
+    PathHelper.sanitize_path!(source_path)
   end
 end

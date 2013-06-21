@@ -16,16 +16,19 @@
 #
 
 class Page < ActiveRecord::Base
+  include Sluggable
+
   acts_as_nested_set
+  acts_as_sluggable_on :title
 
   validates :title, presence: true
-  validates :slug, presence: true, uniqueness: true
   validates :path, presence: true
   validate :check_path_uniqueness
-  validate :check_parent_is_not_self
-  validate :check_ancestor_is_not_descendant
+  with_options on: :update do |page|
+    page.validate :check_parent_is_not_self
+    page.validate :check_ancestor_is_not_descendant
+  end
 
-  before_validation :set_slug
   before_validation :set_path
   before_validation :sanitize_path
   after_save :update_descendant_paths
@@ -36,11 +39,11 @@ class Page < ActiveRecord::Base
 
   private
   def check_parent_is_not_self
-    errors.add(:parent_id, 'cannot be self') if persisted? and parent_id.present? and parent_id == id
+    errors.add(:parent_id, 'cannot be self') if parent_id.present? and parent_id == id
   end
 
   def check_ancestor_is_not_descendant
-    errors.add(:parent_id, 'cannot be a child of itself') if persisted? and parent_id.present? and descendants.exists?(id: parent.self_and_ancestors.pluck(:id))
+    errors.add(:parent_id, 'cannot be a child of itself') if parent_id.present? and descendants.exists?(id: parent.self_and_ancestors.pluck(:id))
   end
 
   def check_path_uniqueness
@@ -48,15 +51,11 @@ class Page < ActiveRecord::Base
   end
 
   def sanitize_path
-    self.path = path.strip.gsub(/\A\/+|\/+\z/, '') # strip leading and ending slashes
-  end
-
-  def set_slug
-    self.slug = title.parameterize if slug.blank? and title.present?
+    PathHelper.sanitize_path!(path)
   end
 
   def set_path
-    self.path = root? ? slug : File.join(*parent.self_and_ancestors.pluck(:slug), slug) if slug.present?
+    self.path = root? ? slug : PathHelper.join_path(parent.self_and_ancestors.pluck(:slug), slug) if slug.present?
   end
 
   def update_descendant_paths
