@@ -10,6 +10,7 @@ gem 'cancan'
 
 # Models
 gem 'acts_as_tree'
+gem 'awesome_nested_set'
 gem 'paperclip'
 
 # Controllers
@@ -26,6 +27,7 @@ gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.0.1'
+gem 'quiet_assets'
 
 # Crons
 gem 'whenever'

@@ -1,5 +1,5 @@
 class Page < ActiveRecord::Base
-  acts_as_tree
+  acts_as_nested_set
 
   validates :title, presence: true
   validates :slug, presence: true, uniqueness: true
@@ -10,10 +10,6 @@ class Page < ActiveRecord::Base
   before_validation :set_path
   before_validation :sanitize_path
   after_save :update_child_paths
-
-  def parents
-    ancestors.reverse
-  end
 
   def to_s
     title
@@ -33,11 +29,13 @@ class Page < ActiveRecord::Base
   end
 
   def set_path
-    self.path = File.join(*parents.collect(&:slug), self.slug)
+    self.path = File.join(*parent.self_and_ancestors.pluck(:slug).reverse, self.slug)
   end
 
   def update_child_paths
     # TODO collect children and children-children ...
-    
+    descendants.each do |descendant|
+      descendant.update(path: File.join(self.path, descendant.slug))
+    end
   end
 end

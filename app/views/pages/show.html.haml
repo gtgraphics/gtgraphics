@@ -19,8 +19,8 @@
 
 %h2 Parent Pages
 %ul
-  - @page.parents.each do |parent_page|
-    %li= link_to parent_page, "/#{parent_page.path}"
+  - @page.ancestors.each do |ancestor|
+    %li= link_to ancestor, "/#{ancestor.path}"
 
 %h2 Sub Pages
 %ul
