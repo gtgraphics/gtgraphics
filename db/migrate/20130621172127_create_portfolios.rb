@@ -6,6 +6,6 @@ class CreatePortfolios < ActiveRecord::Migration
       t.text :description
       t.timestamps
     end
-    add_index :pages, :slug, unique: true
+    add_index :portfolios, :slug, unique: true
   end
 end
