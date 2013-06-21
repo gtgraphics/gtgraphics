@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130620235647) do
+ActiveRecord::Schema.define(version: 20130621172127) do
 
   create_table "images", force: true do |t|
     t.string   "title"
@@ -37,6 +37,15 @@ ActiveRecord::Schema.define(version: 20130620235647) do
   end
 
   add_index "pages", ["path"], name: "index_pages_on_path", unique: true, using: :btree
+  add_index "pages", ["slug"], name: "index_pages_on_slug", unique: true, using: :btree
+
+  create_table "portfolios", force: true do |t|
+    t.string   "owner_name"
+    t.string   "slug"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "redirections", force: true do |t|
     t.string   "source_path"

@@ -16,6 +16,7 @@ module Sluggable
       field = options.fetch(:field, :slug)
       class_variable_set("@@slug_options", { destination_attribute: field })
       validates field, presence: true
+      validates field, uniqueness: true if options[:unique]
       before_validation :sanitize_slug
     end
 
@@ -23,6 +24,7 @@ module Sluggable
       field = options.fetch(:field, :slug)
       class_variable_set("@@slug_options", { source_attribute: attribute, destination_attribute: field })
       validates field, presence: true
+      validates field, uniqueness: true if options[:unique]
       before_validation :set_slug
       before_validation :sanitize_slug
     end

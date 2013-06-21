@@ -1,0 +1,9 @@
+%p#notice= notice
+
+%h1= @portfolio.owner_name
+
+= simple_format @portfolio.description
+
+= link_to 'Edit', edit_portfolio_path(@portfolio)
+\|
+= link_to 'Back', portfolios_path

@@ -1,28 +1,21 @@
 %p#notice= notice
 
-%p
-  %b Title:
-  = @page.title
-%p
-  %b Slug:
-  = @page.slug
-- if @page.parent
-  %p
-    %b Parent:
-    = link_to @page.parent, virtual_page_path(@page.parent)
-%p
-  %b Content:
-  = @page.content
+= render 'breadcrumbs', page: @page
 
-- if @parent_pages.any?
-  %h2 Parent Pages
-  = render 'table', pages: @parent_pages
+%h1= @page.title
 
-%h2 Sub Pages
+- if @page.content.present?
+  = simple_format @page.content
+- else
+  %p -
+
+%h3 Sub Pages
 %p= link_to 'Create', new_page_path(parent_id: @page.id)
 - if @sub_pages.any?
   = render 'table', pages: @sub_pages
 
-= link_to 'Edit', edit_page_path(@page)
+%hr
+
+= link_to 'Edit', [:edit, @page]
 \|
-= link_to 'Back', pages_path
+= link_to 'Back', :pages

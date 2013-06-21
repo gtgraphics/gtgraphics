@@ -21,7 +21,7 @@ class PagesController < ApplicationController
 
   def create
     @page = Page.create(page_params)
-    respond_with @page, location: virtual_page_path(@page)
+    respond_with @page
   end
 
   def edit
@@ -30,7 +30,7 @@ class PagesController < ApplicationController
 
   def update
     @page.update(page_params)
-    respond_with @page, location: virtual_page_path(@page)
+    respond_with @page
   end
 
   def destroy
@@ -51,11 +51,12 @@ class PagesController < ApplicationController
 
   private
   def set_page
-    if params[:path]
-      @page = Page.find_by_path!(params[:path])
-    else
-      @page = Page.find(params[:id])
-    end
+    @page = Page.find_by_path!(params[:id])
+    #if params[:path]
+    #  @page = Page.find_by_path!(params[:path])
+    #else
+    #  @page = Page.find(params[:id])
+    #end
   end
 
   def page_params

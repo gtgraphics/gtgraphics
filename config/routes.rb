@@ -1,17 +1,21 @@
 GTGraphics::Application.routes.draw do
+
   root to: 'home#index'
   
   resources :images
+  resources :portfolios
   resources :testimonials
-  resources :pages do
+  resources :redirections
+  
+  get '*path' => 'redirections#invoke', constraints: RedirectionConstraint.new
+
+  resources :pages, path: '/', constraints: { id: /.*/ } do
     collection do
       get :path_preview
     end
   end
-  resources :redirections
 
-  get '*path' => 'pages#show', constraints: PageConstraint.new
-  get '*path' => 'redirections#invoke', constraints: RedirectionConstraint.new
+  #get '*path' => 'pages#show', constraints: PageConstraint.new
 
 
   # The priority is based upon order of creation: first created -> highest priority.

@@ -66,6 +66,10 @@ class Page < ActiveRecord::Base
     end
   end
 
+  def to_param
+    path
+  end
+
   def to_s
     title
   end

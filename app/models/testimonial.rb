@@ -18,6 +18,9 @@ class Testimonial < ActiveRecord::Base
 
   acts_as_sluggable_on :title
 
+  belongs_to :portfolio
+  has_many :images, dependent: :destroy
+
   def to_s
     name
   end

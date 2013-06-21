@@ -15,6 +15,8 @@ class Image < ActiveRecord::Base
 
   acts_as_sluggable_on :title
 
+  belongs_to :portfolio
+
   validates :title, presence: true
 
   private

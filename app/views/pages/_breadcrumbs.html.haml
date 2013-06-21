@@ -1,0 +1,5 @@
+%ul.breadcrumbs
+  %li= link_to Page.model_name.human(count: 2), :pages
+  - page.ancestors.each do |parent_page|
+    %li= link_to parent_page, parent_page
+  %li= page

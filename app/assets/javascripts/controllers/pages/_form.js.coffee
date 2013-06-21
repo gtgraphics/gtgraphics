@@ -7,7 +7,7 @@ updatePathPreview = ->
   $parentId = $(PARENT_ID_SELECTOR)
   slug = $slug.val()
   if slug and slug isnt ""
-    url = "/pages/path_preview"
+    url = "/path_preview"
     params = slug: slug
     parentId = $parentId.val()
     params.parent_id = parentId if parentId and parentId isnt ""

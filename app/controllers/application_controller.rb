@@ -3,10 +3,12 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  helper_method :virtual_page_path
-
-  protected
-  def virtual_page_path(page)
-    "/#{page.path}"
+  if Rails.env.in? %w(production staging)
+    rescue_from ActiveRecord::RecordNotFound do
+      respond_to do |format|
+        format.html { render 'errors/not_found' }
+        format.all { head :not_found }
+      end
+    end
   end
 end
