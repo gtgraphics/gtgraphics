@@ -22,6 +22,7 @@ class Page < ActiveRecord::Base
   validates :slug, presence: true, uniqueness: true
   validates :path, presence: true
   validate :check_path_uniqueness
+  validate :check_parent_is_not_self
   validate :check_ancestor_is_not_descendant
 
   before_validation :set_slug
@@ -34,8 +35,12 @@ class Page < ActiveRecord::Base
   end
 
   private
+  def check_parent_is_not_self
+    errors.add(:parent_id, 'cannot be self') if persisted? and parent_id.present? and parent_id == id
+  end
+
   def check_ancestor_is_not_descendant
-    errors.add(:parent_id, :invalid) if parent_id.present? and descendants.exists?(id: parent.self_and_ancestors.pluck(:id))
+    errors.add(:parent_id, 'cannot be a child of itself') if persisted? and parent_id.present? and descendants.exists?(id: parent.self_and_ancestors.pluck(:id))
   end
 
   def check_path_uniqueness
