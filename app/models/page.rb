@@ -35,7 +35,7 @@ class Page < ActiveRecord::Base
 
   private
   def check_ancestor_is_not_descendant
-    errors.add(:parent_id, :invalid) if descendants.exists?(id: parent.self_and_ancestors.pluck(:id))
+    errors.add(:parent_id, :invalid) if parent_id.present? and descendants.exists?(id: parent.self_and_ancestors.pluck(:id))
   end
 
   def check_path_uniqueness
