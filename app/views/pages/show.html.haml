@@ -9,10 +9,7 @@
 - if @page.parent
   %p
     %b Parent:
-    = link_to @page.parent, @page.parent
-%p
-  %b Path:
-  = link_to @page.path, "/#{@page.path}"
+    = link_to @page.parent, virtual_page_path(@page.parent)
 %p
   %b Content:
   = @page.content
@@ -20,7 +17,7 @@
 %h2 Parent Pages
 %ul
   - @page.ancestors.each do |ancestor|
-    %li= link_to ancestor, "/#{ancestor.path}"
+    %li= link_to ancestor, virtual_page_path(ancestor)
 
 %h2 Sub Pages
 = render 'table', pages: @sub_pages

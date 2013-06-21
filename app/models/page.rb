@@ -22,6 +22,7 @@ class Page < ActiveRecord::Base
   validates :slug, presence: true, uniqueness: true
   validates :path, presence: true
   validate :check_path_uniqueness
+  validate :check_ancestor_is_not_descendant
 
   before_validation :set_slug
   before_validation :set_path
@@ -33,6 +34,10 @@ class Page < ActiveRecord::Base
   end
 
   private
+  def check_ancestor_is_not_descendant
+    errors.add(:parent_id, :invalid) if descendants.exists?(id: parent.self_and_ancestors.pluck(:id))
+  end
+
   def check_path_uniqueness
     errors.add(:path, :taken) if path.present? and Redirection.exists?(source_path: path)
   end

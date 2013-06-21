@@ -9,6 +9,6 @@
 
   - pages.each do |page|
     %tr
-      %td= link_to page.title, "/#{page.path}"
+      %td= link_to page.title, virtual_page_path(page)
       %td= link_to 'Edit', edit_page_path(page)
       %td= link_to 'Destroy', page, :method => :delete, :data => { :confirm => 'Are you sure?' }
