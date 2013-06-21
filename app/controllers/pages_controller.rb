@@ -4,11 +4,12 @@ class PagesController < ApplicationController
   before_action :set_page, only: [:show, :edit, :update, :destroy]
 
   def index
-    @pages = Page.all
+    @pages = Page.roots
     respond_with @pages
   end
 
   def show
+    @sub_pages = @page.children
     respond_with @page
   end
 

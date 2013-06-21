@@ -23,9 +23,7 @@
     %li= link_to ancestor, "/#{ancestor.path}"
 
 %h2 Sub Pages
-%ul
-  - @page.children.each do |sub_page|
-    %li= link_to sub_page, "/#{sub_page.path}"
+= render 'table', pages: @sub_pages
 
 = link_to 'Edit', edit_page_path(@page)
 \|

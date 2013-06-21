@@ -9,7 +9,7 @@ class Page < ActiveRecord::Base
   before_validation :set_slug
   before_validation :set_path
   before_validation :sanitize_path
-  after_save :update_child_paths
+  after_save :update_descendant_paths
 
   def to_s
     title
@@ -29,13 +29,12 @@ class Page < ActiveRecord::Base
   end
 
   def set_path
-    self.path = File.join(*parent.self_and_ancestors.pluck(:slug).reverse, self.slug)
+    self.path = root? ? slug : File.join(*parent.self_and_ancestors.pluck(:slug), slug)
   end
 
-  def update_child_paths
-    # TODO collect children and children-children ...
+  def update_descendant_paths
     descendants.each do |descendant|
-      descendant.update(path: File.join(self.path, descendant.slug))
+      descendant.update(path: File.join(path, descendant.slug))
     end
   end
 end
