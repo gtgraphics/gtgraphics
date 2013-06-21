@@ -10,6 +10,7 @@ gem 'cancan'
 
 # Models
 gem 'acts_as_tree'
+gem 'annotate'
 gem 'awesome_nested_set'
 gem 'paperclip'
 

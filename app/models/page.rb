@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: pages
+#
+#  id         :integer          not null, primary key
+#  title      :string(255)
+#  slug       :string(255)
+#  content    :text
+#  created_at :datetime
+#  updated_at :datetime
+#  path       :string(255)
+#  parent_id  :integer
+#  lft        :integer
+#  rgt        :integer
+#  depth      :integer
+#
+
 class Page < ActiveRecord::Base
   acts_as_nested_set
 
@@ -21,7 +38,7 @@ class Page < ActiveRecord::Base
   end
 
   def sanitize_path
-    self.path = path.strip.gsub(/\A\/+|\/+\z/, '')
+    self.path = path.strip.gsub(/\A\/+|\/+\z/, '') # strip leading and ending slashes
   end
 
   def set_slug
@@ -29,7 +46,7 @@ class Page < ActiveRecord::Base
   end
 
   def set_path
-    self.path = root? ? slug : File.join(*parent.self_and_ancestors.pluck(:slug), slug)
+    self.path = root? ? slug : File.join(*parent.self_and_ancestors.pluck(:slug), slug) if slug.present?
   end
 
   def update_descendant_paths

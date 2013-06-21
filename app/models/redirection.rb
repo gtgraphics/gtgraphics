@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: redirections
+#
+#  id              :integer          not null, primary key
+#  source_path     :string(255)
+#  destination_url :string(255)
+#  created_at      :datetime
+#  updated_at      :datetime
+#
+
 class Redirection < ActiveRecord::Base
   validates :source_path, presence: true, uniqueness: true
   validates :destination_url, presence: true # TODO Format = Path || URL
@@ -11,6 +22,6 @@ class Redirection < ActiveRecord::Base
   end
 
   def sanitize_source_path
-    self.source_path = source_path.strip.gsub(/\A\/+|\/+\z/, '')
+    self.source_path = source_path.strip.gsub(/\A\/+|\/+\z/, '') # strip leading and ending slashes
   end
 end
