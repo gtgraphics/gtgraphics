@@ -33,7 +33,13 @@ module Sluggable
   private
   def set_slug
     if send(slug_options[:destination_attribute]).blank?
-      send("#{slug_options[:destination_attribute]}=", send(slug_options[:source_attribute]))
+      source_attribute = slug_options[:source_attribute]
+      source_attribute_value = case source_attribute
+      when Proc then source_attribute.call(self)
+      when Symbol then send(source_attribute)
+      else raise ArgumentError, 'source attribute must be a Proc or Symbol'
+      end
+      send("#{slug_options[:destination_attribute]}=", source_attribute_value)
     end
   end
 

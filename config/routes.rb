@@ -1,11 +1,11 @@
 GTGraphics::Application.routes.draw do
-
   root to: 'home#index'
   
   resources :images
   resources :portfolios
   resources :testimonials
   resources :redirections
+  resources :users
   
   get '*path' => 'redirections#invoke', constraints: RedirectionConstraint.new
 

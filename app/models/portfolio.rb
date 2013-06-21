@@ -13,15 +13,17 @@
 class Portfolio < ActiveRecord::Base
   include Sluggable
 
-  acts_as_sluggable_on :owner_name
+  acts_as_sluggable_on ->(portfolio) { portfolio.owner.slug }
 
-  # belongs_to :user
+  belongs_to :owner, class_name: 'User'
   has_many :testimonials, dependent: :destroy
   has_many :images, through: :testimonials
 
-  #def owner_name
-  #  user.full_name
-  #end
+  validates :owner_id, presence: true, uniqueness: true
+
+  def owner_name
+    owner.try(:full_name)
+  end
 
   def to_param
     slug
