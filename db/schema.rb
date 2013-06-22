@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130621212541) do
+ActiveRecord::Schema.define(version: 20130622112242) do
 
   create_table "images", force: true do |t|
     t.string   "title"
@@ -20,6 +20,8 @@ ActiveRecord::Schema.define(version: 20130621212541) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "images", ["slug"], name: "index_images_on_slug", unique: true, using: :btree
 
   create_table "pages", force: true do |t|
     t.string   "title"
@@ -38,15 +40,30 @@ ActiveRecord::Schema.define(version: 20130621212541) do
   add_index "pages", ["slug"], name: "index_pages_on_slug", unique: true, using: :btree
 
   create_table "portfolios", force: true do |t|
-    t.string   "owner_name"
     t.string   "slug"
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "owner_id"
+    t.string   "name"
+    t.string   "path"
   end
 
-  add_index "portfolios", ["slug"], name: "index_portfolios_on_slug", unique: true, using: :btree
+  add_index "portfolios", ["path"], name: "index_portfolios_on_path", unique: true, using: :btree
+
+  create_table "projects", force: true do |t|
+    t.string   "name"
+    t.string   "slug"
+    t.integer  "portfolio_id"
+    t.text     "description"
+    t.string   "client"
+    t.string   "url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "projects", ["portfolio_id"], name: "index_projects_on_portfolio_id", using: :btree
+  add_index "projects", ["slug"], name: "index_projects_on_slug", unique: true, using: :btree
 
   create_table "redirections", force: true do |t|
     t.string   "source_path"
@@ -77,6 +94,7 @@ ActiveRecord::Schema.define(version: 20130621212541) do
     t.string   "last_name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "type"
   end
 
   add_index "users", ["slug"], name: "index_users_on_slug", unique: true, using: :btree

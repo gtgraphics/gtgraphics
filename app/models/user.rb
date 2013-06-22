@@ -9,14 +9,18 @@
 #  last_name  :string(255)
 #  created_at :datetime
 #  updated_at :datetime
+#  type       :string(255)
 #
 
 class User < ActiveRecord::Base
   include Sluggable
 
-  acts_as_sluggable_on :username, unique: true
+  acts_as_sluggable_on :username
 
-  has_one :portfolio, foreign_key: :owner_id
+  validates :username, presence: true, uniqueness: true
+  validates :slug, presence: true, uniqueness: true
+  validates :first_name, presence: true
+  validates :last_name, presence: true
 
   default_scope -> { order(:first_name, :last_name) }
 

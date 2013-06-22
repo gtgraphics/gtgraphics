@@ -22,7 +22,8 @@ class Page < ActiveRecord::Base
   acts_as_sluggable_on :title
 
   validates :title, presence: true
-  validates :path, presence: true
+  validates :slug, presence: true, uniqueness: { scope: :parent_id }
+  validates :path, presence: true, uniqueness: true
   validate :check_path_uniqueness
   with_options on: :update do |page|
     page.validate :check_parent_is_not_self

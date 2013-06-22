@@ -12,14 +12,6 @@
 #  type       :string(255)
 #
 
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-one:
-  username: MyString
-  first_name: MyString
-  last_name: MyString
-
-two:
-  username: MyString
-  first_name: MyString
-  last_name: MyString
+class Author < User
+  has_many :portfolios, foreign_key: :owner_id
+end

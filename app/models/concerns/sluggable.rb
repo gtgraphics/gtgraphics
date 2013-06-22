@@ -15,16 +15,12 @@ module Sluggable
     def acts_as_sluggable(options = {})
       field = options.fetch(:field, :slug)
       class_variable_set("@@slug_options", { destination_attribute: field })
-      validates field, presence: true
-      validates field, uniqueness: true if options[:unique]
       before_validation :sanitize_slug
     end
 
     def acts_as_sluggable_on(attribute, options = {})
       field = options.fetch(:field, :slug)
       class_variable_set("@@slug_options", { source_attribute: attribute, destination_attribute: field })
-      validates field, presence: true
-      validates field, uniqueness: true if options[:unique]
       before_validation :set_slug
       before_validation :sanitize_slug
     end
@@ -39,7 +35,7 @@ module Sluggable
       when Symbol then send(source_attribute)
       else raise ArgumentError, 'source attribute must be a Proc or Symbol'
       end
-      send("#{slug_options[:destination_attribute]}=", source_attribute_value)
+      send("#{slug_options[:destination_attribute]}=", source_attribute_value.presence)
     end
   end
 
