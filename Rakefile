@@ -3,4 +3,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-GTGraphics::Application.load_tasks
+GtGraphics::Application.load_tasks

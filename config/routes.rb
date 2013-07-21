@@ -1,25 +1,4 @@
-GTGraphics::Application.routes.draw do
-  resources :projects
-
-  root to: 'home#index'
-  
-  resources :images
-  resources :portfolios
-  resources :testimonials
-  resources :redirections
-  resources :users
-  
-  get '*path' => 'redirections#invoke', constraints: RedirectionConstraint.new
-
-  resources :pages, path: '/', constraints: { id: /.*/ } do
-    collection do
-      get :path_preview
-    end
-  end
-
-  #get '*path' => 'pages#show', constraints: PageConstraint.new
-
-
+GtGraphics::Application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -60,6 +39,13 @@ GTGraphics::Application.routes.draw do
   #       get 'recent', on: :collection
   #     end
   #   end
+  
+  # Example resource route with concerns:
+  #   concern :toggleable do
+  #     post 'toggle'
+  #   end
+  #   resources :posts, concerns: :toggleable
+  #   resources :photos, concerns: :toggleable
 
   # Example resource route within a namespace:
   #   namespace :admin do

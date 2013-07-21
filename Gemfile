@@ -1,46 +1,52 @@
 source 'https://rubygems.org'
 
-# Environment
-gem 'rails', '4.0.0.rc2'
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'rails', '4.0.0'
+
+# Database
 gem 'pg'
 
 # Authentication & Authorization
-gem 'devise'
+gem 'devise', '3.0.0'
 gem 'cancan'
 
 # Models
+gem 'acts_as_list'
 gem 'acts_as_tree'
 gem 'annotate'
-gem 'awesome_nested_set'
 gem 'paperclip'
-
-# Controllers
 
 # Views
 gem 'haml-rails'
-gem 'formtastic'
+gem 'formtastic', github: 'justinfrench/formtastic', branch: 'rails4'
+gem 'kaminari'
+gem 'active_link_to'
+gem 'jbuilder', '~> 1.2'
 
 # Assets
-gem 'sass-rails', '~> 4.0.0.rc2'
+gem 'sass-rails', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 gem 'turbolinks'
-gem 'jbuilder', '~> 1.0.1'
-gem 'quiet_assets'
+gem 'compass-rails', github: 'Compass/compass-rails', branch: 'rails4-hack' # hack until compass has official Rails 4 support
+gem 'twitter-bootstrap-rails'
+gem 'formtastic-bootstrap'
 
-# Crons
-gem 'whenever'
+# Tools
+group :development do
+  gem 'bullet'
+  gem 'letter_opener'
+  gem 'rails-erd'
+end
+gem 'better_errors'
+gem 'binding_of_caller'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
 end
-
-# Debug
-gem 'better_errors'
-gem 'binding_of_caller'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
