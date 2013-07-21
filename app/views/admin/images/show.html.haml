@@ -1,0 +1,14 @@
+= view_headline_for @image
+
+%p
+  = image_tag @image.asset.url(:thumbnail), class: 'img-polaroid', alt: @image.to_s
+
+= simple_format @image.caption
+
+%dl.dl-horizontal
+  %dt Size
+  %dd #{@image.size.join(' &times; ').html_safe} px (#{number_to_human @image.pixels} Pixels)
+  %dt Aspect Ratio
+  %dd= @image.aspect_ratio
+  %dt Artist
+  %dd= @image.exif_data.artist || '-'

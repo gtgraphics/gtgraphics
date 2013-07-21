@@ -38,6 +38,7 @@ gem 'formtastic-bootstrap'
 
 # Tools
 group :development do
+  gem 'quiet_assets'
   gem 'bullet'
   gem 'letter_opener'
   gem 'rails-erd'
@@ -45,6 +46,7 @@ end
 gem 'better_errors'
 gem 'binding_of_caller'
 gem 'request_store'
+gem 'exifr'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

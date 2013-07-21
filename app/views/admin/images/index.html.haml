@@ -4,15 +4,21 @@
     = create_button_link_for Image, namespace: :admin
 
 - if @images.any?
-  %table.table
+  %table.table.table-striped
     %thead
       %tr
+        %th.thumbnail-cell
         %th= Image.human_attribute_name(:title)
+        %th.actions
     %tbody
       - @images.each do |image|
-        %tr
-          %td= image.title
-
+        %tr.thumbnail-cell
+          %td
+            = link_to [:admin, image] do
+              = image_tag image.asset.url(:thumbnail), class: 'img-polaroid'
+          %td= link_to image.title, [:admin, image]
+          %td.actions
+            = action_buttons_for image
 - else
   .well.text-center
     No images created

@@ -21,7 +21,7 @@ module ButtonHelper
 
   private
   def extract_button_options!(args)
-    options = args.extract_options!
+    options = args.extract_options!.dup
     
     type = options.delete(:as)
     other_type = options.delete(:type)

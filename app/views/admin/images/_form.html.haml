@@ -2,7 +2,18 @@
 
   = form.inputs do
     = form.input :title
+    = form.input :slug
+    = form.input :asset
+
+  = form.inputs for: :translations do |translation_fields|
+    %legend= translate(translation_fields.object.locale, scope: :locales)
+    = translation_fields.input :locale, as: :hidden
+    = translation_fields.input :caption, input_html: { class: 'span6' }
+
+  /= form.inputs for: :files do |file_fields|
+  /  = file_fields.input :asset
+
 
   = form.actions do
     = form.action :submit, button_html: { class: 'btn btn-primary' }
-    = form.action :cancel, button_html: { class: 'btn' }
+    = form.action :cancel, url: :admin_images, button_html: { class: 'btn' }

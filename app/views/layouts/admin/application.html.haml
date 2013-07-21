@@ -18,6 +18,8 @@
             %ul.nav
               = active_link_to Image.model_name.human(count: 2), :admin_images, wrap_tag: :li
               = active_link_to Album.model_name.human(count: 2), :admin_albums, wrap_tag: :li
+              = active_link_to Shout.model_name.human(count: 2), :admin_shouts, wrap_tag: :li
 
     .container
+      = render 'breadcrumbs'
       = yield

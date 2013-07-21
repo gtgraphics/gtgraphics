@@ -6,6 +6,7 @@ GtGraphics::Application.routes.draw do
 
     resources :albums
     resources :images
+    resources :shouts
   end
 
   # The priority is based upon order of creation: first created -> highest priority.
