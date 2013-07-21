@@ -15,6 +15,8 @@ gem 'acts_as_list'
 gem 'acts_as_tree'
 gem 'annotate'
 gem 'paperclip'
+gem 'paper_trail', github: 'airblade/paper_trail', branch: 'rails4'
+gem 'globalize3', github: 'svenfuchs/globalize3', branch: 'rails4'
 
 # Views
 gem 'haml-rails'
