@@ -44,6 +44,7 @@ group :development do
 end
 gem 'better_errors'
 gem 'binding_of_caller'
+gem 'request_store'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

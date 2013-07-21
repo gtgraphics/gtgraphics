@@ -1,0 +1,23 @@
+!!!
+%html
+  %head
+    %title GT Graphics
+    = stylesheet_link_tag 'admin', media: 'all', data: { turbolinks_track: true }
+    = javascript_include_tag 'admin', data: { turbolinks_track: true }
+    = csrf_meta_tags
+  %body
+    .navbar.navbar-fixed-top.navbar-inverse
+      .navbar-inner
+        .container
+          %button.btn.btn-navbar{data: { toggle: 'collapse', target: '.nav-collapse' }}
+            = icon(:reorder)
+
+          = link_to 'GT Graphics', :admin_root, class: 'brand'
+
+          .nav-collapse.collapse
+            %ul.nav
+              = active_link_to Image.model_name.human(count: 2), :admin_images, wrap_tag: :li
+              = active_link_to Album.model_name.human(count: 2), :admin_albums, wrap_tag: :li
+
+    .container
+      = yield

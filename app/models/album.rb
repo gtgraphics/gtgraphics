@@ -1,3 +1,5 @@
 class Album < ActiveRecord::Base
-  #has_many :images, dependent: :destroy
+  translates :title
+
+  validates :title, presence: true, uniqueness: true
 end

@@ -1,0 +1,18 @@
+.page-header.clearfix
+  %h1.pull-left= Image.model_name.human(count: 2)
+  .btn-toolbar.pull-right
+    = button_link_to prepend_icon(:plus, 'New Image'), :new_admin_image, type: :success
+
+- if @images.any?
+  %table.table
+    %thead
+      %tr
+        %th= Image.human_attribute_name(:title)
+    %tbody
+      - @images.each do |image|
+        %tr
+          %td= image.title
+
+- else
+  .well.text-center
+    No images created

@@ -1,0 +1,74 @@
+.append-icon {
+  .caption + i {
+    margin-left: 5px;
+  }
+}
+
+.prepend-icon {
+  i + .caption {
+    margin-left: 5px;
+  }
+}
+
+.append-icon, .prepend-icon {
+  .caption {
+    vertical-align: bottom;
+  }
+}
+
+.btn-mini {
+  .append-icon {
+    .caption + i {
+      margin-left: 2px;
+    }
+  }
+
+  .prepend-icon {
+    i + .caption {
+      margin-left: 2px;
+    }
+  }
+}
+
+
+.btn-large {
+  .append-icon {
+    .caption + i {
+      margin-left: 6px;
+    }
+  }
+
+  .prepend-icon {
+    i + .caption {
+      margin-left: 6px;
+    }
+  }
+}
+
+@media (max-width: 979px) {
+  a.btn {
+    .append-icon, .prepend-icon {
+      .caption {
+        display: none;
+      }
+    }
+  }
+
+  .file-controls {
+    a.btn {
+      .append-icon, .prepend-icon {
+        .caption {
+          display: inline;
+        }
+      }
+    }
+  }
+
+  .navbar a, .dropdown-menu a, .form-actions button {
+    .append-icon, .prepend-icon {
+      .caption {
+        display: inline-block;
+      }
+    }
+  }
+}
