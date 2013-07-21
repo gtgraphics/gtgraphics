@@ -21,3 +21,20 @@
 
 en:
   hello: "Hello world"
+
+  helpers:
+    titles:
+      new: 'Create %{model}'
+      edit: 'Edit %{model}'
+    links:
+      new: 'Create %{model}'
+      edit: 'Edit %{model}'
+
+  activerecord:
+    models:
+      album:
+        one: Album
+        other: Albums
+      image:
+        one: Image
+        other: Images

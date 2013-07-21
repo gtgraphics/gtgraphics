@@ -1,7 +1,7 @@
 .page-header.clearfix
   %h1.pull-left= Image.model_name.human(count: 2)
   .btn-toolbar.pull-right
-    = button_link_to prepend_icon(:plus, 'New Image'), :new_admin_image, type: :success
+    = create_button_link_for Image, namespace: :admin
 
 - if @images.any?
   %table.table

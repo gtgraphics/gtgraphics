@@ -1,6 +1,7 @@
 class CreateImages < ActiveRecord::Migration
   def change
     create_table :images do |t|
+      t.string :slug, index: true, null: false
       t.timestamps
     end
     reversible do |dir|

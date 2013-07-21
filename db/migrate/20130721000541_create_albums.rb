@@ -1,6 +1,7 @@
 class CreateAlbums < ActiveRecord::Migration
   def change
     create_table :albums do |t|
+      t.string :slug, index: true, null: false
       t.timestamps
     end
     reversible do |dir|

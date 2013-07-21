@@ -37,6 +37,10 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   private
+  def image_params
+    params.require(:image).permit(:title, :caption, :files_attributes)
+  end
+
   def load_image
     @image = Image.find(params[:id])
   end
