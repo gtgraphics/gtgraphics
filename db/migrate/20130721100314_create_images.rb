@@ -2,7 +2,7 @@ class CreateImages < ActiveRecord::Migration
   def change
     create_table :images do |t|
       t.string :title
-      t.string :slug, index: true, null: false
+      t.string :slug, index: { unique: true }, null: false
       t.attachment :asset
       t.integer :width
       t.integer :height
