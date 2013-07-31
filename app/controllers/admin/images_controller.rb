@@ -3,10 +3,8 @@ class Admin::ImagesController < Admin::ApplicationController
 
   before_action :load_image, only: %i(show edit update destroy)
 
-  breadcrumbs namespace: :admin do |b|
-    b.collection :images
-    b.element :image, only: %i(show edit update)
-  end
+  breadcrumbs_for_resource :images
+  breadcrumbs_for_resource
 
   def index
     @images = Image.order(:title)

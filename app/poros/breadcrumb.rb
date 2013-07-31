@@ -1,5 +1,5 @@
 class Breadcrumb
-  attr_reader :breadcrumbs, :caption, :destination
+  attr_reader :breadcrumbs, :caption, :destination, :path, :url
   private :breadcrumbs
 
   def initialize(breadcrumbs, caption, destination)
@@ -8,8 +8,13 @@ class Breadcrumb
     @breadcrumbs = breadcrumbs
     @caption = caption.to_s
     @destination = destination
+    if @destination.is_a? String
+      @path = @url = @destination
+    else
+      @path = breadcrumbs.controller_context.polymorphic_path(destination)
+      @url = breadcrumbs.controller_context.polymorphic_url(destination)
+    end
   end
-
 
   def index
     breadcrumbs.index(self)
@@ -27,23 +32,7 @@ class Breadcrumb
     "#<#{self.class.name} caption: #{caption.inspect}, destination: #{destination.inspect}>"
   end
 
-  def path
-    if destination.is_a? String
-      destination
-    else
-      breadcrumbs.controller_context.polymorphic_path(destination)
-    end
-  end
-
   def to_s
     caption
-  end
-
-  def url
-    if destination.is_a? String
-      destination
-    else
-      breadcrumbs.controller_context.polymorphic_url(destination)
-    end
   end
 end

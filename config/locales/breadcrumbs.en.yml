@@ -1,0 +1,4 @@
+en:
+  breadcrumbs:
+    new: 'Create %{model}'
+    edit: 'Edit %{model}'

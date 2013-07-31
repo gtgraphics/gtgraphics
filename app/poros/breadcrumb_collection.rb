@@ -1,12 +1,11 @@
 class BreadcrumbCollection < Array
   CAPTION_LOOKUP_ORDER = [:name, :title, :to_s]
 
-  attr_reader :controller_context, :default_options
+  attr_reader :controller_context
 
-  def initialize(controller_context, options = {})
+  def initialize(controller_context)
     super()
     @controller_context = controller_context
-    @default_options = options
   end
 
   def add(caption, destination, options = {})
@@ -19,6 +18,12 @@ class BreadcrumbCollection < Array
     self << Breadcrumb.new(self, caption, destination) if breadcrumb_addable
   end
 
+  def inspect
+    substr = map { |item| "\"#{item.caption}\"=>\"#{item.path}\"" }.join(', ')
+    "#<#{self.class.name} #{substr}>"
+  end
+
+=begin
   def collection(collection_name_or_class, options = {})
     options = options.reverse_merge(default_options)
     options.assert_valid_keys(:only, :except, :namespace)
@@ -58,9 +63,5 @@ class BreadcrumbCollection < Array
     collection(resource_name, options)
     element(resource_name, element_options)
   end
-
-  def inspect
-    substr = map { |item| "\"#{item.caption}\"=>\"#{item.path}\"" }.join(', ')
-    "#<#{self.class.name} #{substr}>"
-  end
+=end
 end
