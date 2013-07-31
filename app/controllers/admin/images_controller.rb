@@ -3,12 +3,10 @@ class Admin::ImagesController < Admin::ApplicationController
 
   before_action :load_image, only: %i(show edit update destroy)
 
-  #breadcrumbs do |b|
-  #  b.push @image if action_name
-  #end
-
-  breadcrumb Image.model_name.human(count: 2), :admin_images
-  breadcrumb -> { @image.to_s }, -> { [:admin, @image] }, only: %i(show edit update)
+  breadcrumbs namespace: :admin do |b|
+    b.collection :images
+    b.element :image, only: %i(show edit update)
+  end
 
   def index
     @images = Image.order(:title)

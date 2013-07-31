@@ -70,6 +70,8 @@ class Image < ActiveRecord::Base
   end
 
   def set_title
-    self.title = File.basename(asset.queued_for_write[:original].original_filename, '.*').humanize if title.blank?
+    if asset.queued_for_write[:original] and title.blank?
+      self.title = File.basename(asset.queued_for_write[:original].original_filename, '.*').humanize
+    end
   end
 end

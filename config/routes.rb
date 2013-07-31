@@ -9,6 +9,20 @@ GtGraphics::Application.routes.draw do
     resources :shouts
   end
 
+  # Legacy URLs that have changed permanently (HTTP 301)
+  get '/category/:types/:page', to: redirect { |params, request|
+    type = params[:types].split(',').first.downcase
+    url = "/albums/#{type}"
+    page = params[:page].presence.try(:to_i)
+    if page and page > 1
+      url << "?page=#{page}"
+    else
+      url
+    end
+  }
+  get '/image/:id', to: redirect('/images/%{id}')
+  get '/shoutbox', to: redirect('/shouts')
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
