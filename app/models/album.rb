@@ -11,7 +11,7 @@
 class Album < ActiveRecord::Base
   translates :title
 
-  has_many :image_assignments, class_name: 'Image::AlbumAssignment', dependent: :destroy
+  has_many :image_assignments, class_name: 'Album::ImageAssignment', dependent: :destroy
   has_many :images, through: :image_assignments
 
   validates :title, presence: true, uniqueness: true

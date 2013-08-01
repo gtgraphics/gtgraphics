@@ -8,11 +8,11 @@
 #  position :integer          default(0), not null
 #
 
-class Image::AlbumAssignment < ActiveRecord::Base
+class Album::ImageAssignment < ActiveRecord::Base
   self.table_name = 'album_images'
 
   belongs_to :album
   belongs_to :image
 
-  acts_as_list
+  acts_as_list scope: :album_id
 end

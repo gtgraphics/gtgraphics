@@ -25,7 +25,7 @@ class Image < ActiveRecord::Base
 
   translates :caption
 
-  has_many :album_assignments, class_name: 'Image::AlbumAssignment', dependent: :destroy
+  has_many :album_assignments, class_name: 'Album::ImageAssignment', dependent: :destroy
   has_many :albums, through: :album_assignments
   has_many :versions, class_name: 'Image::Version', dependent: :destroy
 
