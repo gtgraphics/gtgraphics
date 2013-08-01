@@ -8,18 +8,29 @@ class BreadcrumbCollection < Array
     @controller_context = controller_context
   end
 
-  def add(caption, destination, options = {})
+  def append(caption, destination, options = {})
+    add_with_method(:push, caption, destination, options)
+  end
+
+  alias_method :add, :append
+
+  def inspect
+    substr = map { |item| "\"#{item.caption}\"=>\"#{item.path}\"" }.join(', ')
+    "#<#{self.class.name} #{substr}>"
+  end
+
+  def prepend(caption, destination, options = {})
+    add_with_method(:unshift, caption, destination, options)
+  end
+
+  private
+  def add_with_method(method, caption, destination, options)
     options.assert_valid_keys(:only, :except)
 
     breadcrumb_addable = options[:only] && controller_context.action_name.to_sym.in?(Array(options[:only]).map(&:to_sym))
     breadcrumb_addable ||= options[:except] && !controller_context.action_name.to_sym.in?(Array(options[:except]).map(&:to_sym))
     breadcrumb_addable ||= options[:only].nil? && options[:except].nil?
 
-    self << Breadcrumb.new(self, caption, destination) if breadcrumb_addable
-  end
-
-  def inspect
-    substr = map { |item| "\"#{item.caption}\"=>\"#{item.path}\"" }.join(', ')
-    "#<#{self.class.name} #{substr}>"
+    send(method, Breadcrumb.new(self, caption, destination)) if breadcrumb_addable
   end
 end

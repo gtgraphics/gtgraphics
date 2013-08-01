@@ -1,0 +1,2 @@
+Number::boolify = ->
+  @ >= 1

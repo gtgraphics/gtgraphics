@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: menu_items
+#
+#  id          :integer          not null, primary key
+#  record_id   :integer
+#  record_type :string(255)
+#  position    :integer
+#  created_at  :datetime
+#  updated_at  :datetime
+#
+
 class MenuItem < ActiveRecord::Base
   RECORD_TYPES = %w(
     Album

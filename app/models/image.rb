@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: images
+#
+#  id                 :integer          not null, primary key
+#  title              :string(255)
+#  slug               :string(255)      not null
+#  asset_file_name    :string(255)
+#  asset_content_type :string(255)
+#  asset_file_size    :integer
+#  asset_updated_at   :datetime
+#  width              :integer
+#  height             :integer
+#  exif_data          :text
+#  created_at         :datetime
+#  updated_at         :datetime
+#
+
 class Image < ActiveRecord::Base
   STYLES = {
     thumbnail: ['75x75#', :png],
@@ -7,6 +25,8 @@ class Image < ActiveRecord::Base
 
   translates :caption
 
+  has_many :album_assignments, class_name: 'Image::AlbumAssignment', dependent: :destroy
+  has_many :albums, through: :album_assignments
   has_many :versions, class_name: 'Image::Version', dependent: :destroy
 
   has_attached_file :asset, styles: STYLES
@@ -23,6 +43,10 @@ class Image < ActiveRecord::Base
   validates_attachment :asset, presence: true, content_type: { content_type: %w(image/jpeg image/pjpeg image/gif image/png) }
 
   accepts_nested_attributes_for :versions, :translations
+
+  alias_attribute :file_name, :asset_file_name
+  alias_attribute :content_type, :asset_content_type
+  alias_attribute :file_size, :asset_file_size
 
   def asset_changed?
     !asset.queued_for_write[:original].nil?

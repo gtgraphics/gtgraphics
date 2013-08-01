@@ -3,7 +3,6 @@ class Admin::ImagesController < Admin::ApplicationController
 
   before_action :load_image, only: %i(show edit update destroy)
 
-  breadcrumbs_for_resource :images
   breadcrumbs_for_resource
 
   def index

@@ -1,3 +1,22 @@
+# == Schema Information
+#
+# Table name: image_versions
+#
+#  id                 :integer          not null, primary key
+#  image_id           :integer
+#  asset_file_name    :string(255)
+#  asset_content_type :string(255)
+#  asset_file_size    :integer
+#  asset_updated_at   :datetime
+#  width              :integer
+#  height             :integer
+#  ratio_numerator    :integer
+#  ratio_denominator  :integer
+#  exif_data          :text
+#  created_at         :datetime
+#  updated_at         :datetime
+#
+
 class Image < ActiveRecord::Base
   class Version < ActiveRecord::Base
     RATIOS = [

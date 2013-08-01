@@ -4,21 +4,27 @@
   Use Font Awesome icons (default)
   To use Glyphicons sprites instead of Font Awesome, replace with "require twitter-bootstrap-static/sprites"
   =require twitter-bootstrap-static/fontawesome
-  */
+*/
 
-  @media (min-width: 980px) {
-    body {
-      margin-top: 60px;
-    }
+@media (min-width: 980px) {
+  body {
+    margin-top: 60px;
   }
+}
 
-  td.actions {
-    text-align: right;
-    .btn-toolbar {
-      margin: 0;
-    }
+td.actions {
+  text-align: right;
+  .btn-toolbar {
+    margin: 0;
   }
+}
 
-  .thumbnail-cell {
-    width: 80px;
-  }
+.thumbnail-cell {
+  width: 80px;
+}
+
+.btn-navbar {
+  height: 30px !important;
+  line-height: normal;
+  padding: 4px 8px;
+}

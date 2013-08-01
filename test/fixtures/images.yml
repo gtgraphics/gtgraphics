@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: images
+#
+#  id                 :integer          not null, primary key
+#  title              :string(255)
+#  slug               :string(255)      not null
+#  asset_file_name    :string(255)
+#  asset_content_type :string(255)
+#  asset_file_size    :integer
+#  asset_updated_at   :datetime
+#  width              :integer
+#  height             :integer
+#  exif_data          :text
+#  created_at         :datetime
+#  updated_at         :datetime
+#
+
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 # This model initially had no columns defined.  If you add columns to the

@@ -3,7 +3,8 @@ class Breadcrumb
   private :breadcrumbs
 
   def initialize(breadcrumbs, caption, destination)
-    raise ArgumentError, 'no caption specified' if caption.blank?
+    raise ArgumentError, 'no breadcrumb collection specified' if breadcrumbs.nil?
+    raise ArgumentError, 'caption is blank' if caption.blank?
     raise ArgumentError, 'no destination specified' if destination.nil?
     @breadcrumbs = breadcrumbs
     @caption = caption.to_s

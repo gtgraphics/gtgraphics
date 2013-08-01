@@ -1,4 +1,5 @@
 en:
   breadcrumbs:
+    home: 'Home'
     new: 'Create %{model}'
     edit: 'Edit %{model}'

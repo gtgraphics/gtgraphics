@@ -41,6 +41,10 @@ en:
     confirm:
       destroy: 'Do you really want to delete this %{model}?'
 
+  views:
+    hints:
+      empty: 'No %{model} have been created yet.'
+
   activerecord:
     models:
       album:

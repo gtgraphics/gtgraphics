@@ -16,4 +16,4 @@
 
   = form.actions do
     = form.action :submit, button_html: { class: 'btn btn-primary' }
-    = form.action :cancel, url: :admin_images, button_html: { class: 'btn' }
+    = form.action :cancel, url: @image.persisted? ? [:admin, @image] : :admin_images, button_html: { class: 'btn' }

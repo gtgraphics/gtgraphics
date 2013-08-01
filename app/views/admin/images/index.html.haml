@@ -1,24 +1,9 @@
-.page-header.clearfix
-  %h1.pull-left= Image.model_name.human(count: 2)
-  .btn-toolbar.pull-right
+= index_headline_for Image do
+  .btn-toolbar
     = create_button_link_for Image, namespace: :admin
 
 - if @images.any?
-  %table.table.table-striped
-    %thead
-      %tr
-        %th.thumbnail-cell
-        %th= Image.human_attribute_name(:title)
-        %th.actions
-    %tbody
-      - @images.each do |image|
-        %tr.thumbnail-cell
-          %td
-            = link_to [:admin, image] do
-              = image_tag image.asset.url(:thumbnail), class: 'img-polaroid'
-          %td= link_to image.title, [:admin, image]
-          %td.actions
-            = action_buttons_for image
+  = render 'table'
 - else
   .well.text-center
-    No images created
+    = translate('views.hints.empty', model: Image.model_name.human(count: 2))
