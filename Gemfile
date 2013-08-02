@@ -13,6 +13,7 @@ gem 'cancan'
 # Models
 gem 'acts_as_list'
 gem 'acts_as_tree'
+gem 'awesome_nested_set'
 gem 'annotate'
 gem 'paperclip'
 gem 'paper_trail', github: 'airblade/paper_trail', branch: 'rails4'

@@ -17,7 +17,7 @@ class MenuItem < ActiveRecord::Base
     Page
   )
 
-  acts_as_list
+  acts_as_nested_set
 
   translates :title
 
