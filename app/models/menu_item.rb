@@ -26,4 +26,6 @@ class MenuItem < ActiveRecord::Base
   validates :title, presence: true
   validates :record_id, presence: true
   validates :record_type, presence: true, inclusion: { in: RECORD_TYPES }
+
+  # default_scope -> { order(:lft) }
 end

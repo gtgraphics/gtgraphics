@@ -14,5 +14,7 @@ class Album::ImageAssignment < ActiveRecord::Base
   belongs_to :album
   belongs_to :image
 
+  default_scope -> { order(:position) }
+
   acts_as_list scope: :album_id
 end
