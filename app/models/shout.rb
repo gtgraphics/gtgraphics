@@ -31,6 +31,6 @@ class Shout < ActiveRecord::Base
 
   private
   def check_coordinates_uniqueness
-    errors.add(:taken) if exists?(x: x_padding, y: y_padding)
+    errors.add(:taken) if Shout.exists?(x: x_padding, y: y_padding)
   end
 end
