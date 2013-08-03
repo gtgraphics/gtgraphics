@@ -1,4 +1,5 @@
-= view_headline_for @image
+= view_headline_for @image do
+  = action_buttons_for @image, except: :show
 
 %p
   = image_tag @image.asset.url(:preview), class: 'img-polaroid', alt: @image.title

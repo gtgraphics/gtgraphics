@@ -35,6 +35,7 @@ gem 'jquery-rails'
 gem 'jquery-turbolinks'
 gem 'turbolinks'
 gem 'compass-rails', github: 'Compass/compass-rails', branch: 'rails4-hack' # hack until compass has official Rails 4 support
+gem 'formtastic-bootstrap', github: 'tlux/formtastic-bootstrap', branch: 'bootstrap3'
 #gem 'twitter-bootstrap-rails'
 #gem 'formtastic-bootstrap'
 

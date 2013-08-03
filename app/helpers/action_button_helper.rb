@@ -5,7 +5,7 @@ module ActionButtonHelper
     displayed_buttons -= Array(options[:except]) if options[:except]
 
     content_tag :div, class: 'btn-toolbar' do
-      with_options options.merge(namespace: :admin, size: :mini) do |buttons|
+      with_options options.merge(namespace: :admin) do |buttons|
         html = ""
         html << buttons.view_button_link_for(object) if displayed_buttons.include?(:show)
         html << buttons.update_button_link_for(object) if displayed_buttons.include?(:edit)
