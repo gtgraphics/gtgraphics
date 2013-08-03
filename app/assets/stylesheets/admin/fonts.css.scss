@@ -1,0 +1,21 @@
+@import "//fonts.googleapis.com/css?family=Karla:400,700,400italic,700italic";
+
+body, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Karla', sans-serif !important;
+}
+
+.page-header {
+  color: #d9534f;
+  h1 {
+    text-transform: uppercase;
+  }
+}
+
+.navbar-brand {
+  text-transform: uppercase;
+  font-weight: 700 !important;
+}
+
+strong, b {
+  font-weight: 700;
+}

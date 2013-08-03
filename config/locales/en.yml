@@ -53,6 +53,8 @@ en:
 
   activerecord:
     attributes:
+      image:
+        content_type: Content Type
       shout:
         nickname: Author
         ip: IP
