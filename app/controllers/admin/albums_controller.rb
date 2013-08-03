@@ -6,18 +6,25 @@ class Admin::AlbumsController < Admin::ApplicationController
   breadcrumbs_for_resource
 
   def index
-    @albums = Album.all
-    respond_with @albums
+    @albums = Album.joins(:translations).order('album_translations.title')
+    respond_with :admin, @albums
   end
 
   def new
     @album = Album.new
-    respond_with @album
+    %w(en de).each do |locale|
+      @album.translations.build(locale: locale)
+    end
+    respond_with :admin, @album
   end
 
   def create
     @album = Album.create(album_params)
-    respond_with @album
+    respond_with :admin, @album
+  end
+
+  def show
+    redirect_to [:admin, @album, :images]
   end
 
   private
@@ -26,6 +33,6 @@ class Admin::AlbumsController < Admin::ApplicationController
   end
 
   def load_album
-    @album = Album.find_by_slug(params[:id])
+    @album = Album.find_by_slug!(params[:id])
   end
 end

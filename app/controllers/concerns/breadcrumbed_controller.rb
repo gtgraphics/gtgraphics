@@ -15,9 +15,9 @@ module BreadcrumbedController
       end
     end
 
-    def breadcrumbs(&block)
+    def breadcrumbs(options = {}, &block)
       raise ArgumentError, 'no block given' unless block_given?
-      before_action do |controller|
+      before_action(options) do |controller|
         controller.instance_exec(breadcrumbs, controller, &block)
       end
     end
@@ -28,7 +28,7 @@ module BreadcrumbedController
       record_caption_methods = Array(options.fetch(:record_caption) { RECORD_CAPTION_METHODS })
       parent_resource = args.first.present? && options[:parent] != false
 
-      breadcrumbs do |b, controller|
+      breadcrumbs(options.slice(:only, :except)) do |b, controller|
         controller_namespace = options.fetch(:namespace) do
           controller.class.name.deconstantize.split('::').map(&:underscore)
         end
@@ -48,26 +48,28 @@ module BreadcrumbedController
         element_name = resource_class.model_name.element.to_sym
         collection_name = resource_class.model_name.collection.to_sym
 
-        @parent_breadcrumb_resources ||= []
+        @parent_breadcrumb_records ||= []
 
         if parent_resource
-          unless singular_string?(args.first.to_s)
-            b.append(resource_class.model_name.human(count: 2), controller_namespace + [collection_name]) # TODO Include Parents
+          record = load_record(element_name, options)
+          if record
+            unless singular_string?(args.first.to_s)
+              b.append(resource_class.model_name.human(count: 2), controller_namespace + [collection_name]) if options[:include_collection] != false
+            end
+            record_caption = load_caption(record)
+            b.append(record_caption, controller_namespace + @parent_breadcrumb_records + [record]) if options[:include_element] != false
+            @parent_breadcrumb_records << record
           end
-
-          record = load_record(element_name)
-          record_caption = load_caption(record)
-          b.append(record_caption, controller_namespace + @parent_breadcrumb_resources + [record])
-
-          @parent_breadcrumb_resources << element_name
         else
           # Resource is primary resource in controller
-          b.append(resource_class.model_name.human(count: 2), controller_namespace + @parent_breadcrumb_resources + [collection_name]) # TODO Include Parents
+          b.append(resource_class.model_name.human(count: 2), controller_namespace + @parent_breadcrumb_records + [collection_name]) if options[:include_collection] != false
 
           if controller.action_name.in? %w(show edit update)
-            record = load_record(element_name)
-            record_caption = load_caption(record)
-            b.append(record_caption, controller_namespace + @parent_breadcrumb_resources + [record])
+            record = load_record(element_name, options)
+            if record
+              record_caption = load_caption(record)
+              b.append(record_caption, controller_namespace + @parent_breadcrumb_records + [record]) if options[:include_element] != false
+            end
           end
 
           if controller.action_name.in? %w(new create)
@@ -92,9 +94,9 @@ module BreadcrumbedController
     RECORD_CAPTION_METHODS.collect { |method| record.try(method) }.compact.first
   end
 
-  def load_record(element_name)
+  def load_record(element_name, options)
     record = instance_variable_get("@#{element_name}")
-    raise "@#{element_name} has not been set in #{self.class.name.deconstantize.underscore}/#{controller_name}##{action_name}" unless record    
+    raise "@#{element_name} has not been set in #{self.class.name.deconstantize.underscore}/#{controller_name}##{action_name}" if options[:allow_nil] != true and record.nil?
     record
   end
 

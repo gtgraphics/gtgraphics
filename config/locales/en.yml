@@ -22,6 +22,12 @@
 en:
   hello: "Hello world"
 
+  browsers:
+    chrome: Chrome
+    firefox: Firefox
+    ie: Internet Explorer
+    opera: Opera
+
   locales:
     en: English
     de: German
@@ -46,6 +52,13 @@ en:
       empty: 'No %{model} have been created yet.'
 
   activerecord:
+    attributes:
+      shout:
+        nickname: Author
+        ip: IP
+        os: Platform
+        x: X Coordinate
+        y: Y Coordinate
     models:
       album:
         one: Album

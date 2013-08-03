@@ -26,6 +26,7 @@ module ButtonHelper
     type = options.delete(:as)
     other_type = options.delete(:type)
     type ||= other_type
+    type ||= 'default'
     icon = options.delete(:icon)
     size = options.delete(:size)
     block_rendering = options.delete(:block)

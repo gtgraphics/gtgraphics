@@ -32,10 +32,11 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
+gem 'jquery-turbolinks'
 gem 'turbolinks'
 gem 'compass-rails', github: 'Compass/compass-rails', branch: 'rails4-hack' # hack until compass has official Rails 4 support
-gem 'twitter-bootstrap-rails'
-gem 'formtastic-bootstrap'
+#gem 'twitter-bootstrap-rails'
+#gem 'formtastic-bootstrap'
 
 # Tools
 group :development do
@@ -48,6 +49,7 @@ gem 'better_errors'
 gem 'binding_of_caller'
 gem 'request_store'
 gem 'exifr'
+gem 'user_agent'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

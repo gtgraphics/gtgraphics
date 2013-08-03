@@ -2,9 +2,6 @@
   %ul.breadcrumb
     - breadcrumbs.each do |breadcrumb|
       - if breadcrumb.last?
-        %li.active
-          = breadcrumb.caption
+        %li.active= breadcrumb.caption
       - else
-        %li
-          = link_to breadcrumb.caption, breadcrumb.destination
-          %span.divider /
+        %li= link_to breadcrumb.caption, breadcrumb.destination

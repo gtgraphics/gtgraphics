@@ -7,18 +7,23 @@
     = csrf_meta_tags
   %body
     .navbar.navbar-fixed-top.navbar-inverse
-      .navbar-inner
-        .container
-          %button.btn.btn-navbar{data: { toggle: 'collapse', target: '.nav-collapse' }}
-            = icon(:reorder)
+      .container
+        %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-responsive-collapse' }}
+          = icon(:reorder)
 
-          = link_to 'GT Graphics', :admin_root, class: 'brand'
+        = link_to 'GT Graphics', :admin_root, class: 'navbar-brand'
 
-          .nav-collapse.collapse
-            %ul.nav
-              = active_link_to Image.model_name.human(count: 2), :admin_images, wrap_tag: :li
-              = active_link_to Album.model_name.human(count: 2), :admin_albums, wrap_tag: :li
-              = active_link_to Shout.model_name.human(count: 2), :admin_shouts, wrap_tag: :li
+        .nav-collapse.collapse.navbar-responsive-collapse
+          %ul.nav.navbar-nav
+            = active_link_to :admin_images, wrap_tag: :li do
+              = Image.model_name.human(count: 2)
+              .badge= Image.count
+            = active_link_to :admin_albums, wrap_tag: :li do
+              = Album.model_name.human(count: 2)
+              .badge= Album.count
+            = active_link_to :admin_shouts, wrap_tag: :li do
+              = Shout.model_name.human(count: 2)
+              .badge= Shout.count
 
     .container
       = render 'breadcrumbs'

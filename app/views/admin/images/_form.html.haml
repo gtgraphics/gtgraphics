@@ -1,4 +1,4 @@
-= semantic_form_for [:admin, @image], html: { class: 'form-horizontal' } do |form|
+= semantic_form_for @album ? [:admin, @album, @image] : [:admin, @image], html: { class: 'form-horizontal' } do |form|
 
   = form.inputs do
     = form.input :title
@@ -10,10 +10,6 @@
     = translation_fields.input :locale, as: :hidden
     = translation_fields.input :caption, input_html: { class: 'span6' }
 
-  /= form.inputs for: :files do |file_fields|
-  /  = file_fields.input :asset
-
-
   = form.actions do
     = form.action :submit, button_html: { class: 'btn btn-primary' }
-    = form.action :cancel, url: @image.persisted? ? [:admin, @image] : :admin_images, button_html: { class: 'btn' }
+    = form.action :cancel, url: @image.persisted? ? [:admin, @album, @image].compact : [:admin, @album, :images].compact, button_html: { class: 'btn btn-default' }

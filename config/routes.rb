@@ -4,9 +4,11 @@ GtGraphics::Application.routes.draw do
   namespace :admin do
     root 'home#index'
 
-    resources :albums
+    resources :albums do
+      resources :images
+    end
     resources :images
-    resources :shouts
+    resources :shouts, except: :show
   end
 
   # Legacy URLs that have changed permanently (HTTP 301)

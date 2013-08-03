@@ -11,7 +11,7 @@
 class Album::ImageAssignment < ActiveRecord::Base
   self.table_name = 'album_images'
 
-  belongs_to :album
+  belongs_to :album, counter_cache: :images_count
   belongs_to :image
 
   default_scope -> { order(:position) }

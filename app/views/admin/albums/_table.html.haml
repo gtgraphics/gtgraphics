@@ -1,0 +1,18 @@
+- albums ||= @albums
+- actions = true if actions.nil?
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th= Album.human_attribute_name :title
+      %th= Album.human_attribute_name :images_count
+      - if actions
+        %th.actions
+  %tbody
+    - albums.each do |album|
+      %tr
+        %td= link_to album.title, [:admin, album]
+        %td= album.images_count
+        - if actions
+          %td.actions
+            = action_buttons_for album

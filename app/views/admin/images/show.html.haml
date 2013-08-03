@@ -1,7 +1,7 @@
 = view_headline_for @image
 
 %p
-  = image_tag @image.asset.url(:thumbnail), class: 'img-polaroid', alt: @image.to_s
+  = image_tag @image.asset.url(:preview), class: 'img-polaroid', alt: @image.title
 
 = simple_format @image.caption
 
@@ -12,3 +12,7 @@
   %dd= @image.aspect_ratio
   %dt Artist
   %dd= @image.exif_data.artist || '-'
+
+- if @albums and @albums.any?
+  %h3= Album.model_name.human(count: 2)
+  = render 'admin/albums/table', albums: @image.albums, actions: false

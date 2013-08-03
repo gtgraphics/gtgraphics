@@ -1,17 +1,27 @@
 class Admin::ImagesController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_image, only: %i(show edit update destroy)
+  before_action :load_album
+  before_action :load_image_or_image_album_assignment, only: %i(show edit update destroy)
 
+  breadcrumbs_for_resource :albums, allow_nil: true
   breadcrumbs_for_resource
 
   def index
-    @images = Image.order(:title)
+    if @album
+      @images = @album.images.joins(:album_assignments).order('album_images.position')
+    else
+      @images = Image.order(:title)
+    end
     respond_with :admin, @images
   end
 
   def new
-    @image = Image.new
+    if @album
+      @image = @album.images.new
+    else
+      @image = Image.new
+    end
     %w(en de).each do |locale|
       @image.translations.build(locale: locale)
     end
@@ -19,11 +29,16 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def create
-    @image = Image.create(image_params)
-    respond_with :admin, @image
+    if @album
+      @image = @album.images.create(image_params)
+    else
+      @image = Image.create(image_params)
+    end
+    respond_with :admin, @image, location: [:admin, @album, @image].compact
   end
 
   def show
+    @albums = @image.albums.to_a unless @album
     respond_with :admin, @image
   end
 
@@ -37,8 +52,12 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def destroy
-    @image.destroy
-    respond_with :admin, @image
+    if @image_album_assignment
+      @image_album_assignment.destroy
+    else
+      @image.destroy
+    end
+    respond_with :admin, @image, location: [:admin, @album, :images].compact
   end
 
   private
@@ -46,7 +65,12 @@ class Admin::ImagesController < Admin::ApplicationController
     params.require(:image).permit(:slug, :title, :caption, :asset, translations_attributes: [:caption, :locale])
   end
 
-  def load_image
-    @image = Image.find_by_slug(params[:id])
+  def load_album
+    @album = Album.find_by_slug(params[:album_id]) if params[:album_id]
+  end
+
+  def load_image_or_image_album_assignment
+    @image = Image.find_by_slug!(params[:id])
+    @image_album_assignment = @image.album_assignments.find_by_image_id(@image.id) if @album
   end
 end

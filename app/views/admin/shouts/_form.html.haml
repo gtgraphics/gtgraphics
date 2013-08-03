@@ -1,0 +1,11 @@
+= semantic_form_for [:admin, @shout], html: { class: 'form-horizontal' } do |form|
+
+  = form.inputs do
+    = form.input :nickname
+    = form.input :message
+    = form.input :x, input_html: { class: 'span1' }
+    = form.input :y, input_html: { class: 'span1' }
+
+  = form.actions do
+    = form.action :submit, button_html: { class: 'btn btn-primary' }
+    = form.action :cancel, url: @shout.persisted? ? [:admin, @shout] : :admin_shouts, button_html: { class: 'btn btn-default' }

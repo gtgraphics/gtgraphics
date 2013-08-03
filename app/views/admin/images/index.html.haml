@@ -1,6 +1,6 @@
 = index_headline_for Image do
   .btn-toolbar
-    = create_button_link_for Image, namespace: :admin
+    = create_button_link_for Image, url: [:new, :admin, @album, :image].compact
 
 - if @images.any?
   = render 'table'

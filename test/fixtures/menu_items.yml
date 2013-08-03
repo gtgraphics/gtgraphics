@@ -5,9 +5,12 @@
 #  id          :integer          not null, primary key
 #  record_id   :integer
 #  record_type :string(255)
-#  position    :integer
 #  created_at  :datetime
 #  updated_at  :datetime
+#  parent_id   :integer
+#  lft         :integer          not null
+#  rgt         :integer          not null
+#  depth       :integer
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

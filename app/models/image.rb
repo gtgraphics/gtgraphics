@@ -19,6 +19,7 @@
 class Image < ActiveRecord::Base
   STYLES = {
     thumbnail: ['75x75#', :png],
+    preview: ['360x200#', :jpeg],
     medium: ['1280x780', :jpeg],
     large: ['1920x1080', :jpeg]
   }

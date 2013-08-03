@@ -1,18 +1,10 @@
-/*
-  =require twitter-bootstrap-static/bootstrap
-
-  Use Font Awesome icons (default)
-  To use Glyphicons sprites instead of Font Awesome, replace with "require twitter-bootstrap-static/sprites"
-  =require twitter-bootstrap-static/fontawesome
-*/
-
 @media (min-width: 980px) {
   body {
-    margin-top: 60px;
+    padding-top: 70px;
   }
 }
 
-td.actions {
+/*td.actions {
   text-align: right;
   .btn-toolbar {
     margin: 0;
@@ -27,4 +19,49 @@ td.actions {
   height: 30px !important;
   line-height: normal;
   padding: 4px 8px;
+}
+
+.controls span.help-inline {
+  padding-top: 5px;
+  vertical-align: top;
+}*/
+
+.page-header-with-content {
+  margin-top: 20px !important;
+  .page-header-content {
+    margin-top: 17px;
+  }
+}
+
+.table {
+  .thumbnail-cell {
+    width: 80px;
+  }
+  .actions {
+    text-align: right;
+    .btn-toolbar {
+      margin: {
+        top: -2px;
+        bottom: -2px;
+      }
+    }
+  }
+}
+
+.navbar-inverse {
+  .navbar-nav li {
+    a {
+      .badge {
+        background-color: #777;
+        color: #333;
+        margin-left: 2px;
+      }
+      &:hover .badge {
+        background-color: white;
+      }
+    }
+    &.active a .badge {
+      background-color: white;
+    }
+  }
 }

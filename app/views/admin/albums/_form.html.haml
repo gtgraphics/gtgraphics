@@ -1,8 +1,13 @@
 = semantic_form_for [:admin, @album], html: { class: 'form-horizontal' } do |form|
 
   = form.inputs do
-    = form.input :title
+    = form.input :slug
+
+  = form.inputs for: :translations do |translation_fields|
+    %legend= translate(translation_fields.object.locale, scope: :locales)
+    = translation_fields.input :locale, as: :hidden
+    = translation_fields.input :title, input_html: { class: 'span6' }
 
   = form.actions do
     = form.action :submit, button_html: { class: 'btn btn-primary' }
-    = form.action :cancel, url: @album.persisted? ? [:admin, @album] : :admin_albums, button_html: { class: 'btn' }
+    = form.action :cancel, url: @album.persisted? ? [:admin, @album] : :admin_albums, button_html: { class: 'btn btn-default' }

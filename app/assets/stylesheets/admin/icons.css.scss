@@ -1,3 +1,5 @@
+@import "//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css";
+
 .append-icon {
   .caption + i {
     margin-left: 5px;
@@ -19,13 +21,13 @@
 .btn-mini {
   .append-icon {
     .caption + i {
-      margin-left: 2px;
+      margin-left: 3px;
     }
   }
 
   .prepend-icon {
     i + .caption {
-      margin-left: 2px;
+      margin-left: 3px;
     }
   }
 }

@@ -1,3 +1,6 @@
+- images ||= @images
+- actions = true if actions.nil?
+
 %table.table.table-striped
   %thead
     %tr
@@ -6,16 +9,18 @@
       %th= Image.human_attribute_name :content_type
       %th= Image.human_attribute_name :width
       %th= Image.human_attribute_name :height
-      %th.actions
+      - if actions
+        %th.actions
   %tbody
-    - @images.each do |image|
-      %tr.thumbnail-cell
-        %td
-          = link_to [:admin, image] do
+    - images.each do |image|
+      %tr
+        %td.thumbnail-cell
+          = link_to [:admin, @album, image].compact do
             = image_tag image.asset.url(:thumbnail), class: 'img-polaroid'
-        %td= link_to image.title, [:admin, image]
+        %td= link_to image.title, [:admin, @album, image].compact
         %td= image.content_type
         %td= image.width
         %td= image.height
-        %td.actions
-          = action_buttons_for image
+        - if actions
+          %td.actions
+            = action_buttons_for image, parent: @album

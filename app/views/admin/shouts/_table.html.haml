@@ -1,0 +1,21 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th= Shout.human_attribute_name :nickname
+      %th= Shout.human_attribute_name :message
+      %th= Shout.human_attribute_name :ip
+      %th= Shout.human_attribute_name :browser
+      %th= Shout.human_attribute_name :os
+      %th= Shout.human_attribute_name :created_at
+      %th.actions
+  %tbody
+    - @shouts.each do |shout|
+      %tr
+        %td= shout.nickname
+        %td= shout.message
+        %td= shout.ip
+        %td= shout.browser
+        %td= shout.os
+        %td= localize shout.created_at
+        %td.actions
+          = action_buttons_for shout, parent: @album, except: :show
