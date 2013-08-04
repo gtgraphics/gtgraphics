@@ -11,6 +11,8 @@
 #
 
 class Album::Translation < ActiveRecord::Base
+  include ::Translation
+
   validates :title, presence: true, if: :default_locale?
 
   def default_locale?

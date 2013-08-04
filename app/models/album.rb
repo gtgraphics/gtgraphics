@@ -10,13 +10,14 @@
 #
 
 class Album < ActiveRecord::Base
+  include Translatable
+
   translates :title
 
   has_many :image_assignments, class_name: 'Album::ImageAssignment', dependent: :destroy
   has_many :images, through: :image_assignments
 
   validates :slug, presence: true, uniqueness: true
-  validates_associated :translations
   
   before_validation :set_slug
 
