@@ -21,7 +21,8 @@ gem 'globalize3', github: 'svenfuchs/globalize3', branch: 'rails4'
 
 # Views
 gem 'haml-rails'
-gem 'formtastic', github: 'justinfrench/formtastic', branch: 'rails4'
+#gem 'formtastic', github: 'justinfrench/formtastic', branch: 'rails4'
+gem 'simple_form', '3.0.0.rc'
 gem 'kaminari'
 gem 'active_link_to'
 gem 'jbuilder', '~> 1.2'
@@ -35,7 +36,7 @@ gem 'jquery-rails'
 gem 'jquery-turbolinks'
 gem 'turbolinks'
 gem 'compass-rails', github: 'Compass/compass-rails', branch: 'rails4-hack' # hack until compass has official Rails 4 support
-gem 'formtastic-bootstrap', github: 'tlux/formtastic-bootstrap', branch: 'bootstrap3'
+#gem 'formtastic-bootstrap', github: 'tlux/formtastic-bootstrap', branch: 'bootstrap3'
 #gem 'twitter-bootstrap-rails'
 #gem 'formtastic-bootstrap'
 

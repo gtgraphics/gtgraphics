@@ -2,24 +2,17 @@
 #
 # Table name: images
 #
-#  id                 :integer          not null, primary key
-#  title              :string(255)
-#  slug               :string(255)      not null
-#  asset_file_name    :string(255)
-#  asset_content_type :string(255)
-#  asset_file_size    :integer
-#  asset_updated_at   :datetime
-#  width              :integer
-#  height             :integer
-#  exif_data          :text
-#  created_at         :datetime
-#  updated_at         :datetime
+#  id         :integer          not null, primary key
+#  slug       :string(255)      not null
+#  created_at :datetime
+#  updated_at :datetime
+#  hits_count :integer          default(0), not null
 #
 
 class Image < ActiveRecord::Base
   STYLES = {
     thumbnail: ['75x75#', :png],
-    preview: ['360x200#', :jpeg],
+    preview: ['770x', :jpeg],
     medium: ['1280x780', :jpeg],
     large: ['1920x1080', :jpeg]
   }
@@ -28,7 +21,7 @@ class Image < ActiveRecord::Base
 
   has_many :album_assignments, class_name: 'Album::ImageAssignment', dependent: :destroy
   has_many :albums, through: :album_assignments
-  has_many :versions, class_name: 'Image::Version', dependent: :destroy
+  #has_many :versions, class_name: 'Image::Version', dependent: :destroy
 
   has_attached_file :asset, styles: STYLES
 
@@ -43,11 +36,21 @@ class Image < ActiveRecord::Base
   validates :slug, presence: true, uniqueness: true
   validates_attachment :asset, presence: true, content_type: { content_type: %w(image/jpeg image/pjpeg image/gif image/png) }
 
-  accepts_nested_attributes_for :versions, :translations
+  accepts_nested_attributes_for :translations
 
   alias_attribute :file_name, :asset_file_name
   alias_attribute :content_type, :asset_content_type
   alias_attribute :file_size, :asset_file_size
+
+  class << self
+    def with_current_locale
+      with_locales(I18n.locale)
+    end
+
+    def with_locales(*locales)
+      joins(:translations).where(image_translations: { locale: locales })
+    end
+  end
 
   def asset_changed?
     !asset.queued_for_write[:original].nil?
@@ -57,12 +60,16 @@ class Image < ActiveRecord::Base
     Rational(width, height)
   end
 
-  def pixels
-    size.inject(:*)
+  def dimensions
+    @dimensions ||= Image::Dimensions.new(width, height)
   end
 
-  def size
-    [width, height]
+  def human_content_type(locale = I18n.locale)
+    I18n.translate(content_type, scope: :content_types, default: content_type)
+  end
+
+  def pixels
+    dimensions.to_a.inject(:*)
   end
 
   def to_param

@@ -1,11 +1,11 @@
-= semantic_form_for [:admin, @shout], html: { class: 'form-horizontal' } do |form|
+= simple_form_for [:admin, @shout], html: { class: 'form-horizontal' } do |form|
 
-  = form.inputs do
-    = form.input :nickname
-    = form.input :message
-    = form.input :x, input_html: { class: 'span1' }
-    = form.input :y, input_html: { class: 'span1' }
+  = form.input :nickname, label_html: { class: 'col-lg-2' }, input_wrapper_html: { class: 'col-lg-6' }
+  = form.input :message, label_html: { class: 'col-lg-2' }, input_wrapper_html: { class: 'col-lg-8' }, input_html: { rows: 4 }
+  = form.input :x, label_html: { class: 'col-lg-2' }, input_wrapper_html: { class: 'col-lg-2' }
+  = form.input :y, label_html: { class: 'col-lg-2' }, input_wrapper_html: { class: 'col-lg-2' }
 
-  = form.actions do
-    = form.action :submit, button_html: { class: 'btn btn-primary' }
-    = form.action :cancel, url: @shout.persisted? ? [:admin, @shout] : :admin_shouts, button_html: { class: 'btn btn-default' }
+  .form-group.form-actions
+    .col-lg-10.col-offset-2
+      = form.button :submit, class: 'btn-primary'
+      = button_link_to translate('helpers.links.cancel'), :admin_shouts

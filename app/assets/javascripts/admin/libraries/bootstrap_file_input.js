@@ -33,9 +33,14 @@ $.fn.fileButton = function() {
     // Thanks for the tip http://stackoverflow.com/a/1299069
     var input = $('<div>').append( $(elem).eq(0).clone() ).html();
 
+    var buttonType = $fileInput.data('type') || 'default';
+    if (buttonType) {
+      buttonType = " btn-" + buttonType;
+    }
+
     // Now we're going to replace that input field with a Bootstrap button.
     // The input will actually still be there, it will just be float above and transparent (done with the CSS).
-    var htmlString = '<button type="button" class="file-input-wrapper btn" tabindex="0">';
+    var htmlString = '<button type="button" class="file-input-wrapper btn' + buttonType + '" tabindex="0">';
     htmlString += '<span class="prepend-icon">'
     htmlString += '<i class="icon-upload-alt"></i>';
     htmlString += '<span class="caption">';

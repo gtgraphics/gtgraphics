@@ -1,18 +1,34 @@
 = view_headline_for @image do
-  = action_buttons_for @image, except: :show
+  %ul.list-inline
+    %li= translation_select
+    %li= action_buttons_for @image, except: :show
 
-%p
-  = image_tag @image.asset.url(:preview), class: 'img-polaroid', alt: @image.title
+.row
+  .col-offset-2.col-lg-8
+    = image_tag @image.asset.url(:preview), class: 'img-responsive thumbnail', alt: @image.title
 
-= simple_format @image.caption
+  .col-offset-2.col-lg-4
+    %dl.dl-horizontal
+      %dt= Image.human_attribute_name(:content_type)
+      %dd= @image.human_content_type
+      %dt= Image.human_attribute_name(:file_size)
+      %dd= number_to_human_size @image.file_size
+      %dt= Image.human_attribute_name(:dimensions)
+      %dd #{@image.dimensions} px (#{number_to_human @image.pixels} Pixels)
 
-%dl.dl-horizontal
-  %dt Size
-  %dd #{@image.size.join(' &times; ').html_safe} px (#{number_to_human @image.pixels} Pixels)
-  %dt Aspect Ratio
-  %dd= @image.aspect_ratio
-  %dt Artist
-  %dd= @image.exif_data.artist || '-'
+  .col-lg-4
+    %dl.dl-horizontal 
+      %dt= Image.human_attribute_name(:aspect_ratio)
+      %dd= @image.aspect_ratio
+      %dt= Image.human_attribute_name(:artist)
+      %dd= @image.exif_data.artist || '-'
+
+
+  .col-offset-2.col-lg-8
+
+    - @image.translations.each do |image_translation|
+      = translations_for image_translation.locale do
+        = simple_format image_translation.caption
 
 - if @albums and @albums.any?
   %h3= Album.model_name.human(count: 2)

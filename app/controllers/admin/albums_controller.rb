@@ -6,7 +6,7 @@ class Admin::AlbumsController < Admin::ApplicationController
   breadcrumbs_for_resource
 
   def index
-    @albums = Album.joins(:translations).order('album_translations.title')
+    @albums = Album.with_current_locale.order('album_translations.title')
     respond_with :admin, @albums
   end
 
@@ -25,6 +25,19 @@ class Admin::AlbumsController < Admin::ApplicationController
 
   def show
     redirect_to [:admin, @album, :images]
+  end
+
+  def edit
+    respond_with :admin, @album
+  end
+
+  def update
+    respond_with :admin, @album
+  end
+  
+  def destroy
+    @album.destroy
+    respond_with :admin, @album
   end
 
   private

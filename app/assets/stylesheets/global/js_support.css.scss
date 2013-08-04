@@ -1,0 +1,12 @@
+html {
+  &.js {
+    .except-js {
+      display: none;
+    }
+  }
+  &.no-js {
+    .only-js {
+      display: none;
+    }
+  }
+}

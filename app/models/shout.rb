@@ -17,7 +17,7 @@ class Shout < ActiveRecord::Base
   COORDINATES_PADDING = 10
 
   validates :nickname, presence: true
-  validates :message, presence: true, length: { maximum: 255 }
+  validates :message, presence: true, length: { maximum: 300 }
   validates :x, presence: true, numericality: { only_integer: true }
   validates :y, presence: true, numericality: { only_integer: true }
   validate :check_coordinates_uniqueness

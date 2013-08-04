@@ -1,15 +1,19 @@
-= semantic_form_for @album ? [:admin, @album, @image] : [:admin, @image], html: { class: 'form-horizontal' } do |form|
+= simple_form_for [:admin, @album, @image].compact, html: { class: 'form-horizontal' } do |form|
 
-  = form.inputs do
-    = form.input :title
-    = form.input :slug
-    = form.input :asset
+  = form.input :title, label_html: { class: 'col-lg-2' }, input_wrapper_html: { class: 'col-lg-6' }
+  = form.input :asset, label_html: { class: 'col-lg-2' }, input_wrapper_html: { class: 'col-lg-8' }
 
-  = form.inputs for: :translations do |translation_fields|
-    %legend= translate(translation_fields.object.locale, scope: :locales)
-    = translation_fields.input :locale, as: :hidden
-    = translation_fields.input :caption, input_html: { class: 'span6' }
+  = form.simple_fields_for :translations do |translation_fields|
+    = translations_for translation_fields.object.locale do
+      %legend.except-js= translate(translation_fields.object.locale, scope: :locales)
+      = translation_fields.input :locale, as: :hidden
+      = translation_fields.input :caption, label_html: { class: 'col-lg-2' }, input_wrapper_html: { class: 'col-lg-8' }, input_html: { rows: 4 }
 
-  = form.actions do
-    = form.action :submit, button_html: { class: 'btn btn-primary' }
-    = form.action :cancel, url: @image.persisted? ? [:admin, @album, @image].compact : [:admin, @album, :images].compact, button_html: { class: 'btn btn-default' }
+  %fieldset
+    %legend= translate('views.forms.advanced_options')
+    = form.input :slug, label_html: { class: 'col-lg-2' }, input_wrapper_html: { class: 'col-lg-4' }
+
+  .form-group.form-actions
+    .col-lg-10.col-offset-2
+      = form.button :submit, class: 'btn-primary'
+      = button_link_to translate('helpers.links.cancel'), @image.persisted? ? [:admin, @album, @image].compact : [:admin, @album, :images].compact

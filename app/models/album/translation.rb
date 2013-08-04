@@ -10,6 +10,10 @@
 #  title      :string(255)
 #
 
-class Album::Translation
-  validates :title, presence: true
+class Album::Translation < ActiveRecord::Base
+  validates :title, presence: true, if: :default_locale?
+
+  def default_locale?
+    locale == I18n.default_locale.to_s
+  end
 end

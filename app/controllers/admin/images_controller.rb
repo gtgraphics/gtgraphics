@@ -9,9 +9,9 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def index
     if @album
-      @images = @album.images.joins(:album_assignments).order('album_images.position')
+      @images = @album.images.joins(:album_assignments).with_current_locale.order('album_images.position')
     else
-      @images = Image.order(:title)
+      @images = Image.with_current_locale
     end
     respond_with :admin, @images
   end

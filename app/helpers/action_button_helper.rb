@@ -21,7 +21,9 @@ module ActionButtonHelper
     parent = Array(options.delete(:parent))
     url = options.delete(:url) { [:new, namespace, parent, model.model_name.singular.to_sym].flatten.compact }
     options[:type] = :success
-    button_link_to prepend_icon(:plus, translate('helpers.links.new', model: model.model_name.human)), url, options
+    icon = options.delete(:icon) { :plus }
+    caption = options.delete(:caption) { translate('helpers.links.new', model: model.model_name.human) }
+    button_link_to prepend_icon(icon, caption), url, options
   end
 
   def destroy_button_link_for(object, options = {})

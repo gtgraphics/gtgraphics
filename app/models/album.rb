@@ -22,6 +22,16 @@ class Album < ActiveRecord::Base
 
   accepts_nested_attributes_for :translations
 
+  class << self
+    def with_current_locale
+      with_locales(I18n.locale)
+    end
+
+    def with_locales(*locales)
+      joins(:translations).where(album_translations: { locale: locales })
+    end
+  end
+
   def to_param
     slug
   end

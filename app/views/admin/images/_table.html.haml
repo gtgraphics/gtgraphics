@@ -1,26 +1,33 @@
 - images ||= @images
 - actions = true if actions.nil?
+- checkboxes = false if checkboxes.nil?
 
 %table.table.table-striped
   %thead
     %tr
+      - if checkboxes
+        %th.checkbox-cell
+          %input{type: 'checkbox', class: 'only-js'}
       %th.thumbnail-cell
       %th= Image.human_attribute_name :title
       %th= Image.human_attribute_name :content_type
-      %th= Image.human_attribute_name :width
-      %th= Image.human_attribute_name :height
+      %th= Image.human_attribute_name :file_size
+      %th= Image.human_attribute_name :dimensions
       - if actions
         %th.actions
   %tbody
     - images.each do |image|
       %tr
+        - if checkboxes
+          %td.checkbox-cell
+            %input{type: 'checkbox'}
         %td.thumbnail-cell
           = link_to [:admin, @album, image].compact do
-            = image_tag image.asset.url(:thumbnail), class: 'img-polaroid'
+            = image_tag image.asset.url(:thumbnail), class: 'thumbnail'
         %td= link_to image.title, [:admin, @album, image].compact
-        %td= image.content_type
-        %td= image.width
-        %td= image.height
+        %td= image.human_content_type
+        %td= number_to_human_size image.file_size
+        %td= image.dimensions
         - if actions
           %td.actions
             = action_buttons_for image, parent: @album, size: :mini

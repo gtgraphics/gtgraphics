@@ -6,4 +6,4 @@
   = render 'table'
 - else
   .well.text-center
-    = translate('views.hints.empty', model: Album.model_name.human(count: 2))
+    %h4= translate('views.hints.empty', model: Album.model_name.human(count: 2))
