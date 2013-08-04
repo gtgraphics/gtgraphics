@@ -48,7 +48,7 @@ class Image < ActiveRecord::Base
     end
 
     def with_locales(*locales)
-      joins(:translations).where(image_translations: { locale: locales })
+      joins(:translations).where(image_translations: { locale: locales }).uniq
     end
   end
 
