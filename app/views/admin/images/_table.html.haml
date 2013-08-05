@@ -7,7 +7,7 @@
     %tr
       - if checkboxes
         %th.checkbox-cell
-          %input{type: 'checkbox', class: 'only-js'}
+          %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
       %th.thumbnail-cell
       %th= Image.human_attribute_name :title
       %th= Image.human_attribute_name :content_type
@@ -20,7 +20,7 @@
       %tr
         - if checkboxes
           %td.checkbox-cell
-            %input{type: 'checkbox'}
+            %input{type: 'checkbox', class: 'table-checkbox'}
         %td.thumbnail-cell
           = link_to [:admin, @album, image].compact do
             = image_tag image.asset.url(:thumbnail), class: 'thumbnail'

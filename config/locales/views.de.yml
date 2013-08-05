@@ -1,0 +1,6 @@
+de:
+  views:
+    forms:
+      advanced_options: Erweiterte Optionen
+    hints:
+      empty: 'Es wurden bislang keine %{model} erstellt.'

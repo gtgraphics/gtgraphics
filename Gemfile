@@ -10,6 +10,10 @@ gem 'pg'
 gem 'devise', '3.0.0'
 gem 'cancan'
 
+# Controller
+gem 'user_agent'
+gem 'http_accept_language'
+
 # Models
 gem 'acts_as_list'
 gem 'acts_as_tree'
@@ -51,7 +55,6 @@ gem 'better_errors'
 gem 'binding_of_caller'
 gem 'request_store'
 gem 'exifr'
-gem 'user_agent'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

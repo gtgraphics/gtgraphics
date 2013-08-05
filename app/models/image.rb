@@ -10,6 +10,8 @@
 #
 
 class Image < ActiveRecord::Base
+  include Translatable
+  
   STYLES = {
     thumbnail: ['75x75#', :png],
     preview: ['770x', :jpeg],

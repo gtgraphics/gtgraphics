@@ -1,0 +1,17 @@
+en:
+  helpers:
+    boolean:
+      yes: Yes
+      no: No
+    titles:
+      new: 'Create %{model}'
+      edit: 'Edit %{model}'
+    links:
+      new: 'Create %{model}'
+      upload: 'Upload %{model}'
+      edit: 'Edit'
+      destroy: 'Remove'
+      view: 'View'
+      cancel: 'Cancel'
+    confirm:
+      destroy: 'Do you really want to delete this %{model}?'

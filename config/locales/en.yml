@@ -20,66 +20,12 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
-
   browsers:
     chrome: Chrome
     firefox: Firefox
     ie: Internet Explorer
     opera: Opera
 
-  content_types:
-    'image/jpeg': JPEG Image
-    'image/png': PNG Image
-    'image/gif': GIF Image
-
   locales:
     en: English
     de: German
-
-  helpers:
-    boolean:
-      yes: Yes
-      no: No
-    titles:
-      new: 'Create %{model}'
-      edit: 'Edit %{model}'
-    links:
-      new: 'Create %{model}'
-      upload: 'Upload %{model}'
-      edit: 'Edit'
-      destroy: 'Remove'
-      view: 'View'
-      cancel: 'Cancel'
-    confirm:
-      destroy: 'Do you really want to delete this %{model}?'
-
-  views:
-    forms:
-      advanced_options: Advanced Options
-    hints:
-      empty: 'No %{model} have been created yet.'
-
-  activerecord:
-    attributes:
-      album:
-        images_count: Images Count
-      image:
-        content_type: Content Type
-        file_size: File Size
-      shout:
-        nickname: Author
-        ip: IP
-        os: Platform
-        x: X Coordinate
-        y: Y Coordinate
-    models:
-      album:
-        one: Album
-        other: Albums
-      image:
-        one: Image
-        other: Images
-      shout:
-        one: Shout
-        other: Shouts

@@ -1,0 +1,5 @@
+en:
+  content_types:
+    'image/jpeg': JPEG Image
+    'image/png': PNG Image
+    'image/gif': GIF Image

@@ -1,0 +1,26 @@
+en:
+  activerecord:
+    attributes:
+      album:
+        images_count: Images Count
+      image:
+        title: Titel
+        caption: Beschriftung
+        content_type: Content Type
+        file_size: File Size
+      shout:
+        nickname: Author
+        ip: IP
+        os: Platform
+        x: X Coordinate
+        y: Y Coordinate
+    models:
+      album:
+        one: Album
+        other: Albums
+      image:
+        one: Image
+        other: Images
+      shout:
+        one: Shout
+        other: Shouts

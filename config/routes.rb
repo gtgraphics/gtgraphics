@@ -1,14 +1,16 @@
 GtGraphics::Application.routes.draw do
   root 'home#index'
 
-  namespace :admin do
-    root 'home#index'
+  scope '(:locale)' do
+    namespace :admin do
+      root 'home#index'
 
-    resources :albums do
+      resources :albums do
+        resources :images
+      end
       resources :images
+      resources :shouts, except: :show
     end
-    resources :images
-    resources :shouts, except: :show
   end
 
   # Legacy URLs that have changed permanently (HTTP 301)

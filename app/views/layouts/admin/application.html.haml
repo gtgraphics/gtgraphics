@@ -32,3 +32,11 @@
     .container
       = render 'breadcrumbs'
       #page_content= yield
+
+      - if Rails.env.development?
+        #debug.well.well-condensed
+          %strong Session:
+          = session.to_json
+          %br
+          %strong Cookies:
+          = cookies.to_json

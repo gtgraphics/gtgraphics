@@ -1,0 +1,31 @@
+de:
+  attributes:
+    created_at: Erstellt am
+
+  activerecord:
+    attributes:
+      album:
+        images_count: Bilder
+      image:
+        artist: Künstler
+        aspect_ratio: Seitenverhältnis
+        content_type: Dateityp
+        dimensions: Maße
+        file_size: Dateigröße
+      shout:
+        nickname: Verfasser
+        message: Nachricht
+        ip: IP
+        os: Betriebssystem
+        x: X-Koordinate
+        y: Y-Koordinate
+    models:
+      album:
+        one: Album
+        other: Alben
+      image:
+        one: Bild
+        other: Bilder
+      shout:
+        one: Stern
+        other: Sterne
