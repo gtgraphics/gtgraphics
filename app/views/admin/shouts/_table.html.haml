@@ -1,21 +1,27 @@
+- shouts ||= @shouts
+- actions = true if actions.nil?
+- checkboxes = false if checkboxes.nil?
+
 %table.table.table-striped
   %thead
     %tr
+      - if checkboxes
+        %th.checkbox-cell
+          %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
       %th= Shout.human_attribute_name :nickname
       %th= Shout.human_attribute_name :message
-      %th= Shout.human_attribute_name :ip
-      %th= Shout.human_attribute_name :browser
-      %th= Shout.human_attribute_name :os
       %th= Shout.human_attribute_name :created_at
-      %th.actions
+      - if actions
+        %th.actions
   %tbody
-    - @shouts.each do |shout|
+    - shouts.each do |shout|
       %tr
+        - if checkboxes
+          %td.checkbox-cell
+            %input{type: 'checkbox', class: 'table-checkbox'}
         %td= shout.nickname
-        %td= shout.message
-        %td= shout.ip
-        %td= shout.browser
-        %td= shout.os
+        %td= shout.message.truncate(50)
         %td= localize shout.created_at
-        %td.actions
-          = action_buttons_for shout, parent: @album, size: :mini, except: :show
+        - if actions
+          %td.actions
+            = action_buttons_for shout, parent: @album, size: :mini

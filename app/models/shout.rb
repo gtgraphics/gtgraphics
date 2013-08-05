@@ -48,6 +48,10 @@ class Shout < ActiveRecord::Base
     (y-COORDINATES_PADDING)..(y+COORDINATES_PADDING) if y
   end
 
+  def to_s
+    nickname
+  end
+
   private
   def check_coordinates_uniqueness
     errors.add(:taken) if Shout.exists?(x: x_padding, y: y_padding)

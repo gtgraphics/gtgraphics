@@ -1,15 +1,26 @@
 GtGraphics::Application.routes.draw do
   root 'home#index'
 
-  scope '(:locale)' do
+  scope '(:locale)', locale: /(en|de)/ do
     namespace :admin do
       root 'home#index'
 
       resources :albums do
-        resources :images
+        resources :images do
+          collection do
+            patch :batch, as: :batch_process
+          end
+        end
       end
-      resources :images
-      resources :shouts, except: :show
+      resources :images do
+        collection do
+          patch :batch, as: :batch_process
+        end
+        member do
+          get :download
+        end
+      end
+      resources :shouts
     end
   end
 

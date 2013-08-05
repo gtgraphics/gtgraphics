@@ -3,7 +3,7 @@
     = create_button_link_for Shout, namespace: :admin
 
 - if @shouts.any?
-  = render 'table'
+  = render 'table', checkboxes: true
 - else
   .well.text-center
     %h4= translate('views.hints.empty', model: Shout.model_name.human(count: 2))

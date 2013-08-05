@@ -11,7 +11,11 @@ de:
       upload: '%{model} hochladen'
       edit: Bearbeiten
       destroy: Löschen
+      destroy_selected: Ausgewählte löschen
       view: Ansehen
       cancel: Abbrechen
     confirm:
       destroy: 'Möchten Sie dieses %{model} wirklich entfernen?'
+      destroy_selected: 'Möchten Sie die ausgewählten %{model} wirklich entfernen?'
+    units:
+      pixels: Pixel

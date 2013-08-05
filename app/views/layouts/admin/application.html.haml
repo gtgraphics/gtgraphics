@@ -1,7 +1,8 @@
 !!!
 %html{lang: I18n.locale}
   %head
-    %title GT Graphics
+    %title
+      = (["GT Graphics Administration"] + breadcrumbs.collect(&:caption).drop(1)).join(' &middot; ').html_safe
     = stylesheet_link_tag 'admin', media: 'all', data: { turbolinks_track: true }
     = javascript_include_tag 'admin', data: { turbolinks_track: true }
     = csrf_meta_tags

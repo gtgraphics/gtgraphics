@@ -1,9 +1,9 @@
 class Admin::ShoutsController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_shout, only: %i(edit update destroy)
+  before_action :load_shout, only: %i(show edit update destroy)
 
-  breadcrumbs_for_resource include_element: false
+  breadcrumbs_for_resource
 
   def index
     @shouts = Shout.order(:created_at).reverse_order
@@ -21,6 +21,10 @@ class Admin::ShoutsController < Admin::ApplicationController
     @shout.user_agent = request.user_agent
     @shout.save
     respond_with :admin, @shout, location: :admin_shouts
+  end
+
+  def show
+    respond_with :admin, @shout
   end
 
   def edit

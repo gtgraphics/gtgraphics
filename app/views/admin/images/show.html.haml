@@ -5,7 +5,7 @@
 
 .row
   .col-offset-2.col-lg-8
-    = image_tag @image.asset.url(:preview), class: 'img-responsive thumbnail', alt: @image.title
+    = link_to image_tag(@image.asset.url(:preview), class: 'img-responsive thumbnail', alt: @image.title)
 
   .col-offset-2.col-lg-4
     %dl.dl-horizontal
@@ -14,14 +14,11 @@
       %dt= Image.human_attribute_name(:file_size)
       %dd= number_to_human_size @image.file_size
       %dt= Image.human_attribute_name(:dimensions)
-      %dd #{@image.dimensions} px (#{number_to_human @image.pixels} Pixels)
+      %dd #{@image.dimensions} #{translate('helpers.units.pixels')}
 
-  .col-lg-4
-    %dl.dl-horizontal 
-      %dt= Image.human_attribute_name(:aspect_ratio)
-      %dd= @image.aspect_ratio
-      %dt= Image.human_attribute_name(:artist)
-      %dd= @image.exif_data.artist || '-'
+  .col-lg-4.text-center
+    %br
+    = button_link_to prepend_icon(:download, translate('helpers.links.download')), [:download, :admin, @image], size: :large, type: :primary
 
 
   .col-offset-2.col-lg-8

@@ -11,7 +11,12 @@ en:
       upload: 'Upload %{model}'
       edit: 'Edit'
       destroy: 'Remove'
+      destroy_selected: 'Remove Selected'
       view: 'View'
       cancel: 'Cancel'
+      download: 'Download'
     confirm:
       destroy: 'Do you really want to delete this %{model}?'
+      destroy_selected: 'Do you really want to delete all selected %{model}?'
+    units:
+      pixels: Pixels

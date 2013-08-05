@@ -2,7 +2,7 @@ class Admin::ImagesController < Admin::ApplicationController
   respond_to :html
 
   before_action :load_album
-  before_action :load_image_or_image_album_assignment, only: %i(show edit update destroy)
+  before_action :load_image_or_image_album_assignment, only: %i(show edit update destroy download)
 
   breadcrumbs_for_resource :albums, allow_nil: true
   breadcrumbs_for_resource
@@ -60,9 +60,20 @@ class Admin::ImagesController < Admin::ApplicationController
     respond_with :admin, @image, location: [:admin, @album, :images].compact
   end
 
+  def download
+    send_file @image.asset.path, filename: @image.virtual_file_name, content_type: @image.content_type, disposition: :attachment
+  end
+
+  def batch
+    # TODO Actions
+    image_ids = Array(params[:image_ids]).map(&:to_i).reject(&:zero?)
+    Image.delete_all(id: image_ids)
+    redirect_to :back
+  end
+
   private
   def image_params
-    params.require(:image).permit(:slug, :title, :caption, :asset, translations_attributes: [:caption, :locale])
+    params.require(:image).permit!#.permit(:slug, :title, :caption, :asset, translations_attributes: [:caption, :locale])
   end
 
   def load_album

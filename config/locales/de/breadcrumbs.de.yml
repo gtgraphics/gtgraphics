@@ -1,0 +1,5 @@
+de:
+  breadcrumbs:
+    home: Startseite
+    new: '%{model} erstellen'
+    edit: '%{model} bearbeiten'

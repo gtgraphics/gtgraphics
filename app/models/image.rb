@@ -38,7 +38,7 @@ class Image < ActiveRecord::Base
   validates :slug, presence: true, uniqueness: true
   validates_attachment :asset, presence: true, content_type: { content_type: %w(image/jpeg image/pjpeg image/gif image/png) }
 
-  accepts_nested_attributes_for :translations
+  accepts_nested_attributes_for :translations, update_only: true 
 
   alias_attribute :file_name, :asset_file_name
   alias_attribute :content_type, :asset_content_type
@@ -80,6 +80,10 @@ class Image < ActiveRecord::Base
 
   def to_s
     title
+  end
+
+  def virtual_file_name
+    title.parameterize.underscore + File.extname(file_name).downcase
   end
 
   private

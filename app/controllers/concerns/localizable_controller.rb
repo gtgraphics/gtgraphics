@@ -35,10 +35,17 @@ module LocalizableController
   end
 
   private
+  def default_url_options(options = {})
+    { locale: nil }
+  end
+
   def detect_locale
     if params[:locale]
       session[:locale] = params[:locale]
-      redirect_to locale: nil
+      respond_to do |format|
+        format.html { redirect_to locale: nil }
+        format.all
+      end
     else
       session[:locale] ||= accepted_locales.first if accepted_locales.any?
     end

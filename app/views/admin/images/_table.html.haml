@@ -2,6 +2,9 @@
 - actions = true if actions.nil?
 - checkboxes = false if checkboxes.nil?
 
+- if checkboxes
+  = hidden_field_tag 'image_ids[]', ''
+
 %table.table.table-striped
   %thead
     %tr
@@ -20,7 +23,7 @@
       %tr
         - if checkboxes
           %td.checkbox-cell
-            %input{type: 'checkbox', class: 'table-checkbox'}
+            = check_box_tag 'image_ids[]', image.id, false, class: 'table-checkbox', id: nil
         %td.thumbnail-cell
           = link_to [:admin, @album, image].compact do
             = image_tag image.asset.url(:thumbnail), class: 'thumbnail'

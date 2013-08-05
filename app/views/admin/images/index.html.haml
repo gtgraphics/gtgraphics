@@ -1,9 +1,17 @@
-= index_headline_for Image do
-  .btn-toolbar
-    = create_button_link_for Image, icon: :upload_alt, caption: translate('helpers.links.upload', model: Image.model_name.human), url: [:new, :admin, @album, :image].compact
+= form_tag :batch_process_admin_images, method: :patch do
 
-- if @images.any?
-  = render 'table', checkboxes: true
-- else
-  .well.text-center
-    %h4= translate('views.hints.empty', model: Image.model_name.human(count: 2))
+  = headline @album ? @album.title : Image.model_name.human(count: 2) do
+    %ul.list-inline
+      %li
+        .btn-toolbar.batch-controls
+          = button_tag icon(:move), name: 'move', class: 'btn btn-default batch-btn', title: 'Move', data: { toggle: :tooltip, placement: :bottom }
+          = button_tag icon(:trash), name: 'remove', class: 'btn btn-danger batch-btn', title: translate('helpers.links.destroy_selected'), data: { toggle: :tooltip, placement: :bottom, confirm: translate('helpers.confirm.destroy_selected', model: Image.model_name.human(count: 2)) }
+      %li
+        .btn-toolbar
+          = create_button_link_for Image, icon: :upload_alt, caption: translate('helpers.links.upload', model: Image.model_name.human), url: [:new, :admin, @album, :image].compact
+
+  - if @images.any?
+    = render 'table', checkboxes: true
+  - else
+    .well.text-center
+      %h4= translate('views.hints.empty', model: Image.model_name.human(count: 2))

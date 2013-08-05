@@ -15,14 +15,14 @@ module Translatable
     scope :with_translation_for, ->(locale) { joins(:translations).where(reflect_on_association(:translations).klass.table_name.to_sym => { locale: locale }) }
 
     with_options if: :observe_translation? do |translatable|
-      translatable.validate :validate_translation
+      #translatable.validate :validate_translation
       translatable.after_save :save_translation
     end
 
     alias_method_chain :attributes, :translation
-    alias_method_chain :attributes=, :translation
     alias_method_chain :changed?, :translation
     alias_method_chain :changes, :translation
+    alias_method_chain :reload, :translation
     alias_method_chain :valid?, :translation
   end
 
@@ -51,6 +51,20 @@ module Translatable
             def #{column_name}_changed?
               translation.#{column_name}_changed?
             end
+
+            def #{column_name}_translation(locale)
+              #{column_name}_translations[locale]
+            end
+
+            def #{column_name}_translations
+              Hash[*translations.collect do |translation|
+                [translation.locale, translation.#{column_name}]
+              end.flatten].with_indifferent_access.merge(translation.locale => translation.#{column_name}).freeze
+            end
+
+            def #{column_name}_translated?(locale = I18n.locale)
+              !translation_for(locale).nil?
+            end
           )
         end
         self.translated_column_names += column_names
@@ -76,11 +90,6 @@ module Translatable
     attributes_without_translation.merge(translated_attributes)      
   end
 
-  def attributes_with_translation=(attributes)
-    translation.attributes = attributes.slice(*self.class.translated_column_names)
-    self.attributes_without_translation = attributes
-  end
-
   def build_translation(*args)
     attributes = args.extract_options!
     locale = args.first || I18n.locale
@@ -95,12 +104,24 @@ module Translatable
     changes_without_translation.merge(translation.changes.slice(*self.class.translated_column_names))
   end
 
+  def reload_with_translation
+    if translation
+      reload_without_translation and translation.reload
+    else
+      reload_without_translation
+    end
+  end
+
   def translated_attributes
-    translation.attributes.slice(*self.class.translated_column_names)
+    translated_attributes_for(I18n.locale)
   end
 
   def translated_attributes_for(locale)
-    translation_for(locale).attributes.slice(*self.class.translated_column_names)
+    if translation = translation_for(locale)
+      translation.attributes.slice(*self.class.translated_column_names)
+    else
+      Hash[*self.class.translated_column_names.map { |column| [column, nil] }.flatten]
+    end
   end
 
   def translation
@@ -116,12 +137,21 @@ module Translatable
     end
   end
 
+  def translations_hash
+    translations.group_by(&:locale).with_indifferent_access
+  end
+
   def valid_with_translation?(context = nil)
-    valid = valid_without_translation? && translation.valid?
-    translation.errors.messages.slice(*self.class.translated_column_names.map(&:to_sym)).each do |column_name, error_messages|
-      errors.set(column_name, error_messages)
+    if translation
+      valid = valid_without_translation?(context) && translation.valid?(context)
+      # copy validation errors from translation
+      translation.errors.messages.slice(*self.class.translated_column_names.map(&:to_sym)).each do |column_name, error_messages|
+        errors.set(column_name, error_messages)
+      end
+      valid
+    else
+      valid_without_translation?(context)
     end
-     valid
   end
 
   private
@@ -133,7 +163,7 @@ module Translatable
     translation.save
   end
 
-  def validate_translation
-    translation.valid?
-  end
+  #def validate_translation
+  #  translation.valid?
+  #end
 end

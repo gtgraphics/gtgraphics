@@ -1,6 +1,8 @@
 de:
   attributes:
     created_at: Erstellt am
+    slug: URL-Token
+    title: Titel
 
   activerecord:
     attributes:
@@ -12,6 +14,9 @@ de:
         content_type: Dateityp
         dimensions: Maße
         file_size: Dateigröße
+        asset: Bilddatei
+      image/translation:
+        caption: Beschriftung
       shout:
         nickname: Verfasser
         message: Nachricht
