@@ -32,6 +32,7 @@ class Admin::AlbumsController < Admin::ApplicationController
   end
 
   def update
+    @album.update(album_params)
     respond_with :admin, @album
   end
   

@@ -20,6 +20,7 @@ module Translatable
     end
 
     alias_method_chain :attributes, :translation
+    alias_method_chain :attributes=, :translation
     alias_method_chain :changed?, :translation
     alias_method_chain :changes, :translation
     alias_method_chain :reload, :translation
@@ -88,6 +89,11 @@ module Translatable
 
   def attributes_with_translation
     attributes_without_translation.merge(translated_attributes)      
+  end
+
+  def attributes_with_translation=(attributes)
+    raise attributes.inspect
+    attributes_without_translation(attributes)
   end
 
   def build_translation(*args)
