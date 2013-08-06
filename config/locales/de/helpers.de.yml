@@ -14,6 +14,7 @@ de:
       destroy_selected: Ausgewählte löschen
       view: Ansehen
       cancel: Abbrechen
+      move: Verschieben
     confirm:
       destroy: 'Möchten Sie dieses %{model} wirklich entfernen?'
       destroy_selected: 'Möchten Sie die ausgewählten %{model} wirklich entfernen?'

@@ -3,7 +3,7 @@
 - checkboxes = false if checkboxes.nil?
 
 - if checkboxes
-  = hidden_field_tag 'image_ids[]', ''
+  = hidden_field_tag 'image_ids[]', '', id: nil
 
 %table.table.table-striped
   %thead
@@ -20,7 +20,7 @@
         %th.actions
   %tbody
     - images.each do |image|
-      %tr
+      = content_tag_for :tr, image do
         - if checkboxes
           %td.checkbox-cell
             = check_box_tag 'image_ids[]', image.id, false, class: 'table-checkbox', id: nil

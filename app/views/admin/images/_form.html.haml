@@ -1,7 +1,7 @@
 = simple_form_for [:admin, @album, @image].compact, html: { class: 'form-horizontal' } do |form|
 
   = form.input :title, label_html: { class: 'col-lg-2' }, input_wrapper_html: { class: 'col-lg-6' }
-  = form.input :asset, label_html: { class: 'col-lg-2' }, input_wrapper_html: { class: 'col-lg-8' }
+  = form.input :asset, label_html: { class: 'col-lg-2' }, input_wrapper_html: { class: 'col-lg-8' }, as: :image_preview, input_html: { preview_version: :thumbnail }
 
   = form.simple_fields_for :translations do |translation_fields|
     = translations_for translation_fields.object.locale do

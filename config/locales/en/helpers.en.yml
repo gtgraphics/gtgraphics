@@ -9,12 +9,13 @@ en:
     links:
       new: 'Create %{model}'
       upload: 'Upload %{model}'
-      edit: 'Edit'
-      destroy: 'Remove'
-      destroy_selected: 'Remove Selected'
-      view: 'View'
-      cancel: 'Cancel'
-      download: 'Download'
+      edit: Edit
+      destroy: Remove
+      destroy_selected: Remove Selected
+      view: View
+      cancel: Cancel
+      download: Download
+      move: Move
     confirm:
       destroy: 'Do you really want to delete this %{model}?'
       destroy_selected: 'Do you really want to delete all selected %{model}?'

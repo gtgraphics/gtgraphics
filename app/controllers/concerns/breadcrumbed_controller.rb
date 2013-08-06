@@ -1,7 +1,7 @@
 module BreadcrumbedController
-  RECORD_CAPTION_METHODS = %i(name title to_s).freeze
-
   extend ActiveSupport::Concern
+
+  RECORD_CAPTION_METHODS = %i(name title to_s).freeze
 
   included do
     helper_method :breadcrumbs
@@ -26,16 +26,18 @@ module BreadcrumbedController
       options = args.extract_options!
 
       record_caption_methods = Array(options.fetch(:record_caption) { RECORD_CAPTION_METHODS })
-      parent_resource = args.first.present? && options[:parent] != false
 
-      breadcrumbs(options.slice(:only, :except)) do |b, controller|
+      breadcrumbs(options.slice(:only, :except, :if, :unless)) do |b, controller|
+        parent_resource = args.first.present? && try_call(options[:parent]) != false
+
         controller_namespace = options.fetch(:namespace) do
           controller.class.name.deconstantize.split('::').map(&:underscore)
         end
+        controller_namespace = try_call(controller_namespace)
         if controller_namespace == false
           controller_namespace = []
         else
-          controller_namespace = Array(controller_namespace).map(&:to_sym)
+          controller_namespace = Array(controller_namespace).flatten.map(&:to_sym)
         end
 
         # Determine collection and element names
@@ -53,22 +55,28 @@ module BreadcrumbedController
         if parent_resource
           record = load_record(element_name, options)
           if record
-            unless singular_string?(args.first.to_s)
-              b.append(resource_class.model_name.human(count: 2), controller_namespace + [collection_name]) if options[:include_collection] != false
+            if !singular_string?(args.first.to_s) and try_call(options[:include_collection]) != false
+              b.append(resource_class.model_name.human(count: 2), controller_namespace + [collection_name])
             end
             record_caption = load_caption(record)
-            b.append(record_caption, controller_namespace + @parent_breadcrumb_records + [record]) if options[:include_element] != false
+            if try_call(options[:include_element]) != false
+              b.append(record_caption, controller_namespace + @parent_breadcrumb_records + [record])
+            end
             @parent_breadcrumb_records << record
           end
         else
           # Resource is primary resource in controller
-          b.append(resource_class.model_name.human(count: 2), controller_namespace + @parent_breadcrumb_records + [collection_name]) if options[:include_collection] != false
+          if try_call(options[:include_collection]) != false
+            b.append(resource_class.model_name.human(count: 2), controller_namespace + @parent_breadcrumb_records + [collection_name])
+          end
 
           if controller.action_name.in? %w(show edit update)
             record = load_record(element_name, options)
             if record
               record_caption = load_caption(record)
-              b.append(record_caption, controller_namespace + @parent_breadcrumb_records + [record]) if options[:include_element] != false
+              if try_call(options[:include_element]) != false
+                b.append(record_caption, controller_namespace + @parent_breadcrumb_records + [record])
+              end
             end
           end
 
@@ -102,5 +110,15 @@ module BreadcrumbedController
 
   def singular_string?(str)
     str.pluralize != str and str.singularize == str
+  end
+
+  def try_call(proc_or_symbol_or_object)
+    if proc_or_symbol_or_object.is_a? Symbol
+      method(proc_or_symbol_or_object).call
+    elsif proc_or_symbol_or_object.respond_to? :call
+      self.instance_eval(&proc_or_symbol_or_object)
+    else
+      proc_or_symbol_or_object
+    end
   end
 end

@@ -1,0 +1,1 @@
+console.log $('<%= @image_ids.map { |image_id| "#image_#{image_id}" }.join(', ') %>')

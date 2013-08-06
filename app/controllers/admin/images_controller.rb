@@ -5,11 +5,12 @@ class Admin::ImagesController < Admin::ApplicationController
   before_action :load_image_or_image_album_assignment, only: %i(show edit update destroy download)
 
   breadcrumbs_for_resource :albums, allow_nil: true
-  breadcrumbs_for_resource
+  breadcrumbs_for_resource include_collection: false, if: :album_set?
+  breadcrumbs_for_resource unless: :album_set?
 
   def index
     if @album
-      @images = @album.images.joins(:album_assignments).with_current_locale.order('album_images.position')
+      @images = @album.images.joins(:album_assignments).order('album_images.position')
     else
       @images = Image.with_current_locale
     end
@@ -65,13 +66,26 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def batch
-    # TODO Actions
-    image_ids = Array(params[:image_ids]).map(&:to_i).reject(&:zero?)
-    Image.delete_all(id: image_ids)
-    redirect_to :back
+    @image_ids = Array(params[:image_ids]).map(&:to_i).reject(&:zero?)
+    if params.key? :destroy
+      @batch_action = :destroy_multiple
+      Image.destroy_all(id: @image_ids)
+    elsif params.key? :move
+      @batch_action = :move_multiple
+    else
+      raise
+    end
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js { render @batch_action }
+    end
   end
 
   private
+  def album_set?
+    !@album.nil?
+  end
+
   def image_params
     params.require(:image).permit!#.permit(:slug, :title, :caption, :asset, translations_attributes: [:caption, :locale])
   end

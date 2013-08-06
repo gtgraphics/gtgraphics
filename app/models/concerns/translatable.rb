@@ -10,14 +10,8 @@ module Translatable
     cattr_accessor(:translated_columns_hash, instance_accessor: false) { {} }
 
     has_many :translations, class_name: "#{self.name}::Translation", autosave: true, dependent: :destroy
-    #has_one :translation, -> { where(locale: I18n.locale) }, class_name: "#{self.name}::Translation"
 
-    scope :with_translation_for, ->(locale) { joins(:translations).where(reflect_on_association(:translations).klass.table_name.to_sym => { locale: locale }) }
-
-    with_options if: :observe_translation? do |translatable|
-      #translatable.validate :validate_translation
-      translatable.after_save :save_translation
-    end
+    after_save :save_translation, if: :observe_translation?
 
     alias_method_chain :attributes, :translation
     alias_method_chain :attributes=, :translation
@@ -25,6 +19,12 @@ module Translatable
     alias_method_chain :changes, :translation
     alias_method_chain :reload, :translation
     alias_method_chain :valid?, :translation
+  end
+
+  module ClassMethods
+    def with_translation_for(locale)
+      joins(:translations).where(reflect_on_association(:translations).klass.table_name.to_sym => { locale: locale })
+    end
   end
 
   module Macro
@@ -168,8 +168,4 @@ module Translatable
   def save_translation
     translation.save
   end
-
-  #def validate_translation
-  #  translation.valid?
-  #end
 end

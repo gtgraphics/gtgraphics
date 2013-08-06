@@ -27,7 +27,10 @@ $.extend window.I18n,
             evalStr += ".#{scope}"
         $.each keypathArray, ->
           evalStr += ".#{@}"
-      translations = eval(evalStr)
+      try
+        translations = eval(evalStr)
+      catch
+        translations = null
       if $.isPlainObject(translations)
         translations
       else
