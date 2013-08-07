@@ -1,6 +1,4 @@
 class BreadcrumbCollection < Array
-  CAPTION_LOOKUP_ORDER = [:name, :title, :to_s]
-
   attr_reader :controller_context
 
   def initialize(controller_context)
