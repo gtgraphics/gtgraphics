@@ -3,18 +3,20 @@ module Translatable
 
   included do 
     include Macro
-    include Migrations
+    include Migration
 
     cattr_accessor(:translated_columns, instance_accessor: false) { [] }
     cattr_accessor(:translated_column_names, instance_accessor: false) { [] }
     cattr_accessor(:translated_columns_hash, instance_accessor: false) { {} }
 
-    has_many :translations, class_name: "#{self.name}::Translation", autosave: true, dependent: :destroy
+    has_many :translations, class_name: "::#{self.name}::Translation", autosave: true, dependent: :destroy
 
     after_save :save_translation, if: :observe_translation?
 
+    scope :with_translation, -> { with_translation_for(I18n.locale) }
+
     alias_method_chain :attributes, :translation
-    alias_method_chain :attributes=, :translation
+    #alias_method_chain :attributes=, :translation
     alias_method_chain :changed?, :translation
     alias_method_chain :changes, :translation
     alias_method_chain :reload, :translation
@@ -22,8 +24,12 @@ module Translatable
   end
 
   module ClassMethods
-    def with_translation_for(locale)
-      joins(:translations).where(reflect_on_association(:translations).klass.table_name.to_sym => { locale: locale })
+    def translation_table_name
+      reflect_on_association(:translations).klass.table_name
+    end
+
+    def with_translation_for(*locales)
+      joins(:translations).where(reflect_on_association(:translations).klass.table_name.to_sym => { locale: locales.flatten }).uniq.includes(:translations)
     end
   end
 
@@ -73,27 +79,24 @@ module Translatable
     end
   end
 
-  module Migrations
+  module Migration
     extend ActiveSupport::Concern
 
     module ClassMethods
-      def create_translation_table!(columns)
-        raise NotImplemented
+      def create_translation_table!(columns, &block)
+        connection.create_table(translation_table_name) do |table|
+          table.references self.model_name.singular, null: false
+        end
       end
 
       def drop_translation_table!(columns)
-        raise NotImplemented
+        connection.drop_table(translation_table_name)
       end
     end
   end
 
   def attributes_with_translation
     attributes_without_translation.merge(translated_attributes)      
-  end
-
-  def attributes_with_translation=(attributes)
-    raise attributes.inspect
-    attributes_without_translation(attributes)
   end
 
   def build_translation(*args)

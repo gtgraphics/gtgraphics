@@ -10,32 +10,18 @@
 #
 
 class Album < ActiveRecord::Base
+  include Sluggable
   include Translatable
 
+  slugs :title
   translates :title
 
   has_many :image_assignments, class_name: 'Album::ImageAssignment', dependent: :destroy
   has_many :images, through: :image_assignments
-
-  validates :slug, presence: true, uniqueness: true
   
   before_validation :set_slug
 
   accepts_nested_attributes_for :translations
-
-  class << self
-    def with_current_locale
-      with_locales(I18n.locale)
-    end
-
-    def with_locales(*locales)
-      joins(:translations).where(album_translations: { locale: locales })
-    end
-  end
-
-  def to_param
-    slug
-  end
 
   def to_s
     title

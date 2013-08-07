@@ -26,6 +26,8 @@
             = active_link_to :admin_shouts, wrap_tag: :li do
               = Shout.model_name.human(count: 2)
               .badge= Shout.count
+            = active_link_to :admin_menu_items, wrap_tag: :li do
+              = MenuItem.model_name.human(count: 2)
 
           %ul.list-inline.navbar-text.pull-right
             %li= link_to prepend_icon(:user, 'Tobias Casper'), '#', class: 'navbar-link'
