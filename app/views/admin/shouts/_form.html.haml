@@ -1,9 +1,9 @@
 = simple_form_for [:admin, @shout], html: { class: 'form-horizontal' } do |form|
 
-  = form.input :nickname, label_html: { class: 'col-lg-2' }, input_wrapper_html: { class: 'col-lg-6' }
-  = form.input :message, label_html: { class: 'col-lg-2' }, input_wrapper_html: { class: 'col-lg-8' }, input_html: { rows: 4 }
-  = form.input :x, label_html: { class: 'col-lg-2' }, input_wrapper_html: { class: 'col-lg-2' }
-  = form.input :y, label_html: { class: 'col-lg-2' }, input_wrapper_html: { class: 'col-lg-2' }
+  = form.input :nickname, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-6' }
+  = form.input :message, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }, input_html: { rows: 4 }
+  = form.input :x, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-2' }
+  = form.input :y, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-2' }
 
   .form-group.form-actions
     .col-lg-10.col-offset-2

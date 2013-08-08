@@ -9,14 +9,17 @@ module Translatable
     cattr_accessor(:translated_column_names, instance_accessor: false) { [] }
     cattr_accessor(:translated_columns_hash, instance_accessor: false) { {} }
 
-    has_many :translations, class_name: "::#{self.name}::Translation", autosave: true, dependent: :destroy
+    begin
+      has_many :translations, class_name: "::#{self.name}::Translation", autosave: true, dependent: :destroy
+    rescue
+      puts "Warning: No Translation table found"
+    end
 
     after_save :save_translation, if: :observe_translation?
 
     scope :with_translation, -> { with_translation_for(I18n.locale) }
 
     alias_method_chain :attributes, :translation
-    #alias_method_chain :attributes=, :translation
     alias_method_chain :changed?, :translation
     alias_method_chain :changes, :translation
     alias_method_chain :reload, :translation
@@ -38,13 +41,8 @@ module Translatable
 
     module ClassMethods
       def translates(*column_names)
-        translation_columns = reflect_on_association(:translations).klass.columns_hash
         column_names = column_names.map(&:to_s)
         column_names.each do |column_name|
-          column = translation_columns.fetch(column_name)
-          self.translated_columns << column
-          self.translated_columns_hash[column_name] = column
-
           self.class_eval %Q(
             def #{column_name}
               translation.#{column_name}
@@ -77,20 +75,43 @@ module Translatable
         self.translated_column_names += column_names
       end
     end
+
+    def translated_columns_hash
+      reflect_on_association(:translations).klass.columns_hash.slice(translated_column_names)
+    end
+
+    def translated_columns
+      translated_columns_hash.values
+    end
   end
 
   module Migration
     extend ActiveSupport::Concern
 
     module ClassMethods
-      def create_translation_table!(columns, &block)
-        connection.create_table(translation_table_name) do |table|
-          table.references self.model_name.singular, null: false
+      def create_translation_table(options = {})
+        connection.create_table(translation_table_name, options.slice(:force, :options)) do |table|
+          table.belongs_to self.model_name.singular.to_sym, index: true, null: false
+          yield(table)
         end
+        clear_schema_cache!
       end
 
-      def drop_translation_table!(columns)
+      def change_translation_table(&block)
+        connection.change_table(translation_table_name, &block)
+        clear_schema_cache!
+      end
+
+      def drop_translation_table
         connection.drop_table(translation_table_name)
+        clear_schema_cache!
+      end
+
+      private
+      def clear_schema_cache!
+        connection.schema_cache.clear! if connection.respond_to?(:schema_cache)
+        self::Translation.reset_column_information
+        self.reset_column_information
       end
     end
   end

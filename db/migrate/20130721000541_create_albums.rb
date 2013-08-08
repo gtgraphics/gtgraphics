@@ -2,11 +2,18 @@ class CreateAlbums < ActiveRecord::Migration
   def change
     create_table :albums do |t|
       t.string :slug, index: true, null: false
+      t.integer :images_count, default: 0, null: false
       t.timestamps
     end
     reversible do |dir|
-      dir.up { Album.create_translation_table! title: :string }
-      dir.down { Album.drop_translation_table! }
+      dir.up do
+        Album.create_translation_table do |t|
+          t.string :title
+        end
+      end
+      dir.down do
+        Album.drop_translation_table
+      end
     end
   end
 end

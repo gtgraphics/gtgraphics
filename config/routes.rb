@@ -12,6 +12,7 @@ GtGraphics::Application.routes.draw do
           end
         end
       end
+
       resources :images do
         collection do
           patch :batch, as: :batch_process
@@ -20,6 +21,9 @@ GtGraphics::Application.routes.draw do
           get :download
         end
       end
+
+      resources :menu_items
+
       resources :shouts
     end
   end

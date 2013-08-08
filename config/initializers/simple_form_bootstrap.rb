@@ -4,7 +4,7 @@ SimpleForm.setup do |config|
     b.use :html5
     b.use :placeholder
     b.use :label
-    b.wrapper :input_wrapper, tag: :div do |input|
+    b.wrapper :container, tag: :div do |input|
       input.use :input
       input.use :error, wrap_with: { tag: :span, class: 'help-block' }
       input.use :hint,  wrap_with: { tag: :span, class: 'help-block' }
@@ -15,7 +15,7 @@ SimpleForm.setup do |config|
     b.use :html5
     b.use :placeholder
     b.use :label
-    b.wrapper :input_wrapper, tag: :div, class: 'controls' do |input|
+    b.wrapper :container, tag: :div, class: 'controls' do |input|
       input.wrapper tag: :div, class: 'input-prepend' do |prepend|
         prepend.use :input
       end

@@ -1,4 +1,4 @@
-= simple_form_for [:admin, @album], html: { class: 'form-horizontal' } do |form|
+= simple_form_for [:admin, @menu_item], html: { class: 'form-horizontal' } do |form|
 
   = form.simple_fields_for :translations do |translation_fields|
     = translations_for translation_fields.object.locale do
@@ -6,11 +6,7 @@
       = translation_fields.input :locale, as: :hidden, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-6' }
       = translation_fields.input :title, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-6' }, required: translation_fields.object.default_locale?
 
-  %fieldset
-    %legend= translate('views.forms.advanced_options')
-    = form.input :slug, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }
-
   .form-group.form-actions
     .col-lg-10.col-offset-2
       = form.button :submit, class: 'btn-primary'
-      = button_link_to translate('helpers.links.cancel'), @album.persisted? ? [:admin, @album] : :admin_albums
+      = button_link_to translate('helpers.links.cancel'), :admin_shouts

@@ -6,6 +6,7 @@ class CreateShouts < ActiveRecord::Migration
       t.integer :x, null: false
       t.integer :y, null: false
       t.string :ip
+      t.string :user_agent
       t.timestamps
     end
   end

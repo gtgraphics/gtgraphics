@@ -31,6 +31,9 @@ de:
       image:
         one: Bild
         other: Bilder
+      menu_item:
+        one: Menüeintrag
+        other: Menüeinträge
       shout:
         one: Stern
         other: Sterne
