@@ -174,8 +174,7 @@ module Translatable
   def read_translated_attribute(column_name, locale = I18n.locale)
     if I18n.respond_to? :fallbacks
       translation_for(locale).read_attribute(column_name) || begin
-        fallbacks = Array(I18n.fallbacks[locale.to_sym] || I18n.default_locale)
-        fallback = fallbacks.detect { |fallback| translation_for(fallback).nil? }
+        fallback = Array(I18n.fallbacks[locale.to_sym] || I18n.default_locale).detect { |fallback| translation_for(fallback).nil? }
         translation_for(fallback) if fallback
       end
     else
@@ -217,7 +216,7 @@ module Translatable
   end
 
   def translation_for(locale)
-    translation_cache[locale.to_s] ||= if translations.loaded?
+    translation_cache[locale.to_s] ||= if new_record? or translations.loaded?
       translations.detect { |translation| translation.locale == locale.to_s }
     else
       translations.find_by_locale(locale.to_s)
