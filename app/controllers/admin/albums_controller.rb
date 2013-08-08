@@ -12,9 +12,7 @@ class Admin::AlbumsController < Admin::ApplicationController
 
   def new
     @album = Album.new
-    %w(en de).each do |locale|
-      @album.translations.build(locale: locale)
-    end
+    @album.build_translations_for_available_locales
     respond_with :admin, @album
   end
 

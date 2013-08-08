@@ -23,7 +23,7 @@ class Admin::ImagesController < Admin::ApplicationController
     else
       @image = Image.new
     end
-    @image.build_translations_for(:de, :en)
+    @image.build_translations_for_available_locales
     respond_with :admin, @image
   end
 

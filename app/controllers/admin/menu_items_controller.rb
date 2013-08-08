@@ -12,7 +12,7 @@ class Admin::MenuItemsController < Admin::ApplicationController
 
   def new
     @menu_item = MenuItem.new
-    @menu_item.build_translations_for(:de, :en)
+    @menu_item.build_translations_for_available_locales
     respond_with :admin, @menu_item
   end
 

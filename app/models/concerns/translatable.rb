@@ -147,6 +147,10 @@ module Translatable
     end
   end
 
+  def build_translations_for_available_locales
+    build_translations_for(I18n.available_locales)
+  end
+
   def changed_with_translation
     changed_without_translation + translation.changed
   end
