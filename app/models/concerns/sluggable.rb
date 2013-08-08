@@ -24,7 +24,7 @@ module Sluggable
  
   module ClassMethods
     def slugs(attribute, options = {})
-      raise 'slug attribute already defined' unless class_variable_get("@@slug_source_column").nil?
+      #raise 'slug attribute already defined' unless class_variable_get("@@slug_source_column").nil?
 
       options = DEFAULTS.merge(options)
 

@@ -4,9 +4,7 @@
 #
 #  id           :integer          not null, primary key
 #  menu_item_id :integer          not null
-#  locale       :string(255)      not null
-#  created_at   :datetime
-#  updated_at   :datetime
+#  locale       :string(2)        not null
 #  title        :string(255)
 #
 

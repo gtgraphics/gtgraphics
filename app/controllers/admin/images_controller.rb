@@ -12,7 +12,7 @@ class Admin::ImagesController < Admin::ApplicationController
     if @album
       @images = @album.images.joins(:album_assignments).order('album_images.position')
     else
-      @images = Image.with_current_locale
+      @images = Image.with_translation
     end
     respond_with :admin, @images
   end
@@ -23,9 +23,7 @@ class Admin::ImagesController < Admin::ApplicationController
     else
       @image = Image.new
     end
-    %w(en de).each do |locale|
-      @image.translations.build(locale: locale)
-    end
+    @image.build_translations_for(:de, :en)
     respond_with :admin, @image
   end
 

@@ -6,7 +6,7 @@ class Admin::AlbumsController < Admin::ApplicationController
   breadcrumbs_for_resource
 
   def index
-    @albums = Album.with_current_locale.order('album_translations.title')
+    @albums = Album.with_translation.order('album_translations.title')
     respond_with :admin, @albums
   end
 

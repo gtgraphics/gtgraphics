@@ -12,9 +12,7 @@ class Admin::MenuItemsController < Admin::ApplicationController
 
   def new
     @menu_item = MenuItem.new
-    %w(en de).each do |locale|
-      @menu_item.translations.build(locale: locale)
-    end
+    @menu_item.build_translations_for(:de, :en)
     respond_with :admin, @menu_item
   end
 
