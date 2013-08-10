@@ -4,8 +4,10 @@
     %title
       = (["GT Graphics Administration"] + breadcrumbs.collect(&:caption).drop(1)).join(' &middot; ').html_safe
     = stylesheet_link_tag 'admin', media: 'all', data: { turbolinks_track: true }
+    = yield :stylesheets
     = i18n_javascript
     = javascript_include_tag 'admin', data: { turbolinks_track: true }
+    = yield :javascripts
     = csrf_meta_tags
   %body
     .navbar.navbar-fixed-top.navbar-inverse

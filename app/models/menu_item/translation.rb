@@ -12,8 +12,4 @@ class MenuItem::Translation < ActiveRecord::Base
   include ::Translation
 
   validates :title, presence: true, if: :default_locale?
-
-  def default_locale?
-    locale == I18n.default_locale.to_s
-  end
 end

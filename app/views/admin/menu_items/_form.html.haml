@@ -1,3 +1,12 @@
+- content_for :javascripts do
+  :javascript
+    $(document).ready(function() {
+      $('#menu_item_menu_item_target_type').change(function() {
+        var $select = $(this);
+        console.log($select.val());
+      });
+    });
+
 = simple_form_for [:admin, @menu_item], html: { class: 'form-horizontal' } do |form|
 
   = form.simple_fields_for :translations do |translation_fields|
@@ -5,6 +14,10 @@
       %legend.except-js= translate(translation_fields.object.locale, scope: :locales)
       = translation_fields.input :locale, as: :hidden, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-6' }
       = translation_fields.input :title, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-6' }, required: translation_fields.object.default_locale?
+
+  = form.input :menu_item_target_type, collection: MenuItem::TARGET_TYPES.map { |target_type| [target_type.constantize.model_name.human, target_type] }.sort_by(&:first), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }
+  = form.simple_fields_for :menu_item_target_type do |target_type_fields|
+    = render 'target_type_fields', fields: target_type_fields
 
   .form-group.form-actions
     .col-lg-10.col-offset-2

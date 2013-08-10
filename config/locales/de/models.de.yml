@@ -17,6 +17,8 @@ de:
         asset: Bilddatei
       image/translation:
         caption: Beschriftung
+      menu_item:
+        menu_item_target_type: Typ
       shout:
         nickname: Verfasser
         message: Nachricht
@@ -24,6 +26,7 @@ de:
         os: Betriebssystem
         x: X-Koordinate
         y: Y-Koordinate
+        coordinates: Koordinaten
     models:
       album:
         one: Album
@@ -34,6 +37,12 @@ de:
       menu_item:
         one: Menüeintrag
         other: Menüeinträge
+      menu_item/link:
+        one: Link
+        other: Links
+      menu_item/record:
+        one: Datensatz
+        other: Datensätze
       shout:
         one: Stern
         other: Sterne

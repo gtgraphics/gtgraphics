@@ -22,7 +22,11 @@ GtGraphics::Application.routes.draw do
         end
       end
 
-      resources :menu_items
+      resources :menu_items do
+        collection do
+          get :target_type_fields
+        end
+      end
 
       resources :shouts
     end

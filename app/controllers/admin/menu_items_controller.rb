@@ -6,7 +6,7 @@ class Admin::MenuItemsController < Admin::ApplicationController
   breadcrumbs_for_resource
 
   def index
-    @menu_items = MenuItem.all
+    @menu_items = MenuItem.roots
     respond_with :admin, @menu_items
   end
 
@@ -37,6 +37,10 @@ class Admin::MenuItemsController < Admin::ApplicationController
   def destroy
     @menu_item.destroy
     respond_with :admin, @menu_item
+  end
+
+  def target_type_fields
+    params[:target_type]
   end
 
   private

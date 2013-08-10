@@ -1,0 +1,18 @@
+= view_headline_for @shout do
+  = action_buttons_for @shout, except: :show
+
+%dl.dl-horizontal
+  %dt= Shout.human_attribute_name(:nickname)
+  %dd= @shout.nickname
+  %dt= Shout.human_attribute_name(:coordinates)
+  %dd= @shout.coordinates.join(' &times; ').html_safe
+  %dt= Shout.human_attribute_name(:browser)
+  %dd= @shout.browser
+  %dt= Shout.human_attribute_name(:os)
+  %dd= @shout.os
+  %dt= Shout.human_attribute_name(:ip)
+  %dd= @shout.ip
+  %dt= Shout.human_attribute_name(:created_at)
+  %dd= localize @shout.created_at
+
+%blockquote= simple_format @shout.message

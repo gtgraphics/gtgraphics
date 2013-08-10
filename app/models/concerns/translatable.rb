@@ -4,6 +4,7 @@ module Translatable
   included do 
     extend Macro
     extend Migration
+    include Dirty
     include Scopes
 
     cattr_accessor(:translated_column_names, instance_accessor: false) { [] }
@@ -13,10 +14,6 @@ module Translatable
     after_save :save_translation, if: :observe_translation?
 
     alias_method_chain :attributes, :translation
-    alias_method_chain :changed, :translation
-    alias_method_chain :changed?, :translation
-    alias_method_chain :changes, :translation
-    alias_method_chain :previous_changes, :translation
     alias_method_chain :reload, :translation
     alias_method_chain :valid?, :translation
   end
@@ -79,6 +76,33 @@ module Translatable
     end
   end
 
+  module Dirty
+    extend ActiveSupport::Concern
+
+    included do
+      alias_method_chain :changed, :translation
+      alias_method_chain :changed?, :translation
+      alias_method_chain :changes, :translation
+      alias_method_chain :previous_changes, :translation
+    end
+
+    def changed_with_translation
+      changed_without_translation + (translation.try(:changed) || [])
+    end
+
+    def changed_with_translation?
+      changed_without_translation? or translation.try(:changed?)
+    end
+
+    def changes_with_translation
+      changes_without_translation.merge(translation.changes.slice(*self.class.translated_column_names))
+    end
+
+    def previous_changes_with_translation
+      previous_changes_without_translation.merge(translation.previous_changes)
+    end
+  end
+
   module Migration
     def create_translation_table(options = {})
       connection.create_table(translation_table_name, options.slice(:force, :options)) do |table|
@@ -116,7 +140,11 @@ module Translatable
     end
 
     module ClassMethods
-      def with_translation_for(*locales)
+      def with_translation_for(locale)
+        with_translations_for(locale)
+      end
+
+      def with_translations_for(*locales)
         joins(:translations).where(reflect_on_association(:translations).klass.table_name.to_sym => { locale: locales.flatten }).uniq.includes(:translations)
       end
     end
@@ -129,46 +157,35 @@ module Translatable
   def build_translation(*args)
     attributes = args.extract_options!
     locale = args.first.to_s.presence || I18n.locale
-    translation = translations.build(attributes.reverse_merge(locale: locale))
+    translation = translations.build(attributes.merge(locale: locale))
     translation_cache[locale] = translation
     translation
   end
 
-  def build_translations_for(*locales)
-    attributes = locales.extract_options!
-    locales.flatten.each do |locale|
+  def build_translations(locales, attributes = {})
+    translations = []
+    locales.each do |locale|
       if translates?(locale)
         translation = translation_for(locale)
-        translation.attributes = attributes if attributes
-        translation
+        translation.attributes = attributes.except(:locale) if attributes
+        translations << translation
       else
-        build_translation(attributes.merge(locale: locale))
+        translations << build_translation(locale, attributes)
       end
     end
+    translations
   end
 
-  def build_translations_for_available_locales
-    build_translations_for(I18n.available_locales)
-  end
-
-  def changed_with_translation
-    changed_without_translation + translation.changed
-  end
-
-  def changed_with_translation?
-    changed_without_translation? or translation.changed?
-  end
-
-  def changes_with_translation
-    changes_without_translation.merge(translation.changes.slice(*self.class.translated_column_names))
+  def build_translations_for_available_locales(attributes = {})
+    build_translations(I18n.available_locales, attributes)
   end
 
   def clear_translation_cache!
     @translation_cache.clear
   end
 
-  def previous_changes_with_translation
-    previous_changes_without_translation.merge(translation.previous_changes)
+  def default_translation
+    translation_for(I18n.default_locale)
   end
 
   def read_translated_attribute(column_name, locale = I18n.locale)
@@ -240,9 +257,11 @@ module Translatable
     end
   end
 
+  private :valid_with_translation?
+
   def write_translated_attribute(column_name, value, locale = I18n.locale)
     build_translation(locale) if translation.nil?
-    translation.write_attribute(column_name, value)
+    translation.send :write_attribute, column_name, value
   end
 
   private

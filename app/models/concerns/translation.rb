@@ -16,4 +16,8 @@ module Translation
       where(locale: locales)
     end
   end
+
+  def default_locale?
+    locale == I18n.default_locale.to_s
+  end
 end
