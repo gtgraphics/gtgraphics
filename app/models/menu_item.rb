@@ -2,46 +2,74 @@
 #
 # Table name: menu_items
 #
-#  id                    :integer          not null, primary key
-#  menu_item_target_id   :integer
-#  menu_item_target_type :string(255)
-#  created_at            :datetime
-#  updated_at            :datetime
-#  parent_id             :integer
-#  lft                   :integer          not null
-#  rgt                   :integer          not null
-#  depth                 :integer
+#  id          :integer          not null, primary key
+#  record_id   :integer
+#  record_type :string(255)
+#  created_at  :datetime
+#  updated_at  :datetime
+#  parent_id   :integer
+#  lft         :integer          not null
+#  rgt         :integer          not null
+#  depth       :integer
+#  target      :string(255)
 #
 
 class MenuItem < ActiveRecord::Base
-  include Translatable
-  
-  TARGET_TYPES = %w(
+  RECORD_TYPES = %w(
     MenuItem::Link
-    MenuItem::Record
-  )
+    Page
+    Album
+    Image
+  ).freeze
 
   acts_as_nested_set
 
   translates :title
 
-  belongs_to :menu_item_target, polymorphic: true, dependent: :destroy
+  belongs_to :record, polymorphic: true
 
-  validates :menu_item_target_id, presence: true
-  validates :menu_item_target_type, presence: true, inclusion: { in: TARGET_TYPES }
+  validates :record_id, presence: true, unless: :link?
+  validates :record_type, presence: true, inclusion: { in: RECORD_TYPES }
+  validates :url, presence: true, if: :link?
+
+  after_destroy :destroy_link
 
   default_scope -> { order(:lft) }
 
-  alias_attribute :target_id, :menu_item_target_id
-  alias_attribute :target_type, :menu_item_target_type
+  RECORD_TYPES.each do |record_type|
+    scope record_type.demodulize.underscore.pluralize, -> { where(record_type: record_type) }
 
-  accepts_nested_attributes_for :translations
-  accepts_nested_attributes_for :menu_item_target
-
-  def build_menu_item_target(attributes = {})
-    raise 'no target type defined' if menu_item_target_type.blank?
-    self.menu_item_target = menu_item_target_type.constantize.new(attributes)
+    define_method "#{record_type.demodulize.underscore}?" do
+      self.record_type == record_type
+    end
   end
 
-  alias_method :build_target, :build_menu_item_target
+  accepts_nested_attributes_for :translations
+
+  def build_record(attributes = {})
+    raise 'no record type defined' if record_type.blank?
+    self.record = record_type.constantize.new(attributes)
+  end
+
+  def url
+    if link?
+      record.try(:url)
+    else
+      RequestStore.store[:controller_context].try(:polymorphic_url, record)
+    end
+  end
+
+  def url=(url)
+    if link?
+      self.record ||= build_record
+      record.url = url
+    else
+      raise "cannot set URL for #{record.inspect} manually"
+    end
+  end
+
+  private
+  def destroy_link
+    record.destroy if link?
+  end
 end

@@ -10,14 +10,14 @@
     = yield :javascripts
     = csrf_meta_tags
   %body
-    .navbar.navbar-fixed-top.navbar-inverse
+    .navbar.navbar-inverse.navbar-fixed-top
       .container
         %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-responsive-collapse' }}
           = icon(:reorder)
 
         = link_to 'GT Graphics', :admin_root, class: 'navbar-brand'
 
-        .nav-collapse.collapse.navbar-responsive-collapse
+        %nav.navbar-responsive-collapse{role: 'navigation'}
           %ul.nav.navbar-nav
             = active_link_to :admin_images, wrap_tag: :li do
               = Image.model_name.human(count: 2)

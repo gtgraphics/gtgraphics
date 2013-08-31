@@ -1,6 +1,10 @@
 GtGraphics::Application.routes.draw do
   root 'home#index'
 
+  resources :albums
+  resources :images
+  resources :pages
+
   scope '(:locale)', locale: /(en|de)/ do
     namespace :admin do
       root 'home#index'
@@ -24,7 +28,7 @@ GtGraphics::Application.routes.draw do
 
       resources :menu_items do
         collection do
-          get :target_type_fields
+          get :record_type_fields
         end
       end
 
