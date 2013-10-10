@@ -39,8 +39,11 @@ class Admin::MenuItemsController < Admin::ApplicationController
     respond_with :admin, @menu_item
   end
 
-  def target_type_fields
-    params[:target_type]
+  def record_type_fields
+    @menu_item = MenuItem.new(record_type: params.fetch(:record_type))
+    respond_to do |format|
+      format.html { render layout: false }
+    end    
   end
 
   private
@@ -49,6 +52,6 @@ class Admin::MenuItemsController < Admin::ApplicationController
   end
 
   def menu_item_params
-    params.require(:menu_item).permit! # FIXME
+    params.require(:menu_item).permit(:record_type, :record_id, :url, :target, translations_attributes: [:id, :locale, :title])
   end
 end

@@ -1,0 +1,5 @@
+- if fields.object.record_type.present?
+  - if fields.object.link?
+    = fields.input :url, required: true, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-6' }
+  - else
+    = fields.input :record_id, collection: fields.object.record_type.constantize.all, label: fields.object.record_type.constantize.model_name.human, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-6' }

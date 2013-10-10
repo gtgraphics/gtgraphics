@@ -1,0 +1,20 @@
+- menu_items ||= @menu_items
+- actions = true if actions.nil?
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th= MenuItem.human_attribute_name :title
+      %th= MenuItem.human_attribute_name :record_type
+      %th= MenuItem.human_attribute_name :record_or_url
+      - if actions
+        %th.actions
+  %tbody
+    - menu_items.each do |menu_item|
+      %tr
+        %td= link_to menu_item.title, [:admin, menu_item]
+        %td= menu_item.record_type.constantize.model_name.human
+        %td= link_to menu_item.record.to_s, menu_item.url
+        - if actions
+          %td.actions
+            = action_buttons_for menu_item, size: :mini

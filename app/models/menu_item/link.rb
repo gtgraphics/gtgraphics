@@ -7,5 +7,9 @@
 #
 
 class MenuItem::Link < ActiveRecord::Base
-  include MenuItemTarget
+  has_one :menu_item
+
+  def to_s
+    url
+  end
 end

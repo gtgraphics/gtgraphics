@@ -18,7 +18,10 @@ de:
       image/translation:
         caption: Beschriftung
       menu_item:
-        menu_item_target_type: Typ
+        record_type: Typ
+        record_id: Objekt
+        url: URL
+        record_or_url: Objekt/URL
       shout:
         nickname: Verfasser
         message: Nachricht
@@ -43,6 +46,9 @@ de:
       menu_item/record:
         one: Datensatz
         other: Datensätze
+      page:
+        one: Seite
+        other: Seiten
       shout:
         one: Stern
         other: Sterne
