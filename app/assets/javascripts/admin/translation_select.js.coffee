@@ -14,7 +14,7 @@ $(document).ready ->
     languages.push(language)
     locales[language] = locale
 
-  languages = languages.unique().sort()
+  languages = languages.uniq().sort()
 
   $selects = $(TRANSLATION_SELECT_SELECTOR)
   if languages.length == 0

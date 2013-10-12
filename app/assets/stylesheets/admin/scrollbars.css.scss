@@ -1,0 +1,38 @@
+.scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+  &::-webkit-scrollbar-track {
+  }
+  &::-webkit-scrollbar-track-piece {
+  }
+  &::-webkit-scrollbar-thumb {
+    height: 50px;
+    background-color: #ccc;
+    box-shadow: inset 1px 1px 0 #bfbfbf;
+  }
+  &::-webkit-scrollbar-corner {
+  }
+  &::-webkit-resizer {
+    display: none;
+  }
+  &:hover {
+    &::-webkit-scrollbar-thumb {
+      height: 50px;
+      background-color: #999;
+      box-shadow: none;
+    }
+  }
+}
+
+body {
+  @extend .scrollbar;
+}
+
+textarea {
+  @extend .scrollbar;
+}

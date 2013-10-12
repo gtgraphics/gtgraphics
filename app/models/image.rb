@@ -19,7 +19,6 @@
 
 class Image < ActiveRecord::Base
   include Sluggable
-  include Translatable
   
   STYLES = {
     thumbnail: ['75x75#', :png],
@@ -57,7 +56,7 @@ class Image < ActiveRecord::Base
   end
 
   def aspect_ratio
-    Rational(width, height)
+    dimensions.to_r
   end
 
   def dimensions
@@ -69,7 +68,7 @@ class Image < ActiveRecord::Base
   end
 
   def pixels
-    dimensions.to_a.inject(:*)
+    dimensions.to_a.reduce(:*)
   end
 
   def to_s

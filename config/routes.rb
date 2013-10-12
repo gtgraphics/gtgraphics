@@ -5,35 +5,35 @@ GtGraphics::Application.routes.draw do
   resources :images
   resources :pages
 
-  scope '(:locale)', locale: /(en|de)/ do
-    namespace :admin do
-      root 'home#index'
+  namespace :admin do
+    root 'home#index'
 
-      resources :albums do
-        resources :images do
-          collection do
-            patch :batch, as: :batch_process
-          end
-        end
-      end
-
+    resources :albums do
       resources :images do
         collection do
           patch :batch, as: :batch_process
         end
-        member do
-          get :download
-        end
       end
-
-      resources :menu_items do
-        collection do
-          get :record_type_fields
-        end
-      end
-
-      resources :shouts
     end
+
+    resources :images do
+      collection do
+        patch :batch, as: :batch_process
+      end
+      member do
+        get :download
+      end
+    end
+
+    resources :menu_items do
+      collection do
+        get :record_type_fields
+      end
+    end
+
+    resources :pages
+
+    resources :shouts
   end
 
   # Legacy URLs that have changed permanently (HTTP 301)

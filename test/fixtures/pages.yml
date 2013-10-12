@@ -3,12 +3,16 @@
 # Table name: pages
 #
 #  id         :integer          not null, primary key
-#  title      :string(255)
 #  slug       :string(255)
-#  content    :text
 #  author_id  :integer
 #  created_at :datetime
 #  updated_at :datetime
+#  template   :string(255)
+#  path       :string(255)
+#  parent_id  :integer
+#  lft        :integer
+#  rgt        :integer
+#  depth      :integer
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

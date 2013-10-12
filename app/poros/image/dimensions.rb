@@ -14,6 +14,10 @@ class Image::Dimensions
     { width: width, height: height }
   end
 
+  def to_r
+    Rational(width, height)
+  end
+
   def to_s
     "#{width} × #{height}"
   end

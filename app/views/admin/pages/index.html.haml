@@ -1,0 +1,9 @@
+= index_headline_for Page do
+  .btn-toolbar
+    = create_button_link_for Page, namespace: :admin
+
+- if @pages.any?
+  = render 'table', checkboxes: true
+- else
+  .well.text-center
+    %h4= translate('views.hints.empty', model: Page.model_name.human(count: 2))

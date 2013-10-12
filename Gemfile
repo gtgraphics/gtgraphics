@@ -21,9 +21,7 @@ gem 'awesome_nested_set'
 gem 'annotate'
 gem 'paperclip'
 gem 'validate_url'
-gem 'globalize3'
-#gem 'paper_trail', github: 'airblade/paper_trail', branch: 'rails4'
-#gem 'globalize3', github: 'svenfuchs/globalize3', branch: 'rails4'
+gem 'globalize', github: 'globalize/globalize', branch: 'rails4'
 
 # Views
 gem 'haml-rails'
@@ -34,6 +32,7 @@ gem 'jbuilder', '~> 1.2'
 
 # Assets
 gem 'sass-rails', '~> 4.0.0'
+gem 'less-rails'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer', platforms: :ruby

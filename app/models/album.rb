@@ -11,7 +11,6 @@
 
 class Album < ActiveRecord::Base
   include Sluggable
-  include Translatable
 
   slugs :title
   translates :title

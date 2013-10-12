@@ -1,3 +1,6 @@
+Array::first = ->
+  @[0]
+
 Array::last = ->
   @[@length-1]
 
@@ -10,7 +13,7 @@ Array::sortBy = (property) ->
     else
       throw "at least one element does not contain property: #{property}"
 
-Array::unique = ->
+Array::uniq = ->
   o = {}
   i = undefined
   l = @length
