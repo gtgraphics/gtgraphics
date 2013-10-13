@@ -11,13 +11,14 @@
 #  screenshot_file_size    :integer
 #  screenshot_updated_at   :datetime
 #  default                 :boolean          default(FALSE), not null
-#  active                  :boolean          default(TRUE), not null
 #
 
 class Page::Template < ActiveRecord::Base
   TEMPLATES_DIR = "app/views/pages/templates"
 
-  has_attached_file :screenshot, styles: { thumbnail: '75x75#' }
+  has_many :pages, dependent: :destroy
+
+  has_attached_file :screenshot, styles: { thumbnail: '75x75#', preview: '125x125' }
 
   validates :file_name, presence: true, uniqueness: true, inclusion: { in: ->(template) { template.class.template_files } }
   validates :name, presence: true
@@ -27,8 +28,7 @@ class Page::Template < ActiveRecord::Base
   after_save :undefault_other_templates, if: :default?
   after_destroy :default_other_template, if: :default?
 
-  scope :active, -> { where(active: true) }
-  scope :inactive, -> { where(active: false) }
+  default_scope -> { order(:name) }
 
   class << self
     def default
@@ -60,7 +60,7 @@ class Page::Template < ActiveRecord::Base
   end
 
   def default_current_template
-    self.default = true if !self.class.exists?(default: true)
+    self.default = true unless self.class.exists?(default: true)
   end
 
   def set_name

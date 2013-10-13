@@ -31,13 +31,12 @@ GtGraphics::Application.routes.draw do
       end
     end
 
-    scope :pages do
-      resources :templates, controller: :page_templates, as: :page_templates do
-        patch :make_default, on: :member
-      end
-    end
     resources :pages
-
+    
+    resources :page_templates do
+      patch :make_default, on: :member
+    end
+    
     resources :shouts
   end
 

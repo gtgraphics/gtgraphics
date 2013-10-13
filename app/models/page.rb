@@ -27,18 +27,19 @@ class Page < ActiveRecord::Base
   validates :slug, presence: true, uniqueness: { scope: :parent_id }
   validates :path, presence: true, uniqueness: true, if: -> { slug.present? }
 
+  after_initialize :set_default_template, if: -> { template.blank? }
   before_validation :generate_path
 
   class Translation < Globalize::ActiveRecord::Translation
     validates :title, presence: true
   end
 
-  class << self
-    
-  end
-
   private
   def generate_path
     self.path = [ancestors.collect(&:slug) + slug].join('/') if slug.present?
+  end
+
+  def set_default_template
+    self.template = Page::Template.default
   end
 end

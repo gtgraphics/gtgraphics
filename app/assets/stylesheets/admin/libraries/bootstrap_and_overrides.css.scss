@@ -59,8 +59,14 @@
         background-color: white;
       }
     }
-    &.active a .badge {
-      background-color: white;
+    &.active a, &.open a {
+      .badge {
+        background-color: white;
+      }
+      b.caret {
+        border-top-color: white;
+        border-bottom-color: white;
+      }
     }
   }
 }

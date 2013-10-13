@@ -6,7 +6,7 @@ class Admin::PageTemplatesController < Admin::ApplicationController
   #breadcrumbs_for_resource :page_templates, class_name: 'Page::Template'
 
   def index
-    @page_templates = Page::Template.order(:default, :name)
+    @page_templates = Page::Template.all
     respond_with :admin, @page_templates
   end
 

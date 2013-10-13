@@ -1,8 +1,33 @@
 @import "//fonts.googleapis.com/css?family=Karla:400,700,400italic,700italic";
+//@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed:300italic,400italic,700italic,400,300,700|Roboto:400,900italic,900,700italic,700,500italic,400italic,500,300italic,300,100italic,100);
 
 body, h1, h2, h3, h4, h5, h6 {
+  //font-family: 'Roboto Condensed', sans-serif !important;
   font-family: 'Karla', sans-serif !important;
 }
+
+/*.navbar-brand {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  letter-spacing: -1px;
+  font-size: 20px !important;
+}
+
+.navbar li {
+  a {
+    font-size: 16px;
+    line-height: 18px;
+    font-weight: 300;
+    font-style: italic;
+    .badge {
+      font-style: normal;
+    }
+
+  }
+  &.active a {
+    font-weight: 700;
+  }
+}*/
 
 .page-header {
   color: #d9534f;
