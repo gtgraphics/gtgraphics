@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/globalize/globalize.git
-  revision: d700eadcfb5da63924205235c30967a5ac3eeae5
+  revision: fd4c54025de7b6225ca883e0f39e573c51e5fd91
   branch: rails4
   specs:
     globalize (4.0.0.alpha.1)

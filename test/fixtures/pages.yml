@@ -2,17 +2,17 @@
 #
 # Table name: pages
 #
-#  id         :integer          not null, primary key
-#  slug       :string(255)
-#  author_id  :integer
-#  created_at :datetime
-#  updated_at :datetime
-#  template   :string(255)
-#  path       :string(255)
-#  parent_id  :integer
-#  lft        :integer
-#  rgt        :integer
-#  depth      :integer
+#  id          :integer          not null, primary key
+#  slug        :string(255)
+#  author_id   :integer
+#  created_at  :datetime
+#  updated_at  :datetime
+#  path        :string(255)
+#  parent_id   :integer
+#  lft         :integer
+#  rgt         :integer
+#  depth       :integer
+#  template_id :integer
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

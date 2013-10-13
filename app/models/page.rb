@@ -2,25 +2,27 @@
 #
 # Table name: pages
 #
-#  id         :integer          not null, primary key
-#  slug       :string(255)
-#  author_id  :integer
-#  created_at :datetime
-#  updated_at :datetime
-#  template   :string(255)
-#  path       :string(255)
-#  parent_id  :integer
-#  lft        :integer
-#  rgt        :integer
-#  depth      :integer
+#  id          :integer          not null, primary key
+#  slug        :string(255)
+#  author_id   :integer
+#  created_at  :datetime
+#  updated_at  :datetime
+#  path        :string(255)
+#  parent_id   :integer
+#  lft         :integer
+#  rgt         :integer
+#  depth       :integer
+#  template_id :integer
 #
 
 class Page < ActiveRecord::Base
   acts_as_nested_set
 
+  belongs_to :template, class_name: 'Page::Template'
+
   translates :title, :content
 
-  accepts_nested_attributes_for :translations
+  accepts_nested_attributes_for :translations, allow_destroy: true
 
   validates :slug, presence: true, uniqueness: { scope: :parent_id }
   validates :path, presence: true, uniqueness: true, if: -> { slug.present? }
@@ -32,9 +34,7 @@ class Page < ActiveRecord::Base
   end
 
   class << self
-    def templates
-      @@templates ||= Dir[Rails.root.join('app/views/pages/templates/*')].collect { |filename| File.basename(filename).split('.').first }.sort
-    end
+    
   end
 
   private

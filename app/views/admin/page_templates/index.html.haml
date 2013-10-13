@@ -1,0 +1,28 @@
+= index_headline_for Page::Template do
+  .btn-toolbar
+    = create_button_link_for Page::Template, namespace: :admin
+
+- if @page_templates.any?
+  
+  %table.table.table-striped
+    %thead
+      %tr
+        %th= Page::Template.human_attribute_name :screenshot
+        %th= Page::Template.human_attribute_name :name
+        %th= Page::Template.human_attribute_name :active
+        %th= Page::Template.human_attribute_name :default
+        %th.actions
+    %tbody
+      - @page_templates.each do |page_template|
+        %tr
+          %td= image_tag page_template.screenshot.url(:thumbnail) if page_template.screenshot.present?
+          %td= page_template.name
+          %td= yes_or_no page_template.active?
+          %td= yes_or_no page_template.default?
+          %td.actions
+            = action_buttons_for page_template, size: :mini do
+              = button_link_to 'Make Default', [:make_default, :admin, page_template], size: :mini
+
+- else
+  .well.text-center
+    %h4= translate('views.hints.empty', model: Page::Template.model_name.human(count: 2))

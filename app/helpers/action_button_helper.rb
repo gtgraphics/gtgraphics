@@ -1,5 +1,5 @@
 module ActionButtonHelper
-  def action_buttons_for(object, options = {})
+  def action_buttons_for(object, options = {}, &block)
     displayed_buttons = %i(show edit destroy)
     displayed_buttons &= Array(options[:only]) if options[:only]
     displayed_buttons -= Array(options[:except]) if options[:except]
@@ -7,6 +7,7 @@ module ActionButtonHelper
     content_tag :div, class: 'btn-toolbar' do
       with_options options.merge(namespace: :admin) do |buttons|
         html = ""
+        html << capture(&block).strip if block_given?
         html << buttons.view_button_link_for(object) if displayed_buttons.include?(:show)
         html << buttons.update_button_link_for(object) if displayed_buttons.include?(:edit)
         html << buttons.destroy_button_link_for(object) if displayed_buttons.include?(:destroy)

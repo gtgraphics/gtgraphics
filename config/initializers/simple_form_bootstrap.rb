@@ -45,7 +45,23 @@ SimpleForm.setup do |config|
 end
 
 class SimpleForm::Inputs::Base
+  FORM_CONTROL_INPUT_TYPES = %w(
+    CollectionSelectInput
+    DateTimeInput
+    FileInput
+    GroupedCollectionSelectInput
+    NumericInput
+    PasswordInput
+    RangeInput
+    StringInput
+    TextInput
+  )
+
   def input_html_classes
-    @input_html_classes << 'form-control'
+    if self.class.name.demodulize.in? FORM_CONTROL_INPUT_TYPES
+      @input_html_classes << 'form-control'
+    else
+      @input_html_classes
+    end
   end
 end

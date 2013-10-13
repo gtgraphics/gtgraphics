@@ -14,6 +14,8 @@ en:
         os: Platform
         x: X Coordinate
         y: Y Coordinate
+      page/template:
+        file_name: File Name
     models:
       album:
         one: Album
@@ -24,3 +26,9 @@ en:
       shout:
         one: Shout
         other: Shouts
+      page:
+        one: Page
+        other: Pages
+      page/template:
+        one: Page Template
+        other: Page Templates
