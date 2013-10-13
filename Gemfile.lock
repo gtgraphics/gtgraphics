@@ -1,7 +1,6 @@
 GIT
   remote: git://github.com/globalize/globalize.git
-  revision: fd4c54025de7b6225ca883e0f39e573c51e5fd91
-  branch: rails4
+  revision: ff8a01447996f92f6ed448cbaa2558f2576549fd
   specs:
     globalize (4.0.0.alpha.1)
       activemodel (>= 4.0.0)

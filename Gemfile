@@ -21,7 +21,7 @@ gem 'awesome_nested_set'
 gem 'annotate'
 gem 'paperclip'
 gem 'validate_url'
-gem 'globalize', github: 'globalize/globalize', branch: 'rails4'
+gem 'globalize', github: 'globalize/globalize'#, branch: 'rails4'
 
 # Views
 gem 'haml-rails'
