@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   private
   def render_404
     respond_to do |format|
-      format.html { render 'public/404', status: :not_found }
+      format.html { render 'public/404', layout: false, status: :not_found }
       format.all { head :not_found }
     end
   end
@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
     if params[:locale] and I18n.available_locales.map(&:to_s).include?(params[:locale])
       I18n.locale = params[:locale].to_sym
     else
-      redirect_to locale: http_accept_language.compatible_language_from(I18n.available_locales)
+      redirect_to request.query_parameters.symbolize_keys.merge(locale: http_accept_language.compatible_language_from(I18n.available_locales))
     end
   end
 end

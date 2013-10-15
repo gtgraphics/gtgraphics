@@ -5,6 +5,8 @@
     %li= action_buttons_for @page, except: :show
 
 %dl.dl-horizontal
+  %dt= Page.human_attribute_name :path
+  %dd= link_to @page.path, @page
   %dt= Page.human_attribute_name :author
   %dd -
   %dt= Page.human_attribute_name :template

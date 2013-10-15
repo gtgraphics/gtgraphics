@@ -6,14 +6,13 @@ class @Editor
     @element = $('<div />', contenteditable: true, class: 'editor-region')
     @element.attr('data-target', "##{inputId}") if inputId
     @element.html($originalInput.val())
+    @element.css(height: @input.outerHeight())
 
-    containerClasses = $.trim("editor-container #{@input.attr('class')}")
-
-    $container = $('<div />', class: containerClasses)
-    $container.insertAfter(@input)
-    $container.append(@controls())
-    $container.append(@input)
-    $container.append(@element)
+    @container = $('<div />', class: 'editor-container')
+    @container.insertAfter(@input)
+    @container.append(@createControls())
+    @container.append(@input)
+    @container.append(@element)
 
     @input.addClass('editor-html')
 
@@ -23,14 +22,16 @@ class @Editor
     # Change Management
     @setUnchanged()
 
-  controls: ->
+  createControls: ->
     $controls = $('<div />', class: 'editor-controls')
     #$controls
 
-    $('<button />', type: 'button', 'data-command': 'bold').html('<b>Bold</b>').appendTo($controls)
-    $('<button />', type: 'button', 'data-command': 'italic').html('<i>Italic<i/>').appendTo($controls)
-    $('<button />', type: 'button', 'data-command': 'underline').html('<u>Underline</u>').appendTo($controls)
-    $('<button />', type: 'button', 'data-command': 'html').html('HTML').appendTo($controls)
+    $('<button />', type: 'button', class: 'btn btn-default btn-mini', 'data-command': 'bold').html('<i class="icon-bold"></i>').appendTo($controls)
+    $('<button />', type: 'button', class: 'btn btn-default btn-mini', 'data-command': 'italic').html('<i class="icon-italic"></i>').appendTo($controls)
+    $('<button />', type: 'button', class: 'btn btn-default btn-mini', 'data-command': 'underline').html('<i class="icon-underline"></i>').appendTo($controls)
+    $('<button />', type: 'button', class: 'btn btn-default btn-mini', 'data-command': 'html').html('HTML').appendTo($controls)
+
+    #document.queryCommandState('bold')
 
     _this = @
     $controls.on 'click', 'button', (event) ->
@@ -55,9 +56,11 @@ class @Editor
     if command == 'html'
       if @input.is(':hidden')
         @input.show()
+        @container.find('button[data-command="html"]').addClass('active')
         @element.hide()
       else
         @input.hide()
+        @container.find('button[data-command="html"]').removeClass('active')
         @element.show()
     else
       document.execCommand(command, false, null)

@@ -54,10 +54,6 @@ class Page < ActiveRecord::Base
 
   delegate :template_path, to: :template
 
-  def to_param
-    "#{id}-#{title.parameterize}"
-  end
-
   private
   def sanitize_slug
     self.slug = slug.parameterize if slug.present?

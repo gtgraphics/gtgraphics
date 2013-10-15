@@ -1,7 +1,6 @@
 GtGraphics::Application.routes.draw do
-  scope '(:locale)', constraints: { locale: /[a-z]{2}/i } do
+  scope '(:locale)', constraints: LocaleConstraint.new do
     namespace :admin do
-      root 'home#index'
 
       resources :albums do
         resources :images do
@@ -35,12 +34,15 @@ GtGraphics::Application.routes.draw do
       end
       
       resources :shouts
+      
+      root 'dashboard#index'
     end
 
     resources :albums
     resources :images
-    resources :pages, path: '/', constraints: { id: /.*/ }
-    root 'home#index'
+
+    get '*id' => 'pages#show', constraints: PageConstraint.new, as: :page
+    root 'pages#index'
   end
 
   # Legacy URLs that have changed permanently (HTTP 301)

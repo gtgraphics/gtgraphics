@@ -51,6 +51,12 @@ class MenuItem < ActiveRecord::Base
     self.record = record_type.constantize.new(attributes)
   end
 
+  def title_with_fallback
+    title_without_fallback || record.title
+  end
+
+  alias_method_chain :title, :fallback
+
   def url
     if link?
       record.try(:url)

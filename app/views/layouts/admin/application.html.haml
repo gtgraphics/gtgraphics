@@ -20,7 +20,7 @@
 
         %nav.navbar-responsive-collapse{role: 'navigation'}
           %ul.nav.navbar-nav
-            %li.dropdown{class: request.path =~ /\A\/admin\/(pages|page_templates)/ ? 'active' : nil}
+            %li.dropdown{class: request.path =~ /\/admin\/(pages|page_templates)/ ? 'active' : nil}
               = link_to :admin_pages, class: 'dropdown-toggle', data: { toggle: 'dropdown' }, role: 'button' do
                 = Page.model_name.human(count: 2)
                 .badge= Page.count
