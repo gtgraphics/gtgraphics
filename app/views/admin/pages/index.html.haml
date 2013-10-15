@@ -3,7 +3,7 @@
     = create_button_link_for Page, namespace: :admin
 
 - if @pages.any?
-  = present @pages, SitemapPresenter
+  = present @pages, PageSitemapPresenter
 - else
   .well.text-center
     %h4= translate('views.hints.empty', model: Page.model_name.human(count: 2))

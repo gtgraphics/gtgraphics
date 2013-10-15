@@ -1,7 +1,7 @@
 = simple_form_for [:admin, @page], html: { class: 'form-horizontal' } do |form|
 
   .fields
-    = form.association :parent, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }, input_html: { rows: 4 }
+    = form.association :parent, collection: Page.assignable_as_parent_of(@page), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }, input_html: { rows: 4 }, prompt: translate('prompts.none') if Page.exists?
     = form.input :slug, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }
     = form.association :template, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }, include_blank: false
 
@@ -16,4 +16,4 @@
   .form-group
     .col-lg-offset-2.col-lg-10
       = form.button :submit, class: 'btn-primary'
-      = button_link_to translate('helpers.links.cancel'), :admin_shouts
+      = button_link_to translate('helpers.links.cancel'), :admin_pages

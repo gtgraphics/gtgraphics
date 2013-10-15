@@ -1,4 +1,6 @@
 module HeadlineHelper
+  HEADLINE_METHOD_CANDIDATES = [:title, :name, :to_s].freeze
+
   def index_headline_for(model, &block)
     headline model.model_name.human(count: 2), &block
   end
@@ -13,7 +15,8 @@ module HeadlineHelper
   end
 
   def view_headline_for(object, &block)
-    headline object.to_s, &block
+    title = HEADLINE_METHOD_CANDIDATES.collect { |method| object.try(method) }.compact.first
+    headline title, &block
   end
 
   def editor_headline_for(object, &block)

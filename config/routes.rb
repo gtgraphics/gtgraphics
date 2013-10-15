@@ -1,10 +1,4 @@
 GtGraphics::Application.routes.draw do
-  root 'home#index'
-
-  resources :albums
-  resources :images
-  resources :pages
-
   namespace :admin do
     root 'home#index'
 
@@ -31,7 +25,9 @@ GtGraphics::Application.routes.draw do
       end
     end
 
-    resources :pages
+    resources :pages do
+      get :preview_path, on: :collection
+    end
     
     resources :page_templates do
       patch :make_default, on: :member
@@ -39,6 +35,11 @@ GtGraphics::Application.routes.draw do
     
     resources :shouts
   end
+
+  resources :albums
+  resources :images
+  resources :pages, path: '/', constraints: { id: /.*/ }
+  root 'home#index'
 
   # Legacy URLs that have changed permanently (HTTP 301)
   get '/category/:types/:page', to: redirect { |params, request|

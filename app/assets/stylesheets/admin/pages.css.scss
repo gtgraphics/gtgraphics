@@ -1,0 +1,9 @@
+#page_sitemap {
+  tr {
+    @for $i from 1 through 10 {
+      &.level-#{$i} td.level-indented {
+        padding-left: 8px + 14px * $i;
+      }
+    }
+  }
+}
