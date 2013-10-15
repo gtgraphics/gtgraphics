@@ -8,14 +8,13 @@ class CreateMenuItems < ActiveRecord::Migration
       t.integer :depth
       t.timestamps
     end
+
     reversible do |dir|
       dir.up do
-        MenuItem.create_translation_table do |t|
-          t.string :title
-        end
+        MenuItem.create_translation_table! title: :string
       end
       dir.down do
-        MenuItem.drop_translation_table
+        MenuItem.drop_translation_table!
       end
     end
   end

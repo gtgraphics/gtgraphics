@@ -5,14 +5,13 @@ class CreateAlbums < ActiveRecord::Migration
       t.integer :images_count, default: 0, null: false
       t.timestamps
     end
+
     reversible do |dir|
       dir.up do
-        Album.create_translation_table do |t|
-          t.string :title
-        end
+        Album.create_translation_table! title: :string
       end
       dir.down do
-        Album.drop_translation_table
+        Album.drop_translation_table!
       end
     end
   end

@@ -10,14 +10,13 @@ class CreateImages < ActiveRecord::Migration
       t.integer :hits_count, default: 0, null: false
       t.timestamps
     end
+
     reversible do |dir|
       dir.up do
-        Image.create_translation_table do |t|
-          t.string :caption
-        end
+        Image.create_translation_table! caption: :string
       end
       dir.down do
-        Image.drop_translation_table
+        Image.drop_translation_table!
       end
     end
   end
