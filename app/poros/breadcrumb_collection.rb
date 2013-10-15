@@ -13,8 +13,8 @@ class BreadcrumbCollection < Array
   alias_method :add, :append
 
   def inspect
-    substr = map { |item| "\"#{item.caption}\"=>\"#{item.path}\"" }.join(', ')
-    "#<#{self.class.name} #{substr}>"
+    substr = " " + map { |item| "\"#{item.caption}\"=>\"#{item.path}\"" }.join(', ')
+    "#<#{self.class.name}#{substr.strip}>"
   end
 
   def prepend(caption, destination, options = {})
