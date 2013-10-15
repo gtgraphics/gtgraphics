@@ -18,7 +18,7 @@
           %td= page_template.name
           %td= yes_or_no page_template.default?
           %td.actions
-            = action_buttons_for page_template, size: :mini do
+            = action_buttons_for page_template, size: :mini, except: (:destroy if page_template.default?) do
               - unless page_template.default?
                 = button_link_to 'Make Default', [:make_default, :admin, page_template], size: :mini, method: :patch
 

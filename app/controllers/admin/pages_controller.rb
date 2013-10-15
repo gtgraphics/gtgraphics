@@ -2,8 +2,25 @@ class Admin::PagesController < Admin::ApplicationController
   respond_to :html
 
   before_action :load_page, only: %i(show edit update destroy)
+  before_action :load_parent_page, only: %i(new create show edit update)
 
-  breadcrumbs_for_resource
+  breadcrumbs do |b|
+    b.append Page.model_name.human(count: 2), :admin_pages
+    if @parent_page
+      @parent_page.self_and_ancestors.each do |page|
+        b.append page.title, [:admin, page]
+      end
+    end
+    case action_name
+    when 'new', 'create'
+      b.append translate('breadcrumbs.new', model: Page.model_name.human), :new_admin_page
+    when 'show', 'edit', 'update'
+      b.append @page.title, [:admin, @page]
+      if %w(edit update).include?(action_name)
+        b.append translate('breadcrumbs.edit', model: Page.model_name.human), [:edit, :admin, @page]
+      end
+    end
+  end
 
   def index
     @pages = Page.all
@@ -11,7 +28,7 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def new
-    @page = Page.new(parent_id: params[:parent_id])
+    @page = Page.new(parent: @parent_page)
     @page.translations.build(locale: I18n.default_locale)
     respond_with :admin, @page
   end
@@ -50,6 +67,16 @@ class Admin::PagesController < Admin::ApplicationController
   private
   def load_page
     @page = Page.find(params[:id])
+  end
+
+  def load_parent_page
+    if params[:parent_id]
+      @parent_page = Page.find_by_id(params[:parent_id])
+    elsif page_params = params[:page]
+      @parent_page = Page.find_by_id(page_params[:parent_id])
+    elsif @page
+      @parent_page = @page.parent
+    end
   end
 
   def page_params

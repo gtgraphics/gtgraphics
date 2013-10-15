@@ -4,6 +4,7 @@ PATH_PREVIEW_SELECTOR = '.help-block.path-preview'
 PATH_PREVIEW_TYPEAHEAD_TIMEOUT = 500
 
 previewPath = ($slug, $parentId) ->
+  return if $slug.length == 0 and $parentId.length == 0
   slug = $slug.val()
   parentId = $parentId.val()
   if slug is ''

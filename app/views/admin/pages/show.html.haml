@@ -1,1 +1,13 @@
-= view_headline_for @page
+= view_headline_for @page do
+  %ul.list-inline
+    /%li= translation_select
+    %li= create_button_link_for Page, url: new_admin_page_path(parent_id: @page)
+    %li= action_buttons_for @page, except: :show
+
+%dl.dl-horizontal
+  %dt= Page.human_attribute_name :author
+  %dd -
+  %dt= Page.human_attribute_name :template
+  %dd= link_to @page.template, [:admin, @page.template]
+  %dt= Page.human_attribute_name :updated_at
+  %dd= localize @page.updated_at

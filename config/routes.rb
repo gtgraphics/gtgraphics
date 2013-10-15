@@ -36,10 +36,12 @@ GtGraphics::Application.routes.draw do
     resources :shouts
   end
 
-  resources :albums
-  resources :images
-  resources :pages, path: '/', constraints: { id: /.*/ }
-  root 'home#index'
+  scope '(:locale)', constraints: { locale: /[a-z]{2}/i } do
+    resources :albums
+    resources :images
+    resources :pages, path: '/', constraints: { id: /.*/ }
+    root 'home#index'
+  end
 
   # Legacy URLs that have changed permanently (HTTP 301)
   get '/category/:types/:page', to: redirect { |params, request|

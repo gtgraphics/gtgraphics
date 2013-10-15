@@ -26,9 +26,10 @@ en:
     ie: Internet Explorer
     opera: Opera
 
-  locales:
+  languages:
     en: English
     de: German
 
   prompts:
     none: '– none –'
+    default: '– Default –'

@@ -14,9 +14,9 @@
 #
 
 class Page::Template < ActiveRecord::Base
-  TEMPLATES_DIR = "app/views/pages/templates"
+  TEMPLATE_VIEWS_DIR = "pages/templates"
 
-  has_many :pages, dependent: :destroy
+  has_many :pages, dependent: :nullify
 
   has_attached_file :screenshot, styles: { thumbnail: '75x75#', preview: '125x125' }
 
@@ -36,7 +36,7 @@ class Page::Template < ActiveRecord::Base
     end
 
     def template_files
-      @@template_files ||= Dir[Rails.root.join(TEMPLATES_DIR, '*')].collect { |filename| File.basename(filename).split('.').first }.sort
+      @@template_files ||= Dir[Rails.root.join(TEMPLATE_VIEWS_DIR, '*')].collect { |filename| File.basename(filename).split('.').first }.sort
     end
 
     def unassigned_template_files
@@ -45,7 +45,11 @@ class Page::Template < ActiveRecord::Base
   end
 
   def template_path
-    Rails.root.join(TEMPLATES_DIR, file_name)
+    File.join(TEMPLATE_VIEWS_DIR, file_name)
+  end
+
+  def to_param
+    "#{id}-#{name.parameterize}"
   end
 
   def to_s

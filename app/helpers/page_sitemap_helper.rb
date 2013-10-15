@@ -8,8 +8,8 @@ module PageSitemapHelper
 
   private
   def page_sitemap_collection_for_select_recursive(collection, pages_by_parents, parent_id = nil, level = 0)
-    Array(pages_by_parents[parent_id]).each do |page|
-      collection << [level.times.collect { "&nbsp;&nbsp;&nbsp;" }.join.html_safe + page.name, page.id]
+    Array(pages_by_parents[parent_id]).sort_by(&:title).each do |page|
+      collection << [level.times.collect { "&nbsp;&nbsp;&nbsp;&nbsp;" }.join.html_safe + page.title, page.id]
       page_sitemap_collection_for_select_recursive(collection, pages_by_parents, page.id, level.next)
     end
   end

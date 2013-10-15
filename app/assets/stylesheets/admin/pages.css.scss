@@ -1,4 +1,13 @@
-#page_sitemap {
+#page_sitemap tr {
+  &.level-0 td {
+    background-color: #f9f9f9;
+    &.level-indented {
+      font-weight: bold;
+    }
+  }
+}
+
+#page_sitemap, .page-sitemap {
   tr {
     @for $i from 1 through 10 {
       &.level-#{$i} td.level-indented {
