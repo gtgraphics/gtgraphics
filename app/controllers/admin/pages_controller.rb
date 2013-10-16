@@ -11,15 +11,9 @@ class Admin::PagesController < Admin::ApplicationController
         b.append page.title, [:admin, page]
       end
     end
-    case action_name
-    when 'new', 'create'
-      b.append translate('breadcrumbs.new', model: Page.model_name.human), :new_admin_page
-    when 'show', 'edit', 'update'
-      b.append @page.title, [:admin, @page]
-      if %w(edit update).include?(action_name)
-        b.append translate('breadcrumbs.edit', model: Page.model_name.human), [:edit, :admin, @page]
-      end
-    end
+    b.append translate('breadcrumbs.new', model: Page.model_name.human), :new_admin_page if action_name.in? %w(new create)
+    b.append @page.title, [:admin, @page] if action_name.in? %w(show edit update)
+    b.append translate('breadcrumbs.edit', model: Page.model_name.human), [:edit, :admin, @page] if action_name.in? %w(edit update)
   end
 
   def index

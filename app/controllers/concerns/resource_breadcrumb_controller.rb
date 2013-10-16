@@ -1,27 +1,9 @@
-module BreadcrumbedController
+module ResourceBreadcrumbController
   extend ActiveSupport::Concern
 
   RECORD_CAPTION_METHODS = %i(name title to_s).freeze
 
-  included do
-    helper_method :breadcrumbs
-  end
-
   module ClassMethods
-    protected
-    def breadcrumb(caption, destination, options = {})
-      before_action(options) do |controller|
-        controller.breadcrumbs.append(caption, destination)
-      end
-    end
-
-    def breadcrumbs(options = {}, &block)
-      raise ArgumentError, 'no block given' unless block_given?
-      before_action(options) do |controller|
-        controller.instance_exec(breadcrumbs, controller, &block)
-      end
-    end
-
     def breadcrumbs_for_resource(*args)
       options = args.extract_options!
 
@@ -90,11 +72,6 @@ module BreadcrumbedController
         end
       end
     end
-  end
-
-  protected
-  def breadcrumbs
-    @breadcrumbs ||= BreadcrumbCollection.new(self)
   end
 
   private

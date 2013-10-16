@@ -1,24 +1,25 @@
-class Breadcrumb
-  attr_reader :breadcrumbs, :caption, :destination, :path, :url
-  private :breadcrumbs
+class Breadcrumb::Item
+  attr_reader :collection, :caption, :destination, :path, :url
+  private :collection
 
-  def initialize(breadcrumbs, caption, destination)
-    raise ArgumentError, 'no breadcrumb collection specified' if breadcrumbs.nil?
+  def initialize(collection, caption, destination)
+    raise ArgumentError, 'no breadcrumb collection specified' if collection.nil?
     raise ArgumentError, 'caption is blank' if caption.blank?
     raise ArgumentError, 'no destination specified' if destination.nil?
-    @breadcrumbs = breadcrumbs
+
+    @collection = collection
     @caption = caption.to_s
     @destination = destination
     if @destination.is_a? String
       @path = @url = @destination
     else
-      @path = breadcrumbs.controller_context.polymorphic_path(destination)
-      @url = breadcrumbs.controller_context.polymorphic_url(destination)
+      @path = collection.controller.url_for(destination)
+      @url = collection.controller.url_for(destination)
     end
   end
 
   def index
-    breadcrumbs.index(self)
+    collection.index(self)
   end
 
   def first?
@@ -26,7 +27,7 @@ class Breadcrumb
   end
 
   def last?
-    index == breadcrumbs.length - 1
+    index == collection.length - 1
   end
 
   def inspect

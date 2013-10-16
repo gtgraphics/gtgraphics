@@ -1,5 +1,5 @@
 GtGraphics::Application.routes.draw do
-  scope '(:locale)', constraints: LocaleConstraint.new do
+  scope '(:locale)', constraints: Routing::LocaleConstraint.new do
     namespace :admin do
 
       resources :albums do
@@ -41,7 +41,7 @@ GtGraphics::Application.routes.draw do
     resources :albums
     resources :images
 
-    get '*id' => 'pages#show', constraints: PageConstraint.new, as: :page
+    get '*id' => 'pages#show', constraints: Routing::PageConstraint.new, as: :page
     root 'pages#index'
   end
 

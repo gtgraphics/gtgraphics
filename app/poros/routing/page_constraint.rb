@@ -1,4 +1,4 @@
-class PageConstraint
+class Routing::PageConstraint
   def matches?(request)
     path = request.params[:id]
     Page.exists?(path: path)

@@ -5,6 +5,13 @@ class Admin::PageTemplatesController < Admin::ApplicationController
 
   #breadcrumbs_for_resource :page_templates, class_name: 'Page::Template'
 
+  breadcrumbs do |b|
+    b.append Page::Template.model_name.human(count: 2), :admin_page_templates
+    b.append translate('breadcrumbs.new', model: Page::Template.model_name.human), :new_admin_page_template if action_name.in? %w(new create)
+    b.append @page_template.name, [:admin, @page_template] if action_name.in? %w(show edit update)
+    b.append translate('breadcrumbs.edit', model: Page::Template.model_name.human), [:edit, :admin, @page_template] if action_name.in? %w(edit update)
+  end
+
   def index
     @page_templates = Page::Template.all
     respond_with :admin, @page_templates
