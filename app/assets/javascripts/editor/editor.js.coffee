@@ -50,9 +50,11 @@ class @Editor
 
   onOpen: ->
     @element.addClass('editing')
+    @container.addClass('focus')
 
   onClose: ->
     @element.removeClass('editing')
+    @container.removeClass('focus')
 
   applyEvents: ->
     # Change Label Behavior

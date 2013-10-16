@@ -19,6 +19,7 @@ class @Editor.Controls.Base
       event.preventDefault()
       @execCommand()
       @editor.setChanged()
+      @editor.element.focus().triggerHandler('focus')
 
     # TODO Track Editor Changes and then document.queryCommandState
     # in order to determine whether this control is active or not
