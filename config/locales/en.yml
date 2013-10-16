@@ -29,7 +29,3 @@ en:
   languages:
     en: English
     de: German
-
-  prompts:
-    none: '– none –'
-    default: '– Default –'

@@ -3,6 +3,7 @@ de:
     created_at: Erstellt am
     slug: URL-Token
     title: Titel
+    content: Inhalt
 
   activerecord:
     attributes:
@@ -22,6 +23,9 @@ de:
         record_id: Objekt
         url: URL
         record_or_url: Objekt/URL
+      page:
+        template: Vorlage
+        parent: Elternseite
       shout:
         nickname: Verfasser
         message: Nachricht

@@ -17,3 +17,4 @@
 //= require_tree ./core_ext
 //= require_tree ./global
 //= require_tree ./admin
+//= require ./editor

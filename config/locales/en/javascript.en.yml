@@ -3,3 +3,8 @@ en:
     helpers:
       links:
         browse: Browse
+
+    editor:
+      bold: Bold
+      italic: Italic
+      underline: Underline

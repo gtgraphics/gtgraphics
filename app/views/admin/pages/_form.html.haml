@@ -1,9 +1,9 @@
 = simple_form_for [:admin, @page], html: { class: 'form-horizontal' } do |form|
 
   .fields
-    = form.association :parent, collection: page_sitemap_collection_for_select(Page.assignable_as_parent_of(@page)), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }, input_html: { rows: 4 }, include_blank: translate('prompts.none') if Page.assignable_as_parent_of(@page).exists?
+    = form.association :parent, collection: page_sitemap_collection_for_select(Page.assignable_as_parent_of(@page)), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }, input_html: { rows: 4 }, include_blank: translate('helpers.prompts.none') if Page.assignable_as_parent_of(@page).exists?
     = form.input :slug, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }
-    = form.association :template, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }, include_blank: translate('prompts.default')
+    = form.association :template, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }, include_blank: translate('helpers.prompts.default')
 
   = form.simple_fields_for :translations do |translation_fields|
     %fieldset

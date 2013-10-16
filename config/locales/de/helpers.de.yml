@@ -18,5 +18,8 @@ de:
     confirm:
       destroy: 'Möchten Sie dieses %{model} wirklich entfernen?'
       destroy_selected: 'Möchten Sie die ausgewählten %{model} wirklich entfernen?'
+    prompts:
+      none: '– keine –'
+      default: '– Standard –'
     units:
       pixels: Pixel

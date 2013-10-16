@@ -3,3 +3,8 @@ de:
     helpers:
       links:
         browse: Durchsuchen
+
+    editor:
+      bold: Fett
+      italic: Kursiv
+      underline: Unterstrichen
