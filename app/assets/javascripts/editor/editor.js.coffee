@@ -1,7 +1,9 @@
 class @Editor
   DEFAULTS = {
     controls: [
-      ['bold', 'italic', 'underline'],
+      ['bold', 'italic', 'underline', 'strikethrough'],
+      ['align_left', 'align_center', 'align_right', 'align_justify'],
+      ['ordered_list', 'unordered_list'],
       'html'
     ]
   }
@@ -49,12 +51,16 @@ class @Editor
           if controlClass
             control = new controlClass(@, $toolbar)
             @controls.push(control)
+          else
+            console.warn "Control not found: #{key}"
         $toolbar.appendTo($controls)
       else
         controlClass = Editor.Controls.get(keyOrGroup)
         if controlClass
           control = new controlClass(@, $controls)
           @controls.push(control)
+        else
+          console.warn "Control not found: #{keyOrGroup}"
 
     $controls
 

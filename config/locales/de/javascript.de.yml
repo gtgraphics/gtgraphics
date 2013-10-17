@@ -8,4 +8,9 @@ de:
       bold: Fett
       italic: Kursiv
       underline: Unterstrichen
+      strikethrough: Durchgestrichen
       html: HTML
+      align_left: Linksbündig
+      align_center: Zentriert
+      align_right: Rechtsbündig
+      align_justify: Blocksatz
