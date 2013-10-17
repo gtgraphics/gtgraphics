@@ -1,9 +1,5 @@
-class @Editor.Controls.Italic extends @Editor.Controls.Base
-  constructor: ->
-    super
-    @isRichTextControl = true
-    
-  create: ->
+class @Editor.Controls.Italic extends @Editor.Controls.RichTextControl   
+  createControl: ->
     $button = super
     $button.attr('title', I18n.translate('editor.italic'))
     $button.html($('<i />', class: 'icon-italic'))
@@ -13,7 +9,10 @@ class @Editor.Controls.Italic extends @Editor.Controls.Base
   execCommand: ->
     document.execCommand('italic', false, null)
 
-  queryState: ->
+  queryActive: ->
     document.queryCommandState('italic')
+
+  queryEnabled: ->
+    document.queryCommandEnabled('italic')
 
 @Editor.Controls.register('italic', @Editor.Controls.Italic)

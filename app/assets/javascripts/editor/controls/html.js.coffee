@@ -3,12 +3,10 @@ class @Editor.Controls.Html extends @Editor.Controls.Base
     super
     @isRichTextControl = false
 
-  create: ->
+  createControl: ->
     $button = super
     $button.addClass('pull-right')
-    #$button.attr('title', I18n.translate('editor.underline'))
     $button.text(I18n.translate('editor.html'))
-    #$button.tooltip(placement: 'top', container: 'body')
     $button
 
   execCommand: ->
@@ -16,20 +14,16 @@ class @Editor.Controls.Html extends @Editor.Controls.Base
     if @editor.html
       @editor.element.hide()
       @editor.input.show().focus()
+      @editor.input.outerHeight(@editor.element.outerHeight(true))
     else
       @editor.input.hide()
       @editor.element.show().focus()
+      @editor.element.outerHeight(@editor.input.outerHeight(true))
 
-    @editor.controls.forEach (control) =>
-      if control.isRichTextControl
-        if @editor.html
-          control.disable()
-        else
-          control.enable()
+    @editor.controls.forEach (control) ->
+      control.refreshState()
 
-    console.log @editor
-
-  queryState: ->
+  queryActive: ->
     @editor.html == true
 
 @Editor.Controls.register('html', @Editor.Controls.Html)

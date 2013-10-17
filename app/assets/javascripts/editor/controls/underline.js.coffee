@@ -1,9 +1,5 @@
-class @Editor.Controls.Underline extends @Editor.Controls.Base
-  constructor: ->
-    super
-    @isRichTextControl = true
-    
-  create: ->
+class @Editor.Controls.Underline extends @Editor.Controls.RichTextControl   
+  createControl: ->
     $button = super
     $button.attr('title', I18n.translate('editor.underline'))
     $button.html($('<i />', class: 'icon-underline'))
@@ -13,7 +9,10 @@ class @Editor.Controls.Underline extends @Editor.Controls.Base
   execCommand: ->
     document.execCommand('underline', false, null)
 
-  queryState: ->
+  queryActive: ->
     document.queryCommandState('underline')
+
+  queryEnabled: ->
+    document.queryCommandEnabled('underline')
 
 @Editor.Controls.register('underline', @Editor.Controls.Underline)

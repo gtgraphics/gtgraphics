@@ -1,13 +1,16 @@
 class @Editor
   DEFAULTS = {
-    controls: ['bold', 'italic', 'underline', 'html']
+    controls: [
+      ['bold', 'italic', 'underline'],
+      'html'
+    ]
   }
 
   constructor: ($originalInput, options = {}) ->
     @input = $originalInput.hide()
     @input.attr('tabindex', '-1')
     @input.data('editor', @)
-    @options = $.extend({}, DEFAULTS, options)
+    @options = jQuery.extend({}, DEFAULTS, options)
 
     @createEditableRegion()
     @createContainer()
@@ -37,9 +40,22 @@ class @Editor
   createControls: ->
     @controls = []
     $controls = $('<div />', class: 'editor-controls btn-toolbar')
-    $.each @options.controls, (index, key) =>
-      controlClass = Editor.Controls.get(key)
-      @controls.push(new controlClass(@, $controls)) if controlClass
+
+    @options.controls.forEach (keyOrGroup) =>
+      if jQuery.isArray(keyOrGroup)
+        $toolbar = $('<div />', class: 'btn-group')
+        keyOrGroup.forEach (key) =>
+          controlClass = Editor.Controls.get(key)
+          if controlClass
+            control = new controlClass(@, $toolbar)
+            @controls.push(control)
+        $toolbar.appendTo($controls)
+      else
+        controlClass = Editor.Controls.get(keyOrGroup)
+        if controlClass
+          control = new controlClass(@, $controls)
+          @controls.push(control)
+
     $controls
 
   destroy: ->

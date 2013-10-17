@@ -1,9 +1,5 @@
-class @Editor.Controls.Bold extends @Editor.Controls.Base
-  constructor: ->
-    super
-    @isRichTextControl = true
-
-  create: ->
+class @Editor.Controls.Bold extends @Editor.Controls.RichTextControl
+  createControl: ->
     $button = super
     $button.attr('title', I18n.translate('editor.bold'))
     $button.html($('<i />', class: 'icon-bold'))
@@ -13,7 +9,10 @@ class @Editor.Controls.Bold extends @Editor.Controls.Base
   execCommand: ->
     document.execCommand('bold', false, null)
 
-  queryState: ->
+  queryActive: ->
     document.queryCommandState('bold')
+
+  queryEnabled: ->
+    document.queryCommandEnabled('bold')
 
 @Editor.Controls.register('bold', @Editor.Controls.Bold)

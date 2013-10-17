@@ -11,36 +11,35 @@ AvailableControls = {}
 class @Editor.Controls.Base
   constructor: (@editor, $controls) ->
     @controls = $controls
-    @control = @create()
-    @control.data('control', @)
+
+    @control = @createControl()
     @control.appendTo(@controls)
-    
+
+    @control.data('control', @)
     @control.click (event) =>
       event.preventDefault()
       @execCommand()
       @editor.setChanged()
       @editor.element.focus().triggerHandler('focus')
 
-    # TODO Track Editor Changes and then document.queryCommandState
-    # in order to determine whether this control is active or not
-    #@editor.
+    @refreshState()
     @editor.element.on 'blur click focus keyup paste', =>
-      if @queryState()
-        @activate()
-      else
-        @deactivate()
-      true
+      @refreshState()
 
     @deactivate()
     @enable()
 
-  create: ->
+  createControl: ->
     $('<button />', type: 'button', class: 'btn btn-default btn-mini', tabindex: '-1')
 
   execCommand: ->
     console.log.warn 'no action has been implemented'
 
-  queryState: ->
+  queryActive: ->
+    false
+
+  queryEnabled: ->
+    true
 
   activate: ->
     @control.addClass('active')
@@ -63,3 +62,14 @@ class @Editor.Controls.Base
       @deactivate()
     else
       @activate()
+
+  refreshState: ->
+    if @queryEnabled()
+      @enable()
+      if @queryActive()
+        @activate()
+      else
+        @deactivate()
+    else
+      @disable()
+    true
