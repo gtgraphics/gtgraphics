@@ -13,3 +13,6 @@
   %dd= link_to @page.template, [:admin, @page.template]
   %dt= Page.human_attribute_name :updated_at
   %dd= localize @page.updated_at
+
+.well
+  = @page.content_html

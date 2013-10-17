@@ -24,15 +24,15 @@ class @Editor.Controls.Base
     # TODO Track Editor Changes and then document.queryCommandState
     # in order to determine whether this control is active or not
     #@editor.
-    @editor.element.on 'click focus blur keyup paste', =>
+    @editor.element.on 'blur click focus keyup paste', =>
       if @queryState()
         @activate()
       else
         @deactivate()
+      true
 
     @deactivate()
     @enable()
-
 
   create: ->
     $('<button />', type: 'button', class: 'btn btn-default btn-mini', tabindex: '-1')

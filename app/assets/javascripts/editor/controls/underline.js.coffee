@@ -1,4 +1,8 @@
 class @Editor.Controls.Underline extends @Editor.Controls.Base
+  constructor: ->
+    super
+    @isRichTextControl = true
+    
   create: ->
     $button = super
     $button.attr('title', I18n.translate('editor.underline'))

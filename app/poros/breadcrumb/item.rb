@@ -1,4 +1,6 @@
 class Breadcrumb::Item
+  extend ActiveModel::Naming
+
   attr_reader :collection, :caption, :destination, :path, :url
   private :collection
 

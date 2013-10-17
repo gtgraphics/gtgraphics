@@ -1,6 +1,6 @@
 class @Editor
   DEFAULTS = {
-    controls: ['bold', 'italic', 'underline']
+    controls: ['bold', 'italic', 'underline', 'html']
   }
 
   constructor: ($originalInput, options = {}) ->
@@ -77,11 +77,13 @@ class @Editor
 
     @element.on 'keyup paste', =>
       @setChanged()
+      true
 
     @input.on 'keyup paste', =>
       @changed = true
       @element.addClass('changed')
       @element.html(@input.val())
+      true
 
   setChanged: ->
     @changed = true

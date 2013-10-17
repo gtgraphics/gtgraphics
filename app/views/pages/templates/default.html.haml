@@ -1,5 +1,7 @@
+= render 'breadcrumbs'
+
 #title
-  = @page.title
+  %h1= @page.title
 
 #content
-  = @page.content.html_safe
+  = @page.content_html

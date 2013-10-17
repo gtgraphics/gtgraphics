@@ -54,6 +54,15 @@ class Page < ActiveRecord::Base
 
   delegate :template_path, to: :template
 
+  def content_html
+    template = Liquid::Template.parse(content)
+    template.render(to_liquid).html_safe
+  end
+
+  def to_liquid
+    attributes.slice(*%w(title slug path)).merge('children' => children)
+  end
+
   private
   def sanitize_slug
     self.slug = slug.parameterize if slug.present?
