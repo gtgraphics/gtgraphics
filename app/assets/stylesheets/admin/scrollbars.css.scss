@@ -37,6 +37,8 @@ textarea {
   @extend .scrollbar;
 }
 
-.form-control.editor-html {
-  @extend .scrollbar;
+.form-control {
+  .editor-html, .editor-region {
+    @extend .scrollbar;
+  }
 }

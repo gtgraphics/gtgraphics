@@ -23,7 +23,7 @@ class Admin::PagesController < Admin::ApplicationController
 
   def new
     @page = Page.new(parent: @parent_page)
-    @page.translations.build(locale: I18n.default_locale)
+    @page.translations.build(locale: I18n.locale)
     respond_with :admin, @page
   end
 

@@ -37,7 +37,7 @@ class @Editor
     @element = $('<div />', contenteditable: true, class: 'editor-region')
     @element.attr('data-target', "##{inputId}") if inputId
     @element.html(@input.val())
-    @element.css(height: @input.outerHeight())
+    #@element.css(height: @input.outerHeight())
 
   createControls: ->
     @controls = []

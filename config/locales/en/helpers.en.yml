@@ -16,6 +16,7 @@ en:
       cancel: Cancel
       download: Download
       move: Move
+      remove: Remove
     confirm:
       destroy: 'Do you really want to delete this %{model}?'
       destroy_selected: 'Do you really want to delete all selected %{model}?'

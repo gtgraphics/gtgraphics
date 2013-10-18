@@ -1,17 +1,39 @@
 = simple_form_for [:admin, @page], html: { class: 'form-horizontal' } do |form|
 
-  .fields
-    = form.association :parent, collection: page_sitemap_collection_for_select(Page.assignable_as_parent_of(@page)), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }, input_html: { rows: 4 }, include_blank: translate('helpers.prompts.none') if Page.assignable_as_parent_of(@page).exists?
-    = form.input :slug, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }
-    = form.association :template, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }, include_blank: translate('helpers.prompts.default')
+  %ul.nav.nav-tabs#translations_tabs{data: { target: '#translations' }}
+    - available_locales.each do |locale|
+      %li.translation-tab{class: ((locale == I18n.locale || @page.translated_locales.one?) ? 'active' : 'only-js'), data: { locale: locale }}
+        = link_to "##{locale}" do
+          = flag_icon(locale)
+          = translate(locale, scope: :languages)
+          = button_tag icon(:remove), name: nil, type: 'button', class: 'btn btn-mini btn-danger remove-translation only-js', data: { toggle: 'tooltip', placement: 'top' }, title: translate('helpers.links.remove', model: Page::Translation.model_name.human), tabindex: '-1'
 
-  = form.simple_fields_for :translations do |translation_fields|
-    %fieldset
-      %legend= translate(translation_fields.object.locale, scope: :languages)
-      .fields
+    %li.dropdown.only-js.add-translation-select.pull-right
+      = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+        = prepend_icon(:plus, translate('helpers.links.add', model: Page::Translation.model_name.human))
+        %b.caret
+      %ul.dropdown-menu
+        - available_locales.each do |locale|
+          %li{data: { locale: locale }}
+            = link_to "#", class: 'add-translation', data: { locale: locale } do
+              = flag_icon(locale)
+              = translate(locale, scope: :languages)
+
+  .tab-content#translations
+
+    = form.simple_fields_for :translations do |translation_fields|
+      .tab-pane{class: (translation_fields.object.locale == I18n.locale || @page.translated_locales.one?) ? 'active' : nil, id: translation_fields.object.locale, data: { locale: translation_fields.object.locale }}
+        = translation_fields.object.locale
         = translation_fields.input :locale, as: :hidden
         = translation_fields.input :title, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-6' }
         = translation_fields.input :content, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }, input_html: { rows: 6, class: 'editor' }
+
+  %fieldset
+    %legend Einstellungen
+    .fields
+      = form.association :parent, collection: page_sitemap_collection_for_select(Page.assignable_as_parent_of(@page)), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }, input_html: { rows: 4 }, include_blank: translate('helpers.prompts.none') if Page.assignable_as_parent_of(@page).exists?
+      = form.input :slug, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }
+      = form.association :template, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }, include_blank: translate('helpers.prompts.default')
 
   .form-group
     .col-lg-offset-2.col-lg-10
