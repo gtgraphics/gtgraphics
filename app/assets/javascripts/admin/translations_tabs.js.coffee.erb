@@ -1,3 +1,5 @@
+# TODO Major Refactoring
+
 queryRemoveButtonState = ($tabs) ->
   disabled = $tabs.find('.translation-tab.translation-available').length <= 1
   $tabs.find('.remove-translation').prop('disabled', disabled)
@@ -74,6 +76,8 @@ createTranslation = ($tabs, locale, callback) ->
         $tabPane = $(html).appendTo($target)
         $tabPane.find('.editor').editor()
         callback() if callback
+      error: ->
+        # TODO
 
     #window.setTimeout callback, 4000 # TODO Placeholder
     #callback() if callback
