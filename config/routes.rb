@@ -26,7 +26,10 @@ GtGraphics::Application.routes.draw do
       end
 
       resources :pages do
-        get :preview_path, on: :collection
+        collection do
+          get :preview_path
+          get :translation_fields
+        end
       end
       
       resources :page_templates do

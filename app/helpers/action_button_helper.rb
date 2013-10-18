@@ -54,5 +54,6 @@ module ActionButtonHelper
     url = options.delete(:url) { [namespace, parent, object].flatten.compact }
     options[:type] = :primary
     button_link_to prepend_icon(:eye_open, translate('helpers.links.view', model: object.class.model_name.human)), url, options
+    #button_link_to icon(:eye_open), url, options.merge(data: { toggle: 'tooltip', placement: 'top' }, title: translate('helpers.links.view', model: object.class.model_name.human))
   end
 end

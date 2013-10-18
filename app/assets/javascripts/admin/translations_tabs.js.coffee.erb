@@ -2,14 +2,6 @@ queryRemoveButtonState = ($tabs) ->
   disabled = $tabs.find('.translation-tab.translation-available').length <= 1
   $tabs.find('.remove-translation').prop('disabled', disabled)
 
-#queryAddSelectButtonState = ($tabs) ->
-#  hidden = $tabs.find('.add-translation').length == $tabs.find('.translation-tab').length
-#  $button = $tabs.find('.add-translation-select')
-#  if hidden
-#    $button.hide()
-#  else
-#    $button.show()
-
 queryAddButtonStates = ($tabs) ->
   $addableItems = $tabs.find('.add-translation')
   $addableItems.each ->
@@ -22,7 +14,6 @@ queryAddButtonStates = ($tabs) ->
 queryState = ($tabs) ->
   queryRemoveButtonState($tabs)
   queryAddButtonStates($tabs)
-  #queryAddSelectButtonState($tabs)
 
 translationAdded = ($tabs, locale) ->
   added = false
@@ -33,7 +24,7 @@ translationAdded = ($tabs, locale) ->
   added
 
 initAvailableTabs = ($tabs) ->
-  $target = $($tabs.data('target'))
+  $target = $('#translations')
 
   definedLocales = []
   $target.find('.tab-pane[data-locale]').each ->
@@ -45,31 +36,47 @@ initAvailableTabs = ($tabs) ->
     locale = $tab.data('locale')
     if jQuery.inArray(locale, definedLocales) >= 0
       $tab.show()
-      $tab.addClass('translation-available')
+      $tab.addClass('translation-available').removeClass('translation-unavailable')
     else
       $tab.hide()
-      $tab.removeClass('translation-available')
+      $tab.removeClass('translation-available').addClass('translation-unavailable')
 
-createTranslation = ($tabs, locale) ->
-  $target = $($tabs.data('target'))
+  $availableTranslationTabs = $('.translation-tab.translation-available')
+  if $availableTranslationTabs.filter('.active').length == 0
+    locale = $availableTranslationTabs.first().data('locale')
+    $tabs.find(".translation-tab[data-locale='#{locale}'] a").tab('show')
+
+createTranslation = ($tabs, locale, callback) ->
+  $target = $('#translations')
   $tabPane = $target.find(".tab-pane[data-locale='#{locale}']")
   translationLoaded = $tabPane.length > 0
   if translationLoaded
     $tabPane.show()
-    $tabPane.find("input[name='_destroy']").val(0)
+    $tabPane.find(".destroy-translation").val(false)
     # TODO add existing _destroy hidden field in pane to false!!!
-    $newTabLink = $tabs.find(".translation-tab[data-locale='#{locale}'] a")
-    $newTabLink.tab('show')
+
+    callback() if callback
   else
     # Fixme - Remove Temp Fix
-    $tabPane = $('<div />', id: locale, class: 'tab-pane', 'data-locale': locale)
-    $tabPane.appendTo($target)
+    #$tabPane = $('<div />', id: locale, class: 'tab-pane', 'data-locale': locale)
+    #$tabPane.appendTo($target)
 
     # TODO: Add HTML via AJAX or re-show already loaded container
     console.log 'load via ajax......'
 
-    $newTabLink = $tabs.find(".translation-tab[data-locale='#{locale}'] a")
-    $newTabLink.tab('show')
+    url = $tabs.data('url')
+    jQuery.ajax
+      url: url,
+      type: 'get',
+      data: { translated_locale: locale },
+      dataType: 'html',
+      success: (html) ->
+        $tabPane = $(html).appendTo($target)
+        $tabPane.find('.editor').editor()
+        callback() if callback
+
+    #window.setTimeout callback, 4000 # TODO Placeholder
+    #callback() if callback
 
 $(document).ready ->
   $('#translations_tabs').each ->
@@ -79,21 +86,31 @@ $(document).ready ->
 
     # Tab Actions
     $tabs.find('.translation-tab a').click (event) ->
+      #return unless event.currentTarget == @
       event.preventDefault()
-      $(@).tab('show')
+      $link = $(@)
+      $tab = $link.closest('.translation-tab')
+      unless $tab.hasClass('disabled')
+        $link.tab('show')
 
     # Remove Translation
     $tabs.on 'click', '.remove-translation', (event) ->
+      #return unless event.currentTarget == @
       event.preventDefault()
       event.stopPropagation()
+      $(document).click() # closes all dropdowns
 
       $link = $(@)
       $tab = $link.closest('.translation-tab')
       if $tab.hasClass('active')
         $tab.siblings('.translation-tab').first().find('a').tab('show') 
       $tab.hide().removeClass('translation-available')
-
       $link.tooltip('hide') # dirty fix
+
+      locale = $tab.data('locale')
+
+      $tabPane = $("#translations .tab-pane[data-locale='#{locale}']")
+      $tabPane.find(".destroy-translation").val(true)
 
       queryState($tabs)
 
@@ -101,11 +118,32 @@ $(document).ready ->
     $tabs.find('.add-translation').click (event) ->
       event.preventDefault()
       $link = $(@)
-      unless $link.closest('li').hasClass('disabled')
+      $dropdownItem = $link.closest('li')
+      unless $dropdownItem.hasClass('disabled')
         locale = $link.data('locale')
+
+        $dropdownItem.addClass('disabled')
+
+        # Show new Tab
         $tab = $tabs.find(".translation-tab[data-locale='#{locale}']")
         $tab.show().addClass('translation-available')
 
-        createTranslation($tabs, locale)
+        # Replace Flag With Loader
+        $flag = $tab.find('.flag')
+        flagIconSrc = $flag.attr('src')
+        loaderSrc = "<%= asset_path('admin/loader.gif') %>"
+        $flag.attr('src', loaderSrc)
+        $tab.removeClass('active')
+        $tab.addClass('disabled')
 
-        queryState($tabs)
+        # Load Translation Tab
+        createTranslation $tabs, locale, ->
+          console.log 'complete'
+
+          $flag.attr('src', flagIconSrc)
+          $tab.removeClass('disabled')
+
+          # view tab after it has been created/found
+          $tabs.find(".translation-tab[data-locale='#{locale}'] a").tab('show')
+
+          queryState($tabs)

@@ -1,8 +1,8 @@
 = simple_form_for [:admin, @page], html: { class: 'form-horizontal' } do |form|
 
-  %ul.nav.nav-tabs#translations_tabs{data: { target: '#translations' }}
+  %ul.nav.nav-tabs#translations_tabs{data: { url: translation_fields_admin_pages_path }}
     - available_locales.each do |locale|
-      %li.translation-tab{class: ((locale == I18n.locale || @page.translated_locales.one?) ? 'active' : 'only-js'), data: { locale: locale }}
+      %li.translation-tab{class: locale == I18n.locale ? 'active' : 'only-js', data: { locale: locale }}
         = link_to "##{locale}" do
           = flag_icon(locale)
           = translate(locale, scope: :languages)
@@ -22,11 +22,7 @@
   .tab-content#translations
 
     = form.simple_fields_for :translations do |translation_fields|
-      .tab-pane{class: (translation_fields.object.locale == I18n.locale || @page.translated_locales.one?) ? 'active' : nil, id: translation_fields.object.locale, data: { locale: translation_fields.object.locale }}
-        = translation_fields.object.locale
-        = translation_fields.input :locale, as: :hidden
-        = translation_fields.input :title, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-6' }
-        = translation_fields.input :content, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }, input_html: { rows: 6, class: 'editor' }
+      = render 'translation_fields', fields: translation_fields
 
   %fieldset
     %legend Einstellungen
