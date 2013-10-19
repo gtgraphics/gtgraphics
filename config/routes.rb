@@ -41,7 +41,7 @@ GtGraphics::Application.routes.draw do
       root 'dashboard#index'
     end
 
-    resources :albums
+    resources :galleries, controller: :albums
     resources :images
 
     get '*id' => 'pages#show', constraints: Routing::PageConstraint.new, as: :page

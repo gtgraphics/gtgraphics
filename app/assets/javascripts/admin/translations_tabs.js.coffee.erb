@@ -53,7 +53,7 @@ createTranslation = ($tabs, locale, callback) ->
   $tabPane = $target.find(".tab-pane[data-locale='#{locale}']")
   translationLoaded = $tabPane.length > 0
   if translationLoaded
-    $tabPane.show()
+    $tabs.find(".translation-tab[data-locale='#{locale}'] a").tab('show')    
     $tabPane.find(".destroy-translation").val(false)
     # TODO add existing _destroy hidden field in pane to false!!!
 

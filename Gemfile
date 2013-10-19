@@ -25,7 +25,7 @@ gem 'globalize', github: 'globalize/globalize'#, branch: 'rails4'
 
 # Views
 gem 'haml-rails'
-gem 'simple_form', '3.0.0.rc'
+gem 'simple_form'#, '3.0.0.rc'
 gem 'kaminari'
 gem 'active_link_to'
 gem 'jbuilder', '~> 1.2'
@@ -39,7 +39,7 @@ gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 gem 'jquery-turbolinks'
 gem 'turbolinks'
-gem 'compass-rails' #, github: 'Compass/compass-rails', branch: 'rails4-hack' # hack until compass has official Rails 4 support
+gem 'compass' #, github: 'Compass/compass-rails', branch: 'rails4-hack' # hack until compass has official Rails 4 support
 #gem 'formtastic-bootstrap', github: 'tlux/formtastic-bootstrap', branch: 'bootstrap3'
 #gem 'twitter-bootstrap-rails'
 #gem 'formtastic-bootstrap'

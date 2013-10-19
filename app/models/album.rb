@@ -10,9 +10,6 @@
 #
 
 class Album < ActiveRecord::Base
-  include Sluggable
-
-  slugs :title
   translates :title
 
   has_many :image_assignments, class_name: 'Album::ImageAssignment', dependent: :destroy

@@ -16,6 +16,8 @@
 #
 
 class Page < ActiveRecord::Base
+  include BatchTranslatable
+
   belongs_to :template, class_name: 'Page::Template'
 
   translates :title, :content
@@ -29,7 +31,7 @@ class Page < ActiveRecord::Base
   validate :validate_parent_assignability
 
   after_initialize :set_default_template, if: -> { template.blank? }
-  before_validation :sanitize_slug
+  before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
   after_save :update_descendants_paths
 
@@ -64,7 +66,9 @@ class Page < ActiveRecord::Base
   end
 
   private
-  def sanitize_slug
+  def generate_slug
+    #translations.
+    self.slug = title(I18n.default_locale) if slug.blank? and title.present?
     self.slug = slug.parameterize if slug.present?
   end
 

@@ -18,8 +18,6 @@
 #
 
 class Image < ActiveRecord::Base
-  include Sluggable
-  
   STYLES = {
     thumbnail: ['75x75#', :png],
     preview: ['1170x', :jpeg],
@@ -27,7 +25,6 @@ class Image < ActiveRecord::Base
     large: ['1920x1080', :jpeg]
   }
 
-  slugs :title
   translates :caption
 
   has_many :album_assignments, class_name: 'Album::ImageAssignment', dependent: :destroy

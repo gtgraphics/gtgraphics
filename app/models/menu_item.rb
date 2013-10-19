@@ -15,7 +15,7 @@
 #
 
 class MenuItem < ActiveRecord::Base
-  RECORD_TYPES = %w(
+  TARGET_TYPES = %w(
     MenuItem::Link
     Page
     Album
@@ -26,52 +26,35 @@ class MenuItem < ActiveRecord::Base
 
   translates :title
 
-  belongs_to :record, polymorphic: true
+  belongs_to :menu_item_target, polymorphic: true
 
-  validates :record_id, presence: true, unless: :link?
-  validates :record_type, presence: true, inclusion: { in: RECORD_TYPES }
-  validates :url, presence: true, if: :link?
+  validates :menu_item_target_id, presence: true, unless: :link?
+  validates :menu_item_target_type, presence: true, inclusion: { in: TARGET_TYPES }
+  # validates :url, presence: true, url: true, if: :link?
 
   after_destroy :destroy_link
 
+  accepts_nested_attributes_for :translations, allow_destroy: true
+
   default_scope -> { order(:lft) }
 
-  RECORD_TYPES.each do |record_type|
-    scope record_type.demodulize.underscore.pluralize, -> { where(record_type: record_type) }
+  TARGET_TYPES.each do |target_type|
+    scope target_type.demodulize.underscore.pluralize, -> { where(menu_item_target_type: target_type) }
 
-    define_method "#{record_type.demodulize.underscore}?" do
-      self.record_type == record_type
+    define_method "#{target_type.demodulize.underscore}?" do
+      self.target_type == target_type
     end
   end
 
-  accepts_nested_attributes_for :translations
+  class << self
+    def target_types
+      TARGET_TYPES
+    end
+  end
 
   def build_record(attributes = {})
     raise 'no record type defined' if record_type.blank?
     self.record = record_type.constantize.new(attributes)
-  end
-
-  def title_with_fallback
-    title_without_fallback || record.title
-  end
-
-  alias_method_chain :title, :fallback
-
-  def url
-    if link?
-      record.try(:url)
-    else
-      RequestStore.store[:controller_context].try(:polymorphic_url, record)
-    end
-  end
-
-  def url=(url)
-    if link?
-      self.record ||= build_record
-      record.url = url
-    else
-      raise "cannot set URL for #{record.inspect} manually"
-    end
   end
 
   private
