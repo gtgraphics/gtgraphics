@@ -18,15 +18,21 @@
 class Page < ActiveRecord::Base
   include BatchTranslatable
 
+  RESERVED_SLUGS = %w(
+    images
+    albums
+    galleries
+  )
+
   belongs_to :template, class_name: 'Page::Template'
 
-  translates :title, :content, :fallbacks_for_empty_translations => true
+  translates :title, :content, fallbacks_for_empty_translations: true
 
   acts_as_nested_set
 
   accepts_nested_attributes_for :translations, allow_destroy: true
 
-  validates :slug, presence: true, uniqueness: { scope: :parent_id }
+  validates :slug, presence: true, uniqueness: { scope: :parent_id }, exclusion: { in: RESERVED_SLUGS, if: :root? }
   validates :path, presence: true, uniqueness: true, if: -> { slug.present? }
   validate :validate_parent_assignability
 

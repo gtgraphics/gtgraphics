@@ -28,11 +28,17 @@ translationAdded = ($tabs, locale) ->
 initAvailableTabs = ($tabs) ->
   $target = $('#translations')
 
+  $tabPaneWithError = null
+
   definedLocales = []
   $target.find('.tab-pane[data-locale]').each ->
     $tabPane = $(@)
     if $tabPane.find('.destroy-translation').val() != 'true'
       definedLocales.push($tabPane.data('locale'))
+
+    $tabPaneErrors = $tabPane.find('.form-group.has-error')
+    if $tabPaneErrors.length > 0 and $tabPaneWithError == null
+      $tabPaneWithError = $tabPane
 
   $tabs.find('.translation-tab').each ->
     $tab = $(@)
@@ -44,10 +50,14 @@ initAvailableTabs = ($tabs) ->
       $tab.hide()
       $tab.removeClass('translation-available').addClass('translation-unavailable')
 
-  $availableTranslationTabs = $('.translation-tab.translation-available')
-  if $availableTranslationTabs.filter('.active').length == 0
-    locale = $availableTranslationTabs.first().data('locale')
+  if $tabPaneWithError
+    locale = $tabPaneWithError.data('locale')
     $tabs.find(".translation-tab[data-locale='#{locale}'] a").tab('show')
+  else
+    $availableTranslationTabs = $('.translation-tab.translation-available')
+    if $availableTranslationTabs.filter('.active').length == 0
+      locale = $availableTranslationTabs.first().data('locale')
+      $tabs.find(".translation-tab[data-locale='#{locale}'] a").tab('show')
 
 createTranslation = ($tabs, locale, callback) ->
   $target = $('#translations')
