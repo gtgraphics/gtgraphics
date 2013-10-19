@@ -21,6 +21,7 @@ GtGraphics::Application.routes.draw do
 
       resources :menu_items, except: :show do
         collection do
+          get :translation_fields
           get :record_type_fields
         end
       end

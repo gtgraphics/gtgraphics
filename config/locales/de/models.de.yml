@@ -19,10 +19,10 @@ de:
       image/translation:
         caption: Beschriftung
       menu_item:
-        record_type: Typ
-        record_id: Objekt
+        new_window: Neues Fenster?
+        target_type: Typ
+        target_id: Objekt
         url: URL
-        record_or_url: Objekt/URL
       page:
         template: Vorlage
         parent: Elternseite

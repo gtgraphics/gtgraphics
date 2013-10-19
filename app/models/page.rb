@@ -41,6 +41,9 @@ class Page < ActiveRecord::Base
   before_validation :generate_path, if: -> { slug.present? }
   after_save :update_descendants_paths
 
+  scope :published, -> { where(published: true) }
+  scope :hidden, -> { where(published: false) }
+
   class Translation < Globalize::ActiveRecord::Translation
     validates :title, presence: true
   end
@@ -51,9 +54,13 @@ class Page < ActiveRecord::Base
     end
   end
 
-  def update_path!
-    generate_path
-    save!
+  def content_html
+    template = Liquid::Template.parse(content)
+    template.render(to_liquid).html_safe
+  end
+
+  def hidden?
+    !published?
   end
 
   def template
@@ -62,13 +69,13 @@ class Page < ActiveRecord::Base
 
   delegate :template_path, to: :template
 
-  def content_html
-    template = Liquid::Template.parse(content)
-    template.render(to_liquid).html_safe
-  end
-
   def to_liquid
     attributes.slice(*%w(title slug path)).merge('children' => children)
+  end
+
+  def update_path!
+    generate_path
+    save!
   end
 
   private

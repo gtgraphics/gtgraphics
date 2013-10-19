@@ -66,17 +66,8 @@ createTranslation = ($tabs, locale, callback) ->
   if translationLoaded
     $tabs.find(".translation-tab[data-locale='#{locale}'] a").tab('show')    
     $tabPane.find(".destroy-translation").val(false)
-    # TODO add existing _destroy hidden field in pane to false!!!
-
-    callback() if callback
+    callback(true) if callback
   else
-    # Fixme - Remove Temp Fix
-    #$tabPane = $('<div />', id: locale, class: 'tab-pane', 'data-locale': locale)
-    #$tabPane.appendTo($target)
-
-    # TODO: Add HTML via AJAX or re-show already loaded container
-    console.log 'load via ajax......'
-
     url = $tabs.data('url')
     jQuery.ajax
       url: url,
@@ -86,12 +77,9 @@ createTranslation = ($tabs, locale, callback) ->
       success: (html) ->
         $tabPane = $(html).appendTo($target)
         $tabPane.find('.editor').editor()
-        callback() if callback
+        callback(true) if callback
       error: ->
-        # TODO
-
-    #window.setTimeout callback, 4000 # TODO Placeholder
-    #callback() if callback
+        callback(false) if callback
 
 $(document).ready ->
   $('#translations_tabs').each ->
@@ -119,7 +107,7 @@ $(document).ready ->
       $tab = $link.closest('.translation-tab')
       if $tab.hasClass('active')
         $tab.siblings('.translation-tab').first().find('a').tab('show') 
-      $tab.hide().removeClass('translation-available')
+      $tab.hide().removeClass('translation-available').addClass('translation-unavailable')
       $link.tooltip('hide') # dirty fix
 
       locale = $tab.data('locale')
@@ -141,7 +129,7 @@ $(document).ready ->
 
         # Show new Tab
         $tab = $tabs.find(".translation-tab[data-locale='#{locale}']")
-        $tab.show().addClass('translation-available')
+        $tab.show().addClass('translation-available').removeClass('translation-unavailable')
 
         # Replace Flag With Loader
         $flag = $tab.find('.flag')
@@ -152,13 +140,12 @@ $(document).ready ->
         $tab.addClass('disabled')
 
         # Load Translation Tab
-        createTranslation $tabs, locale, ->
-          console.log 'complete'
-
+        createTranslation $tabs, locale, (created) ->
           $flag.attr('src', flagIconSrc)
-          $tab.removeClass('disabled')
-
-          # view tab after it has been created/found
-          $tabs.find(".translation-tab[data-locale='#{locale}'] a").tab('show')
-
+          if created
+            $tab.removeClass('disabled')
+            $tabs.find(".translation-tab[data-locale='#{locale}'] a").tab('show')
+          else
+            $tab.hide().addClass('translation-unavailable').removeClass('translation-available')
+            alert(I18n.translate('translations.error'))
           queryState($tabs)

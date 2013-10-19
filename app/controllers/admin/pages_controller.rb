@@ -52,8 +52,9 @@ class Admin::PagesController < Admin::ApplicationController
 
   def preview_path
     @page = Page.new(params.symbolize_keys.slice(:slug, :parent_id))
+    @page.valid?
     respond_to do |format|
-      format.html { render text: @page.valid? ? File.join(request.host, @page.path) : '' }
+      format.html { render text: @page.slug.present? ? File.join(request.host, @page.path) : '' }
     end
   end
 

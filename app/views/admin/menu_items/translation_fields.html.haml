@@ -1,0 +1,5 @@
+- output = nil
+- simple_form_for [:admin, @menu_item], url: '' do |form|
+  - form.simple_fields_for :translations, child_index: microtimestamp do |translation_fields|
+    - output = render 'translation_fields', fields: translation_fields
+= output

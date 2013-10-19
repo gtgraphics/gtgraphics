@@ -11,9 +11,10 @@ previewPath = ($slug, $parentId) ->
     $slug.siblings(PATH_PREVIEW_SELECTOR).remove()
   else
     $.get '/admin/pages/preview_path', { slug: slug, parent_id: parentId }, (path) ->
-      $path = $slug.siblings(PATH_PREVIEW_SELECTOR)
-      $path = $('<span />', class: 'help-block path-preview').insertAfter($slug) if $path.length == 0
-      $path.text(path)
+      if path isnt ''
+        $path = $slug.siblings(PATH_PREVIEW_SELECTOR)
+        $path = $('<span />', class: 'help-block path-preview').insertAfter($slug) if $path.length == 0
+        $path.text(path)
 
 $(document).ready ->
   timeout = null

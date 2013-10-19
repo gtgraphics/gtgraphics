@@ -2,5 +2,6 @@ en:
   views:
     forms:
       advanced_options: Advanced Options
+      settings: Settings
     hints:
       empty: 'No %{model} have been created yet.'

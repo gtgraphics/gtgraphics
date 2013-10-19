@@ -13,6 +13,7 @@
 #  rgt         :integer
 #  depth       :integer
 #  template_id :integer
+#  published   :boolean
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

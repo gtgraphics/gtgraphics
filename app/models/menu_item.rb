@@ -12,6 +12,7 @@
 #  rgt                   :integer          not null
 #  depth                 :integer
 #  target                :string(255)
+#  new_window            :boolean          default(FALSE), not null
 #
 
 class MenuItem < ActiveRecord::Base
@@ -30,13 +31,12 @@ class MenuItem < ActiveRecord::Base
 
   validates :menu_item_target_id, presence: true, unless: :link?
   validates :menu_item_target_type, presence: true, inclusion: { in: TARGET_TYPES }
-  # validates :url, presence: true, url: true, if: :link?
 
   after_destroy :destroy_link
 
-  accepts_nested_attributes_for :translations, allow_destroy: true
-
   default_scope -> { order(:lft) }
+
+  accepts_nested_attributes_for :translations, allow_destroy: true
 
   alias_attribute :target, :menu_item_target
   alias_attribute :target_id, :menu_item_target_id
@@ -50,6 +50,10 @@ class MenuItem < ActiveRecord::Base
     end
   end
 
+  class Translation < Globalize::ActiveRecord::Translation
+    validates :title, presence: true
+  end
+
   class << self
     def target_types
       TARGET_TYPES
@@ -58,13 +62,13 @@ class MenuItem < ActiveRecord::Base
 
   def build_menu_item_target(attributes = {})
     raise 'no record type defined' if record_type.blank?
-    self.record = record_type.constantize.new(attributes)
+    self.target = record_type.constantize.new(attributes)
   end
 
   alias_method :build_target, :build_menu_item_target
 
   private
   def destroy_link
-    record.destroy if link?
+    target.destroy if link?
   end
 end

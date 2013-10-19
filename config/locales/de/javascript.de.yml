@@ -16,3 +16,6 @@ de:
       align_justify: Blocksatz
       ordered_list: Geordnete Liste
       unordered_list: Ungeordnete Liste
+
+    translations:
+      error: Der Übersetzungseditor konnte nicht geladen werden.

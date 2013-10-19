@@ -12,6 +12,7 @@
 #  rgt                   :integer          not null
 #  depth                 :integer
 #  target                :string(255)
+#  new_window            :boolean          default(FALSE), not null
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

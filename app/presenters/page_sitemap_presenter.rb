@@ -6,8 +6,13 @@ class PageSitemapPresenter < Presenter
   end
 
   def render
+    html_options = options.slice(:class, :id)
+    html_options[:class] ||= ""
+    html_options[:class] = " table-indented"
+    html_options[:class].strip!
+
     capture_haml do
-      haml_tag 'table.table', options.slice(:class, :id) do
+      haml_tag 'table.table', html_options do
         haml_tag :tbody do
           render_row
         end

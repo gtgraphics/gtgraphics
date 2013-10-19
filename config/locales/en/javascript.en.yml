@@ -9,3 +9,6 @@ en:
       italic: Italic
       underline: Underline
       html: HTML
+
+    translations:
+      error: The Translation Editor could not be loaded.
