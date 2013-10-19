@@ -5,12 +5,12 @@
 #  id                    :integer          not null, primary key
 #  menu_item_target_id   :integer
 #  menu_item_target_type :string(255)
+#  created_at            :datetime
+#  updated_at            :datetime
 #  parent_id             :integer
 #  lft                   :integer          not null
 #  rgt                   :integer          not null
 #  depth                 :integer
-#  created_at            :datetime
-#  updated_at            :datetime
 #  target                :string(255)
 #
 
@@ -38,6 +38,10 @@ class MenuItem < ActiveRecord::Base
 
   default_scope -> { order(:lft) }
 
+  alias_attribute :target, :menu_item_target
+  alias_attribute :target_id, :menu_item_target_id
+  alias_attribute :target_type, :menu_item_target_type
+
   TARGET_TYPES.each do |target_type|
     scope target_type.demodulize.underscore.pluralize, -> { where(menu_item_target_type: target_type) }
 
@@ -52,10 +56,12 @@ class MenuItem < ActiveRecord::Base
     end
   end
 
-  def build_record(attributes = {})
+  def build_menu_item_target(attributes = {})
     raise 'no record type defined' if record_type.blank?
     self.record = record_type.constantize.new(attributes)
   end
+
+  alias_method :build_target, :build_menu_item_target
 
   private
   def destroy_link

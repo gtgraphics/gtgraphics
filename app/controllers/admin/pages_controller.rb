@@ -17,7 +17,7 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def index
-    @pages = Page.all
+    @pages = Page.with_translations.all
     respond_with :admin, @pages
   end
 
@@ -52,9 +52,8 @@ class Admin::PagesController < Admin::ApplicationController
 
   def preview_path
     @page = Page.new(params.symbolize_keys.slice(:slug, :parent_id))
-    @page.valid?
     respond_to do |format|
-      format.html { render text: File.join(request.host, @page.path) }
+      format.html { render text: @page.valid? ? File.join(request.host, @page.path) : '' }
     end
   end
 
@@ -79,8 +78,8 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def load_parent_page
-    if params[:parent_id]
-      @parent_page = Page.find_by_id(params[:parent_id])
+    if parent_id = params[:parent_id]
+      @parent_page = Page.find_by_id(parent_id)
     elsif page_params = params[:page]
       @parent_page = Page.find_by_id(page_params[:parent_id])
     elsif @page
@@ -89,6 +88,6 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def page_params
-    params.require(:page).permit! # FIXME
+    params.require(:page).permit! #.permit(:parent_id, :slug, :template_id, translations_attributes: [:_destroy, :id, :locale, :title, :content])
   end
 end

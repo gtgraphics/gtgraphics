@@ -8,11 +8,11 @@ module RouteHelper
   end
 
   def menu_item_target_path(menu_item, options = {})
-    record = menu_item.record
-    if record.respond_to? :url
-      menu_item.url
+    target = menu_item.target
+    if target.respond_to? :url
+      target.url
     else
-      polymorphic_path(record, options)
+      polymorphic_path(target, options)
     end
   end
 end

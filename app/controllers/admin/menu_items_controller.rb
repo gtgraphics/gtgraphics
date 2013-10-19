@@ -3,7 +3,8 @@ class Admin::MenuItemsController < Admin::ApplicationController
 
   before_action :load_menu_item, only: %i(show edit update destroy)
 
-  breadcrumbs_for_resource
+  #breadcrumbs_for_resource
+  
 
   def index
     @menu_items = MenuItem.roots

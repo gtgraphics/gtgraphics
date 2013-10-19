@@ -19,7 +19,7 @@ GtGraphics::Application.routes.draw do
         end
       end
 
-      resources :menu_items do
+      resources :menu_items, except: :show do
         collection do
           get :record_type_fields
         end

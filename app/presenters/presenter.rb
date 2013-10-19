@@ -1,5 +1,5 @@
 class Presenter
-  attr_accessor :object, :template, :options
+  attr_reader :object, :template, :options
  
   def initialize(object, template, options = {})
     @object = object

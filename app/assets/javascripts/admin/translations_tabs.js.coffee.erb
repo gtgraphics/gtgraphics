@@ -31,7 +31,8 @@ initAvailableTabs = ($tabs) ->
   definedLocales = []
   $target.find('.tab-pane[data-locale]').each ->
     $tabPane = $(@)
-    definedLocales.push($tabPane.data('locale'))
+    if $tabPane.find('.destroy-translation').val() != 'true'
+      definedLocales.push($tabPane.data('locale'))
 
   $tabs.find('.translation-tab').each ->
     $tab = $(@)

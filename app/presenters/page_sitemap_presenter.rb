@@ -9,14 +9,10 @@ class PageSitemapPresenter < Presenter
     capture_haml do
       haml_tag 'table.table', options.slice(:class, :id) do
         haml_tag :tbody do
-          render_row(root_id, 0)
+          render_row
         end
       end
     end
-  end
-
-  def root_id
-    options[:root_id]
   end
 
   private
@@ -24,7 +20,7 @@ class PageSitemapPresenter < Presenter
     @pages_by_parents ||= pages.group_by(&:parent_id)
   end
 
-  def render_row(parent_id, level)
+  def render_row(parent_id = nil, level = 0)
     Array(pages_by_parents[parent_id]).sort_by(&:title).each do |page|
       haml_tag :tr, class: "level-#{level}", data: { level: level } do
         haml_tag 'td.checkbox-cell', check_box_tag(:page_ids, page.id, false, multiple: true) if checkboxes?

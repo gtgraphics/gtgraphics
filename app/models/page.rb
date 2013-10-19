@@ -20,7 +20,7 @@ class Page < ActiveRecord::Base
 
   belongs_to :template, class_name: 'Page::Template'
 
-  translates :title, :content
+  translates :title, :content, :fallbacks_for_empty_translations => true
 
   acts_as_nested_set
 
@@ -67,7 +67,6 @@ class Page < ActiveRecord::Base
 
   private
   def generate_slug
-    #translations.
     self.slug = title(I18n.default_locale) if slug.blank? and title.present?
     self.slug = slug.parameterize if slug.present?
   end

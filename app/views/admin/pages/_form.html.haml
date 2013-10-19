@@ -1,6 +1,6 @@
 = simple_form_for [:admin, @page], html: { class: 'form-horizontal' } do |form|
 
-  %ul.nav.nav-tabs#translations_tabs{data: { url: translation_fields_admin_pages_path }}
+  %ul.nav.nav-tabs.only-js#translations_tabs{data: { url: translation_fields_admin_pages_path }}
     - available_locales.each do |locale|
       %li.translation-tab{class: locale == I18n.locale ? 'active' : 'only-js', data: { locale: locale }}
         = link_to "##{locale}" do
@@ -8,7 +8,7 @@
           = translate(locale, scope: :languages)
           = button_tag icon(:remove), name: nil, type: 'button', class: 'btn btn-mini btn-danger remove-translation only-js', data: { toggle: 'tooltip', placement: 'top' }, title: translate('helpers.links.remove', model: Page::Translation.model_name.human), tabindex: '-1'
 
-    %li.dropdown.only-js.add-translation-select.pull-right
+    %li.dropdown.add-translation-select.pull-right
       = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
         = prepend_icon(:plus, translate('helpers.links.add', model: Page::Translation.model_name.human))
         %b.caret

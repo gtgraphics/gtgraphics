@@ -5,12 +5,12 @@
 #  id                    :integer          not null, primary key
 #  menu_item_target_id   :integer
 #  menu_item_target_type :string(255)
+#  created_at            :datetime
+#  updated_at            :datetime
 #  parent_id             :integer
 #  lft                   :integer          not null
 #  rgt                   :integer          not null
 #  depth                 :integer
-#  created_at            :datetime
-#  updated_at            :datetime
 #  target                :string(255)
 #
 

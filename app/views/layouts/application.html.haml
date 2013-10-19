@@ -8,7 +8,7 @@
     = csrf_meta_tags
   %body
     %ul.nav
-      - MenuItem.includes(:record).each do |menu_item|
+      - MenuItem.includes(:menu_item_target).each do |menu_item|
         %li= link_to menu_item.title, menu_item_target_path(menu_item)
 
     = yield

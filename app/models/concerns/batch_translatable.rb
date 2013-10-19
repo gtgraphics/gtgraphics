@@ -6,6 +6,6 @@ module BatchTranslatable
   extend ActiveSupport::Concern
 
   def translation
-    translation_for(::Globalize.locale, false) || self.class.translation_class.new
+    @translation ||= (translation_for(::Globalize.locale, false) || self.class.translation_class.new(locale: ::Globalize.locale))
   end
 end

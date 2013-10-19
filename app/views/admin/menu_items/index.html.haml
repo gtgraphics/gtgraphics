@@ -3,7 +3,7 @@
     = create_button_link_for MenuItem, namespace: :admin
 
 - if @menu_items.any?
-  = render 'table', checkboxes: true
+  = present @menu_items, id: 'menu_items', checkboxes: false
 - else
   .well.text-center
     %h4= translate('views.hints.empty', model: MenuItem.model_name.human(count: 2))
