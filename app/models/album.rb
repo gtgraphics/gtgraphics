@@ -10,6 +10,10 @@
 #
 
 class Album < ActiveRecord::Base
+  include BatchTranslatable
+  include Embeddable
+  include Templatable
+
   translates :title
 
   has_many :image_assignments, class_name: 'Album::ImageAssignment', dependent: :destroy
@@ -17,7 +21,7 @@ class Album < ActiveRecord::Base
   
   before_validation :set_slug
 
-  accepts_nested_attributes_for :translations
+  accepts_nested_attributes_for :translations, allow_destroy: true
 
   def to_s
     title

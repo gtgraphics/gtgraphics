@@ -1,19 +1,14 @@
 class PagesController < ApplicationController
+  abstract!
+  
   respond_to :html
 
-  with_options only: :show do |controller|
-    controller.before_action :load_page
-    
-    controller.breadcrumbs do |b|
-      @page.self_and_ancestors.each do |page|
-        b.append page.title, page
-      end
-    end
-  end
+  before_action :load_page
+  helper_method :page
 
-  def index
-    respond_to do |format|
-      format.html
+  breadcrumbs do |b|
+    @page.self_and_ancestors.each do |page|
+      b.append page.title, page
     end
   end
 

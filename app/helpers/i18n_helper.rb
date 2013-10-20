@@ -1,4 +1,8 @@
 module I18nHelper
+  def available_locales(locale = I18n.locale)
+    I18n.available_locales.sort_by { |available_locale| translate(available_locale, scope: :languages, locale: locale) }
+  end
+  
   def i18n_javascript
     javascript_tag do
       raw %{

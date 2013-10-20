@@ -42,10 +42,26 @@ GtGraphics::Application.routes.draw do
       root 'dashboard#index'
     end
 
-    resources :galleries, controller: :albums
-    resources :images
+    #resources :galleries, controller: :albums
+    #resources :images
 
-    get '*id' => 'pages#show', constraints: Routing::PageConstraint.new, as: :page
+    #get '*id' => 'pages#show', constraints: Routing::PageConstraint.new, as: :page
+    #scope '*path', constraints: Routing::PageConstraint.new do
+      #get '/' => 'pages#show', as: :page
+    #  resources :pages, path: '/', only: :show#, constraints: Routing::PageConstraint.new('Content'
+    #  resources :albums, path: '/'
+    #end
+
+    scope '/', constraints: { id: /.*/ } do
+      with_options path: '/', only: :show do |route|
+        route.resources :contents, controller: :pages, constraints: Routing::PageConstraint.new('Content')
+        route.resources :albums, constraints: Routing::PageConstraint.new('Album')
+        route.resources :images, constraints: Routing::PageConstraint.new('Image') do
+          get :download, on: :member
+        end
+      end
+    end
+
     root 'pages#index'
   end
 

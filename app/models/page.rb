@@ -2,75 +2,76 @@
 #
 # Table name: pages
 #
-#  id          :integer          not null, primary key
-#  slug        :string(255)
-#  author_id   :integer
-#  created_at  :datetime
-#  updated_at  :datetime
-#  path        :string(255)
-#  parent_id   :integer
-#  lft         :integer
-#  rgt         :integer
-#  depth       :integer
-#  template_id :integer
+#  id              :integer          not null, primary key
+#  slug            :string(255)
+#  author_id       :integer
+#  created_at      :datetime
+#  updated_at      :datetime
+#  path            :string(255)
+#  parent_id       :integer
+#  lft             :integer
+#  rgt             :integer
+#  depth           :integer
+#  template_id     :integer
+#  published       :boolean
+#  embeddable_id   :integer
+#  embeddable_type :string(255)
 #
 
 class Page < ActiveRecord::Base
-  include BatchTranslatable
+  EMBEDDABLE_TYPES = %w(
+    Content
+    Album
+    Image
+  ).freeze
 
   RESERVED_SLUGS = %w(
     images
     albums
     galleries
-  )
-
-  belongs_to :template, class_name: 'Page::Template'
-
-  translates :title, :content, fallbacks_for_empty_translations: true
+  ).freeze
 
   acts_as_nested_set
 
-  accepts_nested_attributes_for :translations, allow_destroy: true
+  belongs_to :embeddable, polymorphic: true
 
+  validates :embeddable_type, presence: true, inclusion: { in: EMBEDDABLE_TYPES }
   validates :slug, presence: true, uniqueness: { scope: :parent_id }, exclusion: { in: RESERVED_SLUGS, if: :root? }
   validates :path, presence: true, uniqueness: true, if: -> { slug.present? }
+  validate :validate_template_type, if: -> { template.present? and embeddable_type.present? }
   validate :validate_parent_assignability
 
   after_initialize :set_default_template, if: -> { template.blank? }
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
   after_save :update_descendants_paths
+  after_destroy :destroy_embeddable
 
   scope :published, -> { where(published: true) }
   scope :hidden, -> { where(published: false) }
 
-  class Translation < Globalize::ActiveRecord::Translation
-    validates :title, presence: true
+  EMBEDDABLE_TYPES.each do |embeddable_type|
+    scope embeddable_type.pluralize, -> { where(embeddable_type: embeddable_type) }
+
+    class_eval %{
+      def #{embeddable_type}?
+        self.embeddable_type == '#{embeddable_type}'
+      end
+    }
   end
 
   class << self
     def assignable_as_parent_of(page)
       where.not(id: page.self_and_descendants.pluck(:id))
     end
-  end
 
-  def content_html
-    template = Liquid::Template.parse(content)
-    template.render(to_liquid).html_safe
+    def embeddable_types
+      EMBEDDABLE_TYPES
+    end
   end
 
   def hidden?
     !published?
-  end
-
-  def template
-    super || Page::Template.default
-  end
-
-  delegate :template_path, to: :template
-
-  def to_liquid
-    attributes.slice(*%w(title slug path)).merge('children' => children)
   end
 
   def update_path!
@@ -79,9 +80,8 @@ class Page < ActiveRecord::Base
   end
 
   private
-  def generate_slug
-    self.slug = title(I18n.default_locale) if slug.blank? and title.present?
-    self.slug = slug.parameterize if slug.present?
+  def destroy_embeddable
+    embeddable.destroy if content?
   end
 
   def generate_path
@@ -94,6 +94,11 @@ class Page < ActiveRecord::Base
     self.path = File.join(*path_parts)
   end
 
+  def generate_slug
+    self.slug = title(I18n.default_locale) if slug.blank? and title.present?
+    self.slug = slug.parameterize if slug.present?
+  end
+
   def set_default_template
     self.template = Page::Template.default
   end
@@ -104,5 +109,9 @@ class Page < ActiveRecord::Base
 
   def validate_parent_assignability
     errors.add(:parent_id, :invalid) if self_and_descendants.pluck(:id).include?(parent_id)
+  end
+
+  def validate_template_type
+    errors.add(:template_id, :invalid) unless template.class.name == "Template::#{embeddable_type}"
   end
 end

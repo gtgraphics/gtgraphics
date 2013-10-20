@@ -1,5 +1,5 @@
 module HeadlineHelper
-  HEADLINE_METHOD_CANDIDATES = [:title, :name, :to_s].freeze
+  HEADLINE_METHOD_CANDIDATES = %i(title name to_s).freeze
 
   def index_headline_for(model, options = {}, &block)
     headline model.model_name.human(count: 2), options, &block
@@ -27,7 +27,7 @@ module HeadlineHelper
     end
   end
 
-  def headline(text, options= {}, &block)
+  def headline(text, options = {}, &block)
     options[:class] ||= ""
     options[:class] << ' page-header'
     options[:class] << ' page-header-with-content clearfix' if block_given?
