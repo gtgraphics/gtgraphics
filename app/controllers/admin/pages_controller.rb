@@ -17,13 +17,13 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def index
-    @pages = Page.with_translations.all
+    @pages = Page.all
     respond_with :admin, @pages
   end
 
   def new
-    @page = Page.new(parent: @parent_page)
-    @page.translations.build(locale: I18n.locale)
+    @page = Page.new(parent: @parent_page)   
+    #@page.translations.build(locale: I18n.locale)
     respond_with :admin, @page
   end
 

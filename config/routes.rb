@@ -19,13 +19,6 @@ GtGraphics::Application.routes.draw do
         end
       end
 
-      resources :menu_items, except: :show do
-        collection do
-          get :translation_fields
-          get :record_type_fields
-        end
-      end
-
       resources :pages do
         collection do
           get :preview_path
@@ -33,7 +26,11 @@ GtGraphics::Application.routes.draw do
         end
       end
       
-      resources :page_templates do
+      resources :templates do
+        collection do
+          get :translation_fields
+          get :unassigned_files_fields
+        end
         patch :make_default, on: :member
       end
       
@@ -41,16 +38,6 @@ GtGraphics::Application.routes.draw do
       
       root 'dashboard#index'
     end
-
-    #resources :galleries, controller: :albums
-    #resources :images
-
-    #get '*id' => 'pages#show', constraints: Routing::PageConstraint.new, as: :page
-    #scope '*path', constraints: Routing::PageConstraint.new do
-      #get '/' => 'pages#show', as: :page
-    #  resources :pages, path: '/', only: :show#, constraints: Routing::PageConstraint.new('Content'
-    #  resources :albums, path: '/'
-    #end
 
     scope '/', constraints: { id: /.*/ } do
       with_options path: '/', only: :show do |route|
@@ -62,7 +49,7 @@ GtGraphics::Application.routes.draw do
       end
     end
 
-    root 'pages#index'
+    root 'homepage#show'
   end
 
   # Legacy URLs that have changed permanently (HTTP 301)

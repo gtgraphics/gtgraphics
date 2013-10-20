@@ -1,6 +1,6 @@
 = simple_form_for [:admin, @page], html: { class: 'form-horizontal' } do |form|
 
-  = render 'translation_tabs', url: translation_fields_admin_pages_path
+  = render 'translation_tabs', object: @page, url: translation_fields_admin_pages_path
 
   .tab-content#translations
     = form.simple_fields_for :translations do |translation_fields|

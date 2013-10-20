@@ -12,16 +12,16 @@
 #  lft             :integer
 #  rgt             :integer
 #  depth           :integer
-#  template_id     :integer
 #  published       :boolean
 #  embeddable_id   :integer
 #  embeddable_type :string(255)
+#  template_id     :integer
 #
 
 class Page < ActiveRecord::Base
   EMBEDDABLE_TYPES = %w(
     Content
-    Album
+    Gallery
     Image
   ).freeze
 
@@ -34,24 +34,29 @@ class Page < ActiveRecord::Base
   acts_as_nested_set
 
   belongs_to :embeddable, polymorphic: true
+  belongs_to :template
 
+  delegate :title, to: :embeddable, allow_nil: true
+
+  validates :embeddable_id, presence: true, unless: -> { embeddable_type.present? and embeddable_type.class.bound_to_page? }
   validates :embeddable_type, presence: true, inclusion: { in: EMBEDDABLE_TYPES }
   validates :slug, presence: true, uniqueness: { scope: :parent_id }, exclusion: { in: RESERVED_SLUGS, if: :root? }
   validates :path, presence: true, uniqueness: true, if: -> { slug.present? }
-  validate :validate_template_type, if: -> { template.present? and embeddable_type.present? }
   validate :validate_parent_assignability
+  validate :validate_template_type, if: -> { embeddable_type.present? }
 
-  after_initialize :set_default_template, if: -> { template.blank? }
+  #after_initialize :set_default_template, if: -> { template.blank? }
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
   after_save :update_descendants_paths
   after_destroy :destroy_embeddable
 
+  default_scope -> { order(:lft) }
   scope :published, -> { where(published: true) }
   scope :hidden, -> { where(published: false) }
 
   EMBEDDABLE_TYPES.each do |embeddable_type|
-    scope embeddable_type.pluralize, -> { where(embeddable_type: embeddable_type) }
+    scope embeddable_type.underscore.pluralize, -> { where(embeddable_type: embeddable_type) }
 
     class_eval %{
       def #{embeddable_type}?
@@ -68,10 +73,28 @@ class Page < ActiveRecord::Base
     def embeddable_types
       EMBEDDABLE_TYPES
     end
+
+    def template_types
+      @@template_types ||= template_types_hash.values.freeze
+    end
+
+    def template_types_hash
+      @@template_types_hash ||= Hash[*EMBEDDABLE_TYPES.map do |embeddable_type|
+        [embeddable_type, "Template::#{embeddable_type}"]
+      end.flatten].freeze
+    end
   end
 
   def hidden?
     !published?
+  end
+
+  def template_class
+    @template_class ||= self.class.template_types_hash[embeddable_type].try(:constantize)
+  end
+
+  def template_path
+    template.try(:view_path)
   end
 
   def update_path!
@@ -81,7 +104,7 @@ class Page < ActiveRecord::Base
 
   private
   def destroy_embeddable
-    embeddable.destroy if content?
+    embeddable.destroy if embeddable and embeddable.class.bound_to_page?
   end
 
   def generate_path
@@ -100,7 +123,7 @@ class Page < ActiveRecord::Base
   end
 
   def set_default_template
-    self.template = Page::Template.default
+    self.template = template_class.default
   end
 
   def update_descendants_paths
@@ -112,6 +135,6 @@ class Page < ActiveRecord::Base
   end
 
   def validate_template_type
-    errors.add(:template_id, :invalid) unless template.class.name == "Template::#{embeddable_type}"
+    errors.add(:template_id, :invalid) if self.class.template_types_hash[embeddable_type].nil?
   end
 end

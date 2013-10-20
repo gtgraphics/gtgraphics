@@ -29,6 +29,6 @@ en:
       page:
         one: Page
         other: Pages
-      page/template:
-        one: Page Template
-        other: Page Templates
+      template:
+        one: Template
+        other: Templates

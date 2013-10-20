@@ -12,10 +12,10 @@
 #  lft             :integer
 #  rgt             :integer
 #  depth           :integer
-#  template_id     :integer
 #  published       :boolean
 #  embeddable_id   :integer
 #  embeddable_type :string(255)
+#  template_id     :integer
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

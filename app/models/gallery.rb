@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: albums
+# Table name: galleries
 #
 #  id           :integer          not null, primary key
 #  slug         :string(255)      not null
@@ -9,10 +9,12 @@
 #  images_count :integer          default(0), not null
 #
 
-class Album < ActiveRecord::Base
+class Gallery < ActiveRecord::Base
   include BatchTranslatable
   include Embeddable
   include Templatable
+
+  self.bound_to_page = true
 
   translates :title
 

@@ -106,7 +106,8 @@ $(document).ready ->
       $link = $(@)
       $tab = $link.closest('.translation-tab')
       if $tab.hasClass('active')
-        $tab.siblings('.translation-tab').first().find('a').tab('show') 
+        $neighborTab = $tab.prev('.translation-tab').add($tab.next('.translation-tab')).first()
+        $neighborTab.find('a').tab('show') 
       $tab.hide().removeClass('translation-available').addClass('translation-unavailable')
       $link.tooltip('hide') # dirty fix
 

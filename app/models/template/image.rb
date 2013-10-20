@@ -13,7 +13,7 @@
 #
 
 class Template < ActiveRecord::Base
-  class Content < Template
-    self.template_lookup_path = 'contents/templates'
+  class Image < Template
+    self.template_lookup_path = 'images/templates'
   end
 end

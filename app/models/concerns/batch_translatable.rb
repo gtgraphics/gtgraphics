@@ -5,7 +5,15 @@
 module BatchTranslatable
   extend ActiveSupport::Concern
 
-  def translation
-    @translation ||= (translation_for(::Globalize.locale, false) || self.class.translation_class.new(locale: ::Globalize.locale))
+  module ClassMethods
+    def acts_as_batch_translated
+      include InstanceMethods
+    end
+  end
+
+  module InstanceMethods
+    def translation
+      @translation ||= (translation_for(::Globalize.locale, false) || self.class.translation_class.new(locale: ::Globalize.locale))
+    end
   end
 end

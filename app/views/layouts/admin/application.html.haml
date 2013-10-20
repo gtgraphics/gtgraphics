@@ -20,23 +20,19 @@
 
         %nav.navbar-responsive-collapse{role: 'navigation'}
           %ul.nav.navbar-nav
-            = active_link_to :admin_menu_items, wrap_tag: :li do
-              = MenuItem.model_name.human(count: 2)
-              .badge= MenuItem.count
-            %li.dropdown{class: request.path =~ /\/admin\/(pages|page_templates)/ ? 'active' : nil}
-              = link_to :admin_pages, class: 'dropdown-toggle', data: { toggle: 'dropdown' }, role: 'button' do
-                = Page.model_name.human(count: 2)
-                .badge= Page.count
-                %b.caret
-              %ul.dropdown-menu{role: 'menu'}
-                = active_link_to Page.model_name.human(count: 2), :admin_pages, wrap_tag: :li
-                = active_link_to Page::Template.model_name.human(count: 2), :admin_page_templates, wrap_tag: :li
+
+            = active_link_to :admin_pages, wrap_tag: :li do
+              = Page.model_name.human(count: 2)
+              .badge= Page.count
+
+            = active_link_to :admin_templates, wrap_tag: :li do
+              = ::Template.model_name.human(count: 2)
+              .badge= ::Template.count
+
             = active_link_to :admin_images, wrap_tag: :li do
               = Image.model_name.human(count: 2)
               .badge= Image.count
-            = active_link_to :admin_albums, wrap_tag: :li do
-              = Album.model_name.human(count: 2)
-              .badge= Album.count
+
             = active_link_to :admin_shouts, wrap_tag: :li do
               = Shout.model_name.human(count: 2)
               .badge= Shout.count

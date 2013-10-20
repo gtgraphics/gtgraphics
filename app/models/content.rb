@@ -11,6 +11,8 @@ class Content < ActiveRecord::Base
   include BatchTranslatable
   include Embeddable
 
+  self.bound_to_page = true
+
   translates :title, :content, fallbacks_for_empty_translations: true
 
   accepts_nested_attributes_for :translations, allow_destroy: true

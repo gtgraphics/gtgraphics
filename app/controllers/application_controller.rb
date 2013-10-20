@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
     if params[:locale] and I18n.available_locales.map(&:to_s).include?(params[:locale])
       I18n.locale = params[:locale].to_sym
     else
-      redirect_to request.query_parameters.symbolize_keys.merge(locale: http_accept_language.compatible_language_from(I18n.available_locales))
+      redirect_to request.query_parameters.symbolize_keys.merge(locale: http_accept_language.compatible_language_from(I18n.available_locales)).merge(params.slice(:format))
     end
   end
 end

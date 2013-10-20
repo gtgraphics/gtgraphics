@@ -1,0 +1,29 @@
+= index_headline_for ::Template do
+  .btn-toolbar
+    = create_button_link_for ::Template, namespace: :admin
+
+- if @templates.any?
+  
+  %table.table.table-striped
+    %thead
+      %tr
+        %th.thumbnail-cell
+        %th= ::Template.human_attribute_name :name
+        %th= ::Template.human_attribute_name :type
+        %th= ::Template.human_attribute_name :default
+        %th.actions
+    %tbody
+      - @templates.each do |template|
+        %tr
+          %td.thumbnail-cell= image_tag template.screenshot.url(:thumbnail) if template.screenshot.present?
+          %td= template.name
+          %td= template_type(template)
+          %td= yes_or_no template.default?
+          %td.actions
+            = action_buttons_for template.becomes(::Template), size: :mini, except: (:destroy if template.default?) do
+              - unless template.default?
+                = button_link_to 'Make Default', [:make_default, :admin, template.becomes(::Template)], size: :mini, method: :patch
+
+- else
+  .well.text-center
+    %h4= translate('views.hints.empty', model: ::Template.model_name.human(count: 2))

@@ -4,6 +4,7 @@ de:
     slug: URL-Token
     title: Titel
     content: Inhalt
+    description: Beschreibung
 
   activerecord:
     attributes:
@@ -34,10 +35,17 @@ de:
         x: X-Koordinate
         y: Y-Koordinate
         coordinates: Koordinaten
+      template:
+        file_name: Vorlagendatei
+        type: Typ
+        default: Standardvorlage?
     models:
-      album:
-        one: Album
-        other: Alben
+      content:
+        one: Inhalt
+        other: Inhalte
+      gallery:
+        one: Galerie
+        other: Galerien
       image:
         one: Bild
         other: Bilder
@@ -53,9 +61,18 @@ de:
       page:
         one: Seite
         other: Seiten
-      page/template:
-        one: Vorlage
-        other: Vorlagen
       shout:
         one: Stern
         other: Sterne
+      template:
+        one: Vorlage
+        other: Vorlagen
+      template/content:
+        one: Inhaltsvorlage
+        other: Inhaltsvorlagen
+      template/gallery:
+        one: Galerievorlage
+        other: Galerievorlagen
+      template/image:
+        one: Bildseitenvorlage
+        other: Bildseitenvorlagen
