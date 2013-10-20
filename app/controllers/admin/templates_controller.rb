@@ -11,7 +11,12 @@ class Admin::TemplatesController < Admin::ApplicationController
   end
 
   def index
-    @templates = Template.with_translations
+    if @template_type = params[:type] and template_class = "Template::#{@template_type.camelize}" and template_class.in?(Template.template_types)
+      @template_class = template_class.constantize
+      @templates = @template_class.with_translations
+    else
+      @templates = Template.with_translations
+    end
     respond_with :admin, @templates
   end
 

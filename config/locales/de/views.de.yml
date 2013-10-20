@@ -5,3 +5,7 @@ de:
       settings: Einstellungen
     hints:
       empty: 'Es wurden bislang keine %{model} erstellt.'
+    admin:
+      templates:
+        tabs:
+          all: Alle

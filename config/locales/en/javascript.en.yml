@@ -8,6 +8,13 @@ en:
       bold: Bold
       italic: Italic
       underline: Underline
+      strikethrough: Strikethrough
+      align_left: Align Left
+      align_center: Center
+      align_right: Align Right
+      align_justify: Justify
+      ordered_list: Ordered List
+      unordered_list: Unordered List
       html: HTML
 
     translations:

@@ -1,8 +1,8 @@
 en:
   helpers:
     boolean:
-      yes: Yes
-      no: No
+      'yes': 'Yes'
+      'no': 'No'
     titles:
       new: 'Create %{model}'
       edit: 'Edit %{model}'
@@ -17,6 +17,7 @@ en:
       download: Download
       move: Move
       remove: Remove
+      add: Add
     confirm:
       destroy: 'Do you really want to delete this %{model}?'
       destroy_selected: 'Do you really want to delete all selected %{model}?'

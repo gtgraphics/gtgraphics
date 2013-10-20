@@ -14,12 +14,17 @@ en:
         os: Platform
         x: X Coordinate
         y: Y Coordinate
-      page/template:
-        file_name: File Name
+      template:
+        default: Default Template?
+        file_name: Template File
+        type: Type
     models:
       album:
         one: Album
         other: Albums
+      content:
+        one: Content
+        other: Contents
       image:
         one: Image
         other: Images

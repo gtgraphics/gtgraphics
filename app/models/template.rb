@@ -10,6 +10,8 @@
 #  screenshot_content_type :string(255)
 #  screenshot_file_size    :integer
 #  screenshot_updated_at   :datetime
+#  created_at              :datetime
+#  updated_at              :datetime
 #
 
 class Template < ActiveRecord::Base
@@ -28,6 +30,8 @@ class Template < ActiveRecord::Base
   before_save :default_current_template
   after_save :undefault_other_templates, if: :default?
   after_destroy :default_other_template, if: :default?
+
+  scope :defaults, -> { where(default: true) }
 
   accepts_nested_attributes_for :translations, allow_destroy: true
   acts_as_batch_translated
@@ -50,7 +54,7 @@ class Template < ActiveRecord::Base
     attr_accessor :template_lookup_path
 
     def default
-      where(default: true).first
+      defaults.first
     end
 
     def template_types
@@ -65,6 +69,10 @@ class Template < ActiveRecord::Base
     def unassigned_template_files
       template_files - pluck(:file_name)
     end
+  end
+
+  def description_html
+    (description || String.new).html_safe
   end
 
   def view_path

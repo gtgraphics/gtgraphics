@@ -5,3 +5,7 @@ en:
       settings: Settings
     hints:
       empty: 'No %{model} have been created yet.'
+    admin:
+      templates:
+        tabs:
+          all: All

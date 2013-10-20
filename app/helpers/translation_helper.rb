@@ -1,12 +1,7 @@
 module TranslationHelper
-  def translation_select(options = {})
-    options[:class] ||= ""
-    options[:class] << ' translation-select form-control only-js'
-    options[:class].strip!
-    content_tag :select, nil, options
-  end
-
-  def translations_for(locale, &block)
-    content_tag :div, class: "translations locale-#{locale}", data: { locale: locale, language: translate(locale, scope: :locales) }, &block
+  def translation_for(locale, &block)
+    css = 'tab-pane'
+    css << ' active' if locale == I18n.locale
+    content_tag :div, class: css, id: locale, data: { locale: locale }, &block
   end
 end

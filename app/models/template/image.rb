@@ -10,6 +10,8 @@
 #  screenshot_content_type :string(255)
 #  screenshot_file_size    :integer
 #  screenshot_updated_at   :datetime
+#  created_at              :datetime
+#  updated_at              :datetime
 #
 
 class Template < ActiveRecord::Base

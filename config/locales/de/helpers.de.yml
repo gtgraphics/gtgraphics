@@ -1,8 +1,8 @@
 de:
   helpers:
     boolean:
-      yes: Ja
-      no: Nein
+      'yes': 'Ja'
+      'no': 'Nein'
     titles:
       new: '%{model} erstellen'
       edit: '%{model} bearbeiten'
