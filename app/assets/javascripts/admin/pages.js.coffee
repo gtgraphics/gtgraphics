@@ -25,9 +25,12 @@ $(document).ready ->
   previewPath($slug, $parentId)
   
   $slug.on 'textchange', ->
-    $parentId = $('#page_parent_id')
     clearTimeout(timeout) if timeout
     timeout = setTimeout((=> previewPath($(@), $parentId)), PATH_PREVIEW_TYPEAHEAD_TIMEOUT)
+
+  $slug.blur ->
+    clearTimeout(timeout) if timeout
+    previewPath($(@), $parentId)
 
   $parentId.change ->
     $slug = $('#page_slug')

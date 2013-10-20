@@ -25,8 +25,11 @@ de:
         target_id: Objekt
         url: URL
       page:
-        template: Vorlage
+        embeddable_type: Seitentyp
+        embeddable_id: Seitenobjekt
         parent: Elternseite
+        published: Öffentlich?
+        template: Vorlage
       shout:
         nickname: Verfasser
         message: Nachricht

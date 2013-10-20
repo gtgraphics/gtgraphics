@@ -1,17 +1,18 @@
 = simple_form_for [:admin, @page], html: { class: 'form-horizontal' } do |form|
 
-  = render 'translation_tabs', object: @page, url: translation_fields_admin_pages_path
+  = form.input :slug, input_html: { autocomplete: 'off' }, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }
+  = form.association :template, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }, include_blank: translate('helpers.prompts.default')
+  = form.association :parent, collection: page_sitemap_collection_for_select(Page.assignable_as_parent_of(@page)), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }, input_html: { rows: 4 }, include_blank: translate('helpers.prompts.none') if Page.assignable_as_parent_of(@page).exists?
+  = form.input :published, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }
+  = form.input :embeddable_type, collection: page_types_for_select, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }
 
-  .tab-content#translations
-    = form.simple_fields_for :translations do |translation_fields|
-      = render 'translation_fields', fields: translation_fields
-
-  %fieldset
-    %legend= translate('views.forms.settings')
-    .fields
-      = form.association :parent, collection: page_sitemap_collection_for_select(Page.assignable_as_parent_of(@page)), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }, input_html: { rows: 4 }, include_blank: translate('helpers.prompts.none') if Page.assignable_as_parent_of(@page).exists?
-      = form.input :slug, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }
-      = form.association :template, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }, include_blank: translate('helpers.prompts.default')
+  #page_embeddable_container
+    - if @page.embeddable_type.present?
+      - if @page.embeddable_class.bound_to_page?
+        = form.simple_fields_for :embeddable do |embeddable_fields|
+          /= render 'embeddable_fields', fields: embeddable_fields
+      - else
+        = form.input :embeddable_id, label: @page.embeddable_class.model_name.human, collection: @page.embeddable_class.all, required: true, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }
 
   .form-group
     .col-lg-offset-2.col-lg-10

@@ -38,7 +38,7 @@ class Page < ActiveRecord::Base
 
   delegate :title, to: :embeddable, allow_nil: true
 
-  validates :embeddable_id, presence: true, unless: -> { embeddable_type.present? and embeddable_type.class.bound_to_page? }
+  validates :embeddable_id, presence: true, unless: -> { embeddable_class and embeddable_class.bound_to_page? }
   validates :embeddable_type, presence: true, inclusion: { in: EMBEDDABLE_TYPES }
   validates :slug, presence: true, uniqueness: { scope: :parent_id }, exclusion: { in: RESERVED_SLUGS, if: :root? }
   validates :path, presence: true, uniqueness: true, if: -> { slug.present? }
@@ -83,6 +83,10 @@ class Page < ActiveRecord::Base
         [embeddable_type, "Template::#{embeddable_type}"]
       end.flatten].freeze
     end
+  end
+
+  def embeddable_class
+    @embeddable_class ||= (embeddable_type.in?(self.class.embeddable_types) ? embeddable_type.constantize : nil)
   end
 
   def hidden?

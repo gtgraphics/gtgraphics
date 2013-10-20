@@ -1,4 +1,9 @@
 en:
+  attributes: 
+    description: Description
+    slug: Slug
+    title: Title
+
   activerecord:
     attributes:
       album:
@@ -8,6 +13,10 @@ en:
         caption: Beschriftung
         content_type: Content Type
         file_size: File Size
+      page:
+        embeddable_type: Page Type
+        published: Published?
+        template: Template
       shout:
         nickname: Author
         ip: IP
@@ -19,12 +28,12 @@ en:
         file_name: Template File
         type: Type
     models:
-      album:
-        one: Album
-        other: Albums
       content:
         one: Content
         other: Contents
+      gallery:
+        one: Gallery
+        other: Galleries
       image:
         one: Image
         other: Images
