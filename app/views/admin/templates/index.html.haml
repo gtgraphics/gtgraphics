@@ -1,6 +1,6 @@
 = index_headline_for ::Template, class: 'page-header-tabs' do
   .btn-toolbar
-    = create_button_link_for ::Template, namespace: :admin
+    = create_button_link_for ::Template, url: new_admin_template_path(type: @template_type)
 
 %ul.nav.nav-tabs
   = active_link_to request.query_parameters.symbolize_keys.except(:type), active: @template_type.blank?, wrap_tag: :li do

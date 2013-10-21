@@ -11,17 +11,12 @@ class Admin::TemplatesController < Admin::ApplicationController
   end
 
   def index
-    if @template_type = params[:type] and template_class = "Template::#{@template_type.camelize}" and template_class.in?(Template.template_types)
-      @template_class = template_class.constantize
-      @templates = @template_class.with_translations
-    else
-      @templates = Template.with_translations
-    end
+    @templates = template_class.with_translations
     respond_with :admin, @templates
   end
 
   def new
-    @template = Template.new
+    @template = template_class.new
     @template.translations.build(locale: I18n.locale)
     respond_with :admin, @template.becomes(Template)
   end
@@ -88,5 +83,14 @@ class Admin::TemplatesController < Admin::ApplicationController
 
   def template_params
     params.require(:template).permit(:type, :file_name, :default, translations_attributes: [:_destroy, :id, :locale, :name, :description])
+  end
+
+  def template_class
+    if @template_type = params[:type] and template_class = "Template::#{@template_type.camelize}" and template_class.in?(Template.template_types)
+      @template_class = template_class.constantize
+      @template_class
+    else
+      Template
+    end
   end
 end
