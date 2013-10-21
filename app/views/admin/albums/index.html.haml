@@ -1,9 +1,0 @@
-= index_headline_for Album do
-  .btn-toolbar
-    = create_button_link_for Album, namespace: :admin
-
-- if @albums.any?
-  = render 'table'
-- else
-  .well.text-center
-    %h4= translate('views.hints.empty', model: Album.model_name.human(count: 2))

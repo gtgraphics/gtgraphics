@@ -3,6 +3,6 @@ class ContentsController < PagesController
   
   private
   def load_content
-    @content = page.embeddable
+    @content = @page.embeddable
   end
 end

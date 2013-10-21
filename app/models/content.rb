@@ -16,12 +16,14 @@ class Content < ActiveRecord::Base
   translates :title, :content, fallbacks_for_empty_translations: true
 
   accepts_nested_attributes_for :translations, allow_destroy: true
-
-  #class Template < ::Template
-  #end
+  acts_as_batch_translated
 
   class Translation < Globalize::ActiveRecord::Translation
     validates :title, presence: true
+  end
+
+  def title
+    "Content"
   end
 
   def content_html

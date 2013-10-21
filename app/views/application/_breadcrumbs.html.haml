@@ -1,5 +1,5 @@
 #breadcrumbs
   - breadcrumbs.each do |breadcrumb|    
-    = link_to breadcrumb, breadcrumb
+    = link_to_unless breadcrumb.last?, breadcrumb, breadcrumb
     - unless breadcrumb.last?
       &raquo;

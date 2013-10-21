@@ -45,6 +45,8 @@ class Page < ActiveRecord::Base
   validate :validate_parent_assignability
   validate :validate_template_type, if: -> { embeddable_type.present? }
 
+  accepts_nested_attributes_for :embeddable
+
   #after_initialize :set_default_template, if: -> { template.blank? }
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
@@ -63,6 +65,15 @@ class Page < ActiveRecord::Base
         self.embeddable_type == '#{embeddable_type}'
       end
     }
+  end
+
+  class MissingTemplate < Exception
+    attr_reader :page
+
+    def initialize(page)
+      @page = page
+      super "Missing template for #{@page.embeddable_type} in #{@page.inspect}"
+    end
   end
 
   class << self
@@ -85,6 +96,10 @@ class Page < ActiveRecord::Base
     end
   end
 
+  def embeddable
+    super || embeddable_class.try(:new)
+  end
+
   def embeddable_class
     @embeddable_class ||= (embeddable_type.in?(self.class.embeddable_types) ? embeddable_type.constantize : nil)
   end
@@ -93,12 +108,16 @@ class Page < ActiveRecord::Base
     !published?
   end
 
+  def template
+    super || template_class.default
+  end
+
   def template_class
     @template_class ||= self.class.template_types_hash[embeddable_type].try(:constantize)
   end
 
   def template_path
-    template.try(:view_path)
+    template.try(:view_path) || raise(Page::MissingTemplate.new(self))
   end
 
   def update_path!

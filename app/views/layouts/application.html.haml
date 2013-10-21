@@ -8,8 +8,8 @@
     = csrf_meta_tags
   %body
     %ul.nav
-      - MenuItem.with_translations(I18n.locale).each do |menu_item|
-        %li= active_link_to menu_item.title, menu_item_target_path(menu_item)
+      - Page.published.roots.each do |page|
+        %li= active_link_to page.title, page
 
     %ul.nav
       - available_locales.each do |locale|
@@ -17,5 +17,7 @@
           = active_link_to locale: locale do
             = flag_icon(locale)
             = translate(locale, scope: :languages)
+
+    = render 'breadcrumbs'
 
     = yield

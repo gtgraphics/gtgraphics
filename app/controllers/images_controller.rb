@@ -6,6 +6,6 @@ class ImagesController < PagesController
 
   private
   def load_image
-    @image = page.embeddable
+    @image = @page.embeddable
   end
 end

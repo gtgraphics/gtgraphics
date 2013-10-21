@@ -72,7 +72,7 @@ class Template < ActiveRecord::Base
   end
 
   def description_html
-    (description || String.new).html_safe
+    (description || '').html_safe
   end
 
   def view_path

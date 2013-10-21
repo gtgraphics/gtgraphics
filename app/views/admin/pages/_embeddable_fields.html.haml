@@ -1,0 +1,8 @@
+- if fields.object.embeddable_class
+  - if fields.object.embeddable_class.bound_to_page?
+    = fields.association :template, collection: fields.object.template_class.with_translations, include_blank: translate('helpers.prompts.default'), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }
+
+    = fields.simple_fields_for :embeddable do |embeddable_fields|
+      = render "admin/#{fields.object.embeddable_class.model_name.plural}/fields", fields: embeddable_fields
+  - else
+    = fields.input :embeddable_id, label: fields.object.embeddable_class.model_name.human, collection: fields.object.embeddable_class.all, required: true, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }

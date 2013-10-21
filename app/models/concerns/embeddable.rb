@@ -4,7 +4,7 @@ module Embeddable
   included do
     has_one :page, as: :embeddable, dependent: :destroy
     
-    delegate :slug, :path, :published?, :hidden?, to: :page
+    delegate :slug, :path, :published?, :hidden?, to: :page, allow_nil: true
   end
 
   module ClassMethods

@@ -1,6 +1,4 @@
 class PagesController < ApplicationController
-  abstract!
-  
   respond_to :html
 
   before_action :load_page
@@ -18,6 +16,6 @@ class PagesController < ApplicationController
 
   private
   def load_page
-    @page = Page.find_by_path!(params[:id])
+    @page = Page.published.find_by_path!(params[:id])
   end
 end

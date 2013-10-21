@@ -12,18 +12,22 @@
 class Gallery < ActiveRecord::Base
   include BatchTranslatable
   include Embeddable
-  include Templatable
 
   self.bound_to_page = true
 
-  translates :title
+  #translates :title
 
-  has_many :image_assignments, class_name: 'Album::ImageAssignment', dependent: :destroy
-  has_many :images, through: :image_assignments
+  #has_many :image_assignments, class_name: 'Album::ImageAssignment', dependent: :destroy
+  #has_many :images, through: :image_assignments
   
   before_validation :set_slug
 
-  accepts_nested_attributes_for :translations, allow_destroy: true
+  #accepts_nested_attributes_for :translations, allow_destroy: true
+  #acts_as_batch_translated
+
+  def title
+    "Galerie"
+  end
 
   def to_s
     title

@@ -2,12 +2,12 @@ GtGraphics::Application.routes.draw do
   scope '(:locale)', constraints: Routing::LocaleConstraint.new do
     namespace :admin do
 
-      resources :albums do
-        resources :images do
-          collection do
-            patch :batch, as: :batch_process
-          end
-        end
+      resources :contents, only: [] do
+        get :translation_fields, on: :collection
+      end
+
+      resources :galleries, only: [] do
+        get :translation_fields, on: :collection
       end
 
       resources :images do
@@ -22,8 +22,9 @@ GtGraphics::Application.routes.draw do
       resources :pages do
         collection do
           get :preview_path
-          get :translation_fields
+          get :embeddable_fields
         end
+        patch :toggle, on: :member
       end
       
       resources :templates do
@@ -42,7 +43,7 @@ GtGraphics::Application.routes.draw do
     scope '/', constraints: { id: /.*/ } do
       with_options path: '/', only: :show do |route|
         route.resources :contents, controller: :pages, constraints: Routing::PageConstraint.new('Content')
-        route.resources :albums, constraints: Routing::PageConstraint.new('Album')
+        route.resources :galleries, constraints: Routing::PageConstraint.new('Gallery')
         route.resources :images, constraints: Routing::PageConstraint.new('Image') do
           get :download, on: :member
         end

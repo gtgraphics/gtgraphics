@@ -1,10 +1,10 @@
 module RouteHelper
   def page_path(page, options = {})
-    #super(page.path, options)
+    send("#{page.embeddable_type.underscore}_path", page.path, options)
   end
 
   def page_url(page, options = {})
-    #super(page.path, options)
+    send("#{page.embeddable_type.underscore}_url", page.path, options)
   end
 
   def menu_item_target_path(menu_item, options = {})

@@ -1,7 +1,7 @@
 class Admin::PagesController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_page, only: %i(show edit update destroy)
+  before_action :load_page, only: %i(show edit update destroy toggle)
   before_action :load_parent_page, only: %i(new create show edit update)
 
   breadcrumbs do |b|
@@ -48,6 +48,13 @@ class Admin::PagesController < Admin::ApplicationController
   def destroy
     @page.destroy
     respond_with :admin, @page
+  end
+
+  def toggle
+    @page.toggle!(:published)
+    respond_to do |format|
+      format.html { redirect_to request.referer || [:admin, @page] }
+    end
   end
 
   def preview_path

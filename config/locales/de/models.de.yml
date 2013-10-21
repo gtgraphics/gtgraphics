@@ -27,9 +27,12 @@ de:
       page:
         embeddable_type: Seitentyp
         embeddable_id: Seitenobjekt
+        path: Pfad
         parent: Elternseite
         published: Öffentlich?
         template: Vorlage
+        author: Autor
+        updated_at: Aktualisierung
       shout:
         nickname: Verfasser
         message: Nachricht
