@@ -1,13 +1,13 @@
 module ActionButtonHelper
   def action_buttons_for(object, options = {}, &block)
     displayed_buttons = %i(show edit destroy)
-    displayed_buttons &= Array(options[:only]) if options[:only]
-    displayed_buttons -= Array(options[:except]) if options[:except]
+    displayed_buttons &= Array(options.delete(:only)) if options[:only]
+    displayed_buttons -= Array(options.delete(:except)) if options[:except]
 
     content_tag :div, class: 'btn-toolbar' do
       with_options options.merge(namespace: :admin) do |buttons|
         html = ""
-        html << capture(&block).strip if block_given?
+        html << (capture(&block) || "").strip if block_given?
         html << buttons.view_button_link_for(object) if displayed_buttons.include?(:show)
         html << buttons.update_button_link_for(object) if displayed_buttons.include?(:edit)
         html << buttons.destroy_button_link_for(object) if displayed_buttons.include?(:destroy)
@@ -29,6 +29,7 @@ module ActionButtonHelper
 
   def destroy_button_link_for(object, options = {})
     options = options.dup
+    icon_only = options.delete(:icon_only)
     namespace = options.delete(:namespace)
     parent = Array(options.delete(:parent))
     url = options.delete(:url) { [namespace, parent, object].flatten.compact }
@@ -36,24 +37,64 @@ module ActionButtonHelper
     options[:method] = :delete
     options[:data] ||= {}
     options[:data][:confirm] = translate('helpers.confirm.destroy', model: object.class.model_name.human)
-    button_link_to prepend_icon(:remove, translate('helpers.links.destroy', model: object.class.model_name.human)), url, options
+
+    if icon_only
+      caption = icon(:remove)
+      options[:class] ||= ""
+      options[:class] << " icon-only"
+      options[:class].strip!
+      options[:title] = translate('helpers.links.destroy', model: object.class.model_name.human)
+      options[:data].merge!(toggle: 'tooltip', placement: 'top', container: 'body')
+    else
+      caption = prepend_icon(:edit, translate('helpers.links.destroy', model: object.class.model_name.human))
+    end
+
+    button_link_to caption, url, options
   end
 
   def update_button_link_for(object, options = {})
     options = options.dup
+    icon_only = options.delete(:icon_only)
     namespace = options.delete(:namespace)
     parent = Array(options.delete(:parent))
     url = options.delete(:url) { [:edit, namespace, parent, object].flatten.compact }
-    button_link_to prepend_icon(:edit, translate('helpers.links.edit', model: object.class.model_name.human)), url, options
+
+    if icon_only
+      caption = icon(:edit)
+      options[:class] ||= ""
+      options[:class] << " icon-only"
+      options[:class].strip!
+      options[:title] = translate('helpers.links.edit', model: object.class.model_name.human)
+      options[:data] ||= {}
+      options[:data].merge!(toggle: 'tooltip', placement: 'top', container: 'body')
+    else
+      caption = prepend_icon(:edit, translate('helpers.links.edit', model: object.class.model_name.human))
+    end
+
+    button_link_to caption, url, options
   end
 
   def view_button_link_for(object, options = {})
     options = options.dup
+    icon_only = options.delete(:icon_only)
     namespace = options.delete(:namespace)
     parent = Array(options.delete(:parent))
     url = options.delete(:url) { [namespace, parent, object].flatten.compact }
-    options[:type] = :primary
-    button_link_to prepend_icon(:eye_open, translate('helpers.links.view', model: object.class.model_name.human)), url, options
+    #options[:type] = :primary
+
+    if icon_only
+      caption = icon(:info)
+      options[:class] ||= ""
+      options[:class] << " icon-only"
+      options[:class].strip!
+      options[:title] = translate('helpers.links.view', model: object.class.model_name.human)
+      options[:data] ||= {}
+      options[:data].merge!(toggle: 'tooltip', placement: 'top', container: 'body')
+    else
+      caption = prepend_icon(:info, translate('helpers.links.view', model: object.class.model_name.human))
+    end
+
+    button_link_to caption, url, options
     #button_link_to icon(:eye_open), url, options.merge(data: { toggle: 'tooltip', placement: 'top' }, title: translate('helpers.links.view', model: object.class.model_name.human))
   end
 end

@@ -17,7 +17,7 @@ gem 'http_accept_language'
 # Models
 gem 'acts_as_list'
 gem 'acts_as_tree'
-gem 'awesome_nested_set'
+gem 'awesome_nested_set', '3.0.0.rc.2'
 gem 'annotate'
 gem 'paperclip'
 gem 'validate_url'

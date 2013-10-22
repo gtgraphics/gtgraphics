@@ -17,6 +17,8 @@ de:
       move: Verschieben
       remove: Entfernen
       add: Hinzufügen
+      move_up: Nach oben
+      move_down: Nach unten
     confirm:
       destroy: 'Möchten Sie dieses %{model} wirklich entfernen?'
       destroy_selected: 'Möchten Sie die ausgewählten %{model} wirklich entfernen?'

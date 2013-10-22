@@ -35,13 +35,26 @@
     width: 80px;
   }
   .actions {
-    text-align: right;
     white-space: nowrap;
-    padding-left: 15px;
+    position: relative;
+    min-width: 60px;
     .btn-toolbar {
+      position: absolute;
+      top: 7px;
+      right: 8px;
+      text-align: left;
       margin: {
         top: -2px;
         bottom: -2px;
+      }
+      .btn-group {
+        //float: none;
+      }
+      .btn {
+        //margin: 0;
+      }
+      .btn.icon-only {
+        width: 34px;
       }
     }
   }

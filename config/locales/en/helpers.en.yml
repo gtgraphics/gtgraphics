@@ -18,6 +18,8 @@ en:
       move: Move
       remove: Remove
       add: Add
+      move_up: Move Up
+      move_down: Move Down
     confirm:
       destroy: 'Do you really want to delete this %{model}?'
       destroy_selected: 'Do you really want to delete all selected %{model}?'

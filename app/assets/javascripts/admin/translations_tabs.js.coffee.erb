@@ -81,8 +81,8 @@ createTranslation = ($tabs, locale, callback) ->
       error: ->
         callback(false) if callback
 
-$(document).ready ->
-  $('#translations_tabs').each ->
+$.fn.translationTabs = ->
+  @find('#translations_tabs').each ->
     $tabs = $(@)
     initAvailableTabs($tabs)
     queryState($tabs)
@@ -150,3 +150,6 @@ $(document).ready ->
             $tab.hide().addClass('translation-unavailable').removeClass('translation-available')
             alert(I18n.translate('translations.error'))
           queryState($tabs)
+
+$(document).ready ->
+  $(document).translationTabs()

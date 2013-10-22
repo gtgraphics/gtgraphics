@@ -17,5 +17,9 @@ de:
       ordered_list: Geordnete Liste
       unordered_list: Ungeordnete Liste
 
+    pages:
+      embeddable:
+        error: Der Editor konnte nicht geladen werden.
+
     translations:
       error: Der Übersetzungseditor konnte nicht geladen werden.

@@ -47,7 +47,6 @@ class Page < ActiveRecord::Base
 
   accepts_nested_attributes_for :embeddable
 
-  #after_initialize :set_default_template, if: -> { template.blank? }
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
   after_save :update_descendants_paths
@@ -81,6 +80,10 @@ class Page < ActiveRecord::Base
       where.not(id: page.self_and_descendants.pluck(:id))
     end
 
+    def embedding(type)
+      where(embeddable_type: type.to_s.classify)
+    end
+
     def embeddable_types
       EMBEDDABLE_TYPES
     end
@@ -94,6 +97,10 @@ class Page < ActiveRecord::Base
         [embeddable_type, "Template::#{embeddable_type}"]
       end.flatten].freeze
     end
+  end
+
+  def children_with_embedded(type)
+    children.embedding(type).includes(:embeddable)
   end
 
   def embeddable
@@ -118,6 +125,10 @@ class Page < ActiveRecord::Base
 
   def template_path
     template.try(:view_path) || raise(Page::MissingTemplate.new(self))
+  end
+
+  def to_s
+    title
   end
 
   def update_path!

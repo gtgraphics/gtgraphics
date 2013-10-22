@@ -1,3 +1,11 @@
 %h1= Gallery.model_name.human
 
 %p= @gallery
+
+%ul
+  - @image_pages.each do |image_page|
+    %li
+      = link_to image_page do
+        = image_tag image_page.embeddable.asset(:thumbnail), alt: image_page.title
+        %br
+        = image_page.title

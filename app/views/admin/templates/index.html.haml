@@ -33,7 +33,7 @@
             %td= template_type(template)
           %td= yes_or_no template.default?
           %td.actions
-            = action_buttons_for template.becomes(::Template), size: :mini, except: (:destroy if template.default?) do
+            = action_buttons_for template.becomes(::Template), size: :mini, except: (:destroy if template.default?), icon_only: true do
               - unless template.default?
                 = button_link_to 'Make Default', [:make_default, :admin, template.becomes(::Template)], size: :mini, method: :patch
 

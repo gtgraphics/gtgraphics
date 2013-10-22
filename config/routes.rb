@@ -24,7 +24,11 @@ GtGraphics::Application.routes.draw do
           get :preview_path
           get :embeddable_fields
         end
-        patch :toggle, on: :member
+        member do
+          patch :toggle
+          patch :move_up
+          patch :move_down
+        end
       end
       
       resources :templates do

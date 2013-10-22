@@ -1,7 +1,7 @@
 class Admin::PagesController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_page, only: %i(show edit update destroy toggle)
+  before_action :load_page, only: %i(show edit update destroy toggle move_up move_down)
   before_action :load_parent_page, only: %i(new create show edit update)
 
   breadcrumbs do |b|
@@ -57,11 +57,43 @@ class Admin::PagesController < Admin::ApplicationController
     end
   end
 
+  def move_up
+    @page.move_left
+    respond_to do |format|
+      format.html { redirect_to request.referer || :admin_pages }
+    end
+  end
+
+  def move_down
+    @page.move_right
+    respond_to do |format|
+      format.html { redirect_to request.referer || :admin_pages }
+    end
+  end
+
   def preview_path
     @page = Page.new(params.symbolize_keys.slice(:slug, :parent_id))
     @page.valid?
     respond_to do |format|
       format.html { render text: @page.slug.present? ? File.join(request.host, @page.path) : '' }
+    end
+  end
+
+  def embeddable_fields
+    @page = Page.new(embeddable_type: params.fetch(:embeddable_type))
+    respond_to do |format|
+      format.html do
+        if @page.embeddable_class
+          @page.embeddable = @page.embeddable_class.new
+          if @page.embeddable.class.reflect_on_association(:translations)
+            # Create default translation if a translation association exists
+            @page.embeddable.translations.build(locale: I18n.locale)
+          end
+          render layout: false
+        else
+          head :not_found
+        end
+      end
     end
   end
 

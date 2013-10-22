@@ -11,12 +11,19 @@ module ButtonHelper
 
   def button_link_to_if(condition, *args, &block)
     extract_button_options!(args)
-    link_to_if condition, *args, &block
+    if condition
+      link_to *args, &block
+    else
+      options = args.extract_options!
+      options[:class] ||= ""
+      options[:class] << " disabled"
+      options[:class].strip!
+      content_tag :div, block_given? ? capture(&block) : args.first, options
+    end
   end
 
   def button_link_to_unless(condition, *args, &block)
-    extract_button_options!(args)
-    link_to_unless condition, *args, &block
+    button_link_to_if(!condition, *args, &block)
   end
 
   private
