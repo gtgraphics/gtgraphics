@@ -1,3 +1,8 @@
 %h1= Content.model_name.human
 
 = @content.content_html
+
+- if @content_pages.any?
+  %ul
+    - @content_pages.each do |content_page|
+      %li= link_to content_page, content_page

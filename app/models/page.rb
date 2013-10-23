@@ -113,7 +113,7 @@ class Page < ActiveRecord::Base
 
   def embeddable_attributes=(attributes)
     raise 'no embeddable type specified' if embeddable_class.nil?
-    if embeddable
+    if persisted?
       self.embeddable.attributes = attributes
     else
       build_embeddable(attributes)

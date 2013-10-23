@@ -128,11 +128,12 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def page_params
-    embeddable_attributes_params = case params.require(:page)[:embeddable_type]
+    page_params = params.require(:page)
+    embeddable_attributes_params = case page_params[:embeddable_type]
     when 'Content' then { translations_attributes: [:_destroy, :id, :locale, :title, :content] }
     when 'Gallery' then {}
     when 'Image' then {}
     end
-    params.require(:page).permit(:embeddable_type, :slug, :parent_id, :published, :template_id, embeddable_attributes: embeddable_attributes_params || {}) 
+    page_params.permit(:embeddable_type, :slug, :parent_id, :published, :template_id, embeddable_attributes: embeddable_attributes_params || {}) 
   end
 end
