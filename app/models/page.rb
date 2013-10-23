@@ -33,7 +33,7 @@ class Page < ActiveRecord::Base
 
   acts_as_nested_set
 
-  belongs_to :embeddable, polymorphic: true
+  belongs_to :embeddable, polymorphic: true, autosave: true
   belongs_to :template
 
   delegate :title, to: :embeddable, allow_nil: true
@@ -45,8 +45,6 @@ class Page < ActiveRecord::Base
   validates :path, presence: true, uniqueness: true, if: -> { slug.present? }
   validate :validate_parent_assignability
   validate :validate_template_type, if: -> { embeddable_type.present? }
-
-  accepts_nested_attributes_for :embeddable
 
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
@@ -102,7 +100,6 @@ class Page < ActiveRecord::Base
 
   def build_embeddable(attributes = {})
     raise 'invalid embeddable type' unless embeddable_class
-    raise attributes.inspect
     self.embeddable = embeddable_class.new(attributes)
   end
 
@@ -112,6 +109,15 @@ class Page < ActiveRecord::Base
 
   def embeddable
     super || embeddable_class.try(:new)
+  end
+
+  def embeddable_attributes=(attributes)
+    raise 'no embeddable type specified' if embeddable_class.nil?
+    if embeddable
+      self.embeddable.attributes = attributes
+    else
+      build_embeddable(attributes)
+    end
   end
 
   def embeddable_class

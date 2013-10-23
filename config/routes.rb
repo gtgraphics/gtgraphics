@@ -46,7 +46,7 @@ GtGraphics::Application.routes.draw do
 
     scope '/', constraints: { id: /.*/ } do
       with_options path: '/', only: :show do |route|
-        route.resources :contents, controller: :pages, constraints: Routing::PageConstraint.new('Content')
+        route.resources :contents, constraints: Routing::PageConstraint.new('Content')
         route.resources :galleries, constraints: Routing::PageConstraint.new('Gallery')
         route.resources :images, constraints: Routing::PageConstraint.new('Image') do
           get :download, on: :member

@@ -1,16 +1,5 @@
 = simple_form_for [:admin, @page], html: { class: 'form-horizontal' } do |form|
 
-  %p= @page.inspect
-  - embeddable = @page.embeddable
-  %p= embeddable.inspect
-  /%p= embeddable.translations.build(locale: I18n.locale).inspect
-  %p= embeddable.try(:translations).inspect
-  %p= form.object.embeddable_class.inspect
-
-  - c = Content.new(params.require(:page).require(:embeddable_attributes).permit!)
-  /%p= c.inspect
-  /%p= c.translations.to_a
-
   .row
     .col-lg-8
 
