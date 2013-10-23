@@ -12,10 +12,10 @@
 #  lft             :integer
 #  rgt             :integer
 #  depth           :integer
-#  published       :boolean
+#  template_id     :integer
+#  published       :boolean          default(TRUE), not null
 #  embeddable_id   :integer
 #  embeddable_type :string(255)
-#  template_id     :integer
 #
 
 class Page < ActiveRecord::Base

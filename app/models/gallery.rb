@@ -2,11 +2,9 @@
 #
 # Table name: galleries
 #
-#  id           :integer          not null, primary key
-#  slug         :string(255)      not null
-#  created_at   :datetime
-#  updated_at   :datetime
-#  images_count :integer          default(0), not null
+#  id         :integer          not null, primary key
+#  created_at :datetime
+#  updated_at :datetime
 #
 
 class Gallery < ActiveRecord::Base

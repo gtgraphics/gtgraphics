@@ -3,8 +3,6 @@
 # Table name: images
 #
 #  id                 :integer          not null, primary key
-#  title              :string(255)
-#  slug               :string(255)      not null
 #  asset_file_name    :string(255)
 #  asset_content_type :string(255)
 #  asset_file_size    :integer
@@ -14,7 +12,6 @@
 #  exif_data          :text
 #  created_at         :datetime
 #  updated_at         :datetime
-#  hits_count         :integer          default(0), not null
 #
 
 class Image < ActiveRecord::Base
@@ -28,7 +25,7 @@ class Image < ActiveRecord::Base
     large: ['1920x1080', :jpeg]
   }
 
-  translates :caption
+  translates :title, :description, fallbacks_for_empty_translations: true
 
   has_attached_file :asset, styles: STYLES
 
