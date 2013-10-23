@@ -10,8 +10,6 @@ class ChangePages < ActiveRecord::Migration
     add_column :pages, :lft, :integer
     add_column :pages, :rgt, :integer
     add_column :pages, :depth, :integer
-
-    Page.create_translation_table! title: :string, content: :text
   end
 
   def down
@@ -24,7 +22,5 @@ class ChangePages < ActiveRecord::Migration
     remove_column :pages, :lft
     remove_column :pages, :rgt
     remove_column :pages, :depth
-
-    Page.drop_translation_table!
   end
 end
