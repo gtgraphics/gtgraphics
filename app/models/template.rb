@@ -46,10 +46,6 @@ class Template < ActiveRecord::Base
     }
   end
 
-  class Translation < Globalize::ActiveRecord::Translation
-    validates :name, presence: true
-  end
-
   class << self
     attr_accessor :template_lookup_path
 
