@@ -22,10 +22,6 @@ class Content < ActiveRecord::Base
     validates :title, presence: true
   end
 
-  def title
-    "Content"
-  end
-
   def content_html
     template = Liquid::Template.parse(content)
     template.render(to_liquid).html_safe

@@ -128,6 +128,6 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def page_params
-    params.require(:page).permit! #.permit(:parent_id, :slug, :template_id, translations_attributes: [:_destroy, :id, :locale, :title, :content])
+    params.require(:page).permit(:embeddable_type, :slug, :parent_id, :published, :template_id, embeddable_attributes: { translations_attributes: [:_destroy, :id, :locale, :title, :content] }) #.permit(:parent_id, :slug, :template_id, translations_attributes: [:_destroy, :id, :locale, :title, :content])
   end
 end

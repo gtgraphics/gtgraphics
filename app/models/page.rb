@@ -38,6 +38,7 @@ class Page < ActiveRecord::Base
 
   delegate :title, to: :embeddable, allow_nil: true
 
+  validates :embeddable, presence: true
   validates :embeddable_id, presence: true, unless: -> { embeddable_class and embeddable_class.bound_to_page? }
   validates :embeddable_type, presence: true, inclusion: { in: EMBEDDABLE_TYPES }
   validates :slug, presence: true, uniqueness: { scope: :parent_id }, exclusion: { in: RESERVED_SLUGS, if: :root? }
@@ -97,6 +98,12 @@ class Page < ActiveRecord::Base
         [embeddable_type, "Template::#{embeddable_type}"]
       end.flatten].freeze
     end
+  end
+
+  def build_embeddable(attributes = {})
+    raise 'invalid embeddable type' unless embeddable_class
+    raise attributes.inspect
+    self.embeddable = embeddable_class.new(attributes)
   end
 
   def children_with_embedded(type)
