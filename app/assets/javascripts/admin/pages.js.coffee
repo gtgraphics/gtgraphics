@@ -22,29 +22,43 @@ prepareEmbeddableContainer = ($embeddableContainer) ->
   $embeddableContainer.find('.editor').editor()
   $embeddableContainer.find("[data-toggle=tooltip], a[rel=tooltip]").tooltip()
 
-disableInputs = ($fields) ->
-  $fields.filter(':visible').find(':input').each ->
-    $input = $(@)
-    wasDisabled = $input.prop('disabled')
-    console.log wasDisabled
-    $input.data('wasDisabled', wasDisabled)
-    $input.prop('disabled', true)
+#disableInputs = ($fields) ->
+#  $fields.filter(':visible').find(':input').each ->
+#    $input = $(@)
+#    wasDisabled = $input.prop('disabled')
+#    console.log wasDisabled
+#    $input.data('wasDisabled', wasDisabled)
+#    $input.prop('disabled', true)
 
-reenableInputs = ($fields) ->
-  $fields.filter(':hidden').find(':input').each ->
-    $input = $(@)
-    wasDisabled = $input.data('wasDisabled')
-    $input.prop('disabled', wasDisabled || false)
-    $input.removeData('wasDisabled')
+#reenableInputs = ($fields) ->
+#  $fields.filter(':hidden').find(':input').each ->
+#    $input = $(@)
+#    wasDisabled = $input.data('wasDisabled')
+#    $input.prop('disabled', wasDisabled || false)
+#    $input.removeData('wasDisabled')
 
-hideEmbeddableFields = ($fields) ->
-  disableInputs($fields)
-  $fields.hide()
+#hideEmbeddableFields = ($fields) ->
+#  disableInputs($fields)
+#  $fields.hide()
 
-showEmbeddableFields = ($fields) ->
-  reenableInputs($fields)
-  $fields.show()
+#showEmbeddableFields = ($fields) ->
+#  reenableInputs($fields)
+#  $fields.show()
 
+loadEmbeddableEditor = ($embeddableContainer, $embeddableType) ->
+  embeddableType = $embeddableType.val()
+  if embeddableType is ''
+    $embeddableContainer.empty()
+  else
+    jQuery.ajax
+      url: '/admin/pages/embeddable_fields'
+      data: { embeddable_type: embeddableType }
+      dataType: 'html'
+      success: (html) ->
+        $embeddableContainer.html(html)
+        prepareEmbeddableContainer($embeddableContainer)
+      error: ->
+        alert(I18n.translate('pages.embeddable.error'))
 
 $(document).ready ->
   timeout = null
@@ -72,33 +86,8 @@ $(document).ready ->
   $embeddableType = $('#page_embeddable_type')
   $embeddableContainer = $('#page_embeddable_container')
 
-  embeddableType = $embeddableType.val()
+  if $embeddableContainer.is(':empty')
+    loadEmbeddableEditor($embeddableContainer, $embeddableType) 
 
   $embeddableType.change ->
-    embeddableType = $embeddableType.val()
-
-    $embeddableFields = $embeddableContainer.find(".embeddable-fields")
-    typeFilterCondition = "[data-type='#{embeddableType}']"
-    $typeEmbeddableFields = $embeddableFields.filter(typeFilterCondition)
-    $otherEmbeddableFields = $embeddableFields.not(typeFilterCondition)
-
-    if embeddableType is ''
-      hideEmbeddableFields($embeddableFields)
-    else
-      if $typeEmbeddableFields.length > 0
-        # Loaded, show cached DIV
-        hideEmbeddableFields($otherEmbeddableFields)
-        showEmbeddableFields($typeEmbeddableFields)
-      else
-        # Not loaded, so load via AJAX
-        jQuery.ajax
-          url: '/admin/pages/embeddable_fields'
-          data: { embeddable_type: embeddableType }
-          dataType: 'html'
-          success: (html) ->
-            hideEmbeddableFields($otherEmbeddableFields)
-            $typeEmbeddableFields = $(html).appendTo($embeddableContainer)
-            prepareEmbeddableContainer($typeEmbeddableFields)
-            showEmbeddableFields($typeEmbeddableFields)
-          error: ->
-            alert(I18n.translate('pages.embeddable.error'))
+    loadEmbeddableEditor($embeddableContainer, $embeddableType)

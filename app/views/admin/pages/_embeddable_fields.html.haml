@@ -1,8 +1,7 @@
 - if @page.embeddable_class
-  .embeddable-fields{data: { type: @page.embeddable_type }}
-    - if @page.embeddable_class.bound_to_page?
-      = fields.simple_fields_for :embeddable do |embeddable_fields|
-        = render "admin/#{fields.object.embeddable_class.model_name.plural}/fields", fields: embeddable_fields
-        = fields.association :template, collection: @page.template_class.with_translations, include_blank: translate('helpers.prompts.default'), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
-    - else
-      = fields.input :embeddable_id, label: @page.embeddable_class.model_name.human, collection: @page.embeddable_class.all, required: true, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
+  - if @page.embeddable_class.bound_to_page?
+    = fields.simple_fields_for :embeddable do |embeddable_fields|
+      = render "admin/#{fields.object.embeddable_class.model_name.plural}/fields", fields: embeddable_fields
+      = fields.association :template, collection: @page.template_class.with_translations, include_blank: translate('helpers.prompts.default'), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
+  - else
+    = fields.input :embeddable_id, label: @page.embeddable_class.model_name.human, collection: @page.embeddable_class.all, required: true, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
