@@ -8,7 +8,7 @@
   %dt= Page.human_attribute_name :embeddable_type
   %dd= @page.embeddable_class.model_name.human
   %dt= Page.human_attribute_name :path
-  %dd= link_to @page.path, @page
+  %dd= File.join(*@page.self_and_ancestors.map { |page| link_to(page.slug, page) }).html_safe
   %dt= Page.human_attribute_name :template
   %dd= link_to_if @page.template.present?, @page.template.name || '-', admin_template_path(@page.template)
   %dt= Page.human_attribute_name :author

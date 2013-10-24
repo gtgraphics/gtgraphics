@@ -6,7 +6,7 @@
 
 = @content.render_html
 
-- if @content_pages.any?
+- if @content_pages.published.any?
   %ul
-    - @content_pages.each do |content_page|
+    - @content_pages.published.each do |content_page|
       %li= link_to content_page, content_page
