@@ -3,8 +3,6 @@ class Admin::ShoutsController < Admin::ApplicationController
 
   before_action :load_shout, only: %i(show edit update destroy)
 
-  breadcrumbs_for_resource
-
   def index
     @shouts = Shout.order(:created_at).reverse_order
     respond_with @shouts

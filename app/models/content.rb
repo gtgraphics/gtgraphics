@@ -18,7 +18,7 @@ class Content < ActiveRecord::Base
   accepts_nested_attributes_for :translations, allow_destroy: true
   acts_as_batch_translated
 
-  def content_html
+  def render_html
     template = Liquid::Template.parse(content)
     template.render(to_liquid).html_safe
   end

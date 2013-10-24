@@ -1,6 +1,10 @@
-%h1= Content.model_name.human
+%h1= @content.title
 
-= @content.content_html
+- unless @content.translated_locales.include?(I18n.locale)
+  %p{style: 'border: 1px solid red; padding: 10px;'}
+    Not translated to #{I18n.locale}
+
+= @content.render_html
 
 - if @content_pages.any?
   %ul
