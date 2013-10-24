@@ -135,7 +135,7 @@ $.fn.translationTabs = ->
         # Replace Flag With Loader
         $flag = $tab.find('.flag')
         flagIconSrc = $flag.attr('src')
-        loaderSrc = "<%= asset_path('admin/loader.gif') %>"
+        loaderSrc = "<%= asset_path('admin/loader_small.gif') %>"
         $flag.attr('src', loaderSrc)
         $tab.removeClass('active')
         $tab.addClass('disabled')
