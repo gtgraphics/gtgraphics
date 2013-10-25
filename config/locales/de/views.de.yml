@@ -6,6 +6,10 @@ de:
     hints:
       empty: 'Es wurden bislang keine %{model} erstellt.'
     admin:
+      loader:
+        loading: Inhalt wird geladen…
+      pages:
+        empty_type: Bitte wählen Sie einen Seitentyp.
       templates:
         tabs:
           all: Alle

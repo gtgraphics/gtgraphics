@@ -22,43 +22,29 @@ prepareEmbeddableContainer = ($embeddableContainer) ->
   $embeddableContainer.find('.editor').editor()
   $embeddableContainer.find("[data-toggle=tooltip], a[rel=tooltip]").tooltip()
 
-#disableInputs = ($fields) ->
-#  $fields.filter(':visible').find(':input').each ->
-#    $input = $(@)
-#    wasDisabled = $input.prop('disabled')
-#    console.log wasDisabled
-#    $input.data('wasDisabled', wasDisabled)
-#    $input.prop('disabled', true)
-
-#reenableInputs = ($fields) ->
-#  $fields.filter(':hidden').find(':input').each ->
-#    $input = $(@)
-#    wasDisabled = $input.data('wasDisabled')
-#    $input.prop('disabled', wasDisabled || false)
-#    $input.removeData('wasDisabled')
-
-#hideEmbeddableFields = ($fields) ->
-#  disableInputs($fields)
-#  $fields.hide()
-
-#showEmbeddableFields = ($fields) ->
-#  reenableInputs($fields)
-#  $fields.show()
-
 loadEmbeddableEditor = ($embeddableContainer, $embeddableType) ->
   embeddableType = $embeddableType.val()
+  $empty = $('#page_embeddable_container_empty')
   if embeddableType is ''
+    $empty.show()
     $embeddableContainer.empty()
   else
+    $empty.hide()
+    $embeddableContainer.hide()
+    $loader = $('#page_embeddable_container_loader').show()
     jQuery.ajax
       url: '/admin/pages/embeddable_fields'
       data: { embeddable_type: embeddableType }
       dataType: 'html'
       success: (html) ->
-        $embeddableContainer.html(html)
+        $embeddableContainer.html(html).show()
         prepareEmbeddableContainer($embeddableContainer)
       error: ->
+        $embeddableContainer.show()
         alert(I18n.translate('pages.embeddable.error'))
+      complete: ->
+        $loader.hide()
+
 
 $(document).ready ->
   timeout = null
@@ -81,13 +67,14 @@ $(document).ready ->
     clearTimeout(timeout) if timeout
     previewPath($slug, $(@))
 
-
   # Load Embeddable Editor
   $embeddableType = $('#page_embeddable_type')
   $embeddableContainer = $('#page_embeddable_container')
 
-  if $embeddableContainer.is(':empty')
-    loadEmbeddableEditor($embeddableContainer, $embeddableType) 
+  if $embeddableContainer.length > 0
 
-  $embeddableType.change ->
-    loadEmbeddableEditor($embeddableContainer, $embeddableType)
+    if jQuery.trim($embeddableContainer.html()) is ''
+      loadEmbeddableEditor($embeddableContainer, $embeddableType) 
+
+    $embeddableType.change ->
+      loadEmbeddableEditor($embeddableContainer, $embeddableType)

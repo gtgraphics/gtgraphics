@@ -81,6 +81,7 @@ createTranslation = ($tabs, locale, callback) ->
       error: ->
         callback(false) if callback
 
+
 $.fn.translationTabs = ->
   @find('#translations_tabs').each ->
     $tabs = $(@)
@@ -134,15 +135,19 @@ $.fn.translationTabs = ->
 
         # Replace Flag With Loader
         $flag = $tab.find('.flag')
-        flagIconSrc = $flag.attr('src')
-        loaderSrc = "<%= asset_path('admin/loader_small.gif') %>"
-        $flag.attr('src', loaderSrc)
-        $tab.removeClass('active')
+        $flag.hide()
+
+        $loader = $('<div />', class: 'loader loader-tabs')
+        $('<i />', class: 'fa fa-refresh fa-spin').appendTo($loader)
+        $loader.insertAfter($flag)
+
         $tab.addClass('disabled')
 
         # Load Translation Tab
         createTranslation $tabs, locale, (created) ->
-          $flag.attr('src', flagIconSrc)
+          #$flag.attr('src', flagIconSrc)
+          $flag.show()
+          $loader.remove()
           if created
             $tab.removeClass('disabled')
             $tabs.find(".translation-tab[data-locale='#{locale}'] a").tab('show')
@@ -150,6 +155,7 @@ $.fn.translationTabs = ->
             $tab.hide().addClass('translation-unavailable').removeClass('translation-available')
             alert(I18n.translate('translations.error'))
           queryState($tabs)
+
 
 $(document).ready ->
   $(document).translationTabs()

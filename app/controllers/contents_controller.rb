@@ -2,7 +2,7 @@ class ContentsController < PagesController
   before_action :load_content
 
   def show
-    @content_pages = @page.children_with_embedded(:content)
+    @content_pages = @page.children_with_embedded(:content).published
     super
   end
 

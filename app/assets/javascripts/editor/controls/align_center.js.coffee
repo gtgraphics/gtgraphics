@@ -2,7 +2,7 @@ class @Editor.Controls.AlignCenter extends @Editor.Controls.RichTextControl
   createControl: ->
     $button = super
     $button.attr('title', I18n.translate('editor.align_center'))
-    $button.html($('<i />', class: 'icon-align-center'))
+    $button.html($('<i />', class: 'fa fa-align-center'))
     $button.tooltip(placement: 'top', container: 'body')
     $button
 

@@ -2,6 +2,11 @@
 
   .row
     .col-lg-8
+      #page_embeddable_container_empty.well.text-center
+        %h4
+          = translate('views.admin.pages.empty_type')
+
+      = loader id: 'page_embeddable_container_loader', class: 'loader-large'
 
       #page_embeddable_container
         = render 'embeddable_fields', fields: form
@@ -11,9 +16,9 @@
       .panel.panel-default
         .panel-heading
           %h3.panel-title= translate('views.forms.settings')
+
         .panel-body
           = form.input :embeddable_type, collection: page_types_for_select, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
-
           = form.input :slug, input_html: { autocomplete: 'off' }, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
           - if Page.assignable_as_parent_of(@page).exists?
             = form.association :parent, collection: page_sitemap_collection_for_select(Page.assignable_as_parent_of(@page)), input_html: { rows: 4 }, include_blank: translate('helpers.prompts.none'), label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }

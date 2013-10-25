@@ -2,7 +2,7 @@ class @Editor.Controls.UnorderedList extends @Editor.Controls.RichTextControl
   createControl: ->
     $button = super
     $button.attr('title', I18n.translate('editor.unordered_list'))
-    $button.html($('<i />', class: 'icon-list-ul'))
+    $button.html($('<i />', class: 'fa fa-list-ul'))
     $button.tooltip(placement: 'top', container: 'body')
     $button
 

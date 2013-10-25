@@ -53,8 +53,8 @@ class PageSitemapPresenter < Presenter
             end
             haml_tag '.btn-group' do
               haml_concat update_button_link_for(page, namespace: :admin, icon_only: true, size: :mini)
-              haml_concat button_link_to_unless(index.zero?, icon(:chevron_up), [:move_up, :admin, page], method: :patch, size: :mini, title: translate('helpers.links.move_up', model: Page.model_name.human), data: { toggle: 'tooltip', placement: 'top', container: 'body' })
-              haml_concat button_link_to_unless(index == pages.length - 1, icon(:chevron_down), [:move_down, :admin, page], method: :patch, size: :mini, title: translate('helpers.links.move_down', model: Page.model_name.human), data: { toggle: 'tooltip', placement: 'top', container: 'body' })
+              haml_concat button_link_to_unless(index.zero?, icon(:chevron, direction: :up), [:move_up, :admin, page], method: :patch, size: :mini, title: translate('helpers.links.move_up', model: Page.model_name.human), data: { toggle: 'tooltip', placement: 'top', container: 'body' })
+              haml_concat button_link_to_unless(index == pages.length - 1, icon(:chevron, direction: :down), [:move_down, :admin, page], method: :patch, size: :mini, title: translate('helpers.links.move_down', model: Page.model_name.human), data: { toggle: 'tooltip', placement: 'top', container: 'body' })
             end
             haml_tag '.btn-group' do
               haml_concat destroy_button_link_for(page, namespace: :admin, icon_only: true, size: :mini, type: :danger)

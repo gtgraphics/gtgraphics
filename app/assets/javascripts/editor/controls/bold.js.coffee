@@ -2,7 +2,7 @@ class @Editor.Controls.Bold extends @Editor.Controls.RichTextControl
   createControl: ->
     $button = super
     $button.attr('title', I18n.translate('editor.bold'))
-    $button.html($('<i />', class: 'icon-bold'))
+    $button.html($('<i />', class: 'fa fa-bold'))
     $button.tooltip(placement: 'top', container: 'body')
     $button
 

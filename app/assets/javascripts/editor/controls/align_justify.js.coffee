@@ -2,7 +2,7 @@ class @Editor.Controls.AlignJustify extends @Editor.Controls.RichTextControl
   createControl: ->
     $button = super
     $button.attr('title', I18n.translate('editor.align_justify'))
-    $button.html($('<i />', class: 'icon-align-justify'))
+    $button.html($('<i />', class: 'fa fa-align-justify'))
     $button.tooltip(placement: 'top', container: 'body')
     $button
 
