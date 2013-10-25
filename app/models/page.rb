@@ -101,7 +101,6 @@ class Page < ActiveRecord::Base
 
   def build_embeddable(attributes = {})
     raise 'invalid embeddable type' unless embeddable_class
-    #self.embeddable_id = nil
     self.embeddable = embeddable_class.new(attributes)
   end
 
