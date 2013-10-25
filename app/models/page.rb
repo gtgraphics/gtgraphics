@@ -49,6 +49,7 @@ class Page < ActiveRecord::Base
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
   after_save :update_descendants_paths
+  after_update :destroy_replaced_embeddable, if: -> { embeddable_type_changed? }
   after_destroy :destroy_embeddable
 
   default_scope -> { order(:lft) }
@@ -100,6 +101,7 @@ class Page < ActiveRecord::Base
 
   def build_embeddable(attributes = {})
     raise 'invalid embeddable type' unless embeddable_class
+    #self.embeddable_id = nil
     self.embeddable = embeddable_class.new(attributes)
   end
 
@@ -107,16 +109,12 @@ class Page < ActiveRecord::Base
     children.embedding(type).includes(:embeddable)
   end
 
-  def embeddable
-    super || embeddable_class.try(:new)
-  end
-
   def embeddable_attributes=(attributes)
     raise 'no embeddable type specified' if embeddable_class.nil?
-    if persisted?
-      self.embeddable.attributes = attributes
-    else
+    if embeddable_type_changed? or new_record?
       build_embeddable(attributes)
+    else
+      self.embeddable.attributes = attributes
     end
   end
 
@@ -152,6 +150,10 @@ class Page < ActiveRecord::Base
   private
   def destroy_embeddable
     embeddable.destroy if embeddable and embeddable.class.bound_to_page?
+  end
+
+  def destroy_replaced_embeddable
+    embeddable_type_was.constantize.destroy(embeddable_id_was)
   end
 
   def generate_path
