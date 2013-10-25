@@ -85,7 +85,6 @@ class Admin::PagesController < Admin::ApplicationController
         if @page.embeddable_class
           @page.embeddable = @page.embeddable_class.new
           if @page.embeddable.class.reflect_on_association(:translations)
-            # Create default translation if a translation association exists
             @page.embeddable.translations.build(locale: I18n.locale)
           end
           render layout: false
@@ -98,12 +97,13 @@ class Admin::PagesController < Admin::ApplicationController
 
   def translation_fields
     translated_locale = params.fetch(:translated_locale)
-    @page = Page.new
-    @page.translations.build(locale: translated_locale)
+    @page = Page.new(embeddable_type: params.fetch(:embeddable_type))
     respond_to do |format|
       format.html do
-        if translated_locale.in?(I18n.available_locales.map(&:to_s))
-          render layout: false 
+        if @page.embeddable_class and translated_locale.in?(I18n.available_locales.map(&:to_s))
+          @page.embeddable = @page.embeddable_class.new
+          @page.embeddable.translations.build(locale: translated_locale)
+          render "admin/#{@page.embeddable_type.underscore.pluralize}/translation_fields", layout: false 
         else
           head :not_found
         end
@@ -130,7 +130,7 @@ class Admin::PagesController < Admin::ApplicationController
     page_params = params.require(:page)
     embeddable_attributes_params = case page_params[:embeddable_type]
     when 'Content' then { translations_attributes: [:_destroy, :id, :locale, :title, :content] }
-    when 'Gallery' then {}
+    when 'Gallery' then { translations_attributes: [:_destroy, :id, :locale, :title, :description] }
     when 'Image' then {}
     end
     page_params.permit(:embeddable_type, :slug, :parent_id, :published, :template_id, embeddable_attributes: embeddable_attributes_params || {}) 

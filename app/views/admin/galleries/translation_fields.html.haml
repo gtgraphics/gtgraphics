@@ -1,0 +1,13 @@
+- output = nil
+
+- if controller_name == 'pages'
+  - simple_form_for [:admin, @page], url: '' do |form|
+    - form.simple_fields_for :embeddable do |embeddable_fields|
+      - embeddable_fields.simple_fields_for :translations, child_index: microtimestamp do |translation_fields|
+        - output = render 'admin/galleries/translation_fields', fields: translation_fields
+- else
+  - simple_form_for [:admin, @gallery], url: '' do |form|
+    - form.simple_fields_for :translations, child_index: microtimestamp do |translation_fields|
+      - output = render 'admin/galleries/translation_fields', fields: translation_fields
+
+= output

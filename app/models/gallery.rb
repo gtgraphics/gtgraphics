@@ -13,11 +13,13 @@ class Gallery < ActiveRecord::Base
 
   self.bound_to_page = true
 
-  translates :title
+  translates :title, :description, fallbacks_for_empty_translations: true
 
-  def title
-    "Galerie"
-  end
+  accepts_nested_attributes_for :translations, allow_destroy: true
+
+  #def title
+  #  "Galerie"
+  #end
 
   def to_s
     title

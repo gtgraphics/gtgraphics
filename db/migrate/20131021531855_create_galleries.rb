@@ -4,7 +4,7 @@ class CreateGalleries < ActiveRecord::Migration
       t.timestamps
     end
     reversible do |dir|
-      dir.up { Gallery.create_translation_table! title: :string }
+      dir.up { Gallery.create_translation_table! title: :string, description: :text }
       dir.down { Gallery.drop_translation_table! }
     end
   end

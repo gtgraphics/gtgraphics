@@ -6,11 +6,11 @@ class Breadcrumb::Item
 
   def initialize(collection, caption, destination)
     raise ArgumentError, 'no breadcrumb collection specified' if collection.nil?
-    raise ArgumentError, 'caption is blank' if caption.blank?
+    #raise ArgumentError, 'caption is blank' if caption.blank?
     raise ArgumentError, 'no destination specified' if destination.nil?
 
     @collection = collection
-    @caption = caption.to_s
+    @caption = caption
     @destination = destination
     if @destination.is_a? String
       @path = @url = @destination

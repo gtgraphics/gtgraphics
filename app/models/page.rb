@@ -121,7 +121,7 @@ class Page < ActiveRecord::Base
   end
 
   def embeddable_class
-    @embeddable_class ||= (embeddable_type.in?(self.class.embeddable_types) ? embeddable_type.constantize : nil)
+    (embeddable_type.in?(self.class.embeddable_types) ? embeddable_type.constantize : nil)
   end
 
   def hidden?

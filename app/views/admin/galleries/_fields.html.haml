@@ -1,0 +1,7 @@
+= render 'translation_tabs', object: fields.object, url: @page ? translation_fields_admin_pages_path(embeddable_type: fields.object.class.name) : translation_fields_admin_galleries_path
+
+= loader class: 'loader-large'
+
+.tab-content#translations
+  = fields.simple_fields_for :translations do |translation_fields|
+    = render 'admin/galleries/translation_fields', fields: translation_fields
