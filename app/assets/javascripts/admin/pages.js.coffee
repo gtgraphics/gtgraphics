@@ -25,9 +25,11 @@ prepareEmbeddableContainer = ($embeddableContainer) ->
 loadEmbeddableEditor = ($embeddableContainer, $embeddableType) ->
   embeddableType = $embeddableType.val()
   $empty = $('#page_embeddable_container_empty')
+  $embeddableContainer.trigger('loading.embeddable')
   if embeddableType is ''
     $empty.show()
     $embeddableContainer.empty()
+    $embeddableContainer.trigger('loaded.embeddable')
   else
     $empty.hide()
     $embeddableContainer.hide()
@@ -45,6 +47,8 @@ loadEmbeddableEditor = ($embeddableContainer, $embeddableType) ->
         $embeddableType.val('').change()
         $loader.hide()
         alert(I18n.translate('pages.embeddable.error'))
+      complete: ->
+        $embeddableContainer.trigger('loaded.embeddable')
 
 
 $(document).ready ->

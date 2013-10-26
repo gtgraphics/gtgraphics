@@ -16,6 +16,7 @@ de:
       align_justify: Blocksatz
       ordered_list: Geordnete Liste
       unordered_list: Ungeordnete Liste
+      link: Verknüpfung
 
     pages:
       embeddable:

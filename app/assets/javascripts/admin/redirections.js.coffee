@@ -12,13 +12,16 @@ updateContainerVisibility = ($radio) ->
       $destinationPageContainer.show()
       $destinationUrlContainer.hide()
 
-# TODO Trigger Events: Embeddable loaded and Translation Loaded
-
-$(document).ready ->
+initRadios = ->
   $radios = $('#page_embeddable_attributes_external_true, #page_embeddable_attributes_external_false')
-
   $radios.each ->
     updateContainerVisibility($(@))
-
   $radios.click ->
     updateContainerVisibility($(@))
+
+
+$(document).ready ->
+  initRadios()
+
+$(document).on 'loaded.embeddable', ->
+  initRadios()

@@ -129,6 +129,8 @@ $.fn.translationTabs = ->
 
         $dropdownItem.addClass('disabled')
 
+        $tabs.trigger('loading.translation')
+
         # Show new Tab
         $tab = $tabs.find(".translation-tab[data-locale='#{locale}']")
         $tab.show().addClass('translation-available').removeClass('translation-unavailable')
@@ -155,6 +157,7 @@ $.fn.translationTabs = ->
             $tab.hide().addClass('translation-unavailable').removeClass('translation-available')
             alert(I18n.translate('translations.error'))
           queryState($tabs)
+          $tabs.trigger('loaded.translation')
 
 
 $(document).ready ->

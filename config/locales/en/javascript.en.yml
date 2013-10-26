@@ -16,6 +16,7 @@ en:
       ordered_list: Ordered List
       unordered_list: Unordered List
       html: HTML
+      link: Hyperlink
 
     translations:
       error: The Translation Editor could not be loaded.
