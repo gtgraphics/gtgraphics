@@ -3,6 +3,13 @@ class Admin::ImagesController < Admin::ApplicationController
 
   before_action :load_image, only: %i(show edit update destroy download)
 
+  breadcrumbs do |b|
+    b.append Image.model_name.human(count: 2), :admin_images
+    b.append translate('breadcrumbs.new', model: Image.model_name.human), :new_admin_image if action_name.in? %w(new create)
+    b.append @image.title, [:admin, @image] if action_name.in? %w(show edit update)
+    b.append translate('breadcrumbs.edit', model: Image.model_name.human), [:edit, :admin, @image] if action_name.in? %w(edit update)
+  end
+
   def index
     @images = Image.order(:title)
     respond_with :admin, @images

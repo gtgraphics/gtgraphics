@@ -1,4 +1,4 @@
-.tab-pane{class: fields.object.locale == I18n.locale ? 'active' : nil, id: fields.object.locale, data: { locale: fields.object.locale }}
+= translation_pane_for fields.object.locale do
   = fields.input :_destroy, as: :hidden, input_html: { class: 'destroy-translation' }
   = fields.input :locale, as: :hidden
   = fields.input :title, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }

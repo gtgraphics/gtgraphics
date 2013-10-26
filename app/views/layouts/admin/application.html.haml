@@ -29,10 +29,6 @@
               = ::Template.model_name.human(count: 2)
               .badge= ::Template.count
 
-            = active_link_to :admin_galleries, wrap_tag: :li do
-              = Gallery.model_name.human(count: 2)
-              .badge= Gallery.count
-
             = active_link_to :admin_images, wrap_tag: :li do
               = Image.model_name.human(count: 2)
               .badge= Image.count

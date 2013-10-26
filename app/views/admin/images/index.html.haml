@@ -1,17 +1,9 @@
-= form_tag :batch_process_admin_images, method: :patch, remote: true do
+= index_headline_for Image do
+  .btn-toolbar
+    = create_button_link_for Image, icon: :upload, caption: translate('helpers.links.upload', model: Image.model_name.human), url: [:new, :admin, @album, :image].compact
 
-  = headline @album ? @album.title : Image.model_name.human(count: 2) do
-    %ul.list-inline
-      %li
-        .btn-toolbar.batch-controls
-          = button_tag prepend_icon(:move, translate('helpers.links.move')), name: :move, class: 'btn btn-default batch-btn'
-          = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected')), name: :destroy, class: 'btn btn-danger batch-btn', data: { confirm: translate('helpers.confirm.destroy_selected', model: Image.model_name.human(count: 2)) }
-      %li
-        .btn-toolbar
-          = create_button_link_for Image, icon: :upload_alt, caption: translate('helpers.links.upload', model: Image.model_name.human), url: [:new, :admin, @album, :image].compact
-
-  - if @images.any?
-    = render 'table', checkboxes: true
-  - else
-    .well.text-center
-      %h4= translate('views.hints.empty', model: Image.model_name.human(count: 2))
+- if @images.any?
+  = render 'table', checkboxes: true
+- else
+  .well.text-center
+    %h4= translate('views.hints.empty', model: Image.model_name.human(count: 2))

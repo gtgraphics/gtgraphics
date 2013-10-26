@@ -6,7 +6,7 @@ GtGraphics::Application.routes.draw do
         get :translation_fields, on: :collection
       end
 
-      resources :galleries do
+      resources :galleries, only: [] do
         get :translation_fields, on: :collection
       end
 

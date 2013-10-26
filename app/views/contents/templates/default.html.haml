@@ -4,7 +4,7 @@
   %p{style: 'border: 1px solid red; padding: 10px;'}
     Not translated to #{I18n.locale}
 
-= @content.render_html
+= @content.content_html
 
 - if @content_pages.any?
   %ul

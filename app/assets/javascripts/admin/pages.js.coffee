@@ -39,11 +39,12 @@ loadEmbeddableEditor = ($embeddableContainer, $embeddableType) ->
       success: (html) ->
         $embeddableContainer.html(html).show()
         prepareEmbeddableContainer($embeddableContainer)
+        $loader.hide()
       error: ->
         $embeddableContainer.show()
-        alert(I18n.translate('pages.embeddable.error'))
-      complete: ->
+        $embeddableType.val('')
         $loader.hide()
+        alert(I18n.translate('pages.embeddable.error'))
 
 
 $(document).ready ->

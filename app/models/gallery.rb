@@ -17,9 +17,14 @@ class Gallery < ActiveRecord::Base
 
   accepts_nested_attributes_for :translations, allow_destroy: true
 
-  #def title
-  #  "Galerie"
-  #end
+  def description_html
+    template = Liquid::Template.parse(description)
+    template.render(to_liquid).html_safe
+  end
+
+  def to_liquid
+    page.attributes.slice(*%w(slug path)).merge('title' => title, 'children' => page.children)
+  end
 
   def to_s
     title

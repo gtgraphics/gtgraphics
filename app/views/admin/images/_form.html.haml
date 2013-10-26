@@ -4,14 +4,9 @@
   = form.input :asset, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }, as: :image_preview, input_html: { preview_version: :thumbnail }
 
   = form.simple_fields_for :translations do |translation_fields|
-    = translations_for translation_fields.object.locale do
-      %legend.except-js= translate(translation_fields.object.locale, scope: :locales)
-      = translation_fields.input :locale, as: :hidden
-      = translation_fields.input :caption, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }, input_html: { rows: 4 }
-
-  %fieldset
-    %legend= translate('views.forms.advanced_options')
-    = form.input :slug, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }
+    %legend.except-js= translate(translation_fields.object.locale, scope: :locales)
+    = translation_fields.input :locale, as: :hidden
+    = translation_fields.input :caption, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }, input_html: { rows: 4 }
 
   .form-group.form-actions
     .col-lg-10.col-lg-offset-2
