@@ -3,6 +3,9 @@ class @Editor.Controls.ViewMode extends @Editor.Controls.Base
     super
     @isRichTextControl = false
 
+    @editor.input.on 'viewModeChanged.editor', =>
+      @refreshState()
+
   createControl: ->
     $group = $('<div />', class: 'btn-group pull-right')
 

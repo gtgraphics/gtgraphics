@@ -1,6 +1,8 @@
 $.fn.editor = (options = {}) ->
   @each ->
-    new Editor($(@), options)
+    $input = $(@)
+    new Editor($input, options)
 
-$(document).ready ->
+#$(document).ready ->
+$(window).load ->
   $('.editor').editor()
