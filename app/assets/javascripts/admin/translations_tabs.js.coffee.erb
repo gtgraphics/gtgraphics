@@ -33,12 +33,9 @@ initAvailableTabs = ($tabs) ->
   definedLocales = []
   $target.find('.tab-pane[data-locale]').each ->
     $tabPane = $(@)
+    console.log $tabPane
     if $tabPane.find('.destroy-translation').val() != 'true'
       definedLocales.push($tabPane.data('locale'))
-
-    $tabPaneErrors = $tabPane.find('.form-group.has-error')
-    if $tabPaneErrors.length > 0 and $tabPaneWithError == null
-      $tabPaneWithError = $tabPane
 
   $tabs.find('.translation-tab').each ->
     $tab = $(@)
@@ -49,6 +46,12 @@ initAvailableTabs = ($tabs) ->
     else
       $tab.hide()
       $tab.removeClass('translation-available').addClass('translation-unavailable')
+
+    #$tabPaneErrors = $tabPane.find('.form-group.has-error')  
+    $tabPane = $target.find(".tab-pane[data-locale='#{locale}']")
+    $tabPaneErrors = $tabPane.find('.form-group.has-error')
+    if $tabPaneErrors.length > 0 and !$tabPaneWithError
+      $tabPaneWithError = $tabPane
 
   if $tabPaneWithError
     locale = $tabPaneWithError.data('locale')

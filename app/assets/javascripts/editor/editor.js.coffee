@@ -129,7 +129,6 @@ class @Editor
       when 'editor'
         @input.hide()
         @region.show()
-        #@region.outerHeight(@input.outerHeight(true))
         if @disabled
           @region.addClass('disabled')
         else
@@ -139,28 +138,17 @@ class @Editor
         @removeSelection()
         @input.hide()
         @region.show()
-        #@region.outerHeight(@input.outerHeight(true))
         @disable(false)
         @region.removeClass('disabled')
         @region.focus().triggerHandler('focus') if focus
       when 'html'
         @region.hide()
         @input.show()
-        #@input.outerHeight(@region.outerHeight(true))
         @enable(false) unless @disabled
         @input.focus().triggerHandler('focus') if focus
       else
         jQuery.error('invalid view mode: ' + viewMode)
     @input.trigger('viewModeChanged.editor')
-
-  removeSelection: ->
-    if window.getSelection
-      if window.getSelection().empty # Chrome
-        window.getSelection().empty()
-      else if window.getSelection().removeAllRanges # Firefox
-        window.getSelection().removeAllRanges()
-      else if document.selection # IE?
-        document.selection.empty()
 
   enable: (updateState = true) ->
     @disabled = false if updateState
@@ -173,5 +161,43 @@ class @Editor
     @region.addClass('disabled')
     @region.removeAttr('contenteditable')
     @input.prop('disabled', true)
+
+  removeSelection: ->
+    if window.getSelection
+      if window.getSelection().empty # Chrome
+        window.getSelection().empty()
+      else if window.getSelection().removeAllRanges # Firefox
+        window.getSelection().removeAllRanges()
+    else if document.selection # IE?
+      document.selection.empty()
+
+  storeSelection: ->
+    @storedSelection = @getSelection()
+
+  restoreSelection: ->
+    if @storedSelection
+      @setSelection(@storedSelection)
+      @storedSelection = null
+
+  getSelection: ->
+    if window.getSelection
+      selection = window.getSelection()
+      if selection.getRangeAt and selection.rangeCount
+        ranges = []
+        for index in [0...selection.rangeCount]
+          ranges.push(selection.getRangeAt(index))
+        return ranges
+    else if document.selection and document.selection.createRange
+      return document.selection.createRange()
+    null
+
+  setSelection: (storedSelection) ->
+    if window.getSelection
+      selection = window.getSelection()
+      selection.removeAllRanges()
+      for index in [0..storedSelection.length]
+        selection.addRange(storedSelection[index])
+    else if document.selection and storedSelection.select
+      storedSelection.select()
 
 Editor.controls = {}

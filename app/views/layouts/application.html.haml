@@ -14,7 +14,7 @@
 
   %body
     %ul.nav
-      - Page.menu_items.published.roots.each do |page|
+      - Page.menu_items.published.roots.with_translations.each do |page|
         %li= active_link_to page.title, page
 
     %ul.nav

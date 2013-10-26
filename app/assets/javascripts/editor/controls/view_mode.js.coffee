@@ -1,25 +1,24 @@
-class @Editor.Controls.ViewMode extends @Editor.Controls.Base
+class @Editor.Controls.ViewMode extends @Editor.Controls.ControlGroup
   constructor: (@editor, $controls) ->
     super
     @isRichTextControl = false
-
     @editor.input.on 'viewModeChanged.editor', =>
       @refreshState()
 
   createControl: ->
-    $group = $('<div />', class: 'btn-group pull-right')
+    $group = super
 
-    $editor = super.appendTo($group)
+    $editor = @createButton().appendTo($group)
     $editor.text(I18n.translate('editor.view_modes.editor'))
     $editor.attr('data-view-mode', 'editor')
     @applyControlEvents($editor)
 
-    $html = super.appendTo($group)
+    $html = @createButton().appendTo($group)
     $html.text(I18n.translate('editor.view_modes.html'))
     $html.attr('data-view-mode', 'html')
     @applyControlEvents($html)
 
-    $preview = super.appendTo($group)
+    $preview = @createButton().appendTo($group)
     $preview.text(I18n.translate('editor.view_modes.preview'))
     $preview.attr('data-view-mode', 'preview')
     @applyControlEvents($preview)
@@ -28,19 +27,6 @@ class @Editor.Controls.ViewMode extends @Editor.Controls.Base
 
   execCommand: ->
     @editor.changeViewMode()
-
-  queryActive: ->
-    #@editor.viewMode == ''
-    false
-
-  activate: ->
-    false
-
-  deactivate: ->
-    false
-
-  applyEvents: ->
-    false
 
   refreshState: ->
     $buttons = @control.find('button').removeClass('active')

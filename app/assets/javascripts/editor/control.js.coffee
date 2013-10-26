@@ -28,6 +28,9 @@ class @Editor.Controls.Base
     @enable()
 
   createControl: ->
+    @createButton()
+
+  createButton: ->
     $('<button />', type: 'button', class: 'btn btn-default btn-mini', tabindex: '-1')
 
   execCommand: ->

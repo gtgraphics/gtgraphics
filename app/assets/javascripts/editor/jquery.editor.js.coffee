@@ -3,6 +3,5 @@ $.fn.editor = (options = {}) ->
     $input = $(@)
     new Editor($input, options)
 
-#$(document).ready ->
-$(window).load ->
+$(document).ready ->
   $('.editor').editor()

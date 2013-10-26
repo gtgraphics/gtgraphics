@@ -1,6 +1,6 @@
 - translation_class = "#{object.class.name}::Translation".constantize
 
-%ul.nav.nav-tabs.only-js#translations_tabs{data: { url: url }}
+%ul.nav.nav-tabs.only-js#translations_tabs{role: 'navigation', data: { url: url }}
   - available_locales.each do |locale|
     %li.translation-tab{class: locale == I18n.locale ? 'active' : 'only-js', data: { locale: locale }}
       = link_to "##{locale}" do

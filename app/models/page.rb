@@ -57,6 +57,7 @@ class Page < ActiveRecord::Base
   scope :published, -> { where(published: true) }
   scope :hidden, -> { where(published: false) }
   scope :menu_items, -> { where(menu_item: true) }
+  scope :with_translations, -> { includes(embeddable: :translations) }
 
   EMBEDDABLE_TYPES.each do |embeddable_type|
     scope embeddable_type.underscore.pluralize, -> { where(embeddable_type: embeddable_type) }

@@ -17,7 +17,7 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def index
-    @pages = Page.includes(embeddable: :translations)
+    @pages = Page.with_translations
     respond_with :admin, @pages
   end
 
