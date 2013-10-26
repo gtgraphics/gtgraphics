@@ -93,18 +93,15 @@ class @Editor
     $("label[for='#{@input.attr('id')}']").click =>
       @region.focus().triggerHandler('focus')
 
-    # original input
-    @input.focus =>
-      @region.focus()
+    @input.focus (event) =>
+      event.preventDefault()
+      @region.focus().triggerHandler('focus')
 
-    @input.blur =>
-      @region.blur()
-
-    # editable region
     @region.focus =>
       @onOpen()
 
     @region.blur =>
+      @input.blur()
       @onClose()
 
     @region.on 'keyup paste', =>

@@ -14,15 +14,15 @@ class @Editor.Controls.ViewMode extends @Editor.Controls.Base
     $editor.attr('data-view-mode', 'editor')
     @applyControlEvents($editor)
 
-    $preview = super.appendTo($group)
-    $preview.text(I18n.translate('editor.view_modes.preview'))
-    $preview.attr('data-view-mode', 'preview')
-    @applyControlEvents($preview)
-
     $html = super.appendTo($group)
     $html.text(I18n.translate('editor.view_modes.html'))
     $html.attr('data-view-mode', 'html')
     @applyControlEvents($html)
+
+    $preview = super.appendTo($group)
+    $preview.text(I18n.translate('editor.view_modes.preview'))
+    $preview.attr('data-view-mode', 'preview')
+    @applyControlEvents($preview)
 
     $group
 

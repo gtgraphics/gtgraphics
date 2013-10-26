@@ -1,11 +1,17 @@
 !!!
 %html{lang: I18n.locale}
+
   %head
     %title
       = (["GT Graphics"] + breadcrumbs.collect(&:caption).drop(1)).join(' &middot; ').html_safe
     = stylesheet_link_tag 'application', media: 'all', data: { turbolinks_track: true }
+    = yield :stylesheets
+    = i18n_javascript
     = javascript_include_tag 'application', data: { turbolinks_track: true }
+    = yield :javascripts
     = csrf_meta_tags
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'}
+
   %body
     %ul.nav
       - Page.menu_items.published.roots.each do |page|

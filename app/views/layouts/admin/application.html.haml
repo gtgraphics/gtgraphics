@@ -1,5 +1,6 @@
 !!!
 %html{lang: I18n.locale}
+
   %head
     %title
       = (["GT Graphics Administration"] + breadcrumbs.collect(&:caption).drop(1)).join(' &middot; ').html_safe
@@ -9,6 +10,8 @@
     = javascript_include_tag 'admin', data: { turbolinks_track: true }
     = yield :javascripts
     = csrf_meta_tags
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'}
+
   %body
     .navbar.navbar-inverse.navbar-fixed-top
       .container
