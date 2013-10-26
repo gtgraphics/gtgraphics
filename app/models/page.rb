@@ -23,6 +23,7 @@ class Page < ActiveRecord::Base
     Content
     Gallery
     Image
+    Redirection
   ).freeze
 
   RESERVED_SLUGS = %w(
@@ -94,8 +95,11 @@ class Page < ActiveRecord::Base
 
     def template_types_hash
       @@template_types_hash ||= Hash[*EMBEDDABLE_TYPES.map do |embeddable_type|
-        [embeddable_type, "Template::#{embeddable_type}"]
-      end.flatten].freeze
+        embeddable_class = embeddable_type.constantize rescue nil
+        if embeddable_class and embeddable_class.respond_to?(:template_type)
+          [embeddable_type, embeddable_class.template_type]
+        end
+      end.compact.flatten].freeze
     end
   end
 

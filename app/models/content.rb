@@ -10,8 +10,10 @@
 class Content < ActiveRecord::Base
   include BatchTranslatable
   include Embeddable
+  include Templatable
 
   self.bound_to_page = true
+  self.template_type = 'Template::Content'.freeze
 
   translates :title, :content, fallbacks_for_empty_translations: true
 

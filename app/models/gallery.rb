@@ -10,8 +10,10 @@
 class Gallery < ActiveRecord::Base
   include BatchTranslatable
   include Embeddable
+  include Templatable
 
   self.bound_to_page = true
+  self.template_type = 'Template::Gallery'.freeze
 
   translates :title, :description, fallbacks_for_empty_translations: true
 

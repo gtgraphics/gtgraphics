@@ -17,6 +17,7 @@
 class Image < ActiveRecord::Base
   include BatchTranslatable
   include Embeddable
+  include Templatable
 
   STYLES = {
     thumbnail: ['75x75#', :png],
@@ -24,6 +25,8 @@ class Image < ActiveRecord::Base
     medium: ['1280x780', :jpeg],
     large: ['1920x1080', :jpeg]
   }
+
+  self.template_type = 'Template::Image'.freeze
 
   translates :title, :description, fallbacks_for_empty_translations: true
 

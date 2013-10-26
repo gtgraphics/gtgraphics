@@ -1,17 +1,17 @@
 module Templatable
   extend ActiveSupport::Concern
 
-  included do
-    belongs_to :template
+  module ClassMethods
+    def template_type
+      @template_type
+    end
 
-    validate :validate_template_type
+    def template_type=(type)
+      @template_type = type.to_s
+    end
 
-    template_klass = self.const_get(:Template) rescue nil
-    template_klass ||= self.const_set(:Template, Class.new(::Template))
-  end
-
-  private
-  def validate_template_type
-    errors.add(:template_id, :invalid) unless template.is_a?(self.const_get(:Template))
+    def template_class
+      @template_class ||= template_type.try(:constantize)
+    end
   end
 end
