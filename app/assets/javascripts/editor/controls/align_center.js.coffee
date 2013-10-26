@@ -1,18 +1,8 @@
-class @Editor.Controls.AlignCenter extends @Editor.Controls.RichTextControl
-  createControl: ->
-    $button = super
-    $button.attr('title', I18n.translate('editor.align_center'))
-    $button.html($('<i />', class: 'fa fa-align-center'))
-    $button.tooltip(placement: 'top', container: 'body')
-    $button
-
-  execCommand: ->
-    document.execCommand('justifycenter', false, null)
-
-  queryActive: ->
-    document.queryCommandState('justifycenter')
-
-  queryEnabled: ->
-    document.queryCommandEnabled('justifycenter')
+class @Editor.Controls.AlignCenter extends @Editor.Controls.FontControl
+  constructor: ->
+    @caption = 'align_center'
+    @icon = 'align-center'
+    @command = 'justifycenter'
+    super
 
 @Editor.Controls.register('align_center', @Editor.Controls.AlignCenter)

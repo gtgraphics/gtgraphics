@@ -19,11 +19,6 @@ de:
         asset: Bilddatei
       image/translation:
         caption: Beschriftung
-      menu_item:
-        new_window: Neues Fenster?
-        target_type: Typ
-        target_id: Objekt
-        url: URL
       page:
         embeddable_type: Seitentyp
         embeddable_id: Seitenobjekt
@@ -32,12 +27,15 @@ de:
         published: Öffentlich?
         template: Vorlage
         author: Autor
+        menu_item: Menüpunkt?
         updated_at: Aktualisierung
       redirection:
         destination_url: URL
         destination_page: Seite
         external: Externe Umleitung
         internal: Interne Umleitung
+        permanent: Permanent?
+        destination: Ziel
       shout:
         nickname: Verfasser
         message: Nachricht

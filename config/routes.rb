@@ -56,6 +56,7 @@ GtGraphics::Application.routes.draw do
         route.resources :images, constraints: Routing::PageConstraint.new('Image') do
           get :download, on: :member
         end
+        route.resources :redirections, constraints: Routing::PageConstraint.new('Redirection')
       end
     end
 

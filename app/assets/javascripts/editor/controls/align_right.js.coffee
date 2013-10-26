@@ -1,18 +1,8 @@
-class @Editor.Controls.AlignRight extends @Editor.Controls.RichTextControl
-  createControl: ->
-    $button = super
-    $button.attr('title', I18n.translate('editor.align_right'))
-    $button.html($('<i />', class: 'fa fa-align-right'))
-    $button.tooltip(placement: 'top', container: 'body')
-    $button
-
-  execCommand: ->
-    document.execCommand('justifyright', false, null)
-
-  queryActive: ->
-    document.queryCommandState('justifyright')
-
-  queryEnabled: ->
-    document.queryCommandEnabled('justifyright')
+class @Editor.Controls.AlignRight extends @Editor.Controls.FontControl
+  constructor: ->
+    @caption = 'align_right'
+    @icon = 'align-right'
+    @command = 'justifyright'
+    super
 
 @Editor.Controls.register('align_right', @Editor.Controls.AlignRight)

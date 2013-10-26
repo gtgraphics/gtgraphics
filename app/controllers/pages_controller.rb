@@ -5,7 +5,7 @@ class PagesController < ApplicationController
   helper_method :page
 
   breadcrumbs do |b|
-    @page.self_and_ancestors.each do |page|
+    @page.self_and_ancestors.published.each do |page|
       b.append page.title, page
     end
   end

@@ -1,18 +1,6 @@
-class @Editor.Controls.Underline extends @Editor.Controls.RichTextControl   
-  createControl: ->
-    $button = super
-    $button.attr('title', I18n.translate('editor.underline'))
-    $button.html($('<i />', class: 'fa fa-underline'))
-    $button.tooltip(placement: 'top', container: 'body')
-    $button
-
-  execCommand: ->
-    document.execCommand('underline', false, null)
-
-  queryActive: ->
-    document.queryCommandState('underline')
-
-  queryEnabled: ->
-    document.queryCommandEnabled('underline')
+class @Editor.Controls.Underline extends @Editor.Controls.FontControl
+  constructor: ->
+    @caption = @icon = @command = 'underline'
+    super
 
 @Editor.Controls.register('underline', @Editor.Controls.Underline)

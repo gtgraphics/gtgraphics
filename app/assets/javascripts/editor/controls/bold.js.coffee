@@ -1,18 +1,6 @@
-class @Editor.Controls.Bold extends @Editor.Controls.RichTextControl
-  createControl: ->
-    $button = super
-    $button.attr('title', I18n.translate('editor.bold'))
-    $button.html($('<i />', class: 'fa fa-bold'))
-    $button.tooltip(placement: 'top', container: 'body')
-    $button
-
-  execCommand: ->
-    document.execCommand('bold', false, null)
-
-  queryActive: ->
-    document.queryCommandState('bold')
-
-  queryEnabled: ->
-    document.queryCommandEnabled('bold')
+class @Editor.Controls.Bold extends @Editor.Controls.FontControl
+  constructor: ->
+    @caption = @icon = @command = 'bold'
+    super
 
 @Editor.Controls.register('bold', @Editor.Controls.Bold)

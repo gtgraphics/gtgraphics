@@ -9,8 +9,18 @@
   %dd= @page.embeddable_class.model_name.human
   %dt= Page.human_attribute_name :path
   %dd= File.join(*@page.self_and_ancestors.map { |page| link_to(page.slug, page) }).html_safe
-  %dt= Page.human_attribute_name :template
-  %dd= link_to_if @page.template.present?, @page.template.name || '-', admin_template_path(@page.template)
+  - if @page.template.present?
+    %dt= Page.human_attribute_name :template
+    %dd= link_to @page.template.name, admin_template_path(@page.template)
+  %dt= Page.human_attribute_name :published
+  %dd= link_to yes_or_no(@page.published?), toggle_admin_page_path(@page, attribute: :published), method: :patch
+  %dt= Page.human_attribute_name :menu_item
+  %dd= link_to yes_or_no(@page.menu_item?), toggle_admin_page_path(@page, attribute: :menu_item), method: :patch
+
+  - begin
+    = render "admin/#{@page.embeddable_class.model_name.plural}/details", @page.embeddable_class.model_name.singular.to_sym => @page.embeddable
+  - rescue ActionView::MissingTemplate
+
   %dt= Page.human_attribute_name :author
   %dd -
   %dt= Page.human_attribute_name :updated_at

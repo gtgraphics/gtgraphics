@@ -45,7 +45,7 @@ class Page < ActiveRecord::Base
   validates :slug, presence: true, uniqueness: { scope: :parent_id }, exclusion: { in: RESERVED_SLUGS, if: :root? }
   validates :path, presence: true, uniqueness: true, if: -> { slug.present? }
   validate :validate_parent_assignability
-  validate :validate_template_type, if: -> { embeddable_type.present? }
+  validate :validate_template_type
 
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
@@ -56,6 +56,7 @@ class Page < ActiveRecord::Base
   default_scope -> { order(:lft) }
   scope :published, -> { where(published: true) }
   scope :hidden, -> { where(published: false) }
+  scope :menu_items, -> { where(menu_item: true) }
 
   EMBEDDABLE_TYPES.each do |embeddable_type|
     scope embeddable_type.underscore.pluralize, -> { where(embeddable_type: embeddable_type) }
@@ -81,8 +82,9 @@ class Page < ActiveRecord::Base
       where.not(id: page.self_and_descendants.pluck(:id))
     end
 
-    def embedding(type)
-      where(embeddable_type: type.to_s.classify)
+    def embedding(*types)
+      types = Array(types).flatten.map { |type| type.to_s.classify }
+      where(embeddable_type: types.one? ? types.first : types)
     end
 
     def embeddable_types
@@ -116,8 +118,8 @@ class Page < ActiveRecord::Base
     self.embeddable = embeddable_class.new(attributes)
   end
 
-  def children_with_embedded(type)
-    children.embedding(type).includes(:embeddable)
+  def children_with_embedded(*types)
+    children.embedding(*types).includes(:embeddable)
   end
 
   def embeddable_attributes=(attributes)
@@ -137,16 +139,16 @@ class Page < ActiveRecord::Base
     !published?
   end
 
-  def template
-    super || template_class.default
-  end
-
   def template_class
-    @template_class ||= self.class.template_types_hash[embeddable_type].try(:constantize)
+    @template_class ||= template_type.try(:constantize)
   end
 
   def template_path
-    template.try(:view_path) || raise(Page::MissingTemplate.new(self))
+    template.try(:view_path) || template_class.try(:default).try(:view_path) || raise(Page::MissingTemplate.new(self))
+  end
+
+  def template_type
+    self.class.template_types_hash[embeddable_type]
   end
 
   def to_s
@@ -195,6 +197,6 @@ class Page < ActiveRecord::Base
   end
 
   def validate_template_type
-    errors.add(:template_id, :invalid) if self.class.template_types_hash[embeddable_type].nil?
+    errors.add(:template_id, :invalid) if template.present? and template.class.name != template_type
   end
 end

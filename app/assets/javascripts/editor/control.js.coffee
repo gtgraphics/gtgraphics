@@ -41,6 +41,9 @@ class @Editor.Controls.Base
   queryEnabled: ->
     true
 
+  querySupported: ->
+    true
+
   activate: ->
     @control.addClass('active')
     @active = true
@@ -64,7 +67,7 @@ class @Editor.Controls.Base
       @activate()
 
   refreshState: ->
-    if @queryEnabled()
+    if @querySupported() and @queryEnabled()
       @enable()
       if @queryActive()
         @activate()

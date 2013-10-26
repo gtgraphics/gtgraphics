@@ -16,4 +16,10 @@ class @Editor.Controls.Link extends @Editor.Controls.Base
   queryActive: ->
     false
 
+  queryEnabled: ->
+    false
+    
+  querySupported: ->
+    false
+
 @Editor.Controls.register('link', @Editor.Controls.Link)

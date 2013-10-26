@@ -8,6 +8,7 @@
 #  external            :boolean          default(FALSE), not null
 #  created_at          :datetime
 #  updated_at          :datetime
+#  permanent           :boolean          default(FALSE), not null
 #
 
 class Redirection < ActiveRecord::Base
@@ -26,6 +27,14 @@ class Redirection < ActiveRecord::Base
   before_validation :clear_obsolete_destination_attribute
 
   acts_as_batch_translatable
+
+  def destination
+    if external?
+      destination_url
+    else
+      destination_page
+    end
+  end
 
   def internal?
     !external?

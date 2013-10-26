@@ -8,7 +8,7 @@
     = csrf_meta_tags
   %body
     %ul.nav
-      - Page.published.roots.each do |page|
+      - Page.menu_items.published.roots.each do |page|
         %li= active_link_to page.title, page
 
     %ul.nav

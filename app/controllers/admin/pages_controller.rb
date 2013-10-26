@@ -50,9 +50,16 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def toggle
-    @page.toggle!(:published)
+    attribute = params[:attribute]
     respond_to do |format|
-      format.html { redirect_to request.referer || [:admin, @page] }
+      format.html do
+        if attribute.in? %w(published menu_item)
+          @page.update_column(attribute, !@page.attributes[attribute])
+          redirect_to request.referer || [:admin, @page]
+        else
+          head :not_found
+        end
+      end
     end
   end
 
@@ -132,8 +139,8 @@ class Admin::PagesController < Admin::ApplicationController
     when 'Content' then { translations_attributes: [:_destroy, :id, :locale, :title, :content] }
     when 'Gallery' then { translations_attributes: [:_destroy, :id, :locale, :title, :description] }
     when 'Image' then {}
-    when 'Redirection' then [:external, :destination_page_id, :destination_url, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
+    when 'Redirection' then [:external, :destination_page_id, :destination_url, :permanent, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     end
-    page_params.permit(:embeddable_type, :slug, :parent_id, :published, :template_id, embeddable_attributes: embeddable_attributes_params || {}) 
+    page_params.permit(:embeddable_type, :slug, :parent_id, :published, :menu_item, :template_id, embeddable_attributes: embeddable_attributes_params || {}) 
   end
 end
