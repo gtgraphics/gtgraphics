@@ -43,6 +43,9 @@ en:
       page:
         one: Page
         other: Pages
+      redirection: 
+        one: Redirection
+        other: Redirections
       template:
         one: Template
         other: Templates

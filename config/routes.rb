@@ -31,6 +31,10 @@ GtGraphics::Application.routes.draw do
           patch :move_down
         end
       end
+
+      resources :redirections, only: [] do
+        get :translation_fields, on: :collection
+      end
       
       resources :templates do
         collection do

@@ -41,8 +41,7 @@ class Image < ActiveRecord::Base
   validates :title, presence: true, uniqueness: true
   validates_attachment :asset, presence: true, content_type: { content_type: %w(image/jpeg image/pjpeg image/gif image/png) }
 
-  accepts_nested_attributes_for :translations, allow_destroy: true
-  acts_as_batch_translated
+  acts_as_batch_translatable
 
   alias_attribute :file_name, :asset_file_name
   alias_attribute :content_type, :asset_content_type

@@ -132,6 +132,7 @@ class Admin::PagesController < Admin::ApplicationController
     when 'Content' then { translations_attributes: [:_destroy, :id, :locale, :title, :content] }
     when 'Gallery' then { translations_attributes: [:_destroy, :id, :locale, :title, :description] }
     when 'Image' then {}
+    when 'Redirection' then [:external, :destination_page_id, :destination_url, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     end
     page_params.permit(:embeddable_type, :slug, :parent_id, :published, :template_id, embeddable_attributes: embeddable_attributes_params || {}) 
   end

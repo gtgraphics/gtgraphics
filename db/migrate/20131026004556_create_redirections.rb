@@ -4,6 +4,7 @@ class CreateRedirections < ActiveRecord::Migration
       t.belongs_to :destination_page, index: true
       t.string :destination_url
       t.boolean :external, null: false, default: false
+      t.timestamps
     end
     reversible do |dir|
       dir.up { Redirection.create_translation_table! title: :string }

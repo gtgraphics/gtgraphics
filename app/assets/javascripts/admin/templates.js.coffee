@@ -14,7 +14,7 @@ $(document).ready ->
 
     templateType = $type.val()
 
-    if templateType == ''
+    if templateType is ''
       $fileNameContainer.empty()
     else
       $fileName = $('#template_file_name')

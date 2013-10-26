@@ -2,8 +2,11 @@ module BatchTranslatable
   extend ActiveSupport::Concern
 
   module ClassMethods
-    def acts_as_batch_translated
+    def acts_as_batch_translatable(options = {})
       include InstanceMethods
+
+      options.reverse_merge!(allow_destroy: true)
+      accepts_nested_attributes_for :translations, options
 
       validate :validate_translations_count
     end

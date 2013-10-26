@@ -42,7 +42,7 @@ loadEmbeddableEditor = ($embeddableContainer, $embeddableType) ->
         $loader.hide()
       error: ->
         $embeddableContainer.show()
-        $embeddableType.val('')
+        $embeddableType.val('').change()
         $loader.hide()
         alert(I18n.translate('pages.embeddable.error'))
 

@@ -17,8 +17,7 @@ class Content < ActiveRecord::Base
 
   translates :title, :content, fallbacks_for_empty_translations: true
 
-  accepts_nested_attributes_for :translations, allow_destroy: true
-  acts_as_batch_translated
+  acts_as_batch_translatable
 
   def content_html
     template = Liquid::Template.parse(content)

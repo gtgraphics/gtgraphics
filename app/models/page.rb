@@ -101,6 +101,14 @@ class Page < ActiveRecord::Base
         end
       end.compact.flatten].freeze
     end
+
+    def without(page)
+      if page.new_record?
+        all
+      else
+        where.not(id: page.id)
+      end
+    end
   end
 
   def build_embeddable(attributes = {})

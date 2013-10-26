@@ -1,4 +1,4 @@
-= render 'translation_tabs', object: fields.object, url: translation_fields_admin_contents_path
+= render 'translation_tabs', object: fields.object, url: translation_fields_admin_pages_path(embeddable_type: fields.object.class.name)
 
 = loader class: 'loader-large'
 

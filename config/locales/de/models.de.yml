@@ -33,6 +33,11 @@ de:
         template: Vorlage
         author: Autor
         updated_at: Aktualisierung
+      redirection:
+        destination_url: URL
+        destination_page: Seite
+        external: Externe Umleitung
+        internal: Interne Umleitung
       shout:
         nickname: Verfasser
         message: Nachricht
@@ -67,6 +72,9 @@ de:
       page:
         one: Seite
         other: Seiten
+      redirection:
+        one: Umleitung
+        other: Umleitungen
       shout:
         one: Stern
         other: Sterne

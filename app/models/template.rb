@@ -33,8 +33,7 @@ class Template < ActiveRecord::Base
 
   scope :defaults, -> { where(default: true) }
 
-  accepts_nested_attributes_for :translations, allow_destroy: true
-  acts_as_batch_translated
+  acts_as_batch_translatable
 
   Page.template_types.each do |template_type|
     scope template_type.demodulize.underscore.pluralize, -> { where(type: template_type) }

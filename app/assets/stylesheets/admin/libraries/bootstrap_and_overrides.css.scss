@@ -47,12 +47,6 @@
         top: -2px;
         bottom: -2px;
       }
-      .btn-group {
-        //float: none;
-      }
-      .btn {
-        //margin: 0;
-      }
       .btn.icon-only {
         width: 34px;
       }
@@ -82,4 +76,8 @@
       }
     }
   }
+}
+
+label.radio, label.checkbox {
+  font-weight: normal;
 }
