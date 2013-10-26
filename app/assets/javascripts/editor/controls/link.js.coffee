@@ -1,25 +1,14 @@
-class @Editor.Controls.Link extends @Editor.Controls.Base
+class @Editor.Controls.Link extends @Editor.Controls.FontControl
   constructor: ->
-    super
+    @caption = @icon = 'link'
+    @command = 'createlink'
     @isRichTextControl = false
-
-  createControl: ->
-    $button = super
-    $button.attr('title', I18n.translate('editor.link'))
-    $button.html($('<i />', class: 'fa fa-link'))
-    $button.tooltip(placement: 'top', container: 'body')
-    $button
+    super
 
   execCommand: ->
-    alert 'Open Modal'
+    # Open Modal, then execute callback
+    document.execCommand('createlink', false, "http://stackoverflow.com/");
 
-  queryActive: ->
-    false
-
-  queryEnabled: ->
-    false
-    
-  querySupported: ->
-    false
+    #alert 'Open Modal'
 
 @Editor.Controls.register('link', @Editor.Controls.Link)

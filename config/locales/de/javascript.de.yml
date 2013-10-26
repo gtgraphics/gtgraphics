@@ -9,7 +9,6 @@ de:
       italic: Kursiv
       underline: Unterstrichen
       strikethrough: Durchgestrichen
-      html: HTML
       align_left: Linksbündig
       align_center: Zentriert
       align_right: Rechtsbündig
@@ -17,6 +16,10 @@ de:
       ordered_list: Geordnete Liste
       unordered_list: Ungeordnete Liste
       link: Verknüpfung
+      view_modes:
+        editor: Editor
+        preview: Vorschau
+        html: HTML
 
     pages:
       embeddable:

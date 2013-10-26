@@ -16,14 +16,12 @@ class @Editor.Controls.Base
     @control.appendTo(@controls)
 
     @control.data('control', @)
-    @control.click (event) =>
-      event.preventDefault()
-      @execCommand()
-      @editor.setChanged()
-      @editor.element.focus().triggerHandler('focus')
+    @applyEvents()
 
     @refreshState()
-    @editor.element.on 'blur click focus keyup paste', =>
+    @control.on 'click', =>
+      @refreshState()
+    @editor.region.on 'blur click focus keyup paste', =>
       @refreshState()
 
     @deactivate()
@@ -76,3 +74,10 @@ class @Editor.Controls.Base
     else
       @disable()
     true
+
+  applyEvents: ->
+    @control.click (event) =>
+      event.preventDefault()
+      @execCommand()
+      @editor.setChanged()
+      @editor.region.focus().triggerHandler('focus')

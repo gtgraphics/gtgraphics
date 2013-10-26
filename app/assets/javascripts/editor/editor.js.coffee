@@ -5,20 +5,27 @@ class @Editor
       ['align_left', 'align_center', 'align_right', 'align_justify'],
       ['ordered_list', 'unordered_list'],
       'link',
-      'html'
+      'view_mode'
     ]
   }
 
   constructor: ($originalInput, options = {}) ->
+    @viewMode = 'editor'
+
     @input = $originalInput.hide()
-    @input.attr('tabindex', '-1')
+    @input.attr('tabindex', '-1').attr('spellcheck', false)
     @input.data('editor', @)
+    @input.addClass('editor-html')
     @options = jQuery.extend({}, DEFAULTS, options)
 
     @createEditableRegion()
     @createContainer()
 
-    @input.addClass('editor-html')
+    # Determine Disabled/Enabled State
+    if @input.prop('disabled')
+      @disable()
+    else
+      @enable()
 
     # Events
     @applyEvents()
@@ -31,14 +38,15 @@ class @Editor
     @container.insertAfter(@input)
     @container.append(@createControls())
     @container.append(@input)
-    @container.append(@element)
+    @container.append(@region)
 
   createEditableRegion: ->
     inputId = @input.attr('id')
-    @element = $('<div />', contenteditable: true, class: 'editor-region')
-    @element.attr('data-target', "##{inputId}") if inputId
-    @element.html(@input.val())
-    #@element.css(height: @input.outerHeight())
+    @region = $('<div />', contenteditable: true, class: 'editor-region')
+    @region.attr('data-target', "##{inputId}") if inputId
+    @region.outerHeight(@input.outerHeight(true))
+    @region.html(@input.val())
+    @region.attr('spellcheck', false)
 
   createControls: ->
     @controls = []
@@ -67,54 +75,116 @@ class @Editor
 
   destroy: ->
     console.warn 'not fully implemented'
-    @element.removeClass('editable-region')
-    @element.removeAttr('contenteditable')
+    @region.removeClass('editable-region')
+    @region.removeAttr('contenteditable')
     # TODO Destroy Container etc.
 
   onOpen: ->
-    @element.addClass('editing')
+    @region.addClass('editing')
     @container.addClass('focus')
 
   onClose: ->
-    @element.removeClass('editing')
+    @region.removeClass('editing')
     @container.removeClass('focus')
 
   applyEvents: ->
     # Change Label Behavior
     $("label[for='#{@input.attr('id')}']").click =>
-      @element.focus().triggerHandler('focus')
+      @region.focus().triggerHandler('focus')
 
     # original input
     @input.focus =>
-      @element.focus()
+      @region.focus()
 
     @input.blur =>
-      @element.blur()
+      @region.blur()
 
     # editable region
-    @element.focus =>
+    @region.focus =>
       @onOpen()
 
-    @element.blur =>
+    @region.blur =>
       @onClose()
 
-    @element.on 'keyup paste', =>
+    @region.on 'keyup paste', =>
       @setChanged()
       true
 
     @input.on 'keyup paste', =>
       @changed = true
-      @element.addClass('changed')
-      @element.html(@input.val())
+      @region.addClass('changed')
+      @region.html(@input.val())
       true
 
   setChanged: ->
     @changed = true
-    @element.addClass('changed')
-    @input.val(@element.html())
+    @region.addClass('changed')
+    @input.val(@region.html())
 
   setUnchanged: ->
     @changed = false
-    @element.removeClass('changed')
+    @region.removeClass('changed')
+
+  changeViewMode: (viewMode, focus = false) ->
+    if @viewMode == viewMode
+      if focus
+        switch @viewMode
+          when 'editor', 'preview'
+            @region.focus()
+          when 'html'
+            @input.focus()
+          else
+            jQuery.error('invalid view mode: ' + viewMode)
+    else
+      switch viewMode
+        when 'editor'
+          @input.hide()
+          @region.show()
+          @region.outerHeight(@input.outerHeight(true))
+          if @disabled
+            @region.addClass('disabled')
+          else
+            @enable(false)
+          @region.focus().triggerHandler('focus') if focus
+        when 'preview'
+          @removeSelection()
+          @input.hide()
+          @region.show()
+          @region.outerHeight(@input.outerHeight(true))
+          @disable(false)
+          @region.removeClass('disabled')
+          @region.focus().triggerHandler('focus') if focus
+        when 'html'
+          @region.hide()
+          @input.show()
+          @input.outerHeight(@region.outerHeight(true))
+          @enable(false) unless @disabled
+          @input.focus().triggerHandler('focus') if focus
+        else
+          jQuery.error('invalid view mode: ' + viewMode)
+      @viewMode = viewMode
+
+  removeSelection: ->
+    if window.getSelection
+      if window.getSelection().empty # Chrome
+        window.getSelection().empty()
+      else if window.getSelection().removeAllRanges # Firefox
+        window.getSelection().removeAllRanges()
+      else if document.selection # IE?
+        document.selection.empty()
+
+  enable: (updateState = true) ->
+    @disabled = false if updateState
+    @region.removeClass('disabled')
+    @region.attr('contenteditable', true)
+    @input.prop('disabled', false)
+
+  disable: (updateState = true) ->
+    @disabled = true if updateState
+    @region.addClass('disabled')
+    @region.removeAttr('contenteditable')
+    @input.prop('disabled', true)
+
+
 
 Editor.controls = {}

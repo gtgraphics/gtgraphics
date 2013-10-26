@@ -12,13 +12,13 @@ class @Editor.Controls.Html extends @Editor.Controls.Base
   execCommand: ->
     @editor.html = !@editor.html
     if @editor.html
-      @editor.element.hide()
+      @editor.region.hide()
       @editor.input.show().focus()
-      @editor.input.outerHeight(@editor.element.outerHeight(true))
+      @editor.input.outerHeight(@editor.region.outerHeight(true))
     else
       @editor.input.hide()
-      @editor.element.show().focus()
-      @editor.element.outerHeight(@editor.input.outerHeight(true))
+      @editor.region.show().focus()
+      @editor.region.outerHeight(@editor.input.outerHeight(true))
 
     @editor.controls.forEach (control) ->
       control.refreshState()
