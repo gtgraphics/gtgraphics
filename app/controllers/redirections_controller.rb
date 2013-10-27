@@ -2,11 +2,20 @@ class RedirectionsController < PagesController
   before_action :load_redirection
 
   def show
-    status = @redirection.permanent? ? :moved_permanently : :found
     if @redirection.external?
-      redirect_to @redirection.destination_url, status: status
+      destination_uri = URI.parse(@redirection.destination_url)
+      destination_query_parameters = Rack::Utils.parse_nested_query(destination_uri.query)
+      destination_uri.query = request.query_parameters.reverse_merge(destination_query_parameters).to_query
+      destination_url = destination_uri.to_s
     else
-      redirect_to page_path(@redirection.destination_page, request.query_parameters), status: status
+      destination_url = page_path(@redirection.destination_page, request.query_parameters)
+    end
+    
+    respond_to do |format|
+      format.html do
+        status = @redirection.permanent? ? :moved_permanently : :found
+        redirect_to page_path(@redirection.destination_page, request.query_parameters), status: status
+      end
     end
   end
 
