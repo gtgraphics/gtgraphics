@@ -4,7 +4,7 @@ class Admin::Editor::LinksController < Admin::Editor::ApplicationController
   end
 
   def update
-    @link = ::Editor::Link.new()
+    @link = ::Editor::Link.new
   end
 
   private

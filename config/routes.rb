@@ -64,6 +64,12 @@ GtGraphics::Application.routes.draw do
       end
     end
 
+    # TODO: ID-based URLs for Pages
+    #get '/:id', constraints: Routing::PermalinkConstraint.new, to: redirect { |params, request|
+    #  page = Page.find(params[:id])
+    #  page_path(page)
+    #}
+
     root 'homepage#show'
   end
 

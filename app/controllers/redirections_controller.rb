@@ -2,7 +2,12 @@ class RedirectionsController < PagesController
   before_action :load_redirection
 
   def show
-    redirect_to @redirection.destination, status: @redirection.permanent? ? :moved_permanently : :found
+    status = @redirection.permanent? ? :moved_permanently : :found
+    if @redirection.external?
+      redirect_to @redirection.destination_url, status: status
+    else
+      redirect_to page_path(@redirection.destination_page, request.query_parameters), status: status
+    end
   end
 
   private

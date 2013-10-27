@@ -14,15 +14,15 @@ class @Editor.Controls.Link extends @Editor.Controls.FontControl
       $modal = $modalContainer.find('.modal')
       $modal.modal('show')
 
-      $form = $modal.find('.modal-content form')
-      $form.submit (event) =>
-        event.preventDefault()
-        formData = $form.serializeArray()
+      #$form = $modal.find('.modal-content form')
+      #$form.submit (event) =>
+      #  event.preventDefault()
+      #  formData = $form.serializeArray()
+      #  console.log form
+      #  @editor.restoreSelection()
 
-        @editor.restoreSelection()
-        document.execCommand('createlink', false, formData[2].value)
- 
-        $modal.modal('hide')
+      # document.execCommand('createlink', false, formData[2].value)
+      # $modal.modal('hide')
 
       #$modalContainer.on 'hidden.bs.modal', ->
       #  $modal.modal('remove')
