@@ -1,0 +1,5 @@
+- content_for :title do
+  = translate('helpers.titles.new', model: Editor::Link.model_name.human)
+
+- content_for :body_content do
+  = render 'form'

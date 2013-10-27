@@ -6,6 +6,7 @@ de:
     titles:
       new: '%{model} erstellen'
       edit: '%{model} bearbeiten'
+      insert: '%{model} einfügen'
     links:
       new: '%{model} erstellen'
       upload: '%{model} hochladen'
@@ -19,6 +20,8 @@ de:
       add: Hinzufügen
       move_up: Nach oben
       move_down: Nach unten
+      close: Schließen
+      apply: Anwenden
     confirm:
       destroy: 'Möchten Sie diese(s) %{model} wirklich entfernen?'
       destroy_selected: 'Möchten Sie die ausgewählten %{model} wirklich entfernen?'

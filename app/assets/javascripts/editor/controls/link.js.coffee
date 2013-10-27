@@ -6,17 +6,32 @@ class @Editor.Controls.Link extends @Editor.Controls.FontControl
     super
 
   execCommand: ->
-    # Open Modal, then execute callback
-
+    console.log 'execCommand link'
     @editor.storeSelection()
 
-    console.log selection
+    $modalContainer = @findOrCreateModalContainer()
+    $modalContainer.load '/admin/editor/link', =>
+      $modal = $modalContainer.find('.modal')
+      $modal.modal('show')
 
-    #alert 'Open Modal'
+      $form = $modal.find('.modal-content form')
+      $form.submit (event) =>
+        event.preventDefault()
+        formData = $form.serializeArray()
 
-  initModal: ->
-    # Load Modal via AJAX
-    # Display modal via: $('#myModal').modal('show')
-    # Restore Selection on: $(document).on 'hidden.bs.modal'
+        @editor.restoreSelection()
+        document.execCommand('createlink', false, formData[2].value)
+ 
+        $modal.modal('hide')
+
+      #$modalContainer.on 'hidden.bs.modal', ->
+      #  $modal.modal('remove')
+
+  findOrCreateModalContainer: ->
+    $modalContainer = $('#editor_modal_container')
+    if $modalContainer.length == 0
+      $modalContainer = $('<div />', id: 'editor_modal_container')
+      $modalContainer.appendTo('body')
+    $modalContainer
 
 @Editor.Controls.register('link', @Editor.Controls.Link)

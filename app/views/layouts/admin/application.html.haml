@@ -46,7 +46,8 @@
         
     .container
       = render 'breadcrumbs'
-      #page_content= yield
+      #page_content
+        = yield
 
       - if false && Rails.env.development?
         #debug.well.well-condensed

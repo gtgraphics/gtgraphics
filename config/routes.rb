@@ -6,6 +6,10 @@ GtGraphics::Application.routes.draw do
         get :translation_fields, on: :collection
       end
 
+      namespace :editor do
+        resource :link, only: [:show, :update]
+      end
+
       resources :galleries, only: [] do
         get :translation_fields, on: :collection
       end

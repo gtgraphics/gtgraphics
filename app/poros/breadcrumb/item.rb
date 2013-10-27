@@ -5,8 +5,9 @@ class Breadcrumb::Item
   private :collection
 
   def initialize(collection, caption, destination)
-    raise ArgumentError, 'no breadcrumb collection specified' if collection.nil?
-    #raise ArgumentError, 'caption is blank' if caption.blank?
+    unless collection.is_a? Breadcrumb::Collection
+      raise ArgumentError, 'no breadcrumb collection specified'
+    end
     raise ArgumentError, 'no destination specified' if destination.nil?
 
     @collection = collection
