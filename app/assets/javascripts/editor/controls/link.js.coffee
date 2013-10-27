@@ -6,32 +6,48 @@ class @Editor.Controls.Link extends @Editor.Controls.FontControl
     super
 
   execCommand: ->
-    console.log 'execCommand link'
     @editor.storeSelection()
 
     $modalContainer = @findOrCreateModalContainer()
-    $modalContainer.load '/admin/editor/link', =>
+
+    jQuery.ajax
+      url: '/admin/editor/link'
+      data: { target: @editor.input.attr('id') }
+      dataType: 'html'
+      success: (html) =>
+        $modalContainer.html(html)
+        $modal = $modalContainer.find('.modal')
+        $modal.data('owner', @)
+        @editor.currentModal = $modal
+        $modal.modal('show')
+
+      #$modalContainer.on 'hide.bs.modal', =>
+        #@editor.restoreSelection()
+
+    $modalContainer.on 'hidden.bs.modal', =>
       $modal = $modalContainer.find('.modal')
-      $modal.modal('show')
+      $modal.remove()
+      @editor.currentModal = null
 
-      #$form = $modal.find('.modal-content form')
-      #$form.submit (event) =>
-      #  event.preventDefault()
-      #  formData = $form.serializeArray()
-      #  console.log form
-      #  @editor.restoreSelection()
+  execCommandSuccess: (record) ->
+    @editor.restoreSelection()
+    @editor.region.focus()
 
-      # document.execCommand('createlink', false, formData[2].value)
-      # $modal.modal('hide')
+    $modalContainer = @findOrCreateModalContainer()
+    $modal = $modalContainer.find('.modal')
+    $modal.modal('hide')
 
-      #$modalContainer.on 'hidden.bs.modal', ->
-      #  $modal.modal('remove')
+  execCommandError: ->
+    
 
+  execCommandComplete: ->
+    
   findOrCreateModalContainer: ->
     $modalContainer = $('#editor_modal_container')
     if $modalContainer.length == 0
       $modalContainer = $('<div />', id: 'editor_modal_container')
       $modalContainer.appendTo('body')
     $modalContainer
+
 
 @Editor.Controls.register('link', @Editor.Controls.Link)

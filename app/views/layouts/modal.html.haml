@@ -4,7 +4,7 @@
   
       - if content_for? :title
         .modal-header
-          = button_tag icon(:times), type: 'button', class: 'close', data: { dismiss: 'modal' }, aria: { hidden: true }
+          = button_tag icon(:times), type: 'button', class: 'close', data: { dismiss: 'modal' }, 'aria-hidden' => true
           %h4.modal-title
             = yield :title
   

@@ -6,6 +6,20 @@ de:
     content: Inhalt
     description: Beschreibung
 
+  activemodel:
+    attributes:
+      editor/link:
+        caption: Beschriftung
+        url: URL
+        page_id: Seite
+        new_window: Neues Fenster?
+        external: Externer Link
+        internal: Interner Link
+    models:
+      editor/link:
+        one: Hyperlink
+        other: Hyperlinks
+
   activerecord:
     attributes:
       album:
