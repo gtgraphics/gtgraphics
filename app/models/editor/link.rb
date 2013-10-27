@@ -1,8 +1,10 @@
 class Editor::Link
   include ActiveModel::Model
+  include Virtus.model
 
-  attr_accessor :page, :url, :new_window
-  alias_method :new_window?, :new_window
+  attribute :page_id, Integer
+  attribute :url, String
+  attribute :new_window, Boolean
 
   validates :url, presence: true, url: true
 end

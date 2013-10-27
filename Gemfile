@@ -22,6 +22,7 @@ gem 'annotate'
 gem 'paperclip'
 gem 'validate_url'
 gem 'globalize', github: 'globalize/globalize'#, branch: 'rails4'
+gem 'virtus'
 
 # Views
 gem 'haml-rails'
