@@ -29,4 +29,9 @@ class Editor::Link
   def page
     @page ||= Page.find(page_id)
   end
+
+  def page=(page)
+    self.page_id = page.id
+    @page = page
+  end
 end

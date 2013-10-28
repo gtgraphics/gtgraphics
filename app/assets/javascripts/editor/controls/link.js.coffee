@@ -11,9 +11,18 @@ class @Editor.Controls.Link extends @Editor.Controls.AsyncFontControl
 
     $modalContainer = @findOrCreateModalContainer()
 
+    $anchor = @editor.getSelectedNode()
+    target = @editor.input.attr('id')
+    if $anchor.is('a[href]')
+      caption = $anchor.text()
+      url = $anchor.attr('href')
+      newWindow = $anchor.attr('target') == '_blank'
+    else
+      caption = selection.toString()
+
     jQuery.ajax
       url: '/admin/editor/link'
-      data: { target: @editor.input.attr('id'), caption: selection.toString() }
+      data: { target: target, caption: caption, url: url, new_window: newWindow }
       dataType: 'html'
       success: (html) =>
         $modalContainer.html(html)
@@ -27,22 +36,32 @@ class @Editor.Controls.Link extends @Editor.Controls.AsyncFontControl
       $modal.remove()
       @editor.currentModal = null
 
-  execCommandSuccess: (record) ->
+  execCommandSuccess: (html) ->
     $modalContainer = @findOrCreateModalContainer()
-    $modal = $modalContainer.find('.modal')
-    $modal.modal('hide')
+    $modalContainer.find('.modal').modal('hide')
 
     @editor.restoreSelection()
-    selection = @editor.getSelection()
+    @editor.storeSelection()
+    $anchor = @editor.getSelectedNode()
+    if $anchor.is('a[href]')
+      $anchor.replaceWith(html)
+    else
+      @editor.pasteHtml(html)
+    @editor.restoreSelection()
     
-    target = '_blank' if record.new_window
-    $link = $('<a />', href: record.url, target: target).text(record.caption)
-    @editor.pasteHtml($link)
-
   execCommandInvalid: ->
 
   execCommandComplete: ->
     
+  queryActive: ->
+    @editor.getSelectedNode().is('a[href]')
+
+  queryEnabled: ->
+    @editor.viewMode == 'editor'
+
+  querySupported: ->
+    true
+
   findOrCreateModalContainer: ->
     $modalContainer = $('#editor_modal_container')
     if $modalContainer.length == 0

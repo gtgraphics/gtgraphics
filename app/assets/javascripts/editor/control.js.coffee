@@ -31,7 +31,8 @@ class @Editor.Controls.Base
     @createButton()
 
   createButton: ->
-    $('<button />', type: 'button', class: 'btn btn-default btn-mini', tabindex: '-1')
+    $button = $('<button />', type: 'button', class: 'btn btn-default btn-mini', tabindex: '-1')
+    $button
 
   execCommand: ->
     console.log.warn 'no action has been implemented'

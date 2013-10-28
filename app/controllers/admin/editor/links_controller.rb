@@ -1,7 +1,10 @@
 class Admin::Editor::LinksController < Admin::Editor::ApplicationController
   def show
     @editor_link = ::Editor::Link.new(target: params.fetch(:target))
-    @editor_link.caption = params[:caption]
+    @editor_link.attributes = params.slice(:caption, :url, :new_window)
+    if page = Page.find_by(path: params[:url].to_s[1..-1])
+      @editor_link.page = page
+    end
     respond_to do |format|
       format.html
     end

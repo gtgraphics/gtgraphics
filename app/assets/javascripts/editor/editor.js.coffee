@@ -184,6 +184,17 @@ class @Editor
       @setSelection(@storedSelection)
       @storedSelection = null
 
+  getSelectedNode: ->
+    if window.getSelection
+      selection = window.getSelection()
+    else if document.selection
+      selection = document.selection
+    #console.log selection
+    if selection and selection.anchorNode
+      $(selection.anchorNode.parentNode)
+    else
+      $()
+
   getSelection: ->
     if window.getSelection
       selection = window.getSelection()
@@ -203,6 +214,7 @@ class @Editor
 
   # http://stackoverflow.com/questions/6690752/insert-html-at-caret-in-a-contenteditable-div
   pasteHtml: (html) ->
+    html = $(html) if html instanceof String
     html = html.get(0).outerHTML if html instanceof jQuery
 
     if window.getSelection
@@ -232,7 +244,7 @@ class @Editor
           sel.removeAllRanges()
           sel.addRange(range)
 
-      @region.trigger('paste')
+        @region.trigger('paste')
 
     # IE < 9
     else if document.selection and document.selection.type isnt "Control"

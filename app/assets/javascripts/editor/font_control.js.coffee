@@ -4,6 +4,8 @@ class @Editor.Controls.FontControl extends @Editor.Controls.RichTextControl
     $button.attr('title', I18n.translate("editor.#{@caption}"))
     $button.html($('<i />', class: "fa fa-#{@icon}"))
     $button.tooltip(placement: 'top', container: 'body')
+    $button.click ->
+      $button.tooltip('hide')
     $button
 
   execCommand: ->
