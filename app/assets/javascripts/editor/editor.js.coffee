@@ -114,7 +114,7 @@ class @Editor
       @region.html(@input.val())
       true
 
-    # Do not follow links when clicked in editor mode
+    # Prevent links from being followed in editor mode
     @region.on 'click', 'a', (event) =>
       if @viewMode == 'editor'
         event.preventDefault()
@@ -232,8 +232,12 @@ class @Editor
           sel.removeAllRanges()
           sel.addRange(range)
 
+      @region.trigger('paste')
+
     # IE < 9
     else if document.selection and document.selection.type isnt "Control"
       document.selection.createRange().pasteHTML(html)
+      @region.trigger('paste')
+
 
 Editor.controls = {}
