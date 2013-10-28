@@ -16,6 +16,7 @@ de:
       ordered_list: Geordnete Liste
       unordered_list: Ungeordnete Liste
       link: Verknüpfung
+      unlink: Verknüpfung entfernen
       view_modes:
         editor: Editor
         preview: Vorschau

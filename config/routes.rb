@@ -64,14 +64,25 @@ GtGraphics::Application.routes.draw do
       end
     end
 
-    # TODO: ID-based URLs for Pages
-    #get '/:id', constraints: Routing::PermalinkConstraint.new, to: redirect { |params, request|
-    #  page = Page.find(params[:id])
-    #  page_path(page)
-    #}
-
     root 'homepage#show'
   end
+
+  scope '/', constraints: { id: /.*/ } do
+    with_options path: '/', only: :show do |route|
+      route.resources :contents, constraints: Routing::PageConstraint.new('Content')
+      route.resources :galleries, constraints: Routing::PageConstraint.new('Gallery')
+      route.resources :images, constraints: Routing::PageConstraint.new('Image') do
+        get :download, on: :member
+      end
+      route.resources :redirections, constraints: Routing::PageConstraint.new('Redirection')
+    end
+  end
+
+  # TODO: ID-based URLs for Pages
+  #get '/:id', constraints: Routing::PermalinkConstraint.new, to: redirect { |params, request|
+  #  page = Page.find(params[:id])
+  #  page_path(page)
+  #}
 
   # Legacy URLs that have changed permanently (HTTP 301)
   get '/category/:types/:page', to: redirect { |params, request|

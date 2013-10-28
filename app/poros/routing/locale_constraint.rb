@@ -5,6 +5,6 @@ class Routing::LocaleConstraint
 
   def matches?(request)
     locale = request.params[:locale]
-    locale.nil? or @available_locales.include?(locale)
+    locale.blank? or @available_locales.include?(locale)
   end
 end

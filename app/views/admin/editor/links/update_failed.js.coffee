@@ -7,5 +7,5 @@ $fields = modal.find('.editor-fields')
 $fields.html($("<%= j render('update_failed') %>"))
 
 # Trigger Control Callbacks
-control.execCommandError()
+control.execCommandInvalid()
 control.execCommandComplete()

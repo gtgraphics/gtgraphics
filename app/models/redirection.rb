@@ -40,6 +40,12 @@ class Redirection < ActiveRecord::Base
     !external?
   end
 
+  alias_method :internal, :internal?
+
+  def internal=(internal)
+    self.external = !internal
+  end
+
   private
   def clear_obsolete_destination_attribute
     if external?

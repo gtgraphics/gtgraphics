@@ -5,7 +5,7 @@ class @Editor
       ['bold', 'italic', 'underline', 'strikethrough'],
       ['align_left', 'align_center', 'align_right', 'align_justify'],
       ['ordered_list', 'unordered_list'],
-      'link',
+      ['link', 'unlink'],
       'view_mode'
     ]
   }
@@ -44,7 +44,7 @@ class @Editor
 
   createEditableRegion: ->
     inputId = @input.attr('id')
-    @region = $('<div />', contenteditable: true, class: 'editor-region')
+    @region = $('<div />', contenteditable: true, designmode: 'on', class: 'editor-region')
     @region.attr('data-target', "##{inputId}") if inputId
     @region.html(@input.val())
     @region.attr('spellcheck', false)
@@ -114,6 +114,11 @@ class @Editor
       @region.html(@input.val())
       true
 
+    # Do not follow links when clicked in editor mode
+    @region.on 'click', 'a', (event) =>
+      if @viewMode == 'editor'
+        event.preventDefault()
+
   setChanged: ->
     @changed = true
     @region.addClass('changed')
@@ -182,22 +187,53 @@ class @Editor
   getSelection: ->
     if window.getSelection
       selection = window.getSelection()
-      if selection.getRangeAt and selection.rangeCount
-        ranges = []
-        for index in [0...selection.rangeCount]
-          ranges.push(selection.getRangeAt(index))
-        return ranges
-    else if document.selection and document.selection.createRange
-      return document.selection.createRange()
+      return selection.getRangeAt(0) if selection.getRangeAt
+    else if document.selection
+      selection = document.selection
+      return selection.createRange()
     null
 
   setSelection: (storedSelection) ->
     if window.getSelection
       selection = window.getSelection()
       selection.removeAllRanges()
-      for index in [0..storedSelection.length]
-        selection.addRange(storedSelection[index])
+      selection.addRange(storedSelection)
     else if document.selection and storedSelection.select
       storedSelection.select()
+
+  # http://stackoverflow.com/questions/6690752/insert-html-at-caret-in-a-contenteditable-div
+  pasteHtml: (html) ->
+    html = html.get(0).outerHTML if html instanceof jQuery
+
+    if window.getSelection
+      # IE9 and non-IE
+      sel = window.getSelection()
+      if sel.getRangeAt and sel.rangeCount
+        range = sel.getRangeAt(0)
+        range.deleteContents()
+        
+        # Range.createContextualFragment() would be useful here but is
+        # only relatively recently standardized and is not supported in
+        # some browsers (IE9, for one)
+        el = document.createElement("div")
+        el.innerHTML = html
+        frag = document.createDocumentFragment()
+        node = undefined
+        lastNode = undefined
+        while (node = el.firstChild)
+          lastNode = frag.appendChild(node) 
+        range.insertNode(frag)
+        
+        # Preserve the selection
+        if lastNode
+          range = range.cloneRange()
+          range.setStartAfter(lastNode)
+          range.collapse true
+          sel.removeAllRanges()
+          sel.addRange(range)
+
+    # IE < 9
+    else if document.selection and document.selection.type isnt "Control"
+      document.selection.createRange().pasteHTML(html)
 
 Editor.controls = {}
