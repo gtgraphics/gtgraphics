@@ -73,6 +73,7 @@ class @Editor.Controls.ViewMode extends @Editor.Controls.ControlGroup
   applyControlEvents: ($button) ->
     $button.click (event) =>
       event.preventDefault()
-      @editor.changeViewMode($button.data('viewMode'), true)
+      viewMode = $button.data('viewMode')
+      @editor.changeViewMode(viewMode, true)
 
 @Editor.Controls.register('view_mode', @Editor.Controls.ViewMode)
