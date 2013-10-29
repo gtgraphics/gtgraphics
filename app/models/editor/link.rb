@@ -1,17 +1,13 @@
 class Editor::Link
   include ActiveModel::Model
   include Virtus.model
-  include ActiveRecord::Callbacks
-
-  attr_accessor :target
 
   attribute :caption, String
   attribute :external, Boolean, default: false
   attribute :page_id, Integer
   attribute :url, String
-  attribute :new_window, Boolean
+  attribute :target, String
 
-  validates :target, presence: true
   validates :caption, presence: true
   validates :url, presence: true, if: :external?
   validates :page_id, presence: true, if: :internal?
@@ -33,5 +29,10 @@ class Editor::Link
   def page=(page)
     self.page_id = page.id
     @page = page
+  end
+
+  def to_html(template)
+    href = internal? ? template.page_path(page) : url
+    template.content_tag(:a, caption, href: href, target: target).html_safe
   end
 end

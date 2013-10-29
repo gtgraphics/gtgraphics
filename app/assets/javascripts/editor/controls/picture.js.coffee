@@ -1,6 +1,7 @@
-class @Editor.Controls.Link extends @Editor.Controls.AsyncFontControl
+class @Editor.Controls.Picture extends @Editor.Controls.AsyncFontControl
   constructor: ->
-    @caption = @icon = 'link'
+    @caption = 'picture'
+    @icon = 'picture-o'
     super
 
   execCommand: ->
@@ -66,4 +67,4 @@ class @Editor.Controls.Link extends @Editor.Controls.AsyncFontControl
     $modalContainer
 
 
-@Editor.Controls.register('link', @Editor.Controls.Link)
+@Editor.Controls.register('picture', @Editor.Controls.Picture)

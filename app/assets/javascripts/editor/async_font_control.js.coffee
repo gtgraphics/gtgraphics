@@ -7,10 +7,6 @@ class @Editor.Controls.AsyncFontControl extends @Editor.Controls.RichTextControl
     $button
 
   execCommand: ->
-    
 
-  execCommandSuccess: (record) ->
-    document.execCommand(@command, false, null)
-
-  execCommandInvalid: ->
-
+  execCommandCallback: (html) ->
+    console.warn 'no callback defined yet'

@@ -12,7 +12,7 @@ de:
         caption: Beschriftung
         url: URL
         page_id: Seite
-        new_window: Neues Fenster?
+        target: Ziel
         external: Externer Link
         internal: Interner Link
     models:

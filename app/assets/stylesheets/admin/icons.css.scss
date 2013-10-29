@@ -7,7 +7,7 @@
 }
 
 .prepend-icon {
-  i + .caption {
+  i.fa + .caption {
     margin-left: 5px;
   }
 }
@@ -20,13 +20,13 @@
 
 .btn-mini {
   .append-icon {
-    .caption + i {
+    .caption + i.fa {
       margin-left: 3px;
     }
   }
 
   .prepend-icon {
-    i + .caption {
+    i.fa + .caption {
       margin-left: 3px;
     }
   }
@@ -34,16 +34,22 @@
 
 .btn-large {
   .append-icon {
-    .caption + i {
+    .caption + i.fa {
       margin-left: 6px;
     }
   }
 
   .prepend-icon {
-    i + .caption {
+    i.fa + .caption {
       margin-left: 6px;
     }
   }
+}
+
+.dropdown-menu .fa {
+  width: 16px;
+  margin-right: 2px;
+  text-align: center;
 }
 
 /*
