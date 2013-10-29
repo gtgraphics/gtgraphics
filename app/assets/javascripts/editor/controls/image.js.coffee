@@ -1,6 +1,6 @@
-class @Editor.Controls.Picture extends @Editor.Controls.AsyncFontControl
+class @Editor.Controls.Image extends @Editor.Controls.AsyncFontControl
   constructor: ->
-    @caption = 'picture'
+    @caption = 'image'
     @icon = 'picture-o'
     super
 
@@ -14,17 +14,15 @@ class @Editor.Controls.Picture extends @Editor.Controls.AsyncFontControl
     $modalContainer = @findOrCreateModalContainer()
 
     $anchor = @editor.getSelectedNode()
-    target = @editor.input.attr('id')
-    if $anchor.is('a[href]')
-      caption = $anchor.text()
-      url = $anchor.attr('href')
-      target = $anchor.attr('target')
+    if $anchor.is('img')
+      url = $anchor.attr('src')
+      alternativeText = $anchor.attr('alt')
     else
-      caption = selection.toString()
+      #
 
     jQuery.ajax
-      url: '/admin/editor/link'
-      data: { caption: caption, url: url, target: target }
+      url: '/admin/editor/image'
+      data: { url: url, alternative_text: alternativeText }
       dataType: 'html'
       success: (html) =>
         $modalContainer.html(html)
@@ -45,13 +43,13 @@ class @Editor.Controls.Picture extends @Editor.Controls.AsyncFontControl
     @editor.restoreSelection()
 
     $anchor = @editor.getSelectedNode()
-    if $anchor.is('a[href]')
+    if $anchor.is('img')
       $anchor.replaceWith(html)
     else
       @editor.pasteHtml(html)
 
   queryActive: ->
-    @editor.getSelectedNode().is('a[href]')
+    @editor.getSelectedNode().is('img')
 
   queryEnabled: ->
     @editor.viewMode == 'editor'
@@ -67,4 +65,4 @@ class @Editor.Controls.Picture extends @Editor.Controls.AsyncFontControl
     $modalContainer
 
 
-@Editor.Controls.register('picture', @Editor.Controls.Picture)
+@Editor.Controls.register('image', @Editor.Controls.Image)

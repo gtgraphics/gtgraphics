@@ -7,6 +7,7 @@ class Editor::Link
   attribute :page_id, Integer
   attribute :url, String
   attribute :target, String
+  attribute :editing, Boolean, default: false
 
   validates :caption, presence: true
   validates :url, presence: true, if: :external?

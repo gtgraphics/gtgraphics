@@ -1,0 +1,4 @@
+- output = nil
+- simple_form_for [:admin, @editor_image], url: '', method: :patch, remote: true, html: { class: 'form-horizontal' } do |form|
+  - output = render 'fields', fields: form
+= output

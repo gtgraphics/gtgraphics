@@ -6,7 +6,7 @@ class @Editor
       ['align_left', 'align_center', 'align_right', 'align_justify'],
       ['ordered_list', 'unordered_list'],
       ['link', 'unlink'],
-      'picture',
+      'image',
       'view_mode'
     ]
   }

@@ -13,7 +13,6 @@ class @Editor.Controls.Link extends @Editor.Controls.AsyncFontControl
     $modalContainer = @findOrCreateModalContainer()
 
     $anchor = @editor.getSelectedNode()
-    target = @editor.input.attr('id')
     if $anchor.is('a[href]')
       caption = $anchor.text()
       url = $anchor.attr('href')

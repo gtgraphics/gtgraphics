@@ -8,6 +8,7 @@ GtGraphics::Application.routes.draw do
 
       namespace :editor do
         resource :link, only: [:show, :update]
+        resource :image, only: [:show, :update]
       end
 
       resources :galleries, only: [] do

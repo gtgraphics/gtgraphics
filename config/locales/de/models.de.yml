@@ -15,10 +15,19 @@ de:
         target: Ziel
         external: Externer Link
         internal: Interner Link
+      editor/image:
+        url: URL
+        image_id: Bild
+        alternative_text: Alternativtext
+        external: Externes Bild
+        internal: Internes Bild
     models:
       editor/link:
         one: Hyperlink
         other: Hyperlinks
+      editor/image:
+        one: Bild
+        other: Bilder
 
   activerecord:
     attributes:

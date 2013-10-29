@@ -1,0 +1,4 @@
+= fields.input :external, collection: [[Editor::Image.human_attribute_name(:internal), false], [Editor::Image.human_attribute_name(:external), true]], as: :radio_buttons, label: false, container_html: { class: 'col-lg-offset-3 col-lg-9' }
+= fields.input :image_id, collection: Image.all, required: true, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
+= fields.input :url, required: true, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
+= fields.input :alternative_text, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
