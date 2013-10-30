@@ -14,12 +14,12 @@ class @Editor.Controls.ViewMode extends @Editor.Controls.ControlGroup
   createControl: ->
     $group = super
 
-    $selected = @createButton().appendTo($group)
-    $selected.addClass('selected')
-    $selected.click (event) =>
-      event.preventDefault()
-      nextViewMode = VIEW_MODE_TRANSITIONS[@editor.viewMode]
-      @editor.changeViewMode(nextViewMode, true)
+    #$selected = @createButton().appendTo($group)
+    #$selected.addClass('selected')
+    #$selected.click (event) =>
+    #  event.preventDefault()
+    #  nextViewMode = VIEW_MODE_TRANSITIONS[@editor.viewMode]
+    #  @editor.changeViewMode(nextViewMode, true)
 
     $caret = $('<button />', class: 'btn btn-default btn-mini dropdown-toggle', type: 'button', 'data-toggle': 'dropdown')
     $caret.append($('<i />', class: 'fa fa-chevron-down')).appendTo($group)

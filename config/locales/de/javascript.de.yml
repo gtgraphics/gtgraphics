@@ -18,6 +18,8 @@ de:
       link: Verknüpfung
       unlink: Verknüpfung entfernen
       image: Bild
+      indent: Einrücken
+      outdent: Ausrücken
       view_modes:
         editor: Editor
         preview: Vorschau
