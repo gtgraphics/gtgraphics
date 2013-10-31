@@ -6,6 +6,11 @@ en:
     hints:
       empty: 'No %{model} have been created yet.'
     admin:
+      editor:
+        target:
+          self: This Window
+          blank: New Window
+          top: Top Window
       loader:
         loading: Loading…
       pages:

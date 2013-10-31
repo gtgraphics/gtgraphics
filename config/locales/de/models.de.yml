@@ -12,6 +12,7 @@ de:
         caption: Beschriftung
         url: URL
         page_id: Seite
+        locale: Sprache
         target: Ziel
         external: Externer Link
         internal: Interner Link

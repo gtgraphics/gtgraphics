@@ -28,5 +28,6 @@ de:
     prompts:
       none: '– keine –'
       default: '– Standard –'
+      custom: '– Benutzerdefiniert –'
     units:
       pixels: Pixel

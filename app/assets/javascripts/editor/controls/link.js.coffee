@@ -14,15 +14,14 @@ class @Editor.Controls.Link extends @Editor.Controls.AsyncFontControl
 
     $anchor = @editor.getSelectedNode()
     if $anchor.is('a[href]')
-      caption = $anchor.text()
-      url = $anchor.attr('href')
-      target = $anchor.attr('target')
+      html = $anchor.get(0).outerHTML
     else
-      caption = selection.toString()
-
+      html = selection.toString()
+    
     jQuery.ajax
-      url: '/admin/editor/link'
-      data: { caption: caption, url: url, target: target }
+      url: "/#{I18n.locale}/admin/editor/link"
+      #data: { caption: caption, url: url, target: target }
+      data: { html: html }
       dataType: 'html'
       success: (html) =>
         $modalContainer.html(html)
@@ -35,6 +34,7 @@ class @Editor.Controls.Link extends @Editor.Controls.AsyncFontControl
       @editor.currentControl = null
       @editor.currentModal = null
       Editor.active = null
+      @editor.setChanged()
 
   execCommandCallback: (html) ->
     $modalContainer = @findOrCreateModalContainer()

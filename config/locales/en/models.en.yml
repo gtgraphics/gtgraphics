@@ -4,6 +4,30 @@ en:
     slug: Slug
     title: Title
 
+  activemodel:
+    attributes:
+      editor/link:
+        caption: Caption
+        url: URL
+        page_id: Page
+        locale: Language
+        target: Target
+        external: External Link
+        internal: Internal Link
+      editor/image:
+        url: URL
+        image_id: Image
+        alternative_text: Alternative Text
+        external: External Image
+        internal: Internal Image
+    models:
+      editor/link:
+        one: Hyperlink
+        other: Hyperlinks
+      editor/image:
+        one: Image
+        other: Images
+
   activerecord:
     attributes:
       album:

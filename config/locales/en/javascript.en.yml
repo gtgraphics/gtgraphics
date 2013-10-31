@@ -15,8 +15,14 @@ en:
       align_justify: Justify
       ordered_list: Ordered List
       unordered_list: Unordered List
+      indent: Indent
+      outdent: Outdent
       html: HTML
       link: Hyperlink
+      view_modes:
+        editor: Editor
+        preview: Preview
+        html: HTML
 
     translations:
       error: The Translation Editor could not be loaded.

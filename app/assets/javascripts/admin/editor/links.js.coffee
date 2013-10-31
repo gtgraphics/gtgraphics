@@ -1,15 +1,15 @@
 updateContainerVisibility = ($radio) ->
-  $destinationPageContainer = $('.editor_link_page_id')
+  $destinationPageContainers = $('.editor_link_page_id, .editor_link_locale')
   $destinationUrlContainer = $('.editor_link_url')
 
   checked = $radio.prop('checked')
   external = $radio.val() == 'true'
   if checked
     if external
-      $destinationPageContainer.hide()
+      $destinationPageContainers.hide()
       $destinationUrlContainer.show()
     else
-      $destinationPageContainer.show()
+      $destinationPageContainers.show()
       $destinationUrlContainer.hide()
 
 initRadios = ->

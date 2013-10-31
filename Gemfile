@@ -57,6 +57,7 @@ gem 'binding_of_caller'
 gem 'delayed_job_active_record'
 gem 'request_store'
 gem 'exifr'
+gem 'nokogiri'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

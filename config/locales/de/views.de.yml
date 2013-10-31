@@ -6,6 +6,11 @@ de:
     hints:
       empty: 'Es wurden bislang keine %{model} erstellt.'
     admin:
+      editor:
+        target:
+          self: Gleiches Fenster
+          blank: Neues Fenster
+          top: Oberstes Fenster
       loader:
         loading: Inhalt wird geladen…
       pages:
