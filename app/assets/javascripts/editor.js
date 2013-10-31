@@ -5,4 +5,5 @@
 //= require ./editor/rich_text_control
 //= require ./editor/font_control
 //= require ./editor/async_font_control
+//= require ./editor/modal_control
 //= require_tree ./editor/controls
