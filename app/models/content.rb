@@ -19,12 +19,8 @@ class Content < ActiveRecord::Base
 
   acts_as_batch_translatable
 
-  def content_html
-    template = Liquid::Template.parse(content)
+  def content_html(locale = I18n.locale)
+    template = Liquid::Template.parse(self.content(locale))
     template.render(to_liquid).html_safe
-  end
-
-  def to_liquid
-    page.attributes.slice(*%w(slug path)).merge('title' => title, 'children' => page.children)
   end
 end

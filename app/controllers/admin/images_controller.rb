@@ -17,6 +17,7 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def new
     @image = Image.new
+    @image.translations.build(locale: I18n.locale)
     respond_with :admin, @image
   end
 
@@ -45,6 +46,15 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def download
     send_file @image.asset.path, filename: @image.virtual_file_name, content_type: @image.content_type, disposition: :attachment
+  end
+
+  def translation_fields
+    translated_locale = params.fetch(:translated_locale)
+    @image = Image.new
+    @image.translations.build(locale: translated_locale)
+    respond_to do |format|
+      format.html { render layout: false }
+    end
   end
 
   private

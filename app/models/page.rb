@@ -16,6 +16,7 @@
 #  published       :boolean          default(TRUE), not null
 #  embeddable_id   :integer
 #  embeddable_type :string(255)
+#  menu_item       :boolean          default(TRUE), not null
 #
 
 class Page < ActiveRecord::Base

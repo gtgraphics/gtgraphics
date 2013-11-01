@@ -18,6 +18,7 @@ GtGraphics::Application.routes.draw do
       resources :images do
         collection do
           patch :batch, as: :batch_process
+          get :translation_fields
         end
         member do
           get :download

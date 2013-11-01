@@ -6,8 +6,6 @@
 #  destination_page_id :integer
 #  destination_url     :string(255)
 #  external            :boolean          default(FALSE), not null
-#  created_at          :datetime
-#  updated_at          :datetime
 #  permanent           :boolean          default(FALSE), not null
 #
 

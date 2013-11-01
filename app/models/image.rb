@@ -15,6 +15,7 @@
 #
 
 class Image < ActiveRecord::Base
+  include AttachmentPreservable
   include BatchTranslatable
   include Embeddable
   include Templatable
@@ -42,6 +43,7 @@ class Image < ActiveRecord::Base
   validates_attachment :asset, presence: true, content_type: { content_type: %w(image/jpeg image/pjpeg image/gif image/png) }
 
   acts_as_batch_translatable
+  preserve_attachment_between_requests_for :asset
 
   alias_attribute :file_name, :asset_file_name
   alias_attribute :content_type, :asset_content_type
@@ -52,19 +54,20 @@ class Image < ActiveRecord::Base
   end
 
   def aspect_ratio
-    dimensions.to_r
+    Rational(width, height)
   end
 
-  def dimensions
-    @dimensions ||= Image::Dimensions.new(width, height)
+  def description_html(locale = I18n.locale)
+    template = Liquid::Template.parse(self.description(locale))
+    template.render(to_liquid).html_safe
   end
 
   def human_content_type(locale = I18n.locale)
-    I18n.translate(content_type, scope: :content_types, default: content_type)
+    I18n.translate(content_type, scope: :content_types, locale: locale, default: content_type)
   end
 
   def pixels
-    dimensions.to_a.reduce(:*)
+    width * height
   end
 
   def to_s
