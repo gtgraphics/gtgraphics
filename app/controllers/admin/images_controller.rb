@@ -11,7 +11,7 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def index
-    @images = Image.order(:title)
+    @images = Image.with_translations(I18n.locale).order(Image::Translation.arel_table[:title])
     respond_with :admin, @images
   end
 
@@ -58,6 +58,10 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   private
+  def load_image
+    @image = Image.find(params[:id])
+  end
+
   def image_params
     params.require(:image).permit! # TODO
   end

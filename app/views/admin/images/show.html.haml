@@ -1,7 +1,5 @@
 = view_headline_for @image do
-  %ul.list-inline
-    %li= translation_select
-    %li= action_buttons_for @image, except: :show
+  = action_buttons_for @image, except: :show
 
 %p= link_to image_tag(@image.asset.url(:preview), class: 'img-responsive thumbnail', alt: @image.title), @image.asset.url, target: '_blank'
 
@@ -14,7 +12,7 @@
       %dt= Image.human_attribute_name(:file_size)
       %dd= number_to_human_size @image.file_size
       %dt= Image.human_attribute_name(:dimensions)
-      %dd #{@image.dimensions} #{translate('helpers.units.pixels')}
+      %dd #{@image.width} x #{@image.height} #{translate('helpers.units.pixels')}
 
   .col-lg-4.text-center
     %br
@@ -23,9 +21,9 @@
 
   .col-offset-2.col-lg-8
 
-    - @image.translations.each do |image_translation|
-      = translations_for image_translation.locale do
-        = simple_format image_translation.caption
+    /- @image.translations.each do |image_translation|
+    /  = translations_for image_translation.locale do
+    /    = simple_format image_translation.caption
 
 - if @albums and @albums.any?
   %h3= Album.model_name.human(count: 2)

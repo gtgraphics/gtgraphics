@@ -141,6 +141,6 @@ class Admin::PagesController < Admin::ApplicationController
     when 'Image' then {}
     when 'Redirection' then [:external, :destination_page_id, :destination_url, :permanent, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     end
-    page_params.permit(:embeddable_type, :slug, :parent_id, :published, :menu_item, :template_id, embeddable_attributes: embeddable_attributes_params || {}) 
+    page_params.permit(:embeddable_id, :embeddable_type, :slug, :parent_id, :published, :menu_item, :template_id, embeddable_attributes: embeddable_attributes_params || {}) 
   end
 end

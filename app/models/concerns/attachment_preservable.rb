@@ -27,7 +27,7 @@ module AttachmentPreservable
 
   module ClassMethods
     def preserved_attachment_attributes
-      @preserved_attachment_attributes ||= {}
+      @preserved_attachment_attributes ||= []
     end
 
     def preserve_attachment_between_requests_for(*attachment_methods)
@@ -39,7 +39,7 @@ module AttachmentPreservable
           attr_accessor :"temp_#{attachment_method}_#{suffix}"
         end
       end
-      self.preserve_attachments.uniq!
+      self.preserved_attachment_attributes.uniq!
     end
   end
 

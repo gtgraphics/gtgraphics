@@ -15,7 +15,7 @@
 #
 
 class Image < ActiveRecord::Base
-  include AttachmentPreservable
+  # include AttachmentPreservable
   include BatchTranslatable
   include Embeddable
   include Templatable
@@ -43,7 +43,7 @@ class Image < ActiveRecord::Base
   validates_attachment :asset, presence: true, content_type: { content_type: %w(image/jpeg image/pjpeg image/gif image/png) }
 
   acts_as_batch_translatable
-  preserve_attachment_between_requests_for :asset
+  # preserve_attachment_between_requests_for :asset
 
   alias_attribute :file_name, :asset_file_name
   alias_attribute :content_type, :asset_content_type
@@ -75,7 +75,7 @@ class Image < ActiveRecord::Base
   end
 
   def virtual_file_name
-    title.parameterize.underscore + File.extname(file_name).downcase
+    title.parameterize('_') + File.extname(file_name).downcase
   end
 
   private
