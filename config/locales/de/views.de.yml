@@ -16,5 +16,7 @@ de:
       pages:
         empty_type: Bitte wählen Sie einen Seitentyp.
       templates:
+        forms:
+          regions: Regionen
         tabs:
           all: Alle

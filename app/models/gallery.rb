@@ -9,15 +9,15 @@
 
 class Gallery < ActiveRecord::Base
   include BatchTranslatable
-  include Embeddable
+  include PageEmbeddable
   include Templatable
 
-  self.bound_to_page = true
   self.template_type = 'Template::Gallery'.freeze
 
   translates :title, :description, fallbacks_for_empty_translations: true
 
   acts_as_batch_translatable
+  acts_as_page_embeddable destroy_with_page: true
 
   def description_html
     template = Liquid::Template.parse(description)

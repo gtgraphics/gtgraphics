@@ -86,6 +86,25 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def embeddable_fields
+    @page = Page.new(embeddable_type: params.fetch(:embeddable_type), embeddable_id: params[:embeddable_id])
+    respond_to do |format|
+      format.html do
+        if @page.embeddable_class
+          if @page.embeddable.nil?
+            @page.embeddable = @page.embeddable_class.new
+            if @page.embeddable.class.reflect_on_association(:translations)
+              @page.embeddable.translations.build(locale: I18n.locale)
+            end
+          end
+          render layout: false
+        else
+          head :not_found
+        end
+      end
+    end
+  end
+
+  def embeddable_settings
     @page = Page.new(embeddable_type: params.fetch(:embeddable_type))
     respond_to do |format|
       format.html do
@@ -136,10 +155,10 @@ class Admin::PagesController < Admin::ApplicationController
   def page_params
     page_params = params.require(:page)
     embeddable_attributes_params = case page_params[:embeddable_type]
-    when 'Content' then { translations_attributes: [:_destroy, :id, :locale, :title, :content] }
-    when 'Gallery' then { translations_attributes: [:_destroy, :id, :locale, :title, :description] }
-    when 'Image' then {}
-    when 'Redirection' then [:external, :destination_page_id, :destination_url, :permanent, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
+    when 'Content' then [:id, { translations_attributes: [:_destroy, :id, :locale, :title, :content] }]
+    when 'Gallery' then [:id, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
+    when 'Image' then [:id, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
+    when 'Redirection' then [:id, :external, :destination_page_id, :destination_url, :permanent, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     end
     page_params.permit(:embeddable_id, :embeddable_type, :slug, :parent_id, :published, :menu_item, :template_id, embeddable_attributes: embeddable_attributes_params || {}) 
   end

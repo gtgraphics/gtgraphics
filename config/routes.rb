@@ -29,6 +29,7 @@ GtGraphics::Application.routes.draw do
         collection do
           get :preview_path
           get :embeddable_fields
+          get :embeddable_settings
           get :translation_fields
         end
         member do

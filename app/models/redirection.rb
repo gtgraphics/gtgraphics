@@ -11,9 +11,7 @@
 
 class Redirection < ActiveRecord::Base
   include BatchTranslatable
-  include Embeddable
-
-  self.bound_to_page = true
+  include PageEmbeddable
 
   belongs_to :destination_page, class_name: 'Page'
 
@@ -25,6 +23,7 @@ class Redirection < ActiveRecord::Base
   before_validation :clear_obsolete_destination_attribute
 
   acts_as_batch_translatable
+  acts_as_page_embeddable destroy_with_page: true
 
   def destination
     if external?

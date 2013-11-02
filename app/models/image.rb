@@ -17,7 +17,7 @@
 class Image < ActiveRecord::Base
   # include AttachmentPreservable
   include BatchTranslatable
-  include Embeddable
+  include PageEmbeddable
   include Templatable
 
   STYLES = {
@@ -33,6 +33,10 @@ class Image < ActiveRecord::Base
 
   has_attached_file :asset, styles: STYLES
 
+  acts_as_batch_translatable
+  acts_as_page_embeddable multiple: true, destroy_with_page: false
+  # preserve_attachment_between_requests_for :asset
+
   serialize :exif_data, OpenStruct
 
   before_validation :set_title
@@ -41,9 +45,6 @@ class Image < ActiveRecord::Base
 
   validates :title, presence: true, uniqueness: true
   validates_attachment :asset, presence: true, content_type: { content_type: %w(image/jpeg image/pjpeg image/gif image/png) }
-
-  acts_as_batch_translatable
-  # preserve_attachment_between_requests_for :asset
 
   alias_attribute :file_name, :asset_file_name
   alias_attribute :content_type, :asset_content_type

@@ -22,34 +22,55 @@ prepareEmbeddableContainer = ($embeddableContainer) ->
   $embeddableContainer.find('.editor').editor()
   $embeddableContainer.find("[data-toggle=tooltip], a[rel=tooltip]").tooltip()
 
-loadEmbeddableEditor = ($embeddableContainer, $embeddableType) ->
+loadEmbeddableSettings = ($embeddableFields, $embeddableSettings, $pageSettings) ->
+  $embeddableType = $pageSettings.find('#page_embeddable_type')
   embeddableType = $embeddableType.val()
-  $empty = $('#page_embeddable_container_empty')
-  $embeddableContainer.trigger('loading.embeddable')
+
   if embeddableType is ''
-    $empty.show()
-    $embeddableContainer.empty()
-    $embeddableContainer.trigger('loaded.embeddable')
+    $embeddableSettings.empty()
   else
-    $empty.hide()
-    $embeddableContainer.hide()
-    $loader = $('#page_embeddable_container_loader').show()
     jQuery.ajax
-      url: '/admin/pages/embeddable_fields'
+      url: '/admin/pages/embeddable_settings'
       data: { embeddable_type: embeddableType }
       dataType: 'html'
       success: (html) ->
-        $embeddableContainer.html(html).show()
-        prepareEmbeddableContainer($embeddableContainer)
+        $embeddableSettings.html(html).show()
+      error: ->
+        $embeddableType.val('').change()
+
+loadEmbeddableEditor = ($embeddableFields, $embeddableSettings, $pageSettings) ->
+  $embeddableType = $pageSettings.find('#page_embeddable_type')
+  $embeddableId = $embeddableSettings.find('#page_embeddable_id')
+
+  embeddableType = $embeddableType.val()
+  embeddableId = $embeddableId.val()
+
+  $empty = $('#page_embeddable_fields_empty')
+  $embeddableFields.trigger('loading.embeddable')
+  if embeddableType is ''
+    $empty.show()
+    $embeddableFields.empty()
+    $embeddableFields.trigger('loaded.embeddable')
+  else
+    $empty.hide()
+    $embeddableFields.hide()
+    $loader = $('#page_embeddable_fields_loader').show()
+
+    jQuery.ajax
+      url: '/admin/pages/embeddable_fields'
+      data: { embeddable_type: embeddableType, embeddable_id: embeddableId }
+      dataType: 'html'
+      success: (html) ->
+        $embeddableFields.html(html).show()
+        prepareEmbeddableContainer($embeddableFields)
         $loader.hide()
       error: ->
-        $embeddableContainer.show()
+        $embeddableFields.show()
         $embeddableType.val('').change()
         $loader.hide()
         alert(I18n.translate('pages.embeddable.error'))
       complete: ->
-        $embeddableContainer.trigger('loaded.embeddable')
-
+        $embeddableFields.trigger('loaded.embeddable')
 
 $(document).ready ->
   timeout = null
@@ -73,13 +94,21 @@ $(document).ready ->
     previewPath($slug, $(@))
 
   # Load Embeddable Editor
-  $embeddableType = $('#page_embeddable_type')
-  $embeddableContainer = $('#page_embeddable_container')
+  #$embeddableType = $('#page_embeddable_type')
+  $pageSettings = $('#page_settings')
+  $embeddableSettings = $('#page_embeddable_settings')
+  $embeddableFields = $('#page_embeddable_fields')
 
-  if $embeddableContainer.length > 0
+  if $embeddableFields.length > 0
 
-    if jQuery.trim($embeddableContainer.html()) is ''
-      loadEmbeddableEditor($embeddableContainer, $embeddableType) 
+    if jQuery.trim($embeddableFields.html()) is ''
+      loadEmbeddableEditor($embeddableFields, $embeddableSettings, $pageSettings) 
 
-    $embeddableType.change ->
-      loadEmbeddableEditor($embeddableContainer, $embeddableType)
+  $('#page_settings')
+  
+    .on 'change', '#page_embeddable_type', ->
+      loadEmbeddableEditor($embeddableFields, $embeddableSettings, $pageSettings)    
+      loadEmbeddableSettings($embeddableFields, $embeddableSettings, $pageSettings)
+
+    .on 'change', '#page_embeddable_id', ->
+      loadEmbeddableEditor($embeddableFields, $embeddableSettings, $pageSettings)
