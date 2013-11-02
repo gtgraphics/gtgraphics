@@ -1,6 +1,7 @@
-- unless @page.embeddable_class.bound_to_page?
-  = fields.input :embeddable_id, collection: @page.embeddable_class.all, label: @page.embeddable_class.model_name.human, include_blank: translate('helpers.prompts.create'), label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
+- if @page.embeddable_class
+  - unless @page.embeddable_class.bound_to_page?
+    = fields.input :embeddable_id, collection: @page.embeddable_class.all, label: @page.embeddable_class.model_name.human, include_blank: translate('helpers.prompts.create'), label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
 
-- begin
-  = render "admin/#{@page.embeddable_class.model_name.plural}/settings", fields: fields
-- rescue ActionView::MissingTemplate
+  - begin
+    = render "admin/#{@page.embeddable_class.model_name.plural}/settings", fields: fields
+  - rescue ActionView::MissingTemplate

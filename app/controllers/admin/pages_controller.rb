@@ -157,7 +157,7 @@ class Admin::PagesController < Admin::ApplicationController
     embeddable_attributes_params = case page_params[:embeddable_type]
     when 'Content' then [:id, { translations_attributes: [:_destroy, :id, :locale, :title, :content] }]
     when 'Gallery' then [:id, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
-    when 'Image' then [:id, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
+    when 'Image' then [:id, :asset, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     when 'Redirection' then [:id, :external, :destination_page_id, :destination_url, :permanent, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     end
     page_params.permit(:embeddable_id, :embeddable_type, :slug, :parent_id, :published, :menu_item, :template_id, embeddable_attributes: embeddable_attributes_params || {}) 

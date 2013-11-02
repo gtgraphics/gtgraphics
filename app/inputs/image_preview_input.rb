@@ -13,9 +13,7 @@ class ImagePreviewInput < SimpleForm::Inputs::FileInput
             template.image_tag(object.send(attribute_name, version), class: 'thumbnail', style: 'margin-bottom: 10px; margin-right: 10px')
           end
         end
-        inner_html << template.content_tag(:div, style: 'margin-top: 5px') do
-          #object.dimensions.to_s
-        end
+        inner_html << template.content_tag(:div, "#{object.width} &times; #{object.height}".html_safe, style: 'margin-top: 5px')
         inner_html << template.content_tag(:div, class: 'text-muted') do
           I18n.translate(object.send("#{attribute_name}_content_type"), scope: :content_types)          
         end

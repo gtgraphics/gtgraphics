@@ -41,7 +41,7 @@ class Page < ActiveRecord::Base
   delegate :title, to: :embeddable, allow_nil: true
 
   validates :embeddable, presence: true
-  validates :embeddable_id, presence: true, unless: -> { embeddable_class and embeddable_class.bound_to_page? }
+  #validates :embeddable_id, presence: true, unless: -> { embeddable_class and embeddable_class.bound_to_page? }
   validates :embeddable_type, presence: true, inclusion: { in: EMBEDDABLE_TYPES }
   validates :slug, presence: true, uniqueness: { scope: :parent_id }, exclusion: { in: RESERVED_SLUGS, if: :root? }
   validates :path, presence: true, uniqueness: true, if: -> { slug.present? }

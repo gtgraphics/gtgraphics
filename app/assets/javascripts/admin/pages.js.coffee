@@ -21,6 +21,7 @@ prepareEmbeddableContainer = ($embeddableContainer) ->
   $embeddableContainer.translationTabs()
   $embeddableContainer.find('.editor').editor()
   $embeddableContainer.find("[data-toggle=tooltip], a[rel=tooltip]").tooltip()
+  $embeddableContainer.find(':file').fileButton()
 
 loadEmbeddableSettings = ($embeddableFields, $embeddableSettings, $pageSettings) ->
   $embeddableType = $pageSettings.find('#page_embeddable_type')

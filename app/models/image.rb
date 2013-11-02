@@ -39,7 +39,6 @@ class Image < ActiveRecord::Base
 
   serialize :exif_data, OpenStruct
 
-  before_validation :set_title
   before_save :set_dimensions, if: :asset_changed?
   before_save :set_exif_data, if: :asset_changed?
 
@@ -89,12 +88,6 @@ class Image < ActiveRecord::Base
   def set_exif_data
     if asset_content_type.in? %w(image/jpeg image/pjpeg)
       self.exif_data = OpenStruct.new(EXIFR::JPEG.new(asset.queued_for_write[:original].path).to_hash) rescue nil
-    end
-  end
-
-  def set_title
-    if asset.queued_for_write[:original] and title.blank?
-      self.title = File.basename(asset.queued_for_write[:original].original_filename, '.*').humanize
     end
   end
 end
