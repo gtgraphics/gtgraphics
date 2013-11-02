@@ -22,6 +22,7 @@ GtGraphics::Application.routes.draw do
         end
         member do
           get :download
+          get :dimensions
         end
       end
 

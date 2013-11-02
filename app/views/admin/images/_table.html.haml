@@ -30,7 +30,7 @@
         %td= link_to image.title, [:admin, @album, image].compact
         %td= image.human_content_type
         %td= number_to_human_size image.file_size
-        %td #{image.width} x #{image.height}
+        %td #{image.width} &times; #{image.height}
         - if actions
           %td.actions
             = action_buttons_for image, parent: @album, size: :mini, icon_only: true

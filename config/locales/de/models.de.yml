@@ -19,9 +19,12 @@ de:
       editor/image:
         url: URL
         image_id: Bild
+        image_style: Stil
         alternative_text: Alternativtext
         external: Externes Bild
         internal: Internes Bild
+        width: Breite
+        height: Höhe
     models:
       editor/link:
         one: Hyperlink

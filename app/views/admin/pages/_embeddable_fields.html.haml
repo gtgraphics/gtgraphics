@@ -1,11 +1,3 @@
 - if @page.embeddable_class
-
-  - if @page.embeddable_class.page_embeddable_options[:destroy_with_page]
-    = fields.simple_fields_for :embeddable do |embeddable_fields|
-      = render "admin/#{@page.embeddable_class.model_name.plural}/fields", fields: embeddable_fields
-      - if @page.template_class
-        = fields.association :template, collection: @page.template_class.with_translations, include_blank: translate('helpers.prompts.default'), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
-
-  - else
-    = fields.simple_fields_for :embeddable do |embeddable_fields|
-      = render "admin/#{@page.embeddable_class.model_name.plural}/fields", fields: embeddable_fields
+  = fields.simple_fields_for :embeddable do |embeddable_fields|
+    = render "admin/#{@page.embeddable_class.model_name.plural}/fields", fields: embeddable_fields

@@ -1,5 +1,5 @@
 - content_for :title do
-  = translate(@editor_image.editing? ? :edit : :new, scope: 'helpers.titles', model: Editor::Image.model_name.human)
+  = translate(@editor_image.persisted? ? :edit : :new, scope: 'helpers.titles', model: Editor::Image.model_name.human)
 
 - content_for :body_content do
   = simple_form_for [:admin, @editor_image], url: admin_editor_image_path, method: :patch, remote: true, html: { class: 'form-horizontal' } do |form|

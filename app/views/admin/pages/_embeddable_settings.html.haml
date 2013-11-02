@@ -5,3 +5,6 @@
   - begin
     = render "admin/#{@page.embeddable_class.model_name.plural}/settings", fields: fields
   - rescue ActionView::MissingTemplate
+
+- if @page.template_class
+  = fields.association :template, collection: @page.template_class.with_translations, include_blank: translate('helpers.prompts.default'), label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }

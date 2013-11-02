@@ -1,7 +1,7 @@
 class Admin::ImagesController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_image, only: %i(show edit update destroy download)
+  before_action :load_image, only: %i(show edit update destroy download dimensions)
 
   breadcrumbs do |b|
     b.append Image.model_name.human(count: 2), :admin_images
@@ -42,6 +42,20 @@ class Admin::ImagesController < Admin::ApplicationController
   def destroy
     @image.destroy
     respond_with :admin, @image
+  end
+
+  def dimensions
+    if style = params[:style] and Image.attachment_definitions[:asset][:styles].keys.map(&:to_s).include?(style)
+      geometry = Paperclip::Geometry.from_file(@image.asset.path(style))
+      width = geometry.width.to_i
+      height = geometry.height.to_i
+    else
+      width = @image.width
+      height = @image.height
+    end
+    respond_to do |format|
+      format.json { render json: { width: width, height: height } }
+    end
   end
 
   def download

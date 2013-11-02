@@ -20,9 +20,12 @@ class Editor::Image
 
   attribute :external, Boolean, default: false
   attribute :image_id, Integer
+  attribute :image_style, String
   attribute :url, String
   attribute :alternative_text, String
-  attribute :editing, Boolean, default: false
+  attribute :persisted, Boolean, default: false
+  attribute :width, Integer
+  attribute :height, Integer
 
   validates :url, presence: true, if: :external?
   validates :image_id, presence: true, if: :internal?
@@ -38,7 +41,7 @@ class Editor::Image
   end
 
   def image
-    @image ||= Page.find(image_id)
+    @image ||= ::Image.find(image_id)
   end
 
   def image=(image)
@@ -46,8 +49,32 @@ class Editor::Image
     @image = image
   end
 
+  def self.from_html(html)
+    fragment = Nokogiri::HTML::DocumentFragment.parse(html)
+    new.tap do |instance|
+      anchor = fragment.css('img')
+      if anchor.present? and url = anchor.attribute('src').to_s and url.present?
+        instance.persisted = true
+        route = Rails.application.routes.recognize_path(url) rescue nil
+        uri = URI.parse(url) rescue nil
+        if uri.present? and uri.relative? and route.present? and route.key?(:id)
+          if page = Page.find_by(path: route[:id])
+            instance.page = page
+            instance.locale = route[:locale] if I18n.available_locales.map(&:to_s).include?(route[:locale])
+            instance.external = false
+          end
+        else
+          instance.external = true
+          instance.url = uri.to_s
+        end
+      else
+        instance.persisted = false
+      end
+    end
+  end
+
   def to_html(template)
-    src = internal? ? template.page_path(page) : url
-    template.tag(:img, src: src, alt: alternative_text || '').html_safe
+    src = internal? ? image.asset.url(image_style) : url
+    template.tag(:img, src: src, width: width, height: height, alt: alternative_text || '', data: { image_id: image_id, image_style: image_style }).html_safe
   end
 end

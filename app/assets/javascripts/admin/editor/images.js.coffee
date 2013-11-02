@@ -1,15 +1,15 @@
 updateContainerVisibility = ($radio) ->
-  $destinationImageContainer = $('.editor_image_image_id')
+  $destinationImageContainers = $('.editor_image_image_id, .editor_image_image_style')
   $destinationUrlContainer = $('.editor_image_url')
 
   checked = $radio.prop('checked')
   external = $radio.val() == 'true'
   if checked
     if external
-      $destinationImageContainer.hide()
+      $destinationImageContainers.hide()
       $destinationUrlContainer.show()
     else
-      $destinationImageContainer.show()
+      $destinationImageContainers.show()
       $destinationUrlContainer.hide()
 
 initRadios = ->
@@ -21,3 +21,17 @@ initRadios = ->
 
 $(document).on 'show.bs.modal ajax:success', ->
   initRadios()
+
+$(document).on 'change', '#editor_image_image_id, #editor_image_image_style', ->
+  $style = $('#editor_image_image_style')
+  $image = $('#editor_image_image_id')
+  $width = $('#editor_image_width')
+  $height = $('#editor_image_height')
+
+  id = $image.val()
+  style = $style.val()
+
+  if id isnt ''
+    jQuery.getJSON "/admin/images/#{id}/dimensions.json", { style: style }, (dimensions) ->
+      $width.val(dimensions.width)
+      $height.val(dimensions.height)

@@ -70,6 +70,10 @@ class Image < ActiveRecord::Base
     width * height
   end
 
+  def to_liquid
+    {} # TODO
+  end
+
   def to_s
     title
   end
