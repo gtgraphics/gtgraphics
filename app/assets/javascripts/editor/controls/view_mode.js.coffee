@@ -8,7 +8,7 @@ class @Editor.Controls.ViewMode extends @Editor.Controls.ControlGroup
   constructor: (@editor, $controls) ->
     super
     @isRichTextControl = false
-    @editor.input.on 'viewModeChanged.editor', =>
+    @editor.region.on 'viewModeChanged.editor', =>
       @refreshState()
 
   createControl: ->

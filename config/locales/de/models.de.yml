@@ -1,6 +1,7 @@
 de:
   attributes:
     created_at: Erstellt am
+    updated_at: Aktualisierung
     slug: URL-Token
     title: Titel
     content: Inhalt
@@ -63,6 +64,7 @@ de:
         internal: Interne Umleitung
         permanent: Permanent?
         destination: Ziel
+      region_definition:
       shout:
         nickname: Verfasser
         message: Nachricht
@@ -75,6 +77,7 @@ de:
         file_name: Vorlagendatei
         type: Typ
         default: Standardvorlage?
+
     models:
       content:
         one: Inhalt
@@ -100,6 +103,9 @@ de:
       redirection:
         one: Umleitung
         other: Umleitungen
+      region_definition:
+        one: Vorlagenregion
+        other: Vorlagenregionen
       shout:
         one: Stern
         other: Sterne

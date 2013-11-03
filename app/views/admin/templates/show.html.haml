@@ -1,6 +1,47 @@
 = view_headline_for @template.becomes(::Template) do
-  %ul.list-inline
-    /%li= create_button_link_for Page, url: new_admin_(parent_id: @page)
-    %li= action_buttons_for @template.becomes(::Template), except: :show
+  = action_buttons_for @template.becomes(::Template), except: :show
 
-= @template.description_html
+
+/ Details
+%dl.dl-horizontal
+  %dt= ::Template.human_attribute_name :type
+  %dd= link_to @template.class.model_name.human, admin_templates_path(type: @template.type.demodulize)
+  %dt= ::Template.human_attribute_name :file_name
+  %dd= @template.file_name
+  %dt= ::Template.human_attribute_name :updated_at
+  %dd= localize @template.updated_at
+
+
+- if @template.description.present? or @template.screenshot.present?
+  / Description
+  %fieldset
+    %legend= ::Template.human_attribute_name :description
+    .fields
+      - if @template.screenshot.present?
+        .row
+          .col-lg-6{class: @template.description.blank? ? 'col-lg-offset-3' : nil}
+            = link_to @template.screenshot.url, target: '_blank' do
+              = image_tag @template.screenshot.url(:preview), alt: @template.name, class: 'thumbnail'
+          - if @template.description.present?
+            .col-lg-6
+              = @template.description_html
+        %br
+      - else
+        = @template.description_html
+
+
+- if @region_definitions
+  / Region Definitions
+  %fieldset
+    %legend.clearfix
+      = ::Template::RegionDefinition.model_name.human(count: 2)
+      .pull-right
+        = create_button_link_for ::Template::RegionDefinition, url: new_admin_template_region_definition_path(@template.becomes(::Template)), size: :small, as: :link
+    - if @region_definitions.any?
+      = render 'admin/region_definitions/table'
+    - else
+      .well.text-center
+        %p
+          = translate('views.admin.templates.hints.regions_empty')
+        %p
+          = create_button_link_for ::Template::RegionDefinition, url: new_admin_template_region_definition_path(@template.becomes(::Template)), size: :lg

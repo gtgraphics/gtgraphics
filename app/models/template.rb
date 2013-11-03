@@ -20,7 +20,7 @@ class Template < ActiveRecord::Base
   VIEW_PATH = Rails.root.join('app/views').freeze
 
   translates :name, :description, fallbacks_for_empty_translations: true
-  has_attached_file :screenshot, styles: { thumbnail: '75x75#', preview: '125x125' }
+  has_attached_file :screenshot, styles: { thumbnail: '75x75#', preview: '555x' }
 
   has_many :pages, dependent: :nullify
 

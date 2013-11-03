@@ -16,7 +16,9 @@ de:
       pages:
         empty_type: Bitte wählen Sie einen Seitentyp.
       templates:
-        forms:
-          regions: Regionen
+        headlines:
+          details: Details
+        hints:
+          regions_empty: 'Es wurden bislang keine zusätzlichen Regionen definiert.'
         tabs:
           all: Alle

@@ -101,6 +101,9 @@ class @Editor
     @region.focus =>
       @onOpen()
 
+    @region.find('*').focus =>
+      @onOpen()
+
     @region.blur =>
       @input.blur()
       @onClose()
@@ -130,6 +133,7 @@ class @Editor
     @region.removeClass('changed')
 
   changeViewMode: (viewMode, focus = false) ->
+    previousViewMode = @viewMode
     @viewMode = viewMode
     switch @viewMode
       when 'editor'
@@ -153,8 +157,8 @@ class @Editor
         @enable(false) unless @disabled
         @input.focus().triggerHandler('focus') if focus
       else
-        jQuery.error('invalid view mode: ' + viewMode)
-    @input.trigger('viewModeChanged.editor')
+        return jQuery.error('invalid view mode: ' + viewMode)
+    @region.trigger('viewModeChanged.editor', viewMode, previousViewMode)
 
   enable: (updateState = true) ->
     @disabled = false if updateState

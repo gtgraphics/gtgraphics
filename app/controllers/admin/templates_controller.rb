@@ -27,6 +27,7 @@ class Admin::TemplatesController < Admin::ApplicationController
   end
 
   def show
+    @region_definitions = @template.region_definitions.order(:label) if @template.respond_to?(:region_definitions)
     respond_with :admin, @template.becomes(Template)
   end
 
@@ -82,13 +83,12 @@ class Admin::TemplatesController < Admin::ApplicationController
   end
 
   def template_params
-    params.require(:template).permit(:type, :file_name, :default, translations_attributes: [:_destroy, :id, :locale, :name, :description])
+    params.require(:template).permit(:type, :file_name, :default, :screenshot, translations_attributes: [:_destroy, :id, :locale, :name, :description])
   end
 
   def template_class
-    if @template_type = params[:type] and template_class = "Template::#{@template_type.camelize}" and template_class.in?(Template.template_types)
+    if @template_type = params[:type] and template_class = "Template::#{@template_type}" and template_class.in?(Template.template_types)
       @template_class = template_class.constantize
-      @template_class
     else
       Template
     end

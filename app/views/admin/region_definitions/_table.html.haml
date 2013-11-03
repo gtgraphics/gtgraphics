@@ -1,0 +1,15 @@
+- region_definitions ||= @region_definitions
+- template ||= @template
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th= RegionDefinition.human_attribute_name :label
+      %th.actions
+  %tbody
+    - region_definitions.each do |region_definition|
+      %tr
+        %td= region_definition.label
+        %td.actions
+          = action_buttons_for region_definition, parent: template.becomes(::Template), icon_only: true, size: :mini, only: [:edit, :destroy]
+

@@ -80,7 +80,6 @@ module ActionButtonHelper
     namespace = options.delete(:namespace)
     parent = Array(options.delete(:parent))
     url = options.delete(:url) { [namespace, parent, object].flatten.compact }
-    #options[:type] = :primary
 
     if icon_only
       caption = icon(:info)
@@ -95,6 +94,5 @@ module ActionButtonHelper
     end
 
     button_link_to caption, url, options
-    #button_link_to icon(:eye_open), url, options.merge(data: { toggle: 'tooltip', placement: 'top' }, title: translate('helpers.links.view', model: object.class.model_name.human))
   end
 end
