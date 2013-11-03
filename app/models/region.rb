@@ -16,7 +16,7 @@ class Region < ActiveRecord::Base
     Content::Translation
   ).freeze
 
-  belongs_to :definition, class_name: 'Template::RegionDefinition'
+  belongs_to :definition, class_name: 'RegionDefinition'
   belongs_to :regionable, polymorphic: true
 
   validates :regionable_type, presence: true, inclusion: { in: REGIONABLE_TYPES }

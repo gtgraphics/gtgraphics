@@ -9,7 +9,7 @@
   %dt= Page.human_attribute_name :path
   %dd
     - if @page.path.present?
-      = File.join(*@page.self_and_ancestors.map { |page| link_to(page.slug, page) }).html_safe
+      = File.join(*@page.self_and_ancestors.map { |page| link_to(page.slug.present? ? page.slug : translate('views.admin.pages.root'), page) }).html_safe
     - else
       = link_to translate('views.admin.pages.root'), :root
   - if @page.template.present?

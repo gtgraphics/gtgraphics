@@ -22,7 +22,7 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def new
-    @page = Page.new(parent: @parent_page)   
+    @page = Page.new(parent: @parent_page || Page.root)   
     respond_with :admin, @page
   end
 
@@ -158,7 +158,7 @@ class Admin::PagesController < Admin::ApplicationController
   def page_params
     page_params = params.require(:page)
     embeddable_attributes_params = case page_params[:embeddable_type]
-    when 'Content' then [:id, { translations_attributes: [:_destroy, :id, :locale, :title, :content] }]
+    when 'Content' then [:id, { translations_attributes: [:_destroy, :id, :locale, :title, :body] }]
     when 'Gallery' then [:id, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     when 'Image' then [:id, :asset, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     when 'Redirection' then [:id, :external, :destination_page_id, :destination_url, :permanent, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]

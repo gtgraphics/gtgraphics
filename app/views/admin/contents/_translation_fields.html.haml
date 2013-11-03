@@ -3,15 +3,3 @@
   = fields.input :locale, as: :hidden
   = fields.input :title, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }
   = fields.input :body, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }, input_html: { rows: 12, class: 'editor' }
-
-  %fieldset
-    %legend= Region.model_name.human(count: 2)
-    .fields
-      .form-group
-        .col-lg-8.col-lg-offset-2
-          = select_tag :bla, options_from_collection_for_select(@page.template_with_fallback.region_definitions.order(:label), :id, :label), class: 'form-control'
-        .col-lg-2
-          = button_tag 'Hinzufügen', class: 'btn btn-default btn-block'
-
-      = fields.simple_fields_for :regions do |region_fields|
-        = region_fields.input :body, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }, input_html: { rows: 12, class: 'editor' }

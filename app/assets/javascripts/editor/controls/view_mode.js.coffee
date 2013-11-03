@@ -22,7 +22,7 @@ class @Editor.Controls.ViewMode extends @Editor.Controls.ControlGroup
     #  @editor.changeViewMode(nextViewMode, true)
 
     $caret = $('<button />', class: 'btn btn-default btn-mini dropdown-toggle', type: 'button', tabindex: '-1', 'data-toggle': 'dropdown')
-    $caret.append($('<i />', class: 'fa fa-chevron-down')).appendTo($group)
+    $caret.append($('<b />', class: 'caret')).appendTo($group)
 
     $dropdown = $('<ul />', class: 'dropdown-menu').appendTo($group)
     

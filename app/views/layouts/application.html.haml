@@ -13,8 +13,10 @@
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'}
 
   %body
+    .brand
+      = link_to 'GT Graphics', :root
     %ul.nav
-      - Page.menu_items.published.roots.with_translations.each do |page|
+      - Page.in_main_menu.with_translations.each do |page|
         %li= active_link_to page.title, page
 
     %ul.nav
@@ -24,6 +26,10 @@
             = flag_icon(locale)
             = translate(locale, scope: :languages)
 
+    %hr
+
     = render 'breadcrumbs'
 
     = yield
+
+    %hr

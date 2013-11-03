@@ -59,6 +59,7 @@ class Page < ActiveRecord::Base
   default_scope -> { order(:lft) }
   scope :published, -> { where(published: true) }
   scope :hidden, -> { where(published: false) }
+  scope :in_main_menu, -> { published.menu_items.where(depth: 1) }
   scope :menu_items, -> { where(menu_item: true) }
   scope :with_translations, -> { includes(embeddable: :translations) }
 

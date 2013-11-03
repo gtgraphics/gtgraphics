@@ -24,6 +24,16 @@ class Content < ActiveRecord::Base
     template.render(to_liquid).html_safe
   end
 
+  #def body_html(region = nil, locale = I18n.locale)
+  #  if region.nil? 
+  #    body = self.body(locale)
+  #  else
+  #    body = self.translation_for(locale).regions.includes(:definition).where(region_definitions: { label: region }).first.try(:body)
+  #  end
+  #  template = Liquid::Template.parse(body)
+  #  template.render(to_liquid).html_safe
+  #end
+
   def to_liquid
     page.attributes.slice(*%w(slug path)).merge('title' => title, 'children' => page.children)
   end

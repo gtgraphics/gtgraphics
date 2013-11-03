@@ -28,5 +28,6 @@
 
           .form-group.form-actions
             .col-lg-12
-              = form.button :submit, class: 'btn-primary btn-block'
+              = form.button :button, type: 'submit', class: 'btn-primary btn-block' do
+                = prepend_icon(:save, translate(@page.new_record? ? :create : :update, scope: 'helpers.submit', model: Page.model_name.human))
               = button_link_to translate('helpers.links.cancel'), :admin_pages, block:true
