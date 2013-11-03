@@ -43,15 +43,17 @@ class Page < ActiveRecord::Base
   validates :embeddable, presence: true
   #validates :embeddable_id, presence: true, unless: -> { embeddable_class and embeddable_class.bound_to_page? }
   validates :embeddable_type, presence: true, inclusion: { in: EMBEDDABLE_TYPES }
-  validates :slug, presence: true, uniqueness: { scope: :parent_id }, exclusion: { in: RESERVED_SLUGS, if: :root? }
-  validates :path, presence: true, uniqueness: true, if: -> { slug.present? }
+  validates :slug, presence: { unless: :root? }, uniqueness: { scope: :parent_id }, exclusion: { in: RESERVED_SLUGS, if: :root? }
+  validates :path, presence: { unless: :root? }, uniqueness: true, if: -> { slug.present? }
   validate :validate_parent_assignability
   validate :validate_template_type
+  validate :validate_no_root_exists, if: :root?
 
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
   after_save :update_descendants_paths
   after_update :destroy_replaced_embeddable, if: -> { embeddable_type_changed? }
+  before_destroy :destroyable?
   after_destroy :destroy_embeddable
 
   default_scope -> { order(:lft) }
@@ -124,6 +126,10 @@ class Page < ActiveRecord::Base
     children.embedding(*types).includes(:embeddable)
   end
 
+  def destroyable?
+    !root?
+  end
+
   def embeddable_attributes=(attributes)
     raise 'no embeddable type specified' if embeddable_class.nil?
     if embeddable_type_changed? or new_record?
@@ -141,12 +147,16 @@ class Page < ActiveRecord::Base
     !published?
   end
 
+  def template_with_fallback
+    template || template_class.try(:default) || raise(MissingTemplate.new(self))
+  end
+
   def template_class
     @template_class ||= template_type.try(:constantize)
   end
 
   def template_path
-    template.try(:view_path) || template_class.try(:default).try(:view_path) || raise(Page::MissingTemplate.new(self))
+    template_with_fallback.try(:view_path)
   end
 
   def template_type
@@ -172,17 +182,17 @@ class Page < ActiveRecord::Base
   end
 
   def generate_path
-    raise 'slug is blank' if slug.blank?
     if parent.present?
       path_parts = parent.self_and_ancestors.collect(&:slug) << slug
     else
       path_parts = [slug]
     end
+    path_parts.reject!(&:blank?)
     self.path = File.join(*path_parts)
   end
 
   def generate_slug
-    self.slug = title(I18n.default_locale) if slug.blank? and title.present?
+    self.slug = title(I18n.default_locale) if new_record? and slug.blank? and title.present?
     self.slug = slug.parameterize if slug.present?
   end
 
@@ -192,6 +202,10 @@ class Page < ActiveRecord::Base
 
   def update_descendants_paths
     transaction { descendants.each(&:update_path!) }
+  end
+
+  def validate_no_root_exists
+    errors.add(:parent_id, :taken) if self.class.roots.where.not(id: self.id).any?
   end
 
   def validate_parent_assignability

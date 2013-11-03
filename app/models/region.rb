@@ -6,7 +6,7 @@
 #  regionable_id   :integer
 #  regionable_type :string(255)
 #  definition_id   :integer
-#  content         :text
+#  body            :text
 #  created_at      :datetime
 #  updated_at      :datetime
 #

@@ -11,3 +11,10 @@
 #page_embeddable_fields_empty {
   display: none;
 }
+
+#page_settings {
+  overflow: hidden;
+  .form-actions {
+    margin-bottom: -15px;
+  }
+}

@@ -14,13 +14,13 @@ class Content < ActiveRecord::Base
 
   self.template_type = 'Template::Content'.freeze
 
-  translates :title, :content, fallbacks_for_empty_translations: true
+  translates :title, :body, fallbacks_for_empty_translations: true
 
   acts_as_batch_translatable
   acts_as_page_embeddable destroy_with_page: true
 
-  def content_html(locale = I18n.locale)
-    template = Liquid::Template.parse(self.content(locale))
+  def body_html(locale = I18n.locale)
+    template = Liquid::Template.parse(self.body(locale))
     template.render(to_liquid).html_safe
   end
 

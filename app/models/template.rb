@@ -25,7 +25,7 @@ class Template < ActiveRecord::Base
   has_many :pages, dependent: :nullify
 
   validates :type, presence: true, inclusion: { in: ->(template) { template.class.template_types } }
-  validates :file_name, presence: true, uniqueness: { scope: :type }, inclusion: { in: :available_template_files }
+  validates :file_name, presence: true, inclusion: { in: :available_template_files }
 
   before_save :default_current_template
   after_save :undefault_other_templates, if: :default?

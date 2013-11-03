@@ -7,7 +7,11 @@
   %dt= Page.human_attribute_name :embeddable_type
   %dd= @page.embeddable_class.model_name.human
   %dt= Page.human_attribute_name :path
-  %dd= File.join(*@page.self_and_ancestors.map { |page| link_to(page.slug, page) }).html_safe
+  %dd
+    - if @page.path.present?
+      = File.join(*@page.self_and_ancestors.map { |page| link_to(page.slug, page) }).html_safe
+    - else
+      = link_to translate('views.admin.pages.root'), :root
   - if @page.template.present?
     %dt= Page.human_attribute_name :template
     %dd= link_to @page.template.name, admin_template_path(@page.template)

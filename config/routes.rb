@@ -69,7 +69,10 @@ GtGraphics::Application.routes.draw do
       end
     end
 
-    root 'homepage#show'
+    %w(Content Gallery Image Redirection).each do |page_type|
+      root "#{page_type.underscore.pluralize}#show", as: nil, constraints: Routing::PageConstraint.new(page_type)
+    end
+    root 'pages#show'
   end
 
   scope '/', constraints: { id: /.*/ } do

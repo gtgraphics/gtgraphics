@@ -15,6 +15,7 @@ de:
         loading: Inhalt wird geladen…
       pages:
         empty_type: Bitte wählen Sie einen Seitentyp.
+        root: Wurzel
       templates:
         headlines:
           details: Details

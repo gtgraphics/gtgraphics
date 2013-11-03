@@ -10,8 +10,6 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
 
-  breadcrumb I18n.translate('breadcrumbs.home'), :root
-
   private
   def render_404
     respond_to do |format|
@@ -29,7 +27,7 @@ class ApplicationController < ActionController::Base
       I18n.locale = session[:locale] = locale.to_sym
     else
       locale = session[:locale] || http_accept_language.compatible_language_from(I18n.available_locales)
-      redirect_to request.query_parameters.deep_symbolize_keys.merge(locale: locale).merge(params.slice(:format))
+      redirect_to request.query_parameters.deep_symbolize_keys.merge(locale: locale).merge(params.slice(:format)).merge(id: params[:id].presence)
     end
   end
 end

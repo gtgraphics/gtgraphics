@@ -16,6 +16,6 @@ class PagesController < ApplicationController
 
   private
   def load_page
-    @page = Page.published.find_by_path!(params[:id])
+    @page = Page.published.find_by_path!(params[:id] || '')
   end
 end

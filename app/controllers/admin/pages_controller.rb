@@ -36,6 +36,9 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def edit
+    #@page.embeddable.translations.each do |t|
+    #  t.regions.build
+    #end
     respond_with :admin, @page
   end
 

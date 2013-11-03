@@ -4,7 +4,7 @@ de:
     updated_at: Aktualisierung
     slug: URL-Token
     title: Titel
-    content: Inhalt
+    body: Inhalt
     description: Beschreibung
 
   activemodel:
@@ -103,6 +103,9 @@ de:
       redirection:
         one: Umleitung
         other: Umleitungen
+      region:
+        one: Region
+        other: Regionen
       region_definition:
         one: Vorlagenregion
         other: Vorlagenregionen
