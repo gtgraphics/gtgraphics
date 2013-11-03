@@ -15,7 +15,7 @@ class @Editor
     @options = jQuery.extend({}, DEFAULTS, options)
 
     @input = $originalInput.hide()
-    @input.attr('tabindex', '-1').attr('spellcheck', false)
+    @input.attr('spellcheck', false)
 
     @createEditableRegion()
     @createContainer()

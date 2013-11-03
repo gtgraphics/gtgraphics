@@ -1,6 +1,5 @@
 = view_headline_for @page do
   %ul.list-inline
-    /%li= translation_select
     %li= create_button_link_for Page, url: new_admin_page_path(parent_id: @page)
     %li= action_buttons_for @page, except: :show
 

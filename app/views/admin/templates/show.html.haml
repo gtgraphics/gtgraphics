@@ -1,4 +1,6 @@
 = view_headline_for @template.becomes(::Template) do
-  = action_buttons_for @template.becomes(::Template), except: :show
+  %ul.list-inline
+    /%li= create_button_link_for Page, url: new_admin_(parent_id: @page)
+    %li= action_buttons_for @template.becomes(::Template), except: :show
 
 = @template.description_html
