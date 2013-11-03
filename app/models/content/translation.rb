@@ -13,7 +13,7 @@
 
 class Content < ActiveRecord::Base
   class Translation < Globalize::ActiveRecord::Translation
-    has_many :regions, class_name: 'Content::Region', dependent: :destroy    
+    include Regionable
 
     validates :title, presence: true
   end
