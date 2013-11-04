@@ -28,20 +28,3 @@
         %br
       - else
         = @template.description_html
-
-
-- if @region_definitions
-  / Region Definitions
-  %fieldset
-    %legend.clearfix
-      = ::Template::RegionDefinition.model_name.human(count: 2)
-      .pull-right
-        = create_button_link_for ::Template::RegionDefinition, url: new_admin_template_region_definition_path(@template.becomes(::Template)), size: :small, as: :link
-    - if @region_definitions.any?
-      = render 'admin/region_definitions/table'
-    - else
-      .well.text-center
-        %p
-          = translate('views.admin.templates.hints.regions_empty')
-        %p
-          = create_button_link_for ::Template::RegionDefinition, url: new_admin_template_region_definition_path(@template.becomes(::Template)), size: :lg

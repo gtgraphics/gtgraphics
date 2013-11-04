@@ -22,9 +22,11 @@ de:
       move_down: Nach unten
       close: Schließen
       apply: Anwenden
+      make_default: Als Standard festlegen
     confirm:
       destroy: 'Möchten Sie diese(s) %{model} wirklich entfernen?'
       destroy_selected: 'Möchten Sie die ausgewählten %{model} wirklich entfernen?'
+      make_default: '%{model} wirklich als Standard festlegen?'
     prompts:
       create: '– Neu erstellen –'
       custom: '– Benutzerdefiniert –'

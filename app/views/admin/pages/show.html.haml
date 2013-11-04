@@ -9,9 +9,9 @@
   %dt= Page.human_attribute_name :path
   %dd
     - if @page.path.present?
-      = File.join(*@page.self_and_ancestors.map { |page| link_to(page.slug.present? ? page.slug : translate('views.admin.pages.root'), page) }).html_safe
+      = File.join(*@page.self_and_ancestors.map { |page| link_to(page.slug.present? ? page.slug : request.host, page) }).html_safe
     - else
-      = link_to translate('views.admin.pages.root'), :root
+      = link_to request.host, :root
   - if @page.template.present?
     %dt= Page.human_attribute_name :template
     %dd= link_to @page.template.name, admin_template_path(@page.template)

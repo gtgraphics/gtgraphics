@@ -16,8 +16,6 @@
 
 class Template < ActiveRecord::Base
   class Content < Template
-    include RegionDefinable
-
     self.template_lookup_path = 'contents/templates'
   end
 end
