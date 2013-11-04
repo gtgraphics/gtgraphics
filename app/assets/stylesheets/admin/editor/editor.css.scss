@@ -31,6 +31,17 @@
       cursor: not-allowed;
       background-color: #eee;
     }
+
+    &[contenteditable="true"] {
+      img {
+        cursor: move;
+        &:focus {
+
+        }
+        &[data-editor-selected] {
+        }
+      }
+    }
   }
 
   .editor-html, .editor-region {

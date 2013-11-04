@@ -13,8 +13,6 @@
 
 class Content < ActiveRecord::Base
   class Translation < Globalize::ActiveRecord::Translation
-    include Regionable
-
     validates :title, presence: true
   end
 end

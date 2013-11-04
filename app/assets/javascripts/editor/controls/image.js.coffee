@@ -4,6 +4,15 @@ class @Editor.Controls.Image extends @Editor.Controls.AsyncFontControl
     @icon = 'picture-o'
     super
 
+    # TODO
+    @editor.region.on 'click', 'img', (event) ->
+      console.log 'click image'
+      $image = $(@)
+      if $image.attr('data-editor-selected')
+        $image.removeAttr('data-editor-selected')
+      else
+        $image.attr('data-editor-selected', true)
+
   execCommand: ->
     Editor.active = @editor
     @editor.currentControl = @
