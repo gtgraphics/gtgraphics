@@ -1,7 +1,7 @@
 class CreateRegionDefinitions < ActiveRecord::Migration
   def change
     create_table :region_definitions do |t|
-      t.belongs_to :template, index: true
+      t.references :template, index: true
       t.string :label
       t.timestamps
     end

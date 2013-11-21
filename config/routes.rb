@@ -45,6 +45,7 @@ GtGraphics::Application.routes.draw do
       end
       
       resources :templates do
+        resources :regions, controller: :region_definitions, as: :region_definitions, only: [:new, :create, :edit, :update, :destroy]
         collection do
           get :translation_fields
           get :unassigned_files_fields

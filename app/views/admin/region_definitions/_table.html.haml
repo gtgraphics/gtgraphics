@@ -1,15 +1,15 @@
-- region_definitions ||= @region_definitions
-- template ||= @template
-
-%table.table.table-striped
-  %thead
-    %tr
-      %th= RegionDefinition.human_attribute_name :label
-      %th.actions
-  %tbody
-    - region_definitions.each do |region_definition|
+- if @region_definitions.any?
+  %table.table
+    %thead
       %tr
-        %td= region_definition.label
-        %td.actions
-          = action_buttons_for region_definition, parent: template.becomes(::Template), icon_only: true, size: :mini, only: [:edit, :destroy]
-
+        %th= RegionDefinition.human_attribute_name :label
+        %th.actions
+    %tbody
+      - @region_definitions.each do |region_definition|
+        %tr
+          %td= region_definition.label
+          %td.actions
+            = action_buttons_for region_definition, parent: @template.becomes(::Template), except: :show, size: :mini, icon_only: true
+- else
+  .well.text-center
+    %h4= translate('views.hints.empty', model: RegionDefinition.model_name.human(count: 2))

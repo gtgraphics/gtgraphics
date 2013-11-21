@@ -1,9 +1,9 @@
 class CreateRegions < ActiveRecord::Migration
   def change
     create_table :regions do |t|
-      t.belongs_to :regionable, polymorphic: true, index: true
-      t.belongs_to :definition, index: true
-      t.text :content
+      t.references :definition, index: true
+      t.references :page, index: true
+      t.text :body
       t.timestamps
     end
   end

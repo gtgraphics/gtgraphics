@@ -1,0 +1,20 @@
+# == Schema Information
+#
+# Table name: region_definitions
+#
+#  id          :integer          not null, primary key
+#  template_id :integer
+#  label       :string(255)
+#  created_at  :datetime
+#  updated_at  :datetime
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  template_id: 
+  label: MyString
+
+two:
+  template_id: 
+  label: MyString

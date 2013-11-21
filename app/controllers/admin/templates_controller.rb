@@ -27,6 +27,7 @@ class Admin::TemplatesController < Admin::ApplicationController
   end
 
   def show
+    @region_definitions = @template.region_definitions.order(:label)
     respond_with :admin, @template.becomes(Template)
   end
 

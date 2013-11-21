@@ -1,5 +1,7 @@
 = view_headline_for @template.becomes(::Template) do
-  = action_buttons_for @template.becomes(::Template), except: :show
+  %ul.list-inline
+    %li= create_button_link_for RegionDefinition, namespace: :admin, parent: @template.becomes(::Template)
+    %li= action_buttons_for @template.becomes(::Template), except: :show
 
 
 / Details
@@ -28,3 +30,10 @@
         %br
       - else
         = @template.description_html
+
+
+/ Regions
+%fieldset
+  %legend= RegionDefinition.model_name.human(count: 2)
+  .fields
+    = render 'admin/region_definitions/table'

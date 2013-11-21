@@ -37,6 +37,7 @@ class Page < ActiveRecord::Base
 
   belongs_to :embeddable, polymorphic: true, autosave: true
   belongs_to :template
+  has_many :regions, dependent: :destroy
 
   delegate :title, to: :embeddable, allow_nil: true
 
