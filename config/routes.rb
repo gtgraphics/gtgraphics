@@ -48,7 +48,7 @@ GtGraphics::Application.routes.draw do
         resources :regions, controller: :region_definitions, as: :region_definitions, only: [:new, :create, :edit, :update, :destroy]
         collection do
           get :translation_fields
-          get :unassigned_files_fields
+          get :files_fields
         end
         patch :make_default, on: :member
       end

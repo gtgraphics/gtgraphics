@@ -64,7 +64,7 @@ class Admin::TemplatesController < Admin::ApplicationController
     end
   end
 
-  def unassigned_files_fields
+  def files_fields
     respond_to do |format|
       format.html do
         if template_type = params[:template_type] and template_type.in?(Template.template_types)

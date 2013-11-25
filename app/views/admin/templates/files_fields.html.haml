@@ -1,0 +1,4 @@
+- output = nil
+- simple_form_for [:admin, @template.becomes(::Template)], url: '' do |form|
+  - output = render 'files_fields', fields: form
+= output

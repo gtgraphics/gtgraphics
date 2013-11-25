@@ -4,24 +4,17 @@ queryFileNameState = ($type, $fileName) ->
 
 $(document).ready ->
   $type = $('#template_type')
-  #$fileName = $('#template_file_name')
   $fileNameContainer = $('#template_file_name_container')
 
-  #queryFileNameState($type, $fileName)
-
   $type.change ->
-    #queryFileNameState($type, $fileName)
-
     templateType = $type.val()
-
     if templateType is ''
       $fileNameContainer.empty()
     else
       $fileName = $('#template_file_name')
       $fileName.prop('disabled', true)
-
       jQuery.ajax
-        url: '/admin/templates/unassigned_files_fields'
+        url: '/admin/templates/files_fields'
         data: { template_type: templateType }
         dataType: 'html'
         success: (html) ->
