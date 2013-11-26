@@ -80,7 +80,7 @@ class Page < ActiveRecord::Base
 
     def initialize(page)
       @page = page
-      super "Missing template for #{@page.embeddable_type} in #{@page.inspect}"
+      super "Missing template for #{page.embeddable_type} in #{page.inspect}"
     end
   end
 
@@ -150,10 +150,12 @@ class Page < ActiveRecord::Base
     !published?
   end
 
-  def regions_hash
+  def regions_hash(locale = I18n.locale)
     ActiveSupport::HashWithIndifferentAccess[regions.collect do |region|
-      [region.definition_label, region.body] 
-    end.flatten]
+      if body = region.body(locale)
+        [region.definition_label, body]
+      end
+    end.compact.flatten]
   end
 
   def support_template?

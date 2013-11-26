@@ -9,20 +9,22 @@ module PageEmbeddable
 
       if options[:multiple]
         has_many :pages, as: :embeddable, dependent: :destroy
+        has_many :regions, -> { readonly }, through: :pages
       else
         has_one :page, as: :embeddable, dependent: :destroy
         delegate :slug, :path, :published?, :hidden?, to: :page, allow_nil: true
+        has_many :regions, -> { readonly }, through: :page
       end
 
       @page_embeddable_options = options
     end
 
     def bound_to_page?
-      page_embeddable_options[:destroy_with_page]
+      page_embeddable_options.fetch(:destroy_with_page, false)
     end
 
     def page_embeddable_options
-      @page_embeddable_options
+      @page_embeddable_options ||= {}
     end
   end
 end
