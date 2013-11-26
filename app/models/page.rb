@@ -161,6 +161,7 @@ class Page < ActiveRecord::Base
   def support_template?
     self.class.template_types_hash.key?(embeddable_type)
   end
+  alias_method :support_regions?, :support_template?
 
   def template_class
     @template_class ||= template_type.try(:constantize)
