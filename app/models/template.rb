@@ -23,7 +23,7 @@ class Template < ActiveRecord::Base
   has_attached_file :screenshot, styles: { thumbnail: '75x75#', preview: '555x' }
 
   has_many :region_definitions, dependent: :destroy
-  has_many :pages, dependent: :nullify
+  has_many :pages, dependent: :destroy
 
   validates :type, presence: true, inclusion: { in: ->(template) { template.class.template_types } }
   validates :file_name, presence: true, inclusion: { in: :available_template_files }

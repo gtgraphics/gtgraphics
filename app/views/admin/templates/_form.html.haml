@@ -11,7 +11,7 @@
     .fields
       = form.input :type, collection: template_types_for_select, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }
       #template_file_name_container
-        = render 'unassigned_files_fields', fields: form if @template.type.present?
+        = render 'files_fields', fields: form if @template.type.present?
       = form.input :screenshot, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
       = form.input :default, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }
 

@@ -42,14 +42,15 @@ class Page < ActiveRecord::Base
   delegate :title, to: :embeddable, allow_nil: true
 
   validates :embeddable, presence: true
-  #validates :embeddable_id, presence: true, unless: -> { embeddable_class and embeddable_class.bound_to_page? }
   validates :embeddable_type, presence: true, inclusion: { in: EMBEDDABLE_TYPES }
+  validates :template_id, presence: true, if: :support_template?
   validates :slug, presence: { unless: :root? }, uniqueness: { scope: :parent_id }, exclusion: { in: RESERVED_SLUGS, if: :root? }
   validates :path, presence: { unless: :root? }, uniqueness: true, if: -> { slug.present? }
   validate :validate_parent_assignability
   validate :validate_template_type
   validate :validate_no_root_exists, if: :root?
 
+  after_initialize :set_default_template, if: -> { support_template? and template.blank? }
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
   after_save :update_descendants_paths
@@ -58,10 +59,10 @@ class Page < ActiveRecord::Base
   after_destroy :destroy_embeddable
 
   default_scope -> { order(:lft) }
-  scope :published, -> { where(published: true) }
   scope :hidden, -> { where(published: false) }
   scope :in_main_menu, -> { published.menu_items.where(depth: 1) }
   scope :menu_items, -> { where(menu_item: true) }
+  scope :published, -> { where(published: true) }
   scope :with_translations, -> { includes(embeddable: :translations) }
 
   EMBEDDABLE_TYPES.each do |embeddable_type|
@@ -149,8 +150,14 @@ class Page < ActiveRecord::Base
     !published?
   end
 
-  def template_with_fallback
-    template || template_class.try(:default) || raise(MissingTemplate.new(self))
+  def regions_hash
+    ActiveSupport::HashWithIndifferentAccess[regions.collect do |region|
+      [region.definition_label, region.body] 
+    end.flatten]
+  end
+
+  def support_template?
+    self.class.template_types_hash.key?(embeddable_type)
   end
 
   def template_class
@@ -158,7 +165,7 @@ class Page < ActiveRecord::Base
   end
 
   def template_path
-    template_with_fallback.try(:view_path)
+    template.try(:view_path) || raise(MissingTemplate.new(self))
   end
 
   def template_type

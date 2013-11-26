@@ -1,4 +1,4 @@
-- if @page.embeddable_class
+- if @page.support_template?
   - unless @page.embeddable_class.bound_to_page?
     = fields.input :embeddable_id, collection: @page.embeddable_class.all, label: @page.embeddable_class.model_name.human, include_blank: translate('helpers.prompts.create'), label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
 
@@ -6,5 +6,4 @@
     = render "admin/#{@page.embeddable_class.model_name.plural}/settings", fields: fields
   - rescue ActionView::MissingTemplate
 
-- if @page.template_class
-  = fields.association :template, collection: @page.template_class.with_translations, include_blank: translate('helpers.prompts.default'), label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
+  = fields.association :template, collection: @page.template_class.with_translations, include_blank: false, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
