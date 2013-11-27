@@ -1,4 +1,6 @@
 GtGraphics::Application.routes.draw do
+  devise_for :users, controllers: { sessions: 'admin/sessions' }
+
   scope '(:locale)', constraints: Routing::LocaleConstraint.new do
     namespace :admin do
 
