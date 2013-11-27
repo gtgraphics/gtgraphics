@@ -7,7 +7,7 @@ gem 'rails', '4.0.0'
 gem 'pg'
 
 # Authentication & Authorization
-gem 'devise', '3.0.0'
+gem 'devise'
 gem 'cancan'
 
 # Controller
