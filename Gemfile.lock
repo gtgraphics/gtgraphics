@@ -96,6 +96,8 @@ GEM
       railties (>= 3.2.6, < 5)
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
+    email_validator (1.4.0)
+      activemodel
     equalizer (0.0.7)
     erubis (2.7.0)
     execjs (2.0.2)
@@ -245,6 +247,7 @@ DEPENDENCIES
   compass
   delayed_job_active_record
   devise
+  email_validator
   exifr
   globalize!
   haml-rails

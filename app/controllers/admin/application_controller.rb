@@ -1,7 +1,7 @@
 class Admin::ApplicationController < ApplicationController
   include BreadcrumbController
 
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
 
   reset_breadcrumbs
   breadcrumbs do |b|
