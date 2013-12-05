@@ -36,6 +36,9 @@ class @Editor
     # Change Management
     @setUnchanged()
 
+
+  # Element Constructors
+
   createContainer: ->
     @container = $('<div />', class: 'editor-container')
     @container.insertAfter(@input)
@@ -81,14 +84,6 @@ class @Editor
     @region.removeAttr('contenteditable')
     # TODO Destroy Container etc.
 
-  onOpen: ->
-    @region.addClass('editing')
-    @container.addClass('focus')
-
-  onClose: ->
-    @region.removeClass('editing')
-    @container.removeClass('focus')
-
   applyEvents: ->
     # Change Label Behavior
     $("label[for='#{@input.attr('id')}']").click =>
@@ -97,6 +92,9 @@ class @Editor
     @input.focus (event) =>
       event.preventDefault()
       @region.focus().triggerHandler('focus')
+
+    @region.click =>
+      @region.triggerHandler('focus')
 
     @region.focus =>
       @onOpen()
@@ -108,11 +106,11 @@ class @Editor
       @input.blur()
       @onClose()
 
-    @region.on 'keyup paste', =>
+    @region.on 'textchange', =>
       @setChanged()
       true
 
-    @input.on 'keyup paste', =>
+    @input.on 'textchange', =>
       @changed = true
       @region.addClass('changed')
       @region.html(@input.val())
@@ -120,17 +118,48 @@ class @Editor
 
     # Prevent links from being followed in editor mode
     @region.on 'click', 'a', (event) =>
-      if @viewMode == 'editor'
-        event.preventDefault()
+      event.preventDefault() if @viewMode == 'editor'
+
+
+  # Callbacks
+
+  onOpen: ->
+    @region.addClass('editing')
+    @container.addClass('focus')
+
+  onClose: ->
+    @region.removeClass('editing')
+    @container.removeClass('focus')
+
+
+  # Change Management
 
   setChanged: ->
     @changed = true
     @region.addClass('changed')
-    @input.val(@region.html())
+    @input.val(@getHtml())
 
   setUnchanged: ->
     @changed = false
     @region.removeClass('changed')
+
+
+  # Enabling/Disabling
+
+  enable: (updateState = true) ->
+    @disabled = false if updateState
+    @region.removeClass('disabled')
+    @region.attr('contenteditable', true)
+    @input.prop('disabled', false)
+
+  disable: (updateState = true) ->
+    @disabled = true if updateState
+    @region.addClass('disabled')
+    @region.removeAttr('contenteditable')
+    @input.prop('disabled', true)
+
+
+  # View Mode Control
 
   changeViewMode: (viewMode, focus = false) ->
     previousViewMode = @viewMode
@@ -159,30 +188,16 @@ class @Editor
       else
         return jQuery.error('invalid view mode: ' + viewMode)
     @region.trigger('viewModeChanged.editor', viewMode, previousViewMode)
+    #@setChanged()
 
-  enable: (updateState = true) ->
-    @disabled = false if updateState
-    @region.removeClass('disabled')
-    @region.attr('contenteditable', true)
-    @input.prop('disabled', false)
 
-  disable: (updateState = true) ->
-    @disabled = true if updateState
-    @region.addClass('disabled')
-    @region.removeAttr('contenteditable')
-    @input.prop('disabled', true)
+  # Selection Handling
 
   removeSelection: ->
-    if window.getSelection
-      if window.getSelection().empty # Chrome
-        window.getSelection().empty()
-      else if window.getSelection().removeAllRanges # Firefox
-        window.getSelection().removeAllRanges()
-    else if document.selection # IE?
-      document.selection.empty()
+    @getSelection().removeAllRanges()
 
   storeSelection: ->
-    @storedSelection = @getSelection()
+    @storedSelection = rangy.saveSelection()
 
   restoreSelection: ->
     if @storedSelection
@@ -190,35 +205,45 @@ class @Editor
       @storedSelection = null
 
   getSelectedNode: ->
-    if window.getSelection
-      selection = window.getSelection()
-    else if document.selection
-      selection = document.selection
-    #console.log selection
-    if selection and selection.anchorNode
-      $(selection.anchorNode.parentNode)
-    else
-      $()
+    $(getSelection().anchorNode)
+
+  getSelectedNodeParent: ->
+    $(getSelection().anchorNode.parentNode)
 
   getSelection: ->
-    if window.getSelection
-      selection = window.getSelection()
-      return selection.getRangeAt(0) if selection.getRangeAt
-    else if document.selection
-      selection = document.selection
-      return selection.createRange()
-    null
+    rangy.getSelection()
 
   setSelection: (storedSelection) ->
-    if window.getSelection
-      selection = window.getSelection()
-      selection.removeAllRanges()
-      selection.addRange(storedSelection)
-    else if document.selection and storedSelection.select
-      storedSelection.select()
+    range.restoreSelection(storedSelection)
+
+
+  # HTML Input/Output
+
+  getHtml: ->
+    $regionClone = @region.clone()
+    $elements = $regionClone.find('*')
+
+    $elements.each ->
+      # Remove data-editor-* attributes and elements with editor-element class
+      $element = $(@)
+      if $element.hasClass('editor-element')
+        # removes all elements having class "editor-element"
+        $element.remove()
+      else
+        # removes all data-editor* attributes
+        jQuery.each @attributes, ->
+          $element.removeAttr(@name) if @name.match(/^data-editor/)
+
+    $elements.each ->
+      $element = $(@)
+      if $element.hasClass('editor-wrapper')
+        $element.children().first().unwrap($element)
+
+    $regionClone.html()
 
   # http://stackoverflow.com/questions/6690752/insert-html-at-caret-in-a-contenteditable-div
   pasteHtml: (html) ->
+    # TODO Replace with rangy
     html = $(html) if html instanceof String
     html = html.get(0).outerHTML if html instanceof jQuery
 

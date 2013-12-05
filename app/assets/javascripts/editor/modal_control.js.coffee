@@ -6,7 +6,7 @@ class @Editor.Controls.ModalControl extends @Editor.Controls.AsyncFontControl
     selection = @editor.getSelection()
     @editor.storeSelection()
 
-    $node = @editor.getSelectedNode()
+    $node = @editor.getSelectedNodeParent()
     if $node.is(@selector)
       html = $node.get(0).outerHTML
     else

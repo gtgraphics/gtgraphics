@@ -1,3 +1,4 @@
+//= require_tree ./editor/rangy
 //= require ./editor/editor
 //= require ./editor/jquery.editor
 //= require ./editor/control

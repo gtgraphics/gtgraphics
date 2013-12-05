@@ -1,6 +1,6 @@
 class Admin::Editor::ImagesController < Admin::Editor::ApplicationController
   def show
-    @editor_image = ::Editor::Image.new
+    @editor_image = ::Editor::Image.from_html(params[:html])
     respond_to do |format|
       format.html
     end

@@ -1,6 +1,7 @@
 .form-group {
 
   .editor-region {
+    position: relative;
     height: auto;
     display: block;
     padding: 6px 12px;
@@ -35,10 +36,8 @@
     &[contenteditable="true"] {
       img {
         cursor: move;
-        &:focus {
-
-        }
-        &[data-editor-selected] {
+        &[data-editor-state="selected"] {
+          border: 2px solid red;
         }
       }
     }
