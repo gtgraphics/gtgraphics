@@ -1,5 +1,5 @@
 class RedirectionsController < PagesController
-  before_action :load_redirection
+  load_embedded :redirection
 
   def show
     if @redirection.external?
@@ -17,10 +17,5 @@ class RedirectionsController < PagesController
         redirect_to page_path(@redirection.destination_page, request.query_parameters), status: status
       end
     end
-  end
-
-  private
-  def load_redirection
-    @redirection = @page.embeddable
   end
 end

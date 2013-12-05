@@ -1,4 +1,4 @@
-class Message
+class ContactMessage
   include ActiveModel::Model
 
   attr_accessor :first_name, :last_name, :email, :subject, :body
@@ -28,7 +28,7 @@ class Message
 
   def save
     if valid?
-      job = MessageMailerJob.new(self)
+      job = ContactMessageMailerJob.new(self)
       Delayed::Job.enqueue(job)
       true
     else

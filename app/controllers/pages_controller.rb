@@ -2,6 +2,7 @@ class PagesController < ApplicationController
   respond_to :html
 
   before_action :load_page
+
   helper_method :page
 
   breadcrumbs do |b|
@@ -10,8 +11,22 @@ class PagesController < ApplicationController
     end
   end
 
+  class << self
+    def load_embedded(resource_name)
+      helper_method resource_name.to_sym
+      before_action do
+        instance_variable_set("@#{resource_name}", @page.embeddable)
+      end
+    end
+  end
+
   def show
-    respond_with @page, template: @page.template_path
+    respond_with_page
+  end
+
+  protected
+  def respond_with_page(options = {})
+    respond_with @page, options.merge(template: @page.template_path)
   end
 
   private

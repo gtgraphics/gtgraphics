@@ -1,12 +1,7 @@
 class ImagesController < PagesController
-  before_action :load_image
+  load_embedded :image
   
   def download
     render text: "Downloading #{@image} now..."
-  end
-
-  private
-  def load_image
-    @image = @page.embeddable
   end
 end

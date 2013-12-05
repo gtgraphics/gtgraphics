@@ -68,6 +68,9 @@ GtGraphics::Application.routes.draw do
           get :download, on: :member
         end
         route.resources :redirections, constraints: Routing::PageConstraint.new('Redirection')
+        route.resources :contact_forms, constraints: Routing::PageConstraint.new('ContactForm') do
+          resource :message, controller: :contact_messages, as: :messages, only: [:new, :create]
+        end
       end
     end
 
@@ -85,6 +88,9 @@ GtGraphics::Application.routes.draw do
         get :download, on: :member
       end
       route.resources :redirections, constraints: Routing::PageConstraint.new('Redirection')
+      route.resources :contact_forms, constraints: Routing::PageConstraint.new('ContactForm') do
+        resource :message, controller: :contact_messages, as: :messages, only: [:new, :create]
+      end
     end
   end
 
