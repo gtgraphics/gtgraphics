@@ -4,14 +4,15 @@ class @Editor.Controls.Image extends @Editor.Controls.AsyncFontControl
     @icon = 'picture-o'
     super
 
-    # TODO
-    @editor.region.on 'click', 'img', (event) ->
-      console.log 'click image'
-      $image = $(@)
-      if $image.attr('data-editor-selected')
-        $image.removeAttr('data-editor-selected')
-      else
-        $image.attr('data-editor-selected', true)
+    _this = @
+
+    @editor.region.on 'click', 'img', =>
+
+    @editor.region.on 'focus textchange', =>
+      @unselectImage()
+
+    $(document).on 'click', =>
+      @unselectImage()
 
   execCommand: ->
     Editor.active = @editor
@@ -22,16 +23,11 @@ class @Editor.Controls.Image extends @Editor.Controls.AsyncFontControl
 
     $modalContainer = @findOrCreateModalContainer()
 
-    $anchor = @editor.getSelectedNode()
-    if $anchor.is('img')
-      url = $anchor.attr('src')
-      alternativeText = $anchor.attr('alt')
-    else
-      #
+    $image = $('img[data-editor-state="selected"]')
 
     jQuery.ajax
       url: '/admin/editor/image'
-      data: { url: url, alternative_text: alternativeText }
+      data: { html: $image.html() }
       dataType: 'html'
       success: (html) =>
         $modalContainer.html(html)
@@ -58,7 +54,9 @@ class @Editor.Controls.Image extends @Editor.Controls.AsyncFontControl
       @editor.pasteHtml(html)
 
   queryActive: ->
-    @editor.getSelectedNode().is('img')
+    $image = $('img[data-editor-state="selected"]')
+    $image.length > 0
+    #@editor.getSelectedNode().is('img')
 
   queryEnabled: ->
     @editor.viewMode == 'editor'

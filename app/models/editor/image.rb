@@ -52,11 +52,11 @@ class Editor::Image
   def self.from_html(html)
     fragment = Nokogiri::HTML::DocumentFragment.parse(html)
     new.tap do |instance|
-      anchor = fragment.css('img')
-      if anchor.present? and url = anchor.attribute('src').to_s and url.present?
+      image = fragment.css('img')
+      if image.present? and src = image.attribute('src').to_s and src.present?
         instance.persisted = true
-        route = Rails.application.routes.recognize_path(url) rescue nil
-        uri = URI.parse(url) rescue nil
+        route = Rails.application.routes.recognize_path(src) rescue nil
+        uri = URI.parse(src) rescue nil
         if uri.present? and uri.relative? and route.present? and route.key?(:id)
           if page = Page.find_by(path: route[:id])
             instance.page = page
@@ -65,7 +65,7 @@ class Editor::Image
           end
         else
           instance.external = true
-          instance.url = uri.to_s
+          instance.src = uri.to_s
         end
       else
         instance.persisted = false

@@ -21,7 +21,7 @@ class @Editor.Controls.Base
     @refreshState()
     @control.on 'click', =>
       @refreshState()
-    @editor.region.on 'blur click focus keyup paste', =>
+    @editor.region.on 'click focus blur textchange', =>
       @refreshState()
 
     @deactivate()
