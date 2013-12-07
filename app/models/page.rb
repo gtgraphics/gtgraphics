@@ -56,6 +56,7 @@ class Page < ActiveRecord::Base
   before_validation :generate_path, if: -> { slug.present? }
   after_save :update_descendants_paths
   after_update :destroy_replaced_embeddable, if: :embeddable_type_changed?
+  after_update :migrate_or_destroy_regions, if: -> { embeddable_type_changed? and support_regions? }
   before_destroy :destroyable?
   after_destroy :destroy_embeddable
 
@@ -209,6 +210,24 @@ class Page < ActiveRecord::Base
   def generate_slug
     self.slug = title(I18n.default_locale) if new_record? and slug.blank? and title.present?
     self.slug = slug.parameterize if slug.present?
+  end
+
+  def migrate_or_destroy_regions
+    if template_id and template_id_was     
+      region_definitions = template.region_definitions.to_a
+      region_definition_labels = region_definitions.collect(&:label)
+      destroyable_region_ids = []
+      prev_regions = regions.includes(:definition).where(region_definitions: { template_id: template_id_was })
+      prev_regions.each do |region|
+        if region.label.in?(region_definition_labels)
+          region.definition = region_definitions.find { |definition| definition.label == region.label }
+          region.save!
+        else
+          destroyable_region_ids << region.id
+        end
+      end
+      Region.destroy_all(id: destroyable_region_ids)
+    end
   end
 
   def set_default_template

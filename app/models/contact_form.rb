@@ -9,6 +9,9 @@
 
 class ContactForm < ActiveRecord::Base
   include PageEmbeddable
+  include Templatable
+
+  self.template_type = 'Template::ContactForm'.freeze
 
   acts_as_page_embeddable destroy_with_page: true
 

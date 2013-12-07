@@ -1,0 +1,12 @@
+%h1= @contact_form.title
+
+- unless @content.translated_locales.include?(I18n.locale)
+  %p{style: 'border: 1px solid red; padding: 10px;'}
+    Not translated to #{I18n.locale}
+
+= @content.body_html
+
+- if @content_pages.any?
+  %ul
+    - @content_pages.each do |content_page|
+      %li= link_to content_page, content_page
