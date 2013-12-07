@@ -220,7 +220,7 @@ class Page < ActiveRecord::Base
   end
 
   def validate_no_root_exists
-    errors.add(:parent_id, :taken) if self.class.roots.where.not(id: self.id).any?
+    errors.add(:parent_id, :taken) if self.class.roots.without(self).any?
   end
 
   def validate_parent_assignability
