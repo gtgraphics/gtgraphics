@@ -7,17 +7,9 @@ GtGraphics::Application.routes.draw do
 
       resource :account, except: [:new, :create]
 
-      resources :contents, only: [] do
-        get :translation_fields, on: :collection
-      end
-
       namespace :editor do
         resource :link, only: [:show, :update]
         resource :image, only: [:show, :update]
-      end
-
-      resources :galleries, only: [] do
-        get :translation_fields, on: :collection
       end
 
       resources :images do

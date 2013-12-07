@@ -132,7 +132,13 @@ class Admin::PagesController < Admin::ApplicationController
         if @page.embeddable_class and translated_locale.in?(I18n.available_locales.map(&:to_s))
           @page.embeddable = @page.embeddable_class.new
           @page.embeddable.translations.build(locale: translated_locale)
-          render "admin/#{@page.embeddable_type.underscore.pluralize}/translation_fields", layout: false 
+
+          translation_fields_view_path = "admin/#{@page.embeddable_type.underscore.pluralize}/translation_fields"
+          unless File.exists?(Rails.root.join('views', translation_fields_view_path))
+            translation_fields_view_path = "admin/pages/translation_fields"
+          end
+
+          render translation_fields_view_path, layout: false 
         else
           head :not_found
         end
@@ -158,6 +164,7 @@ class Admin::PagesController < Admin::ApplicationController
   def page_params
     page_params = params.require(:page)
     embeddable_attributes_params = case page_params[:embeddable_type]
+    when 'ContactForm' then [:id, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     when 'Content' then [:id, { translations_attributes: [:_destroy, :id, :locale, :title, :body] }]
     when 'Gallery' then [:id, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     when 'Image' then [:id, :asset, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]

@@ -38,6 +38,8 @@ de:
     attributes:
       album:
         images_count: Bilder
+      contact_form:
+        recipients: Empfänger
       image:
         artist: Künstler
         aspect_ratio: Seitenverhältnis
