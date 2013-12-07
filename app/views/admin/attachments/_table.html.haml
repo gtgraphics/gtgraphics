@@ -27,5 +27,4 @@
         %td= number_to_human_size attachment.file_size
         - if actions
           %td.actions
-            = button_link_to icon(:download), [:download, :admin, attachment], type: :default, size: :mini
             = action_buttons_for attachment, size: :mini, icon_only: true

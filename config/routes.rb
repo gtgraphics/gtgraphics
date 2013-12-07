@@ -13,13 +13,17 @@ GtGraphics::Application.routes.draw do
       resource :account, except: [:new, :create]
 
       resources :attachments do
-        get :translation_fields, on: :collection
+        collection do
+          delete :destroy_multiple
+          get :translation_fields
+        end
         get :download, on: :member
       end
 
       resources :images do
         collection do
           patch :batch, as: :batch_process
+          delete :destroy_multiple
           get :translation_fields
         end
         member do

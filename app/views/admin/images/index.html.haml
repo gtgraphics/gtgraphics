@@ -1,9 +1,14 @@
-= index_headline_for Image do
-  .btn-toolbar
-    = create_button_link_for Image, icon: :upload, caption: translate('helpers.links.upload', model: Image.model_name.human), url: :new_admin_image
+= form_tag :destroy_multiple_admin_images, method: :delete do
 
-- if @images.any?
-  = render 'table', checkboxes: true
-- else
-  .well.text-center
-    %h4= translate('views.hints.empty', model: Image.model_name.human(count: 2))
+  = index_headline_for Image do
+    %ul.list-inline
+      %li.batch-controls
+        = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger batch-control'
+      %li= create_button_link_for Image, icon: :upload, caption: translate('helpers.links.upload', model: Image.model_name.human), url: :new_admin_image
+
+
+  - if @images.any?
+    = render 'table', checkboxes: true
+  - else
+    .well.text-center
+      %h4= translate('views.hints.empty', model: Image.model_name.human(count: 2))

@@ -1,9 +1,13 @@
-= index_headline_for Attachment do
-  .btn-toolbar
-    = create_button_link_for Attachment, icon: :plus, caption: translate('helpers.links.upload', model: Attachment.model_name.human), url: :new_admin_attachment
+= form_tag :destroy_multiple_admin_attachments, method: :delete do
 
-- if @attachments.any?
-  = render 'table', checkboxes: true
-- else
-  .well.text-center
-    %h4= translate('views.hints.empty', model: Attachment.model_name.human(count: 2))
+  = index_headline_for Attachment do
+    %ul.list-inline
+      %li.batch-controls
+        = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger batch-control'
+      %li= create_button_link_for Attachment, icon: :upload, caption: translate('helpers.links.upload', model: Attachment.model_name.human), url: :new_admin_attachment
+
+  - if @attachments.any?
+    = render 'table', checkboxes: true
+  - else
+    .well.text-center
+      %h4= translate('views.hints.empty', model: Attachment.model_name.human(count: 2))
