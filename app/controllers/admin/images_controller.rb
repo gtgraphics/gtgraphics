@@ -44,6 +44,14 @@ class Admin::ImagesController < Admin::ApplicationController
     respond_with :admin, @image
   end
 
+  def destroy_multiple
+    image_ids = Array(params[:image_ids])
+    Image.destroy_all(id: image_ids)
+    respond_to do |format|
+      format.html { redirect_to :admin_images }
+    end
+  end
+
   def dimensions
     if style = params[:style] and Image.attachment_definitions[:asset][:styles].keys.map(&:to_s).include?(style)
       geometry = Paperclip::Geometry.from_file(@image.asset.path(style))

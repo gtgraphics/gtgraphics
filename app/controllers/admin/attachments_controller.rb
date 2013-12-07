@@ -44,6 +44,14 @@ class Admin::AttachmentsController < Admin::ApplicationController
     respond_with :admin, @attachment
   end
 
+  def destroy_multiple
+    attachment_ids = Array(params[:attachment_ids])
+    Attachment.destroy_all(id: attachment_ids)
+    respond_to do |format|
+      format.html { redirect_to :admin_attachments }
+    end
+  end
+
   def download
     send_file @attachment.asset.path, filename: @attachment.virtual_file_name, content_type: @attachment.content_type, disposition: :attachment, x_sendfile: true
   end

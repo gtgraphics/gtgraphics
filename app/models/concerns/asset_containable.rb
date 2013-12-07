@@ -12,6 +12,6 @@ module AssetContainable
   end
 
   def virtual_file_name(locale = I18n.locale)
-    title(locale).parameterize('_') + File.extname(file_name).downcase
+    title(locale).parameterize.underscore + File.extname(file_name).downcase
   end
 end

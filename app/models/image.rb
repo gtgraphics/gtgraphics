@@ -32,7 +32,7 @@ class Image < ActiveRecord::Base
 
   translates :title, :description, fallbacks_for_empty_translations: true
 
-  has_attached_file :asset, styles: STYLES, url: '/system/:class/:id_partition/:style/:filename'
+  has_attached_file :asset, styles: STYLES, url: '/system/:class/:id_partition/:style.:extension'
 
   acts_as_batch_translatable
   acts_as_page_embeddable multiple: true, destroy_with_page: false
