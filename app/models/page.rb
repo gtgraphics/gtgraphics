@@ -21,6 +21,7 @@
 
 class Page < ActiveRecord::Base
   EMBEDDABLE_TYPES = %w(
+    ContactForm
     Content
     Gallery
     Image
@@ -36,8 +37,8 @@ class Page < ActiveRecord::Base
   acts_as_nested_set
 
   belongs_to :embeddable, polymorphic: true, autosave: true
-  belongs_to :template
-  has_many :regions, dependent: :destroy
+  belongs_to :template, inverse_of: :pages
+  has_many :regions, dependent: :destroy, inverse_of: :page
 
   delegate :title, to: :embeddable, allow_nil: true
 
@@ -54,7 +55,7 @@ class Page < ActiveRecord::Base
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
   after_save :update_descendants_paths
-  after_update :destroy_replaced_embeddable, if: -> { embeddable_type_changed? }
+  after_update :destroy_replaced_embeddable, if: :embeddable_type_changed?
   before_destroy :destroyable?
   after_destroy :destroy_embeddable
 
@@ -103,12 +104,13 @@ class Page < ActiveRecord::Base
     end
 
     def template_types_hash
-      @@template_types_hash ||= Hash[*EMBEDDABLE_TYPES.map do |embeddable_type|
+      @@template_types_hash ||= EMBEDDABLE_TYPES.inject({}) do |embeddable_types, embeddable_type|
         embeddable_class = embeddable_type.constantize rescue nil
         if embeddable_class and embeddable_class.respond_to?(:template_type)
-          [embeddable_type, embeddable_class.template_type]
+          embeddable_types[embeddable_type] = embeddable_class.template_type
         end
-      end.compact.flatten].freeze
+        embeddable_types
+      end.freeze
     end
 
     def without(page)
@@ -151,11 +153,12 @@ class Page < ActiveRecord::Base
   end
 
   def regions_hash(locale = I18n.locale)
-    ActiveSupport::HashWithIndifferentAccess[regions.collect do |region|
+    regions.inject(ActiveSupport::HashWithIndifferentAccess.new) do |regions_hash, region|
       if body = region.body(locale)
-        [region.definition_label, body]
+        regions_hash[region.definition_label] = body
       end
-    end.compact.flatten]
+      regions_hash
+    end
   end
 
   def support_template?

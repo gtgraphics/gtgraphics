@@ -10,8 +10,8 @@
 #
 
 class RegionDefinition < ActiveRecord::Base
-  belongs_to :template
-  has_many :regions, dependent: :destroy
+  belongs_to :template, inverse_of: :region_definitions
+  has_many :regions, dependent: :destroy, inverse_of: :definition
 
   validates :label, presence: true, uniqueness: { scope: :template_id }
   validates :template_id, presence: true

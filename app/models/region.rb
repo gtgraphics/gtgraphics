@@ -5,14 +5,15 @@
 #  id            :integer          not null, primary key
 #  definition_id :integer
 #  page_id       :integer
-#  body          :text
 #  created_at    :datetime
 #  updated_at    :datetime
 #
 
 class Region < ActiveRecord::Base
-  belongs_to :definition, class_name: 'RegionDefinition'
-  belongs_to :page
+  include HtmlContainable
+  
+  belongs_to :definition, class_name: 'RegionDefinition', inverse_of: :regions
+  belongs_to :page, inverse_of: :regions
   has_one :template, -> { readonly }, through: :definition
 
   delegate :label, to: :definition, prefix: true, allow_nil: true

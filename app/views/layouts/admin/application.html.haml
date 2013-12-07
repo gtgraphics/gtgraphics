@@ -40,6 +40,9 @@
               = Shout.model_name.human(count: 2)
               .badge= Shout.count
 
+            = active_link_to :admin_users, wrap_tag: :li do
+              = User.model_name.human(count: 2)
+
           %ul.list-inline.navbar-text.pull-right
             %li= link_to prepend_icon(:user, 'Tobias Casper'), '#', class: 'navbar-link'
             %li= link_to prepend_icon(:signout, 'Sign out'), :root, class: 'navbar-link'

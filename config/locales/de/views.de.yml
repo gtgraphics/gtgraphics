@@ -2,6 +2,8 @@ de:
   views:
     forms:
       advanced_options: Erweiterte Optionen
+      basics: Basisdaten
+      password: Passwort
       settings: Einstellungen
     hints:
       empty: 'Es wurden bislang keine %{model} erstellt.'

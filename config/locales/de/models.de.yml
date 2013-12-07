@@ -77,8 +77,20 @@ de:
         file_name: Vorlagendatei
         type: Typ
         default: Standardvorlage?
+      user:
+        first_name: Vorname
+        last_name: Nachname
+        full_name: Name
+        email: E-Mail-Adresse
+        current_password: Aktuelles Passwort
+        generate_password: Passwort generieren?
+        password: Passwort
+        password_confirmation: Passwort (Wdh.)
 
     models:
+      contact_form:
+        one: Kontaktformular
+        other: Kontaktformulare
       content:
         one: Inhalt
         other: Inhalte
@@ -124,3 +136,6 @@ de:
       template/image:
         one: Bildseitenvorlage
         other: Bildseitenvorlagen
+      user:
+        one: Benutzer
+        other: Benutzer

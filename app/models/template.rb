@@ -22,8 +22,8 @@ class Template < ActiveRecord::Base
   translates :name, :description, fallbacks_for_empty_translations: true
   has_attached_file :screenshot, styles: { thumbnail: '75x75#', preview: '555x' }
 
-  has_many :region_definitions, dependent: :destroy
-  has_many :pages, dependent: :destroy
+  has_many :region_definitions, dependent: :destroy, inverse_of: :template
+  has_many :pages, dependent: :destroy, inverse_of: :template
 
   validates :type, presence: true, inclusion: { in: ->(template) { template.class.template_types } }
   validates :file_name, presence: true, inclusion: { in: :available_template_files }

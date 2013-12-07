@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  before_action :set_current_user
   before_action :set_locale
 
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
@@ -22,11 +23,15 @@ class ApplicationController < ActionController::Base
     { locale: I18n.locale }
   end
 
+  def set_current_user
+    Thread.current[:current_user] = current_user
+  end
+
   def set_locale
     if locale = params[:locale] and I18n.available_locales.map(&:to_s).include?(locale)
       I18n.locale = session[:locale] = locale.to_sym
     else
-      locale = session[:locale] || http_accept_language.compatible_language_from(I18n.available_locales)
+      locale = current_user.try(:locale) || session[:locale] || http_accept_language.compatible_language_from(I18n.available_locales)
       redirect_to request.query_parameters.deep_symbolize_keys.merge(locale: locale).merge(params.slice(:format)).merge(id: params[:id].presence)
     end
   end

@@ -1,8 +1,11 @@
 GtGraphics::Application.routes.draw do
+  devise_for :users, skip: [:registrations]
   #devise_for :users, controllers: { sessions: 'admin/sessions' }
 
   scope '(:locale)', constraints: Routing::LocaleConstraint.new do
     namespace :admin do
+
+      resource :account, except: [:new, :create]
 
       resources :contents, only: [] do
         get :translation_fields, on: :collection
@@ -45,6 +48,8 @@ GtGraphics::Application.routes.draw do
       resources :redirections, only: [] do
         get :translation_fields, on: :collection
       end
+
+      resources :shouts
       
       resources :templates do
         resources :regions, controller: :region_definitions, as: :region_definitions, only: [:new, :create, :edit, :update, :destroy]
@@ -54,8 +59,8 @@ GtGraphics::Application.routes.draw do
         end
         patch :make_default, on: :member
       end
-      
-      resources :shouts
+
+      resources :users      
       
       root 'dashboard#index'
     end

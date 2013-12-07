@@ -1,0 +1,20 @@
+= index_headline_for User do
+  .btn-toolbar
+    = create_button_link_for User, namespace: :admin
+
+- if @users.any?
+  %table.table.table-striped
+    %thead
+      %tr
+        %th= User.human_attribute_name :full_name
+        %th.actions
+    %tbody
+      - @users.each do |user|
+        %tr
+          %td= user.full_name
+          %td.actions
+            = action_buttons_for user, size: :mini, icon_only: true
+            
+- else
+  .well.text-center
+    %h4= translate('views.hints.empty', model: User.model_name.human(count: 2))
