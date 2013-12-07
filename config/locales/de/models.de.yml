@@ -1,11 +1,13 @@
 de:
   attributes:
+    body: Inhalt
+    content_type: Dateityp
     created_at: Erstellt am
-    updated_at: Aktualisierung
+    description: Beschreibung
+    file_size: Dateigröße
     slug: URL-Token
     title: Titel
-    body: Inhalt
-    description: Beschreibung
+    updated_at: Aktualisierung
 
   activemodel:
     attributes:
@@ -36,16 +38,14 @@ de:
 
   activerecord:
     attributes:
-      album:
-        images_count: Bilder
+      attachment:
+        asset: Datei
       contact_form:
         recipients: Empfänger
       image:
         artist: Künstler
         aspect_ratio: Seitenverhältnis
-        content_type: Dateityp
         dimensions: Maße
-        file_size: Dateigröße
         asset: Bilddatei
       image/translation:
         caption: Beschriftung
@@ -90,6 +90,9 @@ de:
         password_confirmation: Passwort (Wdh.)
 
     models:
+      attachment:
+        one: Datei
+        other: Dateien
       contact_form:
         one: Kontaktformular
         other: Kontaktformulare

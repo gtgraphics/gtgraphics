@@ -1,10 +1,6 @@
 %h1= @contact_form.title
 
-- unless @content.translated_locales.include?(I18n.locale)
-  %p{style: 'border: 1px solid red; padding: 10px;'}
-    Not translated to #{I18n.locale}
-
-= @content.body_html
+= @contact_form.description.html_safe
 
 - if @content_pages.any?
   %ul

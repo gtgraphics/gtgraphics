@@ -1,6 +1,6 @@
 = index_headline_for Image do
   .btn-toolbar
-    = create_button_link_for Image, icon: :upload, caption: translate('helpers.links.upload', model: Image.model_name.human), url: [:new, :admin, @album, :image].compact
+    = create_button_link_for Image, icon: :upload, caption: translate('helpers.links.upload', model: Image.model_name.human), url: :new_admin_image
 
 - if @images.any?
   = render 'table', checkboxes: true

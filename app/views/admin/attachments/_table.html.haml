@@ -1,0 +1,31 @@
+- attachments ||= @attachments
+- actions = true if actions.nil?
+- checkboxes = false if checkboxes.nil?
+
+- if checkboxes
+  = hidden_field_tag 'attachment_ids[]', '', id: nil
+
+%table.table.table-striped
+  %thead
+    %tr
+      - if checkboxes
+        %th.checkbox-cell
+          %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
+      %th= Attachment.human_attribute_name :title
+      %th= Attachment.human_attribute_name :content_type
+      %th= Attachment.human_attribute_name :file_size
+      - if actions
+        %th.actions
+  %tbody
+    - attachments.each do |attachment|
+      = content_tag_for :tr, attachment do
+        - if checkboxes
+          %td.checkbox-cell
+            = check_box_tag 'attachment_ids[]', attachment.id, false, class: 'table-checkbox', id: nil
+        %td= link_to attachment.title, [:admin, attachment]
+        %td= attachment.human_content_type
+        %td= number_to_human_size attachment.file_size
+        - if actions
+          %td.actions
+            = button_link_to icon(:download), [:download, :admin, attachment], type: :default, size: :mini
+            = action_buttons_for attachment, size: :mini, icon_only: true

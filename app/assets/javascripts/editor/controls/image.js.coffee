@@ -71,5 +71,7 @@ class @Editor.Controls.Image extends @Editor.Controls.AsyncFontControl
       $modalContainer.appendTo('body')
     $modalContainer
 
+  unselectImage: ->
+
 
 @Editor.Controls.register('image', @Editor.Controls.Image)

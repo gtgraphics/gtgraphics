@@ -4,7 +4,7 @@ class ImagePreviewInput < SimpleForm::Inputs::FileInput
     version = input_html_options.delete(:preview_version) { :original }
     html = '' # the htmlput string we're going to build
     # check if there's an uploaded file (eg: edit mode or form not saved)
-    if object.send("#{attribute_name}?")
+    if object.send("#{attribute_name}?") and object.errors[attribute_name].empty?
       # append preview image to htmlput
       html << template.content_tag(:div, class: 'clearfix') do
         inner_html = ""
@@ -15,7 +15,9 @@ class ImagePreviewInput < SimpleForm::Inputs::FileInput
         end
         inner_html << template.content_tag(:div, "#{object.width} &times; #{object.height}".html_safe, style: 'margin-top: 5px')
         inner_html << template.content_tag(:div, class: 'text-muted') do
-          I18n.translate(object.send("#{attribute_name}_content_type"), scope: :content_types)          
+          file_name = object.send("#{attribute_name}_file_name")
+          content_type = object.send("#{attribute_name}_content_type")
+          I18n.translate(content_type, scope: :content_types, default: I18n.translate('content_types.default', extension: File.extname(file_name).from(1).upcase, default: content_type))
         end
         inner_html << template.content_tag(:div, class: 'text-muted') do
           template.number_to_human_size(object.send("#{attribute_name}_file_size"))

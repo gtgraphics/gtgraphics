@@ -15,6 +15,7 @@
 #
 
 class Image < ActiveRecord::Base
+  include AssetContainable
   # include AttachmentPreservable
   include BatchTranslatable
   include PageEmbeddable
@@ -31,7 +32,7 @@ class Image < ActiveRecord::Base
 
   translates :title, :description, fallbacks_for_empty_translations: true
 
-  has_attached_file :asset, styles: STYLES
+  has_attached_file :asset, styles: STYLES, url: '/system/:class/:id_partition/:style/:filename'
 
   acts_as_batch_translatable
   acts_as_page_embeddable multiple: true, destroy_with_page: false
@@ -39,6 +40,7 @@ class Image < ActiveRecord::Base
 
   serialize :exif_data, OpenStruct
 
+  before_validation :set_default_title
   before_save :set_dimensions, if: :asset_changed?
   before_save :set_exif_data, if: :asset_changed?
 
@@ -62,10 +64,6 @@ class Image < ActiveRecord::Base
     template.render(to_liquid).html_safe
   end
 
-  def human_content_type(locale = I18n.locale)
-    I18n.translate(content_type, scope: :content_types, locale: locale, default: content_type)
-  end
-
   def pixels
     width * height
   end
@@ -78,11 +76,11 @@ class Image < ActiveRecord::Base
     title
   end
 
-  def virtual_file_name
-    title.parameterize('_') + File.extname(file_name).downcase
+  private
+  def set_default_title
+    translation.title = File.basename(asset_file_name, '.*').humanize if translation.title.blank?
   end
 
-  private
   def set_dimensions
     geometry = Paperclip::Geometry.from_file(asset.queued_for_write[:original].path)
     self.width = geometry.width.to_i

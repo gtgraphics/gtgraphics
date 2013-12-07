@@ -5,7 +5,7 @@
 #  id                     :integer          not null, primary key
 #  first_name             :string(255)
 #  last_name              :string(255)
-#  locale                 :string(255)
+#  preferred_locale       :string(255)
 #  email                  :string(255)      not null
 #  encrypted_password     :string(255)      not null
 #  reset_password_token   :string(255)
@@ -28,9 +28,9 @@ class User < ActiveRecord::Base
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :email, presence: true
-  validates :locale, length: { is: 2, allow_blank: true }
 
-  before_validation :sanitize_locale
+  before_validation :sanitize_preferred_locale
+  before_create :set_generated_password, if: :generate_password?
 
   default_scope -> { order(:first_name, :last_name) }
 
@@ -48,6 +48,10 @@ class User < ActiveRecord::Base
     def current
       Thread.current[:current_user]
     end
+
+    def generate_password(length = 8)
+      Devise.friendly_token.first(length)
+    end
   end
 
   def current?
@@ -59,7 +63,7 @@ class User < ActiveRecord::Base
   end
 
   def generate_password?
-    @generate_password = false unless defined? @generate_password
+    @generate_password = true unless defined? @generate_password
     @generate_password
   end
   alias_method :generate_password, :generate_password?
@@ -77,7 +81,11 @@ class User < ActiveRecord::Base
   end
 
   private
-  def sanitize_locale
-    self.locale = locale.to_s.downcase.presence
+  def sanitize_preferred_locale
+    self.preferred_locale = preferred_locale.to_s.downcase.presence
+  end
+
+  def set_generated_password
+    self.password = self.password_confirmation = self.class.generate_password
   end
 end

@@ -1,0 +1,5 @@
+= translation_pane_for fields.object.locale do
+  = fields.input :_destroy, as: :hidden, input_html: { class: 'destroy-translation' }
+  = fields.input :locale, as: :hidden
+  = fields.input :title, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
+  = fields.input :description, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }, input_html: { rows: 6, class: 'editor' }

@@ -2,6 +2,6 @@ class ImagesController < PagesController
   load_embedded :image
   
   def download
-    render text: "Downloading #{@image} now..."
+    send_file @image.asset.path, filename: @image.virtual_file_name, content_type: @image.content_type, disposition: :attachment, x_sendfile: true
   end
 end

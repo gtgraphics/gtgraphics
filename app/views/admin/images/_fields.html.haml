@@ -6,6 +6,6 @@
 
 .tab-content#translations
   = fields.simple_fields_for :translations do |translation_fields|
-    = render 'admin/images/translation_fields', fields: translation_fields
+    = render 'admin/images/translation_fields', fields: translation_fields, embedded: embedded
 
 = fields.input :asset, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }, as: :image_preview, input_html: { preview_version: :thumbnail }

@@ -1,5 +1,10 @@
 de:
   content_types:
+    default: '%{extension}-Datei'
+    'application/pdf': PDF-Dokument
+    'application/zip': ZIP-Ordner
     'image/jpeg': JPEG-Bilddatei
     'image/png': PNG-Bilddatei
     'image/gif': GIF-Bilddatei
+    'text/html': HTML-Dokument
+    'text/plain': Textdokument

@@ -59,7 +59,7 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def download
-    send_file @image.asset.path, filename: @image.virtual_file_name, content_type: @image.content_type, disposition: :attachment
+    send_file @image.asset.path, filename: @image.virtual_file_name, content_type: @image.content_type, disposition: :attachment, x_sendfile: true
   end
 
   def translation_fields

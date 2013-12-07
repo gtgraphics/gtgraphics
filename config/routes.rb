@@ -5,11 +5,16 @@ GtGraphics::Application.routes.draw do
   scope '(:locale)', constraints: Routing::LocaleConstraint.new do
     namespace :admin do
 
-      resource :account, except: [:new, :create]
-
       namespace :editor do
         resource :link, only: [:show, :update]
         resource :image, only: [:show, :update]
+      end
+
+      resource :account, except: [:new, :create]
+
+      resources :attachments do
+        get :translation_fields, on: :collection
+        get :download, on: :member
       end
 
       resources :images do

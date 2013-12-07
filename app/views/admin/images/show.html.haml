@@ -1,5 +1,7 @@
 = view_headline_for @image do
-  = action_buttons_for @image, except: :show
+  %ul.list-inline
+    %li= button_link_to prepend_icon(:download, translate('helpers.links.download')), [:download, :admin, @image], size: :large, type: :success
+    %li= action_buttons_for @image, except: :show
 
 %p= link_to image_tag(@image.asset.url(:preview), class: 'img-responsive thumbnail', alt: @image.title), @image.asset.url, target: '_blank'
 
@@ -15,8 +17,6 @@
       %dd #{@image.width} x #{@image.height} #{translate('helpers.units.pixels')}
 
   .col-lg-4.text-center
-    %br
-    = button_link_to prepend_icon(:download, translate('helpers.links.download')), [:download, :admin, @image], size: :large, type: :primary
 
 
   .col-offset-2.col-lg-8

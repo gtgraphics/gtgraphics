@@ -25,12 +25,12 @@
           %td.checkbox-cell
             = check_box_tag 'image_ids[]', image.id, false, class: 'table-checkbox', id: nil
         %td.thumbnail-cell
-          = link_to [:admin, @album, image].compact do
+          = link_to [:admin, image] do
             = image_tag image.asset.url(:thumbnail), class: 'thumbnail'
-        %td= link_to image.title, [:admin, @album, image].compact
+        %td= link_to image.title, [:admin, image]
         %td= image.human_content_type
         %td= number_to_human_size image.file_size
         %td #{image.width} &times; #{image.height}
         - if actions
           %td.actions
-            = action_buttons_for image, parent: @album, size: :mini, icon_only: true
+            = action_buttons_for image, size: :mini, icon_only: true
