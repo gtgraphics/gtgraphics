@@ -12,6 +12,7 @@
 #  exif_data          :text
 #  created_at         :datetime
 #  updated_at         :datetime
+#  author_id          :integer
 #
 
 class Editor::Image

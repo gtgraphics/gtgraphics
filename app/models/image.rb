@@ -12,10 +12,12 @@
 #  exif_data          :text
 #  created_at         :datetime
 #  updated_at         :datetime
+#  author_id          :integer
 #
 
 class Image < ActiveRecord::Base
   include AssetContainable
+  include Authorable
   # include AttachmentPreservable
   include BatchTranslatable
   include PageEmbeddable
@@ -36,6 +38,7 @@ class Image < ActiveRecord::Base
 
   has_attached_file :asset, styles: STYLES, url: '/system/:class/:id_partition/:style.:extension'
 
+  acts_as_authorable
   acts_as_batch_translatable
   acts_as_page_embeddable multiple: true, destroy_with_page: false
   # preserve_attachment_between_requests_for :asset

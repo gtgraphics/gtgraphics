@@ -20,6 +20,8 @@
 #
 
 class Page < ActiveRecord::Base
+  include Authorable
+
   EMBEDDABLE_TYPES = %w(
     ContactForm
     Content
@@ -34,6 +36,7 @@ class Page < ActiveRecord::Base
     galleries
   ).freeze
 
+  acts_as_authorable
   acts_as_nested_set
 
   belongs_to :embeddable, polymorphic: true, autosave: true

@@ -67,7 +67,8 @@ GtGraphics::Application.routes.draw do
 
       resources :users      
       
-      root 'dashboard#index'
+      #root 'dashboard#index'
+      root to: redirect('/admin/pages')
     end
 
     scope '/', constraints: { id: /.*/ } do
