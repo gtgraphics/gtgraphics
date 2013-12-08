@@ -80,6 +80,16 @@ class User < ActiveRecord::Base
     end
   end
 
+  def send_password?
+    @send_password = true unless defined? @send_password
+    @send_password
+  end
+  alias_method :send_password, :send_password?
+
+  def send_password=(send_password)
+    @send_password = send_password.in?(ActiveRecord::ConnectionAdapters::Column::TRUE_VALUES)
+  end
+
   private
   def sanitize_preferred_locale
     self.preferred_locale = preferred_locale.to_s.downcase.presence
