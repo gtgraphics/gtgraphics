@@ -6,12 +6,16 @@
   %table.table.table-striped
     %thead
       %tr
+        %th.thumbnail-cell
         %th= User.human_attribute_name :full_name
         %th.actions
     %tbody
       - @users.each do |user|
         %tr
-          %td= user.full_name
+          %td.thumbnail-cell
+            = link_to [:admin, user] do
+              = gravatar_image_tag user.email, alt: user.full_name, size: 75, class: 'thumbnail', default: :mm
+          %td= link_to user.full_name, [:admin, user]
           %td.actions
             = action_buttons_for user, size: :mini, icon_only: true
             

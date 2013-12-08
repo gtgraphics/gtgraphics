@@ -30,8 +30,9 @@ class User < ActiveRecord::Base
   validates :email, presence: true
 
   before_validation :sanitize_preferred_locale
-  before_create :set_generated_password, if: :generate_password?
-  after_create :send_password
+  before_validation :set_generated_password, if: :generate_password?
+  after_create :send_initial_password
+  after_update :send_updated_password, if: :password_changed?
 
   default_scope -> { order(:first_name, :last_name) }
 
@@ -62,15 +63,20 @@ class User < ActiveRecord::Base
   def full_name
     "#{first_name} #{last_name}".strip
   end
+  alias_method :name, :full_name
 
   def generate_password?
-    @generate_password = true unless defined? @generate_password
+    @generate_password = new_record? unless defined? @generate_password
     @generate_password
   end
   alias_method :generate_password, :generate_password?
 
   def generate_password=(generate_password)
     @generate_password = generate_password.in?(ActiveRecord::ConnectionAdapters::Column::TRUE_VALUES)
+  end
+
+  def password_changed?
+    new_record? or password.present?
   end
 
   def recipient
@@ -86,9 +92,12 @@ class User < ActiveRecord::Base
     self.preferred_locale = preferred_locale.to_s.downcase.presence
   end
 
-  def send_password
-    job = UserPasswordMailerJob.new(self.id, I18n.locale)
-    Delayed::Job.enqueue(job)
+  def send_initial_password
+    UserMailer.send_initial_password_email(self).deliver
+  end
+
+  def send_updated_password
+    #UserMailer.send_updated_password_email(self).deliver
   end
 
   def set_generated_password

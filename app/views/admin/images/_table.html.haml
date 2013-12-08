@@ -27,7 +27,7 @@
             = check_box_tag 'image_ids[]', image.id, false, class: 'table-checkbox', id: nil
         %td.thumbnail-cell
           = link_to [:admin, image] do
-            = image_tag image.asset.url(:thumbnail), class: 'thumbnail'
+            = image_tag image.asset.url(:thumbnail), class: 'thumbnail', alt: image.title
         %td= link_to image.title, [:admin, image]
         %td= image.human_content_type
         %td= number_to_human_size image.file_size

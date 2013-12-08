@@ -5,7 +5,9 @@ class Admin::UsersController < Admin::ApplicationController
 
   breadcrumbs do |b|
     b.append User.model_name.human(count: 2), :admin_users
-    b.append @user.full_name, [:admin, @user] if @user
+    b.append translate('breadcrumbs.new', model: User.model_name.human), :new_admin_user if action_name.in? %w(new create)
+    b.append @user.full_name, [:admin, @user] if action_name.in? %w(show edit update)
+    b.append translate('breadcrumbs.edit', model: User.model_name.human), [:edit, :admin, @user] if action_name.in? %w(edit update)
   end
 
   def index
@@ -19,7 +21,7 @@ class Admin::UsersController < Admin::ApplicationController
   end
 
   def create
-    @user = User.create(user_params)
+    @user = User.create(create_user_params)
     respond_with :admin, @user
   end
 
@@ -32,17 +34,8 @@ class Admin::UsersController < Admin::ApplicationController
   end
 
   def update
-    @user.update(user_params)
+    @user.update(update_user_params)
     respond_with :admin, @user
-  end
-
-  def edit_password
-    respond_with :admin, @user
-  end
-
-  def update_password
-    @user.update(user_password_params)
-    respond_with :admin, @user, template: 'edit_password'
   end
 
   def destroy
@@ -55,8 +48,12 @@ class Admin::UsersController < Admin::ApplicationController
     @user = User.find(params[:id])
   end
 
-  def user_params
-    params.require(:user).permit(:first_name, :last_name, :email)
+  def create_user_params
+    params.require(:user).permit(:first_name, :last_name, :email, :preferred_locale, :generate_password, :password, :password_confirmation)
+  end
+
+  def update_user_params
+    params.require(:user).permit(:first_name, :last_name, :email, :preferred_locale, :current_password, :password, :password_confirmation)
   end
 
   def user_password_params

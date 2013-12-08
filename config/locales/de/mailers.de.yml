@@ -1,0 +1,7 @@
+de:
+  mailers:
+    user_mailer:
+      send_initial_password_email:
+        subject: 'Ihr initiales Passwort für GT Graphics'
+      send_updated_password_email:
+        subject: 'Ihr aktualisiertes Passwort für GT Graphics'

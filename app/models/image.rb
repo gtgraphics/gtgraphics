@@ -24,6 +24,7 @@ class Image < ActiveRecord::Base
   include Templatable
 
   CONTENT_TYPES = %w(image/jpeg image/pjpeg image/gif image/png).freeze
+  EXIF_CAPABLE_CONTENT_TYPES = %w(image/jpeg image/pjpeg).freeze
 
   STYLES = {
     thumbnail: ['75x75#', :png],
@@ -92,7 +93,7 @@ class Image < ActiveRecord::Base
   end
 
   def set_exif_data
-    if asset_content_type.in? %w(image/jpeg image/pjpeg)
+    if asset_content_type.in?(EXIF_CAPABLE_CONTENT_TYPES)
       self.exif_data = OpenStruct.new(EXIFR::JPEG.new(asset.queued_for_write[:original].path).to_hash) rescue nil
     end
   end
