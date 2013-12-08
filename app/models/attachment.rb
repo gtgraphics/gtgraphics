@@ -42,6 +42,6 @@ class Attachment < ActiveRecord::Base
 
   private
   def set_default_title
-    translation.title = File.basename(asset_file_name, '.*').humanize if translation.title.blank?
+    translation.title = File.basename(asset_file_name, '.*').humanize if asset_file_name.present? and translation.title.blank?
   end
 end
