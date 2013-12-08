@@ -1,9 +1,12 @@
 = view_headline_for @image do
   %ul.list-inline
     %li= button_link_to prepend_icon(:download, translate('helpers.links.download')), [:download, :admin, @image], size: :large, type: :success
+    %li= button_link_to prepend_icon(:hand, translate('helpers.links.move_to', model: Attachment.model_name.human(count: 2)), direction: :right, outline: true), [:move_to_attachments, :admin, @image], method: :patch, size: :large, data: { confirm: translate('helpers.confirm.move', model: Image.model_name.human, other_model: Attachment.model_name.human(count: 2)) }
     %li= action_buttons_for @image, except: :show
 
-%p= link_to image_tag(@image.asset.url(:preview), class: 'img-responsive thumbnail', alt: @image.title), @image.asset.url, target: '_blank'
+%p
+  = link_to @image.asset.url, target: '_blank' do
+    = image_tag(@image.asset.url(:preview), class: 'img-responsive thumbnail', alt: @image.title)
 
 .row
 
@@ -15,6 +18,8 @@
       %dd= number_to_human_size @image.file_size
       %dt= Image.human_attribute_name(:dimensions)
       %dd #{@image.width} x #{@image.height} #{translate('helpers.units.pixels')}
+      %dt= Image.human_attribute_name(:updated_at)
+      %dd= time_ago @image.updated_at
 
   .col-lg-4.text-center
 

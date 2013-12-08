@@ -31,6 +31,7 @@ class User < ActiveRecord::Base
 
   before_validation :sanitize_preferred_locale
   before_create :set_generated_password, if: :generate_password?
+  after_create :send_password
 
   default_scope -> { order(:first_name, :last_name) }
 
@@ -80,19 +81,14 @@ class User < ActiveRecord::Base
     end
   end
 
-  def send_password?
-    @send_password = true unless defined? @send_password
-    @send_password
-  end
-  alias_method :send_password, :send_password?
-
-  def send_password=(send_password)
-    @send_password = send_password.in?(ActiveRecord::ConnectionAdapters::Column::TRUE_VALUES)
-  end
-
   private
   def sanitize_preferred_locale
     self.preferred_locale = preferred_locale.to_s.downcase.presence
+  end
+
+  def send_password
+    job = UserPasswordMailerJob.new(self.id, I18n.locale)
+    Delayed::Job.enqueue(job)
   end
 
   def set_generated_password

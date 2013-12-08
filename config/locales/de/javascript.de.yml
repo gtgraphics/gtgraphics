@@ -29,5 +29,22 @@ de:
       embeddable:
         error: Der Editor konnte nicht geladen werden.
 
+    timeago:
+      prefix_ago: vor
+      suffix_ago: ''
+      prefix_from_now: in
+      suffix_from_now: ''
+      seconds: wenigen Sekunden
+      minute: etwa einer Minute
+      minutes: '%{minutes} Minuten'
+      hour: etwa einer Stunde
+      hours: '%{hours} Stunden'
+      day: etwa einem Tag
+      days: '%{days} Tagen'
+      month: etwa einem Monat
+      months: '%{months} Monaten'
+      year: etwa einem Jahr
+      years: '%{years} Jahren'
+
     translations:
       error: Der Übersetzungseditor konnte nicht geladen werden.

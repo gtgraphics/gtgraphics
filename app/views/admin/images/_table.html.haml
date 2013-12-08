@@ -16,6 +16,7 @@
       %th= Image.human_attribute_name :content_type
       %th= Image.human_attribute_name :file_size
       %th= Image.human_attribute_name :dimensions
+      %th= Image.human_attribute_name :updated_at
       - if actions
         %th.actions
   %tbody
@@ -31,6 +32,7 @@
         %td= image.human_content_type
         %td= number_to_human_size image.file_size
         %td #{image.width} &times; #{image.height}
+        %td= time_ago image.updated_at
         - if actions
           %td.actions
             = action_buttons_for image, size: :mini, icon_only: true

@@ -21,6 +21,8 @@ class Image < ActiveRecord::Base
   include PageEmbeddable
   include Templatable
 
+  CONTENT_TYPES = %w(image/jpeg image/pjpeg image/gif image/png).freeze
+
   STYLES = {
     thumbnail: ['75x75#', :png],
     preview: ['1170x', :jpeg],
@@ -45,11 +47,10 @@ class Image < ActiveRecord::Base
   before_save :set_exif_data, if: :asset_changed?
 
   validates :title, presence: true, uniqueness: true
-  validates_attachment :asset, presence: true, content_type: { content_type: %w(image/jpeg image/pjpeg image/gif image/png) }
+  validates_attachment :asset, presence: true, content_type: { content_type: CONTENT_TYPES }
 
-  alias_attribute :file_name, :asset_file_name
-  alias_attribute :content_type, :asset_content_type
-  alias_attribute :file_size, :asset_file_size
+  alias_attribute :asset_width, :width
+  alias_attribute :asset_height, :height
 
   def asset_changed?
     !asset.queued_for_write[:original].nil?

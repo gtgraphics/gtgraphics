@@ -1,11 +1,5 @@
-class ContactMessageMailerJob
+class ContactMessageMailerJob < Struct.new(:contact_message)
   include Job
-
-  attr_reader :contact_message
-
-  def initialize(contact_message)
-    @contact_message = contact_message
-  end
 
   def perform
     ContactMessageMailer.send_message_email(contact_message).deliver

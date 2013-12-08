@@ -2,7 +2,7 @@
 
   = render 'translation_tabs', object: form.object, url: translation_fields_admin_attachments_path
 
-  = loader class: 'loader-large'
+  = loader size: :large
 
   .tab-content#translations
     = form.simple_fields_for :translations do |translation_fields|

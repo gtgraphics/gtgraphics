@@ -27,4 +27,4 @@
   %dt= Page.human_attribute_name :author
   %dd -
   %dt= Page.human_attribute_name :updated_at
-  %dd= localize @page.updated_at
+  %dd= time_ago @page.updated_at

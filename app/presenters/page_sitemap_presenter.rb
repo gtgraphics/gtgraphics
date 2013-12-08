@@ -35,6 +35,7 @@ class PageSitemapPresenter < Presenter
       haml_tag :th, Page.human_attribute_name(:embeddable_type)
       haml_tag :th, Page.human_attribute_name(:published)
       haml_tag :th, Page.human_attribute_name(:menu_item)
+      haml_tag :th, Page.human_attribute_name(:updated_at)
       haml_tag :th, ''
     end
   end
@@ -48,6 +49,7 @@ class PageSitemapPresenter < Presenter
         haml_tag :td, page.embeddable_class.model_name.human
         haml_tag :td, link_to(yes_or_no(page.published?), toggle_admin_page_path(page, attribute: :published), method: :patch)
         haml_tag :td, link_to(yes_or_no(page.menu_item?), toggle_admin_page_path(page, attribute: :menu_item), method: :patch)
+        haml_tag :td, time_ago(page.updated_at)
         haml_tag 'td.actions' do
           haml_tag '.btn-toolbar' do
             haml_tag '.btn-group' do

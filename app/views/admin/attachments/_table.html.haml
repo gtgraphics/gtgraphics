@@ -14,6 +14,7 @@
       %th= Attachment.human_attribute_name :title
       %th= Attachment.human_attribute_name :content_type
       %th= Attachment.human_attribute_name :file_size
+      %th= Attachment.human_attribute_name :updated_at
       - if actions
         %th.actions
   %tbody
@@ -25,6 +26,7 @@
         %td= link_to attachment.title, [:admin, attachment]
         %td= attachment.human_content_type
         %td= number_to_human_size attachment.file_size
+        %td= time_ago attachment.updated_at
         - if actions
           %td.actions
             = action_buttons_for attachment, size: :mini, icon_only: true

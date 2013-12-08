@@ -10,10 +10,12 @@ class ImagePreviewInput < SimpleForm::Inputs::FileInput
         inner_html = ""
         inner_html << template.content_tag(:div, class: 'pull-left') do
           template.link_to object.send(attribute_name).url, target: '_blank' do
-            template.image_tag(object.send(attribute_name, version), class: 'thumbnail', style: 'margin-bottom: 10px; margin-right: 10px')
+            template.image_tag(object.send(attribute_name, version), class: 'thumbnail', alt: '', style: 'margin-bottom: 10px; margin-right: 10px')
           end
         end
-        inner_html << template.content_tag(:div, "#{object.width} &times; #{object.height}".html_safe, style: 'margin-top: 5px')
+        if object.respond_to?("#{attribute_name}_width") and object.respond_to?("#{attribute_name}_height")
+          inner_html << template.content_tag(:div, "#{object.send("#{attribute_name}_width")} &times; #{object.send("#{attribute_name}_height")}".html_safe, style: 'margin-top: 5px')
+        end
         inner_html << template.content_tag(:div, class: 'text-muted') do
           file_name = object.send("#{attribute_name}_file_name")
           content_type = object.send("#{attribute_name}_content_type")

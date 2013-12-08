@@ -31,8 +31,11 @@ class ApplicationController < ActionController::Base
     if locale = params[:locale] and I18n.available_locales.map(&:to_s).include?(locale)
       I18n.locale = session[:locale] = locale.to_sym
     else
-      locale = current_user.try(:locale) || session[:locale] || http_accept_language.compatible_language_from(I18n.available_locales)
-      redirect_to request.query_parameters.deep_symbolize_keys.merge(locale: locale).merge(params.slice(:format)).merge(id: params[:id].presence)
+      # if user is logged in his preferred locale will be used
+      # if session includes a locale that locale will be used
+      # if none of the above is set the locale will be determined through the HTTP Accept Language header from the browser
+      locale = current_user.try(:preferred_locale) || session[:locale] || http_accept_language.compatible_language_from(I18n.available_locales)
+      redirect_to request.query_parameters.deep_symbolize_keys.merge(locale: locale, id: params[:id].presence, format: params[:format].presence)
     end
   end
 end

@@ -5,7 +5,7 @@
       #page_embeddable_fields_empty.well.text-center
         %h4= translate('views.admin.pages.empty_type')
 
-      = loader id: 'page_embeddable_fields_loader', class: 'loader-large'
+      = loader size: :large, id: 'page_embeddable_fields_loader'
 
       #page_embeddable_fields
         = render 'embeddable_fields', fields: form

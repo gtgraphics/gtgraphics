@@ -27,15 +27,20 @@ $.extend window.I18n,
             evalStr += ".#{scope}"
         $.each keypathArray, ->
           evalStr += ".#{@}"
+      
       try
         translations = eval(evalStr)
       catch
         translations = null
+
       if $.isPlainObject(translations)
         translations
       else
-        if translations
+        if translations != undefined && translations != null
           translations.interpolate(options)
         else
-          console.warn "I18n: no translation found for #{keypath}"
-          humanizeKeypath(keypath)
+          if options.default != undefined && options.default != null
+            options.default
+          else
+            console.warn "I18n: no translation found for #{keypath}"
+            humanizeKeypath(keypath)

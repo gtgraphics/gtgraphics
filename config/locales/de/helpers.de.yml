@@ -8,25 +8,28 @@ de:
       edit: '%{model} bearbeiten'
       insert: '%{model} einfügen'
     links:
-      new: '%{model} erstellen'
-      upload: '%{model} hochladen'
-      edit: Bearbeiten
+      add: Hinzufügen
+      apply: Anwenden
+      cancel: Abbrechen
+      close: Schließen
       destroy: Löschen
       destroy_selected: Ausgewählte löschen
-      view: Ansehen
-      cancel: Abbrechen
+      download: Herunterladen
+      edit: Bearbeiten
+      make_default: Als Standard festlegen
       move: Verschieben
-      remove: Entfernen
-      add: Hinzufügen
+      move_to: 'Verschieben zu %{model}'
       move_up: Nach oben
       move_down: Nach unten
-      close: Schließen
-      apply: Anwenden
-      make_default: Als Standard festlegen
+      new: '%{model} erstellen'
+      remove: Entfernen
+      upload: '%{model} hochladen'
+      view: Ansehen
     confirm:
       destroy: 'Möchten Sie diese(s) %{model} wirklich entfernen?'
       destroy_selected: 'Möchten Sie die ausgewählten %{model} wirklich entfernen?'
       make_default: '%{model} wirklich als Standard festlegen?'
+      move: '%{model} wirklich zu %{other_model} verschieben?'
     prompts:
       create: '– Neu erstellen –'
       custom: '– Benutzerdefiniert –'

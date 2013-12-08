@@ -1,7 +1,7 @@
 class Admin::ImagesController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_image, only: %i(show edit update destroy download dimensions)
+  before_action :load_image, only: %i(show edit update destroy download move_to_attachments dimensions)
 
   breadcrumbs do |b|
     b.append Image.model_name.human(count: 2), :admin_images
@@ -11,7 +11,7 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def index
-    @images = Image.with_translations(I18n.locale).order(Image::Translation.arel_table[:title])
+    @images = Image.with_translations.order(Image::Translation.arel_table[:title])
     respond_with :admin, @images
   end
 
@@ -68,6 +68,28 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def download
     send_file @image.asset.path, filename: @image.virtual_file_name, content_type: @image.content_type, disposition: :attachment, x_sendfile: true
+  end
+
+  def move_to_attachments
+    valid = false
+    @attachment = Attachment.new(@image.slice(:created_at, :updated_at))
+    @attachment.asset = @image.asset
+    @image.translations.each do |image_translation|
+      @attachment.translations.build(image_translation.slice(:locale, :title, :description, :created_at, :updated_at))
+    end
+    Attachment.transaction do
+      valid = @attachment.save and @image.destroy
+    end
+    respond_to do |format|
+      format.html do
+        if valid
+          redirect_to [:admin, @attachment]
+        else
+          # TODO flash.alert = 'Could not move attachment to images'
+          redirect_to [:admin, @image]
+        end
+      end
+    end
   end
 
   def translation_fields

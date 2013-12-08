@@ -32,6 +32,10 @@ class Attachment < ActiveRecord::Base
     template.render(to_liquid).html_safe
   end
 
+  def image?
+    content_type.in?(Image::CONTENT_TYPES)
+  end
+
   def to_liquid
     {} # TODO
   end

@@ -52,6 +52,9 @@ en:
         file_name: Template File
         type: Type
     models:
+      attachment:
+        one: File
+        other: Files
       content:
         one: Content
         other: Contents
@@ -73,3 +76,6 @@ en:
       template:
         one: Template
         other: Templates
+      user:
+        one: User
+        other: Users

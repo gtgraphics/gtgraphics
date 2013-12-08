@@ -1,6 +1,6 @@
 = render 'translation_tabs', object: fields.object, url: translation_fields_admin_pages_path(embeddable_type: fields.object.class.name)
 
-= loader class: 'loader-large'
+= loader size: :large
 
 .tab-content#translations
   = fields.simple_fields_for :translations do |translation_fields|

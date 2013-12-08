@@ -17,7 +17,10 @@ GtGraphics::Application.routes.draw do
           delete :destroy_multiple
           get :translation_fields
         end
-        get :download, on: :member
+        member do
+          get :download
+          patch :move_to_images
+        end
       end
 
       resources :images do
@@ -29,6 +32,7 @@ GtGraphics::Application.routes.draw do
         member do
           get :download
           get :dimensions
+          patch :move_to_attachments
         end
       end
 
