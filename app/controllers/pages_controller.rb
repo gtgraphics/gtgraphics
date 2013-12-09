@@ -31,6 +31,10 @@ class PagesController < ApplicationController
 
   private
   def load_page
-    @page = Page.published.find_by_path!(params[:id] || '')
+    if params[:id].blank?
+      @page = Page.published.root
+    else
+      @page = Page.published.find_by_path!(params[:id])
+    end
   end
 end

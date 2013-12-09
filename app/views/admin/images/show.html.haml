@@ -18,6 +18,12 @@
       %dd= number_to_human_size @image.file_size
       %dt= Image.human_attribute_name(:dimensions)
       %dd #{@image.width} x #{@image.height} #{translate('helpers.units.pixels')}
+      %dt= Image.human_attribute_name(:author)
+      %dd
+        - if @image.author
+          = link_to user_info(@image.author), [:admin, @image.author]
+        - else
+          \-
       %dt= Image.human_attribute_name(:updated_at)
       %dd= time_ago @image.updated_at
 

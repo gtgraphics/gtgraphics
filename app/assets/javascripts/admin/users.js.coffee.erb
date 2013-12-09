@@ -1,0 +1,46 @@
+refreshGeneratePasswordCheckState = ->
+  $passwordFields = $('#password_fields')
+  if $('#user_generate_password_true').is(':checked')
+    $passwordFields.find(':input').prop('disabled', true)
+    $passwordFields.hide()
+  else
+    $passwordFields.find(':input').prop('disabled', false)
+    $passwordFields.show()
+
+$(document).ready ->
+  # Generate Password Radio Buttons Behavior
+  refreshGeneratePasswordCheckState()
+  $(document).on 'click', '#user_generate_password_true, #user_generate_password_false', ->
+    $radioButton = $(@)
+    refreshGeneratePasswordCheckState()
+
+  # User Info Popover
+
+  $(document).popover
+    container: 'body'
+    selector: '.user-info'
+    trigger: 'hover'
+    placement: 'top'
+    html: true
+    title: ->
+      $(@).data('fullUserName')
+    content: ->
+      $('<img />', src: '<%= asset_path("admin/loader_small.gif") %>')
+
+  $(document).on 'show.bs.popover', '.user-info', ->
+    console.log 'start to show'
+
+
+
+  #  $userInfo = $(@)
+  #  userId = $userInfo.data('userId')
+  #  jQuery.ajax
+  #    url: "/admin/users/#{userId}.popover"
+  #    dataType: 'html'
+  #    success: (content) ->
+  #      $userInfo.popover(trigger: 'manual', html: true, content: content)
+  #      $userInfo.popover('show')
+
+  #$(document).on 'mouseout', '.user-info', ->
+  #  $userInfo = $(@)
+  #  $userInfo.popover('destroy')
