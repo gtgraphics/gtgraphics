@@ -86,9 +86,9 @@ GtGraphics::Application.routes.draw do
     end
 
     %w(Content Gallery Image Redirection ContactForm).each do |page_type|
-      root "#{page_type.underscore.pluralize}#show", as: nil, constraints: Routing::PageConstraint.new(page_type)
+      root "#{page_type.underscore.pluralize}#show", as: nil, constraints: Routing::RootPageConstraint.new(page_type)
     end
-    root to: 'pages#show'
+    root to: 'application#render_404'
   end
 
   # Legacy URLs that have changed permanently (HTTP 301)

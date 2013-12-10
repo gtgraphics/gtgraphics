@@ -11,7 +11,6 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
 
-  private
   def render_404
     respond_to do |format|
       format.html { render 'public/404', layout: false, status: :not_found }
@@ -19,6 +18,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  private
   def default_url_options(options = {})
     { locale: I18n.locale }
   end
