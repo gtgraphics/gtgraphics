@@ -101,6 +101,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def to_s
+    full_name
+  end
+
   private
   def sanitize_preferred_locale
     self.preferred_locale = preferred_locale.to_s.downcase.presence

@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.0'
+gem 'rails', '4.0.2'
 
 # Database
 gem 'pg'
@@ -24,6 +24,7 @@ gem 'email_validator'
 gem 'validate_url'
 gem 'globalize', github: 'globalize/globalize'#, branch: 'rails4'
 gem 'virtus'
+gem 'state_machine'
 
 # Views
 gem 'haml-rails'

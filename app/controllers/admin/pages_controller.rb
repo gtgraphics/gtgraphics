@@ -1,7 +1,7 @@
 class Admin::PagesController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_page, only: %i(show edit update destroy toggle move_up move_down)
+  before_action :load_page, only: %i(show edit update destroy toggle_menu_item move_up move_down publish draft hide)
   before_action :load_parent_page, only: %i(new create show edit update)
 
   breadcrumbs do |b|
@@ -52,17 +52,31 @@ class Admin::PagesController < Admin::ApplicationController
     respond_with :admin, @page
   end
 
-  def toggle
-    attribute = params[:attribute]
+  def publish
+    @page.publish!
     respond_to do |format|
-      format.html do
-        if attribute.in? %w(published menu_item)
-          @page.update_column(attribute, !@page.attributes[attribute])
-          redirect_to request.referer || [:admin, @page]
-        else
-          head :not_found
-        end
-      end
+      format.html { redirect_to request.referer || [:admin, @page] }
+    end
+  end
+
+  def draft
+    @page.draft!
+    respond_to do |format|
+      format.html { redirect_to request.referer || [:admin, @page] }
+    end
+  end
+
+  def hide
+    @page.hide!
+    respond_to do |format|
+      format.html { redirect_to request.referer || [:admin, @page] }
+    end
+  end
+
+  def toggle_menu_item
+    @page.toggle!(:menu_item)
+    respond_to do |format|
+      format.html { redirect_to request.referer || [:admin, @page] }
     end
   end
 
@@ -170,6 +184,6 @@ class Admin::PagesController < Admin::ApplicationController
     when 'Image' then [:id, :asset, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     when 'Redirection' then [:id, :external, :destination_page_id, :destination_url, :permanent, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     end
-    page_params.permit(:embeddable_id, :embeddable_type, :slug, :parent_id, :published, :menu_item, :template_id, embeddable_attributes: embeddable_attributes_params || {}) 
+    page_params.permit(:embeddable_id, :embeddable_type, :slug, :parent_id, :state, :menu_item, :template_id, embeddable_attributes: embeddable_attributes_params || {}) 
   end
 end

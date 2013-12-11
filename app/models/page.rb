@@ -64,11 +64,28 @@ class Page < ActiveRecord::Base
   after_destroy :destroy_embeddable
 
   default_scope -> { order(:lft) }
-  scope :hidden, -> { where(published: false) }
+  scope :drafted, -> { with_state(:drafted) }
+  scope :hidden, -> { with_state(:hidden) }
   scope :in_main_menu, -> { published.menu_items.where(depth: 1) }
   scope :menu_items, -> { where(menu_item: true) }
-  scope :published, -> { where(published: true) }
+  scope :published, -> { with_state(:published) }
   scope :with_translations, -> { includes(embeddable: :translations) }
+
+  state_machine :state, initial: :drafted do
+    state :published
+    state :drafted
+    state :hidden
+
+    event :publish do
+      transition all => :published
+    end
+    event :draft do
+      transition all => :drafted
+    end
+    event :hide do
+      transition all => :hidden
+    end
+  end
 
   EMBEDDABLE_TYPES.each do |embeddable_type|
     scope embeddable_type.underscore.pluralize, -> { where(embeddable_type: embeddable_type) }
@@ -101,6 +118,12 @@ class Page < ActiveRecord::Base
 
     def embeddable_types
       EMBEDDABLE_TYPES
+    end
+
+    def states
+      @@states ||= Page.state_machines[:state].states.inject(ActiveSupport::HashWithIndifferentAccess.new) do |states, state|
+        states.merge!(state.name => I18n.translate(state.name, scope: 'page.states'))
+      end
     end
 
     def template_types
@@ -163,6 +186,10 @@ class Page < ActiveRecord::Base
       end
       regions_hash
     end
+  end
+
+  def state_name(locale = I18n.locale)
+    I18n.translate(state, scope: 'page.states', locale: locale)
   end
 
   def support_template?

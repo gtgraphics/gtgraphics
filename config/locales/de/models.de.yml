@@ -59,6 +59,7 @@ de:
         author: Autor
         menu_item: Menüpunkt?
         updated_at: Aktualisierung
+        state: Status
       redirection:
         destination_url: URL
         destination_page: Seite
@@ -145,3 +146,9 @@ de:
       user:
         one: Benutzer
         other: Benutzer
+
+  page:
+    states:
+      published: Öffentlich
+      drafted: Entwurf
+      hidden: Unsichtbar
