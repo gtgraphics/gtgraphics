@@ -72,7 +72,7 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def move_to_attachments
     valid = false
-    @attachment = Attachment.new(@image.slice(:created_at, :updated_at))
+    @attachment = Attachment.new(@image.slice(:author_id, :created_at, :updated_at))
     @attachment.asset = @image.asset
     @image.translations.each do |image_translation|
       @attachment.translations.build(image_translation.slice(:locale, :title, :description, :created_at, :updated_at))

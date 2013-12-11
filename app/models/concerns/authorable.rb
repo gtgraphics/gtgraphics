@@ -9,6 +9,8 @@ module Authorable
 
       belongs_to name.to_sym, class_name: 'User', foreign_key: options[:column]
 
+      delegate :name, to: :author, prefix: true, allow_nil: true
+
       if options[:default_to_current_user]
         before_validation do
           send("#{name}=", User.current) if send(options[:column]).nil?

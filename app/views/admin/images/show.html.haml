@@ -21,7 +21,7 @@
       %dt= Image.human_attribute_name(:author)
       %dd
         - if @image.author
-          = link_to user_info(@image.author), [:admin, @image.author]
+          = link_to @image.author_name, [:admin, @image.author]
         - else
           \-
       %dt= Image.human_attribute_name(:updated_at)

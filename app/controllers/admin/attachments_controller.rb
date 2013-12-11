@@ -59,7 +59,7 @@ class Admin::AttachmentsController < Admin::ApplicationController
   def move_to_images
     valid = false
     if @attachment.image?
-      @image = Image.new(@attachment.slice(:created_at, :updated_at))
+      @image = Image.new(@attachment.slice(:author_id, :created_at, :updated_at))
       @image.asset = @attachment.asset
       @attachment.translations.each do |attachment_translation|
         @image.translations.build(attachment_translation.slice(:locale, :title, :description, :created_at, :updated_at))
@@ -91,7 +91,7 @@ class Admin::AttachmentsController < Admin::ApplicationController
 
   private
   def attachment_params
-    params.require(:attachment).permit(:asset, translations_attributes: [:_destroy, :id, :locale, :title, :description])
+    params.require(:attachment).permit(:asset, :author_id, translations_attributes: [:_destroy, :id, :locale, :title, :description])
   end
 
   def load_attachment

@@ -13,10 +13,10 @@
 #  rgt             :integer
 #  depth           :integer
 #  template_id     :integer
-#  published       :boolean          default(TRUE), not null
 #  embeddable_id   :integer
 #  embeddable_type :string(255)
 #  menu_item       :boolean          default(TRUE), not null
+#  state           :string(255)      not null
 #
 
 class Page < ActiveRecord::Base
@@ -34,6 +34,12 @@ class Page < ActiveRecord::Base
     images
     albums
     galleries
+  ).freeze
+
+  STATES = %w(
+    published
+    hidden
+    drafted
   ).freeze
 
   acts_as_authorable
@@ -73,8 +79,8 @@ class Page < ActiveRecord::Base
 
   state_machine :state, initial: :drafted do
     state :published
-    state :drafted
     state :hidden
+    state :drafted
 
     event :publish do
       transition all => :published
@@ -121,8 +127,8 @@ class Page < ActiveRecord::Base
     end
 
     def states
-      @@states ||= Page.state_machines[:state].states.inject(ActiveSupport::HashWithIndifferentAccess.new) do |states, state|
-        states.merge!(state.name => I18n.translate(state.name, scope: 'page.states'))
+      @@states ||= STATES.inject(ActiveSupport::HashWithIndifferentAccess.new) do |states, state|
+        states.merge!(state => I18n.translate(state, scope: 'page.states'))
       end
     end
 
@@ -164,7 +170,7 @@ class Page < ActiveRecord::Base
 
   def embeddable_attributes=(attributes)
     raise 'no embeddable type specified' if embeddable_class.nil?
-    if embeddable_type_changed? or new_record?
+    if embeddable.nil? or embeddable_type_changed?
       build_embeddable(attributes)
     else
       self.embeddable.attributes = attributes
@@ -224,7 +230,8 @@ class Page < ActiveRecord::Base
   end
 
   def destroy_replaced_embeddable
-    embeddable_type_was.constantize.destroy(embeddable_id_was)
+    embeddable_class_was = embeddable_type_was.constantize
+    embeddable_class_was.destroy(embeddable_id_was) if embeddable_class_was.bound_to_page?
   end
 
   def generate_path

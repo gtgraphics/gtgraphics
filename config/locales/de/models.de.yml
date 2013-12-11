@@ -40,10 +40,11 @@ de:
     attributes:
       attachment:
         asset: Datei
+        author: Urheber
       contact_form:
         recipients: Empfänger
       image:
-        artist: Künstler
+        author: Urheber
         aspect_ratio: Seitenverhältnis
         dimensions: Maße
         asset: Bilddatei

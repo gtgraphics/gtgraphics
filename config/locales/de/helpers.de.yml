@@ -35,5 +35,6 @@ de:
       custom: '– Benutzerdefiniert –'
       default: '– Standard –'
       none: '– keine –'
+      me: '– Ich –'
     units:
       pixels: Pixel

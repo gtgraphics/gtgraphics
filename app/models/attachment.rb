@@ -9,10 +9,12 @@
 #  asset_updated_at   :datetime
 #  created_at         :datetime
 #  updated_at         :datetime
+#  author_id          :integer
 #
 
 class Attachment < ActiveRecord::Base
   include AssetContainable
+  include Authorable
   # include AttachmentPreservable
   include BatchTranslatable
 
@@ -20,6 +22,7 @@ class Attachment < ActiveRecord::Base
 
   has_attached_file :asset, url: '/system/:class/:id_partition/:filename'
 
+  acts_as_authorable default_to_current_user: false
   acts_as_batch_translatable
   # preserve_attachment_between_requests_for :asset
 

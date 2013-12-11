@@ -5,7 +5,7 @@
 #  id                     :integer          not null, primary key
 #  first_name             :string(255)
 #  last_name              :string(255)
-#  locale                 :string(255)
+#  preferred_locale       :string(255)
 #  email                  :string(255)      not null
 #  encrypted_password     :string(255)      not null
 #  reset_password_token   :string(255)
