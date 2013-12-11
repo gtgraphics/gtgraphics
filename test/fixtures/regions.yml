@@ -2,11 +2,13 @@
 #
 # Table name: regions
 #
-#  id            :integer          not null, primary key
-#  definition_id :integer
-#  page_id       :integer
-#  created_at    :datetime
-#  updated_at    :datetime
+#  id              :integer          not null, primary key
+#  definition_id   :integer
+#  page_id         :integer
+#  created_at      :datetime
+#  updated_at      :datetime
+#  regionable_id   :integer
+#  regionable_type :string(255)
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
