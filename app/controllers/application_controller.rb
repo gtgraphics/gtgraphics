@@ -1,7 +1,4 @@
 class ApplicationController < ActionController::Base
-  include BreadcrumbController
-  include RouteHelper
-
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
@@ -9,18 +6,22 @@ class ApplicationController < ActionController::Base
   before_action :set_current_user
   before_action :set_locale
 
+  include BreadcrumbController
+  include MaintainableController
+  include RouteHelper
+
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
+
+  private
+  def default_url_options(options = {})
+    { locale: I18n.locale }
+  end
 
   def render_404
     respond_to do |format|
       format.html { render 'public/404', layout: false, status: :not_found }
       format.all { head :not_found }
     end
-  end
-
-  private
-  def default_url_options(options = {})
-    { locale: I18n.locale }
   end
 
   def set_current_user

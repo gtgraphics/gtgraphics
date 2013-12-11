@@ -164,7 +164,7 @@ class Admin::PagesController < Admin::ApplicationController
   def page_params
     page_params = params.require(:page)
     embeddable_attributes_params = case page_params[:embeddable_type]
-    when 'ContactForm' then [:id, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
+    when 'ContactForm' then [:id, { recipient_ids: [], translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     when 'Content' then [:id, { translations_attributes: [:_destroy, :id, :locale, :title, :body] }]
     when 'Gallery' then [:id, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     when 'Image' then [:id, :asset, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]

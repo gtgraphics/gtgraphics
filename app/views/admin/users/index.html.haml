@@ -14,7 +14,7 @@
         %tr
           %td.thumbnail-cell
             = link_to [:admin, user] do
-              = gravatar_image_tag user.email, alt: user.full_name, size: 75, class: 'thumbnail', default: :mm
+              = gravatar_image_tag user.email, size: 75, default: :mm, alt: user.full_name, class: 'thumbnail loader-small', style: 'width: 85px; height: 85px;'
           %td= link_to user.full_name, [:admin, user]
           %td.actions
             = action_buttons_for user, size: :mini, icon_only: true

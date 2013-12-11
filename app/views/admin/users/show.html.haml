@@ -1,2 +1,25 @@
 = view_headline_for @user do
-  = action_buttons_for @user, except: :show
+  - if controller_name == 'accounts'
+    = action_buttons_for :account, except: :show, model: translate('views.admin.account.account')
+  - else
+    = action_buttons_for @user, except: :show
+
+.row
+
+  .col-lg-3
+    = gravatar_image_tag @user.email, size: 263, default: :mm, alt: @user.full_name, class: 'thumbnail loader-large', style: 'width: 263px; height: 263px;'
+
+  .col-lg-9
+    %h3= translate('views.admin.users.headlines.basics')
+    %dl.dl-horizontal
+      %dt= User.human_attribute_name :first_name
+      %dd= @user.first_name
+      %dt= User.human_attribute_name :last_name
+      %dd= @user.last_name
+      %dt= User.human_attribute_name :email
+      %dd= mail_to @user.email
+      %dt= User.human_attribute_name :preferred_locale
+      %dd= @user.preferred_locale_name || translate('helpers.prompts.custom')
+
+    /%h3= translate('views.admin.users.headlines.latest_updates')
+    /= translate('views.hints.empty', model: translate('views.admin.users.headlines.latest_updates'))

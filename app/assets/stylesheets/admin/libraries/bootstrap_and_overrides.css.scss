@@ -36,10 +36,11 @@
   }
   .actions {
     white-space: nowrap;
-    position: relative;
-    min-width: 120px;
+    //position: relative;
+    //min-width: 120px;
     .btn-toolbar {
-      position: absolute;
+      //position: absolute;
+      float: right;
       top: 7px;
       right: 8px;
       text-align: left;

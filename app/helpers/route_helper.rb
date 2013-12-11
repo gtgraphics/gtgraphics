@@ -3,7 +3,7 @@ module RouteHelper
     if page.path.present?
       send("#{page.embeddable_type.underscore}_path", page.path, options)
     else
-      root_path
+      root_path(options)
     end
   end
 
@@ -11,7 +11,7 @@ module RouteHelper
     if page.path.present?
       send("#{page.embeddable_type.underscore}_url", page.path, options)
     else
-      root_url
+      root_url(options)
     end
   end
 

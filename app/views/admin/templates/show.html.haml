@@ -16,24 +16,20 @@
 
 - if @template.description.present? or @template.screenshot.present?
   / Description
-  %fieldset
-    %legend= ::Template.human_attribute_name :description
-    .fields
-      - if @template.screenshot.present?
-        .row
-          .col-lg-6{class: @template.description.blank? ? 'col-lg-offset-3' : nil}
-            = link_to @template.screenshot.url, target: '_blank' do
-              = image_tag @template.screenshot.url(:preview), alt: @template.name, class: 'thumbnail'
-          - if @template.description.present?
-            .col-lg-6
-              = @template.description_html
-        %br
-      - else
-        = @template.description_html
+  %h3= ::Template.human_attribute_name :description
+  - if @template.screenshot.present?
+    .row
+      .col-lg-6{class: @template.description.blank? ? 'col-lg-offset-3' : nil}
+        = link_to @template.screenshot.url, target: '_blank' do
+          = image_tag @template.screenshot.url(:preview), alt: @template.name, class: 'thumbnail'
+      - if @template.description.present?
+        .col-lg-6
+          = @template.description_html
+    %br
+  - else
+    = @template.description_html
 
 
 / Regions
-%fieldset
-  %legend= RegionDefinition.model_name.human(count: 2)
-  .fields
-    = render 'admin/region_definitions/table'
+%h3= RegionDefinition.model_name.human(count: 2)
+= render 'admin/region_definitions/table'

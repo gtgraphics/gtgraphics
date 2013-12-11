@@ -1,8 +1,12 @@
-= simple_form_for [:admin, @user], html: { class: 'form-horizontal', multipart: true } do |form|
+= simple_form_for [:admin, @user], html: { class: 'form-horizontal' } do |form|
 
   %fieldset
     %legend= translate('views.forms.basics')
     .fields
+      - if @user.persisted?
+        .form-group
+          .col-lg-offset-2.col-lg-10
+            = gravatar_image_tag @user.email, size: 100, default: :mm, alt: @user.full_name, class: 'thumbnail loader-small', style: 'width: 100px; height: 100px;'
       = form.input :first_name, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
       = form.input :last_name, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }  
       = form.input :email, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
@@ -12,11 +16,15 @@
     %legend= translate('views.forms.password')
     .fields
       - if @user.new_record?
-        = form.input :generate_password, as: :radio_buttons, collection: [[translate('helpers.boolean.yes'), true], [translate('helpers.boolean.no'), false]], label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
-      - else
-        = form.input :current_password, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
-      #password_fields
         = render 'password_fields', fields: form
+      - else
+        .form-group
+          .col-lg-offset-2.col-lg-10
+            - if controller_name == 'accounts'
+              = link_to translate('views.admin.account.edit_password'), :edit_password_admin_account
+            - else
+              = link_to translate('views.admin.users.edit_password'), [:edit_password, :admin, @user]
+
   .form-group
     .col-lg-offset-2.col-lg-10
       = form.button :submit, class: 'btn-primary'

@@ -56,6 +56,16 @@ class User < ActiveRecord::Base
     end
   end
 
+  def change_password?
+    @change_password = false unless defined? @change_password
+    @change_password
+  end
+  alias_method :change_password, :change_password?
+
+  def change_password=(change_password)
+    @change_password = change_password.in?(ActiveRecord::ConnectionAdapters::Column::TRUE_VALUES)
+  end
+
   def current?
     self == self.class.current
   end
@@ -77,6 +87,10 @@ class User < ActiveRecord::Base
 
   def password_changed?
     new_record? or password.present?
+  end
+
+  def preferred_locale_name
+    I18n.translate(preferred_locale, scope: :languages) if preferred_locale.present?
   end
 
   def recipient

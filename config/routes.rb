@@ -10,7 +10,10 @@ GtGraphics::Application.routes.draw do
         resource :image, only: [:show, :update]
       end
 
-      resource :account, except: [:new, :create]
+      resource :account, except: [:new, :create] do
+        get :edit_password
+        patch :update_password
+      end
 
       resources :attachments do
         collection do
@@ -65,7 +68,12 @@ GtGraphics::Application.routes.draw do
         patch :make_default, on: :member
       end
 
-      resources :users      
+      resources :users do
+        member do
+          get :edit_password
+          patch :update_password
+        end
+      end 
       
       #root 'dashboard#index'
       root to: redirect('/admin/pages')
@@ -88,7 +96,7 @@ GtGraphics::Application.routes.draw do
     %w(Content Gallery Image Redirection ContactForm).each do |page_type|
       root "#{page_type.underscore.pluralize}#show", as: nil, constraints: Routing::RootPageConstraint.new(page_type)
     end
-    root to: 'application#render_404'
+    root to: redirect('/404')
   end
 
   # Legacy URLs that have changed permanently (HTTP 301)

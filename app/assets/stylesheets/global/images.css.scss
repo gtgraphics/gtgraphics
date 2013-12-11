@@ -1,0 +1,14 @@
+.thumbnail {
+  &.loader-small, &.loader-large {
+    background: {
+      repeat: no-repeat;
+      position: center;
+    }
+  }
+  &.loader-small {
+    background-image: asset-url('admin/loader_small.gif');
+  }
+  &.loader-large {
+    background-image: asset-url('admin/loader_large.gif');
+  }
+}

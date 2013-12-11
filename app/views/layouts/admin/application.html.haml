@@ -48,7 +48,7 @@
               = User.model_name.human(count: 2)
 
           %ul.list-inline.navbar-text.pull-right
-            %li= link_to prepend_icon(:user, 'Tobias Casper'), '#', class: 'navbar-link'
+            %li= link_to prepend_icon(:user, current_user.full_name), :admin_account, class: 'navbar-link'
             %li= link_to prepend_icon(:signout, 'Sign out'), :root, class: 'navbar-link'
         
     .container

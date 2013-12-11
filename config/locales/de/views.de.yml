@@ -7,7 +7,16 @@ de:
       settings: Einstellungen
     hints:
       empty: 'Es wurden bislang keine %{model} erstellt.'
+      not_found: 'Es wurden keine %{model} gefunden.'
     admin:
+      account:
+        breadcrumbs:
+          my_account: Ich
+          account: Konto
+        headlines:
+          edit_password: Passwort bearbeiten
+        account: Konto
+        edit_password: Passwort bearbeiten
       editor:
         target:
           self: Gleiches Fenster
@@ -25,3 +34,9 @@ de:
           regions_empty: 'Es wurden bislang keine zusätzlichen Regionen definiert.'
         tabs:
           all: Alle
+      users:
+        headlines:
+          basics: Basisdaten
+          edit_password: Passwort bearbeiten
+          latest_updates: Letzte Aktualisierungen
+        edit_password: Passwort bearbeiten
