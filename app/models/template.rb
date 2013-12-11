@@ -65,6 +65,14 @@ class Template < ActiveRecord::Base
     def unassigned_template_files
       template_files - pluck(:file_name)
     end
+
+    def without(template)
+      if template.new_record?
+        all
+      else
+        where.not(id: template.id)
+      end
+    end
   end
 
   def description_html
@@ -87,16 +95,16 @@ class Template < ActiveRecord::Base
   end
 
   def default_current_template
-    self.default = true unless self.class.exists?(default: true)
+    self.default = true unless self.class.without(self).exists?(default: true)
   end
 
   def default_other_template
-    if other_template = self.class.first
+    if other_template = self.class.without(self).first
       other_template.update_column(:default, true)
     end
   end
 
   def undefault_other_templates
-    self.class.where.not(id: id).update_all(default: false)
+    self.class.without(self).update_all(default: false)
   end
 end
