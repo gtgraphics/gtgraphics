@@ -28,6 +28,10 @@ de:
         internal: Internes Bild
         width: Breite
         height: Höhe
+      sign_in_activity:
+        email: E-Mail-Adresse
+        password: Passwort
+        remember_me: Angemeldet bleiben
     models:
       editor/link:
         one: Hyperlink
@@ -91,6 +95,7 @@ de:
         password: Passwort
         password_confirmation: Passwort (Wdh.)
         preferred_locale: Standardsprache
+        remember_me: Angemeldet bleiben
 
     models:
       attachment:

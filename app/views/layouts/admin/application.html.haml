@@ -21,35 +21,36 @@
         = link_to :admin_root, class: 'navbar-brand' do
           GT Graphics
 
-        %nav.navbar-responsive-collapse{role: 'navigation'}
-          %ul.nav.navbar-nav
+        - if user_signed_in?
+          %nav.navbar-responsive-collapse{role: 'navigation'}
+            %ul.nav.navbar-nav
 
-            = active_link_to :admin_pages, wrap_tag: :li do
-              = Page.model_name.human(count: 2)
-              .badge= Page.count
+              = active_link_to :admin_pages, wrap_tag: :li do
+                = Page.model_name.human(count: 2)
+                .badge= Page.count
 
-            = active_link_to :admin_templates, wrap_tag: :li do
-              = ::Template.model_name.human(count: 2)
-              .badge= ::Template.count
+              = active_link_to :admin_templates, wrap_tag: :li do
+                = ::Template.model_name.human(count: 2)
+                .badge= ::Template.count
 
-            = active_link_to :admin_images, wrap_tag: :li do
-              = Image.model_name.human(count: 2)
-              .badge= Image.count
+              = active_link_to :admin_images, wrap_tag: :li do
+                = Image.model_name.human(count: 2)
+                .badge= Image.count
 
-            = active_link_to :admin_attachments, wrap_tag: :li do
-              = Attachment.model_name.human(count: 2)
-              .badge= Attachment.count
+              = active_link_to :admin_attachments, wrap_tag: :li do
+                = Attachment.model_name.human(count: 2)
+                .badge= Attachment.count
 
-            /= active_link_to :admin_shouts, wrap_tag: :li do
-            /  = Shout.model_name.human(count: 2)
-            /  .badge= Shout.count
+              /= active_link_to :admin_shouts, wrap_tag: :li do
+              /  = Shout.model_name.human(count: 2)
+              /  .badge= Shout.count
 
-            = active_link_to :admin_users, wrap_tag: :li do
-              = User.model_name.human(count: 2)
+              = active_link_to :admin_users, wrap_tag: :li do
+                = User.model_name.human(count: 2)
 
-          %ul.list-inline.navbar-text.pull-right
-            %li= active_link_to prepend_icon(:user, current_user.name), :admin_account, class: 'navbar-link'
-            %li= link_to prepend_icon(:signout, 'Sign out'), :root, class: 'navbar-link'
+            %ul.list-inline.navbar-text.pull-right
+              %li= active_link_to prepend_icon(:user, current_user.name), :admin_account, class: 'navbar-link'
+              %li= link_to prepend_icon(:sign_out, translate('helpers.links.sign_out')), :admin_sign_out, class: 'navbar-link', method: :delete, data: { confirm: translate('helpers.confirm.sign_out') }
         
     .container
       = render 'breadcrumbs'

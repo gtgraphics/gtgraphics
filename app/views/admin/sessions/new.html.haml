@@ -1,0 +1,16 @@
+.col-lg-offset-4.col-lg-4
+
+  .page-header
+    %h1= translate('views.admin.users.headlines.sign_in')
+
+  = simple_form_for @sign_in_activity, as: :session, url: :admin_sign_in do |form|
+
+    = form.input :email, autofocus: true
+    = form.input :password
+    = form.input :remember_me, as: :boolean
+
+    .form-group
+      = form.button :button, translate('views.admin.users.sign_in'), class: 'btn-primary btn-block'
+      = button_link_to translate('helpers.links.cancel'), :root, block: true
+
+  /= render "devise/shared/links"

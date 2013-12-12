@@ -23,6 +23,7 @@ de:
       move_down: Nach unten
       new: '%{model} erstellen'
       remove: Entfernen
+      sign_out: Abmelden
       upload: '%{model} hochladen'
       view: Ansehen
     confirm:
@@ -30,6 +31,7 @@ de:
       destroy_selected: 'Möchten Sie die ausgewählten %{model} wirklich entfernen?'
       make_default: '%{model} wirklich als Standard festlegen?'
       move: '%{model} wirklich zu %{other_model} verschieben?'
+      sign_out: 'Möchten Sie sich wirklich abmelden?'
     prompts:
       create: '– Neu erstellen –'
       custom: '– Benutzerdefiniert –'
