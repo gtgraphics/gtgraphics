@@ -1,17 +1,7 @@
 GtGraphics::Application.routes.draw do
-  # devise_for :users, controllers: { sessions: 'admin/sessions' }
-  # devise_for :users, skip: [:sessions] #, paths: { sessions: 'admin/session' },  controllers: { sessions: 'admin/sessions' }
-
   scope '(:locale)', constraints: { locale: /[a-z]{2}/ } do
     scope constraints: Routing::LocaleConstraint.new do
       namespace :admin do
-
-        #devise_scope :user do
-        #  get 'sign_in' => 'sessions#new'
-        #  post 'sign_in' => 'sessions#create'
-        #  match 'sign_out' => 'sessions#destroy', via: Devise.mappings[:user].sign_out_via
-        #end
-
         scope controller: :sessions do
           get :sign_in, action: :new
           post :sign_in, action: :create
