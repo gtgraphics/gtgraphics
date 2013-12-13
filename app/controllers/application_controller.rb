@@ -13,6 +13,10 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
 
   private
+  def current_user
+    # TODO
+  end
+
   def default_url_options(options = {})
     { locale: I18n.locale }
   end
@@ -39,5 +43,13 @@ class ApplicationController < ActionController::Base
       locale = (current_user.try(:preferred_locale) || session[:locale] || http_accept_language.compatible_language_from(I18n.available_locales)).to_s
       redirect_to params.merge(locale: locale, id: params[:id].presence)
     end
+  end
+
+  def sign_in(authenticatable, options = {})
+    # TODO
+  end
+
+  def sign_out(authenticatable, options = {})
+    # TODO
   end
 end
