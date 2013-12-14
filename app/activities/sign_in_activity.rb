@@ -8,10 +8,10 @@ class SignInActivity < Activity
   validate :validate_credentials
   validate :validate_user_is_unlocked
 
-  attr_reader :user
-
   before_validation :set_user
   after_validation :succeed_or_fail_sign_in
+
+  attr_reader :user
 
   private
   def set_user

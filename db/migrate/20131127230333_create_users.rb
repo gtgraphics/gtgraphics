@@ -15,6 +15,7 @@ class CreateUsers < ActiveRecord::Migration
 
       # Trackable
       t.datetime :last_activity_at
+      t.string :last_activity_ip
       t.integer :sign_in_count, default: 0, null: false
       t.datetime :current_sign_in_at
       t.string :current_sign_in_ip

@@ -18,10 +18,12 @@ class Activity
     def execute(attributes = {})
       new(attributes).tap(&:execute)
     end
+    alias_method :create, :execute
 
     def execute!(attributes = {})
       new(attributes).tap(&:execute!)
     end
+    alias_method :create!, :execute!
   end
 
   def execute
@@ -30,12 +32,13 @@ class Activity
     run_callbacks :execution do
       begin
         perform
-      rescue
+      rescue Exception => e
         executed = false
       end
     end
     executed
   end
+  alias_method :save, :execute
 
   def execute!
     raise ActivityInvalid.new(self) unless valid?
@@ -44,6 +47,7 @@ class Activity
     end
     true
   end
+  alias_method :save!, :execute!
 
   def inspect
     attributes_str = " " + attributes.map { |key, value| "#{key}: #{value.inspect}" }.join(', ') if attributes.any?
