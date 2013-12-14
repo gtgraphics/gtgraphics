@@ -1,12 +1,7 @@
 class Admin::ApplicationController < ApplicationController
   include BreadcrumbController
 
-  before_action :authenticate_user!
-
-  # TODO REMOVE
-  #def current_user
-  #  @user ||= User.find_by(email: 'tobias.casper@gmail.com')
-  #end
+  authenticate_user
 
   reset_breadcrumbs
   breadcrumbs do |b|

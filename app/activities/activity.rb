@@ -1,7 +1,7 @@
 class Activity
   include ActiveModel::Model
-  extend ActiveModel::Callbacks
   include Virtus.model
+  extend ActiveModel::Callbacks
 
   class ActivityInvalid < Exception
     attr_reader :activity

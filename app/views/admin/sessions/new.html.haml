@@ -3,11 +3,11 @@
   .page-header
     %h1= translate('views.admin.users.headlines.sign_in')
 
-  = simple_form_for @sign_in_activity, as: :session, url: :admin_sign_in do |form|
+  = simple_form_for @sign_in_activity, as: :session, url: :admin_session do |form|
 
     = form.input :email, autofocus: true
     = form.input :password
-    = form.input :remember_me, as: :boolean
+    = form.input :permanent, as: :boolean
 
     .form-group
       = form.button :button, translate('views.admin.users.sign_in'), class: 'btn-primary btn-block'
