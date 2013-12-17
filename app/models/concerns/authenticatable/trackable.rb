@@ -8,7 +8,8 @@ module Authenticatable::Trackable
   end
 
   def active_within?(time)
-    last_activity_at 
+    return nil if last_activity_at.nil?
+    last_activity_at >= time.ago
   end
 
   # Last Activity

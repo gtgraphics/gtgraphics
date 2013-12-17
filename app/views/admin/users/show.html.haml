@@ -20,6 +20,3 @@
       %dd= mail_to @user.email
       %dt= User.human_attribute_name :preferred_locale
       %dd= @user.preferred_locale_name || translate('helpers.prompts.custom')
-
-    /%h3= translate('views.admin.users.headlines.latest_updates')
-    /= translate('views.hints.empty', model: translate('views.admin.users.headlines.latest_updates'))
