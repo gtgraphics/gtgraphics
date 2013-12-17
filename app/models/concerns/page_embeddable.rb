@@ -11,17 +11,17 @@ module PageEmbeddable
         has_many :pages, as: :embeddable, dependent: :destroy
         has_many :regions, -> { readonly }, through: :pages
 
-        after_save do
-          pages.each(&:touch)
-        end
+        #after_save do
+        #  pages.each(&:touch)
+        #end
       else
         has_one :page, as: :embeddable, dependent: :destroy
         delegate :slug, :path, :published?, :hidden?, to: :page, allow_nil: true
         has_many :regions, -> { readonly }, through: :page
 
-        after_save do
-          page.touch
-        end
+        #after_save do
+        #  page.touch
+        #end
       end
 
       @page_embeddable_options = options

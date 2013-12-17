@@ -2,8 +2,9 @@
 #
 # Table name: homepage_quotes
 #
-#  id     :integer          not null, primary key
-#  author :string(255)
+#  id          :integer          not null, primary key
+#  homepage_id :integer
+#  author      :string(255)
 #
 
 class Homepage < ActiveRecord::Base

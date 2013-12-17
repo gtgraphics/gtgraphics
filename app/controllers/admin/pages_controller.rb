@@ -17,7 +17,7 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def index
-    @pages = Page.with_translations
+    @pages = Page.includes(:embeddable)
     respond_with :admin, @pages
   end
 
@@ -181,6 +181,7 @@ class Admin::PagesController < Admin::ApplicationController
     when 'ContactForm' then [:id, { recipient_ids: [], translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     when 'Content' then [:id, { translations_attributes: [:_destroy, :id, :locale, :title, :body] }]
     when 'Gallery' then [:id, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
+    when 'Homepage' then [:id]
     when 'Image' then [:id, :asset, :author_id, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     when 'Redirection' then [:id, :external, :destination_page_id, :destination_url, :permanent, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     end

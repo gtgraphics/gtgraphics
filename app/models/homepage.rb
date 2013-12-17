@@ -16,4 +16,8 @@ class Homepage < ActiveRecord::Base
   acts_as_page_embeddable destroy_with_page: true
 
   has_many :quotes, class_name: 'Homepage::Quote', dependent: :destroy
+
+  def title(locale = I18n.locale)
+    I18n.translate(:homepage, locale: locale)
+  end
 end

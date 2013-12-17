@@ -1,6 +1,7 @@
 class CreateHomepageQuotes < ActiveRecord::Migration
   def change
     create_table :homepage_quotes do |t|
+      t.references :homepage, index: true
       t.string :author
     end
     reversible do |dir|

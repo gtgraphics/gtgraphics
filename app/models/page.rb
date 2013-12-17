@@ -26,6 +26,7 @@ class Page < ActiveRecord::Base
     ContactForm
     Content
     Gallery
+    Homepage
     Image
     Redirection
   ).freeze
@@ -49,8 +50,6 @@ class Page < ActiveRecord::Base
   belongs_to :template, inverse_of: :pages
   has_many :regions, dependent: :destroy, inverse_of: :page
 
-  delegate :title, to: :embeddable, allow_nil: true
-
   validates :embeddable, presence: true
   validates :embeddable_type, presence: true, inclusion: { in: EMBEDDABLE_TYPES }
   validates :template_id, presence: true, if: :support_template?
@@ -64,8 +63,8 @@ class Page < ActiveRecord::Base
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
   after_save :update_descendants_paths
-  after_update :destroy_replaced_embeddable, if: :embeddable_type_changed?
-  after_update :migrate_or_destroy_regions, if: -> { embeddable_type_changed? and support_regions? }
+  after_update :destroy_replaced_embeddables, if: :embeddable_changed?
+  after_update :migrate_or_destroy_regions, if: -> { embeddable_changed? and support_regions? }
   before_destroy :destroyable?
   after_destroy :destroy_embeddable
 
@@ -181,6 +180,14 @@ class Page < ActiveRecord::Base
     embeddable_type.in?(EMBEDDABLE_TYPES) ? embeddable_type.constantize : nil
   end
 
+  def embeddable_class_was
+    embeddable_type_was.constantize
+  end
+
+  def embeddable_changed?
+    embeddable_type_changed? or embeddable_id_changed?
+  end
+
   def hidden?
     !published?
   end
@@ -215,6 +222,10 @@ class Page < ActiveRecord::Base
     self.class.template_types_hash[embeddable_type]
   end
 
+  def title(locale = I18n.locale)
+    embeddable.try(:title, locale) || embeddable.try(:title)
+  end
+
   def to_s
     title
   end
@@ -229,8 +240,7 @@ class Page < ActiveRecord::Base
     embeddable.destroy if embeddable and embeddable.class.bound_to_page?
   end
 
-  def destroy_replaced_embeddable
-    embeddable_class_was = embeddable_type_was.constantize
+  def destroy_replaced_embeddables
     embeddable_class_was.destroy(embeddable_id_was) if embeddable_class_was.bound_to_page?
   end
 
