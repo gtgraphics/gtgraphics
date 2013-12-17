@@ -21,7 +21,7 @@
         = link_to :admin_root, class: 'navbar-brand' do
           GT Graphics
 
-        - if user_signed_in?
+        - if signed_in?
           %nav.navbar-responsive-collapse{role: 'navigation'}
             %ul.nav.navbar-nav
 

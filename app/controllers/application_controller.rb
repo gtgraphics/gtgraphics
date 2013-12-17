@@ -6,19 +6,27 @@ class ApplicationController < ActionController::Base
   before_action :set_current_user
   before_action :set_locale
 
+  include AuthenticatableController
   include BreadcrumbController
   include MaintainableController
   include RouteHelper
 
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
+  rescue_from Authenticatable::AccessDenied, with: :force_authentication
 
   private
-  def current_user
-    # TODO
-  end
-
   def default_url_options(options = {})
     { locale: I18n.locale }
+  end
+
+  def force_authentication
+    respond_to do |format|
+      format.html do
+        flash[:after_sign_in_path] = request.path
+        redirect_to :admin_sign_in
+      end
+      format.all { head :unauthorized }
+    end
   end
 
   def render_404
@@ -26,10 +34,6 @@ class ApplicationController < ActionController::Base
       format.html { render 'public/404', layout: false, status: :not_found }
       format.all { head :not_found }
     end
-  end
-
-  def set_current_user
-    Thread.current[:current_user] = current_user
   end
 
   def set_locale
@@ -43,13 +47,5 @@ class ApplicationController < ActionController::Base
       locale = (current_user.try(:preferred_locale) || session[:locale] || http_accept_language.compatible_language_from(I18n.available_locales)).to_s
       redirect_to params.merge(locale: locale, id: params[:id].presence)
     end
-  end
-
-  def sign_in(authenticatable, options = {})
-    # TODO
-  end
-
-  def sign_out(authenticatable, options = {})
-    # TODO
   end
 end

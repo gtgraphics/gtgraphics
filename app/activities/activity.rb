@@ -35,6 +35,7 @@ class Activity
       rescue Exception => e
         executed = false
       end
+      true
     end
     executed
   end
@@ -44,8 +45,8 @@ class Activity
     raise ActivityInvalid.new(self) unless valid?
     run_callbacks :execution do
       perform
+      true
     end
-    true
   end
   alias_method :save!, :execute!
 
@@ -59,8 +60,11 @@ class Activity
   end
 
   def valid?(*)
+    valid = nil
     run_callbacks :validation do
-      super
+      valid = super
+      true
     end
+    valid
   end
 end

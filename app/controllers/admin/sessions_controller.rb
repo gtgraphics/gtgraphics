@@ -1,8 +1,5 @@
-#class Admin::SessionsController < Devise::SessionsController
-#  layout 'admin/application'
-#end
 class Admin::SessionsController < Admin::ApplicationController
-  skip_before_action :authenticate_user!, only: [:new, :create]
+  skip_authentication only: [:new, :create]
 
   def new
     @sign_in_activity = SignInActivity.new
@@ -16,9 +13,10 @@ class Admin::SessionsController < Admin::ApplicationController
     respond_to do |format|
       format.html do
         if @sign_in_activity.valid?
-          sign_in @sign_in_activity.user, store: @sign_in_activity.remember_me?
-          #remember_me :user
-          redirect_to :admin_root
+          user = @sign_in_activity.user
+          sign_in user, permanent: @sign_in_activity.permanent?
+          user.track_sign_in!(request.ip)
+          redirect_to flash[:after_sign_in_path] || :admin_root
         else
           render :new
         end
@@ -27,15 +25,14 @@ class Admin::SessionsController < Admin::ApplicationController
   end
 
   def destroy
-    sign_out current_user
-    #forget_me :user
+    sign_out
     respond_to do |format|
-      format.html { redirect_to :admin_root }
+      format.html { redirect_to flash[:after_sign_out_path] || :admin_root }
     end
   end
 
   private
   def sign_in_params
-    params.require(:session).permit(:email, :password, :remember_me)
+    params.require(:session).permit(:email, :password, :permanent)
   end
 end

@@ -1,7 +1,5 @@
 class Admin::ApplicationController < ApplicationController
-  include BreadcrumbController
-
-  authenticate_user
+  authenticate
 
   reset_breadcrumbs
   breadcrumbs do |b|

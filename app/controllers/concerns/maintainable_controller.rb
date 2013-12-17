@@ -13,7 +13,7 @@ module MaintainableController
 
   private
   def check_for_maintenance
-    raise Maintained if !user_signed_in? and File.exists?(MAINTENANCE_FILE)
+    raise Maintained if signed_out? and File.exists?(MAINTENANCE_FILE)
   end
 
   def render_503

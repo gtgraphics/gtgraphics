@@ -1,6 +1,7 @@
 module Authenticatable::Lockable
   extend ActiveSupport::Concern
 
+  FAILED_SIGN_IN_LOCK_TIME = 5.minutes
   MAX_FAILED_SIGN_IN_ATTEMPTS = 5
 
   included do
@@ -23,10 +24,10 @@ module Authenticatable::Lockable
       after_transition any => :locked_temporarily do |lockable, transition|
         lock_time = transition.args.first || raise(ArgumentError, 'you need to specify the lock duration')
         if lock_time.is_a?(DateTime)
-          raise ArgumentError, 'lock time may not be in past' if lock_time.past?
-          lockable.locked_until = lock_time
+          raise ArgumentError, 'lock time must not be in past' if lock_time.past?
+          lockable.update_column(:locked_until, lock_time)
         else
-          lockable.locked_until = DateTime.now + lock_time
+          lockable.update_column(:locked_until, DateTime.now + lock_time)
         end
       end
     end
@@ -44,9 +45,22 @@ module Authenticatable::Lockable
     end
   end
 
+  def fail_sign_in
+    if failed_sign_in_attempts.next == MAX_FAILED_SIGN_IN_ATTEMPTS
+      self.state = 'locked_temporarily'
+      self.locked_until = DateTime.now + FAILED_SIGN_IN_LOCK_TIME
+      self.failed_sign_in_attempts = 0
+    else
+      self.failed_sign_in_attempts += 1
+    end
+  end
+
   def fail_sign_in!
-    if failed_sign_in_attempts == MAX_FAILED_SIGN_IN_ATTEMPTS
-      locked_temporarily!
+    if failed_sign_in_attempts.next == MAX_FAILED_SIGN_IN_ATTEMPTS
+      transaction do
+        lock_temporarily!(FAILED_SIGN_IN_LOCK_TIME)
+        update_column(:failed_sign_in_attempts, 0)
+      end
     else
       increment!(:failed_sign_in_attempts)
     end
@@ -58,10 +72,14 @@ module Authenticatable::Lockable
 
   def remove_expired_lock!
     if temporary_lock_expired?
-      unlock
+      unlock!
     else
       false
     end
+  end
+
+  def succeed_sign_in
+    self.failed_sign_in_attempts = 0
   end
 
   def succeed_sign_in!
@@ -69,8 +87,11 @@ module Authenticatable::Lockable
   end
 
   def temporary_lock_expired?
-    raise "#{self.class.name} has not been locked temporarily" unless lock_state?(:locked_temporarily)
-    locked_until.past?
+    if lock_state?(:locked_temporarily)
+      locked_until.past?
+    else
+      true
+    end
   end
 
   private

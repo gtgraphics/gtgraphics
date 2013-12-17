@@ -4,6 +4,8 @@ module Authenticatable
   included do
     has_secure_password
 
+    delegate :checksum, :salt, to: :password_hash, prefix: :password
+
     class << self
       alias_method :signed_in?, :authenticated?
       alias_method :signed_out?, :anonymous?
@@ -30,6 +32,10 @@ module Authenticatable
 
   def current?
     self == self.class.current
+  end
+
+  def password_hash
+    BCrypt::Password.new(password_digest)
   end
 
   private
