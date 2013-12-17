@@ -23,6 +23,7 @@ module AuthenticatableController
     helper_method :current_user, :signed_in?, :signed_out?, :anonymous?, :authenticated?
 
     before_action :set_current_user
+    before_action :track_last_user_activity
 
     alias_method :anonymous?, :signed_out?
     alias_method :authenticated?, :signed_in?
@@ -77,5 +78,9 @@ module AuthenticatableController
   private
   def set_current_user
     Thread.current[:current_user] = current_user
+  end
+
+  def track_last_user_activity
+    current_user.try(:track_activity!, request.ip)
   end
 end
