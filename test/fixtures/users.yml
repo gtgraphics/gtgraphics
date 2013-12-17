@@ -13,12 +13,13 @@
 #  lock_state              :string(255)      not null
 #  locked_until            :datetime
 #  failed_sign_in_attempts :integer          default(0), not null
+#  last_activity_at        :datetime
+#  last_activity_ip        :string(255)
 #  sign_in_count           :integer          default(0), not null
 #  current_sign_in_at      :datetime
 #  current_sign_in_ip      :string(255)
 #  last_sign_in_at         :datetime
 #  last_sign_in_ip         :string(255)
-#  last_activity_at        :datetime
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
