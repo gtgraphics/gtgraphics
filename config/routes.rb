@@ -89,6 +89,7 @@ GtGraphics::Application.routes.draw do
         with_options path: '/', only: :show do |route|
           route.resources :contents, constraints: Routing::PageConstraint.new('Content')
           route.resources :galleries, constraints: Routing::PageConstraint.new('Gallery')
+          route.resources :homepages, constraints: Routing::PageConstraint.new('Homepage')
           route.resources :images, constraints: Routing::PageConstraint.new('Image') do
             get :download, on: :member
           end
@@ -99,7 +100,7 @@ GtGraphics::Application.routes.draw do
         end
       end
 
-      %w(Content Gallery Image Redirection ContactForm).each do |page_type|
+      %w(Content Gallery Homepage Image Redirection ContactForm).each do |page_type|
         root "#{page_type.underscore.pluralize}#show", as: nil, constraints: Routing::RootPageConstraint.new(page_type)
       end
       root to: redirect('/404')
