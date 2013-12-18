@@ -241,6 +241,7 @@ class Page < ActiveRecord::Base
   end
 
   def destroy_replaced_embeddables
+    # FIXME Translations are not removed when changing to another embeddable type, then back and then the form gets submitted
     embeddable_class_was.destroy(embeddable_id_was) if embeddable_class_was.bound_to_page?
   end
 
