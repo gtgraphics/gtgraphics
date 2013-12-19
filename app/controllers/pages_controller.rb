@@ -25,6 +25,10 @@ class PagesController < ApplicationController
   end
 
   protected
+  def render_page(options = {})
+    render @page.template_path, options
+  end
+
   def respond_with_page(options = {})
     respond_with @page, options.merge(template: @page.template_path)
   end

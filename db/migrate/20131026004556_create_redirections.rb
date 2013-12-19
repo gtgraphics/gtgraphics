@@ -6,6 +6,7 @@ class CreateRedirections < ActiveRecord::Migration
       t.boolean :external, null: false, default: false
       t.timestamps
     end
+    
     reversible do |dir|
       dir.up { Redirection.create_translation_table! title: :string }
       dir.down { Redirection.drop_translation_table! }

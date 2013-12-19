@@ -4,6 +4,7 @@ class CreateHomepageQuotes < ActiveRecord::Migration
       t.references :homepage, index: true
       t.string :author
     end
+    
     reversible do |dir|
       dir.up { Homepage::Quote.create_translation_table! body: :text }
       dir.down { Homepage::Quote.drop_translation_table! }

@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
 
   include AuthenticatableController
   include BreadcrumbController
+  include FlashableController
   include MaintainableController
   include RouteHelper
 

@@ -4,6 +4,7 @@ class CreateAttachments < ActiveRecord::Migration
       t.attachment :asset
       t.timestamps
     end
+    
     reversible do |dir|
       dir.up { Attachment.create_translation_table! title: :string, description: :text }
       dir.down { Attachment.drop_translation_table! }

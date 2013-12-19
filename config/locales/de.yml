@@ -2,3 +2,5 @@ de:
   languages:
     en: Englisch
     de: Deutsch
+
+  dimensions: '%{width} × %{height} Pixel'

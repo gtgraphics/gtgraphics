@@ -29,3 +29,5 @@ en:
   languages:
     en: English
     de: German
+
+  dimensions: '%{width} × %{height} Pixels'

@@ -7,6 +7,7 @@ class CreateTemplates < ActiveRecord::Migration
       t.attachment :screenshot
       t.timestamps
     end
+    
     reversible do |dir|
       dir.up { Template.create_translation_table! name: :string, description: :text }
       dir.down { Template.drop_translation_table! }

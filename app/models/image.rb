@@ -16,15 +16,15 @@
 #
 
 class Image < ActiveRecord::Base
-  include AssetContainable
   include Authorable
   # include AttachmentPreservable
   include BatchTranslatable
+  include ImageContainable
   include PageEmbeddable
   include Templatable
 
-  CONTENT_TYPES = %w(image/jpeg image/pjpeg image/gif image/png).freeze
-  EXIF_CAPABLE_CONTENT_TYPES = %w(image/jpeg image/pjpeg).freeze
+  CONTENT_TYPES = ImageContainable::CONTENT_TYPES
+  EXIF_CAPABLE_CONTENT_TYPES = [Mime::JPEG].freeze
 
   STYLES = {
     thumbnail: ['75x75#', :png],
@@ -35,42 +35,30 @@ class Image < ActiveRecord::Base
 
   self.template_type = 'Template::Image'.freeze
 
-  translates :title, :description, fallbacks_for_empty_translations: true
+  has_many :styles, class_name: 'Image::Style', dependent: :destroy
 
-  has_attached_file :asset, styles: STYLES, url: '/system/:class/:id_partition/:style.:extension'
+  translates :title, :description, fallbacks_for_empty_translations: true
 
   acts_as_authorable default_to_current_user: false
   acts_as_batch_translatable
+  acts_as_image_containable styles: STYLES, url: '/system/images/:id/:style.:extension'
   acts_as_page_embeddable multiple: true, destroy_with_page: false
   # preserve_attachment_between_requests_for :asset
 
   serialize :exif_data, OpenStruct
 
   before_validation :set_default_title
-  before_save :set_dimensions, if: :asset_changed?
   before_save :set_exif_data, if: :asset_changed?
 
-  validates :title, presence: true, uniqueness: true
-  validates_attachment :asset, presence: true, content_type: { content_type: CONTENT_TYPES }
-
-  alias_attribute :asset_width, :width
-  alias_attribute :asset_height, :height
-
-  def asset_changed?
-    !asset.queued_for_write[:original].nil?
+  class << self
+    def content_types
+      CONTENT_TYPES
+    end
   end
 
-  def aspect_ratio
-    Rational(width, height)
-  end
-
-  def description_html(locale = I18n.locale)
-    template = Liquid::Template.parse(self.description(locale))
+  def description_html
+    template = Liquid::Template.parse(description)
     template.render(to_liquid).html_safe
-  end
-
-  def pixels
-    width * height
   end
 
   def to_liquid
@@ -84,12 +72,6 @@ class Image < ActiveRecord::Base
   private
   def set_default_title
     translation.title = File.basename(asset_file_name, '.*').humanize if asset_file_name.present? and translation.title.blank?
-  end
-
-  def set_dimensions
-    geometry = Paperclip::Geometry.from_file(asset.queued_for_write[:original].path)
-    self.width = geometry.width.to_i
-    self.height = geometry.height.to_i
   end
 
   def set_exif_data

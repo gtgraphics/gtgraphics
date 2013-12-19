@@ -85,7 +85,7 @@ GtGraphics::Application.routes.draw do
         root to: redirect('/admin/pages')
       end
 
-      scope '/', constraints: { id: /.*/ } do
+      scope '/', constraints: { id: /[^.]*/ } do
         with_options path: '/', only: :show do |route|
           route.resources :contents, constraints: Routing::PageConstraint.new('Content')
           route.resources :galleries, constraints: Routing::PageConstraint.new('Gallery')
