@@ -20,8 +20,7 @@ class Attachment < ActiveRecord::Base
 
   translates :title, :description, fallbacks_for_empty_translations: true
 
-  has_attached_file :asset, url: '/system/:class/:id_partition/:filename'
-
+  acts_as_asset_containable url: '/system/:class/:id_partition/:filename'
   acts_as_authorable default_to_current_user: false
   acts_as_batch_translatable
   # preserve_attachment_between_requests_for :asset

@@ -92,6 +92,8 @@ class Page < ActiveRecord::Base
     end
   end
 
+  delegate :name, to: :author, prefix: true, allow_nil: true
+
   EMBEDDABLE_TYPES.each do |embeddable_type|
     scope embeddable_type.underscore.pluralize, -> { where(embeddable_type: embeddable_type) }
 

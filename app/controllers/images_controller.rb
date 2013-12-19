@@ -4,8 +4,8 @@ class ImagesController < PagesController
   def show
     respond_to do |format|
       format.html { render_page }
-      format.send(@image.mime_type.to_sym) do
-        send_file @image.asset.path, content_type: @image.content_type, disposition: :inline
+      format.send(@image.format) do
+        send_file @image.asset.path, content_type: @image.content_type, disposition: :inline, x_sendfile: true
       end
     end
   end

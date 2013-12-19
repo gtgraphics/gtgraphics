@@ -19,12 +19,12 @@
   %dd= @page.state_name
   %dt= Page.human_attribute_name :menu_item
   %dd= link_to yes_or_no(@page.menu_item?), [:toggle_menu_item, :admin, @page], method: :patch
-
   - begin
     = render "admin/#{@page.embeddable_class.model_name.plural}/details", @page.embeddable_class.model_name.singular.to_sym => @page.embeddable
   - rescue ActionView::MissingTemplate
-
-  %dt= Page.human_attribute_name :author
-  %dd= link_to @page.author.name, [:admin, @page.author]
+  
+  - if @page.author  
+    %dt= Page.human_attribute_name :author
+    %dd= link_to @page.author.name, [:admin, @page.author]
   %dt= Page.human_attribute_name :updated_at
   %dd= time_ago @page.updated_at

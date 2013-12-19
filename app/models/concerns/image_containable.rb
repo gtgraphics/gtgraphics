@@ -53,16 +53,17 @@ module ImageContainable
 
     included do
       delegate :aspect_ratio, :pixels, to: :dimensions
-
-      alias_method :dimensions, :asset_dimensions
-      alias_method :mime_type, :asset_mime_type
     end
 
-    def asset_dimensions
+    def dimensions
       Dimensions.new(width, height)
     end
 
-    def asset_mime_type
+    def format
+      mime_type.to_sym
+    end
+
+    def mime_type
       CONTENT_TYPES.find { |content_type| content_type == self.content_type }
     end
 
