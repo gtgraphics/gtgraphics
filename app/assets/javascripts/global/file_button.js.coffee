@@ -1,0 +1,2 @@
+$.prepare ->
+  $(':file', @).fileButton()

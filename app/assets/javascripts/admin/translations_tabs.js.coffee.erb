@@ -161,6 +161,5 @@ $.fn.translationTabs = ->
           queryState($tabs)
           $tabs.trigger('loaded.translation')
 
-
-$(document).ready ->
-  $(document).translationTabs()
+$.prepare ->
+  @translationTabs()

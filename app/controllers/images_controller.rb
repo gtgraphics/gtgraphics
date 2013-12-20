@@ -5,6 +5,7 @@ class ImagesController < PagesController
     respond_to do |format|
       format.html { render_page }
       format.send(@image.format) do
+        # redirect_to @image.asset.url
         send_file @image.asset.path, content_type: @image.content_type, disposition: :inline, x_sendfile: true
       end
     end

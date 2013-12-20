@@ -3,7 +3,6 @@
 PATH_PREVIEW_SELECTOR = '.help-block.path-preview'
 PATH_PREVIEW_TYPEAHEAD_TIMEOUT = 500
 
-
 previewPath = ($slug, $parentId) ->
   return if $slug.length == 0 and $parentId.length == 0
   slug = $slug.val()
@@ -14,14 +13,8 @@ previewPath = ($slug, $parentId) ->
     jQuery.get '/admin/pages/preview_path', { slug: slug, parent_id: parentId }, (path) ->
       if path isnt ''
         $path = $slug.siblings(PATH_PREVIEW_SELECTOR)
-        $path = $('<span />', class: 'help-block path-preview').insertAfter($slug) if $path.length == 0
+        $path = $('<span />', class: 'help-block path-preview').insertAfter($slug).prepare() if $path.length == 0
         $path.text(path)
-
-prepareEmbeddableContainer = ($embeddableContainer) ->
-  $embeddableContainer.translationTabs()
-  $embeddableContainer.find('.editor').editor()
-  $embeddableContainer.find("[data-toggle=tooltip], a[rel=tooltip]").tooltip()
-  $embeddableContainer.find(':file').fileButton()
 
 loadEmbeddableSettings = ($embeddableFields, $embeddableSettings, $pageSettings) ->
   $embeddableType = $pageSettings.find('#page_embeddable_type')
@@ -35,7 +28,7 @@ loadEmbeddableSettings = ($embeddableFields, $embeddableSettings, $pageSettings)
       data: { embeddable_type: embeddableType }
       dataType: 'html'
       success: (html) ->
-        $embeddableSettings.html(html).show()
+        $embeddableSettings.html(html).show().prepare()
       error: ->
         $embeddableType.val('').change()
 
@@ -62,8 +55,7 @@ loadEmbeddableEditor = ($embeddableFields, $embeddableSettings, $pageSettings) -
       data: { embeddable_type: embeddableType, embeddable_id: embeddableId }
       dataType: 'html'
       success: (html) ->
-        $embeddableFields.html(html).show()
-        prepareEmbeddableContainer($embeddableFields)
+        $embeddableFields.html(html).show().prepare()
         $loader.hide()
       error: ->
         $embeddableFields.show()
