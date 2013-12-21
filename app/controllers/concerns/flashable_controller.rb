@@ -4,13 +4,13 @@ module FlashableController
   def flash_for(object)
     model_name = object.class.model_name.human
     if object.destroyed?
-      notice = translate('flash.destroyed', model: model_name)
+      notice = translate('helpers.flash.destroyed', model: model_name)
     else
       if object.errors.empty?
         if object.id_changed?
-          notice = translate('flash.created', model: model_name)
+          notice = translate('helpers.flash.created', model: model_name)
         else
-          notice = translate('flash.updated', model: model_name)
+          notice = translate('helpers.flash.updated', model: model_name)
         end
       end
     end

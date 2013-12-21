@@ -2,7 +2,7 @@
   %ul.list-inline
     %li= button_link_to prepend_icon(:download, translate('helpers.links.download')), [:download, :admin, @attachment], size: :large, type: :success
     - if @attachment.image?
-      %li= button_link_to prepend_icon(:hand, translate('helpers.links.move_to', model: Image.model_name.human(count: 2)), direction: :right, outline: true), [:move_to_images, :admin, @attachment], method: :patch, size: :large, data: { confirm: translate('helpers.confirm.move', model: Attachment.model_name.human, other_model: Image.model_name.human(count: 2)) }
+      %li= button_link_to prepend_icon(:hand, translate('helpers.links.move_to', model: Image.model_name.human(count: 2)), direction: :right, outline: true), [:move_to_images, :admin, @attachment], method: :patch, size: :large, data: { confirm: translate('helpers.confirmations.move', model: Attachment.model_name.human, other_model: Image.model_name.human(count: 2)) }
     %li= action_buttons_for @attachment, except: :show
 
 .col-offset-2.col-lg-4

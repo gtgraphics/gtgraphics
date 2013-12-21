@@ -44,6 +44,8 @@ module ButtonHelper
     css << " btn-block" if block_rendering
     options[:class] = css.strip
 
+    options[:role] ||= 'button'
+
     args << options
   end
 end

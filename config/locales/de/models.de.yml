@@ -31,7 +31,7 @@ de:
       sign_in_activity:
         email: E-Mail-Adresse
         password: Passwort
-        remember_me: Angemeldet bleiben
+        permanent: Angemeldet bleiben
     models:
       editor/link:
         one: Hyperlink

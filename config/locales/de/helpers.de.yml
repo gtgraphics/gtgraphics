@@ -3,6 +3,10 @@ de:
     boolean:
       'yes': 'Ja'
       'no': 'Nein'
+    flash:
+      created: '%{model} wurde erfolgreich erstellt.'
+      updated: '%{model} wurde erfolgreich aktualisiert.'
+      destroyed: '%{model} wurde erfolgreich entfernt.'
     titles:
       new: '%{model} erstellen'
       edit: '%{model} bearbeiten'
@@ -26,7 +30,7 @@ de:
       sign_out: Abmelden
       upload: '%{model} hochladen'
       view: Ansehen
-    confirm:
+    confirmations:
       destroy: 'Möchten Sie diese(s) %{model} wirklich entfernen?'
       destroy_selected: 'Möchten Sie die ausgewählten %{model} wirklich entfernen?'
       make_default: '%{model} wirklich als Standard festlegen?'

@@ -35,7 +35,7 @@
           %td.actions
             = action_buttons_for template.becomes(::Template), size: :mini, except: (:destroy if template.default?), icon_only: true do
               - unless template.default?
-                = button_link_to translate('helpers.links.make_default'), [:make_default, :admin, template.becomes(::Template)], size: :mini, method: :patch, confirm: translate('helpers.confirm.make_default', model: ::Template.model_name.human)
+                = button_link_to translate('helpers.links.make_default'), [:make_default, :admin, template.becomes(::Template)], size: :mini, method: :patch, confirm: translate('helpers.confirmations.make_default', model: ::Template.model_name.human)
 
 - else
   .well.text-center

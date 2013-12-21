@@ -39,7 +39,7 @@ module ActionButtonHelper
     options[:type] = :danger
     options[:method] = :delete
     options[:data] ||= {}
-    options[:data][:confirm] = translate('helpers.confirm.destroy', model: model_name)
+    options[:data][:confirm] = translate('helpers.confirmations.destroy', model: model_name)
 
     if icon_only
       caption = icon(:trash, outline: true)

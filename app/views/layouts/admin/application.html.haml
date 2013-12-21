@@ -51,10 +51,14 @@
 
             %ul.list-inline.navbar-text.pull-right
               %li= active_link_to prepend_icon(:user, current_user.name), :admin_account, class: 'navbar-link'
-              %li= link_to prepend_icon(:sign_out, translate('helpers.links.sign_out')), :admin_sign_out, class: 'navbar-link', method: :delete, data: { confirm: translate('helpers.confirm.sign_out') }
+              %li= link_to prepend_icon(:sign_out, translate('helpers.links.sign_out')), :admin_sign_out, class: 'navbar-link', method: :delete, data: { confirm: translate('helpers.confirmations.sign_out') }
         
     .container
       = render 'breadcrumbs'
+      
+      = render_flash(flash.notice, type: :success)
+      = render_flash(flash.alert, type: :danger)
+
       #page_content
         = yield
 

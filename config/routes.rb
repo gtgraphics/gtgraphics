@@ -30,6 +30,7 @@ GtGraphics::Application.routes.draw do
         end
 
         resources :images do
+          resources :styles, controller: :image_styles
           collection do
             patch :batch, as: :batch_process
             delete :destroy_multiple

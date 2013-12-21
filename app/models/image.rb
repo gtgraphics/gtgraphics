@@ -28,6 +28,7 @@ class Image < ActiveRecord::Base
 
   STYLES = {
     thumbnail: ['75x75#', :png],
+    large_thumbnail: ['253x190#', :png],
     preview: '1170x',
     medium: '1280x780',
     large: '1920x1080'
@@ -63,6 +64,10 @@ class Image < ActiveRecord::Base
 
   def to_liquid
     {} # TODO
+  end
+
+  def to_param
+    "#{id}-#{title.parameterize}"
   end
 
   def to_s

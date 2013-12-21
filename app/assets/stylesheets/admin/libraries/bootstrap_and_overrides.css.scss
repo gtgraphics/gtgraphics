@@ -35,21 +35,49 @@
     width: 101px;
   }
   .actions {
-    white-space: nowrap;
-    //position: relative;
-    //min-width: 120px;
     .btn-toolbar {
-      //position: absolute;
       float: right;
-      top: 7px;
-      right: 8px;
       text-align: left;
-      margin: {
-        top: -2px;
-        bottom: -2px;
-      }
-      .btn.icon-only {
-        width: 34px;
+    }
+  }
+}
+
+.actions {
+  white-space: nowrap;
+  //position: relative;
+  //min-width: 120px;
+  .btn-toolbar {
+    top: 7px;
+    right: 8px;
+    margin: {
+      top: -2px;
+      bottom: -2px;
+    }
+    .btn.icon-only {
+      width: 34px;
+    }
+  }
+}
+
+.thumbnail {
+  position: relative;
+  &:hover {
+    .actions .btn {
+      display: inline-block;
+    }
+  }
+  .actions {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    .btn {
+      background: rgba(0, 0, 0, 0.55);
+      border: none;
+      display: none;
+      color: rgba(255, 255, 255, 0.8);
+      &:hover, &:focus {
+        opacity: 1;
+        color: white
       }
     }
   }

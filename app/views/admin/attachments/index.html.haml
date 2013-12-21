@@ -3,7 +3,7 @@
   = index_headline_for Attachment do
     %ul.list-inline
       %li.batch-controls
-        = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger batch-control', data: { confirm: translate('helpers.confirm.destroy_selected', model: Attachment.model_name.human(count: 2)) }
+        = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Attachment.model_name.human(count: 2)) }
       %li= create_button_link_for Attachment, icon: :upload, caption: translate('helpers.links.upload', model: Attachment.model_name.human), url: :new_admin_attachment
 
   - if @attachments.any?

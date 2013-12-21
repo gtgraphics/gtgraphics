@@ -23,6 +23,7 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def create
     @image = Image.create(image_params)
+    flash_for @image
     respond_with :admin, @image
   end
 
@@ -36,11 +37,13 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def update
     @image.update(image_params)
+    flash_for @image
     respond_with :admin, @image
   end
 
   def destroy
     @image.destroy
+    flash_for @image
     respond_with :admin, @image
   end
 

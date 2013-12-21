@@ -1,0 +1,15 @@
+= content_tag_for :tr, image, class: 'thumbnail' do
+  - if checkboxes
+    %td.checkbox-cell
+      = check_box_tag 'image_ids[]', image.id, false, class: 'table-checkbox', id: nil
+  %td.thumbnail-cell
+    = link_to [:admin, image] do
+      = image_tag image.asset.url(:thumbnail), class: 'thumbnail', alt: image.title
+  %td= link_to image.title, [:admin, image]
+  %td= image.human_content_type
+  %td= number_to_human_size image.file_size
+  %td= image.dimensions
+  %td= time_ago image.updated_at
+  - if actions
+    %td.actions
+      = action_buttons_for image, size: :mini, icon_only: true

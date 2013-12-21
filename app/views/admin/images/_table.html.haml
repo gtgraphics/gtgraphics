@@ -5,34 +5,50 @@
 - if checkboxes
   = hidden_field_tag 'image_ids[]', '', id: nil
 
-%table.table.table-striped
-  %thead
-    %tr
-      - if checkboxes
-        %th.checkbox-cell
-          %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
-      %th.thumbnail-cell
-      %th= Image.human_attribute_name :title
-      %th= Image.human_attribute_name :content_type
-      %th= Image.human_attribute_name :file_size
-      %th= Image.human_attribute_name :dimensions
-      %th= Image.human_attribute_name :updated_at
-      - if actions
-        %th.actions
-  %tbody
+- if params[:view] == 'thumbnails'
+
+  .row
     - images.each do |image|
-      = content_tag_for :tr, image do
-        - if checkboxes
-          %td.checkbox-cell
-            = check_box_tag 'image_ids[]', image.id, false, class: 'table-checkbox', id: nil
-        %td.thumbnail-cell
-          = link_to [:admin, image] do
-            = image_tag image.asset.url(:thumbnail), class: 'thumbnail', alt: image.title
-        %td= link_to image.title, [:admin, image]
-        %td= image.human_content_type
-        %td= number_to_human_size image.file_size
-        %td #{image.width} &times; #{image.height}
-        %td= time_ago image.updated_at
-        - if actions
-          %td.actions
+      .col-lg-3
+        = thumbnail image.asset.url(:large_thumbnail), [:admin, image], alt: image.title do#
+          .actions
             = action_buttons_for image, size: :mini, icon_only: true
+          %h3= image.title
+          %p
+            = image.human_content_type
+            %br
+            = number_to_human_size image.file_size
+            %br
+            = image.dimensions
+- else
+  %table.table.table-striped
+    %thead
+      %tr
+        - if checkboxes
+          %th.checkbox-cell
+            %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
+        %th.thumbnail-cell
+        %th= Image.human_attribute_name :title
+        %th= Image.human_attribute_name :content_type
+        %th= Image.human_attribute_name :file_size
+        %th= Image.human_attribute_name :dimensions
+        %th= Image.human_attribute_name :updated_at
+        - if actions
+          %th.actions
+    %tbody
+      - images.each do |image|
+        = content_tag_for :tr, image do
+          - if checkboxes
+            %td.checkbox-cell
+              = check_box_tag 'image_ids[]', image.id, false, class: 'table-checkbox', id: nil
+          %td.thumbnail-cell
+            = link_to [:admin, image] do
+              = image_tag image.asset.url(:thumbnail), class: 'thumbnail', alt: image.title
+          %td= link_to image.title, [:admin, image]
+          %td= image.human_content_type
+          %td= number_to_human_size image.file_size
+          %td= image.dimensions
+          %td= time_ago image.updated_at
+          - if actions
+            %td.actions
+              = action_buttons_for image, size: :mini, icon_only: true
