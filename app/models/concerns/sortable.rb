@@ -130,7 +130,6 @@ module Sortable
           when 2 then sortable_column_order.call(relation.sort_column, relation.sort_direction)
           else raise 'invalid number of arguments' 
           end
-          #raise order.inspect
         else
           order = sortable_column_order.send(relation.sort_direction.to_sym)
         end
