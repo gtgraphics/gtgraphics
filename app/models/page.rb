@@ -63,6 +63,7 @@ class Page < ActiveRecord::Base
   after_initialize :set_default_template, if: -> { support_template? and template.blank? }
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
+  before_validation :clear_template_id, if: :embeddable_type_changed?
   after_save :update_descendants_paths
   after_save :save_embeddable
   after_update :destroy_replaced_embeddables, if: :embeddable_changed?
@@ -215,7 +216,7 @@ class Page < ActiveRecord::Base
   alias_method :support_regions?, :support_template?
 
   def template_class
-    @template_class ||= template_type.try(:constantize)
+    template_type.try(:constantize)
   end
 
   def template_path
@@ -240,6 +241,10 @@ class Page < ActiveRecord::Base
   end
 
   private
+  def clear_template_id
+    self.template_id = nil
+  end
+
   def destroy_embeddable
     embeddable.destroy if embeddable and embeddable.class.bound_to_page?
   end
