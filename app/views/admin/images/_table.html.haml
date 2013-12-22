@@ -7,17 +7,15 @@
 
 - if params[:view] == 'thumbnails'
 
-  .row
+  .row.thumbnails
     - images.each do |image|
-      .col-lg-3
+      .col-lg-3.col-md-3.col-sm-3.col-sx-3
         = thumbnail image.asset.url(:large_thumbnail), [:admin, image], alt: image.title do#
           .actions
             = action_buttons_for image, size: :mini, icon_only: true
-          %h3= image.title
+          %h6= image.title
           %p
             = image.human_content_type
-            %br
-            = number_to_human_size image.file_size
             %br
             = image.dimensions
 - else
@@ -28,11 +26,11 @@
           %th.checkbox-cell
             %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
         %th.thumbnail-cell
-        %th= Image.human_attribute_name :title
+        %th= sort_link_for images, :title, Image.human_attribute_name(:title)
         %th= Image.human_attribute_name :content_type
-        %th= Image.human_attribute_name :file_size
         %th= Image.human_attribute_name :dimensions
-        %th= Image.human_attribute_name :updated_at
+        %th= sort_link_for images, :author, Image.human_attribute_name(:author)
+        %th= sort_link_for images, :updated_at, Image.human_attribute_name(:updated_at)
         - if actions
           %th.actions
     %tbody
@@ -46,8 +44,8 @@
               = image_tag image.asset.url(:thumbnail), class: 'thumbnail', alt: image.title
           %td= link_to image.title, [:admin, image]
           %td= image.human_content_type
-          %td= number_to_human_size image.file_size
           %td= image.dimensions
+          %td= image.author
           %td= time_ago image.updated_at
           - if actions
             %td.actions

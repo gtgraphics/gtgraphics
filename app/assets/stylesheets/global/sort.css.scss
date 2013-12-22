@@ -1,0 +1,10 @@
+.sort-link {
+  color: #333;
+  &:hover, &:focus {
+    color: #333;
+    text-decoration: none;
+  }
+  .sort-indicator {
+    margin-left: 4px;
+  }
+}

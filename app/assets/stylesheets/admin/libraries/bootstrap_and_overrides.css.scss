@@ -59,6 +59,12 @@
   }
 }
 
+.thumbnails {
+  .thumbnail {
+    margin-bottom: 30px;
+  }
+}
+
 .thumbnail {
   position: relative;
   &:hover {
@@ -71,10 +77,10 @@
     top: 12px;
     right: 12px;
     .btn {
-      background: rgba(0, 0, 0, 0.55);
+      background: rgba(0, 0, 0, 0.7);
       border: none;
       display: none;
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.7);
       &:hover, &:focus {
         opacity: 1;
         color: white
