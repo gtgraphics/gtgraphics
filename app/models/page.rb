@@ -63,7 +63,7 @@ class Page < ActiveRecord::Base
   after_initialize :set_default_template, if: -> { support_template? and template.blank? }
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
-  before_validation :clear_template_id, if: :embeddable_type_changed?
+  before_validation :clear_template_id, unless: :support_template?
   after_save :update_descendants_paths
   after_save :save_embeddable
   after_update :destroy_replaced_embeddables, if: :embeddable_changed?
@@ -282,8 +282,11 @@ class Page < ActiveRecord::Base
   end
 
   def save_embeddable
-    if embeddable and (embeddable.new_record? or embeddable.changed?)
-      embeddable.save!(validate: false)
+    if embeddable
+      embeddable.save!
+       #if embeddable.new_record? or embeddable.changed?
+    else
+      raise 'no embeddable defined'
     end
   end
 
