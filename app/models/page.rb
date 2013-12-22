@@ -46,7 +46,7 @@ class Page < ActiveRecord::Base
   acts_as_authorable
   acts_as_nested_set
 
-  belongs_to :embeddable, polymorphic: true
+  belongs_to :embeddable, polymorphic: true, autosave: true
   belongs_to :template, inverse_of: :pages
   has_many :regions, dependent: :destroy, inverse_of: :page
 
@@ -58,14 +58,14 @@ class Page < ActiveRecord::Base
   validate :validate_parent_assignability
   validate :validate_template_type
   validate :validate_no_root_exists, if: :root?
-  validate :validate_embeddable
+  # validate :validate_embeddable
 
   after_initialize :set_default_template, if: -> { support_template? and template.blank? }
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
-  before_validation :clear_template_id, unless: :support_template?
+  before_validation :clear_template, unless: :support_template?
   after_save :update_descendants_paths
-  after_save :save_embeddable
+  # after_save :save_embeddable
   after_update :destroy_replaced_embeddables, if: :embeddable_changed?
   after_update :migrate_or_destroy_regions, if: -> { embeddable_changed? and support_regions? }
   before_destroy :destroyable?
@@ -175,7 +175,7 @@ class Page < ActiveRecord::Base
 
   def embeddable_attributes=(attributes)
     raise 'no embeddable type specified' if embeddable_class.nil?
-    if embeddable.nil? or embeddable_type_changed?
+    if attributes["id"].blank? or embeddable.nil? or embeddable_type_changed?
       build_embeddable(attributes)
     else
       self.embeddable.attributes = attributes
@@ -235,8 +235,8 @@ class Page < ActiveRecord::Base
   end
 
   private
-  def clear_template_id
-    self.template_id = nil
+  def clear_template
+    self.template = nil
   end
 
   def destroy_embeddable
