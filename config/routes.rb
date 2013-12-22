@@ -31,6 +31,7 @@ GtGraphics::Application.routes.draw do
         end
 
         resources :images do
+          get 'by/:sort/:direction', action: :index, as: :order
           resources :styles, controller: :image_styles
           collection do
             patch :batch, as: :batch_process
