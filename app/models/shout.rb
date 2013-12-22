@@ -22,8 +22,12 @@ class Shout < ActiveRecord::Base
   validates :y, presence: true, numericality: { only_integer: true }
   validate :check_coordinates_uniqueness
 
+  # def browser
+  #   "#{parsed_user_agent.browser} #{parsed_user_agent.version}"
+  # end
+
   def browser
-    "#{parsed_user_agent.browser} #{parsed_user_agent.version}"
+    "#{I18n.translate(parsed_user_agent.name, scope: :browsers)} #{parsed_user_agent.version}"
   end
 
   def coordinates
@@ -32,10 +36,6 @@ class Shout < ActiveRecord::Base
 
   def edited?
     updated_at != created_at
-  end
-
-  def browser(locale = I18n.locale)
-    "#{I18n.translate(parsed_user_agent.name, scope: :browsers)} #{parsed_user_agent.version}"
   end
 
   delegate :os, :mobile?, to: :parsed_user_agent

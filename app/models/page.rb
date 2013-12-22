@@ -96,6 +96,7 @@ class Page < ActiveRecord::Base
   end
 
   delegate :name, to: :author, prefix: true, allow_nil: true
+  delegate :title, to: :embeddable, allow_nil: true
 
   EMBEDDABLE_TYPES.each do |embeddable_type|
     scope embeddable_type.underscore.pluralize, -> { where(embeddable_type: embeddable_type) }
@@ -197,17 +198,14 @@ class Page < ActiveRecord::Base
     !published?
   end
 
-  def regions_hash(locale = I18n.locale)
+  def regions_hash
     regions.inject(ActiveSupport::HashWithIndifferentAccess.new) do |regions_hash, region|
-      if body = region.body(locale)
-        regions_hash[region.definition_label] = body
-      end
-      regions_hash
+      regions_hash.merge!(region.definition_label => region.body)
     end
   end
 
-  def state_name(locale = I18n.locale)
-    I18n.translate(state, scope: 'page.states', locale: locale)
+  def state_name
+    I18n.translate(state, scope: 'page.states')
   end
 
   def support_template?
@@ -225,10 +223,6 @@ class Page < ActiveRecord::Base
 
   def template_type
     self.class.template_types_hash[embeddable_type]
-  end
-
-  def title(locale = I18n.locale)
-    embeddable.try(:title, locale) || embeddable.try(:title)
   end
 
   def to_s

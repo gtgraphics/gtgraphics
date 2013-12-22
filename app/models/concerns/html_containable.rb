@@ -1,8 +1,8 @@
 module HtmlContainable
   extend ActiveSupport::Concern
 
-  def body_html(locale = I18n.locale)
-    template = Liquid::Template.parse(self.body(locale))
+  def body_html
+    template = Liquid::Template.parse(self.body)
     template.render(to_liquid).html_safe
   end
 

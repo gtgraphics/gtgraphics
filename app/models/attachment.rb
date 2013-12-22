@@ -36,8 +36,8 @@ class Attachment < ActiveRecord::Base
     by.updated_at { |dir| arel_table[:updated_at].send(dir.to_sym) }
   end
 
-  def description_html(locale = I18n.locale)
-    template = Liquid::Template.parse(self.description(locale))
+  def description_html
+    template = Liquid::Template.parse(self.description)
     template.render(to_liquid).html_safe
   end
 

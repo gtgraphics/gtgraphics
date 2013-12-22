@@ -17,7 +17,7 @@ class Homepage < ActiveRecord::Base
 
   has_many :quotes, class_name: 'Homepage::Quote', dependent: :destroy
 
-  def title(locale = I18n.locale)
-    I18n.translate(:homepage, locale: locale)
+  def title
+    I18n.translate(:homepage)
   end
 end
