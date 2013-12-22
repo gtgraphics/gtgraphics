@@ -282,12 +282,10 @@ class Page < ActiveRecord::Base
     end
   end
 
-  def validate_embeddable
-    embeddable.try(:valid?)
-  end
-
   def save_embeddable
-    embeddable.save!(validate: false) if embeddable and (embeddable.new_record? or embeddable.changed?)
+    if embeddable and (embeddable.new_record? or embeddable.changed?)
+      embeddable.save!(validate: false)
+    end
   end
 
   def set_default_template
@@ -296,6 +294,10 @@ class Page < ActiveRecord::Base
 
   def update_descendants_paths
     transaction { descendants.each(&:update_path!) }
+  end
+
+  def validate_embeddable
+    embeddable.try(:valid?)
   end
 
   def validate_no_root_exists
