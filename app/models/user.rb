@@ -20,6 +20,7 @@
 #  current_sign_in_ip      :string(255)
 #  last_sign_in_at         :datetime
 #  last_sign_in_ip         :string(255)
+#  preferences             :text
 #
 
 class User < ActiveRecord::Base
@@ -27,6 +28,8 @@ class User < ActiveRecord::Base
   include Authenticatable::Lockable
   include Authenticatable::Trackable
   include Sortable
+
+  store :preferences
 
   has_and_belongs_to_many :addressed_contact_forms, class_name: 'ContactForm', join_table: 'contact_form_recipients', foreign_key: 'recipient_id', association_foreign_key: 'contact_form_id'
 

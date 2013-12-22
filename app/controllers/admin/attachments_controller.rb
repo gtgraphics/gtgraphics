@@ -11,7 +11,7 @@ class Admin::AttachmentsController < Admin::ApplicationController
   end
 
   def index
-    @attachments = Attachment.with_translations.order(Attachment::Translation.arel_table[:title])
+    @attachments = Attachment.with_translations.sort(params[:sort], params[:direction])
     respond_with :admin, @attachments
   end
 

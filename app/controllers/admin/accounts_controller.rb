@@ -26,6 +26,7 @@ class Admin::AccountsController < Admin::ApplicationController
   end
 
   def update_password
+    # TODO Make Activity out of it
     if @user.update_with_password(user_password_params)
       sign_in @user, bypass: true
       respond_to do |format|
@@ -42,8 +43,22 @@ class Admin::AccountsController < Admin::ApplicationController
     respond_with :admin, @user, location: :root
   end
 
+  def update_preferences
+    account_preferences_params.each do |key, value|
+      @user.preferences[key] = value
+    end
+    @user.save!
+    respond_to do |format|
+      format.html { redirect_to :back }
+    end
+  end 
+
   private
   def load_user
     @user = User.find(current_user.id)
+  end
+
+  def account_preferences_params
+    params.permit(:image_view_mode)
   end
 end

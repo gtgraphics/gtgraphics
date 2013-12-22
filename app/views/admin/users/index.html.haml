@@ -7,7 +7,7 @@
     %thead
       %tr
         %th.thumbnail-cell
-        %th= sort_link_for @users, :full_name, User.human_attribute_name(:full_name)
+        %th= sort_link_for @users, :full_name
         %th.actions
     %tbody
       - @users.each do |user|

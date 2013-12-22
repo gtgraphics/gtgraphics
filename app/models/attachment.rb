@@ -17,6 +17,7 @@ class Attachment < ActiveRecord::Base
   include Authorable
   # include AttachmentPreservable
   include BatchTranslatable
+  include Sortable
 
   translates :title, :description, fallbacks_for_empty_translations: true
 
@@ -28,6 +29,12 @@ class Attachment < ActiveRecord::Base
   validates_attachment :asset, presence: true
 
   before_validation :set_default_title
+
+  acts_as_sortable do |by|
+    by.file_size { |dir| arel_table[:asset_file_size].send(dir.to_sym) }
+    by.title(default: true) { |dir| Attachment::Translation.arel_table[:title].send(dir.to_sym) }
+    by.updated_at { |dir| arel_table[:updated_at].send(dir.to_sym) }
+  end
 
   def description_html(locale = I18n.locale)
     template = Liquid::Template.parse(self.description(locale))

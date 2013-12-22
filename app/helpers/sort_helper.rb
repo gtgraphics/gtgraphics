@@ -8,6 +8,8 @@ module SortHelper
     options[:class].strip!
 
     caption = block_given? ? capture(&block) : args.first
+    caption = collection.klass.human_attribute_name(column_name) if caption.nil?
+
     link_to url_for(sort: column_name, direction: collection.sorted_by?(column_name) ? collection.sort_direction.invert.to_sym : Sortable::Direction.default.to_sym), options do
       concat content_tag(:span, caption, class: 'sort-caption')
       if collection.sorted_by?(column_name)

@@ -11,10 +11,10 @@
       - if checkboxes
         %th.checkbox-cell
           %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
-      %th= Attachment.human_attribute_name :title
+      %th= sort_link_for attachments, :title
       %th= Attachment.human_attribute_name :content_type
-      %th= Attachment.human_attribute_name :file_size
-      %th= Attachment.human_attribute_name :updated_at
+      %th= sort_link_for attachments, :file_size
+      %th= sort_link_for attachments, :updated_at
       - if actions
         %th.actions
   %tbody

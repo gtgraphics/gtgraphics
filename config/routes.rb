@@ -16,6 +16,7 @@ GtGraphics::Application.routes.draw do
         resource :account, except: [:new, :create] do
           get :edit_password
           patch :update_password
+          patch :update_preferences
         end
 
         resources :attachments do

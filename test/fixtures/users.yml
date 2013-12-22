@@ -20,6 +20,7 @@
 #  current_sign_in_ip      :string(255)
 #  last_sign_in_at         :datetime
 #  last_sign_in_ip         :string(255)
+#  preferences             :text
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
