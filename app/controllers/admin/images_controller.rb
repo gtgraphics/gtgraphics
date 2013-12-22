@@ -12,7 +12,6 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def index
     @images = Image.with_translations.includes(:author).sort(params[:sort], params[:direction])
-    #@images = @images.sort(Image::Translation.arel_table[:title])
     respond_with :admin, @images
   end
 

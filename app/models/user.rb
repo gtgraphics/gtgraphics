@@ -26,6 +26,7 @@ class User < ActiveRecord::Base
   include Authenticatable
   include Authenticatable::Lockable
   include Authenticatable::Trackable
+  include Sortable
 
   has_and_belongs_to_many :addressed_contact_forms, class_name: 'ContactForm', join_table: 'contact_form_recipients', foreign_key: 'recipient_id', association_foreign_key: 'contact_form_id'
 
@@ -39,6 +40,10 @@ class User < ActiveRecord::Base
   after_update :send_updated_password, if: :password_changed?
 
   default_scope -> { order(:first_name, :last_name) }
+
+  acts_as_sortable do |by|
+    by.full_name(default: true) { |dir| [arel_table[:first_name].send(dir.to_sym), arel_table[:last_name].send(dir.to_sym)] }
+  end
 
   def change_password?
     @change_password = false unless defined? @change_password

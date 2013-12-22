@@ -26,3 +26,20 @@ en:
 
     translations:
       error: The Translation Editor could not be loaded.
+
+    timeago:
+      prefix_ago: ''
+      suffix_ago: 'ago'
+      prefix_from_now: in
+      suffix_from_now: ''
+      seconds: a few seconds
+      minute: a minute
+      minutes: '%{minutes} minutes'
+      hour: an hour
+      hours: '%{hours} hours'
+      day: a day
+      days: '%{days} days'
+      month: a month
+      months: '%{months} months'
+      year: a year
+      years: '%{years} years'

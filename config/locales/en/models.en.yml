@@ -3,6 +3,7 @@ en:
     description: Description
     slug: Slug
     title: Title
+    updated_at: Last Update
 
   activemodel:
     attributes:
@@ -37,10 +38,17 @@ en:
         caption: Beschriftung
         content_type: Content Type
         file_size: File Size
+        author: Artist
+        dimensions: Dimensions
+        content_type: File Type
+      image/translation:
+        title: Title
       page:
-        embeddable_type: Page Type
+        embeddable_type: Type
         published: Published?
         template: Template
+        menu_item: Menu Item?
+        state: State
       shout:
         nickname: Author
         ip: IP
@@ -79,3 +87,11 @@ en:
       user:
         one: User
         other: Users
+
+  page:
+    states:
+      published: Published
+      drafted: Draft
+      hidden: Invisible
+
+  homepage: Homepage

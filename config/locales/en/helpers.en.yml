@@ -3,6 +3,10 @@ en:
     boolean:
       'yes': 'Yes'
       'no': 'No'
+    flash:
+      created: '%{model} has been created successfully.'
+      updated: '%{model} has been updated successfully.'
+      destroyed: '%{model} has been destroyed successfully.'
     titles:
       new: 'Create %{model}'
       edit: 'Edit %{model}'
@@ -20,8 +24,11 @@ en:
       add: Add
       move_up: Move Up
       move_down: Move Down
+      move_to: 'Move to %{model}'
       close: Close
-    confirm:
+      sign_out: Sign out
+      sign_in: Sign in
+    confirmations:
       destroy: 'Do you really want to delete this %{model}?'
       destroy_selected: 'Do you really want to delete all selected %{model}?'
     prompts:
