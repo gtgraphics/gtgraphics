@@ -1,5 +1,5 @@
 class RedirectionsController < PagesController
-  load_embedded :redirection
+  embeds :redirection
 
   def show
     if @redirection.external?

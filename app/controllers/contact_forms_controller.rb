@@ -1,5 +1,5 @@
 class ContactFormsController < PagesController 
-  load_embedded :contact_form
+  embeds :contact_form
 
   def show
     # TODO Redirect to contact_messages#new

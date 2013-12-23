@@ -1,5 +1,5 @@
 class ContentsController < PagesController
-  load_embedded :content
+  embeds :content
 
   def show
     @content_pages = @page.children_with_embedded(:content, :gallery).published.menu_items.with_translations

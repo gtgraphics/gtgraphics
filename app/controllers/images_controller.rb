@@ -1,5 +1,5 @@
 class ImagesController < PagesController
-  load_embedded :image
+  embeds :image
 
   def show
     respond_to do |format|

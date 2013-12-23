@@ -11,11 +11,8 @@
     %dd= @attachment.human_content_type
     %dt= Attachment.human_attribute_name(:file_size)
     %dd= number_to_human_size @attachment.file_size
-    %dt= Attachment.human_attribute_name(:author)
-    %dd
-      - if @attachment.author
-        = link_to @attachment.author_name, [:admin, @attachment.author]
-      - else
-        \-
+    - if @attachment.author
+      %dt= Attachment.human_attribute_name(:author)
+      %dd= link_to @attachment.author_name, [:admin, @attachment.author]
     %dt= Attachment.human_attribute_name(:updated_at)
     %dd= time_ago @attachment.updated_at

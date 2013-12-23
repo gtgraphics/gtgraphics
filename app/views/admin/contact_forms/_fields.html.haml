@@ -6,4 +6,4 @@
   = fields.simple_fields_for :translations do |translation_fields|
     = render 'admin/contact_forms/translation_fields', fields: translation_fields
 
-= fields.association :recipients, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }
+= fields.association :recipients, as: :check_boxes, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }

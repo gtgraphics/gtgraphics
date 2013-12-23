@@ -1,5 +1,5 @@
 class HomepagesController < PagesController
-  load_embedded :homepage
+  embeds :homepage
 
   def show
     respond_with_page
