@@ -54,6 +54,11 @@ de:
         asset: Bilddatei
       image/translation:
         caption: Beschriftung
+      message:
+        sender_name: Absender
+        subject: Betreff
+        body: Nachricht
+        read: Gelesen?
       page:
         embeddable_type: Seitentyp
         embeddable_id: Seitenobjekt

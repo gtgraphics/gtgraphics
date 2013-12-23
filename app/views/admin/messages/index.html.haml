@@ -1,0 +1,7 @@
+= index_headline_for Message
+
+- if @messages.any?
+  = render 'table', checkboxes: true
+- else
+  .well.text-center
+    %h4= translate('views.hints.empty', model: Message.model_name.human(count: 2))

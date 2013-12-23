@@ -3,9 +3,19 @@ class Admin::MessagesController < Admin::ApplicationController
 
   before_action :load_message, only: %i(show destroy)
 
+  breadcrumbs do |b|
+    b.append Message.model_name.human(count: 2), :admin_messages
+    b.append 'Archiv', :archived_admin_messages if action_name == 'archived'
+  end
+
   def index
-    @message = current_user.messages
+    @messages = current_user.messages.sort(params[:sort], params[:direction])
     respond_with :admin, @messages
+  end
+
+  def archived
+    @messages = current_user.messages.older_than(2.weeks).sort(params[:sort], params[:direction])
+    respond_with :admin, @messages, template: 'admin/messages/index'
   end
 
   def show

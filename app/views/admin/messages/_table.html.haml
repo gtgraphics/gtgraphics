@@ -1,0 +1,41 @@
+- messages ||= @messages
+- actions = true if actions.nil?
+- checkboxes = false if checkboxes.nil?
+
+- if checkboxes
+  = hidden_field_tag 'message_ids[]', '', id: nil
+
+%table.table.table-striped
+  %thead
+    %tr
+      - if checkboxes
+        %th.checkbox-cell
+          %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
+      %th= sort_link_for messages, :subject
+      %th.text-center= sort_link_for messages, :read
+      %th= sort_link_for messages, :sender_name
+      %th= sort_link_for messages, :created_at
+      - if actions
+        %th.actions
+  %tbody
+    - messages.each do |message|
+      = content_tag_for :tr, message do
+        - if checkboxes
+          %td.checkbox-cell
+            = check_box_tag 'message_ids[]', message.id, false, class: 'table-checkbox', id: nil
+        %td
+          = content_tag message.unread? ? :strong : :span do
+            = link_to message.subject.presence || translate('helpers.prompts.no_subject'), [:admin, message]
+        %td.text-center
+          = link_to '#', class: message.read? ? 'text-muted' : 'text-success', title: 'Als gelesen markieren', data: { toggle: 'tooltip', placement: 'right' } do
+            = icon(:circle, outline: message.read?)
+        %td
+          .pull-left{style: 'margin-right: 10px;'}
+            = mail_to message.sender_email do          
+              = gravatar_image_tag message.sender_email, class: 'thumbnail', size: 30, alt: message.sender_name
+          %div= mail_to message.sender_email, message.sender_name
+          .text-muted= message.sender_email
+        %td= time_ago message.created_at
+        - if actions
+          %td.actions
+            = action_buttons_for message, size: :mini, icon_only: true, only: [:show, :destroy]

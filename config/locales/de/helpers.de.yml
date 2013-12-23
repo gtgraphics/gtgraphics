@@ -42,5 +42,6 @@ de:
       default: '– Standard –'
       none: '– keine –'
       me: '– Ich –'
+      no_subject: '– Kein Betreff –'
     units:
       pixels: Pixel

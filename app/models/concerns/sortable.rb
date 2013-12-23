@@ -17,12 +17,13 @@ module Sortable
   end
 
   class ColumnDefinition
-    attr_reader :name, :order
+    attr_reader :name, :order, :primary_direction
 
     def initialize(name, order, options = {})
       @name = name
       @order = order
       @default = options.fetch(:default, false)
+      @primary_direction = Sortable::Direction.new(options.fetch(:primary, Sortable::Direction.default))
     end
 
     def default?
@@ -36,7 +37,7 @@ module Sortable
     DESCENDING_TOKENS = %w(desc descending).freeze
 
     def initialize(direction)
-      @descending = direction.to_s.downcase.in?(%w(desc descending))
+      @descending = direction.to_s.downcase.in?(DESCENDING_TOKENS)
     end
 
     def self.default
@@ -83,6 +84,14 @@ module Sortable
       @sort_column = column.to_s
     end
 
+    def sort_column_definition
+      @sort_column_definition
+    end
+
+    def sort_column_definition=(column_definition)
+      @sort_column_definition = column_definition
+    end
+
     def sort_direction
       @sort_direction
     end
@@ -119,10 +128,11 @@ module Sortable
       sortable_column = sortable_columns_hash[column]
       sortable_column ||= sortable_columns.find(&:default?)
 
-      relation.sort_column = sortable_column.name
-      relation.sort_direction = direction || Sortable::Direction.default
-
       if sortable_column
+        relation.sort_column = sortable_column.name
+        relation.sort_direction = direction || sortable_column.primary_direction.to_sym
+        relation.sort_column_definition = sortable_column
+
         sortable_column_order = sortable_column.order
         if sortable_column_order.respond_to?(:call)
           order = case sortable_column_order.arity

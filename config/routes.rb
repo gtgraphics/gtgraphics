@@ -46,7 +46,12 @@ GtGraphics::Application.routes.draw do
           end
         end
 
-        resources :messages, only: [:index, :show, :destroy]
+        resources :messages, only: [:index, :show, :destroy] do
+          collection do
+            get 'sort/:sort/:direction', action: :index
+            get :archive, action: :archived, as: :archived
+          end
+        end
 
         resources :pages do
           collection do
