@@ -23,6 +23,7 @@ class Admin::TemplatesController < Admin::ApplicationController
 
   def create
     @template = Template.create(template_params)
+    flash_for @template, :created
     respond_with :admin, @template.becomes(Template)
   end
 
@@ -37,16 +38,19 @@ class Admin::TemplatesController < Admin::ApplicationController
 
   def update
     @template.update(template_params)
+    flash_for @template
     respond_with :admin, @template.becomes(Template)
   end
 
   def destroy
     @template.destroy
+    flash_for @template
     respond_with :admin, @template.becomes(Template)
   end
 
   def make_default
     @template.update(default: true)
+    flash_for @template, :made_default
     redirect_to :admin_templates
   end
 

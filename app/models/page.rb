@@ -69,6 +69,8 @@ class Page < ActiveRecord::Base
   before_destroy :destroyable?
   after_destroy :destroy_embeddable
 
+  # accepts_nested_attributes_for :embeddable #
+
   default_scope -> { order(:lft) }
   scope :drafted, -> { with_state(:drafted) }
   scope :hidden, -> { with_state(:hidden) }
@@ -172,12 +174,13 @@ class Page < ActiveRecord::Base
   end
 
   def embeddable_attributes=(attributes)
-    raise 'no embeddable type specified' if embeddable_class.nil?
-    if attributes["id"].blank? or embeddable.nil? or embeddable_type_changed?
-      build_embeddable(attributes)
-    else
-      self.embeddable.attributes = attributes
+    raise 'invalid embeddable type' unless embeddable_class
+    if attributes['id'].present?
+      embeddable_id = attributes['id'].to_i
+      self.embeddable = embeddable_class.find_by(id: embeddable_id) if self.embeddable_id != embeddable_id
     end
+    build_embeddable if embeddable.nil?
+    self.embeddable.attributes = attributes
   end
 
   def embeddable_class

@@ -23,7 +23,7 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def create
     @image = Image.create(image_params)
-    flash_for @image
+    flash_for @image, :created
     respond_with :admin, @image
   end
 

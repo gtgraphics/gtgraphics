@@ -18,6 +18,7 @@ class Admin::AccountsController < Admin::ApplicationController
   end
 
   def update
+    # TODO
     respond_with :admin, @user, template: 'admin/users/edit', location: :admin_account
   end
 
@@ -40,6 +41,8 @@ class Admin::AccountsController < Admin::ApplicationController
   end
 
   def destroy
+    @user.destroy
+    flash_for @user
     respond_with :admin, @user, location: :root
   end
 

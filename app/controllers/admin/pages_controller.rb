@@ -28,7 +28,7 @@ class Admin::PagesController < Admin::ApplicationController
 
   def create
     @page = Page.create(page_params)
-    flash_for @page
+    flash_for @page, :created
     respond_with :admin, @page
   end
 

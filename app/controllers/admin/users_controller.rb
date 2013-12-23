@@ -24,6 +24,7 @@ class Admin::UsersController < Admin::ApplicationController
 
   def create
     @user = User.create(create_user_params)
+    flash_for @user, :created
     respond_with :admin, @user
   end
 
@@ -37,6 +38,7 @@ class Admin::UsersController < Admin::ApplicationController
 
   def update
     @user.update(update_user_params)
+    flash_for @user
     respond_with :admin, @user
   end
 
@@ -45,6 +47,7 @@ class Admin::UsersController < Admin::ApplicationController
   end
 
   def update_password
+    # TODO Make activity out of it
     if @user.current?
       saved = @user.update_with_password(account_password_params)
     else

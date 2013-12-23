@@ -12,8 +12,10 @@ class ApplicationController < ActionController::Base
   include MaintainableController
   include RouteHelper
 
-  rescue_from ActiveRecord::RecordNotFound, with: :render_404
-  rescue_from Authenticatable::AccessDenied, with: :force_authentication
+  unless Rails.env.development?
+    rescue_from ActiveRecord::RecordNotFound, with: :render_404
+    rescue_from Authenticatable::AccessDenied, with: :force_authentication
+  end
 
   private
   def default_url_options(options = {})

@@ -18,6 +18,7 @@ class Admin::RegionDefinitionsController < Admin::ApplicationController
 
   def create
     @region_definition = @template.region_definitions.create(region_definition_params)
+    flash_for @region_definition, :created
     respond_with :admin, @template.becomes(Template), @region_definition, location: [:admin, @template.becomes(Template), :region_definitions]
   end
 
@@ -27,11 +28,13 @@ class Admin::RegionDefinitionsController < Admin::ApplicationController
 
   def update
     @region_definition.update(region_definition_params)
+    flash_for @region_definition
     respond_with :admin, @template.becomes(Template), @region_definition, location: [:admin, @template.becomes(Template), :region_definitions]
   end
 
   def destroy
     @region_definition.destroy
+    flash_for @region_definition
     respond_with :admin, @template.becomes(Template), @region_definition
   end
 
