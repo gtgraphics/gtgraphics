@@ -19,6 +19,7 @@ de:
         headlines:
           edit_password: Passwort bearbeiten
         account: Konto
+        me: Ich
         edit_password: Passwort bearbeiten
       editor:
         target:
@@ -32,6 +33,7 @@ de:
           archive: Archiv
         archive: Archiv
         inbox: Posteingang
+        replied_subject: "Re: %{subject}"
       pages:
         empty_type: Bitte wählen Sie einen Seitentyp.
         root: Wurzel

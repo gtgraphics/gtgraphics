@@ -27,6 +27,7 @@ de:
       move_down: Nach unten
       new: '%{model} erstellen'
       remove: Entfernen
+      reply: Antworten
       sign_out: Abmelden
       upload: '%{model} hochladen'
       view: Ansehen

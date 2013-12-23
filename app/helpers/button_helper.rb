@@ -26,6 +26,11 @@ module ButtonHelper
     button_link_to_if(!condition, *args, &block)
   end
 
+  def button_mail_to(*args, &block)
+    extract_button_options!(args)
+    mail_to *args, &block
+  end
+
   private
   def extract_button_options!(args)
     options = args.extract_options!.dup

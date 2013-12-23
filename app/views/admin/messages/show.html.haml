@@ -1,11 +1,13 @@
 = index_headline_for Message do
-  = action_buttons_for @message, except: [:show, :edit]
+  %ul.list-inline
+    %li= button_mail_to @message.sender_email, prepend_icon(:mail_reply, translate('helpers.links.reply')), size: :large, subject: translate('views.admin.messages.replied_subject', subject: @message.subject)
+    %li= action_buttons_for @message, except: [:show, :edit]
 
 .panel.panel-default
   .panel-heading
     %dl.dl-horizontal
       %dt= Message.human_attribute_name :recipient_names
-      %dd= @message.recipients.collect { |recipient| link_to(recipient.full_name, [:admin, recipient]) }.join(', ').html_safe
+      %dd= @message.recipients.collect { |recipient| recipient.is_current_user? ? translate('views.admin.account.me') : link_to(recipient.full_name, [:admin, recipient]) }.join(', ').html_safe
       %dt= Message.human_attribute_name :sender_name
       %dd= mail_to @message.sender_email, @message.sender_name
       %dt= Message.human_attribute_name :subject

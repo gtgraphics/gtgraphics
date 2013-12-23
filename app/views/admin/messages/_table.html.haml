@@ -29,7 +29,7 @@
         %td.text-center.visible-lg.visible.md
           = link_to [:toggle, :admin, message], method: :patch, class: message.read? ? 'text-muted' : 'text-success', title: 'Als gelesen markieren', data: { toggle: 'tooltip' } do
             = icon(:circle, outline: message.read?)
-        %td= user_info message.sender_name, message.sender_email
+        %td= mail_to message.sender_email, message.sender_name
         %td= time_ago message.created_at
         - if actions
           %td.actions
