@@ -23,7 +23,7 @@ class Admin::TemplatesController < Admin::ApplicationController
 
   def create
     @template = Template.create(template_params)
-    flash_for @template, :created
+    flash_for @template
     respond_with :admin, @template.becomes(Template)
   end
 

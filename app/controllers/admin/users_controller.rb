@@ -24,7 +24,7 @@ class Admin::UsersController < Admin::ApplicationController
 
   def create
     @user = User.create(create_user_params)
-    flash_for @user, :created
+    flash_for @user
     respond_with :admin, @user
   end
 

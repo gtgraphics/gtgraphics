@@ -16,6 +16,7 @@
 
 class Template < ActiveRecord::Base
   include BatchTranslatable
+  include PersistenceContextTrackable
 
   VIEW_PATH = Rails.root.join('app/views').freeze
 

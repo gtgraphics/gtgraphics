@@ -14,6 +14,8 @@
 #
 
 class Shout < ActiveRecord::Base
+  include PersistenceContextTrackable
+  
   COORDINATES_PADDING = 10
 
   validates :nickname, presence: true

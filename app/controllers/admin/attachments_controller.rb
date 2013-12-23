@@ -23,7 +23,7 @@ class Admin::AttachmentsController < Admin::ApplicationController
 
   def create
     @attachment = Attachment.create(attachment_params)
-    flash_for @attachment, :created
+    flash_for @attachment
     respond_with :admin, @attachment
   end
 

@@ -27,6 +27,7 @@ class User < ActiveRecord::Base
   include Authenticatable
   include Authenticatable::Lockable
   include Authenticatable::Trackable
+  include PersistenceContextTrackable
   include Sortable
 
   store :preferences

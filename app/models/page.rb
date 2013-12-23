@@ -21,6 +21,7 @@
 
 class Page < ActiveRecord::Base
   include Authorable
+  include PersistenceContextTrackable
 
   EMBEDDABLE_TYPES = %w(
     ContactForm

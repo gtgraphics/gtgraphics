@@ -10,6 +10,8 @@
 #
 
 class RegionDefinition < ActiveRecord::Base
+  include PersistenceContextTrackable
+  
   belongs_to :template, inverse_of: :region_definitions
   has_many :regions, dependent: :destroy, inverse_of: :definition
 

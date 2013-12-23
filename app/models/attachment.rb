@@ -17,6 +17,7 @@ class Attachment < ActiveRecord::Base
   include Authorable
   # include AttachmentPreservable
   include BatchTranslatable
+  include PersistenceContextTrackable
   include Sortable
 
   translates :title, :description, fallbacks_for_empty_translations: true

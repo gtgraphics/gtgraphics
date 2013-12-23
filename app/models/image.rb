@@ -21,6 +21,7 @@ class Image < ActiveRecord::Base
   include BatchTranslatable
   include ImageContainable
   include PageEmbeddable
+  include PersistenceContextTrackable
   include Sortable
   include Templatable
 
