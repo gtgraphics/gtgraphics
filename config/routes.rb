@@ -46,6 +46,8 @@ GtGraphics::Application.routes.draw do
           end
         end
 
+        resources :messages, only: [:index, :show, :destroy]
+
         resources :pages do
           collection do
             get :preview_path

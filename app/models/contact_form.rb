@@ -9,7 +9,7 @@
 
 class ContactForm < ActiveRecord::Base
   include BatchTranslatable
-  include HtmlContainable
+  include HtmlContainable # TODO Does not work on description currently (only on body)
   include PageEmbeddable
   include Templatable
 
@@ -23,4 +23,8 @@ class ContactForm < ActiveRecord::Base
   has_and_belongs_to_many :recipients, class_name: 'User', join_table: 'contact_form_recipients', foreign_key: 'contact_form_id', association_foreign_key: 'recipient_id'
 
   validates :recipient_ids, presence: true
+
+  def description_html
+    (description || '').html_safe # FIXME
+  end
 end

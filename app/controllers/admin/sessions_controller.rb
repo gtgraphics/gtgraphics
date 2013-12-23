@@ -1,5 +1,5 @@
 class Admin::SessionsController < Admin::ApplicationController
-  skip_authentication only: [:new, :create]
+  skip_authentication only: %i(new create)
 
   def new
     @sign_in_activity = SignInActivity.new

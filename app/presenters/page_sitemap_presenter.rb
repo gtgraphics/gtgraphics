@@ -43,7 +43,7 @@ class PageSitemapPresenter < Presenter
   def render_row(parent_id = nil, level = 0)
     pages = Array(pages_by_parents[parent_id])
     pages.each_with_index do |page, index|
-      haml_tag :tr, class: "level-#{level}", data: { level: level } do
+      haml_tag :tr, class: "page level-#{level}", data: { page_id: page.id, page_level: level } do
         haml_tag 'td.checkbox-cell', check_box_tag(:page_ids, page.id, false, multiple: true) if checkboxes?
         haml_tag 'td.level-indented', link_to(page.title, page_path(page))
         haml_tag :td, page.embeddable_class.model_name.human

@@ -125,6 +125,9 @@ de:
       menu_item/record:
         one: Datensatz
         other: Datensätze
+      message:
+        one: Nachricht
+        other: Nachrichten
       page:
         one: Seite
         other: Seiten

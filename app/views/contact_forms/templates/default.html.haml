@@ -1,8 +1,6 @@
 %h1= @contact_form.title
 
-= @contact_form.description.html_safe
+= @contact_form.description_html
 
-- if @content_pages.any?
-  %ul
-    - @content_pages.each do |content_page|
-      %li= link_to content_page, content_page
+= simple_form_for ContactMessage.new, url: '' do |form|
+  Bla

@@ -3,6 +3,7 @@ class ContactFormsController < PagesController
 
   def show
     # TODO Redirect to contact_messages#new
+    respond_with_page
   end
 
   private

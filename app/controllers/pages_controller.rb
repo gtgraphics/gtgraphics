@@ -14,8 +14,8 @@ class PagesController < ApplicationController
   class << self
     def embeds(resource_name)
       helper_method resource_name.to_sym
-      define_method resource_name.to_sym do
-        @page.embeddable
+      before_action do
+        instance_variable_set("@#{resource_name}", @page.embeddable)
       end
     end
   end

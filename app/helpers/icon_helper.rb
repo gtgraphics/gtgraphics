@@ -4,9 +4,15 @@ module IconHelper
     caption = args.first
     caption ||= capture(&block) if block_given?
     raise ArgumentError, 'no text supplied' if caption.nil?
+
+    caption_options = options.delete(:caption_html) { Hash.new }
+    caption_options[:class] ||= ''
+    caption_options[:class] << ' caption'
+    caption_options[:class].strip!
+
     content_tag :span, class: 'append-icon' do
       html = ""
-      html << content_tag(:span, caption, class: 'caption') if caption.present?
+      html << content_tag(:span, caption, caption_options) if caption.present?
       html << icon(name, options)
       html.html_safe
     end
@@ -30,9 +36,15 @@ module IconHelper
     caption = args.first
     caption ||= capture(&block) if block_given?
     raise ArgumentError, 'no text supplied' if caption.nil?
+
+    caption_options = options.delete(:caption_html) { Hash.new }
+    caption_options[:class] ||= ''
+    caption_options[:class] << ' caption'
+    caption_options[:class].strip!
+
     content_tag :span, class: 'prepend-icon' do
       html = icon(name, options)
-      html << content_tag(:span, caption, class: 'caption') if caption.present?
+      html << content_tag(:span, caption, caption_options) if caption.present?
       html.html_safe
     end
   end

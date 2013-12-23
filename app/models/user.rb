@@ -32,6 +32,13 @@ class User < ActiveRecord::Base
 
   store :preferences
 
+  with_options foreign_key: 'author_id', dependent: :nullify do |author|
+    author.has_many :attachments
+    author.has_many :images
+    author.has_many :pages
+    author.has_many :snippets
+  end
+  has_many :messages, foreign_key: 'recipient_id', dependent: :destroy  
   has_and_belongs_to_many :addressed_contact_forms, class_name: 'ContactForm', join_table: 'contact_form_recipients', foreign_key: 'recipient_id', association_foreign_key: 'contact_form_id'
 
   validates :first_name, presence: true
