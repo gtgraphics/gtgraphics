@@ -58,14 +58,12 @@ class Page < ActiveRecord::Base
   validate :validate_parent_assignability
   validate :validate_template_type
   validate :validate_no_root_exists, if: :root?
-  # validate :validate_embeddable
 
   after_initialize :set_default_template, if: -> { support_template? and template.blank? }
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
   before_validation :clear_template, unless: :support_template?
   after_save :update_descendants_paths
-  # after_save :save_embeddable
   after_update :destroy_replaced_embeddables, if: :embeddable_changed?
   after_update :migrate_or_destroy_regions, if: -> { embeddable_changed? and support_regions? }
   before_destroy :destroyable?
@@ -244,7 +242,6 @@ class Page < ActiveRecord::Base
   end
 
   def destroy_replaced_embeddables
-    # FIXME Translations are not removed when changing to another embeddable type, then back and then the form gets submitted
     embeddable_class_was.destroy(embeddable_id_was) if embeddable_class_was.bound_to_page?
   end
 
@@ -281,25 +278,12 @@ class Page < ActiveRecord::Base
     end
   end
 
-  def save_embeddable
-    if embeddable
-      embeddable.save!
-       #if embeddable.new_record? or embeddable.changed?
-    else
-      raise 'no embeddable defined'
-    end
-  end
-
   def set_default_template
     self.template = template_class.default
   end
 
   def update_descendants_paths
     transaction { descendants.each(&:update_path!) }
-  end
-
-  def validate_embeddable
-    embeddable.try(:valid?)
   end
 
   def validate_no_root_exists
