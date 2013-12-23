@@ -32,7 +32,7 @@ loadEmbeddableSettings = ($embeddableFields, $embeddableSettings, $pageSettings)
       error: ->
         $embeddableType.val('').change()
 
-loadEmbeddableEditor = ($embeddableFields, $embeddableSettings, $pageSettings) ->
+loadEmbeddableEditor = ($embeddableFields, $embeddableSettings, $pageSettings, buildEmbeddable = false) ->
   $embeddableType = $pageSettings.find('#page_embeddable_type')
   $embeddableId = $embeddableSettings.find('#page_embeddable_id')
 
@@ -50,9 +50,12 @@ loadEmbeddableEditor = ($embeddableFields, $embeddableSettings, $pageSettings) -
     $embeddableFields.hide()
     $loader = $('#page_embeddable_fields_loader').show()
 
+    data = { embeddable_type: embeddableType }
+    data.embeddable_id = embeddableId unless buildEmbeddable
+
     jQuery.ajax
       url: '/admin/pages/embeddable_fields'
-      data: { embeddable_type: embeddableType, embeddable_id: embeddableId }
+      data: data
       dataType: 'html'
       success: (html) ->
         $embeddableFields.html(html).show().prepare()
@@ -100,7 +103,7 @@ $(document).ready ->
   $('#page_settings')
   
     .on 'change', '#page_embeddable_type', ->
-      loadEmbeddableEditor($embeddableFields, $embeddableSettings, $pageSettings)    
+      loadEmbeddableEditor($embeddableFields, $embeddableSettings, $pageSettings, true)    
       loadEmbeddableSettings($embeddableFields, $embeddableSettings, $pageSettings)
 
     .on 'change', '#page_embeddable_id', ->

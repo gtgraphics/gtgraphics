@@ -29,10 +29,10 @@
             %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
         %th.thumbnail-cell
         %th= sort_link_for images, :title
-        %th= Image.human_attribute_name :content_type
+        %th.hidden-xs= Image.human_attribute_name :content_type
         %th= Image.human_attribute_name :dimensions
-        %th= sort_link_for images, :author
-        %th= sort_link_for images, :updated_at
+        %th.visible-lg= sort_link_for images, :author
+        %th.visible-lg= sort_link_for images, :updated_at
         - if actions
           %th.actions
     %tbody
@@ -45,10 +45,10 @@
             = link_to [:admin, image] do
               = image_tag image.asset.url(:thumbnail), class: 'thumbnail loader-small', alt: image.title
           %td= link_to image.title, [:admin, image]
-          %td= image.human_content_type
+          %td.hidden-xs= image.human_content_type
           %td= image.dimensions
-          %td= image.author
-          %td= time_ago image.updated_at
+          %td.visible-lg= image.author
+          %td.visible-lg= time_ago image.updated_at
           - if actions
             %td.actions
               = action_buttons_for image, size: :mini, icon_only: true

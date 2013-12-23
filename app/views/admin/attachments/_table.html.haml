@@ -13,8 +13,8 @@
           %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
       %th= sort_link_for attachments, :title
       %th= Attachment.human_attribute_name :content_type
-      %th= sort_link_for attachments, :file_size
-      %th= sort_link_for attachments, :updated_at
+      %th.hidden-xs= sort_link_for attachments, :file_size
+      %th.visible-lg= sort_link_for attachments, :updated_at
       - if actions
         %th.actions
   %tbody
@@ -25,8 +25,8 @@
             = check_box_tag 'attachment_ids[]', attachment.id, false, class: 'table-checkbox', id: nil
         %td= link_to attachment.title, [:admin, attachment]
         %td= attachment.human_content_type
-        %td= number_to_human_size attachment.file_size
-        %td= time_ago attachment.updated_at
+        %td.hidden-xs= number_to_human_size attachment.file_size
+        %td.visible-lg= time_ago attachment.updated_at
         - if actions
           %td.actions
             = action_buttons_for attachment, size: :mini, icon_only: true

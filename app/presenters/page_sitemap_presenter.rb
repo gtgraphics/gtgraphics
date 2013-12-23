@@ -33,9 +33,9 @@ class PageSitemapPresenter < Presenter
       haml_tag :th, '' if checkboxes?
       haml_tag :th, Page.human_attribute_name(:title)
       haml_tag :th, Page.human_attribute_name(:embeddable_type)
-      haml_tag :th, Page.human_attribute_name(:state)
-      haml_tag :th, Page.human_attribute_name(:menu_item)
-      haml_tag :th, Page.human_attribute_name(:updated_at)
+      haml_tag 'th.hidden-xs', Page.human_attribute_name(:state)
+      haml_tag 'th.visible-lg', Page.human_attribute_name(:menu_item)
+      haml_tag 'th.visible-lg', Page.human_attribute_name(:updated_at)
       haml_tag :th, ''
     end
   end
@@ -47,9 +47,9 @@ class PageSitemapPresenter < Presenter
         haml_tag 'td.checkbox-cell', check_box_tag(:page_ids, page.id, false, multiple: true) if checkboxes?
         haml_tag 'td.level-indented', link_to(page.title, page_path(page))
         haml_tag :td, page.embeddable_class.model_name.human
-        haml_tag :td, page.state_name
-        haml_tag :td, link_to(yes_or_no(page.menu_item?), [:toggle_menu_item, :admin, page], method: :patch)
-        haml_tag :td, time_ago(page.updated_at)
+        haml_tag 'td.hidden-xs', page.state_name
+        haml_tag 'td.visible-lg', link_to(yes_or_no(page.menu_item?), [:toggle_menu_item, :admin, page], method: :patch)
+        haml_tag 'td.visible-lg', time_ago(page.updated_at)
         haml_tag 'td.actions' do
           haml_tag '.btn-toolbar' do
             haml_tag '.btn-group' do

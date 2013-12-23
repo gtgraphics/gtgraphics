@@ -21,6 +21,7 @@ GtGraphics::Application.routes.draw do
 
         resources :attachments do
           collection do
+            get 'sort/:sort/:direction', action: :index
             delete :destroy_multiple
             get :translation_fields
           end
@@ -31,9 +32,9 @@ GtGraphics::Application.routes.draw do
         end
 
         resources :images do
-          get 'by/:sort/:direction', action: :index, as: :order
           resources :styles, controller: :image_styles
           collection do
+            get 'sort/:sort/:direction', action: :index
             patch :batch, as: :batch_process
             delete :destroy_multiple
             get :translation_fields
@@ -78,6 +79,9 @@ GtGraphics::Application.routes.draw do
         end
 
         resources :users do
+          collection do
+            get 'sort/:sort/:direction', action: :index
+          end
           member do
             get :edit_password
             patch :update_password

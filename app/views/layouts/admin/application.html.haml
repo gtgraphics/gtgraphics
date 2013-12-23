@@ -13,17 +13,20 @@
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'}
 
   %body
-    .navbar.navbar-inverse.navbar-fixed-top
+    %nav.navbar.navbar-default.navbar-fixed-top.navbar-inverse{role: 'navigation'}
       .container
-        - if signed_in?
-          %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-responsive-collapse' }}
-            = icon(:reorder)
 
-        = link_to :admin_root, class: 'navbar-brand' do
-          GT Graphics
+        .navbar-header
+          - if signed_in?
+            %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
+              %span.sr-only Toggle Navigation
+              = icon(:reorder)
+
+          = link_to :admin_root, class: 'navbar-brand' do
+            GT Graphics
 
         - if signed_in?
-          %nav.navbar-responsive-collapse{role: 'navigation'}
+          .navbar-collapse.collapse
             %ul.nav.navbar-nav
 
               = active_link_to :admin_pages, wrap_tag: :li do
@@ -41,10 +44,6 @@
               = active_link_to :admin_attachments, wrap_tag: :li do
                 = Attachment.model_name.human(count: 2)
                 .badge= Attachment.count
-
-              /= active_link_to :admin_shouts, wrap_tag: :li do
-              /  = Shout.model_name.human(count: 2)
-              /  .badge= Shout.count
 
               = active_link_to :admin_users, wrap_tag: :li do
                 = User.model_name.human(count: 2)

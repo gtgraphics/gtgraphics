@@ -28,6 +28,7 @@ class Admin::PagesController < Admin::ApplicationController
 
   def create
     @page = Page.create(page_params)
+    flash_for @page
     respond_with :admin, @page
   end
 
@@ -36,19 +37,18 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def edit
-    #@page.embeddable.translations.each do |t|
-    #  t.regions.build
-    #end
     respond_with :admin, @page
   end
 
   def update
     @page.update(page_params)
+    flash_for @page
     respond_with :admin, @page
   end
 
   def destroy
     @page.destroy
+    flash_for @page
     respond_with :admin, @page
   end
 
