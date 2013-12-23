@@ -56,6 +56,16 @@ class User < ActiveRecord::Base
     by.full_name(default: true) { |dir| [arel_table[:first_name].send(dir.to_sym), arel_table[:last_name].send(dir.to_sym)] }
   end
 
+  class << self
+    def without(user)
+      if user.new_record?
+        all
+      else
+        where.not(id: user.id)
+      end
+    end
+  end
+
   def change_password?
     @change_password = false unless defined? @change_password
     @change_password

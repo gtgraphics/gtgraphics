@@ -1,18 +1,25 @@
-en:
+de:
   simple_form:
-    "yes": 'Yes'
-    "no": 'No'
+    "yes": 'Ja'
+    "no": 'Nein'
     required:
-      text: 'required'
+      text: 'erforderlich'
       mark: '*'
       # You can uncomment the line below if you need to overwrite the whole required html.
       # When using html, text and mark won't be used.
       # html: '<abbr title="required">*</abbr>'
+
     error_notification:
-      default_message: "Please review the problems below:"
+      default_message: 'Es sind folgende Fehler aufgetreten:'
+
     inline_labels:
+      page:
+        menu_item: In Menüs anzeigen
+      redirection:
+        permanent: Ursprüngliche Adresse wurde dauerhaft verschoben (HTTP-Status 301)
       template:
         default: Als Standardvorlage für Seiten dieses Typs verwenden
+
     # Labels and hints examples
     # labels:
     #   defaults:

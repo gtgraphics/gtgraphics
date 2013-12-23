@@ -51,6 +51,9 @@ GtGraphics::Application.routes.draw do
             get 'sort/:sort/:direction', action: :index
             get :archive, action: :archived, as: :archived
           end
+          member do
+            patch :toggle
+          end
         end
 
         resources :pages do

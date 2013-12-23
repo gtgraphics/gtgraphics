@@ -14,8 +14,8 @@ class ApplicationController < ActionController::Base
 
   unless Rails.env.development?
     rescue_from ActiveRecord::RecordNotFound, with: :render_404
-    rescue_from Authenticatable::AccessDenied, with: :force_authentication
   end
+  rescue_from Authenticatable::AccessDenied, with: :force_authentication
 
   private
   def default_url_options(options = {})

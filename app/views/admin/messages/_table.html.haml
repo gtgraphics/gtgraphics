@@ -27,12 +27,12 @@
           = content_tag message.unread? ? :strong : :span do
             = link_to message.subject.presence || translate('helpers.prompts.no_subject'), [:admin, message]
         %td.text-center
-          = link_to '#', class: message.read? ? 'text-muted' : 'text-success', title: 'Als gelesen markieren', data: { toggle: 'tooltip', placement: 'right' } do
+          = link_to [:toggle, :admin, message], method: :patch, class: message.read? ? 'text-muted' : 'text-success', title: 'Als gelesen markieren', data: { toggle: 'tooltip' } do
             = icon(:circle, outline: message.read?)
         %td
           .pull-left{style: 'margin-right: 10px;'}
             = mail_to message.sender_email do          
-              = gravatar_image_tag message.sender_email, class: 'thumbnail', size: 30, alt: message.sender_name
+              = gravatar_image_tag message.sender_email, class: 'thumbnail loader-small', size: 30, alt: message.sender_name, style: 'width: 40px; height: 40px;'
           %div= mail_to message.sender_email, message.sender_name
           .text-muted= message.sender_email
         %td= time_ago message.created_at

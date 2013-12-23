@@ -9,4 +9,4 @@
 = fields.input :external, collection: [[Redirection.human_attribute_name(:internal), false], [Redirection.human_attribute_name(:external), true]], as: :radio_buttons, label: false, container_html: { class: 'col-lg-offset-2 col-lg-10' }
 = fields.association :destination_page, required: true, collection: page_sitemap_collection_for_select(Page.without(@page)), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }
 = fields.input :destination_url, required: true, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }
-= fields.input :permanent, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }
+= fields.input :permanent, inline_label: translate('simple_form.inline_labels.redirection.permanent'), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }

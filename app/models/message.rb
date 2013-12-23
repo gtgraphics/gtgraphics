@@ -11,6 +11,7 @@
 #  body              :text
 #  read              :boolean          default(FALSE)
 #  created_at        :datetime
+#  fingerprint       :string(255)
 #
 
 class Message < ActiveRecord::Base
@@ -23,7 +24,9 @@ class Message < ActiveRecord::Base
   validates :last_sender_name, presence: true
   validates :sender_email, presence: true, email: true
   validates :body, presence: true
+  validates :fingerprint, presence: true, uniqueness: true, strict: true
 
+  before_validation :generate_fingerprint, on: :create, unless: :fingerprint?
   after_create :send_notification_email
 
   default_scope -> { order(:created_at).reverse_order }
@@ -41,9 +44,38 @@ class Message < ActiveRecord::Base
   alias_method :full_recipient_name, :recipient_name
 
   class << self
+    def broadcast(recipients, attributes = {})
+      fingerprint = generate_fingerprint
+      transaction do
+        recipients.each do |recipient|
+          create(attributes.merge(recipient: recipient, fingerprint: fingerprint))
+        end
+      end
+    end
+
+    def generate_fingerprint
+      SecureRandom.uuid
+    end
+
     def older_than(time)
       where(arel_table[:created_at].lt(time.ago))
     end
+
+    def without(message)
+      if message.new_record?
+        all
+      else
+        where.not(id: message.id)
+      end
+    end
+  end
+
+  def copies
+    @copies ||= self.class.where(fingerprint: fingerprint).without(self).readonly
+  end
+
+  def copy_ids
+    @copy_ids ||= (copies.loaded? ? copies.collect(&:id) : copies.pluck(:id)).freeze
   end
 
   def full_sender_name
@@ -51,12 +83,32 @@ class Message < ActiveRecord::Base
   end
   alias_method :sender_name, :full_sender_name
 
+  def generate_fingerprint
+    self.fingerprint = self.class.generate_fingerprint
+  end
+
   def mark_read!
     update_column(:read, true)
   end
 
   def mark_unread!
     update_column(:read, false)
+  end
+
+  def other_recipients
+    @other_recipients ||= User.where(id: other_recipient_ids).readonly
+  end
+
+  def other_recipient_ids
+    @other_recipient_ids ||= recipient_ids - [self.id]
+  end
+
+  def recipients
+    @recipients ||= User.where(id: recipient_ids).readonly
+  end
+
+  def recipient_ids
+    @recipient_ids ||= self.class.where(fingerprint: fingerprint).pluck(:recipient_id).freeze
   end
 
   def unread?

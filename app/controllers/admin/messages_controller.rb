@@ -1,7 +1,7 @@
 class Admin::MessagesController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_message, only: %i(show destroy)
+  before_action :load_message, only: %i(show destroy toggle)
 
   breadcrumbs do |b|
     b.append Message.model_name.human(count: 2), :admin_messages
@@ -19,6 +19,7 @@ class Admin::MessagesController < Admin::ApplicationController
   end
 
   def show
+    @message.mark_read! if @message.unread?
     respond_with :admin, @message
   end
 
@@ -26,6 +27,13 @@ class Admin::MessagesController < Admin::ApplicationController
     @message.destroy
     flash_for @message
     respond_with :admin, @message
+  end
+
+  def toggle
+    @message.toggle!(:read)
+    respond_to do |format|
+      format.html { redirect_to request.referer || :admin_messages }
+    end
   end
 
   private
