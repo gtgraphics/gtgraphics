@@ -1,5 +1,13 @@
 = index_headline_for Message
 
+%ul.nav.nav-tabs.nav-justified
+  = active_link_to :admin_messages, active: :exclusive, wrap_tag: :li do
+    = prepend_icon(:inbox, translate('views.admin.messages.inbox'))
+    - if current_user.messages.unread.size > 0
+      .badge.pull-right= current_user.messages.unread.size
+  = active_link_to :archived_admin_messages, active: :exclusive, wrap_tag: :li do
+    = prepend_icon(:archive, translate('views.admin.messages.archive'))
+
 - if @messages.any?
   = render 'table', checkboxes: true
 - else

@@ -1,0 +1,4 @@
+= view_headline_for @message do
+  = action_buttons_for @message, except: [:show, :edit]
+
+= simple_format @message.body

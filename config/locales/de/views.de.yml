@@ -27,6 +27,11 @@ de:
           top: Oberstes Fenster
       loader:
         loading: Inhalt wird geladen…
+      messages:
+        breadcrumbs:
+          archive: Archiv
+        archive: Archiv
+        inbox: Posteingang
       pages:
         empty_type: Bitte wählen Sie einen Seitentyp.
         root: Wurzel

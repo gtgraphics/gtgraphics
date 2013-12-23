@@ -49,9 +49,13 @@
                 = User.model_name.human(count: 2)
 
             %ul.list-inline.navbar-text.pull-right
-              %li= active_link_to prepend_icon(:user, current_user.name), :admin_account, class: 'navbar-link'
-              %li= link_to prepend_icon(:envelope, Message.model_name.human(count: 2), caption_html: { class: 'sr-only' }), :admin_messages, class: 'navbar-link', title: Message.model_name.human(count: 2), data: { toggle: 'tooltip', placement: 'bottom' }
-              %li= link_to prepend_icon(:sign_out, translate('helpers.links.sign_out'), caption_html: { class: 'sr-only' }), :admin_sign_out, class: 'navbar-link', method: :delete, title: translate('helpers.links.sign_out'), data: { toggle: 'tooltip', placement: 'bottom', confirm: translate('helpers.confirmations.sign_out') }
+              %li= active_link_to prepend_icon(:user, current_user.name), :admin_account, id: 'nav_account', class: 'navbar-link'
+              %li
+                = link_to :admin_messages, id: 'nav_messages', class: 'navbar-link', title: Message.model_name.human(count: 2), data: { toggle: 'tooltip', placement: 'bottom' } do
+                  = prepend_icon(:envelope, Message.model_name.human(count: 2), caption_html: { class: 'sr-only' })
+                  - if current_user.messages.unread.size > 0
+                    .badge.badge-mini= current_user.messages.unread.size
+              %li= link_to prepend_icon(:sign_out, translate('helpers.links.sign_out'), id: 'nav_sign_out', caption_html: { class: 'sr-only' }), :admin_sign_out, class: 'navbar-link', method: :delete, title: translate('helpers.links.sign_out'), data: { toggle: 'tooltip', placement: 'bottom', confirm: translate('helpers.confirmations.sign_out') }
         
     .container
       = render 'breadcrumbs'
