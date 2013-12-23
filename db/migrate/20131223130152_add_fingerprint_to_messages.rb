@@ -1,7 +1,6 @@
 class AddFingerprintToMessages < ActiveRecord::Migration
   def change
     add_column :messages, :fingerprint, :string
-    add_index :messages, :fingerprint, unique: true
 
     reversible do |dir|
       dir.up do

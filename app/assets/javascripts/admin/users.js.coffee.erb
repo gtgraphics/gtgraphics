@@ -13,38 +13,3 @@ $(document).ready ->
   $(document).on 'click', '#user_generate_password_true, #user_generate_password_false', ->
     $radioButton = $(@)
     refreshGeneratePasswordCheckState()
-
-  # User Info Popover
-
-  $(document).popover
-    container: 'body'
-    selector: '.user-info'
-    trigger: 'hover'
-    placement: 'top'
-    html: true
-    title: ->
-      $(@).data('fullUserName')
-    content: ->
-      $('<img />', src: '<%= asset_path("admin/loader_small.gif") %>')
-
-  $(document).on 'show.bs.popover', '.user-info', ->
-    console.log 'start to show'
-
-    #setTimeout ->
-    #  #$(@).data('content') = 'Bla<br/>BlaBasd<br/> Blubs'
-    #, 2000
-
-
-
-  #  $userInfo = $(@)
-  #  userId = $userInfo.data('userId')
-  #  jQuery.ajax
-  #    url: "/admin/users/#{userId}.popover"
-  #    dataType: 'html'
-  #    success: (content) ->
-  #      $userInfo.popover(trigger: 'manual', html: true, content: content)
-  #      $userInfo.popover('show')
-
-  #$(document).on 'mouseout', '.user-info', ->
-  #  $userInfo = $(@)
-  #  $userInfo.popover('destroy')

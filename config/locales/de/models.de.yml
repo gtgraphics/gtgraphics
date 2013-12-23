@@ -56,9 +56,11 @@ de:
         caption: Beschriftung
       message:
         sender_name: Absender
+        recipient_names: Empfänger
         subject: Betreff
         body: Nachricht
         read: Gelesen?
+        created_at: Versendet
       page:
         embeddable_type: Seitentyp
         embeddable_id: Seitenobjekt

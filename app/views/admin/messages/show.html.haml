@@ -1,4 +1,16 @@
-= view_headline_for @message do
+= index_headline_for Message do
   = action_buttons_for @message, except: [:show, :edit]
 
-= simple_format @message.body
+.panel.panel-default
+  .panel-heading
+    %dl.dl-horizontal
+      %dt= Message.human_attribute_name :recipient_names
+      %dd= @message.recipients.collect { |recipient| link_to(recipient.full_name, [:admin, recipient]) }.join(', ').html_safe
+      %dt= Message.human_attribute_name :sender_name
+      %dd= mail_to @message.sender_email, @message.sender_name
+      %dt= Message.human_attribute_name :subject
+      %dd= @message.subject.presence || translate('helpers.prompts.no_subject')
+      %dt= Message.human_attribute_name :created_at
+      %dd= time_ago @message.created_at
+  .panel-body
+    = simple_format @message.body
