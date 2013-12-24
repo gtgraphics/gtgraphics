@@ -17,7 +17,7 @@
 class Message < ActiveRecord::Base
   include Sortable
 
-  ARCHIVE_AFTER = 2.weeks
+  # ARCHIVE_AFTER = 2.weeks
 
   belongs_to :recipient, class_name: 'User'
 
@@ -32,8 +32,8 @@ class Message < ActiveRecord::Base
   after_create :send_notification_email
 
   default_scope -> { order(:created_at).reverse_order }
-  scope :archived, -> { read.where(arel_table[:created_at].lt(ARCHIVE_AFTER.ago)) }
-  scope :incoming, -> { where(unread.where_values.reduce(:and).or(arel_table[:created_at].gteq(ARCHIVE_AFTER.ago))) }
+  # scope :archived, -> { read.where(arel_table[:created_at].lt(ARCHIVE_AFTER.ago)) }
+  # scope :incoming, -> { where(unread.where_values.reduce(:and).or(arel_table[:created_at].gteq(ARCHIVE_AFTER.ago))) }
   scope :read, -> { where(read: true) }
   scope :unread, -> { where(read: false) }
 
@@ -61,10 +61,6 @@ class Message < ActiveRecord::Base
       SecureRandom.uuid
     end
 
-    def older_than(time)
-      where(arel_table[:created_at].lt(time.ago))
-    end
-
     def without(message)
       if message.new_record?
         all
@@ -74,9 +70,9 @@ class Message < ActiveRecord::Base
     end
   end
 
-  def archived?
-    read? and created_at < ARCHIVE_AFTER.ago
-  end
+  # def archived?
+  #  read? and created_at < ARCHIVE_AFTER.ago
+  # end
 
   def copies
     @copies ||= self.class.where(fingerprint: fingerprint).without(self).readonly
@@ -95,9 +91,9 @@ class Message < ActiveRecord::Base
     self.fingerprint = self.class.generate_fingerprint
   end
 
-  def incoming?
-    !archived?
-  end
+  # def incoming?
+  #   !archived?
+  # end
 
   def mark_read!
     update_column(:read, true)

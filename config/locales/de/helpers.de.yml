@@ -4,9 +4,13 @@ de:
       'yes': 'Ja'
       'no': 'Nein'
     flash:
-      created: '%{model} wurde erfolgreich erstellt.'
-      updated: '%{model} wurde erfolgreich aktualisiert.'
-      destroyed: '%{model} wurde erfolgreich entfernt.'
+      defaults:
+        created: '%{model} wurde erfolgreich erstellt.'
+        updated: '%{model} wurde erfolgreich aktualisiert.'
+        destroyed: '%{model} wurde erfolgreich entfernt.'
+        destroyed_multiple: '%{model} wurden erfolgreich entfernt.'
+      messages:
+
     titles:
       new: '%{model} erstellen'
       edit: '%{model} bearbeiten'

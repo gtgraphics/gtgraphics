@@ -49,8 +49,7 @@ GtGraphics::Application.routes.draw do
         resources :messages, only: [:index, :show, :destroy] do
           collection do
             get 'sort/:sort/:direction', action: :index
-            get :archive, action: :archived, as: :archived
-            get 'archive/sort/:sort/:direction', action: :archived
+            delete :destroy_multiple
           end
           member do
             patch :toggle

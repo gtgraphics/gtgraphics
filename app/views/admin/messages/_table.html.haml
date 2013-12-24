@@ -27,8 +27,10 @@
           = content_tag message.unread? ? :strong : :span do
             = link_to message.subject.presence || translate('helpers.prompts.no_subject'), [:admin, message]
         %td.text-center.visible-lg.visible.md
-          = link_to [:toggle, :admin, message], method: :patch, class: message.read? ? 'text-muted' : 'text-success', title: 'Als gelesen markieren', data: { toggle: 'tooltip' } do
-            = icon(:circle, outline: message.read?)
+          - if message.read? 
+            = link_to icon(:circle, outline: true), [:toggle, :admin, message], method: :patch, class: 'message-read', title: translate('views.admin.messages.mark_unread'), data: { toggle: 'tooltip' }
+          - else
+            = link_to icon(:circle, outline: false), [:toggle, :admin, message], method: :patch, class: 'message-unread', title: translate('views.admin.messages.mark_read'), data: { toggle: 'tooltip' }
         %td= mail_to message.sender_email, message.sender_name
         %td= time_ago message.created_at
         - if actions

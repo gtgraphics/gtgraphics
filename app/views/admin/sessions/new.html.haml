@@ -5,9 +5,9 @@
 
   = simple_form_for @sign_in_activity, as: :session, url: :admin_sign_in do |form|
 
-    = form.input :email, autofocus: true
-    = form.input :password
-    = form.input :permanent, as: :boolean
+    = form.input :email, autofocus: true, label: false, placeholder: SignInActivity.human_attribute_name(:email)
+    = form.input :password, label: false, placeholder: SignInActivity.human_attribute_name(:password)
+    = form.input :permanent, inline_label: SignInActivity.human_attribute_name(:permanent), label: false, as: :boolean
 
     .form-group
       = form.button :button, translate('views.admin.users.sign_in'), class: 'btn-primary btn-block'
