@@ -40,6 +40,16 @@ body {
   }
 }
 
+.panel-body {
+  .dl-horizontal {
+    margin-top: 0;
+    margin-bottom: 0;
+    + .dl-horizontal {
+      margin-top: 20px;
+    }
+  }
+}
+
 .actions {
   white-space: nowrap;
   //position: relative;

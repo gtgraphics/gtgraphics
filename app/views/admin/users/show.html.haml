@@ -10,7 +10,6 @@
     = gravatar_image_tag @user.email, size: 263, default: :mm, alt: @user.full_name, class: 'thumbnail loader-large', style: 'width: 263px; height: 263px;'
 
   .col-lg-9
-    %h3= translate('views.admin.users.headlines.basics')
     %dl.dl-horizontal
       %dt= User.human_attribute_name :first_name
       %dd= @user.first_name

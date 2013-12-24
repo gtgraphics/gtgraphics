@@ -5,9 +5,6 @@ class Admin::MessagesController < Admin::ApplicationController
 
   breadcrumbs do |b|
     b.append Message.model_name.human(count: 2), :admin_messages
-    # if action_name == 'archived' or (@message and @message.archived?)
-    #   b.append I18n.translate('views.admin.messages.breadcrumbs.archive'), :archived_admin_messages
-    # end
     b.append Message.model_name.human, [:admin, @message] if action_name == 'show'
   end
 

@@ -1,0 +1,12 @@
+- content_for :javascripts do
+  :javascript
+    $(window).load(function() {
+      $.Jcrop('#image_asset', { trueSize: [#{@image.width}, #{@image.height}] });
+    });
+
+= image_tag @image.asset.url, id: 'image_asset', class: 'img-responsive', data: { true_width: @image.width, true_height: @image.height }
+
+%br
+= number_field_tag 'width', nil, placeholder: 'Width', min: 1
+x
+= number_field_tag 'height', nil, placeholder: 'Height', min: 1

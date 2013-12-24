@@ -32,7 +32,7 @@ GtGraphics::Application.routes.draw do
         end
 
         resources :images do
-          resources :styles, controller: :image_styles
+          resources :styles, controller: :image_styles, except: [:index, :show]
           collection do
             get 'sort/:sort/:direction', action: :index
             patch :batch, as: :batch_process

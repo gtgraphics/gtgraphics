@@ -28,6 +28,9 @@ de:
           top: Oberstes Fenster
       loader:
         loading: Inhalt wird geladen…
+      images:
+        headlines:
+          details: Details
       messages:
         breadcrumbs:
           archive: Archiv

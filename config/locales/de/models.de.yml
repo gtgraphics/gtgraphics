@@ -123,6 +123,9 @@ de:
       image:
         one: Bild
         other: Bilder
+      image/style:
+        one: Bildgröße
+        other: Bildauflösungen
       menu_item:
         one: Menüeintrag
         other: Menüeinträge
