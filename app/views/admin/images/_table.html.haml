@@ -11,7 +11,7 @@
     - images.each do |image|
       .col-lg-3.col-md-3.col-sm-3.col-sx-3
         = thumbnail image.asset.url(:large_thumbnail), [:admin, image], alt: image.title, class: 'loader-large' do
-          .actions
+          .actions.top.right
             = action_buttons_for image, size: :mini, icon_only: true
           %h6= image.title
           %p

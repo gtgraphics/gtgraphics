@@ -8,8 +8,12 @@
   .col-lg-8
     .content
       %p
-        = link_to @image.asset.url, target: '_blank' do
-          = image_tag(@image.asset.url(:preview), class: 'img-responsive thumbnail', alt: @image.title)
+        .thumbnail
+          .actions.bottom.right
+            .btn-toolbar
+              = button_link_to prepend_icon(:crop, translate('helpers.links.crop')), [:crop, :admin, @image]
+          = link_to @image.asset.url(:original_cropped), target: '_blank' do
+            = image_tag(@image.asset.url(:preview), class: 'img-responsive', alt: @image.title)
 
     %h3= Image::Style.model_name.human(count: 2)
     .content
@@ -34,7 +38,10 @@
           %dt= Image.human_attribute_name(:file_size)
           %dd= number_to_human_size @image.file_size
           %dt= Image.human_attribute_name(:dimensions)
-          %dd #{@image.width} x #{@image.height} #{translate('helpers.units.pixels')}
+          %dd
+            #{@image.width} &times; #{@image.height} #{translate('helpers.units.pixels')}
+            - if @image.cropped?
+              (#{@image.crop_width} &times; #{@image.crop_height} #{translate('helpers.units.pixels')})
           - if @image.author
             %dt= Image.human_attribute_name(:author)
             %dd= link_to @image.author_name, [:admin, @image.author]

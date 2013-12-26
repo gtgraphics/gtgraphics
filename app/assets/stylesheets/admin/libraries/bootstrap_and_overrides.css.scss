@@ -82,16 +82,32 @@ body {
   }
   .actions {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    &.bottom {
+      bottom: 12px;
+    }
+    &.top {
+      top: 12px;
+    }
+    &.left {
+      left: 12px;
+    }
+    &.right {
+      right: 12px;
+    }
     .btn {
       background: rgba(0, 0, 0, 0.7);
       border: none;
       display: none;
       color: rgba(255, 255, 255, 0.7);
+      .caption {
+        color: rgba(255, 255, 255, 0.7);
+      }
       &:hover, &:focus {
         opacity: 1;
-        color: white
+        color: white;
+        .caption {
+          color: white;
+        }
       }
     }
   }

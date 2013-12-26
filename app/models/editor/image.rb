@@ -13,6 +13,10 @@
 #  created_at         :datetime
 #  updated_at         :datetime
 #  author_id          :integer
+#  crop_x             :integer
+#  crop_y             :integer
+#  crop_width         :integer
+#  crop_height        :integer
 #
 
 class Editor::Image

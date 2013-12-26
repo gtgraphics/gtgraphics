@@ -5,6 +5,6 @@ class Routing::PageConstraint
   
   def matches?(request)
     path = request.params.fetch(:id) { String.new }
-    Page.published.exists?(path: path, embeddable_type: @type)
+    Page.exists?(path: path, embeddable_type: @type)
   end
 end

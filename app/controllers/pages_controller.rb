@@ -36,9 +36,9 @@ class PagesController < ApplicationController
   private
   def load_page
     if params[:id].blank?
-      @page = Page.published.root
+      @page = Page.accessible_by(current_ability).root
     else
-      @page = Page.published.find_by_path!(params[:id])
+      @page = Page.accessible_by(current_ability).find_by_path!(params[:id])
     end
   end
 end

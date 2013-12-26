@@ -1,13 +1,13 @@
 class Admin::ImagesController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_image, only: %i(show edit update destroy download move_to_attachments dimensions)
+  before_action :load_image, only: %i(show edit update crop apply_crop destroy download move_to_attachments dimensions)
 
   breadcrumbs do |b|
     b.append Image.model_name.human(count: 2), :admin_images
     b.append translate('breadcrumbs.new', model: Image.model_name.human), :new_admin_image if action_name.in? %w(new create)
-    b.append @image.title, [:admin, @image] if action_name.in? %w(show edit update)
-    b.append translate('breadcrumbs.edit', model: Image.model_name.human), [:edit, :admin, @image] if action_name.in? %w(edit update)
+    b.append @image.title, [:admin, @image] if action_name.in? %w(show edit update crop apply_crop)
+    b.append translate('breadcrumbs.edit', model: Image.model_name.human), [:edit, :admin, @image] if action_name.in? %w(edit update crop apply_crop)
   end
 
   def index
@@ -40,6 +40,19 @@ class Admin::ImagesController < Admin::ApplicationController
     @image.update(image_params)
     flash_for @image
     respond_with :admin, @image
+  end
+
+  def crop
+    respond_with :admin, @image
+  end
+
+  def apply_crop
+    Image.transaction do
+      @image.update(image_crop_params)
+      @image.asset.reprocess!
+    end
+    flash_for @image
+    respond_with :admin, @image, template: :crop
   end
 
   def destroy
@@ -112,5 +125,9 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def image_params
     params.require(:image).permit! # TODO
+  end
+
+  def image_crop_params
+    params.require(:image).permit(:crop_x, :crop_y, :crop_width, :crop_height)
   end
 end

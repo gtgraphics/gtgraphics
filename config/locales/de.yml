@@ -4,3 +4,10 @@ de:
     de: Deutsch
 
   dimensions: '%{width} × %{height} Pixel'
+
+  resolution_presets:
+    720p: 'HD 720p (1280 × 720, 16:9)'
+    1080p: 'HD 1080p (1920 × 1080, 16:9)'
+    wuxga: 'WUXGA (1920 × 1200, 16:10)'
+    2k: '2K (2048 × 1536, 4:3)'
+    4k: '4K (4096 × 3072, 4:3)'

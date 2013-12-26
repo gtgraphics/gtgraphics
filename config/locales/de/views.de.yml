@@ -30,6 +30,7 @@ de:
         loading: Inhalt wird geladen…
       images:
         headlines:
+          crop_area: Zuschnittbereich
           details: Details
       messages:
         breadcrumbs:

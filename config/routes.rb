@@ -40,6 +40,8 @@ GtGraphics::Application.routes.draw do
             get :translation_fields
           end
           member do
+            get :crop
+            patch :crop, action: :apply_crop
             get :download
             get :dimensions
             patch :move_to_attachments

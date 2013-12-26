@@ -3,21 +3,9 @@ module ImageContainable
 
   CONTENT_TYPES = [Mime::JPEG, Mime::GIF, Mime::PNG].freeze
 
-  included do
-    include AssetContainable
-
-    acts_as_asset_containable
-
-    validates_attachment :asset, presence: true, content_type: { content_type: CONTENT_TYPES }
-
-    before_save :set_dimensions, if: :asset_changed?
-
-    alias_attribute :asset_width, :width
-    alias_attribute :asset_height, :height
-  end
-
   module ClassMethods
     def acts_as_image_containable(options = {})
+      include AssetContainable
       acts_as_asset_containable(options)
       include Extensions
     end
@@ -52,6 +40,13 @@ module ImageContainable
     extend ActiveSupport::Concern
 
     included do
+      validates_attachment :asset, presence: true, content_type: { content_type: CONTENT_TYPES }
+
+      alias_attribute :asset_width, :width
+      alias_attribute :asset_height, :height
+
+      before_save :set_dimensions, if: :asset_changed?
+
       delegate :aspect_ratio, :pixels, to: :dimensions
     end
 
@@ -61,6 +56,11 @@ module ImageContainable
 
     def format
       mime_type.to_sym
+    end
+
+    def geometry(style = :original)
+      @geometries ||= {}
+      @geometries[style] ||= Paperclip::Geometry.from_file(asset.path(style))
     end
 
     def mime_type

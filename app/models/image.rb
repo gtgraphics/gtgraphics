@@ -13,6 +13,10 @@
 #  created_at         :datetime
 #  updated_at         :datetime
 #  author_id          :integer
+#  crop_x             :integer
+#  crop_y             :integer
+#  crop_width         :integer
+#  crop_height        :integer
 #
 
 class Image < ActiveRecord::Base
@@ -20,6 +24,7 @@ class Image < ActiveRecord::Base
   # include AttachmentPreservable
   include BatchTranslatable
   include ImageContainable
+  include ImageCroppable
   include PageEmbeddable
   include PersistenceContextTrackable
   include Sortable
@@ -29,12 +34,21 @@ class Image < ActiveRecord::Base
   EXIF_CAPABLE_CONTENT_TYPES = [Mime::JPEG].freeze
 
   STYLES = {
-    thumbnail: ['75x75#', :png],
-    large_thumbnail: ['253x190#', :png],
-    preview: '1170x',
-    medium: '1280x780',
-    large: '1920x1080'
-  }
+    original_cropped: { geometry: '100%x100%' },
+    thumbnail: { geometry: '75x75#', format: :png },
+    large_thumbnail: { geometry: '253x190#', format: :png },
+    preview: { geometry: '1170x' },
+    medium: { geometry: '1280x780' },
+    large: { geometry: '1920x1080' }
+  }.freeze
+
+  RESOLUTION_PRESETS = {
+    '720p' => '1280x720',
+    '1080p' => '1920x1080',
+    'wuxga' => '1920x1200',
+    '2k' => '2048x1536',
+    '4k' => '4096x3072'
+  }.freeze
 
   self.template_type = 'Template::Image'.freeze
 
@@ -44,7 +58,7 @@ class Image < ActiveRecord::Base
 
   acts_as_authorable default_to_current_user: false
   acts_as_batch_translatable
-  acts_as_image_containable styles: STYLES, url: '/system/images/:id/:style.:extension'
+  acts_as_image_containable styles: STYLES, url: '/system/images/:id/:style.:extension', processors: [:manual_cropper]
   acts_as_page_embeddable multiple: true, destroy_with_page: false
   acts_as_sortable do |by|
     by.author { |dir| [User.arel_table[:first_name].send(dir.to_sym), User.arel_table[:last_name].send(dir.to_sym)] }

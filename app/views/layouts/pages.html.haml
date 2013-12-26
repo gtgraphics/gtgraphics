@@ -1,1 +1,8 @@
+- content_for :content do
+  - unless @page.published?
+    %p
+      %strong Warning: This Page has not been published yet.
+
+  = yield
+
 = render template: 'layouts/application'

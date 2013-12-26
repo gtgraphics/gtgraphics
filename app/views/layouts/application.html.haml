@@ -30,6 +30,9 @@
 
     = render 'breadcrumbs'
 
-    = yield
+    - if content_for? :content
+      = yield :content
+    - else
+      = yield
 
     %hr

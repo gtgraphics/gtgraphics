@@ -1,0 +1,23 @@
+= editor_headline_for @image
+
+= simple_form_for @image, url: [:crop, :admin, @image], html: { class: 'form-horizontal' } do |form|
+  .row
+    .col-lg-8
+      .thumbnail
+        = image_tag @image.asset.url, id: 'image_asset', class: 'img-responsive', data: { original_width: @image.width, original_height: @image.height }
+
+    .col-lg-4
+      .panel.panel-default.control-panel
+        .panel-heading
+          %h3.panel-title= translate('views.admin.images.headlines.crop_area')
+        .panel-body
+          = form.input :crop_x, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }, input_html: { min: 0 }
+          = form.input :crop_y, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }, input_html: { min: 0 }
+          = form.input :crop_width, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }, input_html: { min: 1 , max: @image.width }
+          = form.input :crop_height, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }, input_html: { min: 1 , max: @image.height }
+
+          .form-group.form-actions
+            .col-lg-12
+              = form.button :button, type: 'submit', class: 'btn-primary btn-block' do
+                = prepend_icon(:save, translate('helpers.submit.update', model: Image.model_name.human))
+              = button_link_to translate('helpers.links.cancel'), [:admin, @image], block:true

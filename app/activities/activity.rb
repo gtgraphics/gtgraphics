@@ -27,17 +27,9 @@ class Activity
   end
 
   def execute
-    return false unless valid?
-    executed = true
-    run_callbacks :execution do
-      begin
-        perform
-      rescue Exception => e
-        executed = false
-      end
-      true
-    end
-    executed
+    execute!
+  rescue ActivityInvalid
+    false
   end
   alias_method :save, :execute
 
@@ -55,10 +47,6 @@ class Activity
     "#<#{self.class.name}#{attributes_str}>"
   end
 
-  def perform
-    raise NotImplementedError, "#{self.class.name}#perform must be overridden to execute this activity"
-  end
-
   def valid?(*)
     valid = nil
     run_callbacks :validation do
@@ -66,5 +54,10 @@ class Activity
       true
     end
     valid
+  end
+
+  protected
+  def perform
+    raise NotImplementedError, "#{self.class.name}#perform must be overridden to execute this activity"
   end
 end

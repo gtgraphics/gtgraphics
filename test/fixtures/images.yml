@@ -13,6 +13,10 @@
 #  created_at         :datetime
 #  updated_at         :datetime
 #  author_id          :integer
+#  crop_x             :integer
+#  crop_y             :integer
+#  crop_width         :integer
+#  crop_height        :integer
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
