@@ -1,4 +1,2 @@
-= @image_style.errors.inspect
-
 = simple_form_for [:admin, @image_style], url: @image_style.new_record? ? admin_image_styles_path(@image) : admin_image_style_path(@image, @image_style), html: { class: 'form-horizontal' } do |form|
   = render 'admin/images/crop_fields', fields: form

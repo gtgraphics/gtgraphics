@@ -28,7 +28,7 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def show
-    @image_styles = @image.styles
+    @image_styles = @image.custom_styles
     respond_with :admin, @image
   end
 

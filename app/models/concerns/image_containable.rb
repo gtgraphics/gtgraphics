@@ -58,11 +58,6 @@ module ImageContainable
       mime_type.to_sym
     end
 
-    def geometry(style = :original)
-      @geometries ||= {}
-      @geometries[style] ||= Paperclip::Geometry.from_file(asset.path(style))
-    end
-
     def mime_type
       CONTENT_TYPES.find { |content_type| content_type == self.content_type }
     end

@@ -7,7 +7,7 @@
     %tbody
       - @image_styles.each do |image_style|
         %tr
-          %td= link_to image_style.label, image_style.asset.url
+          %td= link_to image_style.dimensions, image_style.original_asset.url(image_style.label)
           %td.actions
             .btn-toolbar
               = update_button_link_for image_style, url: edit_admin_image_style_path(@image, image_style), size: :mini

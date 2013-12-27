@@ -2,11 +2,11 @@ module ImageCroppable
   extend ActiveSupport::Concern
 
   included do
-    with_options numericality: { only_integer: true }, allow_blank: true do |croppable|
-      croppable.validates :crop_x
-      croppable.validates :crop_y
-      croppable.validates :crop_width
-      croppable.validates :crop_height
+    with_options allow_blank: true do |croppable|
+      croppable.validates :crop_x, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+      croppable.validates :crop_y, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+      croppable.validates :crop_width, numericality: { only_integer: true, greater_than: 0 }
+      croppable.validates :crop_height, numericality: { only_integer: true, greater_than: 0 }
     end
 
     validate :validate_crop_dimensions_consistency, if: :cropped?

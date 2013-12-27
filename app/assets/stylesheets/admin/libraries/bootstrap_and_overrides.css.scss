@@ -115,6 +115,10 @@ body {
 
 .img-editable {
   background-image: asset-url('admin/transparent.png');
+  img {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .navbar-inverse {

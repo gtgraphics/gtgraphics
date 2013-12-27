@@ -10,8 +10,9 @@ class Admin::ImageStylesController < Admin::ApplicationController
     b.append translate('breadcrumbs.new', model: Image::Style.model_name.human), [:new, :admin, @image, :style] if action_name.in? %w(new create)
     b.append translate('breadcrumbs.edit', model: Image::Style.model_name.human), edit_admin_image_style_path(@image, @image_style) if action_name.in? %w(edit update)
   end
+
   def new
-    @image_style = @image.styles.new.tap do |s|
+    @image_style = @image.custom_styles.new.tap do |s|
       s.crop_x = 0
       s.crop_y = 0
       s.crop_width = @image.width
@@ -23,7 +24,7 @@ class Admin::ImageStylesController < Admin::ApplicationController
   end
 
   def create
-    @image_style = @image.styles.create(image_style_params)
+    @image_style = @image.custom_styles.create(image_style_params)
     respond_with :admin, @image_style, location: [:admin, @image]
   end
 
@@ -48,10 +49,10 @@ class Admin::ImageStylesController < Admin::ApplicationController
   end
 
   def load_image_style
-    @image_style = @image.styles.find(params[:id])
+    @image_style = @image.custom_styles.find(params[:id])
   end
 
   def image_style_params
-    params.require(:image_style).permit(:crop_x, :crop_y, :crop_width, :crop_height, :resize_width, :resize_height)
+    params.require(:image_style).permit(:crop_x, :crop_y, :crop_width, :crop_height, :resize_width, :resize_height, :preserve_aspect_ratio)
   end
 end

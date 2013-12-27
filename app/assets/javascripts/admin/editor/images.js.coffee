@@ -47,30 +47,34 @@ normalizeInt = (value) ->
 $(document).ready ->
   $imageAsset = $('#image_asset')
   $imageAsset.load ->
-    $x = $('.crop-x')
-    $y = $('.crop-y')
-    $width = $('.crop-width')
-    $height = $('.crop-height')
-
-    updateFieldsInit = false
-
-    updateFields = (coordinates) ->
-      if updateFieldsInit
-        $x.val(Math.round(coordinates.x))
-        $y.val(Math.round(coordinates.y))
-        $width.val(Math.round(coordinates.w))
-        $height.val(Math.round(coordinates.h))
-      updateFieldsInit = true
-
     originalWidth = normalizeInt($imageAsset.data('originalWidth'))
     originalHeight = normalizeInt($imageAsset.data('originalHeight'))
 
-    currentX = normalizeInt($x.val())
-    currentY = normalizeInt($y.val())
-    currentWidth = normalizeInt($width.val())
-    currentWidth = originalWidth if currentWidth == 0
-    currentHeight = normalizeInt($height.val())
-    currentHeight = originalHeight if currentHeight == 0
+    $cropX = $('.crop-x')
+    $cropY = $('.crop-y')
+    $cropWidth = $('.crop-width')
+    $cropHeight = $('.crop-height')
+    $resizeWidth = $('.resize-width')
+    $resizeHeight = $('.resize-height')
+    $preserveAspectRatio = $('.preserve-aspect-ratio')
+
+    # Cropping
+
+    cropX = normalizeInt($cropX.val())
+    cropY = normalizeInt($cropY.val())
+    cropWidth = normalizeInt($cropWidth.val())
+    cropWidth = originalWidth if cropWidth == 0
+    cropHeight = normalizeInt($cropHeight.val())
+    cropHeight = originalHeight if cropHeight == 0
+
+    updateFieldsInit = false
+    updateFields = (coordinates) ->
+      if updateFieldsInit
+        $cropX.val(Math.round(coordinates.x))
+        $cropY.val(Math.round(coordinates.y))
+        $cropWidth.val(Math.round(coordinates.w))
+        $cropHeight.val(Math.round(coordinates.h))
+      updateFieldsInit = true
 
     $cropper = $.Jcrop($imageAsset.selector, {
       trueSize: [originalWidth, originalHeight]
@@ -79,35 +83,74 @@ $(document).ready ->
     })
 
     updateSelection = ->
-      $cropper.setSelect([currentX, currentY, currentWidth + currentX, currentHeight + currentY])
+      $cropper.setSelect([cropX, cropY, cropWidth + cropX, cropHeight + cropY])
 
-    setCropRectExplicitly = ->
-      $x.val(currentX)
-      $y.val(currentY)
-      $width.val(currentWidth)
-      $height.val(currentHeight)
+    setCropAreaExplicitly = ->
+      $cropX.val(cropX)
+      $cropY.val(cropY)
+      $cropWidth.val(cropWidth)
+      $cropHeight.val(cropHeight)
 
     updateSelection()
-    setCropRectExplicitly()
+    setCropAreaExplicitly()
 
-    $x.on 'textchange blur', ->
-      currentX = normalizeInt($x.val())
+    $cropX.on 'textchange blur', ->
+      cropX = normalizeInt($cropX.val())
       updateSelection()
-      setCropRectExplicitly()
+      setCropAreaExplicitly()
 
-    $y.on 'textchange blur', ->
-      currentY = normalizeInt($y.val())
+    $cropY.on 'textchange blur', ->
+      cropY = normalizeInt($cropY.val())
       updateSelection()
-      setCropRectExplicitly()
+      setCropAreaExplicitly()
 
-    $width.on 'textchange blur', ->
-      currentWidth = normalizeInt($width.val())
+    $cropWidth.on 'textchange blur', ->
+      cropWidth = normalizeInt($cropWidth.val())
       updateSelection()
-      setCropRectExplicitly()
+      setCropAreaExplicitly()
 
-    $height.on 'textchange blur', ->
-      currentHeight = normalizeInt($height.val())
+    $cropHeight.on 'textchange blur', ->
+      cropHeight = normalizeInt($cropHeight.val())
       updateSelection()
-      setCropRectExplicitly()
+      setCropAreaExplicitly()
 
-    @cropper = $cropper
+    # Scaling
+
+    resizeWidth = normalizeInt($resizeWidth.val())
+    resizeHeight = normalizeInt($resizeHeight.val())
+    widthAspectRatio = resizeWidth / resizeHeight
+    heightAspectRatio = resizeHeight / resizeWidth
+    preserveAspectRatio = $preserveAspectRatio.prop('checked')
+
+    refreshPreserveAspectRatioCheckState = ->
+      preserveAspectRatio = $preserveAspectRatio.prop('checked')
+      if preserveAspectRatio
+        widthAspectRatio = resizeWidth / resizeHeight
+        heightAspectRatio = resizeHeight / resizeWidth
+      else
+        widthAspectRatio = null
+        heightAspectRatio = null
+
+    refreshPreserveAspectRatioCheckState()
+    $preserveAspectRatio.change(refreshPreserveAspectRatioCheckState)
+
+    $resizeWidth.on 'textchange blur', ->
+      resizeWidth = normalizeInt($resizeWidth.val())
+      if preserveAspectRatio
+        resizeHeight = Math.round(resizeWidth * heightAspectRatio)
+        $resizeHeight.val(resizeHeight)
+
+    $resizeHeight.on 'textchange blur', ->
+      resizeHeight = normalizeInt($resizeHeight.val())
+      if preserveAspectRatio
+        resizeWidth = Math.round(resizeHeight * widthAspectRatio)
+        $resizeWidth.val(resizeWidth)
+
+    $cropWidth.on 'textchange blur', ->
+      if preserveAspectRatio
+        resizeCropWidthRatio = resizeWidth / cropWidth
+        resizeCropHeightRatio = resizeHeight / cropHeight
+        console.log resizeCropWidthRatio
+        console.log resizeCropHeightRatio
+
+    $cropHeight.on 'textchange blur', ->

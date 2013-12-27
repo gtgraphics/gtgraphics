@@ -2,53 +2,81 @@
 #
 # Table name: image_styles
 #
-#  id                 :integer          not null, primary key
-#  image_id           :integer
-#  asset_file_name    :string(255)
-#  asset_content_type :string(255)
-#  asset_file_size    :integer
-#  asset_updated_at   :datetime
-#  created_at         :datetime
-#  updated_at         :datetime
-#  crop_x             :integer
-#  crop_y             :integer
-#  crop_width         :integer
-#  crop_height        :integer
-#  resize_width       :integer
-#  resize_height      :integer
+#  id                    :integer          not null, primary key
+#  image_id              :integer
+#  crop_width            :integer
+#  crop_height           :integer
+#  created_at            :datetime
+#  updated_at            :datetime
+#  crop_x                :integer
+#  crop_y                :integer
+#  resize_width          :integer
+#  resize_height         :integer
+#  preserve_aspect_ratio :boolean          default(TRUE)
 #
 
 class Image < ActiveRecord::Base
   class Style < ActiveRecord::Base
-    include ImageContainable
-    include ImageCroppable
-    include ImageResizable
-
-    acts_as_image_containable styles: ->(attachment) { attachment.instance.styles }, url: '/system/images/:image_id/styles/:id/:style.:extension'
-
-    belongs_to :image
+    belongs_to :image, inverse_of: :custom_styles
     
     validates :image_id, presence: true
+    with_options allow_blank: true do |style|
+      style.validates :crop_x, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+      style.validates :crop_y, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+      style.validates :crop_width, numericality: { only_integer: true, greater_than: 0 }
+      style.validates :crop_height, numericality: { only_integer: true, greater_than: 0 }
+      style.validates :resize_width, numericality: { only_integer: true, greater_than: 0 }
+      style.validates :resize_height, numericality: { only_integer: true, greater_than: 0 }
+    end
+
+    after_save :reprocess_asset
 
     delegate :asset, :width, :height, to: :image, prefix: :original
   
-    class << self
-      def content_types
-        ImageContainable::CONTENT_TYPES
-      end
+    def cropped?
+      crop_x.present? and crop_y.present? and crop_width.present? and crop_height.present?
+    end
+
+    def crop_geometry
+      "#{crop_width}x#{crop_height}+#{crop_x}+#{crop_y}"
+    end
+
+    def dimensions
+      ImageContainable::Dimensions.new(width, height)
+    end
+
+    def height
+      resize_height || crop_height
     end
 
     def label
-      "custom_#{crop_width}x#{crop_height}"
+      "custom_#{id}"
     end
 
-
-    def to_h
-      { geometry: '100%x100%' } # make a paperclip style hash out of it
+    def resized?
+      resize_width.present? or resize_height.present?
     end
 
-    Paperclip.interpolates :image_id do |attachment, style|
-      attachment.instance.image_id
+    def resize_geometry
+      resize_width = self.resize_width || '100%'
+      resize_height = self.resize_height || '100%'
+      "#{resize_width}x#{resize_height}!"
+    end
+
+    def transformations
+      convert_options = String.new
+      convert_options << " -crop #{crop_geometry} +repage" if cropped?
+      convert_options << " -resize #{resize_geometry}" if resized?
+      { geometry: '100%x100%', convert_options: convert_options }
+    end
+
+    def width
+      resize_width || crop_width
+    end
+
+    private
+    def reprocess_asset
+      original_asset.reprocess!
     end
   end
 end

@@ -63,6 +63,7 @@ de:
         crop_height: Höhe
         resize_width: Breite
         resize_height: Höhe
+        preserve_aspect_ratio: Seitenverhältnis beibehalten
       image/translation:
         caption: Beschriftung
       message:

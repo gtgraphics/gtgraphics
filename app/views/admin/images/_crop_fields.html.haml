@@ -5,15 +5,7 @@
         = image_tag @image.asset.url, id: 'image_asset', class: 'img-responsive', data: { original_width: @image.width, original_height: @image.height }
 
   .col-lg-4
-    - if fields.object.is_a? Image::Style
-      .panel.panel-default
-        .panel-heading
-          %h3.panel-title= translate("views.admin.#{fields.object.class.model_name.route_key}.headlines.resize_dimensions")
-        .panel-body
-          = fields.input :resize_width, input_html: { class: 'resize-width', min: 1 }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
-          = fields.input :resize_height, input_html: { class: 'resize-height', min: 1 }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
-
-    .panel.panel-default.control-panel
+    .panel.panel-default
       .panel-heading
         %h3.panel-title= translate("views.admin.#{fields.object.class.model_name.route_key}.headlines.crop_area")
       .panel-body
@@ -22,8 +14,16 @@
         = fields.input :crop_width, input_html: { class: 'crop-width', min: 1 , max: @image.width }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
         = fields.input :crop_height, input_html: { class: 'crop-height', min: 1 , max: @image.height }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
 
-        .form-group.form-actions
-          .col-lg-12
-            = fields.button :button, type: 'submit', class: 'btn-primary btn-block' do
-              = prepend_icon(:save, translate(@image.new_record? ? :create : :update, scope: 'helpers.submit', model: fields.object.class.model_name.human))
-            = button_link_to translate('helpers.links.cancel'), [:admin, @image], block: true
+    - if fields.object.is_a? Image::Style
+      .panel.panel-default
+        .panel-heading
+          %h3.panel-title= translate("views.admin.#{fields.object.class.model_name.route_key}.headlines.resize_dimensions")
+        .panel-body
+          = fields.input :resize_width, input_html: { class: 'resize-width', min: 1 }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
+          = fields.input :resize_height, input_html: { class: 'resize-height', min: 1 }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
+          = fields.input :preserve_aspect_ratio, inline_label: Image::Style.human_attribute_name(:preserve_aspect_ratio), input_html: { class: 'preserve-aspect-ratio' }, label_html: { class: 'col-lg-4 sr-only' }, container_html: { class: 'col-lg-8' }
+
+      /.form-group.form-actions
+      = fields.button :button, type: 'submit', class: 'btn-primary btn-block' do
+        = prepend_icon(:save, translate(fields.object.new_record? ? :create : :update, scope: 'helpers.submit', model: fields.object.class.model_name.human))
+      = button_link_to translate('helpers.links.cancel'), [:admin, @image], block: true
