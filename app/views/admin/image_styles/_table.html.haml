@@ -1,9 +1,5 @@
 - if @image_styles.any?
   %table.table.table-striped
-    %thead
-      %tr
-        %th= Image::Style.human_attribute_name :label
-        %th.actions
     %tbody
       - @image_styles.each do |image_style|
         %tr

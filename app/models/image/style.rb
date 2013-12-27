@@ -30,6 +30,7 @@ class Image < ActiveRecord::Base
     end
 
     after_save :reprocess_asset
+    after_destroy :destroy_asset
 
     delegate :asset, :width, :height, to: :image, prefix: :original
   
@@ -75,8 +76,12 @@ class Image < ActiveRecord::Base
     end
 
     private
+    def destroy_asset
+      File.delete(original_asset.path(label))
+    end
+
     def reprocess_asset
-      original_asset.reprocess!
+      original_asset.reprocess!(label)
     end
   end
 end

@@ -146,11 +146,10 @@ $(document).ready ->
         resizeWidth = Math.round(resizeHeight * widthAspectRatio)
         $resizeWidth.val(resizeWidth)
 
+    # $resizeWidth.attr('max', cropWidth)
+    # $resizeHeight.attr('max', cropHeight)
+
     $cropWidth.on 'textchange blur', ->
-      if preserveAspectRatio
-        resizeCropWidthRatio = resizeWidth / cropWidth
-        resizeCropHeightRatio = resizeHeight / cropHeight
-        console.log resizeCropWidthRatio
-        console.log resizeCropHeightRatio
+      
 
     $cropHeight.on 'textchange blur', ->
