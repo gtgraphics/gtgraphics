@@ -34,6 +34,14 @@ class Image < ActiveRecord::Base
 
     delegate :asset, :width, :height, to: :image, prefix: :original
   
+    def asset_path
+      original_asset.path(label)
+    end
+
+    def asset_url
+      original_asset.url(label)
+    end
+
     def cropped?
       crop_x.present? and crop_y.present? and crop_width.present? and crop_height.present?
     end
