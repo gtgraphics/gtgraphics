@@ -27,11 +27,11 @@ module ImageCroppable
   end
 
   def validate_crop_dimensions_consistency
-    if crop_x + crop_width > width
+    if crop_x + crop_width > original_width
       errors.add(:crop_x, :invalid)
       errors.add(:crop_width, :invalid)
     end
-    if crop_y + crop_height > height
+    if crop_y + crop_height > original_height
       errors.add(:crop_y, :invalid)
       errors.add(:crop_height, :invalid)
     end

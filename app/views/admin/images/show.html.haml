@@ -17,9 +17,10 @@
 
     %h3= Image::Style.model_name.human(count: 2)
     .content
-      = render 'admin/image_styles/table'
+      /= render 'admin/image_styles/table'
       = create_button_link_for Image::Style, url: [:new, :admin, @image, :style]
 
+  
   .col-lg-4
     - if @image.description_html.present?
       .panel.panel-default

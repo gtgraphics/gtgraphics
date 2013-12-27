@@ -43,6 +43,12 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def crop
+    @image.tap do |i|
+      i.crop_x ||= 0
+      i.crop_y ||= 0
+      i.crop_width ||= i.width
+      i.crop_height ||= i.height
+    end
     respond_with :admin, @image
   end
 

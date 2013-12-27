@@ -7,9 +7,12 @@
     %tbody
       - @image_styles.each do |image_style|
         %tr
-          %td= image_style.label
+          %td= link_to image_style.label, image_style.asset.url
           %td.actions
-            = action_buttons_for image_style, parent: @image, except: :show, size: :mini, icon_only: true
+            .btn-toolbar
+              = update_button_link_for image_style, url: edit_admin_image_style_path(@image, image_style), size: :mini
+              = destroy_button_link_for image_style, url: admin_image_style_path(@image, image_style), size: :mini
+            /= action_buttons_for image_style, parent: @image, except: :show, size: :mini, icon_only: true
 - else
   .well.text-center
     %h4= translate('views.hints.empty', model: Image::Style.model_name.human(count: 2))

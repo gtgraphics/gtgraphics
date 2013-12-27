@@ -40,10 +40,10 @@ module ImageContainable
     extend ActiveSupport::Concern
 
     included do
-      validates_attachment :asset, presence: true, content_type: { content_type: CONTENT_TYPES }
+      #validates_attachment :asset, presence: true, content_type: { content_type: CONTENT_TYPES }
 
-      alias_attribute :asset_width, :width
-      alias_attribute :asset_height, :height
+      alias_attribute :original_width, :width
+      alias_attribute :original_height, :height
 
       before_save :set_dimensions, if: :asset_changed?
 

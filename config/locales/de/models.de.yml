@@ -56,6 +56,13 @@ de:
         crop_y: Y-Position
         crop_width: Breite
         crop_height: Höhe
+      image/style:
+        crop_x: X-Position
+        crop_y: Y-Position
+        crop_width: Breite
+        crop_height: Höhe
+        resize_width: Breite
+        resize_height: Höhe
       image/translation:
         caption: Beschriftung
       message:

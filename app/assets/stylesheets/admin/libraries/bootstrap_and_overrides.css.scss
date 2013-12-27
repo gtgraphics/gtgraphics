@@ -113,6 +113,10 @@ body {
   }
 }
 
+.img-editable {
+  background-image: asset-url('admin/transparent.png');
+}
+
 .navbar-inverse {
   a {
     .badge {

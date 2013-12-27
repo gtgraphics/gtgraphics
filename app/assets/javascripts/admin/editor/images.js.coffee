@@ -47,10 +47,10 @@ normalizeInt = (value) ->
 $(document).ready ->
   $imageAsset = $('#image_asset')
   $imageAsset.load ->
-    $x = $('#image_crop_x')
-    $y = $('#image_crop_y')
-    $width = $('#image_crop_width')
-    $height = $('#image_crop_height')
+    $x = $('.crop-x')
+    $y = $('.crop-y')
+    $width = $('.crop-width')
+    $height = $('.crop-height')
 
     updateFieldsInit = false
 

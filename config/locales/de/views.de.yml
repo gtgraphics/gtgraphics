@@ -32,6 +32,10 @@ de:
         headlines:
           crop_area: Zuschnittbereich
           details: Details
+      image_styles:
+        headlines:
+          resize_dimensions: Skalierung
+          crop_area: Zuschnittbereich
       messages:
         breadcrumbs:
           archive: Archiv

@@ -4,8 +4,21 @@ class Admin::ImageStylesController < Admin::ApplicationController
   before_action :load_image
   before_action :load_image_style, only: %i(edit update destroy)
 
+  breadcrumbs do |b|
+    b.append Image.model_name.human(count: 2), :admin_images
+    b.append @image.title, [:admin, @image]
+    b.append translate('breadcrumbs.new', model: Image::Style.model_name.human), [:new, :admin, @image, :style] if action_name.in? %w(new create)
+    b.append translate('breadcrumbs.edit', model: Image::Style.model_name.human), edit_admin_image_style_path(@image, @image_style) if action_name.in? %w(edit update)
+  end
   def new
-    @image_style = @image.styles.new
+    @image_style = @image.styles.new.tap do |s|
+      s.crop_x = 0
+      s.crop_y = 0
+      s.crop_width = @image.width
+      s.crop_height = @image.height
+      s.resize_width = @image.width
+      s.resize_height = @image.height
+    end
     respond_with :admin, @image_style
   end
 
@@ -39,6 +52,6 @@ class Admin::ImageStylesController < Admin::ApplicationController
   end
 
   def image_style_params
-    params.require(:image_style).permit! # TODO
+    params.require(:image_style).permit(:crop_x, :crop_y, :crop_width, :crop_height, :resize_width, :resize_height)
   end
 end

@@ -37,28 +37,22 @@ class Image < ActiveRecord::Base
     original_cropped: { geometry: '100%x100%' },
     thumbnail: { geometry: '75x75#', format: :png },
     large_thumbnail: { geometry: '253x190#', format: :png },
-    preview: { geometry: '1170x' },
-    medium: { geometry: '1280x780' },
-    large: { geometry: '1920x1080' }
-  }.freeze
-
-  RESOLUTION_PRESETS = {
-    '720p' => '1280x720',
-    '1080p' => '1920x1080',
-    'wuxga' => '1920x1200',
-    '2k' => '2048x1536',
-    '4k' => '4096x3072'
+    preview: '1170x',
+    medium: '1280x780',
+    large: '1920x1080'
   }.freeze
 
   self.template_type = 'Template::Image'.freeze
 
-  has_many :styles, class_name: 'Image::Style', dependent: :destroy
+  has_many :custom_styles, class_name: 'Image::Style', autosave: true, dependent: :destroy
 
   translates :title, :description, fallbacks_for_empty_translations: true
 
   acts_as_authorable default_to_current_user: false
   acts_as_batch_translatable
-  acts_as_image_containable styles: STYLES, url: '/system/images/:id/:style.:extension', processors: [:manual_cropper]
+  acts_as_image_containable styles: ->(attachment) { attachment.instance.styles },
+                            url: '/system/images/:id/:style.:extension',
+                            processors: [:manual_cropper]
   acts_as_page_embeddable multiple: true, destroy_with_page: false
   acts_as_sortable do |by|
     by.author { |dir| [User.arel_table[:first_name].send(dir.to_sym), User.arel_table[:last_name].send(dir.to_sym)] }
@@ -74,13 +68,23 @@ class Image < ActiveRecord::Base
 
   class << self
     def content_types
-      CONTENT_TYPES
+      ImageContainable::CONTENT_TYPES
+    end
+  end
+
+  def custom_styles_hash
+    self.custom_styles.inject({}) do |custom_styles, custom_style|
+      custom_styles.merge!(custom_style.label => custom_style.to_h)
     end
   end
 
   def description_html
     template = Liquid::Template.parse(description)
     template.render(to_liquid).html_safe
+  end
+
+  def styles
+    STYLES.reverse_merge(custom_styles_hash).deep_symbolize_keys
   end
 
   def to_liquid
