@@ -85,7 +85,7 @@ class Image < ActiveRecord::Base
 
     private
     def destroy_asset
-      File.delete(original_asset.path(label))
+      File.delete(asset_path)
     end
 
     def reprocess_asset

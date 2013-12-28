@@ -14,6 +14,14 @@
         = fields.input :crop_width, input_html: { class: 'crop-width', min: 1 , max: @image.width }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
         = fields.input :crop_height, input_html: { class: 'crop-height', min: 1 , max: @image.height }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
 
+        .form-group
+          %label.control-label.col-lg-4.sr-only{for: 'image_style_preserve_crop_aspect_ratio'}
+            = Image::Style.human_attribute_name(:preserve_aspect_ratio)
+          .col-lg-8
+            %label.checkbox
+              = check_box_tag 'image_style_preserve_crop_aspect_ratio', true, name: nil
+              = Image::Style.human_attribute_name(:preserve_aspect_ratio)
+
     - if fields.object.is_a? Image::Style
       .panel.panel-default
         .panel-heading
@@ -21,7 +29,14 @@
         .panel-body
           = fields.input :resize_width, input_html: { class: 'resize-width', min: 1 }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
           = fields.input :resize_height, input_html: { class: 'resize-height', min: 1 }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
-          = fields.input :preserve_aspect_ratio, inline_label: Image::Style.human_attribute_name(:preserve_aspect_ratio), input_html: { class: 'preserve-aspect-ratio' }, label_html: { class: 'col-lg-4 sr-only' }, container_html: { class: 'col-lg-8' }
+
+          .form-group
+            %label.control-label.col-lg-4.sr-only{for: 'image_style_preserve_resize_aspect_ratio'}
+              = Image::Style.human_attribute_name(:preserve_aspect_ratio)
+            .col-lg-8
+              %label.checkbox
+                = check_box_tag 'image_style_preserve_resize_aspect_ratio', true, name: nil
+                = Image::Style.human_attribute_name(:preserve_aspect_ratio)
 
       /.form-group.form-actions
       = fields.button :button, type: 'submit', class: 'btn-primary btn-block' do
