@@ -29,11 +29,15 @@ class Image < ActiveRecord::Base
       style.validates :resize_height, numericality: { only_integer: true, greater_than: 0 }
     end
 
+    after_initialize :set_defaults, if: :new_record?
     after_save :reprocess_asset
     after_destroy :destroy_asset
 
     delegate :asset, :width, :height, to: :image, prefix: :original
   
+    alias_attribute :width, :resize_width
+    alias_attribute :height, :resize_height
+
     def asset_path
       original_asset.path(label)
     end
@@ -52,10 +56,6 @@ class Image < ActiveRecord::Base
 
     def dimensions
       ImageContainable::Dimensions.new(width, height)
-    end
-
-    def height
-      resize_height || crop_height
     end
 
     def label
@@ -79,10 +79,6 @@ class Image < ActiveRecord::Base
       { geometry: '100%x100%', convert_options: convert_options }
     end
 
-    def width
-      resize_width || crop_width
-    end
-
     private
     def destroy_asset
       File.delete(asset_path)
@@ -90,6 +86,17 @@ class Image < ActiveRecord::Base
 
     def reprocess_asset
       original_asset.reprocess!(label)
+    end
+
+    def set_defaults
+      if image
+        crop_x = 0
+        crop_y = 0
+        crop_width = image.width
+        crop_height = image.height
+        resize_width = image.width
+        resize_height = image.height
+      end
     end
   end
 end
