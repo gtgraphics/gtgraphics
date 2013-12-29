@@ -1,132 +1,178 @@
+class @Cropper
+  constructor: ($container) ->
+    @image = $('.img-croppable', $container)
+    @originalWidth = @image.data('originalWidth')
+    @originalHeight = @image.data('originalHeight')
+    @inputs = {
+      cropX: $('.crop-x', $container)
+      cropY: $('.crop-y', $container)
+      cropWidth: $('.crop-width', $container)
+      cropHeight: $('.crop-height', $container)
+      cropAspectRatio: $('.crop-aspect-ratio', $container)
+      resizeWidth: $('.resize-width', $container)
+      resizeHeight: $('.resize-height', $container)
+      resizeAspectRatio: $('.resize-aspect-ratio', $container)      
+    }
 
-# Cropper
+    @initImageEvents()
 
-normalizeInt = (value) ->
-  value = parseInt(value)
-  value = 0 if isNaN(value)
-  value
+  initInputEvents: ->
+    # Crop
+    @applyCropInputEvents @inputs.cropX
+    @applyCropInputEvents @inputs.cropY
+    @applyCropInputEvents @inputs.cropWidth
+    @applyCropInputEvents @inputs.cropHeight, =>
+      if @inputs.cropAspectRatio.prop('checked')
+        @setCropWidth(@cropWidthAspectRatio * @getCropHeight())
 
+    refreshCropAspectRatioState = =>
+      if @inputs.cropAspectRatio.prop('checked')
+        @cropWidthAspectRatio = @inputs.cropWidth.val() / @inputs.cropHeight.val()
+        @cropHeightAspectRatio = @inputs.cropHeight.val() / @inputs.cropWidth.val()
+      else
+        @cropWidthAspectRatio = null
+        @cropHeightAspectRatio = null
+      @cropper.setOptions(aspectRatio: @cropWidthAspectRatio)
 
-class Cropper
-  
+    refreshCropAspectRatioState()
+    @inputs.cropAspectRatio.change =>
+      refreshCropAspectRatioState()
+
+    # TODO Resize Aspect Ratio
+    # TODO Resize Inputs
+
+  initImageEvents: ->
+    @setCropAreaExplicitly = false
+    @cropper = undefined
+    @image.load =>
+      @cropper = $.Jcrop(@image, {
+        trueSize: [@originalWidth, @originalHeight]
+        allowSelect: false
+        onChange: (coordinates) =>
+          @cropArea = @convertToCropArea(@cropper.tellSelect()) unless @cropArea
+          newCropArea = @convertToCropArea(coordinates)
+          if @cropArea
+            @cropAreaChanged = {
+              x: (newCropArea.x - @cropArea.x) != 0.0
+              y: (newCropArea.y - @cropArea.y) != 0.0
+              width: (newCropArea.width - @cropArea.width) != 0.0
+              height: (newCropArea.height - @cropArea.height) != 0.0
+            }
+          else
+            @cropAreaChanged = {
+              x: true
+              y: true
+              width: true
+              height: true
+            }
+          @cropArea = newCropArea
+          unless @setCropAreaExplicitly
+            @setCropX(@cropArea.x) if @cropAreaChanged.x
+            @setCropY(@cropArea.y) if @cropAreaChanged.y
+            @setCropWidth(@cropArea.width) if @cropAreaChanged.width
+            @setCropHeight(@cropArea.height) if @cropAreaChanged.height
+          @setCropAreaExplicitly = false
+      })
+      @initInputEvents()
+      @updateCropArea()
+
+  convertToCropArea: (coordinates) ->
+    {
+      x: coordinates.x
+      y: coordinates.y
+      width: coordinates.x2 - coordinates.x
+      height: coordinates.y2 - coordinates.y
+    }
+
+  getCropAspectRatio: ->
+    @getCropWidth() / @getCropHeight()
+
+  getCropX: ->
+    parseValue(@inputs.cropX.val())
+
+  getCropY: ->
+    parseValue(@inputs.cropY.val())
+
+  getCropWidth: ->
+    parseValue(@inputs.cropWidth.val())
+
+  getCropHeight: ->
+    parseValue(@inputs.cropHeight.val())
+
+  getMaxCropWidth: ->
+    @originalWidth - @getCropX()
+
+  getMaxCropHeight: ->
+    @originalHeight - @getCropY()
+
+  setCropX: (x) ->
+    x = Math.round(x)
+    @inputs.cropX.val(x).attr('max', @getMaxCropWidth())
+
+  setCropY: (y) ->
+    y = Math.round(y)
+    @inputs.cropY.val(y).attr('max', @getMaxCropHeight())
+
+  setCropWidth: (width) ->
+    width = Math.round(width)
+    width = @getMaxCropWidth() if width > @getMaxCropWidth()
+    @inputs.cropWidth.val(width)
+
+  setCropHeight: (height) ->
+    height = Math.round(height)
+    height = @getMaxCropHeight() if height > @getMaxCropHeight()
+    @inputs.cropHeight.val(height)
+
+  setCropArea: (x, y, width, height) ->
+    @setCropX(x)
+    @setCropY(y)
+    @setCropWidth(width)
+    @setCropHeight(height)
+
+  updateCropArea: ->
+    @cropper.setSelect([@getCropX(), @getCropY(), @getCropX() + @getCropWidth(), @getCropY() + @getCropHeight()])
+
+  isValidCropArea: ->
+    cropX = @getCropX()
+    cropY = @getCropY()
+    cropWidth = @getCropWidth()
+    cropHeight = @getCropHeight()
+    cropXValid = cropX >= 0 and cropX <= @originalWidth
+    cropYValid = cropY >= 0 and cropY <= @originalHeight
+    cropWidthValid = cropWidth > 0 and cropWidth <= (@originalWidth - cropX)
+    cropHeightValid = cropHeight > 0 and cropHeight <= (@originalHeight - cropY)
+    cropXValid and cropYValid and cropWidthValid and cropHeightValid
+
+  # Helpers
+
+  applyCropInputEvents: ($input, callback) ->
+    value = $input.val()
+    $input.data('prevValue', value)
+
+    $input.on 'textchange blur', =>
+      value = $input.val()
+      if presentString(value)
+        if $input.data('prevValue') != value
+          @setCropAreaExplicitly = true
+          callback() if callback
+          @updateCropArea()
+        $input.data('prevValue', value)
+
+  emptyString = (value) ->
+    jQuery.trim(value) == ''
+
+  presentString = (value) ->
+    !emptyString(value)
+
+  parseValue = (value) ->
+    value = parseInt(value)
+    value = 0 if isNaN(value)
+    value
+
 
 $(document).ready ->
-  $imageAsset = $('#image_asset')
-  $imageAsset.load ->
-    originalWidth = normalizeInt($imageAsset.data('originalWidth'))
-    originalHeight = normalizeInt($imageAsset.data('originalHeight'))
 
-    $cropX = $('.crop-x')
-    $cropY = $('.crop-y')
-    $cropWidth = $('.crop-width')
-    $cropHeight = $('.crop-height')
-    $resizeWidth = $('.resize-width')
-    $resizeHeight = $('.resize-height')
-    $preserveAspectRatio = $('.preserve-aspect-ratio')
+  @cropper = new Cropper($('#crop_fields'))
 
-    # Cropping
+  # cropper = new Cropper($image, cropX: $cropX, cropY: $cropY, cropWidth: $cropWidth, cropHeight: $cropHeight, resizeWidth: $resizeWidth, resizeHeight: $resizeHeight)
 
-    cropX = normalizeInt($cropX.val())
-    cropY = normalizeInt($cropY.val())
-    cropWidth = normalizeInt($cropWidth.val())
-    cropWidth = originalWidth if cropWidth == 0
-    cropHeight = normalizeInt($cropHeight.val())
-    cropHeight = originalHeight if cropHeight == 0
-
-    updateFieldsInit = false
-    updateFields = (coordinates) ->
-      if updateFieldsInit
-        $cropX.val(Math.round(coordinates.x))
-        $cropY.val(Math.round(coordinates.y))
-        $cropWidth.val(Math.round(coordinates.w))
-        $cropHeight.val(Math.round(coordinates.h))
-      updateFieldsInit = true
-
-    $cropper = $.Jcrop($imageAsset.selector, {
-      trueSize: [originalWidth, originalHeight]
-      allowSelect: false
-      onChange: updateFields
-    })
-
-    updateSelection = ->
-      $cropper.setSelect([cropX, cropY, cropWidth + cropX, cropHeight + cropY])
-
-    setCropAreaExplicitly = ->
-      $cropX.val(cropX)
-      $cropY.val(cropY)
-      $cropWidth.val(cropWidth)
-      $cropHeight.val(cropHeight)
-
-    updateSelection()
-    setCropAreaExplicitly()
-
-    $('#image_style_preserve_crop_aspect_ratio').change ->
-      if $(@).prop('checked')
-        $cropper.setOptions(aspectRatio: cropWidth / cropHeight) 
-      else
-        $cropper.setOptions(aspectRatio: null) 
-
-    $cropX.on 'textchange blur', ->
-      cropX = normalizeInt($cropX.val())
-      #updateSelection()
-      setCropAreaExplicitly()
-
-    $cropY.on 'textchange blur', ->
-      cropY = normalizeInt($cropY.val())
-      #updateSelection()
-      setCropAreaExplicitly()
-
-    $cropWidth.on 'textchange blur', ->
-      cropWidth = normalizeInt($cropWidth.val())
-      #updateSelection()
-      setCropAreaExplicitly()
-
-    $cropHeight.on 'textchange blur', ->
-      cropHeight = normalizeInt($cropHeight.val())
-      #updateSelection()
-      setCropAreaExplicitly()
-
-    # Scaling
-
-    resizeWidth = normalizeInt($resizeWidth.val())
-    resizeHeight = normalizeInt($resizeHeight.val())
-    widthAspectRatio = resizeWidth / resizeHeight
-    heightAspectRatio = resizeHeight / resizeWidth
-    preserveAspectRatio = $preserveAspectRatio.prop('checked')
-
-    refreshPreserveAspectRatioCheckState = ->
-      preserveAspectRatio = $preserveAspectRatio.prop('checked')
-      if preserveAspectRatio
-        widthAspectRatio = resizeWidth / resizeHeight
-        heightAspectRatio = resizeHeight / resizeWidth
-      else
-        widthAspectRatio = null
-        heightAspectRatio = null
-
-    refreshPreserveAspectRatioCheckState()
-    $preserveAspectRatio.change(refreshPreserveAspectRatioCheckState)
-
-    $resizeWidth.on 'textchange blur', ->
-      resizeWidth = normalizeInt($resizeWidth.val())
-      if preserveAspectRatio
-        resizeHeight = Math.round(resizeWidth * heightAspectRatio)
-        $resizeHeight.val(resizeHeight)
-
-    $resizeHeight.on 'textchange blur', ->
-      resizeHeight = normalizeInt($resizeHeight.val())
-      if preserveAspectRatio
-        resizeWidth = Math.round(resizeHeight * widthAspectRatio)
-        $resizeWidth.val(resizeWidth)
-
-    # $resizeWidth.attr('max', cropWidth)
-    # $resizeHeight.attr('max', cropHeight)
-
-    $cropWidth.on 'textchange blur', ->
-      
-
-    origResizeHeight = resizeHeight
-
-    $cropHeight.on 'textchange blur', ->
-      resizeHeightRatio = cropHeight / origResizeHeight
-      resizeHeight = Math.round(resizeHeightRatio * origResizeHeight)
-      $resizeHeight.val(resizeHeight)

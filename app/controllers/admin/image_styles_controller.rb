@@ -12,7 +12,14 @@ class Admin::ImageStylesController < Admin::ApplicationController
   end
 
   def new
-    @image_style = @image.custom_styles.new
+    @image_style = @image.custom_styles.new.tap do |s|
+      s.crop_x = 0
+      s.crop_y = 0
+      s.crop_width = @image.width
+      s.crop_height = @image.height
+      s.resize_width = @image.width
+      s.resize_height = @image.height
+    end
     respond_with :admin, @image_style
   end
 

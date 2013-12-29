@@ -1380,6 +1380,7 @@
       Selection.enableHandles();
     }
     //}}}
+    //}}}    
     function setSelectRaw(l) //{{{
     {
       Coords.setPressed([l[0], l[1]]);
