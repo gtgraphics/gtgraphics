@@ -118,22 +118,28 @@ class @Cropper
     parseValue(@inputs.resizeHeight.val())
 
   setCropX: (x) ->
-    @inputs.cropX.val(Math.round(x)).attr('max', @getMaxCropWidth())
+    x = Math.round(x)
+    @inputs.cropX.val(x).attr('max', @getMaxCropWidth())
     @inputs.cropWidth.attr('max', @getMaxCropWidth())
+    return x
 
   setCropY: (y) ->
-    @inputs.cropY.val(Math.round(y)).attr('max', @getMaxCropHeight())
+    y = Math.round(y)
+    @inputs.cropY.val(y).attr('max', @getMaxCropHeight())
     @inputs.cropHeight.attr('max', @getMaxCropHeight())
+    return y
 
   setCropWidth: (width) ->
     width = Math.round(width)
     width = @getMaxCropWidth() if width > @getMaxCropWidth()
     @inputs.cropWidth.val(width)
+    return width
 
   setCropHeight: (height) ->
     height = Math.round(height)
     height = @getMaxCropHeight() if height > @getMaxCropHeight()
     @inputs.cropHeight.val(height)
+    return height
 
   setCropArea: (x, y, width, height) ->
     @setCropX(x)
