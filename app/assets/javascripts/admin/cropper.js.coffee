@@ -1,5 +1,6 @@
 class @Cropper
   constructor: ($container) ->
+    @container = $container
     @image = $('.img-croppable', $container)
     @originalWidth = @image.data('originalWidth')
     @originalHeight = @image.data('originalHeight')
@@ -13,19 +14,19 @@ class @Cropper
       resizeHeight: $('.resize-height', $container)
       resizeAspectRatio: $('.resize-aspect-ratio', $container)      
     }
-    @initImageEvents()
+    @applyImageEvents()
 
-  initInputEvents: ->
+  applyInputEvents: ->
     # Crop
-    @applyInputEvents @inputs.cropX
-    @applyInputEvents @inputs.cropY
+    @applyInputEvent @inputs.cropX
+    @applyInputEvent @inputs.cropY
 
-    @applyInputEvents @inputs.cropWidth, =>
+    @applyInputEvent @inputs.cropWidth, =>
       @adjustResizeWidthToCropWidth()
       if @inputs.cropAspectRatio.prop('checked')
         @setCropWidth(@cropHeightAspectRatio * @getCropWidth())
 
-    @applyInputEvents @inputs.cropHeight, =>
+    @applyInputEvent @inputs.cropHeight, =>
       @adjustResizeHeightToCropHeight()
       if @inputs.cropAspectRatio.prop('checked')
         @setCropWidth(@cropWidthAspectRatio * @getCropHeight())
@@ -35,10 +36,10 @@ class @Cropper
       @refreshCropAspectRatioState()
 
     # Resize
-    @applyInputEvents @inputs.resizeWidth, =>
+    @applyInputEvent @inputs.resizeWidth, =>
       if @inputs.resizeAspectRatio.prop('checked')
         @setResizeHeight(@resizeHeightAspectRatio * @getResizeWidth())
-    @applyInputEvents @inputs.resizeHeight, =>
+    @applyInputEvent @inputs.resizeHeight, =>
       if @inputs.resizeAspectRatio.prop('checked')
         @setResizeWidth(@resizeWidthAspectRatio * @getResizeHeight())
     
@@ -46,7 +47,7 @@ class @Cropper
     @inputs.resizeAspectRatio.change =>
       @refreshResizeAspectRatioState()
 
-  initImageEvents: ->
+  applyImageEvents: ->
     @setCropAreaExplicitly = false
     @cropper = undefined
     @image.load =>
@@ -78,7 +79,7 @@ class @Cropper
             @setCropHeight(@cropArea.height) if @cropAreaChanged.height
           @setCropAreaExplicitly = false
       })
-      @initInputEvents()
+      @applyInputEvents()
       @updateCropArea()
 
   convertToCropArea: (coordinates) ->
@@ -165,7 +166,7 @@ class @Cropper
     console.log ratio
     @setResizeHeight(cropHeight) # FIXME
 
-  applyInputEvents: ($input, callback) ->
+  applyInputEvent: ($input, callback) ->
     value = $input.val()
     $input.data('prevValue', value)
 
