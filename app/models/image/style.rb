@@ -2,17 +2,16 @@
 #
 # Table name: image_styles
 #
-#  id                    :integer          not null, primary key
-#  image_id              :integer
-#  crop_width            :integer
-#  crop_height           :integer
-#  created_at            :datetime
-#  updated_at            :datetime
-#  crop_x                :integer
-#  crop_y                :integer
-#  resize_width          :integer
-#  resize_height         :integer
-#  preserve_aspect_ratio :boolean          default(TRUE)
+#  id            :integer          not null, primary key
+#  image_id      :integer
+#  crop_width    :integer
+#  crop_height   :integer
+#  created_at    :datetime
+#  updated_at    :datetime
+#  crop_x        :integer
+#  crop_y        :integer
+#  resize_width  :integer
+#  resize_height :integer
 #
 
 class Image < ActiveRecord::Base
