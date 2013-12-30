@@ -30,15 +30,15 @@
 }
 
 body {
-  @extend .scrollbar;
+  //@extend .scrollbar;
 }
 
 textarea {
-  @extend .scrollbar;
+  //@extend .scrollbar;
 }
 
 .form-control {
   .editor-html, .editor-region {
-    @extend .scrollbar;
+    //@extend .scrollbar;
   }
 }

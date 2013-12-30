@@ -14,34 +14,43 @@ class @Cropper
       resizeHeight: $('.resize-height', $container)
       resizeAspectRatio: $('.resize-aspect-ratio', $container)      
     }
+    @resizeable = @inputs.resizeWidth.length > 0 && @inputs.resizeHeight.length > 0
     @applyImageEvents()
 
   applyInputEvents: ->
-    # Crop
+    @applyCropInputEvents()
+    @applyResizeInputEvents() if @resizeable
+
+  applyCropInputEvents: ->
     @applyInputEvent @inputs.cropX
     @applyInputEvent @inputs.cropY
 
     @applyInputEvent @inputs.cropWidth, =>
-      @adjustResizeWidthToCropWidth()
+      @adjustResizeWidthToCropWidth() if @resizeable
       if @inputs.cropAspectRatio.prop('checked')
-        @setCropWidth(@cropHeightAspectRatio * @getCropWidth())
+        @setCropWidth(@cropAspectRatio.height * @getCropWidth())
 
     @applyInputEvent @inputs.cropHeight, =>
-      @adjustResizeHeightToCropHeight()
+      @adjustResizeHeightToCropHeight() if @resizeable
       if @inputs.cropAspectRatio.prop('checked')
-        @setCropWidth(@cropWidthAspectRatio * @getCropHeight())
+        @setCropWidth(@cropAspectRatio.width * @getCropHeight())
 
     @refreshCropAspectRatioState()
     @inputs.cropAspectRatio.change =>
       @refreshCropAspectRatioState()
 
-    # Resize
+  applyResizeInputEvents: ->
+    @resizeCropRatio = {
+      width: 0
+      height: 0
+    }
+
     @applyInputEvent @inputs.resizeWidth, =>
       if @inputs.resizeAspectRatio.prop('checked')
-        @setResizeHeight(@resizeHeightAspectRatio * @getResizeWidth())
+        @setResizeHeight(@resizeAspectRatio.height * @getResizeWidth())
     @applyInputEvent @inputs.resizeHeight, =>
       if @inputs.resizeAspectRatio.prop('checked')
-        @setResizeWidth(@resizeWidthAspectRatio * @getResizeHeight())
+        @setResizeWidth(@resizeAspectRatio.width * @getResizeHeight())
     
     @refreshResizeAspectRatioState()
     @inputs.resizeAspectRatio.change =>
@@ -199,21 +208,17 @@ class @Cropper
     value
 
   refreshCropAspectRatioState: ->
+    @cropAspectRatio = {}
     if @inputs.cropAspectRatio.prop('checked')
-      @cropWidthAspectRatio = @inputs.cropWidth.val() / @inputs.cropHeight.val()
-      @cropHeightAspectRatio = @inputs.cropHeight.val() / @inputs.cropWidth.val()
-    else
-      @cropWidthAspectRatio = null
-      @cropHeightAspectRatio = null
-    @cropper.setOptions(aspectRatio: @cropWidthAspectRatio)
+      @cropAspectRatio.width = @inputs.cropWidth.val() / @inputs.cropHeight.val()
+      @cropAspectRatio.height = @inputs.cropHeight.val() / @inputs.cropWidth.val()
+    @cropper.setOptions(aspectRatio: @cropAspectRatio.width || null)
 
   refreshResizeAspectRatioState: ->
+    @resizeAspectRatio = {}
     if @inputs.resizeAspectRatio.prop('checked')
-      @resizeWidthAspectRatio = @inputs.resizeWidth.val() / @inputs.resizeHeight.val()
-      @resizeHeightAspectRatio = @inputs.resizeHeight.val() / @inputs.resizeWidth.val()
-    else
-      @resizeWidthAspectRatio = null
-      @resizeHeightAspectRatio = null
+      @resizeAspectRatio.width = @inputs.resizeWidth.val() / @inputs.resizeHeight.val()
+      @resizeAspectRatio.height = @inputs.resizeHeight.val() / @inputs.resizeWidth.val()
 
 
 $(document).ready ->
