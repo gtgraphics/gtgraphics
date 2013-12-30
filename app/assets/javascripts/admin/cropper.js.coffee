@@ -119,9 +119,11 @@ class @Cropper
 
   setCropX: (x) ->
     @inputs.cropX.val(Math.round(x)).attr('max', @getMaxCropWidth())
+    @inputs.cropWidth.attr('max', @getMaxCropWidth())
 
   setCropY: (y) ->
     @inputs.cropY.val(Math.round(y)).attr('max', @getMaxCropHeight())
+    @inputs.cropHeight.attr('max', @getMaxCropHeight())
 
   setCropWidth: (width) ->
     width = Math.round(width)
