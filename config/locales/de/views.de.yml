@@ -30,12 +30,12 @@ de:
         loading: Inhalt wird geladen…
       images:
         headlines:
-          crop_area: Zuschnittbereich
+          crop: Zuschnitt
           details: Details
       image_styles:
         headlines:
-          resize_dimensions: Skalierung
-          crop_area: Zuschnittbereich
+          crop: Zuschnitt
+          scale: Skalierung
       messages:
         breadcrumbs:
           archive: Archiv

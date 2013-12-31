@@ -4,14 +4,16 @@
 #
 #  id            :integer          not null, primary key
 #  image_id      :integer
+#  cropped       :boolean          default(TRUE), not null
 #  crop_width    :integer
 #  crop_height   :integer
-#  created_at    :datetime
-#  updated_at    :datetime
 #  crop_x        :integer
 #  crop_y        :integer
+#  resized       :boolean          default(FALSE), not null
 #  resize_width  :integer
 #  resize_height :integer
+#  created_at    :datetime
+#  updated_at    :datetime
 #
 
 class Image < ActiveRecord::Base
@@ -28,14 +30,15 @@ class Image < ActiveRecord::Base
       style.validates :resize_height, numericality: { only_integer: true, greater_than: 0 }
     end
 
+    before_save :clear_crop_area, unless: :cropped?
+    before_save :clear_resize_geometry, unless: :resized?
     after_save :reprocess_asset
     after_destroy :destroy_asset
 
     delegate :asset, :width, :height, to: :image, prefix: :original
-  
-    alias_attribute :width, :resize_width
-    alias_attribute :height, :resize_height
 
+    validate :validate_either_cropped_or_resized
+  
     def asset_path
       original_asset.path(label)
     end
@@ -56,12 +59,12 @@ class Image < ActiveRecord::Base
       ImageContainable::Dimensions.new(width, height)
     end
 
-    def label
-      "custom_#{id}"
+    def height
+      resize_height || crop_height
     end
 
-    def resized?
-      resize_width.present? or resize_height.present?
+    def label
+      "custom_#{id}"
     end
 
     def resize_geometry
@@ -76,14 +79,34 @@ class Image < ActiveRecord::Base
       convert_options << " -resize #{resize_geometry}" if resized?
       { geometry: '100%x100%', convert_options: convert_options }
     end
+    
+    def width
+      resize_width || crop_width
+    end
 
     private
+    def clear_crop_area
+      self.crop_x = nil
+      self.crop_y = nil
+      self.crop_width = nil
+      self.crop_height = nil
+    end
+
+    def clear_resize_geometry
+      self.resize_width = nil
+      self.resize_height = nil
+    end
+
     def destroy_asset
       File.delete(asset_path)
     end
 
     def reprocess_asset
       original_asset.reprocess!(label)
+    end
+
+    def validate_either_cropped_or_resized
+      errors.add(:base, :invalid) unless cropped? or resized?
     end
   end
 end
