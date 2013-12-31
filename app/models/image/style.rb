@@ -38,6 +38,9 @@ class Image < ActiveRecord::Base
     delegate :asset, :width, :height, to: :image, prefix: :original
 
     validate :validate_either_cropped_or_resized
+
+    scope :cropped, -> { where(cropped: true) }
+    scope :resized, -> { where(resized: true) }
   
     def asset_path
       original_asset.path(label)

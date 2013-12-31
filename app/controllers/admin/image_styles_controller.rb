@@ -53,6 +53,6 @@ class Admin::ImageStylesController < Admin::ApplicationController
   end
 
   def image_style_params
-    params.require(:image_style).permit(:crop_x, :crop_y, :crop_width, :crop_height, :resize_width, :resize_height, :preserve_aspect_ratio)
+    params.require(:image_style).permit(:cropped, :crop_x, :crop_y, :crop_width, :crop_height, :resized, :resize_width, :resize_height)
   end
 end

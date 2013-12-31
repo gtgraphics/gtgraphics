@@ -64,6 +64,7 @@ class Image < ActiveRecord::Base
 
   before_validation :set_default_title
   before_save :set_exif_data, if: :asset_changed?
+  before_update :destroy_custom_styles, if: :asset_changed?
 
   class << self
     def content_types
@@ -99,6 +100,10 @@ class Image < ActiveRecord::Base
   end
 
   private
+  def destroy_custom_styles
+    self.custom_styles.destroy_all
+  end
+
   def set_default_title
     translation.title = File.basename(asset_file_name, '.*').humanize if asset_file_name.present? and translation.title.blank?
   end

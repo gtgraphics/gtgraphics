@@ -5,8 +5,8 @@
 
   = simple_form_for @sign_in_activity, as: :session, url: :admin_sign_in do |form|
 
-    = form.input :email, autofocus: true, placeholder: SignInActivity.human_attribute_name(:email), label_html: { class: 'sr-only' }
-    = form.input :password, placeholder: SignInActivity.human_attribute_name(:password), label_html: { class: 'sr-only' }
+    = form.input :email, autofocus: true, placeholder: SignInActivity.human_attribute_name(:email), input_html: { class: 'input-lg' }, label_html: { class: 'sr-only' }
+    = form.input :password, placeholder: SignInActivity.human_attribute_name(:password), input_html: { class: 'input-lg' }, label_html: { class: 'sr-only' }
     = form.input :permanent, as: :boolean, inline_label: SignInActivity.human_attribute_name(:permanent), label_html: { class: 'sr-only' }
 
     .form-group
