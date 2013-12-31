@@ -25,27 +25,30 @@
 
 class Image < ActiveRecord::Base
   class Style < ActiveRecord::Base
-    TYPES = %w(
-      Image::Style::Attachment
-      Image::Style::Variation
-    ).freeze
+    class Attachment < Image::Style
+      include ImageContainable
 
-    belongs_to :image, inverse_of: :custom_styles
+      acts_as_image_containable url: '/system/images/:image_id/:style_label.:extension'
 
-    validates :image_id, presence: true
+      validates_attachment :asset, content_type: { content_type: ImageContainable::CONTENT_TYPES }
 
-    TYPES.each do |type|
-      scope type.demodulize.underscore.pluralize, -> { where(type: type) }
+      delegate :path, :url, to: :asset, prefix: true
 
-      class_eval %{
-        def #{type.demodulize.underscore}?
-          type == '#{type}'
-        end
-      }
-    end
+      def cropped?
+        false
+      end
 
-    def label
-      "custom_#{id}"
+      def resized?
+        false
+      end
+
+      Paperclip.interpolates :image_id do |attachment, style|
+        attachment.instance.image_id
+      end
+
+      Paperclip.interpolates :style_label do |attachment, style|
+        attachment.instance.label
+      end
     end
   end
 end

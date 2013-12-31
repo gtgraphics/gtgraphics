@@ -62,6 +62,8 @@ class Image < ActiveRecord::Base
 
   serialize :exif_data, OpenStruct
 
+  validates_attachment :asset, presence: true, content_type: { content_type: ImageContainable::CONTENT_TYPES }
+
   before_validation :set_default_title
   before_save :set_exif_data, if: :asset_changed?
   before_update :destroy_custom_styles, if: :asset_changed?
@@ -101,7 +103,7 @@ class Image < ActiveRecord::Base
 
   private
   def destroy_custom_styles
-    self.custom_styles.destroy_all
+    self.custom_styles.variations.destroy_all
   end
 
   def set_default_title

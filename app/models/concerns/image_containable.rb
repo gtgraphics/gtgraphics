@@ -50,6 +50,12 @@ module ImageContainable
       delegate :aspect_ratio, :pixels, to: :dimensions
     end
 
+    module ClassMethods
+      def content_types
+        ImageContainable::CONTENT_TYPES
+      end
+    end
+
     def dimensions
       Dimensions.new(width, height)
     end
