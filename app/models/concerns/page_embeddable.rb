@@ -1,6 +1,8 @@
 module PageEmbeddable
   extend ActiveSupport::Concern
 
+  TITLE_CANDIDATES = %w(title name to_s).freeze
+
   module ClassMethods
     def acts_as_page_embeddable(options = {})
       raise 'acts_as_page_embeddable cannot be defined twice on the same model' if @embeddable_options

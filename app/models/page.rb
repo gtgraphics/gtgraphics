@@ -97,7 +97,6 @@ class Page < ActiveRecord::Base
   end
 
   delegate :name, to: :author, prefix: true, allow_nil: true
-  delegate :title, to: :embeddable, allow_nil: true
 
   EMBEDDABLE_TYPES.each do |embeddable_type|
     scope embeddable_type.underscore.pluralize, -> { where(embeddable_type: embeddable_type) }
@@ -229,6 +228,10 @@ class Page < ActiveRecord::Base
 
   def template_type
     self.class.template_types_hash[embeddable_type]
+  end
+
+  def title
+    PageEmbeddable::TITLE_CANDIDATES.collect { |method| embeddable.try(method) }.find(&:present?)
   end
 
   def to_s
