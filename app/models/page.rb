@@ -54,7 +54,7 @@ class Page < ActiveRecord::Base
   validates :embeddable, presence: true
   validates :embeddable_type, presence: true, inclusion: { in: EMBEDDABLE_TYPES }
   validates :template_id, presence: true, if: :support_template?
-  validates :slug, presence: { unless: :root? }, uniqueness: { scope: :parent_id }, exclusion: { in: RESERVED_SLUGS, if: :root? }
+  validates :slug, presence: { unless: :root? }, uniqueness: { scope: :parent_id }, exclusion: { in: RESERVED_SLUGS, unless: :root? }
   validates :path, presence: { unless: :root? }, uniqueness: true, if: -> { slug.present? }
   validate :validate_parent_assignability
   validate :validate_template_type
