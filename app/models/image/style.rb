@@ -37,6 +37,8 @@ class Image < ActiveRecord::Base
       }
     end
 
+    scope :ordered_by_dimensions, -> { order("#{table_name}.width * #{table_name}.height") }
+
     def label
       "custom_#{id}"
     end

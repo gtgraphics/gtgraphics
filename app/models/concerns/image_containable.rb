@@ -40,7 +40,7 @@ module ImageContainable
     extend ActiveSupport::Concern
 
     included do
-      #validates_attachment :asset, presence: true, content_type: { content_type: CONTENT_TYPES }
+      # validates_attachment :asset, presence: true, content_type: { content_type: CONTENT_TYPES }
 
       alias_attribute :original_width, :width
       alias_attribute :original_height, :height

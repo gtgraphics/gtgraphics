@@ -51,13 +51,14 @@ de:
       image:
         author: Urheber
         aspect_ratio: Seitenverhältnis
-        dimensions: Maße
         asset: Bilddatei
+        dimensions: Maße
         crop_x: X-Position
         crop_y: Y-Position
         crop_width: Breite
         crop_height: Höhe
       image/style:
+        asset: Bilddatei
         crop_x: X-Position
         crop_y: Y-Position
         crop_width: Breite

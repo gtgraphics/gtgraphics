@@ -41,6 +41,8 @@ class Image < ActiveRecord::Base
 
   self.template_type = 'Template::Image'.freeze
 
+  attr_readonly :type
+
   has_many :custom_styles, class_name: 'Image::Style', autosave: true, inverse_of: :image, dependent: :destroy
 
   translates :title, :description, fallbacks_for_empty_translations: true

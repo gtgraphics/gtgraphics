@@ -31,6 +31,7 @@ class Admin::ImageStylesController < Admin::ApplicationController
 
   def create
     @image_style = @image.custom_styles.create(image_style_params)
+    flash_for @image_style, :created
     respond_with :admin, @image_style.becomes(Image::Style), location: [:admin, @image]
   end
 
@@ -40,6 +41,7 @@ class Admin::ImageStylesController < Admin::ApplicationController
 
   def update
     @image_style.update(image_style_params)
+    flash_for @image_style, :updated
     respond_with :admin, @image_style.becomes(Image::Style), location: [:admin, @image]
   end
 
@@ -60,13 +62,15 @@ class Admin::ImageStylesController < Admin::ApplicationController
 
   def image_style_params
     image_style_params = params.require(:image_style)
-    case image_style_params[:type]
+    type = @image_style.try(:type) || image_style_params[:type]
+    permitted_attributes = []
+    permitted_attributes << :type unless @image_style.try(:persisted?)
+    case type
     when 'Image::Style::Variation'
-      image_style_params.permit(:type, :cropped, :crop_x, :crop_y, :crop_width, :crop_height, :resized, :resize_width, :resize_height)
+      permitted_attributes += [:cropped, :crop_x, :crop_y, :crop_width, :crop_height, :resized, :resize_width, :resize_height]
     when 'Image::Style::Attachment'
-      image_style_params.permit(:type, :asset)
-    else
-      image_style_params
+      permitted_attributes << :asset
     end
+    image_style_params.permit(*permitted_attributes)
   end
 end
