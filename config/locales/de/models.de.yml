@@ -87,6 +87,8 @@ de:
         menu_item: Menüpunkt?
         updated_at: Aktualisierung
         state: Status
+      project:
+        url: URL
       redirection:
         destination_url: URL
         destination_page: Seite
@@ -162,6 +164,9 @@ de:
       page:
         one: Seite
         other: Seiten
+      project:
+        one: Projekt
+        other: Projekte
       redirection:
         one: Umleitung
         other: Umleitungen

@@ -29,6 +29,7 @@ class Page < ActiveRecord::Base
     Gallery
     Homepage
     Image
+    Project
     Redirection
   ).freeze
 
@@ -70,8 +71,6 @@ class Page < ActiveRecord::Base
   after_update :migrate_or_destroy_regions, if: -> { embeddable_changed? and support_regions? }
   before_destroy :destroyable?
   after_destroy :destroy_embeddable
-
-  # accepts_nested_attributes_for :embeddable #
 
   default_scope -> { order(:lft) }
   scope :drafted, -> { with_state(:drafted) }
