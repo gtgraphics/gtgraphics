@@ -2,25 +2,18 @@
 #
 # Table name: image_styles
 #
-#  id                 :integer          not null, primary key
-#  image_id           :integer
-#  crop_width         :integer
-#  crop_height        :integer
-#  created_at         :datetime
-#  updated_at         :datetime
-#  crop_x             :integer
-#  crop_y             :integer
-#  resize_width       :integer
-#  resize_height      :integer
-#  cropped            :boolean          default(TRUE)
-#  resized            :boolean          default(FALSE)
-#  type               :string(255)      not null
-#  asset_file_name    :string(255)
-#  asset_content_type :string(255)
-#  asset_file_size    :integer
-#  asset_updated_at   :datetime
-#  width              :integer
-#  height             :integer
+#  id                    :integer          not null, primary key
+#  image_id              :integer
+#  created_at            :datetime
+#  updated_at            :datetime
+#  type                  :string(255)      not null
+#  asset_file_name       :string(255)
+#  asset_content_type    :string(255)
+#  asset_file_size       :integer
+#  asset_updated_at      :datetime
+#  width                 :integer
+#  height                :integer
+#  customization_options :text
 #
 
 class Image < ActiveRecord::Base
@@ -28,13 +21,15 @@ class Image < ActiveRecord::Base
     class Variation < Image::Style
       # TODO Move Cropped, Resized, CropX, ..., ResizeHeight to a serialized data store
 
-      with_options allow_blank: true do |style|
-        style.validates :crop_x, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-        style.validates :crop_y, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-        style.validates :crop_width, numericality: { only_integer: true, greater_than: 0 }
-        style.validates :crop_height, numericality: { only_integer: true, greater_than: 0 }
-        style.validates :resize_width, numericality: { only_integer: true, greater_than: 0 }
-        style.validates :resize_height, numericality: { only_integer: true, greater_than: 0 }
+      store :customization_options, accessors: [:cropped, :crop_x, :crop_y, :crop_width, :crop_height, :resized, :resize_width, :resize_height]
+
+      with_options presence: true do |style|
+        style.validates :crop_x, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, if: :cropped?
+        style.validates :crop_y, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, if: :cropped?
+        style.validates :crop_width, numericality: { only_integer: true, greater_than: 0 }, if: :cropped?
+        style.validates :crop_height, numericality: { only_integer: true, greater_than: 0 }, if: :cropped?
+        style.validates :resize_width, numericality: { only_integer: true, greater_than: 0 }, if: :resized?
+        style.validates :resize_height, numericality: { only_integer: true, greater_than: 0 }, if: :resized?
       end
 
       after_initialize :set_defaults, if: :new_record?
@@ -48,9 +43,14 @@ class Image < ActiveRecord::Base
 
       validate :validate_either_cropped_or_resized
 
-      scope :cropped, -> { where(cropped: true) }
-      scope :resized, -> { where(resized: true) }
-    
+      %w(crop_x crop_y crop_width crop_height resize_width resize_height).each do |method|
+        class_eval %{
+          def #{method}=(value)
+            super(value.to_i)
+          end
+        }
+      end
+
       def asset_path
         original_asset.path(label)
       end
@@ -63,6 +63,15 @@ class Image < ActiveRecord::Base
         "#{crop_width}x#{crop_height}+#{crop_x}+#{crop_y}"
       end
 
+      def cropped
+        !!super
+      end
+      alias_method :cropped?, :cropped
+
+      def cropped=(cropped)
+        super(cropped.try(:in?, ActiveRecord::ConnectionAdapters::Column::TRUE_VALUES))
+      end
+
       def dimensions
         ImageContainable::Dimensions.new(width, height)
       end
@@ -71,6 +80,15 @@ class Image < ActiveRecord::Base
         resize_width = self.resize_width || '100%'
         resize_height = self.resize_height || '100%'
         "#{resize_width}x#{resize_height}!"
+      end
+
+      def resized
+        !!super
+      end
+      alias_method :resized?, :resized
+
+      def resized=(resized)
+        super(resized.try(:in?, ActiveRecord::ConnectionAdapters::Column::TRUE_VALUES))
       end
 
       def transformations
@@ -107,8 +125,16 @@ class Image < ActiveRecord::Base
       end
 
       def set_dimensions
-        self.width = resize_width || crop_width
-        self.height = resize_height || crop_height
+        if cropped?
+          self.width = crop_width
+          self.height = crop_height
+        elsif resized?
+          self.width = resize_width
+          self.height = resize_height
+        else
+          self.width = image.width
+          self.height = image.height
+        end
       end
 
       def validate_either_cropped_or_resized

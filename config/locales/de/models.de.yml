@@ -7,6 +7,7 @@ de:
     file_size: Dateigröße
     slug: URL-Token
     title: Titel
+    type: Typ
     updated_at: Aktualisierung
 
   activemodel:
@@ -61,6 +62,7 @@ de:
         crop_y: Y-Position
         crop_width: Breite
         crop_height: Höhe
+        dimensions: Größe
         resize_width: Breite
         resize_height: Höhe
         preserve_aspect_ratio: Seitenverhältnis beibehalten
@@ -138,6 +140,12 @@ de:
       image/style:
         one: Bildformat
         other: Bildformate
+      image/style/variation:
+        one: Bearbeitung
+        other: Bearbeitungen
+      image/style/attachment:
+        one: Externe Bearbeitung
+        other: Externe Bearbeitungen
       menu_item:
         one: Menüeintrag
         other: Menüeinträge

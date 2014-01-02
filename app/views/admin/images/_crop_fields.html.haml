@@ -12,9 +12,9 @@
             - if fields.object.is_a? Image::Style
               %label.checkbox
                 = fields.input_field :cropped, as: :boolean, class: 'crop-flag only-js'
-                = translate("views.admin.#{fields.object.class.model_name.route_key}.headlines.crop")
+                = translate("views.admin.images.headlines.crop")
             - else
-              = translate("views.admin.#{fields.object.class.model_name.route_key}.headlines.crop")
+              = translate("views.admin.images.headlines.crop")
         .panel-body
           = fields.input :crop_x, input_html: { class: 'crop-x', min: 0, max: @image.width }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
           = fields.input :crop_y, input_html: { class: 'crop-y', min: 0, max: @image.height }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
@@ -35,7 +35,7 @@
             %h3.panel-title
               %label.checkbox
                 = fields.input_field :resized, as: :boolean, class: 'resize-flag only-js'
-                = translate("views.admin.#{fields.object.class.model_name.route_key}.headlines.scale")
+                = translate("views.admin.images.headlines.scale")
 
           .panel-body
             = fields.input :resize_width, input_html: { class: 'resize-width', min: 1 }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }

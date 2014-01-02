@@ -1,9 +1,15 @@
 - if @image_styles.any?
   %table.table.table-striped
+    %thead
+      %tr
+        %th= Image::Style.human_attribute_name :dimensions
+        %th= Image::Style.human_attribute_name :type
+        %th.actions
     %tbody
       - @image_styles.each do |image_style|
         %tr
           %td= link_to image_style.dimensions, image_style.asset_url
+          %td= image_style.class.model_name.human
           %td.actions
             .btn-toolbar
               = view_button_link_for image_style, url: image_style.asset_url, size: :mini, icon_only: true

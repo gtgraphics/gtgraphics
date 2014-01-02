@@ -2,21 +2,18 @@
 #
 # Table name: images
 #
-#  id                 :integer          not null, primary key
-#  asset_file_name    :string(255)
-#  asset_content_type :string(255)
-#  asset_file_size    :integer
-#  asset_updated_at   :datetime
-#  width              :integer
-#  height             :integer
-#  exif_data          :text
-#  created_at         :datetime
-#  updated_at         :datetime
-#  author_id          :integer
-#  crop_x             :integer
-#  crop_y             :integer
-#  crop_width         :integer
-#  crop_height        :integer
+#  id                    :integer          not null, primary key
+#  asset_file_name       :string(255)
+#  asset_content_type    :string(255)
+#  asset_file_size       :integer
+#  asset_updated_at      :datetime
+#  width                 :integer
+#  height                :integer
+#  exif_data             :text
+#  created_at            :datetime
+#  updated_at            :datetime
+#  author_id             :integer
+#  customization_options :text
 #
 
 class Image < ActiveRecord::Base
@@ -48,6 +45,8 @@ class Image < ActiveRecord::Base
 
   translates :title, :description, fallbacks_for_empty_translations: true
 
+  store :customization_options, accessors: [:crop_x, :crop_y, :crop_width, :crop_height]
+
   acts_as_authorable default_to_current_user: false
   acts_as_batch_translatable
   acts_as_image_containable styles: ->(attachment) { attachment.instance.styles },
@@ -74,9 +73,20 @@ class Image < ActiveRecord::Base
     end
   end
 
+  %w(crop_x crop_y crop_width crop_height).each do |method|
+    class_eval %{
+      def #{method}=(value)
+        super(value.to_i)
+      end
+    }
+  end
+
   def custom_styles_hash
     self.custom_styles.inject({}) do |custom_styles, custom_style|
-      custom_styles.merge!(custom_style.label => custom_style.transformations)
+      if custom_style.variation? and custom_style.persisted?
+        custom_styles.merge!(custom_style.label => custom_style.transformations)
+      end
+      custom_styles
     end
   end
 

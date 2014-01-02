@@ -2,25 +2,18 @@
 #
 # Table name: image_styles
 #
-#  id                 :integer          not null, primary key
-#  image_id           :integer
-#  crop_width         :integer
-#  crop_height        :integer
-#  created_at         :datetime
-#  updated_at         :datetime
-#  crop_x             :integer
-#  crop_y             :integer
-#  resize_width       :integer
-#  resize_height      :integer
-#  cropped            :boolean          default(TRUE)
-#  resized            :boolean          default(FALSE)
-#  type               :string(255)      not null
-#  asset_file_name    :string(255)
-#  asset_content_type :string(255)
-#  asset_file_size    :integer
-#  asset_updated_at   :datetime
-#  width              :integer
-#  height             :integer
+#  id                    :integer          not null, primary key
+#  image_id              :integer
+#  created_at            :datetime
+#  updated_at            :datetime
+#  type                  :string(255)      not null
+#  asset_file_name       :string(255)
+#  asset_content_type    :string(255)
+#  asset_file_size       :integer
+#  asset_updated_at      :datetime
+#  width                 :integer
+#  height                :integer
+#  customization_options :text
 #
 
 class Image < ActiveRecord::Base
@@ -28,9 +21,10 @@ class Image < ActiveRecord::Base
     class Attachment < Image::Style
       include ImageContainable
 
-      acts_as_image_containable url: '/system/images/:image_id/:style_label.:extension'
+      acts_as_image_containable url: '/system/images/:image_id/:style_label.:extension',
+                                styles: { thumbnail: { geometry: '75x75#', format: :png } }
 
-      validates_attachment :asset, content_type: { content_type: ImageContainable::CONTENT_TYPES }
+      validates_attachment :asset, presence: true, content_type: { content_type: ImageContainable::CONTENT_TYPES }
 
       delegate :path, :url, to: :asset, prefix: true
 
@@ -47,7 +41,11 @@ class Image < ActiveRecord::Base
       end
 
       Paperclip.interpolates :style_label do |attachment, style|
-        attachment.instance.label
+        if style == :original
+          attachment.instance.label
+        else
+          "#{attachment.instance.label}_#{style}"
+        end
       end
     end
   end

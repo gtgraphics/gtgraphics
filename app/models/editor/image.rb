@@ -2,21 +2,18 @@
 #
 # Table name: images
 #
-#  id                 :integer          not null, primary key
-#  asset_file_name    :string(255)
-#  asset_content_type :string(255)
-#  asset_file_size    :integer
-#  asset_updated_at   :datetime
-#  width              :integer
-#  height             :integer
-#  exif_data          :text
-#  created_at         :datetime
-#  updated_at         :datetime
-#  author_id          :integer
-#  crop_x             :integer
-#  crop_y             :integer
-#  crop_width         :integer
-#  crop_height        :integer
+#  id                    :integer          not null, primary key
+#  asset_file_name       :string(255)
+#  asset_content_type    :string(255)
+#  asset_file_size       :integer
+#  asset_updated_at      :datetime
+#  width                 :integer
+#  height                :integer
+#  exif_data             :text
+#  created_at            :datetime
+#  updated_at            :datetime
+#  author_id             :integer
+#  customization_options :text
 #
 
 class Editor::Image

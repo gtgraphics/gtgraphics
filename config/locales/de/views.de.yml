@@ -31,11 +31,8 @@ de:
       images:
         headlines:
           crop: Zuschnitt
-          details: Details
-      image_styles:
-        headlines:
-          crop: Zuschnitt
           scale: Skalierung
+          details: Details
       messages:
         breadcrumbs:
           archive: Archiv
