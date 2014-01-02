@@ -7,10 +7,5 @@ class CreateImageStyles < ActiveRecord::Migration
       t.integer :height
       t.timestamps
     end
-
-    reversible do |dir|
-      dir.up { Image::Style.create_translation_table! name: :string }
-      dir.down { Image::Style.drop_translation_table! }
-    end
   end
 end
