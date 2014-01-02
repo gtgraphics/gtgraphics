@@ -231,7 +231,7 @@ class Page < ActiveRecord::Base
   end
 
   def title
-    PageEmbeddable::TITLE_CANDIDATES.collect { |method| embeddable.try(method) }.find(&:present?)
+    PageEmbeddable::TITLE_CANDIDATES.collect { |method| embeddable.try(method) }.compact.first
   end
 
   def to_s
