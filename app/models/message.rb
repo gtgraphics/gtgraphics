@@ -32,8 +32,6 @@ class Message < ActiveRecord::Base
   after_create :send_notification_email
 
   default_scope -> { order(:created_at).reverse_order }
-  # scope :archived, -> { read.where(arel_table[:created_at].lt(ARCHIVE_AFTER.ago)) }
-  # scope :incoming, -> { where(unread.where_values.reduce(:and).or(arel_table[:created_at].gteq(ARCHIVE_AFTER.ago))) }
   scope :read, -> { where(read: true) }
   scope :unread, -> { where(read: false) }
 
@@ -70,10 +68,6 @@ class Message < ActiveRecord::Base
     end
   end
 
-  # def archived?
-  #  read? and created_at < ARCHIVE_AFTER.ago
-  # end
-
   def copies
     @copies ||= self.class.where(fingerprint: fingerprint).without(self).readonly
   end
@@ -90,10 +84,6 @@ class Message < ActiveRecord::Base
   def generate_fingerprint
     self.fingerprint = self.class.generate_fingerprint
   end
-
-  # def incoming?
-  #   !archived?
-  # end
 
   def mark_read!
     update_column(:read, true)
