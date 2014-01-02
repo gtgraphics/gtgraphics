@@ -1,7 +1,7 @@
 module PagesHelper
   def page_types_for_select(representation = :singular)
-    Page.embeddable_types.collect do |embeddable_type|
-      [embeddable_type.constantize.model_name.human(count: representation == :plural ? 2 : 1), embeddable_type]
+    Page.creatable_embeddable_classes.collect do |embeddable_class|
+      [embeddable_class.model_name.human(count: representation == :plural ? 2 : 1), embeddable_class.name]
     end.sort_by(&:first)
   end
 end

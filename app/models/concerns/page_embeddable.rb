@@ -5,7 +5,7 @@ module PageEmbeddable
     def acts_as_page_embeddable(options = {})
       raise 'acts_as_page_embeddable cannot be defined twice on the same model' if @embeddable_options
 
-      options = options.reverse_merge(multiple: false, destroy_with_page: false).freeze
+      options = options.reverse_merge(convertible: true, creatable: true, multiple: false, destroy_with_page: false).freeze
 
       if options[:multiple]
         has_many :pages, as: :embeddable, dependent: :destroy
@@ -28,7 +28,15 @@ module PageEmbeddable
     end
 
     def bound_to_page?
-      page_embeddable_options.fetch(:destroy_with_page, false)
+      page_embeddable_options[:destroy_with_page]
+    end
+
+    def convertible?
+      page_embeddable_options[:convertible]
+    end
+
+    def creatable?
+      page_embeddable_options[:creatable]
     end
 
     def page_embeddable_options

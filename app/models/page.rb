@@ -123,6 +123,10 @@ class Page < ActiveRecord::Base
       where.not(id: page.self_and_descendants.pluck(:id))
     end
 
+    def creatable_embeddable_classes
+      EMBEDDABLE_TYPES.map(&:constantize).select(&:creatable?)
+    end
+
     def embedding(*types)
       types = Array(types).flatten.map { |type| type.to_s.classify }
       where(embeddable_type: types.one? ? types.first : types)

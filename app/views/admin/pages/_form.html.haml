@@ -16,13 +16,14 @@
           %h3.panel-title= translate('views.forms.settings')
 
         .panel-body
-          = form.input :embeddable_type, collection: page_types_for_select, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
+          - if @page.new_record? or @page.embeddable_class.convertible?
+            = form.input :embeddable_type, collection: page_types_for_select, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
           #page_embeddable_settings
             = render 'embeddable_settings', fields: form
           - if @page.new_record? or !@page.root?
             = form.input :slug, input_html: { autocomplete: 'off' }, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
             - if Page.assignable_as_parent_of(@page).exists?
-              = form.association :parent, collection: page_sitemap_collection_for_select(Page.assignable_as_parent_of(@page).with_translations), input_html: { rows: 4 }, include_blank: false, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
+              = form.association :parent, collection: page_sitemap_collection_for_select(Page.assignable_as_parent_of(@page)), input_html: { rows: 4 }, include_blank: false, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
           = form.input :state, collection: Page.states.invert, as: :radio_buttons, include_blank: false, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
           = form.input :menu_item, inline_label: translate('simple_form.inline_labels.page.menu_item'), label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
 
