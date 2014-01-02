@@ -20,6 +20,7 @@ class Image < ActiveRecord::Base
   include Authorable
   # include AttachmentPreservable
   include BatchTranslatable
+  include HtmlContainable
   include ImageContainable
   include ImageCroppable
   include PageEmbeddable
@@ -51,6 +52,7 @@ class Image < ActiveRecord::Base
 
   acts_as_authorable default_to_current_user: false
   acts_as_batch_translatable
+  acts_as_html_containable :description
   acts_as_image_containable styles: ->(attachment) { attachment.instance.styles },
                             url: '/system/images/:id/:style.:extension'
   acts_as_page_embeddable multiple: true, destroy_with_page: false
@@ -90,11 +92,6 @@ class Image < ActiveRecord::Base
       end
       custom_styles
     end
-  end
-
-  def description_html
-    template = Liquid::Template.parse(description)
-    template.render(to_liquid).html_safe
   end
 
   def styles

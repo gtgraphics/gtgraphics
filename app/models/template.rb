@@ -16,12 +16,16 @@
 
 class Template < ActiveRecord::Base
   include BatchTranslatable
+  include HtmlContainable
   include PersistenceContextTrackable
 
   VIEW_PATH = Rails.root.join('app/views').freeze
 
   translates :name, :description, fallbacks_for_empty_translations: true
   has_attached_file :screenshot, styles: { thumbnail: '75x75#', preview: '555x' }, url: '/system/templates/screenshots/:id/:style.:extension'
+
+  acts_as_batch_translatable
+  acts_as_html_containable :description
 
   has_many :region_definitions, dependent: :destroy, inverse_of: :template
   has_many :pages, dependent: :destroy, inverse_of: :template
@@ -34,8 +38,6 @@ class Template < ActiveRecord::Base
   after_destroy :default_other_template, if: :default?
 
   scope :defaults, -> { where(default: true) }
-
-  acts_as_batch_translatable
 
   Page.template_types.each do |template_type|
     scope template_type.demodulize.underscore.pluralize, -> { where(type: template_type) }

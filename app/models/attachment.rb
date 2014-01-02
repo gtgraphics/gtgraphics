@@ -17,6 +17,7 @@ class Attachment < ActiveRecord::Base
   include Authorable
   # include AttachmentPreservable
   include BatchTranslatable
+  include HtmlContainable
   include PersistenceContextTrackable
   include Sortable
 
@@ -25,6 +26,7 @@ class Attachment < ActiveRecord::Base
   acts_as_asset_containable url: '/system/:class/:id_partition/:filename'
   acts_as_authorable default_to_current_user: false
   acts_as_batch_translatable
+  acts_as_html_containable :description
   # preserve_attachment_between_requests_for :asset
 
   validates_attachment :asset, presence: true

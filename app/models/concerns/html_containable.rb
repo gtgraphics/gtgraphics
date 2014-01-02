@@ -1,12 +1,16 @@
 module HtmlContainable
   extend ActiveSupport::Concern
 
-  def body_html
-    template = Liquid::Template.parse(self.body)
-    template.render(to_liquid).html_safe
-  end
-
-  def to_liquid
-    page.attributes.slice(*%w(slug path)).merge('title' => title, 'children' => page.children)
+  module ClassMethods
+    def acts_as_html_containable(*attributes)
+      attributes.each do |attribute|
+        class_eval %{
+          def #{attribute}_html
+            template = Liquid::Template.parse(self.#{attribute})
+            template.render(to_liquid).html_safe
+          end
+        }
+      end
+    end
   end
 end

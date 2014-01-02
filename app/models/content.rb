@@ -18,5 +18,10 @@ class Content < ActiveRecord::Base
   translates :title, :body, fallbacks_for_empty_translations: true
 
   acts_as_batch_translatable
+  acts_as_html_containable :body
   acts_as_page_embeddable destroy_with_page: true
+
+  def to_liquid
+    page.attributes.slice(*%w(slug path)).merge('title' => title, 'children' => page.children)
+  end
 end
