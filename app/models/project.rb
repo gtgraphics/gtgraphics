@@ -24,4 +24,8 @@ class Project < ActiveRecord::Base
   def to_liquid
     {} # TODO
   end
+
+  def to_s
+    name
+  end
 end

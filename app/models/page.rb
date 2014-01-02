@@ -230,13 +230,10 @@ class Page < ActiveRecord::Base
     self.class.template_types_hash[embeddable_type]
   end
 
-  def title
-    PageEmbeddable::TITLE_CANDIDATES.collect { |method| embeddable.try(method) }.compact.first
-  end
-
   def to_s
-    title
+    embeddable.try(:to_s) || ''
   end
+  alias_method :title, :to_s
 
   def update_path!
     generate_path
