@@ -18,6 +18,8 @@
           %td= link_to user.full_name, [:admin, user]
           %td.actions
             = action_buttons_for user, size: :mini, icon_only: true
+
+  = paginate @users
             
 - else
   .well.text-center

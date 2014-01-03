@@ -1,0 +1,12 @@
+= simple_form_for [:admin, @snippet], html: { class: 'form-horizontal' } do |form|
+ 
+  = render 'translation_tabs', object: form.object, url: translation_fields_admin_snippets_path
+
+  .tab-content#translations
+    = form.simple_fields_for :translations do |translation_fields|
+      = render 'translation_fields', fields: translation_fields
+
+  .form-group
+    .col-lg-10.col-lg-offset-2
+      = form.button :submit, class: 'btn-primary'
+      = button_link_to translate('helpers.links.cancel'), [:admin, @snippet]

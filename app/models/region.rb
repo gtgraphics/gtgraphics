@@ -12,8 +12,6 @@
 #
 
 class Region < ActiveRecord::Base
-  include HtmlContainable
-  
   EMBEDDED_TYPE = 'Region::Content'.freeze
   REFERENCED_TYPE = 'Snippet'.freeze
   REGIONABLE_TYPES = [REFERENCED_TYPE, EMBEDDED_TYPE].freeze

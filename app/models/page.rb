@@ -26,7 +26,6 @@ class Page < ActiveRecord::Base
   EMBEDDABLE_TYPES = %w(
     ContactForm
     Content
-    Gallery
     Homepage
     Image
     Project

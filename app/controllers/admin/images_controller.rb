@@ -11,7 +11,7 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def index
-    @images = Image.with_translations.includes(:author).sort(params[:sort], params[:direction])
+    @images = Image.with_translations.includes(:author).sort(params[:sort], params[:direction]).page(params[:page])
     respond_with :admin, @images
   end
 
@@ -70,6 +70,7 @@ class Admin::ImagesController < Admin::ApplicationController
   def destroy_multiple
     image_ids = Array(params[:image_ids])
     Image.destroy_all(id: image_ids)
+    flash_for Image, :destroyed, multiple: true
     respond_to do |format|
       format.html { redirect_to :admin_images }
     end

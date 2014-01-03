@@ -1,10 +1,12 @@
 de:
   attributes:
+    author: Autor
     body: Inhalt
     content_type: Dateityp
     created_at: Erstellt am
     description: Beschreibung
     file_size: Dateigröße
+    name: Name
     slug: URL-Token
     title: Titel
     type: Typ
@@ -182,6 +184,9 @@ de:
       shout:
         one: Stern
         other: Sterne
+      snippet:
+        one: Schnipsel
+        other: Schnipsel
       template:
         one: Vorlage
         other: Vorlagen

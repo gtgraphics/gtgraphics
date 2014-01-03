@@ -5,6 +5,12 @@ en:
       settings: Settings
     hints:
       empty: 'No %{model} have been created yet.'
+    pagination:
+      first: "&laquo; First"
+      last: "Last &raquo;"
+      previous: "&lsaquo; Prev"
+      next: "Next &rsaquo;"
+      truncate: "..."
     admin:
       editor:
         target:

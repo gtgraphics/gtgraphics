@@ -1,0 +1,32 @@
+- snippets ||= @snippets
+- actions = true if actions.nil?
+- checkboxes = false if checkboxes.nil?
+
+- if checkboxes
+  = hidden_field_tag 'snippet_ids[]', '', id: nil
+
+%table.table.table-striped
+  %thead
+    %tr
+      - if checkboxes
+        %th.checkbox-cell
+          %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
+      %th= sort_link_for snippets, :name
+      %th= sort_link_for snippets, :author
+      %th= sort_link_for snippets, :updated_at
+      - if actions
+        %th.actions
+  %tbody
+    - snippets.each do |snippet|
+      = content_tag_for :tr, snippet do
+        - if checkboxes
+          %td.checkbox-cell
+            = check_box_tag 'snippet_ids[]', snippet.id, false, class: 'table-checkbox', id: nil
+        %td= link_to snippet.name, [:admin, snippet]
+        %td= snippet.author_name
+        %td= time_ago snippet.updated_at
+        - if actions
+          %td.actions
+            = action_buttons_for snippet, size: :mini, icon_only: true, only: [:show, :destroy]
+
+= paginate snippets

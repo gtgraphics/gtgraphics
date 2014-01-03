@@ -9,7 +9,7 @@ class Admin::MessagesController < Admin::ApplicationController
   end
 
   def index
-    @messages = current_user.messages.sort(params[:sort], params[:direction])
+    @messages = current_user.messages.sort(params[:sort], params[:direction]).page(params[:page])
     respond_with :admin, @messages
   end
 

@@ -2,6 +2,8 @@ module FlashableController
   extend ActiveSupport::Concern
  
   def flash_for(object, *args)
+    return unless request.format.html?
+    
     options = args.extract_options!.reverse_merge(multiple: false)
     action = args.first
 
@@ -30,8 +32,10 @@ module FlashableController
 
     if flashable
       model_name = klass.model_name.human(count: options[:multiple] ? 2 : 1)
-      notice = translate(action, scope: ['helpers.flash', klass.name.underscore], model: model_name, default: String.new).presence
-      notice ||= translate(action, scope: 'helpers.flash.defaults', model: model_name) 
+      action_with_suffix = action.to_s
+      action_with_suffix << '_multiple' if options[:multiple]
+      notice = translate(action_with_suffix, scope: ['helpers.flash', klass.name.underscore], model: model_name, default: String.new).presence
+      notice ||= translate(action_with_suffix, scope: 'helpers.flash.defaults', model: model_name) 
       flash.notice = notice if notice
     end
   end

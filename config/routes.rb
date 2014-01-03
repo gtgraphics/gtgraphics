@@ -21,7 +21,7 @@ GtGraphics::Application.routes.draw do
 
         resources :attachments do
           collection do
-            get 'sort/:sort/:direction', action: :index
+            # get 'sort/:sort/:direction', action: :index
             delete :destroy_multiple
             get :translation_fields
           end
@@ -36,7 +36,7 @@ GtGraphics::Application.routes.draw do
             get :new_attachment, on: :collection
           end
           collection do
-            get 'sort/:sort/:direction', action: :index
+            # get 'sort/:sort/:direction', action: :index
             patch :batch, as: :batch_process
             delete :destroy_multiple
             get :translation_fields
@@ -52,7 +52,7 @@ GtGraphics::Application.routes.draw do
 
         resources :messages, only: [:index, :show, :destroy] do
           collection do
-            get 'sort/:sort/:direction', action: :index
+            # get 'sort/:sort/:direction', action: :index
             delete :destroy_multiple
           end
           member do
@@ -82,6 +82,13 @@ GtGraphics::Application.routes.draw do
         end
 
         resources :shouts
+
+        resources :snippets do
+          collection do
+            delete :destroy_multiple
+            get :translation_fields
+          end
+        end
         
         resources :templates do
           resources :regions, controller: :region_definitions, as: :region_definitions, only: [:new, :create, :edit, :update, :destroy]
@@ -94,7 +101,7 @@ GtGraphics::Application.routes.draw do
 
         resources :users do
           collection do
-            get 'sort/:sort/:direction', action: :index
+            # get 'sort/:sort/:direction', action: :index
           end
           member do
             get :edit_password
@@ -110,7 +117,6 @@ GtGraphics::Application.routes.draw do
         with_options path: '/', only: :show do |route|
           route.resources :homepages, constraints: Routing::PageConstraint.new('Homepage')
           route.resources :contents, constraints: Routing::PageConstraint.new('Content')
-          route.resources :galleries, constraints: Routing::PageConstraint.new('Gallery')
           route.resources :images, constraints: Routing::PageConstraint.new('Image') do
             get :download, on: :member
           end
@@ -122,7 +128,7 @@ GtGraphics::Application.routes.draw do
         end
       end
 
-      %w(Content Gallery Homepage Image Redirection Project ContactForm).each do |page_type|
+      %w(Homepage Content Image Redirection Project ContactForm).each do |page_type|
         root "#{page_type.underscore.pluralize}#show", as: nil, constraints: Routing::RootPageConstraint.new(page_type)
       end
       root to: redirect('/404')

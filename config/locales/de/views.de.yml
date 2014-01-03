@@ -11,6 +11,12 @@ de:
     list_types:
       tiles: Kacheln
       table: Tabelle
+    pagination:
+      first: "&laquo;"
+      last: "&raquo;"
+      previous: "&lsaquo;"
+      next: "&rsaquo;"
+      truncate: "..."
     admin:
       account:
         breadcrumbs:
