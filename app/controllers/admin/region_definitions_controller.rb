@@ -18,7 +18,7 @@ class Admin::RegionDefinitionsController < Admin::ApplicationController
 
   def create
     @region_definition = @template.region_definitions.create(region_definition_params)
-    flash_for @region_definition
+    flash_for @region_definition, :created
     respond_with :admin, @template.becomes(Template), @region_definition, location: [:admin, @template.becomes(Template), :region_definitions]
   end
 

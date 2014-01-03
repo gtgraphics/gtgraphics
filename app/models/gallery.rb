@@ -7,6 +7,7 @@
 #  updated_at :datetime
 #
 
+# DEPRECATED!!!
 class Gallery < ActiveRecord::Base
   include BatchTranslatable
   include HtmlContainable

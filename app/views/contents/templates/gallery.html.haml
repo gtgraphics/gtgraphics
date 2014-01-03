@@ -1,0 +1,14 @@
+%h1
+  = content.title
+  %small Gallery
+
+- unless content.translated_locales.include?(I18n.locale)
+  %p{style: 'border: 1px solid red; padding: 10px;'}
+    Not translated to #{I18n.locale}
+
+= content.body_html
+
+- if page.children.images.any?
+  %ul
+    - page.children.images.each do |image_page|
+      %li= link_to image_page, image_page

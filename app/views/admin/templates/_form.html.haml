@@ -13,7 +13,7 @@
       #template_file_name_container
         = render 'files_fields', fields: form if @template.type.present?
       = form.input :screenshot, as: :image_preview, input_html: { preview_version: :thumbnail }, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
-      = form.input :default, inline_label: translate('simple_form.inline_labels.template.default'), input_html: { disabled: @template.class.count <= 1 }, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
+      = form.input :default, inline_label: translate('simple_form.inline_labels.template.default'), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
 
   .form-group
     .col-lg-offset-2.col-lg-10
