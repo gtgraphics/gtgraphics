@@ -4,35 +4,24 @@
   %head
     %title
       = (["GT Graphics"] + breadcrumbs.collect(&:caption).drop(1)).join(' &middot; ').html_safe
+
     = stylesheet_link_tag 'application', media: 'all', data: { turbolinks_track: true }
+    - if admin_context?
+      = stylesheet_link_tag 'admin', media: 'all', data: { turbolinks_track: true }    
     = yield :stylesheets
+
     = i18n_javascript
     = javascript_include_tag 'application', data: { turbolinks_track: true }
+    - if admin_context?
+      = javascript_include_tag 'admin', data: { turbolinks_track: true }
     = yield :javascripts
+
     = csrf_meta_tags
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'}
     = yield :head
-  %body
-    .brand
-      = link_to 'GT Graphics', :root
-    %ul.nav
-      - Page.in_main_menu.with_translations.each do |page|
-        %li= active_link_to page.title, page
 
-    %ul.nav
-      - available_locales.each do |locale|
-        %li
-          = active_link_to locale: locale do
-            = flag_icon(locale)
-            = translate(locale, scope: :languages)
-
-    %hr
-
-    = render 'breadcrumbs'
-
+  %body{class: "controller-#{controller_name} action-#{action_name}" + (admin_context? ? ' admin' : '')}
     - if content_for? :content
       = yield :content
-    - else
+    - else 
       = yield
-
-    %hr

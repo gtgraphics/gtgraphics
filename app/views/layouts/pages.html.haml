@@ -3,10 +3,36 @@
   %meta{name: 'keywords', content: @page.meta_keywords || ''}
 
 - content_for :content do
+
+  .temp-nav
+    .brand
+      = link_to 'GT Graphics', :root
+    %ul.nav
+      - Page.in_main_menu.with_translations.each do |page|
+        %li= active_link_to page.title, page
+
+    %ul.nav
+      - available_locales.each do |locale|
+        %li
+          = active_link_to locale: locale do
+            = flag_icon(locale)
+            = translate(locale, scope: :languages)
+
+  %hr
+
   - unless @page.published?
     %p
       %strong Warning: This Page has not been published yet.
 
-  = yield
+  .container
+    = render 'breadcrumbs'
+    = render_flash(flash.notice, type: :success)
+    = render_flash(flash.alert, type: :danger)
+
+    #page_content
+      - if content_for? :page_content
+        = yield :page_content
+      - else
+        = yield
 
 = render template: 'layouts/application'

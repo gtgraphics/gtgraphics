@@ -21,7 +21,7 @@ class @Editor.Controls.ViewMode extends @Editor.Controls.ControlGroup
     #  nextViewMode = VIEW_MODE_TRANSITIONS[@editor.viewMode]
     #  @editor.changeViewMode(nextViewMode, true)
 
-    $caret = $('<button />', class: 'btn btn-default btn-mini dropdown-toggle', type: 'button', tabindex: '-1', 'data-toggle': 'dropdown')
+    $caret = $('<button />', class: 'btn btn-default btn-sm dropdown-toggle', type: 'button', tabindex: '-1', 'data-toggle': 'dropdown')
     $caret.append($('<b />', class: 'caret')).appendTo($group)
 
     $dropdown = $('<ul />', class: 'dropdown-menu').appendTo($group)

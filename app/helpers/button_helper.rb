@@ -40,7 +40,14 @@ module ButtonHelper
     type ||= other_type
     type ||= 'default'
     icon = options.delete(:icon)
-    size = options.delete(:size)
+    size = options.delete(:size).to_s
+    size = case size
+    when 'mini' then 'xs'
+    when 'small' then 'sm'
+    when 'large' then 'lg'
+    else size.presence
+    end
+
     block_rendering = options.delete(:block)
 
     css = options.delete(:class).to_s + " btn"

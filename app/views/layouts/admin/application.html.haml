@@ -1,71 +1,62 @@
-!!!
-%html{lang: I18n.locale}
+- content_for :content do   
 
-  %head
-    %title
-      = (["GT Graphics Administration"] + breadcrumbs.collect(&:caption).drop(1)).join(' &middot; ').html_safe
-    = stylesheet_link_tag 'admin', media: 'all', data: { turbolinks_track: true }
-    = yield :stylesheets
-    = i18n_javascript
-    = javascript_include_tag 'admin', data: { turbolinks_track: true }
-    = yield :javascripts
-    = csrf_meta_tags
-    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'}
-
-  %body
-    %nav.navbar.navbar-default.navbar-fixed-top.navbar-inverse{role: 'navigation'}
-      .container
-
-        .navbar-header
-          - if signed_in?
-            %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
-              %span.sr-only Toggle Navigation
-              = icon(:reorder)
-
-          = link_to :admin_root, class: 'navbar-brand' do
-            GT Graphics
-
-        - if signed_in?
-          .navbar-collapse.collapse
-            %ul.nav.navbar-nav
-
-              = active_link_to :admin_pages, wrap_tag: :li do
-                = Page.model_name.human(count: 2)
-                .badge= Page.count
-
-              = active_link_to :admin_templates, wrap_tag: :li do
-                = ::Template.model_name.human(count: 2)
-                .badge= ::Template.count
-
-              = active_link_to :admin_snippets, wrap_tag: :li do
-                = Snippet.model_name.human(count: 2)
-                .badge= Snippet.count
-
-              = active_link_to :admin_images, wrap_tag: :li do
-                = Image.model_name.human(count: 2)
-                .badge= Image.count
-
-              = active_link_to :admin_attachments, wrap_tag: :li do
-                = Attachment.model_name.human(count: 2)
-                .badge= Attachment.count
-
-              = active_link_to :admin_users, wrap_tag: :li do
-                = User.model_name.human(count: 2)
-
-            %ul.list-inline.navbar-text.pull-right
-              %li= active_link_to prepend_icon(:user, current_user.name), :admin_account, id: 'nav_account', class: 'navbar-link'
-              %li
-                = link_to :admin_messages, id: 'nav_messages', class: 'navbar-link', title: Message.model_name.human(count: 2), data: { toggle: 'tooltip', placement: 'bottom' } do
-                  = prepend_icon(:envelope, Message.model_name.human(count: 2), caption_html: { class: 'sr-only' })
-                  - if current_user.messages.unread.size > 0
-                    .badge.badge-mini= current_user.messages.unread.size
-              %li= link_to prepend_icon(:sign_out, translate('helpers.links.sign_out'), id: 'nav_sign_out', caption_html: { class: 'sr-only' }), :admin_sign_out, class: 'navbar-link', method: :delete, title: translate('helpers.links.sign_out'), data: { toggle: 'tooltip', placement: 'bottom', confirm: translate('helpers.confirmations.sign_out') }
-        
+  %nav.navbar.navbar-default.navbar-fixed-top.navbar-inverse{role: 'navigation'}
     .container
-      = render 'breadcrumbs'
-      
-      = render_flash(flash.notice, type: :success)
-      = render_flash(flash.alert, type: :danger)
 
-      #page_content
+      .navbar-header
+        - if signed_in?
+          %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
+            %span.sr-only Toggle Navigation
+            = icon(:reorder)
+
+        = link_to :admin_root, class: 'navbar-brand' do
+          GT Graphics
+
+      - if signed_in?
+        .navbar-collapse.collapse
+          %ul.nav.navbar-nav
+
+            = active_link_to :admin_pages, wrap_tag: :li do
+              = Page.model_name.human(count: 2)
+              .badge= Page.count
+
+            = active_link_to :admin_templates, wrap_tag: :li do
+              = ::Template.model_name.human(count: 2)
+              .badge= ::Template.count
+
+            = active_link_to :admin_snippets, wrap_tag: :li do
+              = Snippet.model_name.human(count: 2)
+              .badge= Snippet.count
+
+            = active_link_to :admin_images, wrap_tag: :li do
+              = Image.model_name.human(count: 2)
+              .badge= Image.count
+
+            = active_link_to :admin_attachments, wrap_tag: :li do
+              = Attachment.model_name.human(count: 2)
+              .badge= Attachment.count
+
+            = active_link_to :admin_users, wrap_tag: :li do
+              = User.model_name.human(count: 2)
+
+          %ul.list-inline.navbar-text.pull-right
+            %li= active_link_to prepend_icon(:user, current_user.name), :admin_account, id: 'nav_account', class: 'navbar-link'
+            %li
+              = link_to :admin_messages, id: 'nav_messages', class: 'navbar-link', title: Message.model_name.human(count: 2), data: { toggle: 'tooltip', placement: 'bottom' } do
+                = prepend_icon(:envelope, Message.model_name.human(count: 2), caption_html: { class: 'sr-only' })
+                - if current_user.messages.unread.size > 0
+                  .badge.badge-mini= current_user.messages.unread.size
+            %li= link_to prepend_icon(:sign_out, translate('helpers.links.sign_out'), id: 'nav_sign_out', caption_html: { class: 'sr-only' }), :admin_sign_out, class: 'navbar-link', method: :delete, title: translate('helpers.links.sign_out'), data: { toggle: 'tooltip', placement: 'bottom', confirm: translate('helpers.confirmations.sign_out') }
+
+  .container
+    = render 'breadcrumbs'
+    = render_flash(flash.notice, type: :success)
+    = render_flash(flash.alert, type: :danger)
+
+    #page_content
+      - if content_for? :content
+        = yield :content
+      - else
         = yield
+
+= render template: 'layouts/application'

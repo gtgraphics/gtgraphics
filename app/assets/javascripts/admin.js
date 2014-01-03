@@ -1,9 +1,2 @@
-//= require jquery
-//= require jquery_ujs
-//= require jquery.turbolinks
-//= require turbolinks
-//= require_tree ./core_ext
-//= require_tree ./libraries
-//= require_tree ./global
 //= require_tree ./admin
 //= require ./editor

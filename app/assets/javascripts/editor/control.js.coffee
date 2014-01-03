@@ -31,7 +31,7 @@ class @Editor.Controls.Base
     @createButton()
 
   createButton: ->
-    $button = $('<button />', type: 'button', class: 'btn btn-default btn-mini', tabindex: '-1')
+    $button = $('<button />', type: 'button', class: 'btn btn-default btn-sm', tabindex: '-1')
     $button
 
   execCommand: ->
