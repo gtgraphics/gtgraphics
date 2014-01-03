@@ -88,7 +88,10 @@ de:
         updated_at: Aktualisierung
         state: Status
       project:
-        url: URL
+        released_on: Release
+      project/translation:
+        client_name: Auftraggeber
+        client_url: URL
       redirection:
         destination_url: URL
         destination_page: Seite

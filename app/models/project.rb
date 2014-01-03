@@ -13,7 +13,7 @@ class Project < ActiveRecord::Base
   include HtmlContainable
   include PageEmbeddable
 
-  translates :name, :description, fallbacks_for_empty_translations: true
+  translates :name, :description, :client_name, :client_url, fallbacks_for_empty_translations: true
 
   acts_as_batch_translatable
   acts_as_html_containable :description

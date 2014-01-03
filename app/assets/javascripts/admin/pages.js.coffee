@@ -1,7 +1,6 @@
-# Path Generator
-
 PATH_PREVIEW_SELECTOR = '.help-block.path-preview'
 PATH_PREVIEW_TYPEAHEAD_TIMEOUT = 500
+
 
 previewPath = ($slug, $parentId) ->
   return if $slug.length == 0 and $parentId.length == 0
@@ -44,7 +43,8 @@ loadEmbeddableEditor = ($embeddableFields, $embeddableSettings, $pageSettings, b
   if embeddableType is ''
     $empty.show()
     $embeddableFields.empty()
-    $embeddableFields.trigger('loaded.embeddable')
+    $embeddableFields.trigger('empty.embeddable')
+    $embeddableFields.trigger('loaded.embeddable', true)
   else
     $empty.hide()
     $embeddableFields.hide()
@@ -60,13 +60,16 @@ loadEmbeddableEditor = ($embeddableFields, $embeddableSettings, $pageSettings, b
       success: (html) ->
         $embeddableFields.html(html).show().prepare()
         $loader.hide()
+        $embeddableFields.trigger('success.embeddable')
+        $embeddableFields.trigger('loaded.embeddable', true)
       error: ->
         $embeddableFields.show()
         $embeddableType.val('').change()
         $loader.hide()
         alert(I18n.translate('pages.embeddable.error'))
-      complete: ->
-        $embeddableFields.trigger('loaded.embeddable')
+        $embeddableFields.trigger('fail.embeddable')
+        $embeddableFields.trigger('loaded.embeddable', false)
+
 
 $(document).ready ->
   timeout = null
@@ -90,21 +93,16 @@ $(document).ready ->
     previewPath($slug, $(@))
 
   # Load Embeddable Editor
-  #$embeddableType = $('#page_embeddable_type')
   $pageSettings = $('#page_settings')
   $embeddableSettings = $('#page_embeddable_settings')
   $embeddableFields = $('#page_embeddable_fields')
 
-  if $embeddableFields.length > 0
-
-    if jQuery.trim($embeddableFields.html()) is ''
-      loadEmbeddableEditor($embeddableFields, $embeddableSettings, $pageSettings) 
+  if $embeddableFields.length > 0 and jQuery.trim($embeddableFields.html()) is ''
+    loadEmbeddableEditor($embeddableFields, $embeddableSettings, $pageSettings) 
 
   $('#page_settings')
-  
     .on 'change', '#page_embeddable_type', ->
       loadEmbeddableEditor($embeddableFields, $embeddableSettings, $pageSettings, true)    
       loadEmbeddableSettings($embeddableFields, $embeddableSettings, $pageSettings)
-
     .on 'change', '#page_embeddable_id', ->
       loadEmbeddableEditor($embeddableFields, $embeddableSettings, $pageSettings)

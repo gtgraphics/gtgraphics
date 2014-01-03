@@ -23,6 +23,8 @@ class Admin::PagesController < Admin::ApplicationController
 
   def new
     @page = Page.new(parent: @parent_page || Page.root)
+    @page.embeddable_type = params[:type] if Page.embeddable_types.include?(params[:type])
+    build_page_embeddable
     respond_with :admin, @page
   end
 
@@ -107,12 +109,7 @@ class Admin::PagesController < Admin::ApplicationController
     respond_to do |format|
       format.html do
         if @page.embeddable_class
-          if @page.embeddable.nil?
-            @page.embeddable = @page.embeddable_class.new
-            if @page.embeddable.class.reflect_on_association(:translations)
-              @page.embeddable.translations.build(locale: I18n.locale)
-            end
-          end
+          build_page_embeddable
           render layout: false
         else
           head :not_found
@@ -161,6 +158,15 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   private
+  def build_page_embeddable
+    if @page.embeddable_class and @page.embeddable.nil?
+      @page.embeddable = @page.embeddable_class.new
+      if @page.embeddable.class.reflect_on_association(:translations)
+        @page.embeddable.translations.build(locale: I18n.locale)
+      end
+    end
+  end
+
   def load_page
     @page = Page.find(params[:id])
   end

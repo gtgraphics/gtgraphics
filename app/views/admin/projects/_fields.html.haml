@@ -5,3 +5,5 @@
 .tab-content#translations
   = fields.simple_fields_for :translations do |translation_fields|
     = render 'admin/projects/translation_fields', fields: translation_fields
+
+= fields.input :released_on, discard_day: true, discard_month: true, start_year: 2000, container_html: { class: 'col-lg-3' }, label_html: { class: 'col-lg-2' }
