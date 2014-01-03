@@ -23,6 +23,8 @@ class Page < ActiveRecord::Base
   include Authorable
   include PersistenceContextTrackable
 
+  DEFAULT_EMBEDDABLE_TYPE = 'Content'
+
   EMBEDDABLE_TYPES = %w(
     ContactForm
     Content
@@ -61,6 +63,7 @@ class Page < ActiveRecord::Base
   validate :validate_no_root_exists, if: :root?
   validate :validate_embeddable_type_is_convertible, on: :update, if: :embeddable_type_changed?
 
+  after_initialize :set_default_embeddable_type, unless: :embeddable_type?
   after_initialize :set_default_template, if: -> { support_template? and template.blank? }
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
@@ -96,6 +99,7 @@ class Page < ActiveRecord::Base
   end
 
   delegate :name, to: :author, prefix: true, allow_nil: true
+  delegate :region_definitions, to: :template
 
   EMBEDDABLE_TYPES.each do |embeddable_type|
     scope embeddable_type.underscore.pluralize, -> { where(embeddable_type: embeddable_type) }
@@ -202,6 +206,10 @@ class Page < ActiveRecord::Base
     !published?
   end
 
+  def render_region(name)
+    regions_hash.fetch(name, '').html_safe
+  end
+
   def regions_hash
     regions.inject(ActiveSupport::HashWithIndifferentAccess.new) do |regions_hash, region|
       regions_hash.merge!(region.definition_label => region.body)
@@ -286,6 +294,10 @@ class Page < ActiveRecord::Base
       end
       Region.destroy_all(id: destroyable_region_ids)
     end
+  end
+
+  def set_default_embeddable_type
+    self.embeddable_type = DEFAULT_EMBEDDABLE_TYPE
   end
 
   def set_default_template
