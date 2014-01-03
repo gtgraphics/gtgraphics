@@ -21,6 +21,7 @@
 
 class Page < ActiveRecord::Base
   include Authorable
+  include BatchTranslatable
   include PersistenceContextTrackable
 
   DEFAULT_EMBEDDABLE_TYPE = 'Content'
@@ -46,12 +47,17 @@ class Page < ActiveRecord::Base
     drafted
   ).freeze
 
+  translates :title, :regions, :meta_description, :meta_keywords
+
+  serialize :regions, ActiveSupport::HashWithIndifferentAccess
+
   acts_as_authorable
+  acts_as_batch_translatable
   acts_as_nested_set
 
   belongs_to :embeddable, polymorphic: true, autosave: true
   belongs_to :template, inverse_of: :pages
-  has_many :regions, dependent: :destroy, inverse_of: :page
+  # has_many :regions, dependent: :destroy, inverse_of: :page
 
   validates :embeddable, presence: true
   validates :embeddable_type, presence: true, inclusion: { in: EMBEDDABLE_TYPES }
@@ -70,7 +76,7 @@ class Page < ActiveRecord::Base
   before_validation :clear_template, unless: :support_template?
   after_save :update_descendants_paths
   after_update :destroy_replaced_embeddables, if: :embeddable_changed?
-  after_update :migrate_or_destroy_regions, if: -> { embeddable_changed? and support_regions? }
+  # after_update :migrate_or_destroy_regions, if: -> { embeddable_changed? and support_regions? }
   before_destroy :destroyable?
   after_destroy :destroy_embeddable
 
@@ -237,13 +243,13 @@ class Page < ActiveRecord::Base
     self.class.template_types_hash[embeddable_type]
   end
 
-  def title(locale = I18n.locale)
-    I18n.with_locale(locale) { to_s }
-  end
+  #def title(locale = I18n.locale)
+  #  I18n.with_locale(locale) { to_s }
+  #end
 
-  def to_s
-    embeddable.try(:to_s) || ''
-  end
+  #def to_s
+  #  embeddable.try(:to_s) || ''
+  #end
 
   def update_path!
     generate_path

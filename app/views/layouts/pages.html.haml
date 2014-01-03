@@ -1,3 +1,7 @@
+- content_for :head do
+  %meta{name: 'description', content: @page.meta_description || ''}
+  %meta{name: 'keywords', content: @page.meta_keywords || ''}
+
 - content_for :content do
   - unless @page.published?
     %p
