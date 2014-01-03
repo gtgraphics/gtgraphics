@@ -18,6 +18,9 @@ class Project < ActiveRecord::Base
 
   translates :name, :description, :client_name, :client_url, fallbacks_for_empty_translations: true
 
+  has_many :project_images, class_name: 'Project::Image', dependent: :destroy
+  has_many :images, through: :project_images
+
   acts_as_batch_translatable
   acts_as_html_containable :description
   acts_as_page_embeddable destroy_with_page: true
