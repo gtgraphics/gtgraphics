@@ -90,7 +90,7 @@ de:
       project:
         released_on: Release
       project/translation:
-        client_name: Auftraggeber
+        client_name: Kunde
         client_url: URL
       redirection:
         destination_url: URL

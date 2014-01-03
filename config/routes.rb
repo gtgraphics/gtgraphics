@@ -108,12 +108,13 @@ GtGraphics::Application.routes.draw do
 
       scope '/', constraints: { id: /[^.]*/ } do
         with_options path: '/', only: :show do |route|
+          route.resources :homepages, constraints: Routing::PageConstraint.new('Homepage')
           route.resources :contents, constraints: Routing::PageConstraint.new('Content')
           route.resources :galleries, constraints: Routing::PageConstraint.new('Gallery')
-          route.resources :homepages, constraints: Routing::PageConstraint.new('Homepage')
           route.resources :images, constraints: Routing::PageConstraint.new('Image') do
             get :download, on: :member
           end
+          route.resources :projects, constraints: Routing::PageConstraint.new('Project')
           route.resources :redirections, constraints: Routing::PageConstraint.new('Redirection')
           route.resources :contact_forms, constraints: Routing::PageConstraint.new('ContactForm') do
             resource :message, controller: :contact_messages, as: :messages, only: [:new, :create]
@@ -121,7 +122,7 @@ GtGraphics::Application.routes.draw do
         end
       end
 
-      %w(Content Gallery Homepage Image Redirection ContactForm).each do |page_type|
+      %w(Content Gallery Homepage Image Redirection Project ContactForm).each do |page_type|
         root "#{page_type.underscore.pluralize}#show", as: nil, constraints: Routing::RootPageConstraint.new(page_type)
       end
       root to: redirect('/404')

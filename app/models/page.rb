@@ -230,10 +230,13 @@ class Page < ActiveRecord::Base
     self.class.template_types_hash[embeddable_type]
   end
 
+  def title(locale = I18n.locale)
+    I18n.with_locale(locale) { to_s }
+  end
+
   def to_s
     embeddable.try(:to_s) || ''
   end
-  alias_method :title, :to_s
 
   def update_path!
     generate_path

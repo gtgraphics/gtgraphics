@@ -3,6 +3,8 @@ class PagesController < ApplicationController
 
   before_action :load_page
 
+  attr_reader :page
+  protected :page
   helper_method :page
 
   breadcrumbs do |b|
@@ -14,6 +16,9 @@ class PagesController < ApplicationController
   class << self
     def embeds(resource_name)
       helper_method resource_name.to_sym
+      attr_reader resource_name.to_sym
+      protected resource_name.to_sym
+
       before_action do
         instance_variable_set("@#{resource_name}", @page.embeddable)
       end
