@@ -20,10 +20,6 @@ class RegionDefinition < ActiveRecord::Base
 
   before_validation :sanitize_label
 
-  def to_param
-    label
-  end
-
   private
   def sanitize_label
     self.label = label.parameterize('_') if label.present?
