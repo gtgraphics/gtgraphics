@@ -22,10 +22,6 @@ class Project < ActiveRecord::Base
   validates :url, url: true, allow_blank: true
 
   def to_liquid
-    {} # TODO
-  end
-
-  def to_s
-    name
+    page.attributes.slice(*%w(slug path)).merge('name' => name, 'children' => page.children)
   end
 end
