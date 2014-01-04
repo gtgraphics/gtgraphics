@@ -4,21 +4,34 @@
 
 - content_for :content do
 
-  .temp-nav
-    .brand
-      = link_to 'GT Graphics', :root
-    %ul.nav
-      - Page.in_main_menu.with_translations.each do |page|
-        %li= active_link_to page.title, page
+  %nav.navbar.navbar-default.navbar-fixed-top.navbar-inverse{role: 'navigation'}
+    .container
 
-    %ul.nav
-      - available_locales.each do |locale|
-        %li
-          = active_link_to locale: locale do
-            = flag_icon(locale)
-            = translate(locale, scope: :languages)
+      .navbar-header
+        - if signed_in?
+          %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
+            %span.sr-only Toggle Navigation
+            = icon(:reorder)
 
-  %hr
+        = link_to :root, class: 'navbar-brand' do
+          GT Graphics
+
+      .navbar-collapse.collapse
+        %ul.nav.navbar-nav
+          - Page.in_main_menu.with_translations.each do |page|
+            = active_link_to page.title, page, wrap_tag: :li
+
+        %ul.nav.navbar-nav.navbar-right
+          %li.dropdown
+            = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+              = flag_icon(locale)
+              %b.caret
+            %ul.dropdown-menu
+              - I18n.available_locales.each do |locale|
+                %li
+                  = active_link_to locale: locale do
+                    = flag_icon(locale)
+                    = translate(locale, scope: :languages)
 
   - unless @page.published?
     %p
@@ -34,5 +47,8 @@
         = yield :page_content
       - else
         = yield
+
+    %hr
+    = link_to 'Admin', :admin_root
 
 = render template: 'layouts/application'

@@ -8,5 +8,7 @@
   = fields.simple_fields_for :translations do |translation_fields|
     = render 'admin/images/translation_fields', fields: translation_fields
 
+%hr
+
 = fields.input :asset, as: :image_preview, required: true, input_html: { preview_version: :thumbnail }, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
 = fields.association :author, label_html: { class: 'col-lg-2' }, container_html: { class: embedded ? 'col-lg-10' : 'col-lg-8' }

@@ -47,9 +47,9 @@ class Page < ActiveRecord::Base
     drafted
   ).freeze
 
-  translates :title, :regions, :meta_description, :meta_keywords
+  translates :contents, :meta_description, :meta_keywords
 
-  serialize :regions, ActiveSupport::HashWithIndifferentAccess
+  store :contents
 
   acts_as_authorable
   acts_as_batch_translatable
@@ -243,13 +243,13 @@ class Page < ActiveRecord::Base
     self.class.template_types_hash[embeddable_type]
   end
 
-  #def title(locale = I18n.locale)
-  #  I18n.with_locale(locale) { to_s }
-  #end
+  def title(locale = I18n.locale)
+    I18n.with_locale(locale) { to_s }
+  end
 
-  #def to_s
-  #  embeddable.try(:to_s) || ''
-  #end
+  def to_s
+    embeddable.try(:to_s) || ''
+  end
 
   def update_path!
     generate_path

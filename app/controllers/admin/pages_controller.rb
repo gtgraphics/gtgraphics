@@ -25,6 +25,7 @@ class Admin::PagesController < Admin::ApplicationController
     @page = Page.new(parent: @parent_page || Page.root)
     @page.embeddable_type = params[:type] if Page.embeddable_types.include?(params[:type])
     build_page_embeddable
+    @page.translations.build(locale: I18n.locale)
     respond_with :admin, @page
   end
 
