@@ -23,7 +23,7 @@ class Project < ActiveRecord::Base
 
   acts_as_batch_translatable
   acts_as_html_containable :description
-  acts_as_page_embeddable destroy_with_page: true
+  acts_as_page_embeddable bound_to_page: true
 
   def to_liquid
     page.attributes.slice(*%w(slug path)).merge('name' => name, 'children' => page.children)

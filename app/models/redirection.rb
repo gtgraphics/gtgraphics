@@ -24,7 +24,7 @@ class Redirection < ActiveRecord::Base
   before_validation :sanitize_destination_url
 
   acts_as_batch_translatable
-  acts_as_page_embeddable destroy_with_page: true
+  acts_as_page_embeddable bound_to_page: true
 
   def destination
     if external?

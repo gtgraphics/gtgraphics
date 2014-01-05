@@ -13,7 +13,7 @@ class Homepage < ActiveRecord::Base
 
   self.template_type = 'Template::Homepage'.freeze
 
-  acts_as_page_embeddable convertible: false, creatable: false, destroy_with_page: true
+  acts_as_page_embeddable convertible: false, creatable: false, bound_to_page: true
 
   has_many :quotes, class_name: 'Homepage::Quote', dependent: :destroy
 
