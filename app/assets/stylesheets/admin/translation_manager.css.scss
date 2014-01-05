@@ -1,0 +1,12 @@
+.remove-locale {
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-left: 3px;
+}
+
+.tab-pane {
+  display: none;
+  &.active {
+    display: block;
+  }
+}

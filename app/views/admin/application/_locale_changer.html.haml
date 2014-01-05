@@ -1,0 +1,21 @@
+%ul.nav.nav-tabs.locale-changer{role: 'navigation'}
+  / List of added locales
+  - available_locales.each do |locale|
+    %li
+      = link_to '#', class: 'change-locale', data: { locale: locale } do
+        = flag_icon(locale)
+        = translate(locale, scope: :languages)
+        %button.btn.btn-xs.btn-danger.remove-locale{type: 'button', title: translate('helpers.links.remove', model: object.class.translation_class.model_name.human), tabindex: '-1', data: { locale: locale, toggle: 'tooltip', placement: 'top' }}
+          = icon(:times)
+
+  / Dropdown Menu with addable locales
+  %li.dropdown.pull-right
+    = link_to '#', class: 'dropdown-toggle add-locale-menu', data: { toggle: 'dropdown' } do
+      = prepend_icon(:plus, translate('helpers.links.add', model: object.class.translation_class.model_name.human))
+      %b.caret
+    %ul.dropdown-menu
+      - available_locales.each do |locale|
+        %li
+          = link_to "#", class: 'add-locale', data: { locale: locale } do
+            = flag_icon(locale)
+            = translate(locale, scope: :languages)

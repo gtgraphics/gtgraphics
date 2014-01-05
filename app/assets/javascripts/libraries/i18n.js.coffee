@@ -8,11 +8,11 @@
     keypathStr = keypathStr.charAt(0).toUpperCase() + keypathStr.slice(1);
     keypathStr.replace('_', ' ')
 
-  $.extend window.I18n,
+  $.extend I18n,
 
     translate: (keypath, options = {}) ->
       if !@translations or @translations.length == 0
-        console.warn 'I18n: no translations found'
+        console.warn "I18n: no translations found (#{keypath})"
         humanizeKeypath(keypath)
       else
         options = $.extend({}, options)

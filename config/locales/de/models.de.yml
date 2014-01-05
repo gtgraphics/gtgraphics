@@ -70,7 +70,8 @@ de:
         resize_height: Höhe
         preserve_aspect_ratio: Seitenverhältnis beibehalten
       image/translation:
-        caption: Beschriftung
+        title: Bildtitel
+        description: Beschriftung
       message:
         sender_name: Absender
         recipient_names: Empfänger
@@ -89,6 +90,9 @@ de:
         menu_item: Menüpunkt?
         updated_at: Aktualisierung
         state: Status
+      page/translation:
+        meta_description: SEO-Beschreibung
+        meta_keywords: SEO-Keywords
       project:
         released_on: Release
       project/translation:

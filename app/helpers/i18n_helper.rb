@@ -6,9 +6,9 @@ module I18nHelper
   def i18n_javascript
     javascript_tag do
       raw %{
-        this.I18n || (this.I18n = {});
-        this.I18n.locale = '#{I18n.locale}';
-        this.I18n.translations = #{I18n.translate(:javascript, default: {}).to_json};
+        I18n || (I18n = {});
+        I18n.locale = '#{I18n.locale}';
+        I18n.translations = #{I18n.translate(:javascript, default: {}).to_json};
       }
     end
   end

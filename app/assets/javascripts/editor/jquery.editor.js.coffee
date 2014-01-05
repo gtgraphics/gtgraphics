@@ -1,4 +1,8 @@
-$.fn.editor = (options = {}) ->
-  @each ->
-    $input = $(@)
-    new Editor($input, options)
+( ($) ->
+  
+  $.fn.editor = (options = {}) ->
+    @each ->
+      $input = $(@)
+      new Editor($input, options)
+
+) jQuery

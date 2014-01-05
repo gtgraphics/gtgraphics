@@ -5,5 +5,8 @@
 /      - output = render "admin/#{@page.embeddable_class.model_name.plural}/translation_fields", fields: translation_fields
 /= output
 
-= nested_form_content_for @page, :embeddable, [:translations, { child_index: microtimestamp }] do |fields|
-  = render "admin/#{@page.embeddable_class.model_name.plural}/translation_fields", fields: fields
+/= nested_form_content_for @page, :embeddable, [:translations, { child_index: microtimestamp }] do |fields|
+/  = render "admin/#{@page.embeddable_class.model_name.plural}/translation_fields", fields: fields
+
+= nested_form_content_for @page, [:translations, { child_index: microtimestamp }] do |fields|
+  = render 'translation_fields', fields: fields

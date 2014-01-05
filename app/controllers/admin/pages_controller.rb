@@ -24,8 +24,12 @@ class Admin::PagesController < Admin::ApplicationController
   def new
     @page = Page.new(parent: @parent_page || Page.root)
     @page.embeddable_type = params[:type] if Page.embeddable_types.include?(params[:type])
+    @page.embeddable_id = params[:embeddable_id] if params.key?(:embeddable_id)
     build_page_embeddable
-    @page.translations.build(locale: I18n.locale)
+
+    @page.embeddable.translations.each do |embedable_translation|
+      @page.translations.build(locale: embedable_translation.locale)
+    end
     respond_with :admin, @page
   end
 
@@ -106,12 +110,20 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def embeddable_fields
-    @page = Page.new(embeddable_type: params.fetch(:embeddable_type), embeddable_id: params[:embeddable_id])
     respond_to do |format|
       format.html do
+        @page = Page.new(embeddable_type: params.fetch(:embeddable_type), embeddable_id: params[:embeddable_id])
         if @page.embeddable_class
           build_page_embeddable
           render layout: false
+        else
+          head :not_found
+        end
+      end
+      format.js do
+        @page = Page.new(embeddable_type: params[:embeddable_type])
+        if @page.embeddable_class
+          build_page_embeddable
         else
           head :not_found
         end
@@ -138,22 +150,23 @@ class Admin::PagesController < Admin::ApplicationController
 
   def translation_fields
     translated_locale = params.fetch(:translated_locale)
-    @page = Page.new(embeddable_type: params.fetch(:embeddable_type))
+    # @page = Page.new(embeddable_type: params.fetch(:embeddable_type))
+    @page = Page.new
+    @page.translations.build(locale: translated_locale)
     respond_to do |format|
       format.html do
-        if @page.embeddable_class and translated_locale.in?(I18n.available_locales.map(&:to_s))
-          @page.embeddable = @page.embeddable_class.new
-          @page.embeddable.translations.build(locale: translated_locale)
-
-          translation_fields_view_path = "admin/#{@page.embeddable_type.underscore.pluralize}/translation_fields"
-          unless File.exists?(Rails.root.join('views', translation_fields_view_path))
-            translation_fields_view_path = "admin/pages/translation_fields"
-          end
-
-          render translation_fields_view_path, layout: false 
-        else
-          head :not_found
-        end
+        #if @page.embeddable_class and translated_locale.in?(I18n.available_locales.map(&:to_s))
+        #  @page.embeddable = @page.embeddable_class.new
+        #  @page.embeddable.translations.build(locale: translated_locale)
+        #  translation_fields_view_path = "admin/#{@page.embeddable_type.underscore.pluralize}/translation_fields"
+        #  unless File.exists?(Rails.root.join('views', translation_fields_view_path))
+        #    translation_fields_view_path = "admin/pages/translation_fields"
+        #  end
+        #  render translation_fields_view_path, layout: false 
+        #else
+        #  head :not_found
+        #end
+        render layout: false
       end
     end
   end
@@ -193,6 +206,6 @@ class Admin::PagesController < Admin::ApplicationController
     when 'Project' then [:id, :released_on, { translations_attributes: [:_destroy, :id, :locale, :name, :description, :client_name, :client_url] }]
     when 'Redirection' then [:id, :external, :destination_page_id, :destination_url, :permanent, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     end
-    page_params.permit(:embeddable_id, :embeddable_type, :slug, :parent_id, :state, :menu_item, :template_id, embeddable_attributes: embeddable_attributes_params || {}) 
+    page_params.permit(:embeddable_id, :embeddable_type, :slug, :parent_id, :state, :menu_item, :template_id, translations_attributes: [:_destroy, :id, :locale, :title, :meta_keywords, :meta_description], embeddable_attributes: embeddable_attributes_params || {}) 
   end
 end

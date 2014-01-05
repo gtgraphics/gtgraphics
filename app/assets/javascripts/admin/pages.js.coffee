@@ -100,7 +100,7 @@ $(document).ready ->
   if $embeddableFields.length > 0 and jQuery.trim($embeddableFields.html()) is ''
     loadEmbeddableEditor($embeddableFields, $embeddableSettings, $pageSettings) 
 
-  $('#page_settings')
+  $pageSettings
     .on 'change', '#page_embeddable_type', ->
       loadEmbeddableEditor($embeddableFields, $embeddableSettings, $pageSettings, true)    
       loadEmbeddableSettings($embeddableFields, $embeddableSettings, $pageSettings)

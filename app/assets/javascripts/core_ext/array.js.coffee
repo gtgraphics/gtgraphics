@@ -1,8 +1,20 @@
 Array::first = ->
   @[0]
 
+Array::include = (element, fromIndex = 0) ->
+  jQuery.inArray(element, @, fromIndex) >= 0
+
 Array::last = ->
   @[@length-1]
+
+Array::remove = (element) ->
+  index = 0
+  while index < @length
+    if @[index] is element
+      @splice(index, 1)
+      index--
+    index++
+  @
 
 Array::sortBy = (property) ->
   @sort (a, b) ->
@@ -14,14 +26,11 @@ Array::sortBy = (property) ->
       throw "at least one element does not contain property: #{property}"
 
 Array::uniq = ->
-  o = {}
-  i = undefined
-  l = @length
-  r = []
-  i = 0
-  while i < l
-    o[this[i]] = this[i]
-    i += 1
-  for i of o
-    r.push o[i]
-  r
+  inputArray = @
+  outputArray = []
+  index = 0
+  while index < inputArray.length
+    element = inputArray[index]
+    outputArray.push(element) unless outputArray.include(element)
+    index++
+  outputArray
