@@ -19,7 +19,7 @@ class Template < ActiveRecord::Base
   include HtmlContainable
   include PersistenceContextTrackable
 
-  VIEW_PATH = Rails.root.join('app/views/templates').freeze
+  VIEW_PATH = Rails.root.join('app/views').freeze
 
   translates :name, :description, fallbacks_for_empty_translations: true
 
@@ -34,9 +34,29 @@ class Template < ActiveRecord::Base
   validates :file_name, presence: true, inclusion: { in: -> { self.class.unassigned_template_files } }
 
   class << self
-    def template_files
-      @@template_files ||= Dir[File.join(VIEW_PATH, '*')].map do |template_file|
-        File.basename(template_file).split('.').first
+    def grouped_template_files
+      template_files.group_by { |template_file| File.join(template_file.split('/')[0..-2]) }
+    end
+
+    def template_lookup_paths
+      @template_lookup_paths ||= %w(templates)
+    end
+    attr_writer :template_lookup_paths
+
+    def template_files(full_paths = false)
+      if self.template_lookup_paths.is_a?(Array)
+        template_lookup_paths = "{#{self.template_lookup_paths.join(',')}}"
+      else
+        template_lookup_paths = self.template_lookup_paths
+      end
+      Dir[File.join([VIEW_PATH, template_lookup_paths, '*'].compact)].map do |template_file|
+        if full_paths
+          template_file
+        else
+          dirname = File.dirname(template_file.gsub(VIEW_PATH.to_s + '/', ''))
+          basename = File.basename(template_file).split('.').first
+          "#{dirname}/#{basename}"          
+        end
       end.sort.freeze
     end
 
