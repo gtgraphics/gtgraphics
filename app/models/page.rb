@@ -59,7 +59,7 @@ class Page < ActiveRecord::Base
   validate :validate_parent_assignability
   validate :validate_template_type
   validate :validate_no_root_exists, if: :root?
-  validate :validate_embeddable_type_is_convertible, on: :update, if: -> { embeddable_type_was.present? }
+  validate :validate_embeddable_type_was_convertible, on: :update, if: -> { embeddable_type_was.present? }
 
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
@@ -227,12 +227,12 @@ class Page < ActiveRecord::Base
     transaction { descendants.each(&:update_path!) }
   end
 
-  def validate_embeddable_type_is_convertible
-    errors.add(:embeddable_type, :invalid) unless self.embeddable_class_was.convertible?
+  def validate_embeddable_type_was_convertible
+    errors.add(:embeddable_type, :invalid) unless embeddable_class_was.convertible?
   end
 
   def validate_no_root_exists
-    errors.add(:parent_id, :taken) if self.class.roots.without(self).any?
+    errors.add(:parent_id, :taken) if self.class.roots.without(self).exists?
   end
 
   def validate_parent_assignability

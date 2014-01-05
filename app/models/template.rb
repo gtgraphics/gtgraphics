@@ -54,7 +54,7 @@ class Template < ActiveRecord::Base
   end
 
   def view_path
-    raise 'no template file defined' if file_name.nil?
+    raise 'no template file defined' if file_name.blank?
     view_path = File.join(VIEW_PATH, file_name)
     raise MissingFile.new(self) unless File.exists?(view_path)
     view_path

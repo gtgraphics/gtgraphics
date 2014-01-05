@@ -18,10 +18,12 @@ class RegionDefinition < ActiveRecord::Base
   validates :label, presence: true, uniqueness: { scope: :template_id }
   validates :template_id, presence: true
 
-  before_validation :sanitize_label
+  before_validation :sanitize_label, if: -> { label.present? }
 
   private
   def sanitize_label
-    self.label = label.parameterize('_') if label.present?
+    I18n.with_locale(I18n.default_locale) do
+      self.label = label.parameterize('_')
+    end
   end
 end

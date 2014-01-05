@@ -25,10 +25,11 @@ class Region < ActiveRecord::Base
   delegate :body, to: :regionable
 
   validates :definition_id, presence: true
+  validates :regionable, presence: true
   validates :regionable_id, presence: true, if: :referenced?
   validates :regionable_type, presence: true, inclusion: { in: REGIONABLE_TYPES }
 
-  after_destroy :destroy_regionable
+  after_destroy :destroy_regionable, if: :embedded?
 
   scope :embedded, -> { where(type: EMBEDDED_TYPE) }
   scope :referenced, -> { where(type: REFERENCED_TYPE) }
@@ -47,10 +48,12 @@ class Region < ActiveRecord::Base
   def embedded?
     regionable_type == EMBEDDED_TYPE
   end
+  alias_method :content?, :embedded?
 
   def referenced?
     regionable_type == REFERENCED_TYPE
   end
+  alias_method :snippet?, :referenced?
 
   def regionable_attributes=(attributes)
     raise 'no regionable type specified' if regionable_class.nil?
@@ -67,6 +70,6 @@ class Region < ActiveRecord::Base
 
   private
   def destroy_regionable
-    regionable.try(:destroy) if embedded?
+    regionable.try(:destroy)
   end
 end
