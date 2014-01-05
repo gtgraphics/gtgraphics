@@ -26,25 +26,18 @@ class Page < ActiveRecord::Base
 
   DEFAULT_EMBEDDABLE_TYPE = 'Content'
 
-  EMBEDDABLE_TYPES = %w(
-    ContactForm
-    Content
-    Homepage
-    Image
-    Project
-    Redirection
-  ).freeze
-
-  RESERVED_SLUGS = %w(
-    images
-    albums
-    galleries
-  ).freeze
-
   STATES = %w(
     published
     hidden
     drafted
+  ).freeze
+
+  EMBEDDABLE_TYPES = %w(
+    Page::ContactForm
+    Page::Homepage
+    Page::Image
+    Page::Project
+    Page::Redirection
   ).freeze
 
   translates :contents, :meta_description, :meta_keywords, fallbacks_for_empty_translations: true
@@ -57,27 +50,22 @@ class Page < ActiveRecord::Base
 
   belongs_to :embeddable, polymorphic: true, autosave: true
   belongs_to :template, inverse_of: :pages
-  # has_many :regions, dependent: :destroy, inverse_of: :page
+  has_many :regions, dependent: :destroy, inverse_of: :page
 
-  validates :embeddable, presence: true
-  validates :embeddable_type, presence: true, inclusion: { in: EMBEDDABLE_TYPES }
-  validates :template_id, presence: true, if: :support_template?
-  validates :slug, presence: { unless: :root? }, uniqueness: { scope: :parent_id }, exclusion: { in: RESERVED_SLUGS, unless: :root? }
+  validates :embeddable_type, inclusion: { in: EMBEDDABLE_TYPES }, allow_blank: true
+  validates :template_id, presence: true
+  validates :slug, presence: { unless: :root? }, uniqueness: { scope: :parent_id }
   validates :path, presence: { unless: :root? }, uniqueness: true, if: -> { slug.present? }
   validate :validate_parent_assignability
   validate :validate_template_type
   validate :validate_no_root_exists, if: :root?
-  validate :validate_embeddable_type_is_convertible, on: :update, if: :embeddable_type_changed?
+  validate :validate_embeddable_type_is_convertible, on: :update, if: -> { embeddable_type_was.present? }
 
-  after_initialize :set_default_embeddable_type, unless: :embeddable_type?
-  after_initialize :set_default_template, if: -> { support_template? and template.blank? }
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
-  before_validation :clear_template, unless: :support_template?
-  after_save :update_descendants_paths
-  after_update :destroy_replaced_embeddables, if: :embeddable_changed?
   before_destroy :destroyable?
-  after_destroy :destroy_embeddable
+  after_save :update_descendants_paths
+  after_update :destroy_replaced_embeddable
 
   default_scope -> { order(:lft) }
   scope :drafted, -> { with_state(:drafted) }
@@ -107,11 +95,11 @@ class Page < ActiveRecord::Base
   delegate :region_definitions, to: :template
 
   EMBEDDABLE_TYPES.each do |embeddable_type|
-    scope embeddable_type.underscore.pluralize, -> { where(embeddable_type: embeddable_type) }
+    scope embeddable_type.demodulize.underscore.pluralize, -> { where(embeddable_type: embeddable_type) }
 
     class_eval %{
-      def #{embeddable_type}?
-        self.embeddable_type == '#{embeddable_type}'
+      def #{embeddable_type.demodulize.underscore}?
+        embeddable_type == '#{embeddable_type}'
       end
     }
   end
@@ -141,20 +129,6 @@ class Page < ActiveRecord::Base
     def states
       STATES.inject(ActiveSupport::HashWithIndifferentAccess.new) do |states, state|
         states.merge!(state => I18n.translate(state, scope: 'page.states'))
-      end.freeze
-    end
-
-    def template_types
-      @@template_types ||= template_types_hash.values.freeze
-    end
-
-    def template_types_hash
-      @@template_types_hash ||= EMBEDDABLE_TYPES.inject({}) do |embeddable_types, embeddable_type|
-        embeddable_class = embeddable_type.constantize rescue nil
-        if embeddable_class and embeddable_class.respond_to?(:template_type)
-          embeddable_types[embeddable_type] = embeddable_class.template_type
-        end
-        embeddable_types
       end.freeze
     end
 
@@ -220,32 +194,8 @@ class Page < ActiveRecord::Base
     I18n.translate(state, scope: 'page.states')
   end
 
-  def support_regions?
-    support_template?
-  end
-
-  def support_template?
-    self.class.template_types_hash.key?(embeddable_type)
-  end
-
-  def template_class
-    template_type.try(:constantize)
-  end
-
   def template_path
-    template.try(:view_path) || raise(MissingTemplate.new(self))
-  end
-
-  def template_type
-    self.class.template_types_hash[embeddable_type]
-  end
-
-  def title(locale = I18n.locale)
-    I18n.with_locale(locale) { to_s }
-  end
-
-  def to_s
-    embeddable.try(:to_s) || ''
+    template.try(:view_path)
   end
 
   def update_path!
@@ -254,16 +204,8 @@ class Page < ActiveRecord::Base
   end
 
   private
-  def clear_template
-    self.template = nil
-  end
-
-  def destroy_embeddable
-    embeddable.destroy if embeddable and embeddable.class.bound_to_page?
-  end
-
-  def destroy_replaced_embeddables
-    embeddable_class_was.destroy(embeddable_id_was) if embeddable_class_was.bound_to_page?
+  def destroy_replaced_embeddable
+    embeddable_class_was.destroy(embeddable_id_was) if embeddable_type_was and embeddable_id_was
   end
 
   def generate_path
@@ -281,14 +223,6 @@ class Page < ActiveRecord::Base
     self.slug = slug.parameterize if slug.present?
   end
 
-  def set_default_embeddable_type
-    self.embeddable_type = DEFAULT_EMBEDDABLE_TYPE
-  end
-
-  def set_default_template
-    self.template = template_class.default
-  end
-
   def update_descendants_paths
     transaction { descendants.each(&:update_path!) }
   end
@@ -303,9 +237,5 @@ class Page < ActiveRecord::Base
 
   def validate_parent_assignability
     errors.add(:parent_id, :invalid) if self_and_descendants.pluck(:id).include?(parent_id)
-  end
-
-  def validate_template_type
-    errors.add(:template_id, :invalid) if template.present? and template.class.name != template_type
   end
 end
