@@ -47,7 +47,7 @@ class Page < ActiveRecord::Base
     drafted
   ).freeze
 
-  translates :contents, :meta_description, :meta_keywords
+  translates :contents, :meta_description, :meta_keywords, fallbacks_for_empty_translations: true
 
   store :contents
 
@@ -76,7 +76,6 @@ class Page < ActiveRecord::Base
   before_validation :clear_template, unless: :support_template?
   after_save :update_descendants_paths
   after_update :destroy_replaced_embeddables, if: :embeddable_changed?
-  # after_update :migrate_or_destroy_regions, if: -> { embeddable_changed? and support_regions? }
   before_destroy :destroyable?
   after_destroy :destroy_embeddable
 
@@ -117,22 +116,13 @@ class Page < ActiveRecord::Base
     }
   end
 
-  class MissingTemplate < Exception
-    attr_reader :page
-
-    def initialize(page)
-      @page = page
-      super "Missing template for #{page.embeddable_type} in #{page.inspect}"
-    end
-  end
-
   class << self
     def assignable_as_parent_of(page)
       where.not(id: page.self_and_descendants.pluck(:id))
     end
 
     def creatable_embeddable_classes
-      EMBEDDABLE_TYPES.map(&:constantize).select(&:creatable?)
+      @@creatable_embeddable_classes ||= embeddable_classes.select(&:creatable?).freeze
     end
 
     def embedding(*types)
@@ -140,14 +130,18 @@ class Page < ActiveRecord::Base
       where(embeddable_type: types.one? ? types.first : types)
     end
 
+    def embeddable_classes
+      @@embeddable_classes ||= embeddable_types.map(&:constantize).freeze
+    end
+
     def embeddable_types
       EMBEDDABLE_TYPES
     end
 
     def states
-      @@states ||= STATES.inject(ActiveSupport::HashWithIndifferentAccess.new) do |states, state|
+      STATES.inject(ActiveSupport::HashWithIndifferentAccess.new) do |states, state|
         states.merge!(state => I18n.translate(state, scope: 'page.states'))
-      end
+      end.freeze
     end
 
     def template_types
@@ -219,17 +213,20 @@ class Page < ActiveRecord::Base
   def regions_hash
     regions.inject(ActiveSupport::HashWithIndifferentAccess.new) do |regions_hash, region|
       regions_hash.merge!(region.definition_label => region.body)
-    end
+    end.freeze
   end
 
   def state_name
     I18n.translate(state, scope: 'page.states')
   end
 
+  def support_regions?
+    support_template?
+  end
+
   def support_template?
     self.class.template_types_hash.key?(embeddable_type)
   end
-  alias_method :support_regions?, :support_template?
 
   def template_class
     template_type.try(:constantize)
@@ -282,24 +279,6 @@ class Page < ActiveRecord::Base
   def generate_slug
     self.slug = title(I18n.default_locale) if new_record? and slug.blank? and title.present?
     self.slug = slug.parameterize if slug.present?
-  end
-
-  def migrate_or_destroy_regions
-    if template_id and template_id_was     
-      region_definitions = template.region_definitions.to_a
-      region_definition_labels = region_definitions.collect(&:label)
-      destroyable_region_ids = []
-      prev_regions = regions.includes(:definition).where(region_definitions: { template_id: template_id_was })
-      prev_regions.each do |region|
-        if region.label.in?(region_definition_labels)
-          region.definition = region_definitions.find { |definition| definition.label == region.label }
-          region.save!
-        else
-          destroyable_region_ids << region.id
-        end
-      end
-      Region.destroy_all(id: destroyable_region_ids)
-    end
   end
 
   def set_default_embeddable_type
