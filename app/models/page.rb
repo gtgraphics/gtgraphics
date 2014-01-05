@@ -24,8 +24,6 @@ class Page < ActiveRecord::Base
   include BatchTranslatable
   include PersistenceContextTrackable
 
-  DEFAULT_EMBEDDABLE_TYPE = 'Content'
-
   STATES = %w(
     published
     hidden
@@ -33,6 +31,7 @@ class Page < ActiveRecord::Base
   ).freeze
 
   EMBEDDABLE_TYPES = %w(
+    Page::Content
     Page::ContactForm
     Page::Homepage
     Page::Image
@@ -53,11 +52,11 @@ class Page < ActiveRecord::Base
   has_many :regions, dependent: :destroy, inverse_of: :page
 
   validates :embeddable_type, inclusion: { in: EMBEDDABLE_TYPES }, allow_blank: true
-  validates :template_id, presence: true
+  validates :template_id, presence: true # FIXME Redirection has no template
   validates :slug, presence: { unless: :root? }, uniqueness: { scope: :parent_id }
   validates :path, presence: { unless: :root? }, uniqueness: true, if: -> { slug.present? }
   validate :validate_parent_assignability
-  validate :validate_template_type
+  validate :validate_template
   validate :validate_no_root_exists, if: :root?
   validate :validate_embeddable_type_was_convertible, on: :update, if: -> { embeddable_type_was.present? }
 
@@ -237,5 +236,12 @@ class Page < ActiveRecord::Base
 
   def validate_parent_assignability
     errors.add(:parent_id, :invalid) if self_and_descendants.pluck(:id).include?(parent_id)
+  end
+
+  def validate_template
+    # TODO
+    # If Page embedding Page::Project -> Template::Project or Template
+    # If Page without embedding -> Template
+    # errors.add(:template_id, :invalid) if embeddable_type
   end
 end

@@ -3,7 +3,7 @@ class Page < ActiveRecord::Base
     include PageEmbeddable
     include Templatable
 
-    self.template_type = 'Template::Project'
+    belongs_to :template, class_name: 'Template::Project'
 
     acts_as_page_embeddable
   end
