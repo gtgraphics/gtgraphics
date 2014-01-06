@@ -23,10 +23,8 @@ class Image < ActiveRecord::Base
   include HtmlContainable
   include ImageContainable
   include ImageCroppable
-  include PageEmbeddable
   include PersistenceContextTrackable
   include Sortable
-  include Templatable
 
   CONTENT_TYPES = ImageContainable::CONTENT_TYPES
   EXIF_CAPABLE_CONTENT_TYPES = [Mime::JPEG].freeze
@@ -51,7 +49,6 @@ class Image < ActiveRecord::Base
   store :customization_options, accessors: [:crop_x, :crop_y, :crop_width, :crop_height]
 
   acts_as_authorable default_to_current_user: false
-  acts_as_batch_translatable
   acts_as_html_containable :description
   acts_as_image_containable styles: ->(attachment) { attachment.instance.styles },
                             url: '/system/images/:id/:style.:extension'
@@ -65,7 +62,7 @@ class Image < ActiveRecord::Base
 
   serialize :exif_data, OpenStruct
 
-  validates_attachment :asset, presence: true, content_type: { content_type: ImageContainable::CONTENT_TYPES }
+  validates_attachment :asset, presence: true, content_type: { content_type: CONTENT_TYPES }
 
   before_validation :set_default_title
   before_save :set_exif_data, if: :asset_changed?
@@ -73,7 +70,7 @@ class Image < ActiveRecord::Base
 
   class << self
     def content_types
-      ImageContainable::CONTENT_TYPES
+      CONTENT_TYPES
     end
   end
 
@@ -98,10 +95,6 @@ class Image < ActiveRecord::Base
     STYLES.reverse_merge(custom_styles_hash).deep_symbolize_keys
   end
 
-  def to_liquid
-    {} # TODO
-  end
-
   def to_param
     "#{id}-#{title.parameterize}"
   end
@@ -116,7 +109,7 @@ class Image < ActiveRecord::Base
   end
 
   def set_default_title
-    translation.title = File.basename(asset_file_name, '.*').humanize if asset_file_name.present? and translation.title.blank?
+    self.title = File.basename(asset_file_name, '.*').humanize if asset_file_name.present? and title.blank?
   end
 
   def set_exif_data

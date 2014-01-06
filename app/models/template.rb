@@ -44,16 +44,17 @@ class Template < ActiveRecord::Base
     attr_writer :template_lookup_paths
 
     def template_files(full_paths = false)
-      if self.template_lookup_paths.is_a?(Array)
-        template_lookup_paths = "{#{self.template_lookup_paths.join(',')}}"
+      template_lookup_paths = Array(self.template_lookup_paths)
+      if template_lookup_paths.one?
+        template_lookup_paths = self.template_lookup_paths.first
       else
-        template_lookup_paths = self.template_lookup_paths
+        template_lookup_paths = "{#{self.template_lookup_paths.join(',')}}"
       end
       Dir[File.join([VIEW_PATH, template_lookup_paths, '*'].compact)].map do |template_file|
         if full_paths
-          template_file
+          template_fileruf
         else
-          dirname = File.dirname(template_file.gsub(VIEW_PATH.to_s + '/', ''))
+          dirname = File.dirname(template_file.gsub("#{VIEW_PATH}/", ''))
           basename = File.basename(template_file).split('.').first
           "#{dirname}/#{basename}"          
         end

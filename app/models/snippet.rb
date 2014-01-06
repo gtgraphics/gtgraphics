@@ -14,7 +14,7 @@ class Snippet < ActiveRecord::Base
   include HtmlContainable
   include Sortable
 
-  has_many :regions, as: :regionable, dependent: :destroy
+  has_many :regions, as: :concrete_region, dependent: :destroy
 
   translates :name, :body, fallbacks_for_empty_translations: true
 

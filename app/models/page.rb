@@ -39,29 +39,28 @@ class Page < ActiveRecord::Base
     Page::Redirection
   ).freeze
 
-  translates :contents, :meta_description, :meta_keywords, fallbacks_for_empty_translations: true
-
-  store :contents
+  translates :title, :meta_description, :meta_keywords, fallbacks_for_empty_translations: true
 
   acts_as_authorable
   acts_as_batch_translatable
   acts_as_nested_set
 
   belongs_to :embeddable, polymorphic: true, autosave: true
-  belongs_to :template, inverse_of: :pages
-  has_many :regions, dependent: :destroy, inverse_of: :page
+  has_many :regions, dependent: :destroy
 
+  validates :embeddable, presence: true
   validates :embeddable_type, inclusion: { in: EMBEDDABLE_TYPES }, allow_blank: true
   validates :template_id, presence: true # FIXME Redirection has no template
   validates :slug, presence: { unless: :root? }, uniqueness: { scope: :parent_id }
   validates :path, presence: { unless: :root? }, uniqueness: true, if: -> { slug.present? }
   validate :validate_parent_assignability
-  validate :validate_template
+  validate :validate_template, if: :embeddable_type?
   validate :validate_no_root_exists, if: :root?
   validate :validate_embeddable_type_was_convertible, on: :update, if: -> { embeddable_type_was.present? }
 
   before_validation :generate_slug
   before_validation :generate_path, if: -> { slug.present? }
+  before_save :sanitize_regions
   before_destroy :destroyable?
   after_save :update_descendants_paths
   after_update :destroy_replaced_embeddable
@@ -91,7 +90,6 @@ class Page < ActiveRecord::Base
   end
 
   delegate :name, to: :author, prefix: true, allow_nil: true
-  delegate :region_definitions, to: :template
 
   EMBEDDABLE_TYPES.each do |embeddable_type|
     scope embeddable_type.demodulize.underscore.pluralize, -> { where(embeddable_type: embeddable_type) }
@@ -180,17 +178,15 @@ class Page < ActiveRecord::Base
   end
 
   def render_region(name)
-    regions_hash.fetch(name, '').html_safe
-  end
-
-  def regions_hash
-    regions.inject(ActiveSupport::HashWithIndifferentAccess.new) do |regions_hash, region|
-      regions_hash.merge!(region.definition_label => region.body)
-    end.freeze
+    regions.fetch(name, '').html_safe
   end
 
   def state_name
     I18n.translate(state, scope: 'page.states')
+  end
+
+  def template
+    embeddable.template if embeddable_class.support_template?
   end
 
   def template_path
@@ -222,12 +218,20 @@ class Page < ActiveRecord::Base
     self.slug = slug.parameterize if slug.present?
   end
 
+  def sanitize_regions
+    if embeddable_class.support_regions?
+      self.regions = regions.slice(template.region_definitions) # TODO
+    else
+      regions.clear
+    end
+  end
+
   def update_descendants_paths
     transaction { descendants.each(&:update_path!) }
   end
 
   def validate_embeddable_type_was_convertible
-    errors.add(:embeddable_type, :invalid) unless embeddable_class_was.convertible?
+    erezeptrrors.add(:embeddable_type, :invalid) unless embeddable_class_was.convertible?
   end
 
   def validate_no_root_exists

@@ -2,12 +2,8 @@ module PageEmbeddable
   extend ActiveSupport::Concern
 
   module ClassMethods
-    def acts_as_page_embeddable(options = {})
-      raise 'acts_as_page_embeddable cannot be defined twice on the same model' if @embeddable_options
-
-      options = options.reverse_merge(convertible: true, creatable: true).freeze
-      @page_embeddable_options = options
-
+    def acts_as_page_type(options = {})
+      @page_type_options = options.reverse_merge(convertible: true, creatable: true, template_class: nil).freeze
       include Extensions
     end
   end
@@ -16,23 +12,36 @@ module PageEmbeddable
     extend ActiveSupport::Concern
 
     included do
+      belongs_to :template, class_name: template_type if support_template?
       has_one :page, as: :embeddable, dependent: :destroy
-      has_many :regions, -> { readonly }, through: :page
+      has_many :regions, as: :regionable, dependent: :destroy if support_regions?
 
-      delegate :slug, :path, :published?, :hidden?, to: :page, allow_nil: true
+      delegate :slug, :path, to: :page, allow_nil: true
     end
 
     module ClassMethods
       def convertible?
-        page_embeddable_options[:convertible]
+        @page_type_options[:convertible]
       end
 
       def creatable?
-        page_embeddable_options[:creatable]
+        @page_type_options[:creatable]
       end
 
-      def page_embeddable_options
-        @page_embeddable_options ||= {}
+      def support_regions?
+        support_template?
+      end
+
+      def support_template?
+        template_type.present?
+      end
+
+      def template_class
+        template_type.try(:constantize)
+      end
+
+      def template_type
+        @page_type_options[:template_class].try(:to_s)
       end
     end
   end

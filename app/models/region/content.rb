@@ -9,10 +9,10 @@ class Region < ActiveRecord::Base
   class Content < ActiveRecord::Base
     include BatchTranslatable
 
-    has_one :region, as: :regionable, dependent: :destroy
-    
     translates :body, fallbacks_for_empty_translations: true
 
     acts_as_batch_translatable
+
+    has_one :region, as: :concrete_region, dependent: :destroy
   end
 end

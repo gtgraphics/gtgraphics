@@ -2,74 +2,80 @@
 #
 # Table name: regions
 #
-#  id              :integer          not null, primary key
-#  definition_id   :integer
-#  page_id         :integer
-#  created_at      :datetime
-#  updated_at      :datetime
-#  regionable_id   :integer
-#  regionable_type :string(255)
+#  id                   :integer          not null, primary key
+#  definition_id        :integer
+#  page_id              :integer
+#  created_at           :datetime
+#  updated_at           :datetime
+#  concrete_region_id   :integer
+#  concrete_region_type :string(255)
+#  regionable_id        :integer
+#  regionable_type      :string(255)
 #
 
 class Region < ActiveRecord::Base
   EMBEDDED_TYPE = 'Region::Content'.freeze
   REFERENCED_TYPE = 'Snippet'.freeze
-  REGIONABLE_TYPES = [REFERENCED_TYPE, EMBEDDED_TYPE].freeze
+  CONCRETE_REGION_TYPES = [REFERENCED_TYPE, EMBEDDED_TYPE].freeze
 
   belongs_to :definition, class_name: 'RegionDefinition', inverse_of: :regions
-  belongs_to :page, inverse_of: :regions
-  belongs_to :regionable, polymorphic: true
+  belongs_to :regionable, polymorphic: true # e.g. Page::Content
+  belongs_to :concrete_region, polymorphic: true
   has_one :template, -> { readonly }, through: :definition
 
   delegate :label, to: :definition, prefix: true, allow_nil: true
-  delegate :body, to: :regionable
+  delegate :body, to: :concrete_region
 
   validates :definition_id, presence: true
+  validates :concrete_region, presence: true, if: :embedded?
+  validates :concrete_region_id, presence: true, if: :referenced?
+  validates :concrete_region_type, presence: true, inclusion: { in: CONCRETE_REGION_TYPES }
   validates :regionable, presence: true
-  validates :regionable_id, presence: true, if: :referenced?
-  validates :regionable_type, presence: true, inclusion: { in: REGIONABLE_TYPES }
 
-  after_destroy :destroy_regionable, if: :embedded?
+  after_destroy :destroy_concrete_region, if: :embedded?
 
   scope :embedded, -> { where(type: EMBEDDED_TYPE) }
   scope :referenced, -> { where(type: REFERENCED_TYPE) }
 
+  accepts_nested_attributes_for :concrete_region
+  accepts_nested_attributes_for :regionable
+
   class << self
-    def regionable_types
-      REGIONABLE_TYPES
+    def concrete_region_types
+      CONCRETE_REGION_TYPES
     end
   end
 
-  def build_regionable(attributes = {})
-    raise 'invalid regionable type' unless regionable_class
-    self.regionable = regionable_class.new(attributes)
+  def build_concrete_region(attributes = {})
+    raise 'invalid region type' unless concrete_region_class
+    self.concrete_region = concrete_region_class.new(attributes)
+  end
+
+  def concrete_region_attributes=(attributes)
+    raise 'invalid region type' unless concrete_region_class
+    if concrete_region_type_changed? or new_record?
+      build_concrete_region(attributes)
+    else
+      concrete_region.attributes = attributes
+    end
+  end
+
+  def concrete_region_class
+    concrete_region_type.in?(CONCRETE_REGION_TYPES) ? concrete_region_type.constantize : nil
   end
 
   def embedded?
-    regionable_type == EMBEDDED_TYPE
+    concrete_region_type == EMBEDDED_TYPE
   end
   alias_method :content?, :embedded?
 
   def referenced?
-    regionable_type == REFERENCED_TYPE
+    concrete_region_type == REFERENCED_TYPE
   end
   alias_method :snippet?, :referenced?
 
-  def regionable_attributes=(attributes)
-    raise 'no regionable type specified' if regionable_class.nil?
-    if regionable_type_changed? or new_record?
-      build_regionable(attributes)
-    else
-      self.regionable.attributes = attributes
-    end
-  end
-
-  def regionable_class
-    regionable_type.in?(REGIONABLE_TYPES) ? regionable_type.constantize : nil
-  end
-
   private
-  def destroy_regionable
-    regionable.try(:destroy)
+  def destroy_concrete_region
+    concrete_region.try(:destroy)
   end
 end

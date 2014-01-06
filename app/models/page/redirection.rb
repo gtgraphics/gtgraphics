@@ -3,18 +3,15 @@ class Page < ActiveRecord::Base
     include BatchTranslatable
     include PageEmbeddable
 
-    belongs_to :destination_page, class_name: 'Page'
+    acts_as_page_embeddable
 
-    translates :title, fallbacks_for_empty_translations: true
+    belongs_to :destination_page, class_name: 'Page'
 
     validates :destination_page_id, presence: true, if: :internal?
     validates :destination_url, presence: true, url: true, if: :external?
 
     before_validation :clear_obsolete_destination_attribute
     before_validation :sanitize_destination_url
-
-    acts_as_batch_translatable
-    acts_as_page_embeddable
 
     def destination
       if external?

@@ -2,7 +2,6 @@ class Page < ActiveRecord::Base
   class Content < ActiveRecord::Base
     include PageEmbeddable
     
-    belongs_to :page
-    belongs_to :template, class_name: 'Template::Content'
+    acts_as_page_embeddable template_class: 'Template::Content'
   end
 end
