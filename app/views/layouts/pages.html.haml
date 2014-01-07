@@ -1,7 +1,9 @@
 - content_for :head do
   %meta{name: 'description', content: @page.meta_description || ''}
   %meta{name: 'keywords', content: @page.meta_keywords || ''}
-
+  - @page.translated_locales.each do |translated_locale|
+    %link{rel: 'alternate', hreflang: translated_locale, href: page_url(locale: translated_locale)}
+    
 - content_for :content do
 
   %nav.navbar.navbar-default.navbar-fixed-top.navbar-inverse{role: 'navigation'}
@@ -28,10 +30,9 @@
               %b.caret
             %ul.dropdown-menu
               - I18n.available_locales.each do |locale|
-                %li
-                  = active_link_to locale: locale do
-                    = flag_icon(locale)
-                    = translate(locale, scope: :languages)
+                = active_link_to locale: locale, wrap_tag: :li, hreflang: locale, lang: locale do
+                  = flag_icon(locale)
+                  = translate(locale, scope: :languages, locale: locale)
 
   - unless @page.published?
     %p

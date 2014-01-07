@@ -1,4 +1,4 @@
-class PageSitemapPresenter < Presenter
+class PageTreePresenter < Presenter
   presents :pages
 
   def checkboxes?
