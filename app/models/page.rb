@@ -41,6 +41,8 @@ class Page < ActiveRecord::Base
 
   translates :title, :meta_description, :meta_keywords, fallbacks_for_empty_translations: true
 
+  serialize :meta_keywords, Array
+
   acts_as_authorable
   acts_as_batch_translatable
   acts_as_nested_set
@@ -63,7 +65,7 @@ class Page < ActiveRecord::Base
   before_save :sanitize_regions
   before_destroy :destroyable?
   after_save :update_descendants_paths
-  after_update :destroy_replaced_embeddable
+  after_update :destroy_replaced_embeddable, if: :embeddable_changed?
 
   default_scope -> { order(:lft) }
   scope :drafted, -> { with_state(:drafted) }
@@ -90,6 +92,7 @@ class Page < ActiveRecord::Base
   end
 
   delegate :name, to: :author, prefix: true, allow_nil: true
+  delegate :meta_keyword_tokens, :meta_keyword_tokens=, to: :translation
 
   EMBEDDABLE_TYPES.each do |embeddable_type|
     scope embeddable_type.demodulize.underscore.pluralize, -> { where(embeddable_type: embeddable_type) }
@@ -200,7 +203,7 @@ class Page < ActiveRecord::Base
 
   private
   def destroy_replaced_embeddable
-    embeddable_class_was.destroy(embeddable_id_was) if embeddable_type_was and embeddable_id_was
+    embeddable_class_was.destroy(embeddable_id_was) if embeddable_type_changed? and embeddable_id_changed? # if embeddable_type_was and embeddable_id_was
   end
 
   def generate_path
@@ -220,9 +223,9 @@ class Page < ActiveRecord::Base
 
   def sanitize_regions
     if embeddable_class.support_regions?
-      self.regions = regions.slice(template.region_definitions) # TODO
+      # self.regions = regions.slice(template.region_definitions) # TODO
     else
-      regions.clear
+      # regions.clear
     end
   end
 
@@ -231,7 +234,7 @@ class Page < ActiveRecord::Base
   end
 
   def validate_embeddable_type_was_convertible
-    erezeptrrors.add(:embeddable_type, :invalid) unless embeddable_class_was.convertible?
+    errors.add(:embeddable_type, :invalid) unless embeddable_class_was.convertible?
   end
 
   def validate_no_root_exists

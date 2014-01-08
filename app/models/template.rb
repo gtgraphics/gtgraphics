@@ -5,7 +5,6 @@
 #  id                      :integer          not null, primary key
 #  file_name               :string(255)
 #  type                    :string(255)
-#  default                 :boolean          default(FALSE), not null
 #  screenshot_file_name    :string(255)
 #  screenshot_content_type :string(255)
 #  screenshot_file_size    :integer
@@ -19,7 +18,7 @@ class Template < ActiveRecord::Base
   include HtmlContainable
   include PersistenceContextTrackable
 
-  VIEW_PATH = Rails.root.join('app/views').freeze
+  VIEW_ROOT = "#{Rails.root}/app/views"
 
   translates :name, :description, fallbacks_for_empty_translations: true
 
@@ -31,32 +30,20 @@ class Template < ActiveRecord::Base
   has_many :region_definitions, dependent: :destroy, inverse_of: :template
   has_many :pages, dependent: :destroy, inverse_of: :template
 
-  validates :file_name, presence: true, inclusion: { in: -> { self.class.unassigned_template_files } }
+  validates :type, presence: true, exclusion: { in: [self.name] }, on: :create
+  validates :file_name, presence: true, inclusion: { in: ->(template) { template.class.unassigned_template_files } }
+
+  attr_readonly :type
 
   class << self
-    def grouped_template_files
-      template_files.group_by { |template_file| File.join(template_file.split('/')[0..-2]) }
-    end
-
-    def template_lookup_paths
-      @template_lookup_paths ||= %w(templates)
-    end
-    attr_writer :template_lookup_paths
+    attr_accessor :template_lookup_path
 
     def template_files(full_paths = false)
-      template_lookup_paths = Array(self.template_lookup_paths)
-      if template_lookup_paths.one?
-        template_lookup_paths = self.template_lookup_paths.first
-      else
-        template_lookup_paths = "{#{self.template_lookup_paths.join(',')}}"
-      end
-      Dir[File.join([VIEW_PATH, template_lookup_paths, '*'].compact)].map do |template_file|
+      Dir[File.join([VIEW_ROOT, template_lookup_path, '*'].compact)].map do |template_file|
         if full_paths
-          template_fileruf
+          template_file
         else
-          dirname = File.dirname(template_file.gsub("#{VIEW_PATH}/", ''))
-          basename = File.basename(template_file).split('.').first
-          "#{dirname}/#{basename}"          
+          File.basename(template_file).split('.').first
         end
       end.sort.freeze
     end
@@ -76,8 +63,6 @@ class Template < ActiveRecord::Base
 
   def view_path
     raise 'no template file defined' if file_name.blank?
-    view_path = File.join(VIEW_PATH, file_name)
-    raise MissingFile.new(self) unless File.exists?(view_path)
-    view_path
+    File.join(self.class.template_lookup_path, file_name)
   end
 end

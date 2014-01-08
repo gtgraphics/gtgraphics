@@ -2,7 +2,7 @@ module PageEmbeddable
   extend ActiveSupport::Concern
 
   module ClassMethods
-    def acts_as_page_type(options = {})
+    def acts_as_page_embeddable(options = {})
       @page_type_options = options.reverse_merge(convertible: true, creatable: true, template_class: nil).freeze
       include Extensions
     end
@@ -12,6 +12,8 @@ module PageEmbeddable
     extend ActiveSupport::Concern
 
     included do
+      self.table_name = "#{self.model_name.element}_pages"
+
       belongs_to :template, class_name: template_type if support_template?
       has_one :page, as: :embeddable, dependent: :destroy
       has_many :regions, as: :regionable, dependent: :destroy if support_regions?

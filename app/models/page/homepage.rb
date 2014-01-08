@@ -1,15 +1,15 @@
 # == Schema Information
 #
-# Table name: content_pages
+# Table name: homepage_pages
 #
 #  id          :integer          not null, primary key
 #  template_id :integer
 #
 
 class Page < ActiveRecord::Base
-  class Content < ActiveRecord::Base
+  class Homepage < ActiveRecord::Base
     include PageEmbeddable
     
-    acts_as_page_embeddable template_class: 'Template::Content'
+    acts_as_page_embeddable template_class: 'Template::Homepage'
   end
 end

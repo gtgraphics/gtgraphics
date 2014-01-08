@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: redirection_pages
+#
+#  id                  :integer          not null, primary key
+#  external            :boolean          default(FALSE), not null
+#  destination_page_id :integer
+#  destination_url     :string(255)
+#  permanent           :boolean          default(FALSE), not null
+#
+
 class Page < ActiveRecord::Base
   class Redirection < ActiveRecord::Base
     include BatchTranslatable

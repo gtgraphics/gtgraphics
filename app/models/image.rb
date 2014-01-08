@@ -20,7 +20,6 @@ class Image < ActiveRecord::Base
   include Authorable
   # include AttachmentPreservable
   include BatchTranslatable
-  include HtmlContainable
   include ImageContainable
   include ImageCroppable
   include PersistenceContextTrackable
@@ -38,21 +37,17 @@ class Image < ActiveRecord::Base
     large: { geometry: '1920x1080', processors: [:manual_cropper] }
   }.freeze
 
-  self.template_type = 'Template::Image'.freeze
-
-  attr_readonly :type
-
   has_many :custom_styles, class_name: 'Image::Style', autosave: true, inverse_of: :image, dependent: :destroy
+  has_many :image_pages, class_name: 'Page::Image', dependent: :destroy
+  has_many :pages, through: :image_pages
 
   translates :title, :description, fallbacks_for_empty_translations: true
 
   store :customization_options, accessors: [:crop_x, :crop_y, :crop_width, :crop_height]
 
   acts_as_authorable default_to_current_user: false
-  acts_as_html_containable :description
   acts_as_image_containable styles: ->(attachment) { attachment.instance.styles },
                             url: '/system/images/:id/:style.:extension'
-  acts_as_page_embeddable multiple: true, destroy_with_page: false
   acts_as_sortable do |by|
     by.author { |dir| [User.arel_table[:first_name].send(dir.to_sym), User.arel_table[:last_name].send(dir.to_sym)] }
     by.title(default: true) { |column, dir| Image::Translation.arel_table[column].send(dir.to_sym) }
@@ -91,12 +86,21 @@ class Image < ActiveRecord::Base
     end
   end
 
+  def description_html
+    template = Liquid::Template.parse(description)
+    template.render(to_liquid).html_safe
+  end
+
   def styles
     STYLES.reverse_merge(custom_styles_hash).deep_symbolize_keys
   end
 
   def to_param
     "#{id}-#{title.parameterize}"
+  end
+
+  def to_liquid
+    attributes.slice(*%w(title width height)).merge(customization_options).merge('author' => author_name)
   end
 
   def to_s

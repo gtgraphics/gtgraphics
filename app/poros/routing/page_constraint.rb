@@ -1,6 +1,6 @@
 class Routing::PageConstraint
   def initialize(type)
-    @type = type
+    @type = "Page::#{type}"
   end
   
   def matches?(request)

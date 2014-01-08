@@ -5,6 +5,10 @@
     %title
       = (["GT Graphics"] + breadcrumbs.collect(&:caption).drop(1)).join(' &middot; ').html_safe
 
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'}
+    = csrf_meta_tags
+    = yield :head
+
     = stylesheet_link_tag 'application', media: 'all', data: { turbolinks_track: true }
     - if admin_context?
       = stylesheet_link_tag 'admin', media: 'all', data: { turbolinks_track: true }    
@@ -14,10 +18,6 @@
     - if admin_context?
       = javascript_include_tag 'admin', data: { turbolinks_track: true }
     = yield :javascripts
-
-    = csrf_meta_tags
-    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'}
-    = yield :head
 
   %body{class: admin_context? ? 'admin' : nil, data: { controller: controller_name, action: action_name, locale: I18n.locale }}
     = i18n_javascript

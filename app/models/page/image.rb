@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: image_pages
+#
+#  id          :integer          not null, primary key
+#  template_id :integer
+#  image_id    :integer
+#
+
 class Page < ActiveRecord::Base
   class Image < ActiveRecord::Base
     include PageEmbeddable

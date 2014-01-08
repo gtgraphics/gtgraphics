@@ -1,8 +1,8 @@
 - content_for :head do
   %meta{name: 'description', content: @page.meta_description || ''}
-  %meta{name: 'keywords', content: @page.meta_keywords || ''}
-  - @page.translated_locales.each do |translated_locale|
-    %link{rel: 'alternate', hreflang: translated_locale, href: page_url(locale: translated_locale)}
+  %meta{name: 'keywords', content: @page.meta_keyword_tokens || ''}
+  - @page.translated_locales.reject { |locale| locale == I18n.locale }.each do |translated_locale|
+    %link{rel: 'alternate', hreflang: translated_locale, href: page_url(@page, locale: translated_locale)}
     
 - content_for :content do
 
@@ -29,8 +29,8 @@
               = flag_icon(locale)
               %b.caret
             %ul.dropdown-menu
-              - I18n.available_locales.each do |locale|
-                = active_link_to locale: locale, wrap_tag: :li, hreflang: locale, lang: locale do
+              - I18n.available_locales.sort_by { |locale| translate(locale, scope: :languages, locale: locale) }.each do |locale|
+                = active_link_to url_for(locale: locale), wrap_tag: :li, hreflang: locale, lang: locale do
                   = flag_icon(locale)
                   = translate(locale, scope: :languages, locale: locale)
 

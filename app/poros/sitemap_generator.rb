@@ -15,10 +15,7 @@ class SitemapGenerator
       xml = Builder::XmlMarkup.new(indent: 2, target: file)
       xml.instruct!
       xml.urlset xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9', 'xmlns:xhtml' => 'http://www.w3.org/1999/xhtml' do
-
-
-
-        Page.includes(:translations).find_each(batch_size: 50) do |page|
+        Page.published.includes(:translations).find_each(batch_size: 50) do |page|
           if page.root?
             xml.url do
               xml.comment! "Root"

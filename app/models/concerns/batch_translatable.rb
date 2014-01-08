@@ -3,16 +3,18 @@ module BatchTranslatable
 
   module ClassMethods
     def acts_as_batch_translatable(options = {})
-      include InstanceMethods
-
-      options.reverse_merge!(allow_destroy: true)
       accepts_nested_attributes_for :translations, options
-
-      validate :validate_translations_count
+      include Extensions
     end
   end
 
-  module InstanceMethods
+  module Extensions
+    extend ActiveSupport::Concern
+
+    included do
+      validate :validate_translations_count
+    end
+
     ##
     # Provides a fix to prevent Globalize from creating a translation for
     # the current locale when saving a record.
