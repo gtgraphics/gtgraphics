@@ -17,6 +17,7 @@
 #  embeddable_type :string(255)
 #  menu_item       :boolean          default(TRUE), not null
 #  state           :string(255)      not null
+#  indexable       :boolean          default(TRUE), not null
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

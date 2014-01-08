@@ -17,6 +17,7 @@
 #  embeddable_type :string(255)
 #  menu_item       :boolean          default(TRUE), not null
 #  state           :string(255)      not null
+#  indexable       :boolean          default(TRUE), not null
 #
 
 class Page < ActiveRecord::Base
@@ -70,6 +71,7 @@ class Page < ActiveRecord::Base
   default_scope -> { order(:lft) }
   scope :drafted, -> { with_state(:drafted) }
   scope :hidden, -> { with_state(:hidden) }
+  scope :indexable, -> { where(indexable: true) }
   scope :in_main_menu, -> { published.menu_items.where(depth: 1) }
   scope :menu_items, -> { where(menu_item: true) }
   scope :published, -> { with_state(:published) }

@@ -34,7 +34,8 @@ class Image < ActiveRecord::Base
     large_thumbnail: { geometry: '253x190#', format: :png, processors: [:manual_cropper] },
     preview: { geometry: '1170x>', processors: [:manual_cropper] },
     medium: { geometry: '1280x780', processors: [:manual_cropper] },
-    large: { geometry: '1920x1080', processors: [:manual_cropper] }
+    large: { geometry: '1920x1080', processors: [:manual_cropper] },
+    social: { geometry: '1500x1500#', format: :jpg, processors: [:manual_cropper] }
   }.freeze
 
   has_many :custom_styles, class_name: 'Image::Style', autosave: true, inverse_of: :image, dependent: :destroy
@@ -46,6 +47,7 @@ class Image < ActiveRecord::Base
   store :customization_options, accessors: [:crop_x, :crop_y, :crop_width, :crop_height]
 
   acts_as_authorable default_to_current_user: false
+  acts_as_batch_translatable
   acts_as_image_containable styles: ->(attachment) { attachment.instance.styles },
                             url: '/system/images/:id/:style.:extension'
   acts_as_sortable do |by|

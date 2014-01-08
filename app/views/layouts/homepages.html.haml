@@ -1,0 +1,8 @@
+- content_for :social_meta_tags do
+  %meta{property: 'og:title', content: 'GT Graphics'}
+  %meta{property: 'og:description', content: @page.meta_description || ''}
+
+- content_for :page_content do
+  = yield
+
+= render template: 'layouts/pages'
