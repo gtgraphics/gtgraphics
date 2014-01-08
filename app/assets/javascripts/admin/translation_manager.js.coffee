@@ -1,4 +1,3 @@
-
 class @TranslationManager
   constructor: ($container) ->
     @container = $container
@@ -176,7 +175,6 @@ class @TranslationManager
   getLocalePanes: (locale, includeRemoved = false) ->
     @getPanes(includeRemoved).filter(localeFilter(locale))
    
-
   showPanes: (locale) ->
     @getPanes(true).removeClass('active')
     @getLocalePanes(locale, true).addClass('active')
@@ -193,6 +191,7 @@ class @TranslationManager
   localeFilter = (locale) ->
     jQuery.error 'locale not defined' if !locale or locale == ''
     "[data-locale='#{locale}']"
+
 
 $(document).ready ->
   $('.translation-manager')
