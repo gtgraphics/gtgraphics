@@ -1,7 +1,7 @@
 module RouteHelper
   def page_path(page, options = {})
     if page.path.present?
-      send("#{page.embeddable_type.underscore}_path", page.path, options)
+      send("#{page.embeddable_class.model_name.element}_path", page.path, options)
     else
       root_path(options)
     end
@@ -9,7 +9,7 @@ module RouteHelper
 
   def page_url(page, options = {})
     if page.path.present?
-      send("#{page.embeddable_type.underscore}_url", page.path, options)
+      send("#{page.embeddable_class.model_name.element}_url", page.path, options)
     else
       root_url(options)
     end

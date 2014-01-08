@@ -1,0 +1,57 @@
+.radio-container {
+
+}
+
+.checkbox-container,
+.radio-container {
+  display: inline-block;
+  *display: inline;
+  vertical-align: middle;
+  margin: 0;
+  padding: 0;
+  width: 18px;
+  height: 18px;
+  line-height: normal;
+
+  .check-indicator,
+  .check-indeterminate-indicator,
+  .radio-indicator {
+    color: #333;
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .check-indeterminate-indicator {
+    color: #999;
+  }
+
+  &.checked {
+    .check-indicator {
+      display: block;
+    }
+  }
+
+  &.indeterminate {
+    .check-indeterminate-indicator {
+      display: block;
+    }
+  }
+
+  &.active {
+    //background-color: #ebebeb;
+  }
+
+  &.hover, &.focus, &.active {
+    //border-color: #adadad;
+  }
+}

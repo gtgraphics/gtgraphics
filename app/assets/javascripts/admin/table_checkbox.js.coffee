@@ -31,45 +31,51 @@ $(document).ready ->
 
   $tables = $(TABLE_SELECTOR)
   
-    .on 'click', GLOBAL_CHECKBOX_SELECTOR, ->
+    .on 'ifChanged', GLOBAL_CHECKBOX_SELECTOR, ->
       $toggler = $(@)
       $table = $toggler.closest(TABLE_SELECTOR)
       $checkboxes = $table.find(SINGLE_CHECKBOX_SELECTOR)
-      checked = !allCheckboxesChecked($checkboxes)
-      $checkboxes.each ->
-        $checkbox = $(@)
-        prevChecked = $checkbox.prop('checked')
-        $checkbox.prop('checked', checked)
-        $checkbox.triggerHandler('click') if prevChecked != checked
-      $toggler.prop('checked', checked)
+      if $toggler.prop('indeterminate')
+        $toggler.attr('indeterminate', false).prop('checked', true)
+      else
+        if allCheckboxesChecked($checkboxes)
+          $checkboxes.prop('checked', false)
+        else
+          $checkboxes.prop('checked', true)
+      $checkboxes.iCheck('update')
+      $toggler.iCheck('update')
       $table.trigger('toggled', [checkStatus($checkboxes)])
 
-    .on 'click', SINGLE_CHECKBOX_SELECTOR, ->
+    .on 'ifChanged', SINGLE_CHECKBOX_SELECTOR, ->
       $checkbox = $(@)
       $table = $checkbox.closest(TABLE_SELECTOR)
       $toggler = $table.find(GLOBAL_CHECKBOX_SELECTOR)
       $checkboxes = $table.find(SINGLE_CHECKBOX_SELECTOR)
-      allChecked = allCheckboxesChecked($checkboxes)
-      $checkboxes.each ->
-        $checkbox = $(@)
-        $checkbox.triggerHandler('click')
-      
-      prevTogglerChecked = $toggler.prop('checked')
-      if allChecked
-        $toggler.prop('checked', true)
-        $toggler.triggerHandler('click')
-      else
-        #unless $checkbox.prop('checked')
-        $toggler.prop('checked', false)
-        $toggler.triggerHandler('click')
 
-      $table.trigger('toggled', [checkStatus($checkboxes)])
+      $checkbox.iCheck('update')
+      
+      checked = !allCheckboxesChecked($checkboxes)
+      #$toggler.prop('checked', checked).iCheck('update')
+      #$checkboxes.prop('checked', checked)
+
+      cs = checkStatus($checkboxes)
+      switch cs
+        when 'all'
+          $toggler.attr('indeterminate', false).prop('checked', true)
+        when 'some'
+          $toggler.attr('indeterminate', true).prop('checked', false)
+        else
+          $toggler.attr('indeterminate', false).prop('checked', false)
+
+      $toggler.iCheck('update')
+      $checkboxes.iCheck('update')
+
+      $table.trigger('toggled', [cs])
 
     .each ->
       $table = $(@)
       $checkboxes = $table.find(SINGLE_CHECKBOX_SELECTOR)
       $table.trigger('toggled', [checkStatus($checkboxes)])
-
 
 # Batch Buttons
 
