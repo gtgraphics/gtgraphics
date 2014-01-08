@@ -1,6 +1,12 @@
 - content_for :head do
   %meta{name: 'description', content: @page.meta_description || ''}
   %meta{name: 'keywords', content: @page.meta_keyword_tokens || ''}
+  - if content_for? :social_meta_tags
+    = yield :social_meta_tags
+  - else
+    %meta{property: 'og:title', content: @page.title}
+  %meta{property: 'og:url', content: page_url(@page)}
+  %link{rel: 'canonical', href: page_url(@page)}  
   - @page.translated_locales.reject { |locale| locale == I18n.locale }.each do |translated_locale|
     %link{rel: 'alternate', hreflang: translated_locale, href: page_url(@page, locale: translated_locale)}
     
