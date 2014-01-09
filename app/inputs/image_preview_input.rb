@@ -1,16 +1,14 @@
 class ImagePreviewInput < SimpleForm::Inputs::FileInput
   def input
-    # :preview_version is a custom attribute from :input_html hash, so you can pick custom sizes
     version = input_html_options.delete(:preview_version) { :original }
-    html = '' # the htmlput string we're going to build
-    # check if there's an uploaded file (eg: edit mode or form not saved)
-    if object.send("#{attribute_name}?") and object.errors[attribute_name].empty?
-      # append preview image to htmlput
+    html = ''
+    image_asset = object.send(attribute_name)
+    if object.errors[attribute_name].empty? and image_asset.present? and File.exists?(image_asset.path(version))
       html << template.content_tag(:div, class: 'clearfix') do
-        inner_html = ""
+        inner_html = ''
         inner_html << template.content_tag(:div, class: 'pull-left') do
           template.link_to object.send(attribute_name).url, target: '_blank' do
-            template.image_tag(object.send(attribute_name, version), class: 'thumbnail', alt: '', style: 'margin-bottom: 10px; margin-right: 10px')
+            template.image_tag(image_asset.url(version), class: 'thumbnail', alt: '', style: 'margin-bottom: 10px; margin-right: 10px')
           end
         end
         if object.respond_to?("#{attribute_name}_width") and object.respond_to?("#{attribute_name}_height")

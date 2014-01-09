@@ -1,3 +1,7 @@
+Array::each = (callback) ->
+  jQuery.each @, (index, element) ->
+    callback.call(element, element, index)
+
 Array::first = ->
   @[0]
 

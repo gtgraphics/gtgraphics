@@ -74,7 +74,7 @@ class Image < ActiveRecord::Base
   %w(crop_x crop_y crop_width crop_height).each do |method|
     class_eval %{
       def #{method}=(value)
-        super(value.to_i)
+        super(value.try(:to_i))
       end
     }
   end

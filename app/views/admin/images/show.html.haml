@@ -1,8 +1,14 @@
 = view_headline_for @image do
   %ul.list-inline
-    %li= button_link_to prepend_icon(:download, translate('helpers.links.download')), [:download, :admin, @image], size: :large, type: :success
-    %li= button_link_to prepend_icon(:hand, translate('helpers.links.move_to', model: Attachment.model_name.human(count: 2)), direction: :right, outline: true), [:move_to_attachments, :admin, @image], method: :patch, size: :large, data: { confirm: translate('helpers.confirmations.move', model: Image.model_name.human, other_model: Attachment.model_name.human(count: 2)) }
     %li= action_buttons_for @image, except: :show
+    %li.only-js
+      .dropdown.pull-right
+        = button_link_to '#', data: { toggle: 'dropdown' } do
+          .sr-only= translate('helpers.links.settings')
+          %b.caret
+        %ul.dropdown-menu{role: 'menu', aria_labelledby: 'dLabel'}
+          %li= link_to prepend_icon(:download, translate('helpers.links.download')), [:download, :admin, @image]
+          %li= link_to prepend_icon(:hand, translate('helpers.links.move_to', model: Attachment.model_name.human(count: 2)), direction: :right, outline: true), [:move_to_attachments, :admin, @image], method: :patch, data: { confirm: translate('helpers.confirmations.move', model: Image.model_name.human, other_model: Attachment.model_name.human(count: 2)) }
 
 .row
   .col-lg-8

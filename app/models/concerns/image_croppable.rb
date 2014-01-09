@@ -9,7 +9,7 @@ module ImageCroppable
       croppable.validates :crop_height, numericality: { only_integer: true, greater_than: 0 }
     end
 
-    validate :validate_crop_dimensions_consistency, if: :cropped?
+    validate :validate_crop_dimensions_consistency, on: :update, if: :cropped?
 
     before_validation :clear_crop_area, if: :asset_changed?
   end

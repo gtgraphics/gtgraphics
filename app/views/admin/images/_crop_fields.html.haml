@@ -11,7 +11,7 @@
           %h3.panel-title
             - if fields.object.is_a? Image::Style
               %label.checkbox
-                = fields.input_field :cropped, as: :boolean, class: 'crop-flag only-js'
+                = fields.check_box :cropped, class: 'crop-flag only-js'
                 = translate("views.admin.images.headlines.crop")
             - else
               = translate("views.admin.images.headlines.crop")
@@ -34,7 +34,7 @@
           .panel-heading
             %h3.panel-title
               %label.checkbox
-                = fields.input_field :resized, as: :boolean, class: 'resize-flag only-js'
+                = fields.check_box :resized, class: 'resize-flag only-js'
                 = translate("views.admin.images.headlines.scale")
 
           .panel-body

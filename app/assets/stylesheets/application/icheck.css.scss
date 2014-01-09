@@ -8,6 +8,7 @@
   width: 18px;
   height: 18px;
   line-height: normal;
+  position: relative;
 
   .check-indicator,
   .check-indeterminate-indicator,
@@ -29,6 +30,11 @@
 }
 
 .checkbox-container {
+  .check-indicator .fa {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+  }
   .check-indeterminate-indicator {
     color: #999;
   }
@@ -65,10 +71,12 @@
 .js {
   label {
     &.checkbox, &.radio {
+      position: relative;
       cursor: pointer;
-      padding-left: 0;
+      padding-left: 27px;
       .checkbox-container, .radio-container {
-        margin-right: 8px;
+        position: absolute;
+        left: 1px;
         &.hover {
           background-color: #ebebeb;
           border-color: #adadad;
