@@ -1,42 +1,9 @@
 = index_headline_for ::Template do
   .btn-toolbar
-    = create_button_link_for ::Template, url: new_admin_template_path(type: @template_type)
-
-%ul.nav.nav-tabs
-  = active_link_to request.query_parameters.symbolize_keys.except(:type), active: @template_type.blank?, wrap_tag: :li do
-    = translate('views.admin.templates.tabs.all')
-    .badge= ::Template.count
-  - template_types(:plural).each do |template_type, template_class|
-    = active_link_to request.query_parameters.symbolize_keys.merge(type: template_class.demodulize), active: @template_type == template_class.demodulize, wrap_tag: :li do
-      = template_type
-      .badge= ::Template.where(type: template_class).count
+    = create_button_link_for ::Template, namespace: :admin
 
 - if @templates.any? 
-  %table.table.table-striped
-    %thead
-      %tr
-        %th.thumbnail-cell
-        %th= ::Template.human_attribute_name :name
-        - if @template_type.blank?
-          %th= ::Template.human_attribute_name :type
-        %th= ::Template.human_attribute_name :default
-        %th.actions
-    %tbody
-      - @templates.each do |template|
-        %tr
-          %td.thumbnail-cell
-            - if template.screenshot.present?
-              = link_to admin_template_path(template) do
-                = image_tag template.screenshot.url(:thumbnail), alt: template.name, class: 'thumbnail'
-          %td= link_to template.name, admin_template_path(template)
-          - if @template_type.blank?
-            %td= template_type(template)
-          %td= yes_or_no template.default?
-          %td.actions
-            = action_buttons_for template.becomes(::Template), size: :mini, except: (:destroy if template.default?), icon_only: true do
-              - unless template.default?
-                = button_link_to translate('helpers.links.make_default'), [:make_default, :admin, template.becomes(::Template)], size: :mini, method: :patch, confirm: translate('helpers.confirmations.make_default', model: ::Template.model_name.human)
-
+  = render 'table'
 - else
   .well.text-center
     %h4= translate('views.hints.empty', model: (@template_class.present? ? @template_class : ::Template).model_name.human(count: 2))

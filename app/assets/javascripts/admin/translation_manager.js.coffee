@@ -58,11 +58,18 @@ class @TranslationManager
   addLocale: (locale) ->
     return false if @translatedLocales.include(locale)
     @translatedLocales.push(locale)
-    @getLocalePanes(locale, true).removeClass('removed')
-    @refreshButtonStates()
-    @getAddLocaleButton(locale).trigger('addedLocale.translationManager', locale)
-    console.debug "added locale: #{locale}"
-    @changeLocale(locale)
+    $localePanes = @getLocalePanes(locale, true)
+    if $localePanes.any()
+      $localePanes.removeClass('removed')
+      console.debug "added locale: #{locale}"
+      @changeLocale(locale)
+      @refreshButtonStates()
+    else
+      @loadPane locale, =>
+        @getAddLocaleButton(locale).trigger('addedLocale.translationManager', locale)
+        console.debug "added locale: #{locale}"
+        @changeLocale(locale)
+        @refreshButtonStates()
     true
 
   removeLocale: (locale) ->
@@ -179,11 +186,14 @@ class @TranslationManager
     @getPanes(true).removeClass('active')
     @getLocalePanes(locale, true).addClass('active')
 
-  loadPane: (locale) ->
+  loadPane: (locale, callback) ->
+    jQuery.get @url, { translated_locale: locale }, (html) =>
+      $html = $(html).appendTo(@container.find('.tab-content')).prepare()
+      callback.call($html) if callback
 
   # Helpers
   getNeighborLocale: ->
-    index = jQuery.inArray(@selectedLocale, @translatedLocales)
+    index = @translatedLocales.index(@selectedLocale)
     locale = @translatedLocales[index + 1]
     locale ||= @translatedLocales[index - 1]
     locale

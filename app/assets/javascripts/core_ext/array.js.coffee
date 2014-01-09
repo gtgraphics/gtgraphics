@@ -2,7 +2,10 @@ Array::first = ->
   @[0]
 
 Array::include = (element, fromIndex = 0) ->
-  jQuery.inArray(element, @, fromIndex) >= 0
+  @index(element, fromIndex) >= 0
+
+Array::index = (element, fromIndex = 0) ->
+  jQuery.inArray(element, @, fromIndex)
 
 Array::last = ->
   @[@length-1]

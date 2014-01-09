@@ -18,6 +18,14 @@ class Template < ActiveRecord::Base
   include HtmlContainable
   include PersistenceContextTrackable
 
+  TEMPLATE_TYPES = %w(
+    Template::ContactForm
+    Template::Content
+    Template::Homepage
+    Template::Image
+    Template::Project
+  ).freeze
+
   VIEW_ROOT = "#{Rails.root}/app/views"
 
   translates :name, :description, fallbacks_for_empty_translations: true
@@ -30,7 +38,7 @@ class Template < ActiveRecord::Base
   has_many :region_definitions, dependent: :destroy, inverse_of: :template
   has_many :pages, dependent: :destroy, inverse_of: :template
 
-  validates :type, presence: true, exclusion: { in: [self.name] }, on: :create
+  validates :type, presence: true, inclusion: { in: TEMPLATE_TYPES }, on: :create
   validates :file_name, presence: true, inclusion: { in: ->(template) { template.class.unassigned_template_files } }
 
   attr_readonly :type
@@ -39,6 +47,7 @@ class Template < ActiveRecord::Base
     attr_accessor :template_lookup_path
 
     def template_files(full_paths = false)
+      raise 'method can only be called on subclasses of Template' if self.name == 'Template'
       Dir[File.join([VIEW_ROOT, template_lookup_path, '*'].compact)].map do |template_file|
         if full_paths
           template_file
@@ -46,6 +55,14 @@ class Template < ActiveRecord::Base
           File.basename(template_file).split('.').first
         end
       end.sort.freeze
+    end
+
+    def template_classes
+      TEMPLATE_TYPES.map(&:constantize).freeze
+    end
+
+    def template_types
+      TEMPLATE_TYPES
     end
 
     def unassigned_template_files

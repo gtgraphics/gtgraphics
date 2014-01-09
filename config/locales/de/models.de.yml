@@ -173,6 +173,24 @@ de:
       page:
         one: Seite
         other: Seiten
+      page/content:
+        one: Inhalt
+        other: Inhalte
+      page/contact_form:
+        one: Kontaktformular
+        other: Kontaktformulare
+      page/homepage:
+        one: Startseite
+        other: Startseiten
+      page/image:
+        one: Bildseite
+        other: Bildseiten
+      page/project:
+        one: Projektseite
+        other: Projektseiten
+      page/redirection:
+        one: Umleitung
+        other: Umleitungen
       project:
         one: Projekt
         other: Projekte

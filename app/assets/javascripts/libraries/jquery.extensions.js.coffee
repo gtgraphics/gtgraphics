@@ -1,9 +1,17 @@
 (($) ->
  
-  $.fn.any ->
-    @length > 0
+  $.fn.any = (filter) ->
+    if filter
+      $scope = @filter(filter)
+    else
+      $scope = @
+    $scope.length > 0
     
-  $.fn.none ->
-    @length == 0
+  $.fn.none = (filter) ->
+    if filter
+      $scope = @filter(filter)
+    else
+      $scope = @
+    $scope.length == 0
  
 ) jQuery

@@ -27,9 +27,9 @@ class Admin::PagesController < Admin::ApplicationController
     @page.embeddable_id = params[:embeddable_id] if params.key?(:embeddable_id)
     build_page_embeddable
 
-    @page.embeddable.translations.each do |embedable_translation|
-      @page.translations.build(locale: embedable_translation.locale)
-    end
+    #@page.embeddable.translations.each do |embedable_translation|
+    #  @page.translations.build(locale: embedable_translation.locale)
+    #end
     respond_with :admin, @page
   end
 
