@@ -109,6 +109,10 @@ class Message < ActiveRecord::Base
     @recipient_ids ||= self.class.where(fingerprint: fingerprint).pluck(:recipient_id).freeze
   end
 
+  def sender
+    %{"#{full_sender_name}" <#{sender_email}>}
+  end
+
   def unread?
     !read?
   end
