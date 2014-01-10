@@ -1,4 +1,4 @@
-$.prepare ->
+jQuery.prepare ->
   # Popover
   $('[data-toggle=popover]', @).popover()
   $('a[rel=popover]', @).popover()

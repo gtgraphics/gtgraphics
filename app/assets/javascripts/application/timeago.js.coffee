@@ -1,4 +1,4 @@
-$.prepare ->
+jQuery.prepare ->
 
   $.timeago.settings.allowFuture = true
   $.timeago.settings.strings =

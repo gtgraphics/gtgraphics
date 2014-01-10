@@ -1,18 +1,25 @@
-TRUE_VALUES = ['true', '1']
+TRUE_VALUES = ['true', 't', '1']
 
 String::blank = (trimmed = true) ->
-  if trimmed
-    str = $.trim(@)
-  else
-    str = @
-  str == ""
+  jQuery.trim(@) == ""
 
 String::boolify = ->
-  $.inArray(@toLowerCase(), TRUE_VALUES) >= 0
+  TRUE_VALUES.include(@toLowerCase())
+
+String::camelize = ->
+  pieces = @split(/[\W_-]/)
+  jQuery.map(pieces, (piece) -> piece.capitalize()).join("")
 
 String::capitalize = ->
   @charAt(0).toUpperCase() + @slice(1);
 
+String::dasherize = ->
+  @replace("_", "-")
+
 String::interpolate = (interpolations = {}) ->
   @replace /%\{(.*?)\}/g, (whole, expression) ->
     interpolations[expression] || ""
+
+String::underscore = ->
+  @replace(/[\W]/g, "").replace /[A-Z]/g, (match) ->
+    "_#{match.toLowerCase()}"

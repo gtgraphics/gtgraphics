@@ -2,7 +2,7 @@ CHECKBOX_DETERMINATE_TEMPLATE = '<span class="check-indicator"><i class="fa fa-c
 CHECKBOX_INDETERMINATE_TEMPLATE = '<span class="check-indeterminate-indicator"><i class="fa fa-minus"></i></span>'
 RADIO_TEMPLATE = '<span class="radio-indicator"><i class="fa fa-circle"></i></span>'
 
-$.prepare ->
+jQuery.prepare ->
   $(':checkbox, :radio', @).iCheck(
     checkboxClass: 'checkbox-container btn btn-default'
     radioClass: 'radio-container btn btn-default'

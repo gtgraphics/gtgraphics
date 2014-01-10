@@ -1,4 +1,8 @@
 (($) ->
+
+  $.fn.all = (filter) ->
+    jQuery.error 'filter argument is required' unless filter
+    @length == @filter(filter).length
  
   $.fn.any = (filter) ->
     if filter
