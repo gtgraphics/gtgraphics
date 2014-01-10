@@ -1,9 +1,0 @@
-= index_headline_for Gallery do
-  .btn-toolbar
-    = create_button_link_for Gallery, namespace: :admin
-
-- if @galleries.any?
-  
-- else
-  .well.text-center
-    %h4= translate('views.hints.empty', model: Gallery.model_name.human(count: 2))

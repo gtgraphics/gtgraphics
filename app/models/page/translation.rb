@@ -16,15 +16,6 @@ class Page < ActiveRecord::Base
   class Translation < Globalize::ActiveRecord::Translation
     validates :title, presence: true
 
-    serialize :meta_keywords, Array
-
-    def meta_keyword_tokens
-      @meta_keyword_tokens ||= meta_keywords.join(',')
-    end
-
-    def meta_keyword_tokens=(tokens)
-      self.meta_keywords = tokens.split(',')
-      @meta_keyword_tokens = tokens
-    end
+    composed_of :meta_keywords, class_name: 'TokenCollection', mapping: %w(meta_keywords to_s), converter: :parse
   end
 end

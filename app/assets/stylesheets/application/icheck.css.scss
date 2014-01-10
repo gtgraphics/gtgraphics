@@ -27,6 +27,11 @@
     user-select: none;
     pointer-events: none;
   }
+
+  &.hover, &.focus {
+    background-color: #ebebeb;
+    border-color: #adadad;
+  }
 }
 
 .checkbox-container {
@@ -76,15 +81,13 @@
       padding-left: 27px;
       .checkbox-container, .radio-container {
         position: absolute;
-        left: 1px;
-        &.hover {
-          background-color: #ebebeb;
-          border-color: #adadad;
-        }
+        left: 0;
       }
       &:active {
         .checkbox-container, .radio-container {
           background-image: none;
+          background-color: #ebebeb;
+          border-color: #adadad;
           outline: 0;
           -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
           box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);

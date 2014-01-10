@@ -42,8 +42,6 @@ class Page < ActiveRecord::Base
 
   translates :title, :meta_description, :meta_keywords, fallbacks_for_empty_translations: true
 
-  serialize :meta_keywords, Array
-
   acts_as_authorable
   acts_as_batch_translatable
   acts_as_nested_set
@@ -94,7 +92,7 @@ class Page < ActiveRecord::Base
   end
 
   delegate :name, to: :author, prefix: true, allow_nil: true
-  delegate :meta_keyword_tokens, :meta_keyword_tokens=, to: :translation
+  delegate :meta_keywords, :meta_keywords=, to: :translation
 
   EMBEDDABLE_TYPES.each do |embeddable_type|
     scope embeddable_type.demodulize.underscore.pluralize, -> { where(embeddable_type: embeddable_type) }

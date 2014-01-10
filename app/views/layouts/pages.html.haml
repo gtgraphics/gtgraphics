@@ -1,6 +1,6 @@
 - content_for :head do
   %meta{name: 'description', content: @page.meta_description || ''}
-  %meta{name: 'keywords', content: @page.meta_keyword_tokens || ''}
+  %meta{name: 'keywords', content: @page.meta_keywords || ''}
   %meta{name: 'robots', content: @page.indexable? ? 'index,follow' : 'noindex,follow'}
 
   - if content_for? :social_meta_tags
