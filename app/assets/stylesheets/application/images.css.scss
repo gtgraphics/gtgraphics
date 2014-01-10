@@ -1,0 +1,53 @@
+.thumbnails {
+  .thumbnail {
+    margin-bottom: 30px;
+  }
+}
+
+.thumbnail {
+  position: relative;
+  &:hover {
+    .actions .btn {
+      display: inline-block;
+    }
+  }
+  .actions {
+    position: absolute;
+    &.bottom {
+      bottom: 12px;
+    }
+    &.top {
+      top: 12px;
+    }
+    &.left {
+      left: 12px;
+    }
+    &.right {
+      right: 12px;
+    }
+    .btn {
+      background: rgba(0, 0, 0, 0.7);
+      border: none;
+      display: none;
+      color: rgba(255, 255, 255, 0.7);
+      .caption {
+        color: rgba(255, 255, 255, 0.7);
+      }
+      &:hover, &:focus {
+        opacity: 1;
+        color: white;
+        .caption {
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+.img-editable {
+  background-image: asset-url('admin/transparent.png');
+  img {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

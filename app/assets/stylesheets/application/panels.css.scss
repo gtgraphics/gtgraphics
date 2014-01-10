@@ -1,0 +1,20 @@
+.panel-body {
+  .dl-horizontal {
+    margin-top: 0;
+    margin-bottom: 0;
+    + .dl-horizontal {
+      margin-top: 20px;
+    }
+  }
+}
+
+.panel-title .checkbox {
+  //margin: 0;
+  padding: 0;
+  padding-top: 2px;
+  input[type="checkbox"] {
+    margin-left: 0;
+    margin-right: 6px;
+    margin-top: 3px;
+  }
+}

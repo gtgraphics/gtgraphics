@@ -1,8 +1,3 @@
-- content_for :javascripts do
-  :coffee
-    $(document).ready ->
-      $(".tokenizer").select2(tags: [], tokenSeparators: [','])
-
 = simple_form_for [:admin, @page], html: { class: 'form-horizontal', multipart: true } do |form|
 
   .row
