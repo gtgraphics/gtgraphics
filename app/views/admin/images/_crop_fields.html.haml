@@ -6,57 +6,66 @@
           = image_tag @image.asset.url, id: 'image_asset', class: 'img-responsive img-croppable', data: { original_width: @image.width, original_height: @image.height }
 
     .col-lg-4
-      .panel.panel-default.crop-panel
-        .panel-heading
-          %h3.panel-title
-            - if fields.object.is_a? Image::Style
-              %label.checkbox
-                = fields.check_box :cropped, class: 'crop-flag only-js'
-                = translate("views.admin.images.headlines.crop")
-            - else
-              = translate("views.admin.images.headlines.crop")
-        .panel-body
-          = fields.input :crop_x, input_html: { class: 'crop-x', min: 0, max: @image.width }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
-          = fields.input :crop_y, input_html: { class: 'crop-y', min: 0, max: @image.height }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
-          = fields.input :crop_width, input_html: { class: 'crop-width', min: 1 , max: @image.width }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
-          = fields.input :crop_height, input_html: { class: 'crop-height', min: 1 , max: @image.height }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
 
-          .form-group.js-only
-            %label.control-label.col-lg-4.sr-only{for: 'image_style_preserve_crop_aspect_ratio'}
-              = Image::Style.human_attribute_name(:preserve_aspect_ratio)
-            .col-lg-8
-              %label.checkbox
-                %input{type: 'checkbox', checked: false, class: 'crop-aspect-ratio'}
-                = Image::Style.human_attribute_name(:preserve_aspect_ratio)
+      .panel-group
 
-      - if fields.object.is_a? Image::Style
-        .panel.panel-default.resize-panel
+        / Crop
+        .panel.panel-default.crop-panel
           .panel-heading
             %h3.panel-title
-              %label.checkbox
-                = fields.check_box :resized, class: 'resize-flag only-js'
-                = translate("views.admin.images.headlines.scale")
-
-          .panel-body
-            = fields.input :resize_width, input_html: { class: 'resize-width', min: 1 }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
-            = fields.input :resize_height, input_html: { class: 'resize-height', min: 1 }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
-
-            .form-group.js-only
-              %label.control-label.col-lg-4.sr-only{for: 'image_style_preserve_resize_aspect_ratio'}
-                = Image::Style.human_attribute_name(:preserve_aspect_ratio)
-              .col-lg-8
+              - if fields.object.is_a? Image::Style
                 %label.checkbox
-                  %input{type: 'checkbox', checked: true, class: 'resize-aspect-ratio'}
+                  = fields.check_box :cropped, class: 'crop-flag only-js'
+                  = translate("views.admin.images.headlines.crop")
+              - else
+                = translate("views.admin.images.headlines.crop")
+
+          .panel-collapse{class: fields.object.cropped? ? 'in' : 'collapse'}
+            .panel-body
+              = fields.input :crop_x, input_html: { class: 'crop-x', min: 0, max: @image.width }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
+              = fields.input :crop_y, input_html: { class: 'crop-y', min: 0, max: @image.height }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
+              = fields.input :crop_width, input_html: { class: 'crop-width', min: 1 , max: @image.width }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
+              = fields.input :crop_height, input_html: { class: 'crop-height', min: 1 , max: @image.height }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
+
+              .form-group.js-only
+                %label.control-label.col-lg-4.sr-only{for: 'image_style_preserve_crop_aspect_ratio'}
                   = Image::Style.human_attribute_name(:preserve_aspect_ratio)
+                .col-lg-8
+                  %label.checkbox
+                    %input{type: 'checkbox', checked: false, class: 'crop-aspect-ratio'}
+                    = Image::Style.human_attribute_name(:preserve_aspect_ratio)
 
-            .form-group.js-only
-              .col-lg-8.col-lg-offset-4
-                .btn-group
-                  %button{type: 'button', class: 'btn btn-default resize-scale', data: { factor: 0.5 }} 50%
-                  %button{type: 'button', class: 'btn btn-default resize-scale', data: { factor: 1 }} 100%
-                  %button{type: 'button', class: 'btn btn-default resize-scale', data: { factor: 2 }} 200%
+        / Resize
+        - if fields.object.is_a? Image::Style
+          .panel.panel-default.resize-panel
+            .panel-heading
+              %h3.panel-title
+                %label.checkbox
+                  = fields.check_box :resized, class: 'resize-flag only-js'
+                  = translate("views.admin.images.headlines.scale")
 
-      /.form-group.form-actions
-      = fields.button :button, type: 'submit', class: 'btn-primary btn-block' do
-        = prepend_icon(:save, translate(fields.object.new_record? ? :create : :update, scope: 'helpers.submit', model: fields.object.class.model_name.human))
-      = button_link_to translate('helpers.links.cancel'), [:admin, @image], block: true
+            .panel-collapse{class: fields.object.resized? ? 'in' : 'collapse'}
+              .panel-body
+                = fields.input :resize_width, input_html: { class: 'resize-width', min: 1 }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
+                = fields.input :resize_height, input_html: { class: 'resize-height', min: 1 }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
+
+                .form-group.js-only
+                  %label.control-label.col-lg-4.sr-only{for: 'image_style_preserve_resize_aspect_ratio'}
+                    = Image::Style.human_attribute_name(:preserve_aspect_ratio)
+                  .col-lg-8
+                    %label.checkbox
+                      %input{type: 'checkbox', checked: true, class: 'resize-aspect-ratio'}
+                      = Image::Style.human_attribute_name(:preserve_aspect_ratio)
+
+                .form-group.js-only
+                  .col-lg-8.col-lg-offset-4
+                    .btn-group
+                      %button{type: 'button', class: 'btn btn-default resize-scale', data: { factor: 0.5 }} 50%
+                      %button{type: 'button', class: 'btn btn-default resize-scale', data: { factor: 1 }} 100%
+                      %button{type: 'button', class: 'btn btn-default resize-scale', data: { factor: 2 }} 200%
+
+        .panel
+          /.form-group.form-actions
+          = fields.button :button, type: 'submit', class: 'btn-primary btn-block' do
+            = prepend_icon(:save, translate(fields.object.new_record? ? :create : :update, scope: 'helpers.submit', model: fields.object.class.model_name.human))
+          = button_link_to translate('helpers.links.cancel'), [:admin, @image], block: true

@@ -63,9 +63,6 @@ class Image < ActiveRecord::Base
         "#{crop_width}x#{crop_height}+#{crop_x}+#{crop_y}"
       end
 
-      def cropped
-        !!super
-      end
       alias_method :cropped?, :cropped
 
       def cropped=(cropped)
@@ -82,9 +79,6 @@ class Image < ActiveRecord::Base
         "#{resize_width}x#{resize_height}!"
       end
 
-      def resized
-        !!super
-      end
       alias_method :resized?, :resized
 
       def resized=(resized)
@@ -120,17 +114,17 @@ class Image < ActiveRecord::Base
       end
 
       def set_defaults
-        self.cropped = true
-        self.resized = false
+        self.cropped = true if cropped.nil?
+        self.resized = false if resized.nil?
       end
 
       def set_dimensions
-        if cropped?
-          self.width = crop_width
-          self.height = crop_height
-        elsif resized?
+        if resized?
           self.width = resize_width
           self.height = resize_height
+        elsif cropped?
+          self.width = crop_width
+          self.height = crop_height
         else
           self.width = image.width
           self.height = image.height

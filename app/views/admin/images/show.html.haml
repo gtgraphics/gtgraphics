@@ -7,6 +7,9 @@
           .sr-only= translate('helpers.links.settings')
           %b.caret
         %ul.dropdown-menu{role: 'menu', aria_labelledby: 'dLabel'}
+          %li= link_to prepend_icon(:crop, translate('helpers.links.crop')), [:crop, :admin, @image]
+          %li= link_to prepend_icon(:picture, translate('helpers.links.new', model: Image::Style.model_name.human), outline: true), [:new, :admin, @image, :style]
+          %li.divider
           %li= link_to prepend_icon(:download, translate('helpers.links.download')), [:download, :admin, @image]
           %li= link_to prepend_icon(:hand, translate('helpers.links.move_to', model: Attachment.model_name.human(count: 2)), direction: :right, outline: true), [:move_to_attachments, :admin, @image], method: :patch, data: { confirm: translate('helpers.confirmations.move', model: Image.model_name.human, other_model: Attachment.model_name.human(count: 2)) }
 
@@ -25,8 +28,6 @@
     %h3= Image::Style.model_name.human(count: 2)
     .content
       = render 'admin/image_styles/table'
-      = create_button_link_for Image::Style, url: [:new, :admin, @image, :style]
-
   
   .col-lg-4
     - if @image.description_html.present?

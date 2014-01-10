@@ -16,7 +16,7 @@ class @Cropper
       cropHeight: $('.crop-height', @panels.crop)
       cropAspectRatio: $('.crop-aspect-ratio', @panels.crop)
     }
-    @resizeable = @panels.resize.length > 0
+    @resizeable = @panels.resize.any()
     if @resizeable
       jQuery.extend @inputs, {
         resized: $('.resize-flag', $container)
@@ -59,51 +59,46 @@ class @Cropper
         @setCropAreaExplicitly = false
     })
 
-  refreshCroppedState: ->
+  refreshCroppedState: (initial) ->
     enabled = @inputs.cropped.prop('checked')
-    $panelBody = @panels.crop.find('.panel-body')
+    $panelCollapse = @panels.crop.find('.panel-collapse')
     if enabled
-      @panels.crop.removeClass('disabled')
-      $panelBody.show()
+      $panelCollapse.collapse('show') unless initial
       @cropper.enable()
     else
-      @panels.crop.addClass('disabled')
-      $panelBody.hide()
+      $panelCollapse.collapse('hide') unless initial
       @cropper.disable()
-    $panelBody.find(':input').prop('disabled', !enabled)
+    $panelCollapse.find(':input').prop('disabled', !enabled)
     @refreshSubmitButtonState()
 
-  refreshResizedState: ->
+  refreshResizedState: (initial) ->
     enabled = @inputs.resized.prop('checked')
-    $panelBody = @panels.resize.find('.panel-body')
-    if enabled
-      @panels.resize.removeClass('disabled')
-      $panelBody.show()
-    else
-      @panels.resize.addClass('disabled')
-      $panelBody.hide()
-    $panelBody.find(':input').prop('disabled', !enabled)
+    $panelCollapse = @panels.resize.find('.panel-collapse')
+    unless initial
+      if enabled
+        $panelCollapse.collapse('show')
+      else
+        $panelCollapse.collapse('hide')
+    $panelCollapse.find(':input').prop('disabled', !enabled).iCheck('update')
     @refreshSubmitButtonState()
 
   refreshSubmitButtonState: ->
-    disabled = @panels.crop.hasClass('disabled') and @panels.resize.hasClass('disabled')
-    $(':submit', @container).prop('disabled', disabled)
+    enabled = @inputs.cropped.prop('checked') or @inputs.resized.prop('checked')
+    $(':submit', @container).prop('disabled', !enabled)
 
   applyInputEvents: ->
     @applyCropInputEvents()
     @applyResizeInputEvents() if @resizeable
 
   applyCropInputEvents: ->
-    if @inputs.cropped.length > 0
-      @refreshCroppedState()
-      @inputs.cropped.change =>
-        @refreshCroppedState()
+    if @inputs.cropped.any()
+      @refreshCroppedState(true)
+      @inputs.cropped.on 'ifChanged', =>
+        @refreshCroppedState(false)
 
-    @applyInputEvent @inputs.cropX, =>
-      @refreshResizeCropRatio()
+    @applyInputEvent @inputs.cropX
 
-    @applyInputEvent @inputs.cropY, =>
-      @refreshResizeCropRatio()
+    @applyInputEvent @inputs.cropY
 
     @applyInputEvent @inputs.cropWidth, =>
       if @inputs.cropAspectRatio.prop('checked')
@@ -114,14 +109,14 @@ class @Cropper
         @setCropWidth(@cropAspectRatio.width * @getCropHeight())
 
     @refreshCropAspectRatioState()
-    @inputs.cropAspectRatio.change =>
+    @inputs.cropAspectRatio.on 'ifChanged', =>
       @refreshCropAspectRatioState()
 
   applyResizeInputEvents: ->
-    if @inputs.resized.length > 0
-      @refreshResizedState()
-      @inputs.resized.change =>
-        @refreshResizedState()
+    if @inputs.resized.any()
+      @refreshResizedState(true)
+      @inputs.resized.on 'ifChanged', =>
+        @refreshResizedState(false)
 
     @applyInputEvent @inputs.resizeWidth, =>
       if @inputs.resizeAspectRatio.prop('checked')
@@ -131,7 +126,7 @@ class @Cropper
         @setResizeWidth(@resizeAspectRatio.width * @getResizeHeight())
     
     @refreshResizeAspectRatioState()
-    @inputs.resizeAspectRatio.change =>
+    @inputs.resizeAspectRatio.on 'ifChanged', =>
       @refreshResizeAspectRatioState()
 
     @applyResizeScaleButtonEvents()
@@ -144,6 +139,8 @@ class @Cropper
       factor = $button.data('factor')
       _this.setResizeWidth(factor * _this.getCropWidth())
       _this.setResizeHeight(factor * _this.getCropHeight())
+      _this.refreshCropAspectRatioState()
+      _this.refreshResizeAspectRatioState() if _this.resizeable
 
     @container.on 'init.cropper crop.cropper resize.cropper', ->
       _this.inputs.resizeScaleButtons.each ->
@@ -270,6 +267,10 @@ class @Cropper
           $input.trigger('crop.cropper')
           @setCropAreaExplicitly = true
           callback() if callback
+
+          @refreshCropAspectRatioState()
+          @refreshResizeAspectRatioState() if @resizeable
+
           @updateCropArea()
         $input.data('prevValue', value)
 
@@ -286,16 +287,17 @@ class @Cropper
 
   refreshCropAspectRatioState: ->
     @cropAspectRatio = {}
+    @cropAspectRatio.width = @inputs.cropWidth.val() / @inputs.cropHeight.val()
+    @cropAspectRatio.height = @inputs.cropHeight.val() / @inputs.cropWidth.val()
     if @inputs.cropAspectRatio.prop('checked')
-      @cropAspectRatio.width = @inputs.cropWidth.val() / @inputs.cropHeight.val()
-      @cropAspectRatio.height = @inputs.cropHeight.val() / @inputs.cropWidth.val()
-    @cropper.setOptions(aspectRatio: @cropAspectRatio.width || null)
+      @cropper.setOptions(aspectRatio: @cropAspectRatio.width)
+    else
+      @cropper.setOptions(aspectRatio: null)
 
   refreshResizeAspectRatioState: ->
     @resizeAspectRatio = {}
-    if @inputs.resizeAspectRatio.prop('checked')
-      @resizeAspectRatio.width = @inputs.resizeWidth.val() / @inputs.resizeHeight.val()
-      @resizeAspectRatio.height = @inputs.resizeHeight.val() / @inputs.resizeWidth.val()
+    @resizeAspectRatio.width = @inputs.resizeWidth.val() / @inputs.resizeHeight.val()
+    @resizeAspectRatio.height = @inputs.resizeHeight.val() / @inputs.resizeWidth.val()
 
   refreshResizeCropRatio: ->
     @resizeCropRatio = @getResizeCropRatio() if @resizeable
