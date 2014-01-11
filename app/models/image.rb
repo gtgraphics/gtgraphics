@@ -61,7 +61,7 @@ class Image < ActiveRecord::Base
 
   validates_attachment :asset, presence: true, content_type: { content_type: CONTENT_TYPES }
 
-  before_validation :set_default_title
+  before_validation :set_default_title, on: :create
   before_save :set_exif_data, if: :asset_changed?
   before_update :destroy_custom_styles, if: :asset_changed?
 
@@ -115,7 +115,12 @@ class Image < ActiveRecord::Base
   end
 
   def set_default_title
-    self.title = File.basename(asset_file_name, '.*').humanize if asset_file_name.present? and title.blank?
+    if asset_file_name.present?
+      generated_title = File.basename(asset_file_name, '.*').humanize
+      translations.each do |translation|
+        translation.title = generated_title if translation.title.blank?
+      end
+    end
   end
 
   def set_exif_data
