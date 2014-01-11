@@ -1,4 +1,6 @@
 GtGraphics::Application.routes.draw do
+  resource :sitemap, controller: :page_sitemaps, only: :show
+    
   scope '(:locale)', constraints: { locale: /[a-z]{2}/ } do
     scope constraints: Routing::LocaleConstraint.new do
       namespace :admin do
@@ -135,8 +137,6 @@ GtGraphics::Application.routes.draw do
       root to: redirect('/404')
     end
   end
-
-  resource :sitemap, controller: :page_sitemaps, only: :show
 
   # Legacy URLs that have changed permanently (HTTP 301)
   #get '/category/:types/:page', to: redirect { |params, request|
