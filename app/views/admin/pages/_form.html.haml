@@ -3,30 +3,22 @@
   .row
     .col-lg-8
       / Editor
-      #page_embeddable_fields_empty.well.text-center
-        %h4= translate('views.admin.pages.empty_type')
-
-      = loader size: :large, id: 'page_embeddable_fields_loader'
 
       /#page_embeddable_fields
       /  = render 'embeddable_fields', fields: form
 
-      .translation-manager.only-js{data: { url: translation_fields_admin_pages_path }}
-
-        = render 'locale_changer', object: @page
-
-        .tab-content
-          .page-fields
-            = form.simple_fields_for :translations do |translation_fields|
-              = translation_pane_for translation_fields.object.locale do
-                = translation_fields.input :_destroy, as: :hidden, input_html: { class: 'destroy-translation' }
-                = translation_fields.input :locale, as: :hidden
-                = translation_fields.input :title, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }
-                = translation_fields.input :meta_description, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }
-                = translation_fields.input :meta_keywords, input_html: { class: 'tokenizer' }, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }
-          %hr
-          .embeddable-fields
-            = render 'embeddable_fields', fields: form
+      = translation_manager_for @page, url: translation_fields_admin_pages_path do
+        .page-fields
+          = form.simple_fields_for :translations do |translation_fields|
+            = translation_pane_for translation_fields.object.locale do
+              = translation_fields.input :_destroy, as: :hidden, input_html: { class: 'destroy-translation' }
+              = translation_fields.input :locale, as: :hidden
+              = translation_fields.input :title, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }
+              = translation_fields.input :meta_description, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }
+              = translation_fields.input :meta_keywords, input_html: { class: 'tokenizer' }, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }
+        %hr
+        .embeddable-fields
+          = render 'embeddable_fields', fields: form
 
     .col-lg-4
       / Settings
@@ -36,7 +28,7 @@
 
         .panel-body
           - if @page.new_record? or @page.embeddable_class.convertible?
-            = form.input :embeddable_type, collection: page_types_for_select, include_blank: false, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
+            = form.input :embeddable_type, collection: page_types_for_select, include_blank: false, input_html: { class: 'combobox' }, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
           #page_embeddable_settings
             = render 'embeddable_settings', fields: form
           - if @page.new_record? or !@page.root?

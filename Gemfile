@@ -44,8 +44,8 @@ gem 'jquery-rails'
 gem 'jquery-turbolinks'
 gem 'turbolinks'
 gem 'compass' # github: 'Compass/compass-rails', branch: 'rails4-hack' # hack until compass has official Rails 4 support
-#gem 'less-rails' # Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 gem 'bootstrap-sass-rails'
+gem 'select2-bootstrap-css'
 
 # Tools
 group :development do

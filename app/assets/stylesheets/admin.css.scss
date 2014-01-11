@@ -11,9 +11,6 @@
  *= require_self
  */
 
-// Bootstrap
-@import "shared/bootstrap_variables";
-
 // Shared
 @import "shared";
 
@@ -24,5 +21,4 @@
 @import "admin/loader";
 @import "admin/messages";
 @import "admin/pages";
-@import "admin/tabs";
 @import "admin/translation_manager";

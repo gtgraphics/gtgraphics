@@ -1,16 +1,15 @@
 @import "shared/js_support";
 
 // Libraries
+@import "shared/bootstrap_overrides";
 @import "twitter/bootstrap";
 @import "shared/select2";
+@import "shared/select2-bootstrap";
 
 // Bootstrap Overrides
 @import "shared/buttons";
-@import "shared/editor";
-@import "shared/file_buttons";
 @import "shared/fonts";
 @import "shared/forms";
-@import "shared/icheck";
 @import "shared/icons";
 @import "shared/images";
 @import "shared/misc";
@@ -20,3 +19,9 @@
 @import "shared/selection";
 @import "shared/sort";
 @import "shared/tables";
+@import "shared/tabs";
+
+// Own styles
+@import "shared/editor";
+@import "shared/file_buttons";
+@import "shared/icheck";
