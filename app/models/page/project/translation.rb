@@ -14,6 +14,9 @@
 class Page < ActiveRecord::Base
   class Project < ActiveRecord::Base
     class Translation < Globalize::ActiveRecord::Translation
+      include UniquelyTranslated
+
+      acts_as_uniquely_translated :project_page_id
     end
   end
 end

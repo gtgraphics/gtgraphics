@@ -83,7 +83,7 @@ GtGraphics::Application.routes.draw do
 
         resources :shouts
 
-        resources :snippets do
+        resources :snippets, except: :show do
           collection do
             delete :destroy_multiple
             get :translation_fields
@@ -93,6 +93,7 @@ GtGraphics::Application.routes.draw do
         resources :templates do
           resources :regions, controller: :region_definitions, as: :region_definitions, only: [:new, :create, :edit, :update, :destroy]
           collection do
+            delete :destroy_multiple
             get :translation_fields
             get :files_fields
           end
@@ -134,6 +135,8 @@ GtGraphics::Application.routes.draw do
       root to: redirect('/404')
     end
   end
+
+  resource :sitemap, controller: :page_sitemaps, only: :show
 
   # Legacy URLs that have changed permanently (HTTP 301)
   #get '/category/:types/:page', to: redirect { |params, request|

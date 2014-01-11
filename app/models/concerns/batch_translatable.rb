@@ -3,7 +3,7 @@ module BatchTranslatable
 
   module ClassMethods
     def acts_as_batch_translatable(options = {})
-      accepts_nested_attributes_for :translations, options
+      accepts_nested_attributes_for :translations, options.reverse_merge(allow_destroy: true)
       include Extensions
     end
   end

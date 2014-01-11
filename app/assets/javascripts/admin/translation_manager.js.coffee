@@ -57,44 +57,49 @@ class @TranslationManager
     true
 
   addLocale: (locale) ->
-    # TODO Reset _destroy Form Field
     return false if @translatedLocales.include(locale)
     $button = @getAddLocaleButton(locale)
     $button.trigger('addingLocale.translationManager', locale)
-    @translatedLocales.push(locale)
-    $localePanes = @getLocalePanes(locale, true)
-    if $localePanes.any()
-      $localePanes.removeClass('removed')
+
+    addedLocaleCallback = =>
+      @translatedLocales.push(locale)
       $button.trigger('addedLocale.translationManager', locale)
       @changeLocale(locale)
       @refreshButtonStates()
+
+    $localePanes = @getLocalePanes(locale, true)
+    if $localePanes.any()
+      $localePanes.removeClass('removed')
+      @markTranslationDestroyed(locale, false)
+      addedLocaleCallback()
     else
       @loadPane locale, =>
-        $button.trigger('addedLocale.translationManager', locale)
-        @changeLocale(locale)
-        @refreshButtonStates()
+        addedLocaleCallback()
     true
 
   removeLocale: (locale) ->
-    # TODO Set _destroy Form Field
     return false unless @translatedLocales.include(locale)
     $button = @getRemoveLocaleButton(locale)
     $button.trigger('removingLocale.translationManager', locale)
-    @translatedLocales.remove(locale)
+    @markTranslationDestroyed(locale, true)
     @getLocalePanes(locale).addClass('removed')
     @refreshButtonStates()
+    @translatedLocales.remove(locale)
     $button.trigger('removedLocale.translationManager', locale)
     @changeLocale(@getNeighborLocale(locale)) if @selectedLocale == locale
     true
 
-  # State refreshers
+  markTranslationDestroyed: (locale, destroy = true) ->
+    @getDestroyTranslationInputs(locale).val(destroy)
+
+  # Methods to query and control initial appearance
 
   queryInitialState: ->
     @availableLocales = @getAddLocaleButtons().map(-> $(@).data('locale')).toArray()
     @translatedLocales = @getPanes().map(-> $(@).data('locale')).toArray().uniq()
-    @setInitialLocale()
+    @changeLocale(@getInitialLocale())
 
-  setInitialLocale: ->
+  getInitialLocale: ->
     _this = @
     localeWithErrors = null
     jQuery.each @translatedLocales, ->
@@ -104,7 +109,10 @@ class @TranslationManager
         localeWithErrors = locale
         return false
     initialLocale = localeWithErrors || I18n.locale
-    @changeLocale(initialLocale)
+    initialLocale = @translatedLocales.first() unless @translatedLocales.include(initialLocale)
+    initialLocale
+
+  # Methods to refresh states for UI elements
 
   refreshButtonStates: ->
     @refreshChangeLocaleButtonStates()
@@ -139,29 +147,6 @@ class @TranslationManager
       locale = $button.data('locale')
       _this.disableRemoveLocaleButton(locale, _this.translatedLocales.length <= 1)
 
-  # Button getters
-
-  getChangeLocaleButton: (locale) ->
-    @getChangeLocaleButtons().filter(localeFilter(locale))
-
-  getChangeLocaleButtons: ->
-    $('.change-locale', @container)
-
-  getRemoveLocaleButton: (locale) ->
-    @getRemoveLocaleButtons().filter(localeFilter(locale))
-
-  getRemoveLocaleButtons: ->
-    $('.remove-locale', @container)
-
-  getAddLocaleButton: (locale) ->
-    @getAddLocaleButtons().filter(localeFilter(locale))
-
-  getAddLocaleButtons: ->
-    $('.add-locale', @container)
-
-  getDestroyTranslationInputs: (locale) ->
-    @getLocalePanes(locale).find('.destroy-translation')
-
   # Button actions
 
   activateChangeLocaleButton: (locale, activated = true) ->
@@ -188,7 +173,30 @@ class @TranslationManager
     else
       $listItem.show()
 
-  # Pane getters
+  # Getters for UI elements: Buttons
+
+  getChangeLocaleButton: (locale) ->
+    @getChangeLocaleButtons().filter(localeFilter(locale))
+
+  getChangeLocaleButtons: ->
+    $('.change-locale', @container)
+
+  getRemoveLocaleButton: (locale) ->
+    @getRemoveLocaleButtons().filter(localeFilter(locale))
+
+  getRemoveLocaleButtons: ->
+    $('.remove-locale', @container)
+
+  getAddLocaleButton: (locale) ->
+    @getAddLocaleButtons().filter(localeFilter(locale))
+
+  getAddLocaleButtons: ->
+    $('.add-locale', @container)
+
+  getDestroyTranslationInputs: (locale) ->
+    @getLocalePanes(locale).find('.destroy-translation')
+
+  # Getters for UI elements: Panes
 
   getPanes: (includeRemoved = false) ->
     $panes = $('.tab-content', @container).find('.tab-pane')
@@ -219,11 +227,17 @@ class @TranslationManager
     "[data-locale='#{locale}']"
 
 
+# jQuery Plugin
+
+$.fn.translationManager = ->
+  @each ->
+    $container = $(@)
+    translationManager = new TranslationManager($container)
+    $container.data('translationManager', translationManager)
+
+  # hotfix for non-disappearing tooltips
+  @on 'removedLocale.translationManager', ->
+    $('.tooltip', @).remove()
+
 $(document).ready ->
-  $('.translation-manager')
-    .each ->
-      $container = $(@)
-      translationManager = new TranslationManager($container)
-      $container.data('translationManager', translationManager)
-    .on 'removedLocale.translationManager', ->
-      $('.tooltip', @).remove()
+  $('.translation-manager').translationManager()

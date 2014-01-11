@@ -1,14 +1,28 @@
+- templates ||= @templates
+- actions = true if actions.nil?
+- checkboxes = false if checkboxes.nil?
+
+- if checkboxes
+  = hidden_field_tag 'template_ids[]', '', id: nil
+
 %table.table.table-striped
   %thead
     %tr
+      - if checkboxes
+        %th.checkbox-cell
+          %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
       %th.thumbnail-cell
-      %th= ::Template.human_attribute_name :name
+      %th= sort_link_for templates, :name
       - if @template_type.blank?
         %th= ::Template.human_attribute_name :type
-      %th.actions
+      - if actions
+        %th.actions
   %tbody
-    - @templates.each do |template|
+    - templates.each do |template|
       %tr
+        - if checkboxes
+          %td.checkbox-cell
+            = check_box_tag 'template_ids[]', template.id, false, class: 'table-checkbox', id: nil
         %td.thumbnail-cell
           - if template.screenshot.present?
             = link_to admin_template_path(template) do
@@ -16,5 +30,8 @@
         %td= link_to template.name, admin_template_path(template)
         - if @template_type.blank?
           %td= template.class.model_name.human
-        %td.actions
-          = action_buttons_for template.becomes(::Template), size: :mini, icon_only: true
+        - if actions
+          %td.actions
+            = action_buttons_for template.becomes(::Template), size: :mini, icon_only: true
+
+= paginate templates

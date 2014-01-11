@@ -229,6 +229,7 @@ DEPENDENCIES
   bcrypt-ruby
   better_errors
   binding_of_caller
+  builder
   bullet
   cancan
   coffee-rails (~> 4.0.0)

@@ -13,6 +13,9 @@
 class Region < ActiveRecord::Base
   class Content < ActiveRecord::Base
     class Translation < Globalize::ActiveRecord::Translation
+      include UniquelyTranslated
+
+      acts_as_uniquely_translated :region_content_id
     end
   end
 end

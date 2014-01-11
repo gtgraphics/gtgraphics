@@ -1,3 +1,3 @@
-$(document).ready ->
-  $('.combobox').select2()
-  $('.tags').select2(multiple: true)
+jQuery.prepare ->
+  $('.combobox', @).select2()
+  $('.tags', @).select2(multiple: true)

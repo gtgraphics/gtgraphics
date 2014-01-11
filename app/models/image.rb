@@ -88,11 +88,6 @@ class Image < ActiveRecord::Base
     end
   end
 
-  def description_html
-    template = Liquid::Template.parse(description)
-    template.render(to_liquid).html_safe
-  end
-
   def styles
     STYLES.reverse_merge(custom_styles_hash).deep_symbolize_keys
   end

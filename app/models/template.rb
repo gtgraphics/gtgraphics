@@ -15,8 +15,8 @@
 
 class Template < ActiveRecord::Base
   include BatchTranslatable
-  include HtmlContainable
   include PersistenceContextTrackable
+  include Sortable
 
   TEMPLATE_TYPES = %w(
     Template::ContactForm
@@ -33,7 +33,10 @@ class Template < ActiveRecord::Base
   has_attached_file :screenshot, styles: { thumbnail: '75x75#', preview: '555x' }, url: '/system/templates/screenshots/:id/:style.:extension'
 
   acts_as_batch_translatable
-  acts_as_html_containable :description
+  acts_as_sortable do |by|
+    by.name(default: true) { |column, dir| Template::Translation.arel_table[column].send(dir.to_sym) }
+    by.updated_at
+  end
 
   has_many :region_definitions, dependent: :destroy, inverse_of: :template
   has_many :pages, dependent: :destroy, inverse_of: :template

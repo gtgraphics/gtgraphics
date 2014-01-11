@@ -1,6 +1,6 @@
 refreshGeneratePasswordCheckState = ->
   $passwordFields = $('#password_fields')
-  if $('#user_generate_password_true').is(':checked')
+  if $('#user_generate_password_true').prop('checked')
     $passwordFields.find(':input').prop('disabled', true)
     $passwordFields.hide()
   else
@@ -10,6 +10,6 @@ refreshGeneratePasswordCheckState = ->
 $(document).ready ->
   # Generate Password Radio Buttons Behavior
   refreshGeneratePasswordCheckState()
-  $(document).on 'click', '#user_generate_password_true, #user_generate_password_false', ->
+  $(document).on 'ifChanged', '#user_generate_password_true, #user_generate_password_false', ->
     $radioButton = $(@)
     refreshGeneratePasswordCheckState()

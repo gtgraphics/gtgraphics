@@ -13,6 +13,8 @@
 
 class Template < ActiveRecord::Base
   class Translation < Globalize::ActiveRecord::Translation
-    validates :name, presence: true
+    include UniquelyTranslated
+
+    acts_as_uniquely_translated :template_id
   end
 end

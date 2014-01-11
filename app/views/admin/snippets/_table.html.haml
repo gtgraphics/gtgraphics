@@ -27,6 +27,6 @@
         %td= time_ago snippet.updated_at
         - if actions
           %td.actions
-            = action_buttons_for snippet, size: :mini, icon_only: true
+            = action_buttons_for snippet, size: :mini, except: :show, icon_only: true
 
 = paginate snippets

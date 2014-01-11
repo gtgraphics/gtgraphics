@@ -33,6 +33,7 @@ gem 'kaminari'
 gem 'active_link_to'
 gem 'jbuilder', '~> 1.2'
 gem 'liquid'
+gem 'builder'
 
 # Assets
 gem 'sass-rails', '~> 4.0.0'

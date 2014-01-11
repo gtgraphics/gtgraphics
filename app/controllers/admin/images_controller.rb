@@ -11,7 +11,7 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def index
-    @images = Image.with_translations.includes(:author).sort(params[:sort], params[:direction]).page(params[:page])
+    @images = Image.with_translations(I18n.locale).includes(:author).sort(params[:sort], params[:direction]).page(params[:page])
     respond_with :admin, @images
   end
 

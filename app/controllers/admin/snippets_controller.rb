@@ -11,7 +11,7 @@ class Admin::SnippetsController < Admin::ApplicationController
   end
 
   def index
-    @snippets = Snippet.with_translations.includes(:author).sort(params[:sort], params[:direction]).page(params[:page])
+    @snippets = Snippet.with_translations(I18n.locale).includes(:author).sort(params[:sort], params[:direction]).page(params[:page])
     respond_with :admin, @snippets
   end
 
@@ -43,21 +43,21 @@ class Admin::SnippetsController < Admin::ApplicationController
     respond_with :admin, @snippet
   end
 
-  def translation_fields
-    translated_locale = params.fetch(:translated_locale)
-    @snippet = Snippet.new
-    @snippet.translations.build(locale: translated_locale)
-    respond_to do |format|
-      format.html { render layout: false }
-    end
-  end
-
   def destroy_multiple
     snippet_ids = Array(params[:snippet_ids])
     Snippet.destroy_all(id: snippet_ids)
     flash_for Snippet, :destroyed, multiple: true
     respond_to do |format|
       format.html { redirect_to :admin_snippets }
+    end
+  end
+
+  def translation_fields
+    translated_locale = params.fetch(:translated_locale)
+    @snippet = Snippet.new
+    @snippet.translations.build(locale: translated_locale)
+    respond_to do |format|
+      format.html { render layout: false }
     end
   end
 

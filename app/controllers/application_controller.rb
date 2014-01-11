@@ -8,13 +8,11 @@ class ApplicationController < ActionController::Base
 
   include AuthenticatableController
   include BreadcrumbController
+  include ErrorHandlingController
   include FlashableController
   include MaintainableController
   include RouteHelper
 
-  unless Rails.env.development?
-    rescue_from ActiveRecord::RecordNotFound, with: :render_404
-  end
   rescue_from Authenticatable::AccessDenied, with: :force_authentication
 
   private
@@ -31,14 +29,7 @@ class ApplicationController < ActionController::Base
       format.all { head :unauthorized }
     end
   end
-
-  def render_404
-    respond_to do |format|
-      format.html { render 'public/404', layout: false, status: :not_found }
-      format.all { head :not_found }
-    end
-  end
-
+  
   def set_locale
     available_locales = I18n.available_locales.map(&:to_s)
     if locale = params[:locale] and locale.in?(available_locales)

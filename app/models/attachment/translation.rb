@@ -13,6 +13,10 @@
 
 class Attachment < ActiveRecord::Base
   class Translation < Globalize::ActiveRecord::Translation
+    include UniquelyTranslated
+
+    acts_as_uniquely_translated :snippet_id
+
     validates :title, presence: true
   end
 end

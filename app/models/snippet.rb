@@ -11,7 +11,7 @@
 class Snippet < ActiveRecord::Base
   include Authorable
   include BatchTranslatable
-  include HtmlContainable
+  include PersistenceContextTrackable
   include Sortable
 
   has_many :regions, as: :concrete_region, dependent: :destroy
@@ -20,7 +20,6 @@ class Snippet < ActiveRecord::Base
 
   acts_as_authorable
   acts_as_batch_translatable
-  acts_as_html_containable :body
   acts_as_sortable do |by|
     by.author { |dir| [User.arel_table[:first_name].send(dir.to_sym), User.arel_table[:last_name].send(dir.to_sym)] }
     by.name(default: true) { |column, dir| Snippet::Translation.arel_table[column].send(dir.to_sym) }

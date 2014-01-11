@@ -3,10 +3,10 @@
 
 .row
   .col-lg-8
-    - if @template.description_html.present?
+    - if @template.description.present?
       %h3= ::Template.human_attribute_name :description
       .content
-        = @template.description_html
+        = @template.description
 
     %h3= RegionDefinition.model_name.human(count: 2)
     .content

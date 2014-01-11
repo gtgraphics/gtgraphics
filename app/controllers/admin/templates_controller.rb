@@ -11,7 +11,7 @@ class Admin::TemplatesController < Admin::ApplicationController
   end
 
   def index
-    @templates = template_class.with_translations.order(template_class.translation_class.arel_table[:name])
+    @templates = Template.with_translations(I18n.locale).sort(params[:sort], params[:direction]).page(params[:page])
     respond_with :admin, @templates
   end
 
@@ -48,10 +48,13 @@ class Admin::TemplatesController < Admin::ApplicationController
     respond_with :admin, @template.becomes(Template)
   end
 
-  def make_default
-    @template.update(default: true)
-    flash_for @template, :made_default
-    redirect_to :admin_templates
+  def destroy_multiple
+    template_ids = Array(params[:template_ids])
+    Template.destroy_all(id: template_ids)
+    flash_for Template, :destroyed, multiple: true
+    respond_to do |format|
+      format.html { redirect_to :admin_templates }
+    end
   end
 
   def translation_fields
@@ -94,7 +97,7 @@ class Admin::TemplatesController < Admin::ApplicationController
     if @template_type = params[:type] and template_class = "Template::#{@template_type}" and template_class.in?(Template.template_types)
       @template_class = template_class.constantize
     else
-      Template
+      raise 'template type not found'
     end
   end
 end

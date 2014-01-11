@@ -17,7 +17,6 @@ class Attachment < ActiveRecord::Base
   include Authorable
   # include AttachmentPreservable
   include BatchTranslatable
-  include HtmlContainable
   include PersistenceContextTrackable
   include Sortable
 
@@ -26,7 +25,6 @@ class Attachment < ActiveRecord::Base
   acts_as_asset_containable url: '/system/:class/:id_partition/:filename'
   acts_as_authorable default_to_current_user: false
   acts_as_batch_translatable
-  acts_as_html_containable :description
   # preserve_attachment_between_requests_for :asset
 
   validates_attachment :asset, presence: true
@@ -39,21 +37,14 @@ class Attachment < ActiveRecord::Base
     by.updated_at { |dir| arel_table[:updated_at].send(dir.to_sym) }
   end
 
-  def description_html
-    template = Liquid::Template.parse(self.description)
-    template.render(to_liquid).html_safe
-  end
-
   def image?
     content_type.in?(Image::CONTENT_TYPES)
   end
 
-  def to_liquid
-    {} # TODO
-  end
-
   private
   def set_default_title
-    translation.title = File.basename(asset_file_name, '.*').humanize if asset_file_name.present? and translation.title.blank?
+    if asset_file_name.present? and translation.title.blank?
+      translation.title = File.basename(asset_file_name, '.*').humanize
+    end
   end
 end
