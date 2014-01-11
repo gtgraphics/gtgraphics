@@ -16,26 +16,25 @@
 .row
   .col-lg-8
     .content
-      %p
-        .thumbnail
-          .actions.bottom.right
-            .btn-toolbar
-              = button_link_to prepend_icon(:crop, translate('helpers.links.crop')), [:crop, :admin, @image]
-          = link_to @image.asset.url(:original_cropped), target: '_blank' do
-            .img-editable
-              = image_tag(@image.asset.url(:preview), class: 'img-responsive', alt: @image.title)
+      .thumbnail
+        /.actions.bottom.right
+        /  .btn-toolbar
+        /    = button_link_to prepend_icon(:crop, translate('helpers.links.crop')), [:crop, :admin, @image]
+        = link_to @image.asset.url(:original_cropped), target: '_blank' do
+          .img-editable
+            = image_tag(@image.asset.url(:preview), class: 'img-responsive', alt: @image.title)
 
     %h3= Image::Style.model_name.human(count: 2)
     .content
       = render 'admin/image_styles/table'
   
   .col-lg-4
-    - if @image.description_html.present?
+    - if @image.description.present?
       .panel.panel-default
         .panel-heading
           %h3.panel-title= Image.human_attribute_name :description
         .panel-body
-          = @image.description_html
+          = @image.description
 
     .panel.panel-default
       .panel-heading

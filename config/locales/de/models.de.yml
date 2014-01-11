@@ -225,6 +225,9 @@ de:
       template/image:
         one: Bildseitenvorlage
         other: Bildseitenvorlagen
+      template/contact_form:
+        one: Kontaktformular-Vorlage
+        other: Kontaktformular-Vorlagen
       user:
         one: Benutzer
         other: Benutzer

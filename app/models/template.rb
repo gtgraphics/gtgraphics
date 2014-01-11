@@ -39,7 +39,6 @@ class Template < ActiveRecord::Base
   end
 
   has_many :region_definitions, dependent: :destroy, inverse_of: :template
-  has_many :pages, dependent: :destroy, inverse_of: :template
 
   validates :type, presence: true, inclusion: { in: TEMPLATE_TYPES }, on: :create
   validates :file_name, presence: true, inclusion: { in: ->(template) { template.class.unassigned_template_files } }

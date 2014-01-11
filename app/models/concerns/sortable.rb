@@ -76,6 +76,14 @@ module Sortable
   end
 
   module RelationExtension
+    def default_sort_column
+      @default_sort_column
+    end
+
+    def default_sort_column=(column)
+      @default_sort_column = column.to_s
+    end
+
     def sort_column
       @sort_column
     end
@@ -125,10 +133,10 @@ module Sortable
     def sort(column, direction = nil)
       relation = all.extending(Sortable::RelationExtension)
 
-      sortable_column = sortable_columns_hash[column]
-      sortable_column ||= sortable_columns.find(&:default?)
+      default_sortable_column = sortable_columns.find(&:default?)
+      relation.default_sort_column = default_sortable_column.name
 
-      if sortable_column
+      if sortable_column = sortable_columns_hash[column] || default_sortable_column
         relation.sort_column = sortable_column.name
         relation.sort_direction = direction || sortable_column.primary_direction.to_sym
         relation.sort_column_definition = sortable_column

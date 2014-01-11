@@ -16,5 +16,7 @@
 class Template < ActiveRecord::Base
   class ContactForm < Template
     self.template_lookup_path = 'contact_forms/templates'
+
+    has_many :pages, class_name: 'Page::ContactForm', foreign_key: :template_id, dependent: :destroy
   end
 end

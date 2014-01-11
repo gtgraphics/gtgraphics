@@ -43,10 +43,9 @@ gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 gem 'jquery-turbolinks'
 gem 'turbolinks'
-gem 'compass' #, github: 'Compass/compass-rails', branch: 'rails4-hack' # hack until compass has official Rails 4 support
-#gem 'formtastic-bootstrap', github: 'tlux/formtastic-bootstrap', branch: 'bootstrap3'
-#gem 'twitter-bootstrap-rails'
-#gem 'formtastic-bootstrap'
+gem 'compass' # github: 'Compass/compass-rails', branch: 'rails4-hack' # hack until compass has official Rails 4 support
+#gem 'less-rails' # Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
+gem 'bootstrap-sass-rails'
 
 # Tools
 group :development do

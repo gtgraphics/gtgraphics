@@ -11,10 +11,14 @@
 .panel-title .checkbox {
   //margin: 0;
   padding: 0;
-  padding-top: 2px;
+  min-height: auto;
   input[type="checkbox"] {
     margin-left: 0;
     margin-right: 6px;
     margin-top: 3px;
   }
+}
+
+.panel-title {
+  font-weight: 500;
 }

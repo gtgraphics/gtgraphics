@@ -3,7 +3,7 @@
     .col-lg-8
       .thumbnail
         .img-editable
-          = image_tag @image.asset.url, id: 'image_asset', class: 'img-responsive img-croppable', data: { original_width: @image.width, original_height: @image.height }
+          = image_tag @image.asset.url, id: 'image_asset', class: 'img-croppable img-responsive', alt: @image.title, data: { original_width: @image.width, original_height: @image.height }
 
     .col-lg-4
 

@@ -16,5 +16,7 @@
 class Template < ActiveRecord::Base
   class Image < Template
     self.template_lookup_path = 'images/templates'
+
+    has_many :pages, class_name: 'Page::Image', foreign_key: :template_id, dependent: :destroy
   end
 end
