@@ -15,6 +15,7 @@ de:
     inline_labels:
       page:
         menu_item: In Menüs anzeigen
+        indexable: Suchmaschinen dürfen die Seite indexieren
       redirection:
         permanent: Ursprüngliche Adresse wurde dauerhaft verschoben (HTTP-Status 301)
       template:
