@@ -8,9 +8,9 @@ class PageSitemap
     @pages = pages
   end
 
-  def to_xml
+  def to_xml(options = {})
     max_page_depth = @pages.maximum(:depth).next
-    xml = Builder::XmlMarkup.new(indent: 2, target: file)
+    xml = Builder::XmlMarkup.new(indent: 2)
     xml.instruct!
     xml.urlset xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9', 'xmlns:xhtml' => 'http://www.w3.org/1999/xhtml' do
       @pages.find_each(batch_size: 50) do |page|
