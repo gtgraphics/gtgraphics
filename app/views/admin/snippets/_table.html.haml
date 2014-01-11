@@ -12,7 +12,6 @@
         %th.checkbox-cell
           %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
       %th= sort_link_for snippets, :name
-      %th= sort_link_for snippets, :author
       %th= sort_link_for snippets, :updated_at
       - if actions
         %th.actions
@@ -23,7 +22,6 @@
           %td.checkbox-cell
             = check_box_tag 'snippet_ids[]', snippet.id, false, class: 'table-checkbox', id: nil
         %td= link_to snippet.name, [:admin, snippet]
-        %td= snippet.author_name
         %td= time_ago snippet.updated_at
         - if actions
           %td.actions

@@ -21,7 +21,6 @@ class Snippet < ActiveRecord::Base
   acts_as_authorable
   acts_as_batch_translatable
   acts_as_sortable do |by|
-    by.author { |dir| [User.arel_table[:first_name].send(dir.to_sym), User.arel_table[:last_name].send(dir.to_sym)] }
     by.name(default: true) { |column, dir| Snippet::Translation.arel_table[column].send(dir.to_sym) }
     by.updated_at
   end

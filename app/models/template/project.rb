@@ -17,6 +17,7 @@ class Template < ActiveRecord::Base
   class Project < Template
     self.template_lookup_path = 'projects/templates'
 
-    has_many :pages, class_name: 'Page::Project', foreign_key: :template_id, dependent: :destroy
+    has_many :project_pages, class_name: 'Page::Project', foreign_key: :template_id, dependent: :destroy
+    has_many :pages, through: :project_pages
   end
 end
