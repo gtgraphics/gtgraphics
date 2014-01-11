@@ -9,5 +9,20 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require_tree ./admin
  */
+
+// Bootstrap
+@import "shared/bootstrap_variables";
+
+// Shared
+@import "shared";
+
+// Admin Assets
+@import "admin/cropper";
+@import "admin/headlines";
+@import "admin/jquery.Jcrop";
+@import "admin/loader";
+@import "admin/messages";
+@import "admin/pages";
+@import "admin/tabs";
+@import "admin/translation_manager";

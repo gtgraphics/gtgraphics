@@ -1,16 +1,12 @@
-.thumbnails {
-  .thumbnail {
-    margin-bottom: 30px;
-  }
-}
-
 .thumbnail {
   position: relative;
+  
   &:hover {
     .actions .btn {
       display: inline-block;
     }
   }
+
   .actions {
     position: absolute;
     &.bottom {
@@ -40,6 +36,12 @@
           color: white;
         }
       }
+    }
+  }
+
+  .caption {
+    h4 {
+      font-weight: 700;
     }
   }
 }

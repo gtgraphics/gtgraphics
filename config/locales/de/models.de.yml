@@ -141,9 +141,6 @@ de:
       content:
         one: Inhalt
         other: Inhalte
-      gallery:
-        one: Galerie
-        other: Galerien
       homepage:
         one: Startseite
         other: Startseiten
@@ -213,21 +210,21 @@ de:
       template:
         one: Vorlage
         other: Vorlagen
+      template/contact_form:
+        one: Kontaktformular-Vorlage
+        other: Kontaktformular-Vorlagen
       template/content:
         one: Inhaltsvorlage
         other: Inhaltsvorlagen
-      template/gallery:
-        one: Galerievorlage
-        other: Galerievorlagen
       template/homepage:
         one: Homepagevorlage
         other: Homepagevorlagen
       template/image:
         one: Bildseitenvorlage
         other: Bildseitenvorlagen
-      template/contact_form:
-        one: Kontaktformular-Vorlage
-        other: Kontaktformular-Vorlagen
+      template/project:
+        one: Projektvorlage
+        other: Projektvorlagen
       user:
         one: Benutzer
         other: Benutzer

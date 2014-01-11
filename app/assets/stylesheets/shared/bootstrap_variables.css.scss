@@ -1,7 +1,7 @@
 //
 // Bootstrap Customization
 //
-// For all available variables hava a look at the
+// For all available variables have a look at the
 // Bootstrap Customizer provided by the authors:
 //
 // http://getbootstrap.com/customize/#less-variables
@@ -13,11 +13,10 @@
 
 // Customization
 // -------------------------
+
 $body-bg:                white;
 $font-family-sans-serif: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family-serif:      "Roboto Slab", Georgia, "Times New Roman", Times, serif;
 $headings-font-weight:   300;
 $line-height-base:       1.5;
 $text-color:             lighten(#000, 20%);
-
-
-@import "twitter/bootstrap";

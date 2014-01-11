@@ -16,7 +16,7 @@ class Admin::TemplatesController < Admin::ApplicationController
   end
 
   def new
-    @template = template_class.new
+    @template = Template.new
     @template.translations.build(locale: I18n.locale)
     respond_with :admin, @template.becomes(Template)
   end

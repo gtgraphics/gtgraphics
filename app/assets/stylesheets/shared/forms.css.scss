@@ -1,3 +1,15 @@
+fieldset {
+  legend {
+    padding-bottom: 4px;
+    font-size: 18px;
+    border-bottom-width: 2px;
+  }
+}
+
+label.radio, label.checkbox {
+  font-weight: normal;
+}
+
 .form-actions {
   margin-top: 20px;
   padding: 15px;

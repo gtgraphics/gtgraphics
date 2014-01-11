@@ -1,6 +1,16 @@
-table {
+.table {
   .checkbox-cell {
     width: 30px;
+    text-align: center;
+  }
+  .thumbnail-cell {
+    width: 101px;
+  }
+  .actions {
+    .btn-toolbar {
+      float: right;
+      text-align: left;
+    }
   }
 
   &.table-indented {
