@@ -24,6 +24,9 @@
     right: 0;
     @include user-select(none);
     pointer-events: none;
+    i.fa {
+      line-height: normal;
+    }
   }
 
   &.hover, &.focus {
