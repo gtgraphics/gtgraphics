@@ -93,16 +93,16 @@ $(document).ready ->
     previewPath($slug, $(@))
 
   # Load Embeddable Editor
-  $pageSettings = $('#page_settings')
-  $embeddableSettings = $('#page_embeddable_settings')
-  $embeddableFields = $('#page_embeddable_fields')
+  #$pageSettings = $('#page_settings')
+  #$embeddableSettings = $('#page_embeddable_settings')
+  #$embeddableFields = $('#page_embeddable_fields')
 
-  if $embeddableFields.length > 0 and jQuery.trim($embeddableFields.html()) is ''
-    loadEmbeddableEditor($embeddableFields, $embeddableSettings, $pageSettings) 
+  #if $embeddableFields.length > 0 and jQuery.trim($embeddableFields.html()) is ''
+  #  loadEmbeddableEditor($embeddableFields, $embeddableSettings, $pageSettings) 
 
-  $pageSettings
-    .on 'change', '#page_embeddable_type', ->
-      loadEmbeddableEditor($embeddableFields, $embeddableSettings, $pageSettings, true)    
-      loadEmbeddableSettings($embeddableFields, $embeddableSettings, $pageSettings)
-    .on 'change', '#page_embeddable_id', ->
-      loadEmbeddableEditor($embeddableFields, $embeddableSettings, $pageSettings)
+  #$pageSettings
+  #  .on 'change', '#page_embeddable_type', ->
+  #    loadEmbeddableEditor($embeddableFields, $embeddableSettings, $pageSettings, true)    
+  #    loadEmbeddableSettings($embeddableFields, $embeddableSettings, $pageSettings)
+  #  .on 'change', '#page_embeddable_id', ->
+  #    loadEmbeddableEditor($embeddableFields, $embeddableSettings, $pageSettings)

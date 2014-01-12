@@ -94,11 +94,12 @@ de:
       page/translation:
         meta_description: SEO-Beschreibung
         meta_keywords: SEO-Keywords
-      project:
-        released_on: Release
-      project/translation:
-        client_name: Kunde
+      page/project:
+        client_name: Auftraggeber
         client_url: URL
+        released_on: Release
+      page/project/translation:
+        name: Projektname
       redirection:
         destination_url: URL
         destination_page: Seite

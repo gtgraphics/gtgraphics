@@ -24,7 +24,7 @@ class Admin::PagesController < Admin::ApplicationController
   def new
     @page = Page.new(parent: @parent_page || Page.root)
     @page.translations.build(locale: I18n.locale)
-    @page.embeddable_type = 'Page::Content'
+    @page.embeddable_type = params[:type] || 'Page::Content'
     build_page_embeddable
 
     #@page.embeddable.translations.each do |embedable_translation|
@@ -110,36 +110,11 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def embeddable_fields
-    respond_to do |format|
-      format.html do
-        @page = Page.new(embeddable_type: params.fetch(:embeddable_type), embeddable_id: params[:embeddable_id])
-        if @page.embeddable_class
-          build_page_embeddable
-          render layout: false
-        else
-          head :not_found
-        end
-      end
-      format.js do
-        @page = Page.new(embeddable_type: params[:embeddable_type])
-        if @page.embeddable_class
-          build_page_embeddable
-        else
-          head :not_found
-        end
-      end
-    end
-  end
-
-  def embeddable_settings
-    @page = Page.new(embeddable_type: params.fetch(:embeddable_type))
+    @page = Page.new(embeddable_type: params.fetch(:embeddable_type), embeddable_id: params[:embeddable_id])
+    build_page_embeddable
     respond_to do |format|
       format.html do
         if @page.embeddable_class
-          @page.embeddable = @page.embeddable_class.new
-          if @page.embeddable.class.reflect_on_association(:translations)
-            @page.embeddable.translations.build(locale: I18n.locale)
-          end
           render layout: false
         else
           head :not_found
