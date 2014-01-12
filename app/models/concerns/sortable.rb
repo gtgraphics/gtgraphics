@@ -84,6 +84,14 @@ module Sortable
       @default_sort_column = column.to_s
     end
 
+    def default_sort_direction
+      @default_sort_direction
+    end
+
+    def default_sort_direction=(direction)
+      @default_sort_direction = Sortable::Direction.new(direction)
+    end
+
     def sort_column
       @sort_column
     end
@@ -135,6 +143,7 @@ module Sortable
 
       default_sortable_column = sortable_columns.find(&:default?)
       relation.default_sort_column = default_sortable_column.name
+      relation.default_sort_direction = default_sortable_column.primary_direction
 
       if sortable_column = sortable_columns_hash[column] || default_sortable_column
         relation.sort_column = sortable_column.name
