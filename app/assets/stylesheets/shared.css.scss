@@ -1,5 +1,8 @@
 @import "shared/js_support";
 
+// Custom Mixins
+@import "shared/mixins";
+
 // Libraries
 @import "shared/bootstrap_overrides";
 @import "twitter/bootstrap";

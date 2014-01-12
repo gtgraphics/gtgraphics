@@ -1,5 +1,5 @@
 = fields.simple_fields_for :embeddable do |embeddable_fields|
-  = render "admin/#{embeddable_fields.object.class.model_name.element.pluralize}/fields", fields: embeddable_fields, embedded: true
+  = render "admin/pages/#{embeddable_fields.object.class.model_name.element.pluralize}/fields", fields: embeddable_fields, embedded: true
   = embeddable_fields.input :id, as: :hidden if embeddable_fields.object.new_record?
 
   /= fields.simple_fields_for :translations do |translation_fields|

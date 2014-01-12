@@ -35,7 +35,7 @@ class PagesController < ApplicationController
   end
 
   def respond_with_page(options = {})
-    unless @page.embeddable_class.support_template?
+    unless @page.embeddable_class.supports_template?
       raise ActionView::MissingTemplate, "#{@page.embeddable_class} does not support templates"
     end
     respond_with @page, options.merge(template: @page.template_path)

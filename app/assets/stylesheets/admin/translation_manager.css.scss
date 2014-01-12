@@ -2,16 +2,35 @@
 
   .remove-locale {
     position: absolute;
-    padding-top: 0;
-    padding-bottom: 0;
-    margin-left: 3px;
-    right: 15px;
+    //padding: 
+    margin: 0;
+    right: 10px;
     top: 10px;
+    border: 0;
+    background: none;
+    color: $brand-danger;
+    margin-top: -1px;
+
+    &:disabled, &.disabled,
+    &:hover:disabled, &:hover.disabled,
+    &:active:disabled, &:active.disabled,
+    &.active:disabled, &.active.disabled {
+      color: $btn-link-disabled-color;
+    }
+
+    &:active, &.active {
+      background: none;
+      color: $brand-danger;
+    }
+
+    &:hover {
+      color: darken(adjust-hue($brand-danger, -10), 5%);
+    }
   }
 
   .change-locale {
     position: relative;
-    padding-right: 43px;
+    padding-right: 34px;
   }
 
   .tab-pane {

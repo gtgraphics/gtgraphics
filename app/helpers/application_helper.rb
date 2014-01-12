@@ -20,10 +20,6 @@ module ApplicationHelper
     classes << 'admin' if admin_controller?
     classes.join(' ')
   end
-  
-  def caret
-    content_tag :b, nil, class: 'caret'
-  end
 
   def microtimestamp
     (Time.now.to_f * 1_000_000).to_i

@@ -47,20 +47,18 @@ class Page < ActiveRecord::Base
   acts_as_nested_set
 
   belongs_to :embeddable, polymorphic: true, autosave: true
-  has_many :regions, dependent: :destroy
+  has_many :regions, dependent: :destroy, autosave: true
 
   validates :embeddable, presence: true
   validates :embeddable_type, inclusion: { in: EMBEDDABLE_TYPES }, allow_blank: true
-  validates :template_id, presence: true # FIXME Redirection has no template
   validates :slug, presence: { unless: :root? }, uniqueness: { scope: :parent_id }
-  validates :path, presence: { unless: :root? }, uniqueness: true, if: -> { slug.present? }
+  validates :path, presence: { unless: :root? }, uniqueness: true, if: :slug?
   validate :validate_parent_assignability
-  validate :validate_template, if: :embeddable_type?
-  validate :validate_no_root_exists, if: :root?
-  validate :validate_embeddable_type_was_convertible, on: :update, if: -> { embeddable_type_was.present? }
+  validate :validate_root_uniqueness, if: :root?
+  validate :validate_embeddable_type_was_convertible, on: :update, if: :embeddable_type_changed?
 
   before_validation :generate_slug
-  before_validation :generate_path, if: -> { slug.present? }
+  before_validation :generate_path, if: :slug?
   before_save :sanitize_regions
   before_destroy :destroyable?
   after_save :update_descendants_paths
@@ -73,7 +71,6 @@ class Page < ActiveRecord::Base
   scope :in_main_menu, -> { published.menu_items.where(depth: 1) }
   scope :menu_items, -> { where(menu_item: true) }
   scope :published, -> { with_state(:published) }
-  scope :with_translations, -> { includes(embeddable: :translations) }
 
   state_machine :state, initial: :drafted do
     state :published
@@ -93,6 +90,7 @@ class Page < ActiveRecord::Base
 
   delegate :name, to: :author, prefix: true, allow_nil: true
   delegate :meta_keywords, :meta_keywords=, to: :translation
+  delegate :supports_template?, :supports_regions?, to: :embeddable_class, allow_nil: true
 
   EMBEDDABLE_TYPES.each do |embeddable_type|
     scope embeddable_type.demodulize.underscore.pluralize, -> { where(embeddable_type: embeddable_type) }
@@ -115,7 +113,7 @@ class Page < ActiveRecord::Base
 
     def embedding(*types)
       types = Array(types).flatten.map { |type| type.to_s.classify }
-      where(embeddable_type: types.one? ? types.first : types)
+      where(embeddable_type: types.many? ? types : types.first)
     end
 
     def embeddable_classes
@@ -139,6 +137,10 @@ class Page < ActiveRecord::Base
         where.not(id: page.id)
       end
     end
+  end
+
+  def available_regions
+    template.region_definitions.pluck(:label) if supports_regions?
   end
 
   def build_embeddable(attributes = {})
@@ -180,16 +182,12 @@ class Page < ActiveRecord::Base
     !published?
   end
 
-  def render_region(name)
-    regions.fetch(name, '').html_safe
-  end
-
   def state_name
     I18n.translate(state, scope: 'page.states')
   end
 
   def template
-    embeddable.template if embeddable_class.support_template?
+    embeddable.template if supports_template?
   end
 
   def template_path
@@ -222,10 +220,11 @@ class Page < ActiveRecord::Base
   end
 
   def sanitize_regions
-    if embeddable_class.support_regions?
-      # self.regions = regions.slice(template.region_definitions) # TODO
+    # If changing the embeddable type, migrates the regions to the defined regions on the new template
+    if support_regions?
+      # self.regions = regions.slice(available_regions) # TODO
     else
-      # regions.clear
+      regions.destroy_all
     end
   end
 
@@ -237,18 +236,11 @@ class Page < ActiveRecord::Base
     errors.add(:embeddable_type, :invalid) unless embeddable_class_was.convertible?
   end
 
-  def validate_no_root_exists
-    errors.add(:parent_id, :taken) if self.class.roots.without(self).exists?
-  end
-
   def validate_parent_assignability
     errors.add(:parent_id, :invalid) if self_and_descendants.pluck(:id).include?(parent_id)
   end
 
-  def validate_template
-    # TODO
-    # If Page embedding Page::Project -> Template::Project or Template
-    # If Page without embedding -> Template
-    # errors.add(:template_id, :invalid) if embeddable_type
+  def validate_root_uniqueness
+    errors.add(:parent_id, :taken) if self.class.roots.without(self).exists?
   end
 end

@@ -7,6 +7,7 @@ module I18nHelper
     javascript_tag do
       raw %{
         I18n || (I18n = {});
+        I18n.defaultLocale = '#{I18n.default_locale}';
         I18n.locale = '#{I18n.locale}';
         I18n.translations = #{I18n.translate(:javascript, default: {}).to_json};
       }

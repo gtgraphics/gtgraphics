@@ -1,4 +1,4 @@
-@import "//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css";
+@import url("//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css");
 
 .append-icon {
   .caption + i {
@@ -18,7 +18,7 @@
   }
 }
 
-.btn-mini {
+.btn-xs {
   .append-icon {
     .caption + i.fa {
       margin-left: 3px;
@@ -32,7 +32,7 @@
   }
 }
 
-.btn-large {
+.btn-lg {
   .append-icon {
     .caption + i.fa {
       margin-left: 6px;
@@ -52,32 +52,16 @@
   text-align: center;
 }
 
-/*
-@media (max-width: 979px) {
-  a.btn {
-    .append-icon, .prepend-icon {
-      .caption {
-        display: none;
-      }
-    }
-  }
+// Flags
 
-  .file-controls {
-    a.btn {
-      .append-icon, .prepend-icon {
-        .caption {
-          display: inline;
-        }
-      }
-    }
-  }
-
-  .navbar a, .dropdown-menu a, .form-actions button {
-    .append-icon, .prepend-icon {
-      .caption {
-        display: inline-block;
-      }
-    }
+.prepend-flag-icon, .append-flag-icon {
+  .flag-icon {
+    margin-top: -2px;   
   }
 }
-*/
+
+.prepend-flag-icon {
+  .flag-icon + .caption {
+    margin-left: 5px;
+  }  
+}

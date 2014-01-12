@@ -8,7 +8,7 @@ class ImagePreviewInput < SimpleForm::Inputs::FileInput
         inner_html = ''
         inner_html << template.content_tag(:div, class: 'pull-left') do
           template.link_to object.send(attribute_name).url, target: '_blank' do
-            template.image_tag(image_asset.url(version), class: 'thumbnail', alt: '', style: 'margin-bottom: 10px; margin-right: 10px')
+            template.image_tag(image_asset.url(version), class: 'img-circle', alt: '', style: 'margin-bottom: 10px; margin-right: 10px')
           end
         end
         if object.respond_to?("#{attribute_name}_width") and object.respond_to?("#{attribute_name}_height")

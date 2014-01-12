@@ -30,7 +30,7 @@
 
       .navbar-collapse.collapse
         %ul.nav.navbar-nav
-          - Page.in_main_menu.with_translations.each do |page|
+          - Page.in_main_menu.with_translations(I18n.locale).each do |page|
             = active_link_to page.title, page, wrap_tag: :li
 
         %ul.nav.navbar-nav.navbar-right
@@ -41,8 +41,7 @@
             %ul.dropdown-menu
               - I18n.available_locales.sort_by { |locale| translate(locale, scope: :languages, locale: locale) }.each do |locale|
                 = active_link_to url_for(locale: locale), wrap_tag: :li, hreflang: locale, lang: locale do
-                  = flag_icon(locale)
-                  = translate(locale, scope: :languages, locale: locale)
+                  = prepend_flag_icon(locale, translate(locale, scope: :languages, locale: locale))
 
   - unless @page.published?
     %p
