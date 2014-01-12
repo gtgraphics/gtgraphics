@@ -1,0 +1,9 @@
+//= require jquery
+//= require jquery_ujs
+//= require turbolinks
+//= require jquery.turbolinks
+//= require twitter/bootstrap
+//= require_tree ./core_ext
+//= require_tree ./libraries
+//= require_tree ./shared
+//= require ./editor

@@ -1,12 +1,12 @@
 module ApplicationHelper
-  def admin_context?
-    signed_in? or controller.class.name.split('::').first == 'Admin'
+  def admin_controller?
+    controller.class.name.split('::').first == 'Admin'
   end
 
   def body_css
     classes = []
     classes << I18n.locale.to_s
-    classes << 'admin' if admin_context?
+    classes << 'admin' if admin_controller?
     classes.join(' ')
   end
 

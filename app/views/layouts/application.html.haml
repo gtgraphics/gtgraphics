@@ -5,6 +5,7 @@
     %title
       = (["GT Graphics"] + breadcrumbs.collect(&:caption).drop(1)).join(' &middot; ').html_safe
 
+    / Meta Elements
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'}
     = csrf_meta_tags
     %meta{property: 'og:site_name', content: 'GT Graphics'}
@@ -12,14 +13,18 @@
     = facebook_meta_tags
     = yield :head
 
-    = stylesheet_link_tag 'application', media: 'all', data: { turbolinks_track: true }
-    - if admin_context?
-      = stylesheet_link_tag 'admin', media: 'all', data: { turbolinks_track: true }    
+    / Stylesheets
+    - if admin_controller?
+      = stylesheet_link_tag 'admin', media: 'all', data: { turbolinks_track: true }
+    - else
+      = stylesheet_link_tag 'application', media: 'all', data: { turbolinks_track: true }
     = yield :stylesheets
 
-    = javascript_include_tag 'application', data: { turbolinks_track: true }
-    - if admin_context?
+    / JavaScripts
+    - if admin_controller?
       = javascript_include_tag 'admin', data: { turbolinks_track: true }
+    - else
+      = javascript_include_tag 'application', data: { turbolinks_track: true }
     = yield :javascripts
 
   %body{class: body_css, data: { controller: controller_name, action: action_name, locale: I18n.locale }}
