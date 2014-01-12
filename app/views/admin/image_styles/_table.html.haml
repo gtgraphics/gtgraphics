@@ -1,9 +1,9 @@
 - if @image_styles.any?
   %ul#image_styles
     - @image_styles.each do |image_style|
-      = content_tag_for :li, image_style.becomes(::Image::Style), class: 'clearfix' do
+      = content_tag_for :li, image_style.becomes(Image::Style), class: 'clearfix' do
         .pull-left= link_to image_style.dimensions, image_style.asset_url
         .actions.pull-right
           .btn-toolbar
-            = update_button_link_for image_style, url: edit_admin_image_style_path(@image, image_style), size: :mini, icon_only: true
-            = destroy_button_link_for image_style, url: admin_image_style_path(@image, image_style), size: :mini, icon_only: true
+            = update_button_link_for image_style.becomes(Image::Style), url: edit_admin_image_style_path(@image, image_style), size: :mini, icon_only: true
+            = destroy_button_link_for image_style.becomes(Image::Style), url: admin_image_style_path(@image, image_style), size: :mini, icon_only: true
