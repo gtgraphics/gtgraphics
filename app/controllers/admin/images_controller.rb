@@ -1,7 +1,7 @@
 class Admin::ImagesController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_image, only: %i(show edit update crop apply_crop destroy download move_to_attachments dimensions)
+  before_action :load_image, only: %i(show edit update crop apply_crop uncrop destroy download move_to_attachments dimensions)
 
   breadcrumbs do |b|
     b.append Image.model_name.human(count: 2), :admin_images
@@ -59,6 +59,12 @@ class Admin::ImagesController < Admin::ApplicationController
     end
     flash_for @image
     respond_with :admin, @image, template: :crop
+  end
+
+  def uncrop
+    @image.uncrop!
+    flash_for @image
+    respond_with :admin, @image
   end
 
   def destroy

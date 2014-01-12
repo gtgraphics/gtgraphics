@@ -46,6 +46,7 @@ GtGraphics::Application.routes.draw do
           member do
             get :crop
             patch :crop, action: :apply_crop
+            patch :uncrop
             get :download
             get :dimensions
             patch :move_to_attachments

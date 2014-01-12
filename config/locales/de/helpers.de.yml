@@ -35,6 +35,7 @@ de:
       reset: Zurücksetzen
       reply: Antworten
       sign_out: Abmelden
+      uncrop: Original wiederherstellen
       upload: '%{model} hochladen'
       view: Ansehen
     confirmations:

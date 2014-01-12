@@ -11,7 +11,6 @@
       - if checkboxes
         %th.checkbox-cell
           %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
-      %th.thumbnail-cell
       %th= sort_link_for templates, :name
       - if @template_type.blank?
         %th= ::Template.human_attribute_name :type
@@ -23,10 +22,6 @@
         - if checkboxes
           %td.checkbox-cell
             = check_box_tag 'template_ids[]', template.id, false, class: 'table-checkbox', id: nil
-        %td.thumbnail-cell
-          - if template.screenshot.present?
-            = link_to admin_template_path(template) do
-              = image_tag template.screenshot.url(:thumbnail), alt: template.name, class: 'thumbnail'
         %td= link_to template.name, admin_template_path(template)
         - if @template_type.blank?
           %td= template.class.model_name.human

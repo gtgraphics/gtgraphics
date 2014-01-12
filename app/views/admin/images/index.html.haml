@@ -1,14 +1,16 @@
 = form_tag :destroy_multiple_admin_images, method: :delete do
 
-  = index_headline_for Image do
-    %ul.list-inline
-      %li.batch-controls
-        = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) }
-      %li= create_button_link_for Image, icon: :upload, caption: translate('helpers.links.upload', model: Image.model_name.human), url: :new_admin_image
-      %li
-        .btn-group
-          = active_button_link_to icon(:th_list), update_preferences_admin_account_path(image_view_mode: 'table'), method: :patch, active: current_user.preferences[:image_view_mode] != 'tiles', title: translate('views.list_types.table'), data: { toggle: 'tooltip', container: 'body' }
-          = active_button_link_to icon(:th_large), update_preferences_admin_account_path(image_view_mode: 'tiles'), method: :patch, active: current_user.preferences[:image_view_mode] == 'tiles', title: translate('views.list_types.tiles'), data: { toggle: 'tooltip', container: 'body' }
+  
+
+  /= index_headline_for Image do
+  /  %ul.list-inline
+  /    %li.batch-controls
+  /      = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) }
+  /    %li= create_button_link_for Image, icon: :upload, caption: translate('helpers.links.upload', model: Image.model_name.human), url: :new_admin_image
+  /    %li
+  /      .btn-group
+  /        = active_button_link_to icon(:th_list), update_preferences_admin_account_path(image_view_mode: 'table'), method: :patch, active: current_user.preferences[:image_view_mode] != 'tiles', title: translate('views.list_types.table'), data: { toggle: 'tooltip', container: 'body' }
+  /        = active_button_link_to icon(:th_large), update_preferences_admin_account_path(image_view_mode: 'tiles'), method: :patch, active: current_user.preferences[:image_view_mode] == 'tiles', title: translate('views.list_types.tiles'), data: { toggle: 'tooltip', container: 'body' }
 
   - if @images.any?
     = render 'table', checkboxes: true

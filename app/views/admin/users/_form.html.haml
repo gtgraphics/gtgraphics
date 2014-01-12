@@ -3,10 +3,6 @@
   %fieldset
     %legend= translate('views.forms.basics')
     .fields
-      - if @user.persisted?
-        .form-group
-          .col-lg-offset-2.col-lg-10
-            = gravatar_image_tag @user.email, size: 100, default: :mm, alt: @user.full_name, class: 'thumbnail loader-small', style: 'width: 100px; height: 100px;'
       = form.input :first_name, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
       = form.input :last_name, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }  
       = form.input :email, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }

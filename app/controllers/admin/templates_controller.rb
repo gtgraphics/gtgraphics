@@ -4,6 +4,7 @@ class Admin::TemplatesController < Admin::ApplicationController
   before_action :load_template, only: %i(show edit update destroy make_default)
 
   breadcrumbs do |b|
+    b.append Page.model_name.human(count: 2), :admin_pages
     b.append Template.model_name.human(count: 2), :admin_templates
     b.append translate('breadcrumbs.new', model: Template.model_name.human), :new_admin_template if action_name.in? %w(new create)
     b.append @template.name, [:admin, @template.becomes(Template)] if action_name.in? %w(show edit update)

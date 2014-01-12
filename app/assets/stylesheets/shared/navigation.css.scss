@@ -3,37 +3,17 @@
   color: white;
 }
 
-.navbar-inverse {
-  a {
-    .badge {
-      background-color: #777;
-      color: #333;
-      margin-left: 2px;
-    }
-    .badge-mini {
-      font-size: 9px;
-      padding: 2px 5px;
-    }
-    &:hover .badge {
-      background-color: white;
-    }
-  }
-  &.active a, &.open a {
-    .badge {
-      background-color: white;
-    }
-    b.caret {
-      border-top-color: white;
-      border-bottom-color: white;
-    }
+#nav_account {
+  .avatar {
+    display: block;
+    float: left;
+    margin-top: -4px;
+    margin-right: 6px;
   }
 }
 
 #nav_messages {
-  position: relative;
   .badge {
-    position: absolute;
-    top: -5px;
-    right: -6px;
+    margin-left: 4px;
   }
 }

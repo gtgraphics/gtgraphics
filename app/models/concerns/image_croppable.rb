@@ -14,8 +14,17 @@ module ImageCroppable
     before_validation :clear_crop_area, if: :asset_changed?
   end
 
+  def crop_dimensions
+    ImageContainable::Dimensions.new(crop_width, crop_height) if cropped?
+  end
+
   def cropped?
     crop_x.present? and crop_y.present? and crop_width.present? and crop_height.present?
+  end
+
+  def uncrop!
+    clear_crop_area
+    asset.reprocess!
   end
 
   private

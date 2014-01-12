@@ -3,7 +3,7 @@
   = index_headline_for Snippet do
     %ul.list-inline
       %li.batch-controls
-        = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) }
+        = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Snippet.model_name.human(count: 2)) }
       %li= create_button_link_for Snippet, namespace: :admin
 
   - if @snippets.any?
