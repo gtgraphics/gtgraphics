@@ -51,6 +51,10 @@ class @PageEmbeddableManager
   setEmbeddableType: (type) ->
     @getEmbeddableTypeSelect().select2('val', type)
 
+  getTranslatedLocales: ->
+    @translationManager.translatedLocales
+
+
 # jQuery Plugin
 
 $.fn.pageEmbeddableManager = ->

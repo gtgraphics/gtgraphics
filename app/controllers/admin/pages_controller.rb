@@ -110,6 +110,10 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def embeddable_fields
+
+    embeddable_type = params.fetch(:embeddable_type)
+    locales = params.fetch(:locales)
+
     @page = Page.new(embeddable_type: params.fetch(:embeddable_type), embeddable_id: params[:embeddable_id])
     build_page_embeddable
     respond_to do |format|
