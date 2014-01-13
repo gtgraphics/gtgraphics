@@ -6,6 +6,8 @@
         = prepend_flag_icon(locale, translate(locale, scope: :languages))
         %button.pull-right.remove-locale{type: 'button', title: translate('helpers.links.remove', model: object.class.translation_class.model_name.human), tabindex: 0, data: { locale: locale, toggle: 'tooltip', placement: 'top' }}
           = icon(:times)
+          %span.sr-only
+            = translate('helpers.links.remove', model: object.class.translation_class.model_name.human)
 
   / Dropdown Menu with addable locales
   %li.dropdown.pull-right

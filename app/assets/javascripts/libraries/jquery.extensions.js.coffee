@@ -17,5 +17,12 @@
     else
       $scope = @
     $scope.length == 0
+
+
+  # Select
+
+  $.fn.options = ->
+    @filter('select').find('option').map(-> $(@).val()).toArray()
+
  
 ) jQuery

@@ -19,6 +19,8 @@ module PageEmbeddable
       has_many :regions, as: :regionable, dependent: :destroy if supports_regions?
 
       delegate :slug, :path, to: :page, allow_nil: true
+
+      validates :template_id, presence: true if supports_template?
     end
 
     module ClassMethods

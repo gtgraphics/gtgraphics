@@ -4,7 +4,8 @@ class @TranslationManager
     @queryInitialState()
     @refreshButtonStates()
     @applyEvents()
-    @url = @container.data('url')
+    @loadUrl = @container.data('loadUrl')
+    @loadFormat = @container.data('loadFormat') || 'html'
 
   # Events
 
@@ -211,9 +212,16 @@ class @TranslationManager
     @getLocalePanes(locale, true).addClass('active')
 
   loadPane: (locale, callback) ->
-    jQuery.get @url, { translated_locale: locale }, (html) =>
-      $html = $(html).appendTo(@container.find('.tab-content')).prepare()
-      callback.call($html) if callback
+    ajaxOptions = {
+      url: @loadUrl
+      dataType: @loadFormat
+      data: { translatedLocale: locale }
+    }
+    if @loadFormat == 'html'
+      ajaxOptions.success = (data) =>
+        $html = $(data).appendTo(@container.find('.tab-content')).prepare()
+        callback.call($html) if callback  
+    jQuery.ajax(ajaxOptions)
 
   # Helpers
   getNeighborLocale: ->

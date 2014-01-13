@@ -19,6 +19,9 @@ class Page < ActiveRecord::Base
     translates :name, :description, fallbacks_for_empty_translations: true
     acts_as_batch_translatable
 
+    validates :client_name, presence: true
+    validates :client_url, url: true, allow_blank: true
+
     after_initialize :set_default_release_date, if: -> { new_record? and released_on.blank? }
 
     private

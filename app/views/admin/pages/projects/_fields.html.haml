@@ -1,3 +1,7 @@
+= fields.association :template, container_html: { class: 'col-lg-5' }, label_html: { class: 'col-lg-2' }
+
+%hr
+
 .translations
   = fields.simple_fields_for :translations do |translation_fields|
     = render 'admin/pages/projects/translation_fields', fields: translation_fields

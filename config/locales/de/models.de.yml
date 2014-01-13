@@ -8,6 +8,7 @@ de:
     file_size: Dateigröße
     name: Name
     slug: URL-Token
+    template: Vorlage
     title: Titel
     type: Typ
     updated_at: Aktualisierung
@@ -48,8 +49,6 @@ de:
       attachment:
         asset: Datei
         author: Urheber
-      contact_form:
-        recipients: Empfänger
       image:
         author: Urheber
         aspect_ratio: Seitenverhältnis
@@ -91,12 +90,14 @@ de:
         indexable: Indexiert?
         updated_at: Aktualisierung
         state: Status
+      page/contact_form:
+        recipients: Empfänger
       page/translation:
         meta_description: SEO-Beschreibung
         meta_keywords: SEO-Keywords
       page/project:
         client_name: Auftraggeber
-        client_url: URL
+        client_url: Website
         released_on: Release
       page/project/translation:
         name: Projektname
