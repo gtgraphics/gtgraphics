@@ -110,12 +110,20 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def embeddable_fields
-
     embeddable_type = params.fetch(:embeddable_type)
-    locales = params.fetch(:locales)
+    translated_locales = params.fetch(:translated_locales)
 
-    @page = Page.new(embeddable_type: params.fetch(:embeddable_type), embeddable_id: params[:embeddable_id])
-    build_page_embeddable
+    @page = Page.new(embeddable_type: embeddable_type)
+    if @page.embeddable_class
+      @page.embeddable ||= @page.embeddable_class.new
+      if @page.embeddable_class.reflect_on_association(:translations)
+        translated_locales.each do |translated_locale|
+          @page.embeddable.translations.build(locale: translated_locale)
+        end
+      end
+    end
+
+    #build_page_embeddable
     respond_to do |format|
       format.html do
         if @page.embeddable_class
@@ -128,12 +136,20 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def translation_fields
+    embeddable_type = params.fetch(:embeddable_type)
     translated_locale = params.fetch(:translated_locale)
-    # @page = Page.new(embeddable_type: params.fetch(:embeddable_type))
-    @page = Page.new
+
+    @page = Page.new(embeddable_type: embeddable_type)
     @page.translations.build(locale: translated_locale)
+    if @page.embeddable_class
+      @page.embeddable ||= @page.embeddable_class.new
+      if @page.embeddable_class.reflect_on_association(:translations)
+        @page.embeddable.translations.build(locale: translated_locale)
+      end
+    end
+
     respond_to do |format|
-      format.html do
+      format.js do
         #if @page.embeddable_class and translated_locale.in?(I18n.available_locales.map(&:to_s))
         #  @page.embeddable = @page.embeddable_class.new
         #  @page.embeddable.translations.build(locale: translated_locale)

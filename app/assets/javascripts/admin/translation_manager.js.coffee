@@ -4,8 +4,8 @@ class @TranslationManager
     @queryInitialState()
     @refreshButtonStates()
     @applyEvents()
-    @loadUrl = @container.data('loadUrl')
-    @loadFormat = @container.data('loadFormat') || 'html'
+    @url = @container.data('url')
+    @dataType = @container.data('dataType') || 'html'
 
   # Events
 
@@ -197,6 +197,9 @@ class @TranslationManager
   getDestroyTranslationInputs: (locale) ->
     @getLocalePanes(locale).find('.destroy-translation')
 
+  getAdditionalUrlParams: ->
+    {}
+
   # Getters for UI elements: Panes
 
   getPanes: (includeRemoved = false) ->
@@ -212,16 +215,13 @@ class @TranslationManager
     @getLocalePanes(locale, true).addClass('active')
 
   loadPane: (locale, callback) ->
-    ajaxOptions = {
-      url: @loadUrl
-      dataType: @loadFormat
-      data: { translatedLocale: locale }
-    }
-    if @loadFormat == 'html'
-      ajaxOptions.success = (data) =>
-        $html = $(data).appendTo(@container.find('.tab-content')).prepare()
-        callback.call($html) if callback  
-    jQuery.ajax(ajaxOptions)
+    jQuery.ajax
+      url: @url
+      dataType: @dataType
+      data: jQuery.extend({}, @getAdditionalUrlParams(), translated_locale: locale)
+      success: (data) =>
+        $(data).appendTo(@container.find('.tab-content')).prepare() if @dataType == 'html'
+        callback() if callback  
 
   # Helpers
   getNeighborLocale: ->
@@ -237,10 +237,11 @@ class @TranslationManager
 
 # jQuery Plugin
 
-$.fn.translationManager = ->
+$.fn.translationManager = (klass) ->
   @each ->
     $container = $(@)
-    translationManager = new TranslationManager($container)
+    klass ||= window[$container.data('type')] || TranslationManager
+    translationManager = new klass($container)
     $container.data('translationManager', translationManager)
 
   # hotfix for non-disappearing tooltips

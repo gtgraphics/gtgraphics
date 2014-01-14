@@ -10,7 +10,7 @@ module NestedFormHelper
         nested_association_args << [association_name]
       end
     end
- 
+
     html = nil
     simple_form_for object, url: '' do |form|
       html = _recursive_fields_for_nested_form_content(form, nested_association_args, &block)
@@ -24,7 +24,7 @@ module NestedFormHelper
       args.flatten!
       options = args.extract_options!
       if options.delete(:generate_index)
-        options[:child_index] = (Time.now.to_f * 1_000_000).to_i # microtime
+        options[:child_index] = microtimestamp # (Time.now.to_f * 1_000_000).to_i
       end
       parent_fields.simple_fields_for *args, options do |fields|
         _recursive_fields_for_nested_form_content(fields, nested_association_args, &block)

@@ -4,8 +4,7 @@ module TranslationHelper
   end
 
   def translation_manager_for(fields_or_object, options = {}, &block)
-    url = options.fetch(:url)
-    content_tag :div, class: 'translation-manager', data: { load_url: url, load_format: options[:format] } do
+    content_tag :div, class: 'translation-manager', data: options do
       inner_html = render 'locale_changer', object: block_given? ? fields_or_object : fields_or_object.object
       inner_html << content_tag(:div, class: 'tab-content') do
         if block_given?

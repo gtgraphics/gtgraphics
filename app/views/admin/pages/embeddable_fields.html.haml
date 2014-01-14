@@ -1,4 +1,2 @@
-- output = nil
-- simple_form_for [:admin, @page], url: '' do |form|
-  - output = render 'embeddable_fields', fields: form
-= output
+= nested_form_content_for @page do |fields|
+  = render 'embeddable_fields', fields: fields

@@ -1,8 +1,7 @@
 class @PageEmbeddableManager
   constructor: ($container) ->
     @container = $container
-    @url = $container.data('loadUrl')
-    @translationManager = $('.translation-manager', @container).data('translationManager') # TODO Not yet loaded at this point
+    @url = $container.data('url')
     @queryInitialState()
     @applyEvents()
 
@@ -21,7 +20,7 @@ class @PageEmbeddableManager
     $embeddableType = @getEmbeddableTypeSelect()
     $embeddableType.trigger('changingEmbeddableType.pageEmbeddableManager', type)
     @setEmbeddableType(type)
-    @loadEmbeddableFields type, ->
+    @loadEmbeddableFields type, =>
       @embeddableType = type
       $embeddableType.trigger('changedEmbeddableType.pageEmbeddableManager', type)
     true
@@ -29,31 +28,49 @@ class @PageEmbeddableManager
   loadEmbeddableFields: (type, callback) ->
     jQuery.ajax
       url: @url
-      dataType: 'script'
-      data: { embeddable_type: type }
-      success: ->
+      dataType: 'html'
+      data: {
+        translated_locales: @getTranslatedLocales()
+        embeddable_type: type
+      }
+      success: (html) =>
+        $embeddableFieldsContainer = @getEmbeddableFieldsContainer()
+        $embeddableFieldsContainer.html(html).prepare()
+        $embeddableTranslations = @getTranslationsContainer($embeddableFieldsContainer)
+        # TODO Update current locale display state
+
         callback() if callback
       error: =>
         alert I18n.translate('pages.embeddable.error')
-        @setEmbeddableType(@embeddableType)
+        @setEmbeddableType(@embeddableType) # restore select to previous embeddable type
 
-  # Getters/Setters
+  # DOM Element Getters
 
   getEmbeddableTypeSelect: ->
     $('select.embeddable-type-select', @container)
 
+  getEmbeddableFieldsContainer: ->
+    $('.embeddable-fields', @container)
+
+  getTranslationsContainer: ($scope) ->
+    $('.translations', $scope)
+
+  # Getters/Setters
+
   getEmbeddableType: ->
     @getEmbeddableTypeSelect().select2('val')
+
+  getTranslationManager: ->
+    $('.translation-manager', @container).data('translationManager')
+
+  getTranslatedLocales: ->
+    @getTranslationManager().translatedLocales
 
   getAvailableEmbeddableTypes: ->
     @getEmbeddableTypeSelect().options()
 
   setEmbeddableType: (type) ->
     @getEmbeddableTypeSelect().select2('val', type)
-
-  getTranslatedLocales: ->
-    @translationManager.translatedLocales
-
 
 # jQuery Plugin
 
