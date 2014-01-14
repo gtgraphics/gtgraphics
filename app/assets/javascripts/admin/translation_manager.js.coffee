@@ -52,10 +52,13 @@ class @TranslationManager
     $button = @getChangeLocaleButton(locale)
     $button.trigger('changingLocale.translationManager', locale)
     @selectedLocale = locale
-    @showPanes(locale)
+    @showSelectedLocalePanes()
     @refreshButtonStates()
     $button.trigger('changedLocale.translationManager', locale)
     true
+
+  showSelectedLocalePanes: ->
+    @showPanes(@selectedLocale)
 
   addLocale: (locale) ->
     return false if @translatedLocales.include(locale)

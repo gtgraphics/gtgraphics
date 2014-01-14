@@ -201,7 +201,7 @@ class Page < ActiveRecord::Base
 
   private
   def destroy_replaced_embeddable
-    embeddable_class_was.destroy(embeddable_id_was) if embeddable_type_changed? and embeddable_id_changed? # if embeddable_type_was and embeddable_id_was
+    embeddable_class_was.destroy(embeddable_id_was) if embeddable_type_changed?
   end
 
   def generate_path
@@ -221,7 +221,7 @@ class Page < ActiveRecord::Base
 
   def sanitize_regions
     # If changing the embeddable type, migrates the regions to the defined regions on the new template
-    if support_regions?
+    if supports_regions?
       # self.regions = regions.slice(available_regions) # TODO
     else
       regions.destroy_all

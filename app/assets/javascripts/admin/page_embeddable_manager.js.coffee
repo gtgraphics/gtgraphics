@@ -37,8 +37,7 @@ class @PageEmbeddableManager
         $embeddableFieldsContainer = @getEmbeddableFieldsContainer()
         $embeddableFieldsContainer.html(html).prepare()
         $embeddableTranslations = @getTranslationsContainer($embeddableFieldsContainer)
-        # TODO Update current locale display state
-
+        @getTranslationManager().showSelectedLocalePanes()
         callback() if callback
       error: =>
         alert I18n.translate('pages.embeddable.error')
