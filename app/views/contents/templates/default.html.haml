@@ -1,6 +1,7 @@
-%h1= content.title
+.page-header
+  %h1= page.title
 
-- unless content.translated_locales.include?(I18n.locale)
+- unless page.translated_locales.include?(I18n.locale)
   %p{style: 'border: 1px solid red; padding: 10px;'}
     Not translated to #{I18n.locale}
 

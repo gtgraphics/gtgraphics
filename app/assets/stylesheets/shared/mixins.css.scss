@@ -1,10 +1,23 @@
-@mixin caret($size: 4px) {
+@mixin caret-down($size: 4px) {
   display: inline-block;
   width: 0;
   height: 0;
   margin-left: 2px;
   vertical-align: middle;
   border-top: $size solid;
+  border-bottom: 0;
   border-right: $size solid transparent;
   border-left: $size solid transparent;
+}
+
+@mixin caret-up($size: 4px) {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: 0;
+  border-bottom: $size solid;
+  border-right: $size solid transparent;
+  border-left: $size solid transparent; 
 }

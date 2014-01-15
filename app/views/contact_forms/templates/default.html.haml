@@ -1,6 +1,5 @@
-%h1= contact_form.title
+.page-header
+  %h1= page.title
 
-= contact_form.description_html
-
-= simple_form_for ContactMessage.new, url: '' do |form|
+= simple_form_for Message.new, url: '' do |form|
   Bla

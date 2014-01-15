@@ -1,4 +1,5 @@
-@import "bootstrap_headers";
+@import 'mixins';
+@import 'bootstrap_headers';
 
 /**
  * Select2 Bootstrap CSS
@@ -193,42 +194,25 @@
  * 1. Class repetition to address missing .select2-chosen in Select2 v.3.3.2.
  */
 
-.select2-container .select2-choice .select2-arrow b,
-.select2-container .select2-choice div b /* 1 */ {
-  background-position: 0 3px;
+.select2-container .select2-choice {
+  .select2-arrow b, div b {
+    @include caret-down;
+    margin-top: 8px;
+  }
 }
 
-.select2-dropdown-open .select2-choice .select2-arrow b,
-.select2-dropdown-open .select2-choice div b /* 1 */ {
-  background-position: -18px 3px;
+.select2-container.select2-drop-above .select2-choice {
+  .select2-arrow b, div b {
+    @include caret-up;
+    margin-top: 8px;
+  }
 }
 
-.select2-container.input-sm .select2-choice .select2-arrow b,
-.input-group-sm .select2-container .select2-choice .select2-arrow b,
-.select2-container.input-sm .select2-choice div b, /* 1 */
-.input-group-sm .select2-container .select2-choice div b /* 1 */ {
-  background-position: 0 1px;
-}
-
-.select2-dropdown-open.input-sm .select2-choice .select2-arrow b,
-.input-group-sm .select2-dropdown-open .select2-choice .select2-arrow b,
-.select2-dropdown-open.input-sm .select2-choice div b, /* 1 */
-.input-group-sm .select2-dropdown-open .select2-choice div b /* 1 */ {
-  background-position: -18px 1px;
-}
-
-.select2-container.input-lg .select2-choice .select2-arrow b,
-.input-group-lg .select2-container .select2-choice .select2-arrow b,
-.select2-container.input-lg .select2-choice div b, /* 1 */
-.input-group-lg .select2-container .select2-choice div b /* 1 */ {
-  background-position: 0 9px;
-}
-
-.select2-dropdown-open.input-lg .select2-choice .select2-arrow b,
-.input-group-lg .select2-dropdown-open .select2-choice .select2-arrow b,
-.select2-dropdown-open.input-lg .select2-choice div b, /* 1 */
-.input-group-lg .select2-dropdown-open .select2-choice div b /* 1 */ {
-  background-position: -18px 9px;
+.select2-drop {
+  z-index: 900 !important;
+  &.select2-drop-above {
+    z-index: 9000 !important;
+  }
 }
 
 /**
