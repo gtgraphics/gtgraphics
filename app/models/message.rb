@@ -3,15 +3,13 @@
 # Table name: messages
 #
 #  id                :integer          not null, primary key
-#  recipient_id      :integer
 #  first_sender_name :string(255)
 #  last_sender_name  :string(255)
 #  sender_email      :string(255)
 #  subject           :string(255)
 #  body              :text
-#  read              :boolean          default(FALSE)
 #  created_at        :datetime
-#  fingerprint       :string(255)
+#  contact_form_id   :integer
 #
 
 class Message < ActiveRecord::Base
@@ -27,9 +25,6 @@ class Message < ActiveRecord::Base
 
   after_create :create_recipiences
 
-  delegate :name, to: :recipient, prefix: true
-  alias_method :full_recipient_name, :recipient_name
-
   class << self
     def without(message)
       if message.new_record?
@@ -40,17 +35,18 @@ class Message < ActiveRecord::Base
     end
   end
 
-  def full_sender_name
-    "#{first_sender_name} #{last_sender_name}".strip
-  end
-  alias_method :sender_name, :full_sender_name
-
   def sender
-    %{"#{full_sender_name}" <#{sender_email}>}
+    %{"#{sender_name}" <#{sender_email}>}
+  end
+
+  def sender_name
+    "#{first_sender_name} #{last_sender_name}".strip
   end
 
   private
   def create_recipiences
-    # TODO
+    contact_form.recipients.each do |recipient|
+      recipiences.create(recipient: recipient)
+    end
   end
 end

@@ -5,7 +5,7 @@
       %li.batch-controls
         = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Message.model_name.human(count: 2)) }
 
-  - if @messages.any?
+  - if @message_recipiences.any?
     = render 'table', checkboxes: true
   - else
     .well.text-center

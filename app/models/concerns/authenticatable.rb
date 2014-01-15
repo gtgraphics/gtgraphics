@@ -11,7 +11,7 @@ module Authenticatable
       alias_method :signed_out?, :anonymous?
     end
 
-    alias_method :is_current_user?, :current?
+    alias_method :current_user?, :current?
   end
  
   module ClassMethods

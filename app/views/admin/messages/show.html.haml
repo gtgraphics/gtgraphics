@@ -3,16 +3,32 @@
     %li= button_mail_to @message.sender, prepend_icon(:mail_reply, translate('helpers.links.reply')), subject: translate('views.admin.messages.replied_subject', subject: @message.subject)
     %li= action_buttons_for @message, except: [:show, :edit]
 
-.panel.panel-default
-  .panel-heading
+.row
+
+  .col-lg-2.col-lg-offset-1.col-md-3.col-sm-3.col-xs-3
+    .text-center
+      = gravatar_image_tag @message.sender_email, alt: @message.sender_name, size: 220, default: :mm, class: 'img-circle img-responsive'
+      %h3= @message.sender_name
+      %p= mail_to(@message.sender_email, @message.sender_email)
+
+
+  .col-lg-8.col-md-9.col-sm-9.col-xs-9
+
     %dl.dl-horizontal
-      %dt= Message.human_attribute_name :recipient_names
-      %dd= @message.recipients.collect { |recipient| recipient.is_current_user? ? translate('views.admin.account.me') : link_to(recipient.full_name, [:admin, recipient]) }.join(', ').html_safe
       %dt= Message.human_attribute_name :sender_name
-      %dd= mail_to @message.sender_email, @message.sender_name
+      %dd
+        - sender = mail_to(@message.sender_email, @message.sender_name)
+        - if @message.contact_form
+          = translate('views.admin.messages.sender_html', sender: sender, contact_form: link_to(@message.contact_form.page.title, [:admin, @message.contact_form.page]))
+        - else
+          = sender
+      %dt= Message.human_attribute_name :recipient_names
+      %dd= @message.recipients.collect { |recipient| recipient.current_user? ? translate('views.admin.account.me') : link_to(recipient.full_name, [:admin, recipient]) }.join(', ').html_safe
       %dt= Message.human_attribute_name :subject
       %dd= @message.subject.presence || translate('helpers.prompts.no_subject')
       %dt= Message.human_attribute_name :created_at
       %dd= time_ago @message.created_at
-  .panel-body
+
+    %hr
+
     = simple_format @message.body

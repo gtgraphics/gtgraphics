@@ -48,8 +48,8 @@
                 %li.divider
                 = active_link_to :admin_messages, id: 'nav_messages', wrap_tag: :li do
                   = prepend_icon(:envelope, Message.model_name.human(count: 2))
-                  - unless current_user.messages.unread.size.zero?
-                    .badge= current_user.messages.unread.size
+                  - unless current_user.message_recipiences.unread.size.zero?
+                    .badge= current_user.message_recipiences.unread.size
                 %li.divider
                 %li= link_to prepend_icon(:sign_out, translate('helpers.links.sign_out'), id: 'nav_sign_out'), :admin_sign_out, method: :delete, data: { confirm: translate('helpers.confirmations.sign_out') }
 

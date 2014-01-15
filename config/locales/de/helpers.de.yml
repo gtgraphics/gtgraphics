@@ -9,7 +9,9 @@ de:
         updated: '%{model} wurde erfolgreich aktualisiert.'
         destroyed: '%{model} wurde erfolgreich entfernt.'
         destroyed_multiple: '%{model} wurden erfolgreich entfernt.'
-      messages:
+      message:
+        marked_read: 'Nachricht wurde als gelesen markiert.'
+        marked_unread: 'Nachricht wurde als ungelesen markiert.'
 
     titles:
       new: '%{model} erstellen'

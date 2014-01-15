@@ -76,6 +76,11 @@ de:
         recipient_names: Empfänger
         subject: Betreff
         body: Nachricht
+        created_at: Versendet
+      message/recipience:
+        sender_name: Absender
+        subject: Betreff
+        body: Nachricht
         read: Gelesen?
         created_at: Versendet
       page:

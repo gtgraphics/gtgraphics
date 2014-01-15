@@ -49,6 +49,7 @@ de:
         replied_subject: "Re: %{subject}"
         mark_read: Als gelesen markieren
         mark_unread: Als ungelesen markieren
+        sender_html: '%{sender} (via %{contact_form})'
       pages:
         empty_type: Bitte wählen Sie einen Seitentyp.
         root: Wurzel

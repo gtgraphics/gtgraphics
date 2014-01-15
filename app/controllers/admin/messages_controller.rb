@@ -9,32 +9,37 @@ class Admin::MessagesController < Admin::ApplicationController
   end
 
   def index
-    @messages = current_user.messages.sort(params[:sort], params[:direction]).page(params[:page])
-    respond_with :admin, @messages
+    @message_recipiences = current_user.message_recipiences.includes(:message).sort(params[:sort], params[:direction]).page(params[:page])
+    respond_with :admin, @message_recipiences
   end
 
   def show
-    @message.mark_read! if @message.unread?
-    respond_with :admin, @message
+    @message_recipience.mark_read! if @message_recipience.unread?
+    respond_with :admin, @message_recipience
   end
 
   def destroy
-    @message.destroy
-    flash_for @message
-    respond_with :admin, @message
+    @message_recipience.destroy
+    flash_for Message, :destroyed
+    respond_with :admin, @message_recipience, location: :admin_messages
   end
 
   def toggle
-    @message.toggle!(:read)
+    @message_recipience.toggle!(:read)
+    if @message_recipience.read?
+      flash_for :message, :marked_read
+    else
+      flash_for :message, :marked_unread
+    end
     respond_to do |format|
       format.html { redirect_to request.referer || :admin_messages }
     end
   end
 
   def destroy_multiple
-    message_ids = Array(params[:message_ids])
-    Message.destroy_all(id: message_ids)
-    flash_for :messages, :destroyed_multiple, multiple: true
+    message_ids = Array(params[:message_ids]).reject(&:blank?).map(&:to_i)
+    current_user.message_recipiences.joins(:message).where(messages: { id: message_ids }).readonly(false).destroy_all
+    flash_for :messages, :destroyed, multiple: true
     respond_to do |format|
       format.html { redirect_to :admin_messages }
     end
@@ -42,6 +47,7 @@ class Admin::MessagesController < Admin::ApplicationController
 
   private
   def load_message
-    @message = current_user.messages.find(params[:id])
+    @message_recipience = current_user.message_recipiences.includes(:message).where(messages: { id: params[:id] }).first!
+    @message = @message_recipience.message
   end
 end
