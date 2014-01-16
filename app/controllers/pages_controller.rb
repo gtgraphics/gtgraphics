@@ -43,10 +43,10 @@ class PagesController < ApplicationController
 
   private
   def load_page
-    if params[:id].blank?
+    if params[:path].blank?
       @page = Page.accessible_by(current_ability).root
     else
-      @page = Page.accessible_by(current_ability).find_by_path!(params[:id])
+      @page = Page.accessible_by(current_ability).find_by_path!(params[:path])
     end
   end
 end

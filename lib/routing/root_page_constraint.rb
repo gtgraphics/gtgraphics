@@ -1,6 +1,6 @@
 class Routing::RootPageConstraint
   def initialize(type)
-    @type = "Page::#{type}"
+    @type = type
     @locale_constraint = Routing::LocaleConstraint.new
   end
   
