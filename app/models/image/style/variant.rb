@@ -18,7 +18,7 @@
 
 class Image < ActiveRecord::Base
   class Style < ActiveRecord::Base
-    class Variation < Image::Style
+    class Variant < Image::Style
       # TODO Move Cropped, Resized, CropX, ..., ResizeHeight to a serialized data store
 
       store :customization_options, accessors: [:cropped, :crop_x, :crop_y, :crop_width, :crop_height, :resized, :resize_width, :resize_height]

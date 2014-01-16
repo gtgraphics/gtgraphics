@@ -14,5 +14,8 @@ class Page < ActiveRecord::Base
     acts_as_page_embeddable template_class: 'Template::Image'
 
     belongs_to :image, class_name: '::Image'
+
+    delegate :title, to: :image, allow_nil: true
+    delegate :format, to: :image
   end
 end

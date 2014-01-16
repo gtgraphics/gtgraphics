@@ -15,9 +15,11 @@ class PagesController < ApplicationController
 
   class << self
     def embeds(embeddable_name)
-      helper_method embeddable_name.to_sym
-      attr_reader embeddable_name.to_sym
-      protected embeddable_name.to_sym
+      method_name = embeddable_name.to_sym
+
+      helper_method method_name
+      attr_reader method_name
+      protected method_name
 
       before_action do
         instance_variable_set("@#{embeddable_name}", @page.embeddable)

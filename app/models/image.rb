@@ -92,10 +92,6 @@ class Image < ActiveRecord::Base
     STYLES.reverse_merge(custom_styles_hash).deep_symbolize_keys
   end
 
-  def to_param
-    "#{id}-#{title.parameterize}"
-  end
-
   def to_liquid
     attributes.slice(*%w(title width height)).merge(customization_options).merge('author' => author_name)
   end

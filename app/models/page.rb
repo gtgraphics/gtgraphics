@@ -57,6 +57,7 @@ class Page < ActiveRecord::Base
   validate :validate_root_uniqueness, if: :root?
   validate :validate_embeddable_type_was_convertible, on: :update, if: :embeddable_type_changed?
 
+  before_validation :set_title
   before_validation :generate_slug
   before_validation :generate_path, if: :slug?
   before_save :sanitize_regions
@@ -70,6 +71,7 @@ class Page < ActiveRecord::Base
   scope :indexable, -> { where(indexable: true) }
   scope :in_main_menu, -> { published.menu_items.where(depth: 1) }
   scope :menu_items, -> { where(menu_item: true) }
+  scope :primary, -> { where(depth: 1) }
   scope :published, -> { with_state(:published) }
 
   state_machine :state, initial: :drafted do
@@ -194,6 +196,10 @@ class Page < ActiveRecord::Base
     template.try(:view_path)
   end
 
+  def to_s
+    title
+  end
+
   def update_path!
     generate_path
     save!
@@ -211,7 +217,7 @@ class Page < ActiveRecord::Base
       path_parts = [slug]
     end
     path_parts.reject!(&:blank?)
-    self.path = File.join(*path_parts)
+    self.path = File.join(path_parts)
   end
 
   def generate_slug
@@ -225,6 +231,15 @@ class Page < ActiveRecord::Base
       # self.regions = regions.slice(available_regions) # TODO
     else
       regions.destroy_all
+    end
+  end
+
+  def set_title
+    if embeddable and PageEmbeddable::TITLE_CANDIDATES.any? { |method| embeddable.respond_to?(method) }
+      translations.each do |translation|
+        title_candidate = PageEmbeddable::TITLE_CANDIDATES.collect { |method| embeddable.try(method, translation.locale) }.compact.first
+        translation.title = title_candidate if title_candidate.present? and translation.title.blank?
+      end
     end
   end
 

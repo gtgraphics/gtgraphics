@@ -9,7 +9,7 @@ class ContactFormsController < PagesController
   def create
     @message = @contact_form.messages.new(message_params)
     if @message.save
-      redirect_to @contact_form
+      redirect_to contact_form_path(@contact_form)
     else
       render_page
     end

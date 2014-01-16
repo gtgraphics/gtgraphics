@@ -20,7 +20,7 @@ module ImageContainable
     end
 
     def aspect_ratio
-      Rational(width, height)
+      Rational(width, height) unless @width.zero? or @height.zero?
     end
 
     def inspect

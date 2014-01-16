@@ -1,9 +1,11 @@
-%h1= Image.model_name.human
+.page-header
+  %h1= image.title
 
-%p= image
-
-= image.description_html
+= raw image.description
 
 %p
-  = link_to page_path(page, format: image.format) do
-    = image_tag image.asset
+  = link_to page_path(page, format: image_page.image.format) do
+    = image_tag image_page.image.asset(:original_cropped), class: 'img-responsive img-rounded'
+
+%h3= image.title
+= raw image.description

@@ -1,14 +1,10 @@
-%h1
-  = content.title
-  %small Gallery
+.page-header
+  %h1= page.title
 
-- unless content.translated_locales.include?(I18n.locale)
-  %p{style: 'border: 1px solid red; padding: 10px;'}
-    Not translated to #{I18n.locale}
-
-= content.body_html
-
-- if page.children.images.any?
-  %ul
-    - page.children.images.each do |image_page|
-      %li= link_to image_page, image_page
+.row
+  - page.children.images.each do |child_page|
+    .col-lg-3
+      = link_to child_page, class: 'thumbnail' do
+        = image_tag child_page.embeddable.image.asset(:large_thumbnail), class: 'img-responsive'
+        .caption
+          %h3= child_page.title

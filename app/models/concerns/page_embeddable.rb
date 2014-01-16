@@ -1,6 +1,8 @@
 module PageEmbeddable
   extend ActiveSupport::Concern
 
+  TITLE_CANDIDATES = %w(title name)
+
   module ClassMethods
     def acts_as_page_embeddable(options = {})
       @page_type_options = options.reverse_merge(
@@ -61,5 +63,9 @@ module PageEmbeddable
 
   def to_param
     path
+  end
+
+  def to_s
+    TITLE_CANDIDATES.collect { |method| send(method, translation.locale) }.compact.first || super
   end
 end

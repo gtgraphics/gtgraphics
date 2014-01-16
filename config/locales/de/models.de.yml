@@ -100,22 +100,24 @@ de:
         state: Status
       page/contact_form:
         recipients: Empfänger
-      page/translation:
-        meta_description: SEO-Beschreibung
-        meta_keywords: SEO-Keywords
+      page/image:
+        image: Bild
       page/project:
         client_name: Auftraggeber
         client_url: Website
         released_on: Release
       page/project/translation:
         name: Projektname
-      redirection:
+      page/redirection:
         destination_url: URL
         destination_page: Seite
         external: Externe Umleitung
         internal: Interne Umleitung
         permanent: Permanent?
         destination: Ziel
+      page/translation:
+        meta_description: SEO-Beschreibung
+        meta_keywords: SEO-Keywords
       region_definition:
       shout:
         nickname: Verfasser

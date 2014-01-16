@@ -1,12 +1,9 @@
-%h1
-  = content.title
-  %small Showcase
+.page-header
+  %h1
+    = page.title
+    %small Showcase
 
-- unless content.translated_locales.include?(I18n.locale)
-  %p{style: 'border: 1px solid red; padding: 10px;'}
-    Not translated to #{I18n.locale}
 
-= content.body_html
 
 - if page.children.projects.any?
   %ul

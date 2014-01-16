@@ -1,5 +1,9 @@
 class ImagesController < PagesController
-  embeds :image
+  embeds :image_page
+
+  before_action :load_image
+  attr_reader :image
+  helper_method :image
 
   def show
     respond_to do |format|
@@ -13,5 +17,10 @@ class ImagesController < PagesController
   
   def download
     send_file @image.asset.path, filename: @image.virtual_file_name, content_type: @image.content_type, disposition: :attachment, x_sendfile: true
+  end
+
+  private
+  def load_image
+    @image = image_page.image
   end
 end
