@@ -118,9 +118,20 @@ GtGraphics::Application.routes.draw do
       end
 
       Page::EMBEDDABLE_TYPES.each do |page_type|
-        page_type_name = page_type.demodulize.underscore
-        resource page_type_name.to_sym, path: '*path', constraints: Routing::PageConstraint.new(page_type)
-        root "#{page_type_name.pluralize}#show", as: nil, constraints: Routing::RootPageConstraint.new(page_type)
+        page_embeddable_class = page_type.constantize
+        resource_name = page_embeddable_class.resource_name
+        page_options = { path: '*path', constraints: Routing::PageConstraint.new(page_type), only: :show }
+        case resource_name
+        when :contact_form
+          resource(resource_name, page_options.merge(only: [:show, :create]))
+        when :image
+          resource(resource_name, page_options) do
+            get :download
+          end
+        else
+          resource(resource_name, page_options)
+        end
+        root "#{resource_name.to_s.pluralize}#show", as: nil, constraints: Routing::RootPageConstraint.new(page_type)
       end
       root to: redirect('/404')
     end

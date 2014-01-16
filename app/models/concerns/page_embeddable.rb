@@ -3,7 +3,12 @@ module PageEmbeddable
 
   module ClassMethods
     def acts_as_page_embeddable(options = {})
-      @page_type_options = options.reverse_merge(convertible: true, creatable: true, template_class: nil).freeze
+      @page_type_options = options.reverse_merge(
+        convertible: true,
+        creatable: true,
+        resource_name: self.model_name.element.to_sym,
+        template_class: nil
+      ).freeze
       include Extensions
     end
   end
@@ -32,6 +37,10 @@ module PageEmbeddable
         @page_type_options[:creatable]
       end
 
+      def resource_name
+        @page_type_options[:resource_name]
+      end
+
       def supports_regions?
         supports_template?
       end
@@ -48,5 +57,9 @@ module PageEmbeddable
         @page_type_options[:template_class].try(:to_s)
       end
     end
+  end
+
+  def to_param
+    path
   end
 end

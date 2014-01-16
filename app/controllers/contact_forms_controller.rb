@@ -2,16 +2,21 @@ class ContactFormsController < PagesController
   embeds :contact_form
 
   def show
-    # TODO Redirect to contact_messages#new
-    respond_with_page
+    @message = @contact_form.messages.new
+    render_page
   end
 
   def create
-    
+    @message = @contact_form.messages.new(message_params)
+    if @message.save
+      redirect_to @contact_form
+    else
+      render_page
+    end
   end
 
   private
-  def contact_message_params
-    params.require(:contact_message).permit! # TODO
+  def message_params
+    params.require(:message).permit(:first_sender_name, :last_sender_name, :sender_email, :subject, :body) # TODO
   end
 end

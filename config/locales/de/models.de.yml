@@ -72,7 +72,10 @@ de:
         title: Bildtitel
         description: Beschriftung
       message:
+        first_sender_name: Vorname
+        last_sender_name: Nachname
         sender_name: Absender
+        sender_email: E-Mail-Adresse
         recipient_names: Empfänger
         subject: Betreff
         body: Nachricht
