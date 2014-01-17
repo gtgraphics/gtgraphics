@@ -17,5 +17,9 @@ class Page < ActiveRecord::Base
 
     delegate :title, to: :image, allow_nil: true
     delegate :format, to: :image
+
+    def to_liquid
+      { 'image' => image }
+    end
   end
 end

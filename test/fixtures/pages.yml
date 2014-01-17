@@ -12,7 +12,6 @@
 #  lft             :integer
 #  rgt             :integer
 #  depth           :integer
-#  template_id     :integer
 #  embeddable_id   :integer
 #  embeddable_type :string(255)
 #  menu_item       :boolean          default(TRUE), not null

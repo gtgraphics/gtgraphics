@@ -12,7 +12,6 @@
 #  lft             :integer
 #  rgt             :integer
 #  depth           :integer
-#  template_id     :integer
 #  embeddable_id   :integer
 #  embeddable_type :string(255)
 #  menu_item       :boolean          default(TRUE), not null
@@ -69,7 +68,6 @@ class Page < ActiveRecord::Base
   scope :drafted, -> { with_state(:drafted) }
   scope :hidden, -> { with_state(:hidden) }
   scope :indexable, -> { where(indexable: true) }
-  scope :in_main_menu, -> { published.menu_items.where(depth: 1) }
   scope :menu_items, -> { where(menu_item: true) }
   scope :primary, -> { where(depth: 1) }
   scope :published, -> { with_state(:published) }
@@ -91,6 +89,7 @@ class Page < ActiveRecord::Base
   end
 
   delegate :name, to: :author, prefix: true, allow_nil: true
+  delegate :name, to: :template, prefix: true, allow_nil: true
   delegate :meta_keywords, :meta_keywords=, to: :translation
   delegate :supports_template?, :supports_regions?, to: :embeddable_class, allow_nil: true
 
@@ -194,6 +193,15 @@ class Page < ActiveRecord::Base
 
   def template_path
     template.try(:view_path)
+  end
+
+  def to_liquid
+    attributes.slice(*%w(title slug path updated_at)).merge(
+      'type' => embeddable_class.model_name.human,
+      'author' => author_name,
+      'template' => template_name,
+      'children' => children.with_translations(I18n.locale).to_a
+    ).reverse_merge(embeddable.try(:to_liquid) || {})
   end
 
   def to_s

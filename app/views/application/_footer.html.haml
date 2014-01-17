@@ -1,7 +1,7 @@
 %footer
   .container
     %hr
-    - Page.primary.published.includes(:children).with_translations(I18n.locale).each do |page|
+    - Page.primary.accessible_by(current_ability).includes(:children).with_translations(I18n.locale).each do |page|
       %li
         %strong= link_to page.title, page
         - if page.children.any?

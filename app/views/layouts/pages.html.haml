@@ -30,7 +30,7 @@
 
       .navbar-collapse.collapse
         %ul.nav.navbar-nav
-          - Page.in_main_menu.with_translations(I18n.locale).each do |page|
+          - Page.primary.menu_items.accessible_by(current_ability).with_translations(I18n.locale).each do |page|
             = active_link_to page.title, page, wrap_tag: :li
 
         %ul.nav.navbar-nav.navbar-right
