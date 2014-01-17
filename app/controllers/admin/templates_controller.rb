@@ -91,7 +91,7 @@ class Admin::TemplatesController < Admin::ApplicationController
   end
 
   def template_params
-    params.require(:template).permit(:type, :file_name, :default, :screenshot, translations_attributes: [:_destroy, :id, :locale, :name, :description])
+    params.require(:template).permit(:type, :file_name, :region_labels, :screenshot, translations_attributes: [:_destroy, :id, :locale, :name, :description])
   end
 
   def template_class

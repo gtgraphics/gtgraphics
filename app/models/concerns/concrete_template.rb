@@ -1,0 +1,20 @@
+module ConcreteTemplate
+  extend ActiveSupport::Concern
+
+  module ClassMethods
+    def acts_as_concrete_template(options = {})
+      acts_as_concrete_template_for(self.model_name.element, options)
+    end
+
+    # acts_as_concrete_template :homepage, class_name: 'Page::Homepage', lookup_path: 'homepages/templates'
+    def acts_as_concrete_template_for(page_type, options = {})
+      options.reverse_merge!(class_name: "Page::#{page_type.to_s.classify}", 
+                             lookup_path: "#{page_type.to_s.pluralize}/templates")
+
+      self.template_lookup_path = options[:lookup_path]
+
+      has_many :"#{page_type}_pages", class_name: options[:class_name], foreign_key: :template_id, dependent: :restrict_with_error
+      has_many :pages, through: :"#{page_type}_pages"
+    end
+  end
+end

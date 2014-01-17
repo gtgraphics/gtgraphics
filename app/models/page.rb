@@ -46,7 +46,7 @@ class Page < ActiveRecord::Base
   acts_as_batch_translatable
   acts_as_nested_set
 
-  belongs_to :embeddable, polymorphic: true, autosave: true
+  belongs_to :embeddable, polymorphic: true, autosave: true, dependent: :destroy
   has_many :regions, dependent: :destroy, autosave: true
 
   validates :embeddable, presence: true
@@ -229,6 +229,7 @@ class Page < ActiveRecord::Base
     # If changing the embeddable type, migrates the regions to the defined regions on the new template
     if supports_regions?
       # self.regions = regions.slice(available_regions) # TODO
+      
     else
       regions.destroy_all
     end

@@ -15,6 +15,7 @@
 
 class Template < ActiveRecord::Base
   include BatchTranslatable
+  include ConcreteTemplate
   include PersistenceContextTrackable
   include Sortable
 
@@ -38,10 +39,11 @@ class Template < ActiveRecord::Base
     by.updated_at
   end
 
-  has_many :region_definitions, dependent: :destroy, inverse_of: :template
+  has_many :region_definitions, autosave: true, dependent: :destroy, inverse_of: :template
+  has_many :regions, through: :region_definitions
 
   validates :type, presence: true, inclusion: { in: TEMPLATE_TYPES }, on: :create
-  validates :file_name, presence: true, inclusion: { in: ->(template) { template.class.unassigned_template_files } }
+  validates :file_name, presence: true, inclusion: { in: ->(template) { template.class.template_files } }
 
   attr_readonly :type
 
@@ -67,10 +69,6 @@ class Template < ActiveRecord::Base
       TEMPLATE_TYPES
     end
 
-    def unassigned_template_files
-      (template_files - pluck(:file_name)).freeze
-    end
-
     def without(template)
       if template.new_record?
         all
@@ -78,6 +76,21 @@ class Template < ActiveRecord::Base
         where.not(id: template.id)
       end
     end
+  end
+
+  def region_labels
+    @region_labels ||= TokenCollection.new(region_definitions.pluck(:label), sort: true)
+  end
+  
+  def region_labels=(labels)
+    @region_labels = TokenCollection.parse(labels, sort: true, unique: true)
+    tokens = @region_labels.tokens
+    tokens.each do |label|
+      if region_definitions.none? { |region_definition| region_definition.label == label }
+        region_definitions.build(label: label)
+      end
+    end
+    region_definitions.reject { |region_definition| tokens.include?(region_definition.label) }.each(&:mark_for_destruction)
   end
 
   def view_path

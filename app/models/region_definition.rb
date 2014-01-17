@@ -13,7 +13,7 @@ class RegionDefinition < ActiveRecord::Base
   include PersistenceContextTrackable
   
   belongs_to :template, inverse_of: :region_definitions
-  has_many :regions, dependent: :destroy, inverse_of: :definition
+  has_many :regions, dependent: :destroy, inverse_of: :definition, foreign_key: :definition_id
 
   validates :label, presence: true, uniqueness: { scope: :template_id }
   validates :template_id, presence: true
