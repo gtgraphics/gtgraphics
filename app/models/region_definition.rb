@@ -20,6 +20,12 @@ class RegionDefinition < ActiveRecord::Base
 
   before_validation :sanitize_label, if: -> { label.present? }
 
+  default_scope -> { order(:label) }
+
+  def to_s
+    label
+  end
+
   private
   def sanitize_label
     I18n.with_locale(I18n.default_locale) do
