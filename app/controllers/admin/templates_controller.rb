@@ -44,8 +44,11 @@ class Admin::TemplatesController < Admin::ApplicationController
   end
 
   def destroy
-    @template.destroy
-    flash_for @template
+    if @template.destroy
+      flash_for @template
+    else
+      flash_for :template, :destroyed, successful: false
+    end
     respond_with :admin, @template.becomes(Template)
   end
 

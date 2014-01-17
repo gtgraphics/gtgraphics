@@ -12,7 +12,7 @@ module BatchTranslatable
     extend ActiveSupport::Concern
 
     included do
-      validate :validate_translations_count
+      validate :verify_translations_count
     end
 
     ##
@@ -24,7 +24,7 @@ module BatchTranslatable
     end
 
     private
-    def validate_translations_count
+    def verify_translations_count
       errors.add(:translations, :greater_than, count: 1) if translations.size.zero?
     end
   end

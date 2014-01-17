@@ -112,6 +112,7 @@ de:
       inclusion: ist kein gültiger Wert
       invalid: ist nicht gültig
       invalid_url: ist kein gültiger URL
+      contains_invalid: enthält ungültige Werte
       less_than: muss kleiner als %{count} sein
       less_than_or_equal_to: muss kleiner oder gleich %{count} sein
       not_a_number: ist keine Zahl

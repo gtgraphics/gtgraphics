@@ -9,13 +9,13 @@ module ImageCroppable
       croppable.validates :crop_height, numericality: { only_integer: true, greater_than: 0 }
     end
 
-    validate :validate_crop_dimensions_consistency, on: :update, if: :cropped?
+    validate :verify_crop_dimensions_consistency, on: :update, if: :cropped?
 
     before_validation :clear_crop_area, if: :asset_changed?
   end
 
   def crop_dimensions
-    ImageContainable::Dimensions.new(crop_width, crop_height) if cropped?
+    ImageDimensions.new(crop_width, crop_height) if cropped?
   end
 
   def cropped?
@@ -35,7 +35,7 @@ module ImageCroppable
     self.crop_height = nil
   end
 
-  def validate_crop_dimensions_consistency
+  def verify_crop_dimensions_consistency
     if crop_x + crop_width > original_width
       errors.add(:crop_x, :invalid)
       errors.add(:crop_width, :invalid)

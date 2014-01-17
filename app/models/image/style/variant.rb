@@ -41,7 +41,7 @@ class Image < ActiveRecord::Base
 
       delegate :asset, :width, :height, to: :image, prefix: :original
 
-      validate :validate_either_cropped_or_resized
+      validate :verify_either_cropped_or_resized
 
       %w(crop_x crop_y crop_width crop_height resize_width resize_height).each do |method|
         class_eval %{
@@ -70,7 +70,7 @@ class Image < ActiveRecord::Base
       end
 
       def dimensions
-        ImageContainable::Dimensions.new(width, height)
+        ImageDimensions.new(width, height)
       end
 
       def resize_geometry
@@ -131,7 +131,7 @@ class Image < ActiveRecord::Base
         end
       end
 
-      def validate_either_cropped_or_resized
+      def verify_either_cropped_or_resized
         errors.add(:base, :invalid) unless cropped? or resized?
       end
     end      

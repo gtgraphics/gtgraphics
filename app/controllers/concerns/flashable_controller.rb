@@ -4,7 +4,7 @@ module FlashableController
   def flash_for(object, *args)
     return unless request.format.html?
     
-    options = args.extract_options!.reverse_merge(multiple: false)
+    options = args.extract_options!.reverse_merge(multiple: false, successful: true)
     action = args.first
 
     flashable = true
@@ -32,11 +32,20 @@ module FlashableController
 
     if flashable
       model_name = klass.model_name.human(count: options[:multiple] ? 2 : 1)
-      action_with_suffix = action.to_s
-      action_with_suffix << '_multiple' if options[:multiple]
-      notice = translate(action_with_suffix, scope: ['helpers.flash', klass.name.underscore], model: model_name, default: String.new).presence
-      notice ||= translate(action_with_suffix, scope: 'helpers.flash.defaults', model: model_name) 
-      flash.notice = notice if notice
+      affixed_action = ''
+      affixed_action << 'not_' unless options[:successful]
+      affixed_action << action.to_s
+      affixed_action << '_multiple' if options[:multiple]
+      message = translate(affixed_action, scope: ['helpers.flash', klass.name.underscore], model: model_name, default: String.new).presence
+      message ||= translate(affixed_action, scope: 'helpers.flash.defaults', model: model_name) 
+      if message
+        if options[:successful]
+          flash.notice = message
+        else
+          flash.alert = message
+        end
+      end
+      
     end
   end
 end

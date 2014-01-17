@@ -44,6 +44,7 @@ class Template < ActiveRecord::Base
 
   validates :type, presence: true, inclusion: { in: TEMPLATE_TYPES }, on: :create
   validates :file_name, presence: true, inclusion: { in: ->(template) { template.class.template_files } }
+  validate :verify_region_labels_validity
 
   attr_readonly :type
 
@@ -96,5 +97,12 @@ class Template < ActiveRecord::Base
   def view_path
     raise 'no template file defined' if file_name.blank?
     File.join(self.class.template_lookup_path, file_name)
+  end
+
+  private
+  def verify_region_labels_validity
+    if region_definitions.any? { |region_definition| region_definition.errors.any? }
+      errors.add(:region_labels, :contains_invalid)
+    end
   end
 end

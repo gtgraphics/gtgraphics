@@ -53,9 +53,9 @@ class Page < ActiveRecord::Base
   validates :embeddable_type, inclusion: { in: EMBEDDABLE_TYPES }, allow_blank: true
   validates :slug, presence: { unless: :root? }, uniqueness: { scope: :parent_id }
   validates :path, presence: { unless: :root? }, uniqueness: true, if: :slug?
-  validate :validate_parent_assignability
-  validate :validate_root_uniqueness, if: :root?
-  validate :validate_embeddable_type_was_convertible, on: :update, if: :embeddable_type_changed?
+  validate :verify_parent_assignability
+  validate :verify_root_uniqueness, if: :root?
+  validate :verify_embeddable_type_was_convertible, on: :update, if: :embeddable_type_changed?
 
   before_validation :set_title
   before_validation :generate_slug
@@ -248,15 +248,15 @@ class Page < ActiveRecord::Base
     transaction { descendants.each(&:update_path!) }
   end
 
-  def validate_embeddable_type_was_convertible
+  def verify_embeddable_type_was_convertible
     errors.add(:embeddable_type, :invalid) unless embeddable_class_was.convertible?
   end
 
-  def validate_parent_assignability
+  def verify_parent_assignability
     errors.add(:parent_id, :invalid) if self_and_descendants.pluck(:id).include?(parent_id)
   end
 
-  def validate_root_uniqueness
+  def verify_root_uniqueness
     errors.add(:parent_id, :taken) if self.class.roots.without(self).exists?
   end
 end
