@@ -2,7 +2,7 @@
   %h1= page.title
 
 .row
-  - page.children.images.each do |child_page|
+  - page.children.images.with_translations(I18n.locale).each do |child_page|
     .col-lg-3
       = link_to child_page, class: 'thumbnail' do
         = image_tag child_page.embeddable.image.asset(:large_thumbnail), class: 'img-responsive'

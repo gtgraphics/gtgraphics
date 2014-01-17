@@ -57,7 +57,7 @@ class Page < ActiveRecord::Base
   validate :verify_root_uniqueness, if: :root?
   validate :verify_embeddable_type_was_convertible, on: :update, if: :embeddable_type_changed?
 
-  before_validation :set_title
+  before_validation :fetch_title_from_embeddable
   before_validation :generate_slug
   before_validation :generate_path, if: :slug?
   before_save :sanitize_regions
@@ -210,9 +210,18 @@ class Page < ActiveRecord::Base
     embeddable_class_was.destroy(embeddable_id_was) if embeddable_type_changed?
   end
 
+  def fetch_title_from_embeddable
+    if embeddable and PageEmbeddable::TITLE_CANDIDATES.any? { |method| embeddable.respond_to?(method) }
+      translations.each do |translation|
+        title_candidate = PageEmbeddable::TITLE_CANDIDATES.collect { |method| embeddable.try(method, translation.locale) }.compact.first
+        translation.title = title_candidate if title_candidate.present? and translation.title.blank?
+      end
+    end
+  end
+
   def generate_path
     if parent.present?
-      path_parts = parent.self_and_ancestors.collect(&:slug) << slug
+      path_parts = parent.self_and_ancestors.pluck(:slug) << slug
     else
       path_parts = [slug]
     end
@@ -232,15 +241,6 @@ class Page < ActiveRecord::Base
       
     else
       regions.destroy_all
-    end
-  end
-
-  def set_title
-    if embeddable and PageEmbeddable::TITLE_CANDIDATES.any? { |method| embeddable.respond_to?(method) }
-      translations.each do |translation|
-        title_candidate = PageEmbeddable::TITLE_CANDIDATES.collect { |method| embeddable.try(method, translation.locale) }.compact.first
-        translation.title = title_candidate if title_candidate.present? and translation.title.blank?
-      end
     end
   end
 
