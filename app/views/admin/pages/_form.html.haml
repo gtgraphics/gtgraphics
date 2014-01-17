@@ -11,7 +11,7 @@
               = form.simple_fields_for :translations do |translation_fields|
                 = render 'translation_fields', fields: translation_fields
             
-          .embeddable-fields
+          .embeddable-fields{data: { translation_url: embeddable_translation_fields_admin_pages_path, type: @page.embeddable_type }}
             = render 'embeddable_fields', fields: form
 
       .col-lg-4

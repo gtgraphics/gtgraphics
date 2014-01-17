@@ -8,6 +8,7 @@ class @PageEmbeddableManager
   queryInitialState: ->
     @availableEmbeddableTypes = @getAvailableEmbeddableTypes()
     @embeddableType = @getEmbeddableType()
+    @getEmbeddableFieldsContainer().attr('data-type', @embeddableType)
 
   applyEvents: ->
     @getEmbeddableTypeSelect().change =>
@@ -16,13 +17,14 @@ class @PageEmbeddableManager
 
   changeEmbeddableType: (type) ->
     return false if type == @embeddableType
-    return false unless @availableEmbeddableTypes.include(type)
+    return false unless _.contains(@availableEmbeddableTypes, type)
     $embeddableType = @getEmbeddableTypeSelect()
     $embeddableType.trigger('changingEmbeddableType.pageEmbeddableManager', type)
     @setEmbeddableType(type)
     @loadEmbeddableFields type, =>
       @embeddableType = type
       $embeddableType.trigger('changedEmbeddableType.pageEmbeddableManager', type)
+      @getEmbeddableFieldsContainer().attr('data-type', @embeddableType)
     true
 
   loadEmbeddableFields: (type, callback) ->
@@ -45,6 +47,9 @@ class @PageEmbeddableManager
 
   # DOM Element Getters
 
+  getEmbeddableTranslationFieldsContainer: ->
+    @getTranslationsContainer(@getEmbeddableFieldsContainer())
+
   getEmbeddableTypeSelect: ->
     $('select.embeddable-type-select', @container)
 
@@ -52,6 +57,7 @@ class @PageEmbeddableManager
     $('.embeddable-fields', @container)
 
   getTranslationsContainer: ($scope) ->
+    $scope ||= @container
     $('.translations', $scope)
 
   # Getters/Setters

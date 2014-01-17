@@ -123,7 +123,29 @@ class Admin::PagesController < Admin::ApplicationController
       end
     end
 
-    #build_page_embeddable
+    respond_to do |format|
+      format.html do
+        if @page.embeddable_class
+          render layout: false
+        else
+          head :not_found
+        end
+      end
+    end
+  end
+
+  def embeddable_translation_fields
+    embeddable_type = params.fetch(:embeddable_type)
+    translated_locale = params.fetch(:translated_locale)
+
+    @page = Page.new(embeddable_type: embeddable_type)
+    if @page.embeddable_class
+      @page.embeddable ||= @page.embeddable_class.new
+      if @page.embeddable_class.reflect_on_association(:translations)
+        @page.embeddable.translations.build(locale: translated_locale)
+      end
+    end
+
     respond_to do |format|
       format.html do
         if @page.embeddable_class
@@ -150,18 +172,11 @@ class Admin::PagesController < Admin::ApplicationController
 
     respond_to do |format|
       format.js do
-        #if @page.embeddable_class and translated_locale.in?(I18n.available_locales.map(&:to_s))
-        #  @page.embeddable = @page.embeddable_class.new
-        #  @page.embeddable.translations.build(locale: translated_locale)
-        #  translation_fields_view_path = "admin/#{@page.embeddable_type.underscore.pluralize}/translation_fields"
-        #  unless File.exists?(Rails.root.join('views', translation_fields_view_path))
-        #    translation_fields_view_path = "admin/pages/translation_fields"
-        #  end
-        #  render translation_fields_view_path, layout: false 
-        #else
-        #  head :not_found
-        #end
-        render layout: false
+        if @page.embeddable_class
+          render layout: false
+        else
+          head :not_found
+        end
       end
     end
   end

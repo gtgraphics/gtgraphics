@@ -45,6 +45,7 @@ gem 'turbolinks'
 gem 'compass' # github: 'Compass/compass-rails', branch: 'rails4-hack' # hack until compass has official Rails 4 support
 gem 'bootstrap-sass-rails'
 gem 'select2-bootstrap-css'
+gem 'underscore-rails'
 
 # Tools
 group :development do

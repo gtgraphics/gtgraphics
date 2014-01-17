@@ -4,7 +4,7 @@ String::blank = (trimmed = true) ->
   jQuery.trim(@) == ""
 
 String::boolify = ->
-  TRUE_VALUES.include(@toLowerCase())
+  _.contains(TRUE_VALUES, @toLowerCase())
 
 String::camelize = ->
   pieces = @split(/[\W_-]/)

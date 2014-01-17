@@ -11,6 +11,13 @@
       $scope = @
     $scope.length > 0
     
+  $.fn.many = (filter) ->
+    if filter
+      $scope = @filter(filter)
+    else
+      $scope = @
+    $scope.length > 1
+
   $.fn.none = (filter) ->
     if filter
       $scope = @filter(filter)

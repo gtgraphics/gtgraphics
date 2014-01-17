@@ -48,7 +48,7 @@ class @TranslationManager
 
   changeLocale: (locale) ->
     return false if @selectedLocale and @selectedLocale == locale
-    return false unless @translatedLocales.include(locale)
+    return false unless _.contains(@translatedLocales, locale)
     $button = @getChangeLocaleButton(locale)
     $button.trigger('changingLocale.translationManager', locale)
     @selectedLocale = locale
@@ -60,8 +60,8 @@ class @TranslationManager
   showSelectedLocalePanes: ->
     @showPanes(@selectedLocale)
 
-  addLocale: (locale) ->
-    return false if @translatedLocales.include(locale)
+  addLocale: (locale, callback) ->
+    return false if _.contains(@translatedLocales, locale)
     $button = @getAddLocaleButton(locale)
     $button.trigger('addingLocale.translationManager', locale)
 
@@ -82,7 +82,7 @@ class @TranslationManager
     true
 
   removeLocale: (locale) ->
-    return false unless @translatedLocales.include(locale)
+    return false unless _.contains(@translatedLocales, locale)
     $button = @getRemoveLocaleButton(locale)
     $button.trigger('removingLocale.translationManager', locale)
     @markTranslationDestroyed(locale, true)
@@ -100,7 +100,7 @@ class @TranslationManager
 
   queryInitialState: ->
     @availableLocales = @getAddLocaleButtons().map(-> $(@).data('locale')).toArray()
-    @translatedLocales = @getPanes().map(-> $(@).data('locale')).toArray().uniq()
+    @translatedLocales = _.uniq(@getPanes().map(-> $(@).data('locale')).toArray())
     @changeLocale(@getInitialLocale())
 
   getInitialLocale: ->
@@ -113,7 +113,7 @@ class @TranslationManager
         localeWithErrors = locale
         return false
     initialLocale = localeWithErrors || I18n.locale
-    initialLocale = @translatedLocales.first() unless @translatedLocales.include(initialLocale)
+    initialLocale = @translatedLocales.first() unless _.contains(@translatedLocales, initialLocale)
     initialLocale
 
   # Methods to refresh states for UI elements
@@ -130,7 +130,7 @@ class @TranslationManager
       locale = $link.data('locale')
 
       # Added/removed: Display or hide
-      hidden = !_this.translatedLocales.include(locale)
+      hidden = !_.contains(_this.translatedLocales, locale)
       _this.hideChangeLocaleButton(locale, hidden)
 
       # Changed: Active or inactive
@@ -142,7 +142,7 @@ class @TranslationManager
     @getAddLocaleButtons().each ->
       $button = $(@)
       locale = $button.data('locale')
-      _this.disableAddLocaleButton(locale, _this.translatedLocales.include(locale))
+      _this.disableAddLocaleButton(locale, _.contains(_this.translatedLocales, locale))
 
   refreshRemoveLocaleButtonStates: ->
     _this = @
@@ -225,10 +225,12 @@ class @TranslationManager
       success: (data) =>
         $(data).appendTo(@container.find('.tab-content')).prepare() if @dataType == 'html'
         callback() if callback  
+      error: =>
+        alert I18n.translate('translations.error')
 
   # Helpers
   getNeighborLocale: ->
-    index = @translatedLocales.index(@selectedLocale)
+    index = _.indexOf(@translatedLocales, @selectedLocale)
     locale = @translatedLocales[index + 1]
     locale ||= @translatedLocales[index - 1]
     locale
