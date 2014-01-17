@@ -200,7 +200,7 @@ class Page < ActiveRecord::Base
     title
   end
 
-  def update_path
+  def update_path!
     generate_path
     save!
   end
@@ -245,7 +245,7 @@ class Page < ActiveRecord::Base
   end
 
   def update_descendants_paths
-    transaction { descendants.each(&:update_path) }
+    transaction { descendants.each(&:update_path!) }
   end
 
   def verify_embeddable_type_was_convertible
