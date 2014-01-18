@@ -16,7 +16,7 @@ class RegionDefinition < ActiveRecord::Base
   has_many :regions, dependent: :destroy, inverse_of: :definition, foreign_key: :definition_id
 
   validates :label, presence: true, uniqueness: { scope: :template_id }
-  validates :template_id, presence: true
+  validates :template, presence: true
 
   before_validation :sanitize_label, if: -> { label.present? }
 

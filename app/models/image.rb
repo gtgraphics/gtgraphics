@@ -39,7 +39,7 @@ class Image < ActiveRecord::Base
   }.freeze
 
   has_many :custom_styles, class_name: 'Image::Style', autosave: true, inverse_of: :image, dependent: :destroy
-  has_many :image_pages, class_name: 'Page::Image', dependent: :destroy
+  has_many :image_pages, class_name: 'Page::Image', dependent: :delete_all
   has_many :pages, through: :image_pages
 
   translates :title, :description, fallbacks_for_empty_translations: true
@@ -87,7 +87,7 @@ class Image < ActiveRecord::Base
 
   def custom_styles_hash
     self.custom_styles.inject({}) do |custom_styles, custom_style|
-      if custom_style.variation? and custom_style.persisted?
+      if custom_style.variant? and custom_style.persisted?
         custom_styles.merge!(custom_style.label => custom_style.transformations)
       end
       custom_styles
@@ -117,7 +117,7 @@ class Image < ActiveRecord::Base
 
   private
   def destroy_custom_styles
-    self.custom_styles.variations.destroy_all
+    self.custom_styles.variants.destroy_all
   end
 
   def set_default_title

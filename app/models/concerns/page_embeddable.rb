@@ -22,8 +22,8 @@ module PageEmbeddable
       self.table_name = "#{self.model_name.element}_pages"
 
       belongs_to :template, class_name: template_type if supports_template?
-      has_one :page, as: :embeddable, dependent: :destroy
-      has_many :regions, as: :regionable, dependent: :destroy if supports_regions?
+      has_one :page, as: :embeddable
+      has_many :regions, through: :page if supports_regions?
 
       delegate :slug, :path, to: :page, allow_nil: true
 

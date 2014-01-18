@@ -15,6 +15,8 @@ class Page < ActiveRecord::Base
 
     belongs_to :image, class_name: '::Image'
 
+    validates :image, presence: true
+
     delegate :title, to: :image, allow_nil: true
     delegate :format, to: :image
 

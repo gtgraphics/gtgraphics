@@ -1,11 +1,8 @@
 .page-header
   %h1= image.title
 
-= raw image.description
+= link_to page_path(page, format: image_page.image.format) do
+  = image_tag image_page.image.asset(:original_cropped), class: 'img-responsive img-rounded'
 
-%p
-  = link_to page_path(page, format: image_page.image.format) do
-    = image_tag image_page.image.asset(:original_cropped), class: 'img-responsive img-rounded'
-
-%h3= image.title
+%br
 = raw image.description

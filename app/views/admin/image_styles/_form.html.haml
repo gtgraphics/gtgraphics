@@ -11,7 +11,7 @@
 
   = form.input :type, as: :hidden if @image_style.new_record?
 
-  - if @image_style.variation?
+  - if @image_style.variant?
     = render 'admin/images/crop_fields', fields: form
   - else
     = form.input :asset, as: :image_preview, required: true, input_html: { preview_version: :thumbnail }, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }

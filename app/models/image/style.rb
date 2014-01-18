@@ -19,13 +19,13 @@
 class Image < ActiveRecord::Base
   class Style < ActiveRecord::Base
     TYPES = %w(
-      Image::Style::Variation
+      Image::Style::Variant
       Image::Style::Attachment
     ).freeze
 
     belongs_to :image, inverse_of: :custom_styles
 
-    validates :image_id, presence: true
+    validates :image, presence: true
 
     TYPES.each do |type|
       scope type.demodulize.underscore.pluralize, -> { where(type: type) }
