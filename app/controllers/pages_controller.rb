@@ -2,6 +2,7 @@ class PagesController < ApplicationController
   respond_to :html
 
   before_action :load_page
+  before_action :load_template
 
   attr_reader :page
   protected :page
@@ -49,6 +50,13 @@ class PagesController < ApplicationController
       @page = Page.accessible_by(current_ability).roots.first!
     else
       @page = Page.accessible_by(current_ability).find_by_path!(params[:path])
+    end
+  end
+
+  def load_template
+    if @page.supports_template?
+      @template = @page.template 
+      @region_definitions = @template.try(:region_definitions) if @page.supports_regions?
     end
   end
 end
