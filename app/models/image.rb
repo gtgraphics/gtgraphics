@@ -94,7 +94,7 @@ class Image < ActiveRecord::Base
 
   def to_liquid
     attributes.slice(*%w(title width height updated_at)).merge(customization_options).merge(
-      'author' => author_name,
+      'author' => author,
       'file_name' => asset_file_name,
       'file_size' => asset_file_size,
       'format' => human_content_type

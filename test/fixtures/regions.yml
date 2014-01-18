@@ -9,8 +9,6 @@
 #  updated_at           :datetime
 #  concrete_region_id   :integer
 #  concrete_region_type :string(255)
-#  regionable_id        :integer
-#  regionable_type      :string(255)
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

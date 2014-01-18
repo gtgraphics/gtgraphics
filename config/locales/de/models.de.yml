@@ -131,7 +131,7 @@ de:
         file_name: Vorlagendatei
         type: Typ
         default: Standardvorlage?
-        region_labels: Regionen
+        region_labels: Editierbare Regionen
       user:
         first_name: Vorname
         last_name: Nachname

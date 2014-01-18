@@ -108,6 +108,13 @@ class User < ActiveRecord::Base
     end
   end
 
+  def to_liquid
+    attributes.slice(*%w(first_name last_name email)).merge(
+      'name' => full_name,
+      'full_name' => full_name
+    )
+  end
+
   def to_s
     full_name
   end

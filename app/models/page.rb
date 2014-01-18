@@ -113,7 +113,7 @@ class Page < ActiveRecord::Base
     end
 
     def embedding(*types)
-      types = Array(types).flatten.map { |type| type.to_s.classify }
+      types = Array(types).flatten.map { |type| "Page::#{type.to_s.classify}" }
       where(embeddable_type: types.many? ? types : types.first)
     end
 
@@ -141,7 +141,7 @@ class Page < ActiveRecord::Base
   end
 
   def available_regions
-    template.region_definitions.pluck(:label) if supports_regions?
+    @available_regions ||= (template && template.region_definitions.pluck(:label)) || []
   end
 
   def build_embeddable(attributes = {})
@@ -198,7 +198,7 @@ class Page < ActiveRecord::Base
   def to_liquid
     attributes.slice(*%w(title slug path updated_at)).merge(
       'type' => embeddable_class.model_name.human,
-      'author' => author_name,
+      'author' => author,
       'template' => template_name,
       'children' => children.with_translations(I18n.locale).to_a
     ).reverse_merge(embeddable.try(:to_liquid) || {})

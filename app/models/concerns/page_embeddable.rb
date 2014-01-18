@@ -64,8 +64,4 @@ module PageEmbeddable
   def to_param
     path
   end
-
-  def to_s
-    TITLE_CANDIDATES.collect { |method| send(method, translation.locale) }.compact.first || super
-  end
 end

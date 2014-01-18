@@ -9,8 +9,6 @@
 #  updated_at           :datetime
 #  concrete_region_id   :integer
 #  concrete_region_type :string(255)
-#  regionable_id        :integer
-#  regionable_type      :string(255)
 #
 
 class Region < ActiveRecord::Base
@@ -19,9 +17,8 @@ class Region < ActiveRecord::Base
   CONCRETE_REGION_TYPES = [REFERENCED_TYPE, EMBEDDED_TYPE].freeze
 
   belongs_to :definition, class_name: 'RegionDefinition', inverse_of: :regions
-  belongs_to :regionable, polymorphic: true # e.g. Page::Content
   belongs_to :concrete_region, polymorphic: true
-  has_one :template, -> { readonly }, through: :definition
+  has_one :template, through: :definition
 
   delegate :label, to: :definition, prefix: true, allow_nil: true
   delegate :body, to: :concrete_region
@@ -30,7 +27,6 @@ class Region < ActiveRecord::Base
   validates :concrete_region, presence: true, if: :embedded?
   validates :concrete_region_id, presence: true, if: :referenced?
   validates :concrete_region_type, presence: true, inclusion: { in: CONCRETE_REGION_TYPES }
-  validates :regionable, presence: true
 
   after_destroy :destroy_concrete_region, if: :embedded?
 
@@ -38,11 +34,14 @@ class Region < ActiveRecord::Base
   scope :referenced, -> { where(type: REFERENCED_TYPE) }
 
   accepts_nested_attributes_for :concrete_region
-  accepts_nested_attributes_for :regionable
 
   class << self
     def concrete_region_types
       CONCRETE_REGION_TYPES
+    end
+
+    def labelled(label)
+      joins(:definition).where(region_definitions: { label: label })
     end
   end
 
