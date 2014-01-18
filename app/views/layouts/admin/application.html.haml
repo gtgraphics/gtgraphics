@@ -13,46 +13,8 @@
           GT Graphics
 
       - if signed_in?
-        .navbar-collapse.collapse
-          / Main Menu
-          %ul.nav.navbar-nav#nav_primary
-            %li.dropdown.hidden-xs{class: request.path =~ /pages|templates|snippets/ ? ' active' : nil}
-              = link_to :admin_pages, wrap_tag: :li, class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
-                = Page.model_name.human(count: 2)
-                = caret
-              %ul.dropdown-menu
-                = active_link_to translate('views.admin.pages.sitemap'), :admin_pages, wrap_tag: :li, active: :exclusive
-                = active_link_to translate('helpers.links.new', model: Page.model_name.human), :new_admin_page, wrap_tag: :li
-                %li.divider
-                = active_link_to ::Template.model_name.human(count: 2), :admin_templates, wrap_tag: :li
-                = active_link_to Snippet.model_name.human(count: 2), :admin_snippets, wrap_tag: :li
-
-            = active_link_to Page.model_name.human(count: 2), :admin_pages, wrap_tag: :li, class: 'visible-xs'
-            = active_link_to ::Template.model_name.human(count: 2), :admin_templates, wrap_tag: :li, class: 'visible-xs'
-            = active_link_to Snippet.model_name.human(count: 2), :admin_snippets, wrap_tag: :li, class: 'visible-xs'
-
-            = active_link_to Image.model_name.human(count: 2), :admin_images, wrap_tag: :li
-            = active_link_to Attachment.model_name.human(count: 2), :admin_attachments, wrap_tag: :li
-            = active_link_to User.model_name.human(count: 2), :admin_users, wrap_tag: :li
-
-          / User Menu
-          %ul.nav.navbar-nav.navbar-right#nav_user
-            %li.dropdown{class: request.path =~ /account|messages/ ? 'active' : nil}
-              = active_link_to :admin_account, id: 'nav_account', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
-                %span.avatar= gravatar_image_tag current_user.email, default: :mm, size: 28, class: 'img-circle'
-                %span.name= current_user.name
-                = caret
-              %ul.dropdown-menu
-                = active_link_to prepend_icon(:user, translate('views.admin.account.my_account')), :admin_account, wrap_tag: :li, active: :exclusive
-                = active_link_to prepend_icon(:wrench, translate('views.admin.account.settings')), :edit_admin_account, wrap_tag: :li
-                %li.divider
-                = active_link_to :admin_messages, id: 'nav_messages', wrap_tag: :li do
-                  = prepend_icon(:envelope, Message.model_name.human(count: 2))
-                  - unless current_user.message_recipiences.unread.size.zero?
-                    .badge= current_user.message_recipiences.unread.size
-                %li.divider
-                %li= link_to prepend_icon(:sign_out, translate('helpers.links.sign_out'), id: 'nav_sign_out'), :admin_sign_out, method: :delete, data: { confirm: translate('helpers.confirmations.sign_out') }
-
+        = render 'navbar'
+        
   .container
     = render 'breadcrumbs'
     = render_flash(flash.notice, type: :success)

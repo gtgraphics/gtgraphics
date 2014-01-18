@@ -25,8 +25,8 @@
       = link_to @image.asset.url(:original_cropped), target: '_blank' do
         = image_tag(@image.asset.url(:preview), class: 'img-responsive img-rounded img-editable', alt: @image.title)
 
-
-    .content= @image.description.try(:html_safe)
+    .content
+      = raw @image.description
 
     /%h3= Image::Style.model_name.human(count: 2)
     /.content
@@ -50,15 +50,28 @@
                 #{@image.crop_dimensions} (#{@image.dimensions})
               - else
                 = @image.dimensions
-            - if @image.author
+            - if @image.author or @image.exif_data.artist.present?
               %dt= Image.human_attribute_name(:author)
-              %dd= link_to @image.author_name, [:admin, @image.author]
+              %dd
+                - if @image.author
+                  = link_to @image.author.name, [:admin, @image.author]
+                - else
+                  = @image.exif_data.artist
+            - if @image.camera.present?
+              %dt= Image.human_attribute_name(:camera)
+              %dd= @image.camera
+            - if @image.software.present?
+              %dt= Image.human_attribute_name(:software)
+              %dd= @image.software
+            - if @image.taken_at.present?
+              %dt= Image.human_attribute_name(:taken_at)
+              %dd= time_ago @image.taken_at
             %dt= Image.human_attribute_name(:updated_at)
             %dd= time_ago @image.updated_at
 
-    .panel.panel-default
-      .panel-heading
-        %h3.panel-title= Image::Style.model_name.human(count: 2)
-      .panel-body
-        /= @image.description.html_safe
-        = render 'admin/image_styles/table'
+    - if @image_styles.any?
+      .panel.panel-default
+        .panel-heading
+          %h3.panel-title= Image::Style.model_name.human(count: 2)
+        .panel-body
+          = render 'admin/image_styles/table'

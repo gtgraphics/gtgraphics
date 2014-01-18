@@ -65,6 +65,8 @@ class Image < ActiveRecord::Base
   before_save :set_exif_data, if: :asset_changed?
   before_update :destroy_custom_styles, if: :asset_changed?
 
+  delegate :software, to: :exif_data, allow_nil: true
+
   class << self
     def content_types
       CONTENT_TYPES
@@ -79,6 +81,10 @@ class Image < ActiveRecord::Base
     }
   end
 
+  def camera
+    exif_data.try(:model)
+  end
+
   def custom_styles_hash
     self.custom_styles.inject({}) do |custom_styles, custom_style|
       if custom_style.variation? and custom_style.persisted?
@@ -90,6 +96,10 @@ class Image < ActiveRecord::Base
 
   def styles
     STYLES.reverse_merge(custom_styles_hash).deep_symbolize_keys
+  end
+
+  def taken_at
+    exif_data.try(:date_time_original).try(:to_datetime)
   end
 
   def to_liquid

@@ -16,7 +16,6 @@ module PagesHelper
       end
     else
       raise Region::NotFound.new(name, @page.template) if Rails.env.development?
-      ""
     end
   end
 end

@@ -58,6 +58,9 @@ de:
         crop_y: Y-Position
         crop_width: Breite
         crop_height: Höhe
+        taken_at: Aufnahme
+        software: Bearbeitungs-Software
+        camera: Kamera
       image/style:
         asset: Bilddatei
         crop_x: X-Position

@@ -1,8 +1,2 @@
-/- output = nil
-/- simple_form_for [:admin, @template], url: '', as: :template do |form|
-/  - form.simple_fields_for :translations, child_index: microtimestamp do |translation_fields|
-/    - output = render 'translation_fields', fields: translation_fields
-/= output
-
-= nested_form_content_for @template, [:translations, { child_index: microtimestamp }], as: :template do |fields|
+= nested_form_content_for @template, translations: { generate_index: true } do |fields|
   = render 'translation_fields', fields: fields

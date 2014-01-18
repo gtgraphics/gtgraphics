@@ -20,7 +20,8 @@
           %dd= link_to @template.class.model_name.human, admin_templates_path(type: @template.type.demodulize)
           %dt= ::Template.human_attribute_name :file_name
           %dd= @template.file_name
-          %dt= ::Template.human_attribute_name :region_labels
-          %dd= @template.region_definitions.pluck(:label).map { |label| content_tag(:code, label) }.join(', ').html_safe
+          - if @template.region_definitions.any?
+            %dt= ::Template.human_attribute_name :region_labels
+            %dd= @template.region_definitions.pluck(:label).map { |label| content_tag(:code, label) }.join(', ').html_safe
           %dt= ::Template.human_attribute_name :updated_at
           %dd= time_ago @template.updated_at
