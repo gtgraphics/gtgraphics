@@ -2,21 +2,22 @@
 #
 # Table name: pages
 #
-#  id              :integer          not null, primary key
-#  slug            :string(255)
-#  author_id       :integer
-#  created_at      :datetime
-#  updated_at      :datetime
-#  path            :string(255)
-#  parent_id       :integer
-#  lft             :integer
-#  rgt             :integer
-#  depth           :integer
-#  embeddable_id   :integer
-#  embeddable_type :string(255)
-#  menu_item       :boolean          default(TRUE), not null
-#  state           :string(255)      not null
-#  indexable       :boolean          default(TRUE), not null
+#  id                :integer          not null, primary key
+#  slug              :string(255)
+#  author_id         :integer
+#  created_at        :datetime
+#  updated_at        :datetime
+#  path              :string(255)
+#  parent_id         :integer
+#  lft               :integer
+#  rgt               :integer
+#  depth             :integer
+#  embeddable_id     :integer
+#  embeddable_type   :string(255)
+#  menu_item         :boolean          default(TRUE), not null
+#  state             :string(255)      not null
+#  indexable         :boolean          default(TRUE), not null
+#  descendants_count :integer          default(0)
 #
 
 class Page < ActiveRecord::Base
@@ -60,8 +61,9 @@ class Page < ActiveRecord::Base
   before_validation :generate_slug
   before_validation :generate_path, if: :slug?
   before_save :sanitize_regions
+  before_save :update_descendants_count
   before_destroy :destroyable?
-  after_save :update_descendants_paths
+  after_save :update_descendants_paths, if: :path_changed?
   after_update :destroy_replaced_embeddable, if: :embeddable_changed?
 
   default_scope -> { order(:lft) }
@@ -179,6 +181,10 @@ class Page < ActiveRecord::Base
     embeddable_type_changed? or embeddable_id_changed?
   end
 
+  def has_descendants?
+    descendants_count > 0
+  end
+
   def hidden?
     !published?
   end
@@ -254,6 +260,10 @@ class Page < ActiveRecord::Base
 
   def update_descendants_paths
     transaction { descendants.each(&:update_path!) }
+  end
+
+  def update_descendants_count
+    self.descendants_count = descendants.size
   end
 
   def verify_embeddable_type_was_convertible

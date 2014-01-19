@@ -23,7 +23,7 @@ module ButtonHelper
   end
 
   def button_link_to_unless(condition, *args, &block)
-    button_link_to_if(!condition, *args, &block)
+    button_link_to_if !condition, *args, &block
   end
 
   def button_mail_to(*args, &block)
@@ -35,11 +35,7 @@ module ButtonHelper
   def extract_button_options!(args)
     options = args.extract_options!.dup
     
-    type = options.delete(:as)
-    other_type = options.delete(:type)
-    type ||= other_type
-    type ||= 'default'
-    icon = options.delete(:icon)
+    type = options.delete(:as) || options.delete(:type) || 'default'
     size = options.delete(:size).to_s
     size = case size
     when 'mini' then 'xs'
@@ -47,13 +43,12 @@ module ButtonHelper
     when 'large' then 'lg'
     else size.presence
     end
-
-    block_rendering = options.delete(:block)
+    block_mode = options.delete(:block)
 
     css = options.delete(:class).to_s + " btn"
     css << " btn-#{type}" if type
     css << " btn-#{size}" if size
-    css << " btn-block" if block_rendering
+    css << " btn-block" if block_mode
     options[:class] = css.strip
 
     options[:role] ||= 'button'
