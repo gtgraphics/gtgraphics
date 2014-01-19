@@ -3,16 +3,11 @@ class ContactFormsController < PagesController
 
   def show
     @message = @contact_form.messages.new
-    render_page
-  end
-
-  def create
-    @message = @contact_form.messages.new(message_params)
-    if @message.save
-      redirect_to contact_form_path(@contact_form)
-    else
-      render_page
+    if request.post?
+      @message.attributes = message_params
+      return redirect_to contact_form_path(@contact_form) if @message.save
     end
+    render_page
   end
 
   private

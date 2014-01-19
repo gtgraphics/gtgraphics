@@ -17,7 +17,7 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def index
-    @pages = Page.with_translations(I18n.locale)
+    @pages = Page.with_translations(I18n.locale).where(depth: 0..1)
     respond_with :admin, @pages
   end
 
@@ -98,6 +98,14 @@ class Admin::PagesController < Admin::ApplicationController
     @page.move_right
     respond_to do |format|
       format.html { redirect_to request.referer || :admin_pages }
+    end
+  end
+
+  def tree_items
+    @parent_page = Page.find(params.fetch(:parent_id))
+    @pages = @parent_page.children.with_translations(I18n.locale)
+    respond_to do |format|
+      format.html { render layout: false }
     end
   end
 

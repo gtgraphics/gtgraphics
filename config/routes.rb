@@ -62,10 +62,11 @@ GtGraphics::Application.routes.draw do
 
         resources :pages do
           collection do
-            get :preview_path
             get :embeddable_fields
             get :embeddable_translation_fields
+            get :preview_path
             get :translation_fields
+            get :tree_items
           end
           member do
             patch :move_up
@@ -113,10 +114,35 @@ GtGraphics::Application.routes.draw do
       Page::EMBEDDABLE_TYPES.each do |page_type|
         page_embeddable_class = page_type.constantize
         resource_name = page_embeddable_class.resource_name
-        page_options = { path: '*path', constraints: Routing::PageConstraint.new(page_type), only: :show }
+
+        actions = { show: :get, edit: :get }
+        case resource_name
+        when :contact_form then actions.merge!(show: [:get, :post])
+        when :image then actions.merge!(download: :get)
+        end
+
+        scope '*path', constraints: Routing::PageConstraint.new(page_type) do
+          controller_name = resource_name.to_s.pluralize
+          actions.each do |action_name, request_methods|
+            if action_name == :show
+              match '', controller: controller_name, action: action_name, via: request_methods, as: resource_name
+            else
+              match action_name, controller: controller_name, action: action_name, via: request_methods, as: "#{action_name}_#{resource_name}"
+            end
+          end
+        end
+        
+        root "#{resource_name.to_s.pluralize}#show", as: nil, constraints: Routing::RootPageConstraint.new(page_type)
+
+=begin
         case resource_name
         when :contact_form
-          resource(resource_name, page_options.merge(only: [:show, :create]))
+
+          get '*path', to: "#{resource_name.to_s.pluralize}#show", Routing::PageConstraint.new(page_type)
+
+          resource(resource_name, page_options.merge(only: :edit)) do
+            #resource
+          end
         when :image
           resource(resource_name, page_options) do
             get :download
@@ -124,7 +150,8 @@ GtGraphics::Application.routes.draw do
         else
           resource(resource_name, page_options)
         end
-        root "#{resource_name.to_s.pluralize}#show", as: nil, constraints: Routing::RootPageConstraint.new(page_type)
+=end
+        
       end
       root to: 'homepages#show'
     end

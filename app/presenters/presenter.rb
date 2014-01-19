@@ -4,12 +4,17 @@ class Presenter
   def initialize(object, template, options = {})
     @object = object
     @template = template
-    @options = options
+    @options = options.reverse_merge(self.class.defaults || {})
   end
- 
-  def self.presents(name)
-    define_method name do
-      @object
+
+  class << self
+    attr_accessor :defaults
+
+    def presents(name, defaults = {})
+      define_method name do
+        @object
+      end
+      self.defaults = defaults
     end
   end
  

@@ -7,6 +7,7 @@ class PagesController < ApplicationController
   attr_reader :page
   protected :page
   helper_method :page
+  helper_method :editing?
 
   breadcrumbs do |b|
     @page.self_and_ancestors.published.each do |page|
@@ -32,7 +33,15 @@ class PagesController < ApplicationController
     respond_with_page
   end
 
+  def edit
+    show
+  end
+
   protected
+  def editing?
+    action_name == 'edit'
+  end
+
   def render_page(options = {})
     render @page.template_path, options
   end
