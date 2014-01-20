@@ -142,6 +142,10 @@ class Page < ActiveRecord::Base
     end
   end
 
+  def ancestors_and_siblings
+    self.class.where(parent_id: self.ancestors.ids << nil)
+  end
+
   def available_regions
     @available_regions ||= (template && template.region_definitions.pluck(:label)) || []
   end
@@ -187,6 +191,10 @@ class Page < ActiveRecord::Base
 
   def hidden?
     !published?
+  end
+
+  def self_and_ancestors_and_siblings
+    self.class.where(parent_id: self.self_and_ancestors.ids << nil)
   end
 
   def state_name

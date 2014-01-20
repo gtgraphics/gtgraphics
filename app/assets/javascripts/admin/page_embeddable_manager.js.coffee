@@ -85,5 +85,6 @@ $.fn.pageEmbeddableManager = ->
     embeddableManager = new PageEmbeddableManager($container)
     $container.data('pageEmbeddableManager', embeddableManager)
 
-$(document).ready ->
+
+jQuery.prepare ->
   $('.embeddable-manager').pageEmbeddableManager()

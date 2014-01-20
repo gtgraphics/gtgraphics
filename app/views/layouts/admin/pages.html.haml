@@ -1,0 +1,67 @@
+- @hide_breadcrumbs = true
+
+- content_for :admin_content do
+
+  - if action_name.in? %w(new create edit update)
+    - if content_for? :page_content
+      = yield :page_content
+    - else
+      = yield
+
+  - else
+    .row
+      .col-lg-3.col-md-3
+        #page_sitemap{data: { url: tree_items_admin_pages_path }}
+          = present @pages, PageTreePresenter, active: @page
+
+      .col-lg-9.col-md-9
+        #page_content
+          - if content_for? :page_content
+            = yield :page_content
+          - else
+            = yield
+
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+
+= render template: 'layouts/admin/application'

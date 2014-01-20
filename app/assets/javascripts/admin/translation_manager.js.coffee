@@ -253,5 +253,6 @@ $.fn.translationManager = (klass) ->
   @on 'removedLocale.translationManager', ->
     $('.tooltip', @).remove()
 
-$(document).ready ->
+
+jQuery.prepare ->
   $('.translation-manager').translationManager()

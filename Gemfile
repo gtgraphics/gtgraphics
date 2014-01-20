@@ -41,6 +41,7 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 gem 'jquery-turbolinks'
+gem 'jquery-ui-rails'
 gem 'turbolinks'
 gem 'compass' # github: 'Compass/compass-rails', branch: 'rails4-hack' # hack until compass has official Rails 4 support
 gem 'bootstrap-sass-rails'

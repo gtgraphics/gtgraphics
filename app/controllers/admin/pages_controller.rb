@@ -18,6 +18,7 @@ class Admin::PagesController < Admin::ApplicationController
 
   def index
     @pages = Page.with_translations(I18n.locale).where(depth: 0..1)
+    @page = Page.root
     respond_with :admin, @pages
   end
 
@@ -25,12 +26,13 @@ class Admin::PagesController < Admin::ApplicationController
     @page = Page.new(parent: @parent_page || Page.root)
     @page.translations.build(locale: I18n.locale)
     @page.embeddable_type = params[:type] || 'Page::Content'
-    build_page_embeddable
-
-    #@page.embeddable.translations.each do |embedable_translation|
-    #  @page.translations.build(locale: embedable_translation.locale)
-    #end
-    respond_with :admin, @page
+    if @page.embeddable_class and @page.embeddable.nil?
+      @page.embeddable = @page.embeddable_class.new
+      if @page.embeddable_class.reflect_on_association(:translations)
+        @page.embeddable.translations.build(locale: I18n.locale)
+      end
+    end
+    respond_with :admin, @page, layout: !request.xhr?
   end
 
   def create
@@ -40,11 +42,12 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def show
-    respond_with :admin, @page
+    @pages = @page.self_and_ancestors_and_siblings
+    respond_with :admin, @page, layout: !request.xhr?
   end
 
   def edit
-    respond_with :admin, @page
+    respond_with :admin, @page, layout: !request.xhr?
   end
 
   def update
@@ -190,15 +193,6 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   private
-  def build_page_embeddable
-    if @page.embeddable_class and @page.embeddable.nil?
-      @page.embeddable = @page.embeddable_class.new
-      if @page.embeddable_class.reflect_on_association(:translations)
-        @page.embeddable.translations.build(locale: I18n.locale)
-      end
-    end
-  end
-
   def load_page
     @page = Page.find(params[:id])
   end

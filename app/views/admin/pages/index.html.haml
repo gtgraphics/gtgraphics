@@ -1,12 +1,4 @@
-= index_headline_for Page do
-  .btn-toolbar
-    = create_button_link_for Page, namespace: :admin
-
 - if @pages.any?
-  .row
-    .col-lg-6
-      = present @pages, PageTreePresenter, id: 'page_sitemap', data: { url: tree_items_admin_pages_path }
-    .col-lg-6
 - else
   .well.text-center
     %h4= translate('views.hints.empty', model: Page.model_name.human(count: 2))

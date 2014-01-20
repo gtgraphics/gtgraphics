@@ -6,8 +6,8 @@
         = Page.model_name.human(count: 2)
         = caret
       %ul.dropdown-menu
-        = active_link_to translate('views.admin.pages.sitemap'), :admin_pages, wrap_tag: :li, active: :exclusive
-        = active_link_to translate('helpers.links.new', model: Page.model_name.human), :new_admin_page, wrap_tag: :li
+        = active_link_to translate('views.admin.pages.sitemap'), :admin_pages, wrap_tag: :li
+        %li= link_to translate('helpers.links.new', model: Page.model_name.human), :new_admin_page
         %li.divider
         = active_link_to ::Template.model_name.human(count: 2), :admin_templates, wrap_tag: :li
         = active_link_to Snippet.model_name.human(count: 2), :admin_snippets, wrap_tag: :li

@@ -3,6 +3,8 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require jquery.turbolinks
+//= require jquery.ui.draggable
+//= require jquery.ui.droppable
 //= require twitter/bootstrap
 //= require_tree ./core_ext
 //= require_tree ./libraries

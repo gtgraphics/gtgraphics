@@ -5,3 +5,7 @@ body {
 .content + .content {
   margin-top: 20px;
 }
+
+.caret-right {
+  @include caret-right;
+}

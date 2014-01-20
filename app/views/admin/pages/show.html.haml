@@ -1,7 +1,8 @@
-= view_headline_for @page do
-  %ul.list-inline
-    %li= create_button_link_for Page, url: new_admin_page_path(parent_id: @page)
-    %li= action_buttons_for @page, except: [:show, @page.destroyable? ? nil : :destroy].compact
+- unless request.xhr?
+  = view_headline_for @page do
+    %ul.list-inline
+      %li= create_button_link_for Page, url: new_admin_page_path(parent_id: @page)
+      %li= action_buttons_for @page, except: [:show, @page.destroyable? ? nil : :destroy].compact
 
 %dl.dl-horizontal
   %dt= Page.human_attribute_name :embeddable_type

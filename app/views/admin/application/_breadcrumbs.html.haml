@@ -1,4 +1,4 @@
-- if breadcrumbs.count > 1
+- if !@hide_breadcrumbs and breadcrumbs.count > 1
   %ul.breadcrumb
     - breadcrumbs.each do |breadcrumb|
       - if breadcrumb.last?

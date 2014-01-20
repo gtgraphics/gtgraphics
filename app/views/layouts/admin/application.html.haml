@@ -20,9 +20,9 @@
     = render_flash(flash.notice, type: :success)
     = render_flash(flash.alert, type: :danger)
 
-    #page_content
-      - if content_for? :content
-        = yield :content
+    #admin_content
+      - if content_for? :admin_content
+        = yield :admin_content
       - else
         = yield
 
