@@ -1,8 +1,10 @@
 module IconHelper
   # Bootstrap
 
-  def caret
-    content_tag :b, nil, class: 'caret'
+  def caret(direction = :down)
+    css = 'caret'
+    css << "-#{direction}" if direction != :down
+    content_tag :b, nil, class: css
   end
 
   # Font Awesome

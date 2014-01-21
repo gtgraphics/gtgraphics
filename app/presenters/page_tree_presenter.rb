@@ -42,6 +42,10 @@ class PageTreePresenter < Presenter
         #haml_tag :span do
         #  haml_concat link_to(page.title, [:edit, :admin, page])
         #end
+        haml_tag :span do
+          haml_concat caret
+          
+        end
         haml_concat link_to(page.title, [:admin, page])
         if pages_by_parents[page.id]
           haml_tag :ul, class: "level-#{level.next}" do

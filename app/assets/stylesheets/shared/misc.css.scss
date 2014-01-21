@@ -6,6 +6,20 @@ body {
   margin-top: 20px;
 }
 
+// Carets
+
+.caret-down {
+  @extend .caret;
+}
+
 .caret-right {
   @include caret-right;
+}
+
+.caret-left {
+  @include caret-left;
+}
+
+.caret-up {
+  @include caret-up;
 }
