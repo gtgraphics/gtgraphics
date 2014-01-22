@@ -17,7 +17,7 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def index
-    @pages = Page.with_translations(I18n.locale).where(depth: 0..1)
+    @pages = Page.with_translations(I18n.locale).where(depth: 0..2)
     @page = Page.root
     respond_with :admin, @pages
   end
@@ -42,7 +42,7 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def show
-    @pages = @page.self_and_ancestors_and_siblings
+    @pages = @page.self_and_ancestors_and_siblings.with_translations(I18n.locale)
     respond_with :admin, @page, layout: !request.xhr?
   end
 

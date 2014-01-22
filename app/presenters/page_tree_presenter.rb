@@ -31,23 +31,23 @@ class PageTreePresenter < Presenter
   def render_item(parent_id = nil, level = 0)
     pages = Array(pages_by_parents[parent_id])
     pages.each do |page|
+      children_loaded = !!pages_by_parents[page.id]
       css = "page page-#{page.state}"
       css << ' active' if page == active_page
       if page.has_descendants?
         css << ' with-descendants'
-        css << ' open' if pages_by_parents[page.id]
+        css << ' open' if children_loaded
       end
       haml_tag :li, id: "page_#{page.id}", class: css, data: { page_id: page.id } do
-        # haml_concat link_to(page.title, [:edit, :admin, page])
-        #haml_tag :span do
-        #  haml_concat link_to(page.title, [:edit, :admin, page])
-        #end
-        haml_tag :span do
-          haml_concat caret
-          
+        haml_tag 'span.node' do
+          haml_tag 'span.node-icon' do
+            haml_concat button_tag(caret(children_loaded ? :down : :right), type: 'button', class: 'toggle-children') if page.has_descendants?
+          end
+          haml_tag 'span.node-caption' do
+            haml_concat link_to(page.title, [:admin, page], class: 'open-page')
+          end
         end
-        haml_concat link_to(page.title, [:admin, page])
-        if pages_by_parents[page.id]
+        if children_loaded
           haml_tag :ul, class: "level-#{level.next}" do
             render_item(page.id, level.next)
           end
