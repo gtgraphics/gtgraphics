@@ -18,6 +18,8 @@
     %dd= link_to @page.template.name, admin_template_path(@page.template)
   %dt= Page.human_attribute_name :state
   %dd= @page.state_name
+  %dt= Page.human_attribute_name :translated_locales
+  %dd= @page.translated_locales.map { |locale| link_to(translate(locale, scope: :languages), page_path(@page, locale: locale)) }.sort.join(', ').html_safe
   %dt= Page.human_attribute_name :menu_item
   %dd= link_to yes_or_no(@page.menu_item?), [:toggle_menu_item, :admin, @page], method: :patch
   - begin

@@ -4,7 +4,10 @@ class PageTreePresenter < Presenter
   def render
     level = parent_page.try(:depth).try(:next) || 0
     capture_haml do
-      options[:class] = "#{options[:class]} level-#{level}".strip
+      options[:class] ||= ''
+      options[:class] << " level-#{level}"
+      options[:class] << ' tree' if level.zero?
+      options[:class].strip!
       haml_tag :ul, options.except(:parent) do
         render_item(parent_page_id, level)
       end

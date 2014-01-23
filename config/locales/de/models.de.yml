@@ -10,6 +10,7 @@ de:
     slug: URL-Token
     template: Vorlage
     title: Titel
+    translated_locales: Lokalisierungen
     type: Typ
     updated_at: Aktualisierung
 

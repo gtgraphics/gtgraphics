@@ -1,18 +1,28 @@
 setEvents = ($scope) ->
-  $('li.page', $scope)
+  $('.node', $scope)
     .draggable
       distance: 5
       revert: 'invalid'
       appendTo: '#page_sitemap'
       containment: '#page_sitemap'
       helper: ->
-        $('<ul />', class: 'drag-helper').append($(@).clone())
+        $list = $('<ul />', class: 'tree drag-helper')
+        $listItem = $('<li />', class: 'with-descendants').appendTo($list)
+        $(@).clone().appendTo($listItem)
+        $list
     .droppable
       greedy: true
       activeClass: 'dragging'
       hoverClass: 'dragover'
-      accept: 'li.page'
+      accept: ($source) ->
+        $target = $(@)
+        # prevent that parents can be moved to one of their children
+        if $source.closest('li').children('ul').find('li > .node').is($target)
+          false
+        else
+          '.node'
       drop: (event, ui) ->
+        console.log "dropped it like it's hot"
 
 jQuery.prepare ->
   setEvents(@)
