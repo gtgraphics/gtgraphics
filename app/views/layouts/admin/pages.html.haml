@@ -11,7 +11,7 @@
   - else
     .row
       .col-lg-3.col-md-3
-        #page_sitemap{data: { url: tree_items_admin_pages_path }}
+        #page_sitemap{data: { url: tree_children_admin_pages_path }}
           = present @pages, PageTreePresenter, active: @page
 
       .col-lg-9.col-md-9
@@ -20,48 +20,5 @@
             = yield :page_content
           - else
             = yield
-
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
-  %br
 
 = render template: 'layouts/admin/application'

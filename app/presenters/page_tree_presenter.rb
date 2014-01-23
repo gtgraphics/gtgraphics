@@ -41,7 +41,13 @@ class PageTreePresenter < Presenter
       haml_tag :li, id: "page_#{page.id}", class: css, data: { page_id: page.id } do
         haml_tag 'span.node' do
           haml_tag 'span.node-icon' do
-            haml_concat button_tag(caret(children_loaded ? :down : :right), type: 'button', class: 'toggle-children') if page.has_descendants?
+            if page.has_descendants?
+              haml_tag 'button.toggle-children', type: 'button' do
+                haml_tag 'span.node-icon-open', caret(:down)
+                haml_tag 'span.node-icon-openable', caret(:right)
+                haml_tag 'span.node-icon-opening', icon(:refresh, spin: true)
+              end
+            end
           end
           haml_tag 'span.node-caption' do
             haml_concat link_to(page.title, [:admin, page], class: 'open-page')

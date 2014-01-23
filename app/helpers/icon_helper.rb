@@ -14,11 +14,27 @@ module IconHelper
     if shape = options[:shape]
       icon_class << "-#{shape.to_s.dasherize}"
     end
-    icon_class << "-o" if options[:outline]
+    icon_class << '-o' if options[:outline]
     if direction = options[:direction]
       icon_class << "-#{direction.to_s.dasherize}"
     end
-    icon_class << " fa-spin" if options[:spin]
+    icon_class << ' fa-spin' if options[:spin]
+    if size = options[:size]
+      if size == :large
+        icon_class << ' fa-lg'
+      else
+        icon_class << " fa-#{size}x"
+      end
+    end
+    icon_class << ' fa-inverse' if options[:inverse]
+    if rotate = options[:rotate] and rotate != 0
+      icon_class << " fa-rotate-#{rotate}"
+    end
+    if flip = options[:flip]
+      icon_class << " fa-flip-#{flip}"
+    end
+    icon_class << ' fa-border' if options[:border]
+    icon_class << ' fa-fw' if options[:fixed_width]
     content_tag :i, nil, class: icon_class
   end
 

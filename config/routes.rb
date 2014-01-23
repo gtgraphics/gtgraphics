@@ -66,7 +66,7 @@ GtGraphics::Application.routes.draw do
             get :embeddable_translation_fields
             get :preview_path
             get :translation_fields
-            get :tree_items
+            get :tree_children
           end
           member do
             patch :move_up
@@ -75,6 +75,7 @@ GtGraphics::Application.routes.draw do
             patch :publish
             patch :draft
             patch :hide
+            get :tree_children
           end
         end
 
@@ -121,13 +122,13 @@ GtGraphics::Application.routes.draw do
         when :image then actions.merge!(download: :get)
         end
 
-        scope '*path', constraints: Routing::PageConstraint.new(page_type) do
+        scope constraints: Routing::PageConstraint.new(page_type) do
           controller_name = resource_name.to_s.pluralize
           actions.each do |action_name, request_methods|
             if action_name == :show
-              match '', controller: controller_name, action: action_name, via: request_methods, as: resource_name
+              match '*path(.:format)', controller: controller_name, action: action_name, via: request_methods, as: resource_name
             else
-              match action_name, controller: controller_name, action: action_name, via: request_methods, as: "#{action_name}_#{resource_name}"
+              match "*path/#{action_name}(.:format)", controller: controller_name, action: action_name, via: request_methods, as: "#{action_name}_#{resource_name}"
             end
           end
         end

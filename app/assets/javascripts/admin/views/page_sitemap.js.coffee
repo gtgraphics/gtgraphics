@@ -1,19 +1,18 @@
 setEvents = ($scope) ->
   $('li.page', $scope)
-    .draggable(
+    .draggable
+      distance: 5
       revert: 'invalid'
       appendTo: '#page_sitemap'
       containment: '#page_sitemap'
       helper: ->
         $('<ul />', class: 'drag-helper').append($(@).clone())
-    )
-    .droppable(
+    .droppable
       greedy: true
       activeClass: 'dragging'
       hoverClass: 'dragover'
       accept: 'li.page'
       drop: (event, ui) ->
-    )
 
 jQuery.prepare ->
   setEvents(@)
@@ -26,23 +25,23 @@ $(document).ready ->
 
   $pageSitemap.on 'click', '.toggle-children', (event) ->
     event.preventDefault()
-
     $button = $(@)
     $listItem = $button.closest('li')
 
-    # Descendants
     if $listItem.hasClass('with-descendants')
       if $('ul', $listItem).none()
         $listItem.addClass('opening')
+        $button.prop('disabled', true)
         jQuery.ajax
           url: $pageSitemap.data('url')
-          data: { parent_id: $listItem.data('pageId') }
+          data: { id: $listItem.data('pageId') }
           dataType: 'html'
           success: (html) ->
             $(html).appendTo($listItem).prepare()
             $listItem.addClass('open')
           complete: ->
             $listItem.removeClass('opening')
+            $button.prop('disabled', false)
       else
         $listItem.toggleClass('open')
 

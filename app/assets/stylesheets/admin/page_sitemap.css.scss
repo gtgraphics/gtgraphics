@@ -18,30 +18,63 @@
   }
 
   li {
-    position: relative;
-
     > ul {
       display: none;
     }
 
-    &.active {
-      > .node > .node-caption {
-        font-weight: bold;
-      }
-
-      /*&:after {
-        @include caret-left(8px);
-        content: '';
-        position: absolute;
-        right: 0;
-        top: 1px;
-        color: white;
-      }*/
-    }
-    
     &.open {
       > ul {
         display: block;
+      }
+    }
+
+    &.active {
+      > .node .node-caption {
+        font-weight: bold;
+      }
+    }
+
+    &.with-descendants {
+      .toggle-children {
+        border: 0;
+        background: none;
+        width: 18px;
+        height: auto;
+        padding: 0;
+        margin: 0;
+        color: $gray-light;
+        .caret, .caret-right {
+          color: $gray-light;
+          margin: 0;
+        }
+        &:hover, &:focus {
+          color: $gray-light;
+          .caret, .caret-right {
+            color: $link-color;
+          }
+        }
+      }
+
+      > .node .node-icon {
+        .node-icon-open { display: none; }
+        .node-icon-openable { display: block; }
+        .node-icon-opening { display: none; }
+      }
+
+      &.opening {
+        > .node .node-icon {
+          .node-icon-open { display: none; }
+          .node-icon-openable { display: none; }
+          .node-icon-opening { display: block; }
+        }
+      }
+
+      &.open {
+        > .node .node-icon {
+          .node-icon-open { display: block; }
+          .node-icon-openable { display: none; }
+          .node-icon-opening { display: none; }
+        }
       }
     }
   }
@@ -50,18 +83,5 @@
     display: inline-block;
     width: 16px;
     text-align: center;
-
-    .caret, .caret-right {
-      color: $gray-light;
-      margin: 0;
-    }
-  }
-
-  .toggle-children {
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    width: 18px;
   }
 }
