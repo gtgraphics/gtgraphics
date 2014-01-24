@@ -1,0 +1,134 @@
+ul.jqtree-tree {
+  background-image: asset-url('admin/shadow.png');
+  background-position: right center;
+  background-size: 25px 100%;
+  background-repeat: no-repeat;
+
+  margin-left: 20px;
+  list-style: none outside;
+  margin-bottom: 0;
+  padding: 0;
+  ul.jqtree_common {
+    list-style: none outside;
+    margin-bottom: 0;
+    padding: 0;
+    display: block;
+    margin-left: 20px;
+    margin-right: 0;
+  }
+  li {
+    &.jqtree-closed > ul.jqtree_common {
+      display: none;
+    }
+    &.jqtree_common {
+      clear: both;
+      list-style-type: none;
+    }
+  }
+  .jqtree-toggler {
+    display: block;
+    position: absolute;
+    left: -1.5em;
+    top: 20%;
+    *top: 0;
+    /* fix for ie7 */
+    font-size: 12px;
+    line-height: 12px;
+    width: 12px;
+    height: 12px;
+    text-align: center;
+    /* fix for ie9 */
+    border-bottom: none;
+    //color: darken($gray-lighter, 20%);
+    color: $text-color;
+    text-decoration: none;
+    &:hover {
+      color: $text-color;
+      //color: #000;
+    }
+  }
+  .jqtree-element {
+    cursor: pointer;
+  }
+  .jqtree-title {
+    vertical-align: middle;
+  }
+  li.jqtree-folder {
+    margin-bottom: 4px;
+    &.jqtree-closed {
+      margin-bottom: 1px;
+    }
+    .jqtree-title {
+      margin-left: 0;
+    }
+  }
+  .jqtree-toggler.jqtree-closed {
+    background-position: 0 0;
+  }
+}
+
+span.jqtree-dragging {
+  color: #fff;
+  background: #000;
+  opacity: 0.6;
+  cursor: pointer;
+  padding: 2px 8px;
+}
+
+ul.jqtree-tree {
+
+  $ghost-border: 2px dotted $link-color;
+
+  li.jqtree-ghost {
+    position: relative;
+    z-index: 10;
+    margin-right: 20px;
+    span {
+      display: block;
+      &.jqtree-circle {
+        height: 8px;
+        width: 8px;
+        position: absolute;
+        top: -4px;
+        left: 2px;
+      }
+      &.jqtree-line {
+        height: 0;
+        padding: 0;
+        position: absolute;
+        top: -1px;
+        left: 0px;
+        width: 100%;
+        border-bottom: $ghost-border;
+      }
+    }
+    &.jqtree-inside {
+      margin-left: 48px;
+    }
+  }
+  span.jqtree-border {
+    position: absolute;
+    display: block;
+    left: -25px;
+    right: -6px;
+    top: -1px;
+    height: 25px !important;
+    margin: 0;
+    border: $ghost-border;
+    @include border-radius(10px);
+  }
+  .jqtree-element {
+    width: 100%;
+    /* todo: why is this in here? */
+    *width: auto;
+    /* ie7 fix; issue 41 */
+    position: relative;
+  }
+  li.jqtree-selected > .jqtree-element {
+    font-weight: bold;
+    &:hover {
+    }
+  }
+  .jqtree-moving > .jqtree-element .jqtree-title {
+  }
+}

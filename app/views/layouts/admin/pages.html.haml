@@ -1,4 +1,4 @@
-- @hide_breadcrumbs = true
+/- @hide_breadcrumbs = true
 
 - content_for :admin_content do
 
@@ -10,13 +10,10 @@
 
   - else
     .row
-      .col-lg-4.col-md-4
-        #page_sitemap.tree{data: { url: tree_children_admin_pages_path }}
-          = present @pages, PageTreePresenter, active: @page
-          %br
-          = create_button_link_for Page, namespace: :admin, block: true
+      .col-lg-3.col-md-3
+        #sitemap{data: { url: tree_admin_pages_path(format: :json) }}
 
-      .col-lg-8.col-md-8
+      .col-lg-9.col-md-9
         #page_content
           - if content_for? :page_content
             = yield :page_content

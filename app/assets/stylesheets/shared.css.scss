@@ -4,6 +4,7 @@
 @import "shared/mixins";
 
 // Libraries
+@import "compass";
 @import "shared/bootstrap_overrides";
 @import "twitter/bootstrap";
 @import "shared/select2";
@@ -15,6 +16,7 @@
 @import "shared/forms";
 @import "shared/icons";
 @import "shared/images";
+@import "shared/jqtree";
 @import "shared/misc";
 @import "shared/navigation";
 @import "shared/panels";

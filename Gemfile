@@ -43,7 +43,7 @@ gem 'jquery-rails'
 gem 'jquery-turbolinks'
 gem 'jquery-ui-rails'
 gem 'turbolinks'
-gem 'compass' # github: 'Compass/compass-rails', branch: 'rails4-hack' # hack until compass has official Rails 4 support
+gem 'compass-rails' # github: 'Compass/compass-rails', branch: 'rails4-hack' # hack until compass has official Rails 4 support
 gem 'bootstrap-sass-rails'
 gem 'select2-bootstrap-css'
 gem 'underscore-rails'
@@ -77,4 +77,4 @@ end
 # gem 'capistrano', group: :development
 
 # Use debugger
-# gem 'debugger', group: [:development, :test]
+gem 'debugger', group: [:development, :test]

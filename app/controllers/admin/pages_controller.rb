@@ -1,7 +1,7 @@
 class Admin::PagesController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_page, only: %i(show edit update destroy toggle_menu_item move_up move_down publish draft hide)
+  before_action :load_page, only: %i(show edit update destroy toggle_menu_item move move_up move_down publish draft hide)
   before_action :load_parent_page, only: %i(new create show edit update)
 
   breadcrumbs do |b|
@@ -104,15 +104,41 @@ class Admin::PagesController < Admin::ApplicationController
     end
   end
 
-  def tree_children
-    if page_id = params[:id]
-      @parent_page = Page.find(page_id)
-    else
-      @parent_page = Page.root
+  def move
+    valid = true
+    target_page = Page.find(params[:to])
+    Page.transaction do
+      case params[:position]
+      when 'inside'
+        @page.move_to_child_of(target_page)
+        @page.update_path!
+        target_page.self_and_descendants.without(@page).each(&:update_descendants_count!)
+      when 'before'
+        @page.move_to_left_of(target_page)
+        @page.update_path!
+        @page.parent.self_and_descendants.without(@page).each(&:update_descendants_count!) if @page.parent
+      when 'after'
+        @page.move_to_right_of(target_page)
+        @page.update_path!
+        @page.parent.self_and_descendants.without(@page).each(&:update_descendants_count!) if @page.parent
+      else
+        valid = false
+      end
     end
-    @pages = @parent_page.children.with_translations(I18n.locale)
     respond_to do |format|
-      format.html { render layout: false }
+      format.html { head valid ? :ok : :bad_request }
+    end
+  end
+
+  def tree
+    if page_id = params[:node]
+      pages = Page.find(page_id).children
+    else
+      pages = Page.where(depth: 0..1)
+    end
+    @page_tree = PageTree.new(pages.with_translations(I18n.locale))
+    respond_to do |format|
+      format.json { render json: @page_tree }
     end
   end
 

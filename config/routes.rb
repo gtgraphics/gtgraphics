@@ -66,16 +66,16 @@ GtGraphics::Application.routes.draw do
             get :embeddable_translation_fields
             get :preview_path
             get :translation_fields
-            get :tree_children
+            get :tree
           end
           member do
+            patch :move
             patch :move_up
             patch :move_down
             patch :toggle_menu_item
             patch :publish
             patch :draft
             patch :hide
-            get :tree_children
           end
         end
 

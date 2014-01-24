@@ -224,7 +224,18 @@ class Page < ActiveRecord::Base
 
   def update_path!
     generate_path
-    save!
+    transaction do
+      save!
+      update_descendants_paths
+    end
+  end
+
+  def update_descendants_count
+    self.descendants_count = descendants.count
+  end
+
+  def update_descendants_count!
+    update_column(:descendants_count, descendants.count)
   end
 
   private
@@ -268,10 +279,6 @@ class Page < ActiveRecord::Base
 
   def update_descendants_paths
     transaction { descendants.each(&:update_path!) }
-  end
-
-  def update_descendants_count
-    self.descendants_count = descendants.size
   end
 
   def verify_embeddable_type_was_convertible
