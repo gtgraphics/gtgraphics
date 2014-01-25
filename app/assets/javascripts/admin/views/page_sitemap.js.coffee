@@ -16,16 +16,6 @@ $(document).ready ->
         $checkbox = $('<input />', type: 'checkbox', value: node.id).prependTo($title)
         $checkbox.click (event) ->
           event.stopPropagation()
-        $checkbox.on 'ifChanged', (event) ->
-          $childCheckboxes = $checkbox.closest('li').children('ul').children('li').find(':check')
-          if $checkbox.prop('indeterminate')
-            $checkbox.prop('indeterminate', false).prop('checked', true)
-            $childCheckboxes.prop('checked', true)
-          else
-
-
-          $checkbox.iCheck('update')
-          $childCheckboxes.iCheck('update')
 
   $sitemap.on 'tree.refresh', ->
     $sitemap.prepare()
