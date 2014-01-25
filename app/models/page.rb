@@ -157,6 +157,10 @@ class Page < ActiveRecord::Base
     children.embedding(*types).includes(:embeddable)
   end
 
+  def descendants_count
+    self_and_descendants.pluck(:children_count).sum
+  end
+
   def destroyable?
     !root?
   end

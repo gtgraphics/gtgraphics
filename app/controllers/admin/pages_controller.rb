@@ -94,13 +94,24 @@ class Admin::PagesController < Admin::ApplicationController
     valid = true
     target_page = Page.find(params[:to])
     Page.transaction do
+      previous_parent_id = @page.parent_id
+
+      # Move Page in Tree
       case params[:position]
       when 'inside' then @page.move_to_child_with_index(target_page, 0)
       when 'before' then @page.move_to_left_of(target_page)
       when 'after' then @page.move_to_right_of(target_page)
       else valid = false
       end
-      [@page.id, @page.parent_id, target_page.id, target_page.parent_id].uniq.each do |page_id|
+
+      # Rename Slug if parent page already contains children with the same slug
+      if Page.where(parent_id: @page.parent_id, slug: @page.slug).count > 1
+        # TODO Rename slug
+        raise ActiveRecord::Rollback, 'Slug has already been taken' 
+      end
+
+      # Update Counter Caches
+      [@page.id, @page.parent_id, target_page.id, target_page.parent_id, previous_parent_id].uniq.each do |page_id|
         Page.reset_counters(page_id, :children)
       end
     end
