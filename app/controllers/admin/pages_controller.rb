@@ -62,25 +62,15 @@ class Admin::PagesController < Admin::ApplicationController
     respond_with :admin, @page
   end
 
-  def publish
-    @page.publish!
-    respond_to do |format|
-      format.html { redirect_to request.referer || [:admin, @page] }
-    end
-  end
-
-  def draft
-    @page.draft!
-    respond_to do |format|
-      format.html { redirect_to request.referer || [:admin, @page] }
-    end
-  end
-
-  def hide
-    @page.hide!
-    respond_to do |format|
-      format.html { redirect_to request.referer || [:admin, @page] }
-    end
+  %w(publish draft hide).each do |action|
+    class_eval %{
+      def #{action}
+        @page.#{action}!
+        respond_to do |format|
+          format.html { redirect_to request.referer || [:admin, @page] }
+        end
+      end
+    }
   end
 
   def toggle_menu_item
