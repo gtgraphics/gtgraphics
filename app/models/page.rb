@@ -51,15 +51,14 @@ class Page < ActiveRecord::Base
 
   validates :embeddable, presence: true
   validates :embeddable_type, inclusion: { in: EMBEDDABLE_TYPES }, allow_blank: true
-  validates :slug, presence: { unless: :root? }, uniqueness: { scope: :parent_id }
-  validates :path, presence: { unless: :root? }, uniqueness: true, if: :slug?
-  validate :verify_parent_assignability
+  validates :slug, presence: { unless: :root? }, uniqueness: { scope: :parent_id, if: :slug_changed? }
+  validates :path, presence: { unless: :root? }, uniqueness: { if: :path_changed? }
+  validate :verify_parent_assignability, if: :parent_id_changed?
   validate :verify_root_uniqueness, if: :root?
   validate :verify_embeddable_type_was_convertible, on: :update, if: :embeddable_type_changed?
 
-  before_validation :fetch_title_from_embeddable
   before_validation :generate_slug
-  before_validation :generate_path, if: :slug?
+  before_validation :generate_path, if: :slug_changed?
   before_save :sanitize_regions
   before_destroy :destroyable?
   after_save :update_descendants_paths, if: :path_changed?
@@ -229,15 +228,6 @@ class Page < ActiveRecord::Base
   private
   def destroy_replaced_embeddable
     embeddable_class_was.destroy(embeddable_id_was) if embeddable_type_changed?
-  end
-
-  def fetch_title_from_embeddable
-    if embeddable and PageEmbeddable::TITLE_CANDIDATES.any? { |method| embeddable.respond_to?(method) }
-      translations.each do |translation|
-        title_candidate = PageEmbeddable::TITLE_CANDIDATES.collect { |method| embeddable.try(method, translation.locale) }.compact.first
-        translation.title = title_candidate if title_candidate.present? and translation.title.blank?
-      end
-    end
   end
 
   def generate_path

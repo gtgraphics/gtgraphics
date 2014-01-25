@@ -90,20 +90,6 @@ class Admin::PagesController < Admin::ApplicationController
     end
   end
 
-  def move_up
-    @page.move_left
-    respond_to do |format|
-      format.html { redirect_to request.referer || :admin_pages }
-    end
-  end
-
-  def move_down
-    @page.move_right
-    respond_to do |format|
-      format.html { redirect_to request.referer || :admin_pages }
-    end
-  end
-
   def move
     valid = true
     target_page = Page.find(params[:to])
@@ -114,8 +100,7 @@ class Admin::PagesController < Admin::ApplicationController
       when 'after' then @page.move_to_right_of(target_page)
       else valid = false
       end
-      @page.update_path!
-      [@page.id, target_page.id].each do |page_id|
+      [@page.id, @page.parent_id, target_page.id, target_page.parent_id].uniq.each do |page_id|
         Page.reset_counters(page_id, :children)
       end
     end
