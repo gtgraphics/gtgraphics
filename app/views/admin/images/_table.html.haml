@@ -13,7 +13,8 @@
         = thumbnail image.asset.url(:large_thumbnail), [:admin, image], alt: image.title, class: 'loader-large' do
           .actions.top.right
             = action_buttons_for image, size: :mini, icon_only: true
-          %h3= image.title
+          %h3
+            = image.title
           %p
             = image.human_content_type
             %br
@@ -21,7 +22,7 @@
 
 - else
 
-  %table.table.table-striped
+  %table.table
     %thead
       %tr
         - if checkboxes

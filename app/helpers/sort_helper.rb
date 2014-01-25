@@ -12,9 +12,9 @@ module SortHelper
 
     direction = collection.sorted_by?(column_name) ? collection.sort_direction.invert.to_sym : Sortable::Direction.default.to_sym
     if column_name.to_s == collection.default_sort_column and direction == collection.default_sort_direction.to_sym
-      url = url_for(sort: nil, direction: nil) # default order
+      url = url_for(params.merge(sort: nil, direction: nil)) # default order
     else
-      url = url_for(sort: column_name, direction: direction)
+      url = url_for(params.merge(sort: column_name, direction: direction))
     end
 
     link_to url, options do

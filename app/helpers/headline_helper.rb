@@ -30,7 +30,7 @@ module HeadlineHelper
   def headline(text, options = {}, &block)
     options[:class] ||= ""
     options[:class] << ' page-header'
-    options[:class] << ' page-header-with-content clearfix' if block_given?
+    options[:class] << ' page-header-with-content' if block_given?
     options[:class].strip!
     content_tag(:div, options) do
       html = ""

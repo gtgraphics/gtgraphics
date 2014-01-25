@@ -1,9 +1,11 @@
 ul.jqtree-tree {
+  /*
   background-image: asset-url('admin/shadow.png');
   background-position: right center;
   background-size: 25px 100%;
   background-repeat: no-repeat;
-
+  */
+  
   margin-left: 20px;
   list-style: none outside;
   margin-bottom: 0;
@@ -15,6 +17,7 @@ ul.jqtree-tree {
     display: block;
     margin-left: 20px;
     margin-right: 0;
+    padding-bottom: 3px;
   }
   li {
     &.jqtree-closed > ul.jqtree_common {

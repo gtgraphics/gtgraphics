@@ -14,8 +14,10 @@ de:
     pagination:
       first: "&laquo;"
       last: "&raquo;"
-      previous: "&lsaquo;"
-      next: "&rsaquo;"
+      #previous: "&lsaquo;"
+      #next: "&rsaquo;"
+      previous: Vorige Seite
+      next: Nächste Seite
       truncate: "..."
     admin:
       account:

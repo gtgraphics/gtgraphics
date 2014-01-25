@@ -1,2 +1,7 @@
-%li
-  = link_to_unless current_page.first?, translate('views.pagination.previous').html_safe, url, rel: 'prev', remote: remote
+/%li
+/  = link_to_unless current_page.first?, translate('views.pagination.previous').html_safe, url, rel: 'prev', remote: remote
+
+- if current_page.first?
+  = button_link_to icon(:angle, direction: :left, fixed_width: true), '#', disabled: true
+- else
+  = button_link_to icon(:angle, direction: :left, fixed_width: true), url, rel: 'prev', title: translate('views.pagination.previous'), data: { toggle: 'tooltip', placement: 'bottom', container: '#toolbar' }

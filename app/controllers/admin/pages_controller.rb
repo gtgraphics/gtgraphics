@@ -91,7 +91,7 @@ class Admin::PagesController < Admin::ApplicationController
       when 'inside' then @page.move_to_child_with_index(target_page, 0)
       when 'before' then @page.move_to_left_of(target_page)
       when 'after' then @page.move_to_right_of(target_page)
-      else valid = false
+      else return valid = false
       end
 
       # Rename Slug if parent page already contains children with the same slug
@@ -101,7 +101,7 @@ class Admin::PagesController < Admin::ApplicationController
       end
 
       # Update Counter Caches
-      [@page.id, @page.parent_id, target_page.id, target_page.parent_id, previous_parent_id].uniq.each do |page_id|
+      [@page.id, @page.parent_id, target_page.id, target_page.parent_id, previous_parent_id].compact.uniq.each do |page_id|
         Page.reset_counters(page_id, :children)
       end
     end

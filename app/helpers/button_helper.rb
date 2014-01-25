@@ -49,6 +49,7 @@ module ButtonHelper
     css << " btn-#{type}" if type
     css << " btn-#{size}" if size
     css << " btn-block" if block_mode
+    css << " disabled" if options.delete(:disabled)
     options[:class] = css.strip
 
     options[:role] ||= 'button'

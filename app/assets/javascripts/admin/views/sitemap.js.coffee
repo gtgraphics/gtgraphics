@@ -13,9 +13,32 @@ $(document).ready ->
     onCreateLi: (node, $listItem) ->
       if node.destroyable
         $title = $listItem.find('.jqtree-title')
-        $checkbox = $('<input />', type: 'checkbox', value: node.id).prependTo($title)
+        $checkbox = $('<input />', type: 'checkbox', name: 'page_ids[]', value: node.id).prependTo($title)
         $checkbox.click (event) ->
           event.stopPropagation()
+        
+        $listItem.on 'ifChecked', ':checkbox', (event) ->
+          event.stopPropagation()
+
+          # Handle Child Checkboxes Behavior
+          $childCheckboxes = $checkbox.closest('li').children('ul').children('li').find(':checkbox')
+          $childCheckboxes.prop('checked', true)
+          $childCheckboxes.iCheck('update')
+
+          # Handle Parent Checkboxes Behavior
+          $parentCheckboxes = $checkbox.parents().find(':checkbox')
+
+          $parentCheckboxes.attr('indeterminate', true)
+          $parentCheckboxes.iCheck('update')
+
+        $listItem.on 'ifUnchecked', ':checkbox', (event) ->
+          event.stopPropagation()
+
+          # Handle Child Checkboxes Behavior
+          $childCheckboxes = $checkbox.closest('li').children('ul').children('li').find(':checkbox')
+          if $childCheckboxes.all(':checked')
+            $childCheckboxes.prop('checked', false)
+            $childCheckboxes.iCheck('update')
 
   $sitemap.on 'tree.refresh', ->
     $sitemap.prepare()
