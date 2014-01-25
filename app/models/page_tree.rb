@@ -15,7 +15,8 @@ class PageTree
   def serialize_pages(parent_id = nil)
     pages = @pages_by_parents[parent_id]
     pages.collect do |page|
-      page_hash = { id: page.id, label: page.title, load_on_demand: page.has_descendants?,
+      page_hash = { id: page.id, label: page.title, load_on_demand: page.has_children?,
+                    destroyable: page.destroyable?,
                     url: admin_page_path(page, locale: I18n.locale),
                     move_url: move_admin_page_path(page, locale: I18n.locale) }
       page_hash.merge!(children: serialize_pages(page.id)) if @pages_by_parents[page.id]

@@ -109,20 +109,14 @@ class Admin::PagesController < Admin::ApplicationController
     target_page = Page.find(params[:to])
     Page.transaction do
       case params[:position]
-      when 'inside'
-        @page.move_to_child_of(target_page)
-        @page.update_path!
-        target_page.self_and_descendants.without(@page).each(&:update_descendants_count!)
-      when 'before'
-        @page.move_to_left_of(target_page)
-        @page.update_path!
-        @page.parent.self_and_descendants.without(@page).each(&:update_descendants_count!) if @page.parent
-      when 'after'
-        @page.move_to_right_of(target_page)
-        @page.update_path!
-        @page.parent.self_and_descendants.without(@page).each(&:update_descendants_count!) if @page.parent
-      else
-        valid = false
+      when 'inside' then @page.move_to_child_with_index(target_page, 0)
+      when 'before' then @page.move_to_left_of(target_page)
+      when 'after' then @page.move_to_right_of(target_page)
+      else valid = false
+      end
+      @page.update_path!
+      [@page.id, target_page.id].each do |page_id|
+        Page.reset_counters(page_id, :children)
       end
     end
     respond_to do |format|

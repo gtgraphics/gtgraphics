@@ -37,14 +37,14 @@ class PageTreePresenter < Presenter
       children_loaded = !!pages_by_parents[page.id]
       css = "page page-#{page.state}"
       css << ' active' if page == active_page
-      if page.has_descendants?
+      if page.has_children?
         css << ' with-descendants'
         css << ' open' if children_loaded
       end
       haml_tag :li, id: "page_#{page.id}", class: css, data: { page_id: page.id } do
         haml_tag 'span.node' do
           haml_tag 'span.node-icon' do
-            if page.has_descendants?
+            if page.has_children?
               haml_tag 'button.toggle-children', type: 'button' do
                 haml_tag 'span.node-icon-open', caret(:down)
                 haml_tag 'span.node-icon-openable', caret(:right)

@@ -2,22 +2,22 @@
 #
 # Table name: pages
 #
-#  id                :integer          not null, primary key
-#  slug              :string(255)
-#  author_id         :integer
-#  created_at        :datetime
-#  updated_at        :datetime
-#  path              :string(255)
-#  parent_id         :integer
-#  lft               :integer
-#  rgt               :integer
-#  depth             :integer
-#  embeddable_id     :integer
-#  embeddable_type   :string(255)
-#  menu_item         :boolean          default(TRUE), not null
-#  state             :string(255)      not null
-#  indexable         :boolean          default(TRUE), not null
-#  descendants_count :integer          default(0)
+#  id              :integer          not null, primary key
+#  slug            :string(255)
+#  author_id       :integer
+#  created_at      :datetime
+#  updated_at      :datetime
+#  path            :string(255)
+#  parent_id       :integer
+#  lft             :integer
+#  rgt             :integer
+#  depth           :integer
+#  embeddable_id   :integer
+#  embeddable_type :string(255)
+#  menu_item       :boolean          default(TRUE), not null
+#  state           :string(255)      not null
+#  indexable       :boolean          default(TRUE), not null
+#  children_count  :integer          default(0), not null
 #
 
 class Page < ActiveRecord::Base
@@ -44,7 +44,7 @@ class Page < ActiveRecord::Base
 
   acts_as_authorable
   acts_as_batch_translatable
-  acts_as_nested_set
+  acts_as_nested_set counter_cache: :children_count, dependent: :destroy
 
   belongs_to :embeddable, polymorphic: true, autosave: true, dependent: :destroy
   has_many :regions, dependent: :destroy, autosave: true
@@ -61,7 +61,6 @@ class Page < ActiveRecord::Base
   before_validation :generate_slug
   before_validation :generate_path, if: :slug?
   before_save :sanitize_regions
-  before_save :update_descendants_count
   before_destroy :destroyable?
   after_save :update_descendants_paths, if: :path_changed?
   after_update :destroy_replaced_embeddable, if: :embeddable_changed?
@@ -185,8 +184,8 @@ class Page < ActiveRecord::Base
     embeddable_type_changed? or embeddable_id_changed?
   end
 
-  def has_descendants?
-    descendants_count > 0
+  def has_children?
+    children_count > 0
   end
 
   def hidden?
@@ -224,18 +223,7 @@ class Page < ActiveRecord::Base
 
   def update_path!
     generate_path
-    transaction do
-      save!
-      update_descendants_paths
-    end
-  end
-
-  def update_descendants_count
-    self.descendants_count = descendants.count
-  end
-
-  def update_descendants_count!
-    update_column(:descendants_count, descendants.count)
+    save!
   end
 
   private

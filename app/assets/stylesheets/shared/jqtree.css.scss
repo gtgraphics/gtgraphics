@@ -52,6 +52,12 @@ ul.jqtree-tree {
   }
   .jqtree-title {
     vertical-align: middle;
+    .checkbox-container {
+      position: relative;
+      top: -2px;
+      margin-right: 4px;
+    }
+
   }
   li.jqtree-folder {
     margin-bottom: 4px;
@@ -128,6 +134,9 @@ ul.jqtree-tree {
     font-weight: bold;
     &:hover {
     }
+  }
+  .jqtree-moving, .jqtree-moving * {
+    cursor: move !important;
   }
   .jqtree-moving > .jqtree-element .jqtree-title {
   }

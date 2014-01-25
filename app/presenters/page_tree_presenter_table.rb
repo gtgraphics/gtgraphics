@@ -27,14 +27,14 @@ class PageTreePresenterTable < Presenter
     pages = Array(pages_by_parents[parent_id])
     pages.each_with_index do |page, index|
       css = "page level-#{level}"
-      if page.has_descendants?
+      if page.has_children?
         css << ' with-descendants'
         css << ' opened' if pages_by_parents[page.id]
       end
       haml_tag :tr, id: "page_#{page.id}", class: css, data: { page_id: page.id, parent_page_id: parent_id, page_level: level } do
         haml_tag 'td.checkbox-cell', check_box_tag(:page_ids, page.id, false, multiple: true)
         haml_tag 'td.level-indented' do
-          if page.has_descendants?
+          if page.has_children?
             haml_concat link_to(page.title, '#', class: 'toggle-descendants')
           else
             haml_concat page.title

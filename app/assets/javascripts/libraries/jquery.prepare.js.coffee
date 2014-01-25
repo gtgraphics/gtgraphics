@@ -6,7 +6,7 @@
   $.prepare = (callback) ->
     $(document).on 'prepare', (event) ->
       $scope = $(event.target)
-      callback.call($scope)
+      callback.apply($scope)
 
   $(document).ready ->
     $(document).prepare()
