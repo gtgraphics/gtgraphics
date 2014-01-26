@@ -1,8 +1,10 @@
+.page-header.gtg-admin-page-header-with-toolbar
+  %h1= Image.model_name.human(count: 2)
+
 = form_tag :destroy_multiple_admin_images, method: :delete do
 
   .gtg-admin-toolbar
     #toolbar.container
-      %h1= Image.model_name.human(count: 2)
       .clearfix
         .btn-toolbar.pull-left
           .btn-group

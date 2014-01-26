@@ -1,6 +1,8 @@
+.page-header.gtg-admin-page-header-with-toolbar
+  %h1= Page.model_name.human(count: 2)
+
 .gtg-admin-toolbar
   #toolbar.container
-    %h1= Page.model_name.human(count: 2)
     .btn-toolbar.pull-left
       .btn-group
         = create_button_link_for Page, caption: translate('helpers.links.new', model: Page.model_name.human), url: :new_admin_page

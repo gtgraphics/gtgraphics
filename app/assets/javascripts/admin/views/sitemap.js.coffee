@@ -11,11 +11,8 @@ $(document).ready ->
     closedIcon: '<i class="caret-right"></i>'
     openedIcon: '<i class="caret"></i>'
     onCreateLi: (node, $listItem) ->
-      if node.destroyable
-        $listItem.children('.jqtree-element').click (event) ->
-          document.location.href = node.url
-
-
+      $listItem.children('.jqtree-element').find('.jqtree-title').click (event) ->
+        document.location.href = node.url
 
   $sitemap.on 'tree.refresh', ->
     $sitemap.prepare()

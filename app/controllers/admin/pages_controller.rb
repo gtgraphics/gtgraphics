@@ -2,7 +2,7 @@ class Admin::PagesController < Admin::ApplicationController
   respond_to :html
 
   before_action :load_page, only: %i(show edit update destroy toggle_menu_item move move_up move_down publish draft hide)
-  before_action :load_parent_page, only: %i(new create show edit update)
+  before_action :load_parent_page, only: %i(index new create show edit update)
 
   breadcrumbs do |b|
     b.append Page.model_name.human(count: 2), :admin_pages
@@ -17,13 +17,14 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def index
-    #@pages = Page.with_translations(I18n.locale).where(depth: 0..1)
+    @pages = Page.with_translations(I18n.locale).where(depth: 0..1)
     @page = Page.root
-    respond_with :admin, @pages
+    respond_with :admin, @pages, template: 'admin/pages/show'
   end
 
   def new
     @page = Page.new(parent: @parent_page || Page.root)
+    @page.parent_id = params[:page_id] if params[:page_id]
     @page.translations.build(locale: I18n.locale)
     @page.embeddable_type = params[:type] || 'Page::Content'
     if @page.embeddable_class and @page.embeddable.nil?
@@ -208,10 +209,12 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def load_parent_page
-    if parent_id = params[:parent_id]
-      @parent_page = Page.find_by_id(parent_id)
+    if parent_id = params[:page_id]
+      @parent_page = Page.find_by(id: parent_id)
+    elsif parent_id = params[:parent_id]
+      @parent_page = Page.find_by(id: parent_id)
     elsif page_params = params[:page]
-      @parent_page = Page.find_by_id(page_params[:parent_id])
+      @parent_page = Page.find_by(id: page_params[:parent_id])
     elsif @page
       @parent_page = @page.parent
     end

@@ -1,43 +1,44 @@
+.gtg-admin-page-header-with-toolbar
+  %h1= @page.title
+
 .gtg-admin-toolbar
   #toolbar.container
-    %h1= @page.title
     .btn-toolbar.pull-left
       .btn-group
         = create_button_link_for Page, caption: translate('helpers.links.new', model: Page.model_name.human), url: [:new, :admin, @page, :child]
       .btn-group.batch-control
         = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) }        
-      
+    
+.row
+  .col-lg-3.col-md-3
+    #sitemap{data: { url: tree_admin_pages_path(format: :json) }}
 
-/- unless request.xhr?
-/  = view_headline_for @page do
-/    %ul.list-inline
-/      %li= create_button_link_for Page, url: new_admin_page_path(parent_id: @page)
-/      %li= action_buttons_for @page, except: [:show, @page.destroyable? ? nil : :destroy].compact
-
-%dl.dl-horizontal
-  %dt= Page.human_attribute_name :embeddable_type
-  %dd= @page.embeddable_class.model_name.human
-  %dt= Page.human_attribute_name :path
-  %dd
-    - if @page.path.present?
-      = File.join(*@page.self_and_ancestors.map { |page| link_to(page.slug.present? ? page.slug : request.host, page) }).html_safe
-    - else
-      = link_to request.host, :root
-  - if @page.template.present?
-    %dt= Page.human_attribute_name :template
-    %dd= link_to @page.template.name, admin_template_path(@page.template)
-  %dt= Page.human_attribute_name :state
-  %dd= @page.state_name
-  %dt= Page.human_attribute_name :translated_locales
-  %dd= @page.translated_locales.map { |locale| link_to(translate(locale, scope: :languages), page_path(@page, locale: locale)) }.sort.join(', ').html_safe
-  %dt= Page.human_attribute_name :menu_item
-  %dd= link_to yes_or_no(@page.menu_item?), [:toggle_menu_item, :admin, @page], method: :patch
-  - begin
-    = render "admin/#{@page.embeddable_class.model_name.plural}/details", @page.embeddable_class.model_name.singular.to_sym => @page.embeddable
-  - rescue ActionView::MissingTemplate
-  
-  - if @page.author  
-    %dt= Page.human_attribute_name :author
-    %dd= link_to @page.author.name, [:admin, @page.author]
-  %dt= Page.human_attribute_name :updated_at
-  %dd= time_ago @page.updated_at
+  .col-lg-9.col-md-9
+    #page_content
+      %dl.dl-horizontal
+        %dt= Page.human_attribute_name :embeddable_type
+        %dd= @page.embeddable_class.model_name.human
+        %dt= Page.human_attribute_name :path
+        %dd
+          - if @page.path.present?
+            = File.join(*@page.self_and_ancestors.map { |page| link_to(page.slug.present? ? page.slug : request.host, page) }).html_safe
+          - else
+            = link_to request.host, :root
+        - if @page.template.present?
+          %dt= Page.human_attribute_name :template
+          %dd= link_to @page.template.name, admin_template_path(@page.template)
+        %dt= Page.human_attribute_name :state
+        %dd= @page.state_name
+        %dt= Page.human_attribute_name :translated_locales
+        %dd= @page.translated_locales.map { |locale| link_to(translate(locale, scope: :languages), page_path(@page, locale: locale)) }.sort.join(', ').html_safe
+        %dt= Page.human_attribute_name :menu_item
+        %dd= link_to yes_or_no(@page.menu_item?), [:toggle_menu_item, :admin, @page], method: :patch
+        - begin
+          = render "admin/#{@page.embeddable_class.model_name.plural}/details", @page.embeddable_class.model_name.singular.to_sym => @page.embeddable
+        - rescue ActionView::MissingTemplate
+        
+        - if @page.author  
+          %dt= Page.human_attribute_name :author
+          %dd= link_to @page.author.name, [:admin, @page.author]
+        %dt= Page.human_attribute_name :updated_at
+        %dd= time_ago @page.updated_at

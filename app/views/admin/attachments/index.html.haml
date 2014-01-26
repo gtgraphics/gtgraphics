@@ -1,8 +1,10 @@
+.page-header
+  %h1= Attachment.model_name.human(count: 2)
+
 = form_tag :destroy_multiple_admin_attachments, method: :delete do
 
   .gtg-admin-toolbar
     #toolbar.container
-      %h1= Attachment.model_name.human(count: 2)
       .clearfix
         .btn-toolbar.pull-left
           .btn-group
