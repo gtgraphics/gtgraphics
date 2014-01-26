@@ -1,10 +1,11 @@
 .page-header
   %h1= page.title
 
-.row
-  - page.children.images.with_translations(I18n.locale).each do |child_page|
-    .col-lg-3
-      = link_to child_page, class: 'thumbnail' do
-        = image_tag child_page.embeddable.image.asset(:large_thumbnail), class: 'img-responsive'
-        .caption
-          %h3= child_page.title
+- page.children.images.with_translations(I18n.locale).each_slice(4) do |child_pages|
+  .row
+    - child_pages.each do |child_page|
+      .col-lg-3
+        = link_to child_page, class: 'thumbnail' do
+          = image_tag child_page.embeddable.image.asset(:large_thumbnail), class: 'img-responsive'
+          .caption
+            %h3= child_page.title
