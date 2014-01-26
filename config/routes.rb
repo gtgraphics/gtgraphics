@@ -62,6 +62,7 @@ GtGraphics::Application.routes.draw do
         end
 
         resources :pages do
+          resources :children, controller: :pages, only: :new
           collection do
             get :embeddable_fields
             get :embeddable_translation_fields

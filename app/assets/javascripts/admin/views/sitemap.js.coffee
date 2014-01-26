@@ -11,34 +11,9 @@ $(document).ready ->
     closedIcon: '<i class="caret-right"></i>'
     openedIcon: '<i class="caret"></i>'
     onCreateLi: (node, $listItem) ->
-      return false
       if node.destroyable
-
-        $element = $listItem.children('.jqtree-element')
-        $checkbox = $('<input />', type: 'checkbox', name: 'page_ids[]', value: node.id).prependTo($element)
-        
-        $checkbox.on 'ifChanged', (event) ->
-          #event.stopPropagation()
-
-          #$checkbox.prop('indeterminate', false).iCheck('update')
-
-          $parentCheckboxes = $checkbox.parents('.jqtree-folder').children('.jqtree-element').find(':checkbox')
-          $siblingCheckboxes = $checkbox.closest('li').siblings().find(':checkbox')
-          $childCheckboxes = $checkbox.closest('li').children('ul').children('li').find(':checkbox')
-
-          console.log $parentCheckboxes
-
-          if $checkbox.prop('checked')
-            $parentCheckboxes.each ->
-              $parentCheckbox = $(@)
-              unless $parentCheckbox.prop('checked')
-                $parentCheckbox.attr('indeterminate', true).iCheck('update')
-          else
-            $parentCheckboxes.each ->
-              $parentCheckbox = $(@)
-              unless $parentCheckbox.prop('checked')
-                $parentCheckbox.attr('indeterminate', false).iCheck('update')
-
+        $listItem.children('.jqtree-element').click (event) ->
+          document.location.href = node.url
 
 
 
