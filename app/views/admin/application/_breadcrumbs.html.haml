@@ -1,15 +1,17 @@
+- toolbar = false if toolbar.nil?
+
 - if breadcrumbs.many?
   %ul.breadcrumb
     - breadcrumbs.each_with_index do |breadcrumb, index|
       - if breadcrumb.last?
         %li.active
-          - if breadcrumb.first?
+          - if breadcrumb.first? and toolbar
             = icon(:home)
           - else
             = breadcrumb.caption
       - else
         %li
-          - if breadcrumb.first?
+          - if breadcrumb.first? and toolbar
             = link_to icon(:home), breadcrumb.destination, title: translate('breadcrumbs.home'), data: { toggle: 'tooltip', placement: 'bottom', container: '#toolbar' }
           - else
             = link_to breadcrumb.caption, breadcrumb.destination

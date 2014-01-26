@@ -1,6 +1,6 @@
 .gtg-admin-toolbar
   #toolbar.container
-    = render 'breadcrumbs'
+    %h1= @image.title
     .btn-toolbar.pull-right
       .btn-group
         = update_button_link_for @image, namespace: :admin

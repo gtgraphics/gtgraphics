@@ -1,11 +1,8 @@
 = form_tag :destroy_multiple_admin_images, method: :delete do
-  
-  /.text-center.bla{style: 'font-size: 52px; font-weight: 200;'}
-  /  = Image.model_name.human(count: 2)
 
   .gtg-admin-toolbar
     #toolbar.container
-      = render 'breadcrumbs'
+      %h1= Image.model_name.human(count: 2)
       .clearfix
         .btn-toolbar.pull-left
           .btn-group

@@ -1,14 +1,11 @@
 .gtg-admin-toolbar
   #toolbar.container
-    = render 'breadcrumbs'
+    %h1= Page.model_name.human(count: 2)
     .btn-toolbar.pull-left
       .btn-group
         = create_button_link_for Page, caption: translate('helpers.links.new', model: Page.model_name.human), url: :new_admin_page
       .btn-group.batch-control
         = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) }        
-    .btn-toolbar.pull-right
-      = update_button_link_for Page.root, namespace: :admin, icon_only: true
-      = destroy_button_link_for Page.root, namespace: :admin, icon_only: true
       
 .row
   .col-lg-3.col-md-3

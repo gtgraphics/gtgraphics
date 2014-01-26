@@ -1,18 +1,26 @@
-= view_headline_for @attachment do
-  %ul.list-inline
-    %li= button_link_to prepend_icon(:download, translate('helpers.links.download')), [:download, :admin, @attachment], type: :success
-    - if @attachment.image?
-      %li= button_link_to prepend_icon(:hand, translate('helpers.links.move_to', model: Image.model_name.human(count: 2)), direction: :right, outline: true), [:move_to_images, :admin, @attachment], method: :patch, data: { confirm: translate('helpers.confirmations.move', model: Attachment.model_name.human, other_model: Image.model_name.human(count: 2)) }
-    %li= action_buttons_for @attachment, except: :show
+.gtg-admin-toolbar
+  #toolbar.container
+    %h1= @attachment.title
+    .btn-toolbar.pull-right
+      .btn-group
+        = update_button_link_for @attachment, namespace: :admin
+      .btn-group.pull-right
+        = button_link_to '#', data: { toggle: 'dropdown' }, class: 'dropdown-toggle' do
+          = icon(:cog, fixed_width: true)
+          .sr-only= translate('helpers.links.settings')
+        %ul.dropdown-menu{role: 'menu', aria_labelledby: 'dLabel'}
+          %li= link_to prepend_icon(:download, translate('helpers.links.download')), [:download, :admin, @attachment]
+          %li= link_to prepend_icon(:hand, translate('helpers.links.move_to', model: Image.model_name.human(count: 2)), direction: :right, outline: true), [:move_to_images, :admin, @attachment], method: :patch, data: { confirm: translate('helpers.confirmations.move', model: Attachment.model_name.human, other_model: Image.model_name.human(count: 2)) }
+          %li.divider
+          %li= link_to prepend_icon(:trash, translate('helpers.links.destroy'), outline: true, fixed_width: true), [:admin, @attachment], method: :delete, data: { confirm: translate('helpers.confirmations.destroy', model: Attachment.model_name.human) }
 
-.col-offset-2.col-lg-4
-  %dl.dl-horizontal
-    %dt= Attachment.human_attribute_name(:content_type)
-    %dd= @attachment.human_content_type
-    %dt= Attachment.human_attribute_name(:file_size)
-    %dd= number_to_human_size @attachment.file_size
-    - if @attachment.author
-      %dt= Attachment.human_attribute_name(:author)
-      %dd= link_to @attachment.author_name, [:admin, @attachment.author]
-    %dt= Attachment.human_attribute_name(:updated_at)
-    %dd= time_ago @attachment.updated_at
+%dl.dl-horizontal
+  %dt= Attachment.human_attribute_name(:content_type)
+  %dd= @attachment.human_content_type
+  %dt= Attachment.human_attribute_name(:file_size)
+  %dd= number_to_human_size @attachment.file_size
+  - if @attachment.author
+    %dt= Attachment.human_attribute_name(:author)
+    %dd= link_to @attachment.author_name, [:admin, @attachment.author]
+  %dt= Attachment.human_attribute_name(:updated_at)
+  %dd= time_ago @attachment.updated_at

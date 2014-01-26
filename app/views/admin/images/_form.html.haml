@@ -1,12 +1,4 @@
 = simple_form_for [:admin, @image], html: { class: 'form-horizontal' } do |form|
-  .gtg-admin-toolbar
-    #toolbar.container
-      = render 'breadcrumbs'
-      .btn-toolbar.pull-right
-        .btn-group
-          = button_link_to translate('helpers.links.cancel'), [:admin, @image]
-        .btn-group
-          = form.button :submit, class: 'btn-primary'
 
   = translation_manager_for form, url: translation_fields_admin_images_path
 

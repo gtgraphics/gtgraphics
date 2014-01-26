@@ -1,0 +1,18 @@
+- users ||= @users
+
+%table.table.table-hover
+  %thead
+    %tr
+      %th.thumbnail-cell
+      %th= sort_link_for @users, :full_name
+      %th.actions
+  %tbody
+    - users.each do |user|
+      %tr
+        %td.thumbnail-cell
+          = link_to [:admin, user] do
+            = gravatar_image_tag user.email, size: 75, default: :mm, alt: user.full_name, class: 'img-circle loader-small', style: 'width: 75px; height: 75px;'
+        %td= link_to user.full_name, [:admin, user]
+        %td.actions
+          = action_buttons_for user, size: :mini, icon_only: true
+        

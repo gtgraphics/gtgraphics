@@ -1,26 +1,15 @@
-= index_headline_for User do
-  .btn-toolbar
-    = create_button_link_for User, namespace: :admin
+.gtg-admin-toolbar
+  #toolbar.container
+    %h1= User.model_name.human(count: 2)
+    .clearfix
+      .btn-toolbar.pull-left
+        .btn-group
+          = create_button_link_for User, namespace: :admin
+      .btn-toolbar.pull-right
+        = paginate @users
 
 - if @users.any?
-  %table.table.table-striped
-    %thead
-      %tr
-        %th.thumbnail-cell
-        %th= sort_link_for @users, :full_name
-        %th.actions
-    %tbody
-      - @users.each do |user|
-        %tr
-          %td.thumbnail-cell
-            = link_to [:admin, user] do
-              = gravatar_image_tag user.email, size: 75, default: :mm, alt: user.full_name, class: 'img-circle loader-small', style: 'width: 75px; height: 75px;'
-          %td= link_to user.full_name, [:admin, user]
-          %td.actions
-            = action_buttons_for user, size: :mini, icon_only: true
-
-  = paginate @users
-            
+  = render 'table'  
 - else
   .well.text-center
     %h4= translate('views.hints.empty', model: User.model_name.human(count: 2))

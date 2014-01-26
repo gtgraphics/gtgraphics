@@ -2,7 +2,7 @@
 
   .gtg-admin-toolbar
     #toolbar.container
-      = render 'breadcrumbs'
+      %h1= Attachment.model_name.human(count: 2)
       .clearfix
         .btn-toolbar.pull-left
           .btn-group
@@ -14,8 +14,6 @@
 
   - if @attachments.any?
     = render 'table', checkboxes: true
-    .pull-right
-      = paginate @attachments
   - else
     .well.text-center
       %h4= translate('views.hints.empty', model: Attachment.model_name.human(count: 2))
