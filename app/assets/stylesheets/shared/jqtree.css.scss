@@ -53,14 +53,11 @@ ul.jqtree-tree {
   .jqtree-element {
     cursor: pointer;
   }
+  .checkbox-container {
+    margin-top: 2px;
+    margin-right: 5px;
+  }
   .jqtree-title {
-    vertical-align: middle;
-    .checkbox-container {
-      position: relative;
-      top: -2px;
-      margin-right: 4px;
-    }
-
   }
   li.jqtree-folder {
     margin-bottom: 4px;
@@ -77,11 +74,13 @@ ul.jqtree-tree {
 }
 
 span.jqtree-dragging {
-  color: #fff;
-  background: #000;
+  color: $body-bg;
+  background: $text-color;
+  white-space: nowrap;
   opacity: 0.6;
   cursor: pointer;
-  padding: 2px 8px;
+  padding: 3px 8px;
+  @include border-radius(4px);
 }
 
 ul.jqtree-tree {

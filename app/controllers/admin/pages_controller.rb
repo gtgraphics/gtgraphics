@@ -17,7 +17,7 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def index
-    @pages = Page.with_translations(I18n.locale).where(depth: 0..1)
+    #@pages = Page.with_translations(I18n.locale).where(depth: 0..1)
     @page = Page.root
     respond_with :admin, @pages
   end
@@ -114,7 +114,7 @@ class Admin::PagesController < Admin::ApplicationController
     if page_id = params[:node]
       pages = Page.find(page_id).children
     else
-      pages = Page.where(depth: 0..1)
+      pages = Page.all #where(depth: 0..1)
     end
     @page_tree = PageTree.new(pages.with_translations(I18n.locale))
     respond_to do |format|

@@ -1,7 +1,7 @@
 class Admin::ImagesController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_image, only: %i(show edit update crop apply_crop uncrop destroy download move_to_attachments dimensions)
+  before_action :load_image, only: %i(show edit update crop apply_crop uncrop destroy download move_to_attachments dimensions context_menu)
 
   breadcrumbs do |b|
     b.append Image.model_name.human(count: 2), :admin_images
@@ -126,6 +126,12 @@ class Admin::ImagesController < Admin::ApplicationController
     translated_locale = params.fetch(:translated_locale)
     @image = Image.new
     @image.translations.build(locale: translated_locale)
+    respond_to do |format|
+      format.html { render layout: false }
+    end
+  end
+
+  def context_menu
     respond_to do |format|
       format.html { render layout: false }
     end

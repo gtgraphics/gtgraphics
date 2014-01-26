@@ -12,7 +12,7 @@ class Admin::ImageStylesController < Admin::ApplicationController
   end
 
   def new
-    @image_style = @image.custom_styles.new(type: 'Image::Style::Variation')
+    @image_style = @image.custom_styles.new(type: 'Image::Style::Variant')
     @image_style.tap do |s|
       s.crop_x = 0
       s.crop_y = 0
@@ -66,7 +66,7 @@ class Admin::ImageStylesController < Admin::ApplicationController
     permitted_attributes = []
     permitted_attributes << :type unless @image_style.try(:persisted?)
     case type
-    when 'Image::Style::Variation'
+    when 'Image::Style::Variant'
       permitted_attributes += [:cropped, :crop_x, :crop_y, :crop_width, :crop_height, :resized, :resize_width, :resize_height]
     when 'Image::Style::Attachment'
       permitted_attributes << :asset

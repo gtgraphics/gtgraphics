@@ -1,7 +1,15 @@
-- if !@hide_breadcrumbs and breadcrumbs.count > 1
+- if breadcrumbs.many?
   %ul.breadcrumb
-    - breadcrumbs.each do |breadcrumb|
+    - breadcrumbs.each_with_index do |breadcrumb, index|
       - if breadcrumb.last?
-        %li.active= breadcrumb.caption
+        %li.active
+          - if breadcrumb.first?
+            = icon(:home)
+          - else
+            = breadcrumb.caption
       - else
-        %li= link_to breadcrumb.caption, breadcrumb.destination
+        %li
+          - if breadcrumb.first?
+            = link_to icon(:home), breadcrumb.destination, title: translate('breadcrumbs.home'), data: { toggle: 'tooltip', placement: 'bottom', container: '#toolbar' }
+          - else
+            = link_to breadcrumb.caption, breadcrumb.destination

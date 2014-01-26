@@ -5,7 +5,7 @@ class Admin::AttachmentsController < Admin::ApplicationController
 
   breadcrumbs do |b|
     b.append Attachment.model_name.human(count: 2), :admin_attachments
-    b.append translate('breadcrumbs.new', model: Attachment.model_name.human), :new_admin_attachment if action_name.in? %w(new create)
+    b.append translate('breadcrumbs.upload', model: Attachment.model_name.human), :new_admin_attachment if action_name.in? %w(new create)
     b.append @attachment.title, [:admin, @attachment] if action_name.in? %w(show edit update)
     b.append translate('breadcrumbs.edit', model: Attachment.model_name.human), [:edit, :admin, @attachment] if action_name.in? %w(edit update)
   end

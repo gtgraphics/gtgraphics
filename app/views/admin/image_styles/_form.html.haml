@@ -1,8 +1,8 @@
 - if @image_style.new_record?
   %ul.nav.nav-tabs
-    = active_link_to({ action: 'new' }, wrap_tag: :li, active: @image_style.variation?) do
-      %input{type: 'radio', checked: @image_style.variation?}
-      = Image::Style::Variation.model_name.human
+    = active_link_to({ action: 'new' }, wrap_tag: :li, active: @image_style.variant?) do
+      %input{type: 'radio', checked: @image_style.variant?}
+      = Image::Style::Variant.model_name.human
     = active_link_to({ action: 'new_attachment' }, wrap_tag: :li, active: @image_style.attachment?) do
       %input{type: 'radio', checked: @image_style.attachment?}
       = Image::Style::Attachment.model_name.human

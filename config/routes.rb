@@ -42,6 +42,7 @@ GtGraphics::Application.routes.draw do
             get :translation_fields
           end
           member do
+            get :context_menu
             get :crop
             patch :crop, action: :apply_crop
             patch :uncrop

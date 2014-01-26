@@ -1,5 +1,6 @@
 de:
   breadcrumbs:
+    edit: '%{model} bearbeiten'
     home: Startseite
     new: '%{model} erstellen'
-    edit: '%{model} bearbeiten'
+    upload: '%{model} hochladen'

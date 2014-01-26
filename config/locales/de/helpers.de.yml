@@ -42,7 +42,7 @@ de:
       upload: '%{model} hochladen'
       view: Ansehen
     confirmations:
-      destroy: 'Möchten Sie diese(s) %{model} wirklich entfernen?'
+      destroy: '%{model} wirklich entfernen?'
       destroy_selected: 'Möchten Sie die ausgewählten %{model} wirklich entfernen?'
       make_default: '%{model} wirklich als Standard festlegen?'
       move: '%{model} wirklich zu %{other_model} verschieben?'

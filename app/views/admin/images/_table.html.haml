@@ -7,22 +7,23 @@
 
 - if current_user.preferences[:image_view_mode] == 'tiles'
 
-  .row.thumbnails
-    - images.each do |image|
-      .col-lg-3.col-md-3.col-sm-3.col-sx-3
-        = thumbnail image.asset.url(:large_thumbnail), [:admin, image], alt: image.title, class: 'loader-large' do
-          .actions.top.right
-            = action_buttons_for image, size: :mini, icon_only: true
-          %h3
-            = image.title
-          %p
-            = image.human_content_type
-            %br
-            = image.dimensions
+  - images.each_slice(4) do |sliced_images|
+    .row
+      - sliced_images.each do |image|
+        .col-lg-3.col-md-3.col-sm-3.col-sx-3
+          = thumbnail image.asset.url(:large_thumbnail), [:admin, image], alt: image.title, class: 'loader-large' do
+            .actions.top.right
+              = action_buttons_for image, size: :mini, icon_only: true
+            %h3
+              = image.title
+            %p
+              = image.human_content_type
+              %br
+              = image.dimensions
 
 - else
 
-  %table.table
+  %table.table.table-hover
     %thead
       %tr
         - if checkboxes

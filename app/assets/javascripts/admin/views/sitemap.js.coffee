@@ -11,34 +11,36 @@ $(document).ready ->
     closedIcon: '<i class="caret-right"></i>'
     openedIcon: '<i class="caret"></i>'
     onCreateLi: (node, $listItem) ->
+      return false
       if node.destroyable
-        $title = $listItem.find('.jqtree-title')
-        $checkbox = $('<input />', type: 'checkbox', name: 'page_ids[]', value: node.id).prependTo($title)
-        $checkbox.click (event) ->
-          event.stopPropagation()
+
+        $element = $listItem.children('.jqtree-element')
+        $checkbox = $('<input />', type: 'checkbox', name: 'page_ids[]', value: node.id).prependTo($element)
         
-        $listItem.on 'ifChecked', ':checkbox', (event) ->
-          event.stopPropagation()
+        $checkbox.on 'ifChanged', (event) ->
+          #event.stopPropagation()
 
-          # Handle Child Checkboxes Behavior
+          #$checkbox.prop('indeterminate', false).iCheck('update')
+
+          $parentCheckboxes = $checkbox.parents('.jqtree-folder').children('.jqtree-element').find(':checkbox')
+          $siblingCheckboxes = $checkbox.closest('li').siblings().find(':checkbox')
           $childCheckboxes = $checkbox.closest('li').children('ul').children('li').find(':checkbox')
-          $childCheckboxes.prop('checked', true)
-          $childCheckboxes.iCheck('update')
 
-          # Handle Parent Checkboxes Behavior
-          $parentCheckboxes = $checkbox.parents().find(':checkbox')
+          console.log $parentCheckboxes
 
-          $parentCheckboxes.attr('indeterminate', true)
-          $parentCheckboxes.iCheck('update')
+          if $checkbox.prop('checked')
+            $parentCheckboxes.each ->
+              $parentCheckbox = $(@)
+              unless $parentCheckbox.prop('checked')
+                $parentCheckbox.attr('indeterminate', true).iCheck('update')
+          else
+            $parentCheckboxes.each ->
+              $parentCheckbox = $(@)
+              unless $parentCheckbox.prop('checked')
+                $parentCheckbox.attr('indeterminate', false).iCheck('update')
 
-        $listItem.on 'ifUnchecked', ':checkbox', (event) ->
-          event.stopPropagation()
 
-          # Handle Child Checkboxes Behavior
-          $childCheckboxes = $checkbox.closest('li').children('ul').children('li').find(':checkbox')
-          if $childCheckboxes.all(':checked')
-            $childCheckboxes.prop('checked', false)
-            $childCheckboxes.iCheck('update')
+
 
   $sitemap.on 'tree.refresh', ->
     $sitemap.prepare()
