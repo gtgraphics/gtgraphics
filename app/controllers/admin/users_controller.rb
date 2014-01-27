@@ -7,7 +7,6 @@ class Admin::UsersController < Admin::ApplicationController
   breadcrumbs do |b|
     b.append User.model_name.human(count: 2), :admin_users
     b.append translate('breadcrumbs.new', model: User.model_name.human), :new_admin_user if action_name.in? %w(new create)
-    b.append @user.full_name, [:admin, @user] if action_name.in? %w(show edit update)
     b.append translate('breadcrumbs.edit', model: User.model_name.human), [:edit, :admin, @user] if action_name.in? %w(edit update edit_password update_password)
     b.append translate('breadcrumbs.edit', model: User.human_attribute_name(:password)), [:edit_password, :admin, @user] if action_name.in? %w(edit_password update_password)
   end
@@ -19,13 +18,13 @@ class Admin::UsersController < Admin::ApplicationController
 
   def new
     @user = User.new
-    respond_with :admin, @user
+    respond_with :admin, @user, template: 'admin/users/editor'
   end
 
   def create
     @user = User.create(create_user_params)
     flash_for @user
-    respond_with :admin, @user
+    respond_with :admin, @user, template: 'admin/users/editor'
   end
 
   def show
@@ -33,13 +32,13 @@ class Admin::UsersController < Admin::ApplicationController
   end
 
   def edit
-    respond_with :admin, @user
+    respond_with :admin, @user, template: 'admin/users/editor'
   end
 
   def update
     @user.update(update_user_params)
     flash_for @user
-    respond_with :admin, @user
+    respond_with :admin, @user, template: 'admin/users/editor'
   end
 
   def edit_password

@@ -4,22 +4,19 @@ class Admin::AccountsController < Admin::ApplicationController
   before_action :load_user
 
   breadcrumbs do |b|
-    b.append translate('views.admin.account.breadcrumbs.my_account'), :admin_account
     b.append translate('breadcrumbs.edit', model: translate('views.admin.account.breadcrumbs.account')), :edit_admin_account if action_name.in? %w(edit update edit_password update_password)
     b.append translate('breadcrumbs.edit', model: User.human_attribute_name(:password)), :edit_password_admin_account if action_name.in? %w(edit_password update_password)
   end
 
-  def show
-    respond_with :admin, @user, template: 'admin/users/show'
-  end
-
   def edit
-    respond_with :admin, @user, template: 'admin/users/edit'
+    respond_with :admin, @user, template: 'admin/users/editor'
   end
 
   def update
     # TODO
-    respond_with :admin, @user, template: 'admin/users/edit', location: :admin_account
+    @user.update(user_params)
+    flash_for @user
+    respond_with :admin, @user, template: 'admin/users/editor', location: :admin_account
   end
 
   def edit_password

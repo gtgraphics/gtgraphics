@@ -1,7 +1,8 @@
-= index_headline_for Message do
-  %ul.list-inline
-    %li= button_mail_to @message.sender, prepend_icon(:mail_reply, translate('helpers.links.reply')), subject: translate('views.admin.messages.replied_subject', subject: @message.subject)
-    %li= action_buttons_for @message, except: [:show, :edit]
+= toolbar do
+  .btn-group
+    = button_mail_to @message.sender, prepend_icon(:mail_reply, translate('helpers.links.reply')), subject: translate('views.admin.messages.replied_subject', subject: @message.subject)
+  .btn-group
+    = destroy_button_link_for @message, namespace: :admin
 
 .row
 

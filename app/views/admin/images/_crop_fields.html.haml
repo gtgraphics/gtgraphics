@@ -63,9 +63,3 @@
                       %button{type: 'button', class: 'btn btn-default resize-scale', data: { factor: 0.5 }} 50%
                       %button{type: 'button', class: 'btn btn-default resize-scale', data: { factor: 1 }} 100%
                       %button{type: 'button', class: 'btn btn-default resize-scale', data: { factor: 2 }} 200%
-
-        .panel
-          /.form-group.form-actions
-          = fields.button :button, type: 'submit', class: 'btn-primary btn-block' do
-            = prepend_icon(:save, translate(fields.object.new_record? ? :create : :update, scope: 'helpers.submit', model: fields.object.class.model_name.human))
-          = button_link_to translate('helpers.links.cancel'), [:admin, @image], block: true

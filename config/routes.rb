@@ -15,7 +15,7 @@ GtGraphics::Application.routes.draw do
           resource :image, only: [:show, :update]
         end
 
-        resource :account, except: [:new, :create] do
+        resource :account, except: [:new, :create, :show] do
           get :edit_password
           patch :update_password
           patch :update_preferences
@@ -103,7 +103,7 @@ GtGraphics::Application.routes.draw do
           patch :make_default, on: :member
         end
 
-        resources :users do
+        resources :users, except: :show do
           member do
             get :edit_password
             patch :update_password

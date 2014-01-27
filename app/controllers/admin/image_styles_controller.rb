@@ -21,28 +21,28 @@ class Admin::ImageStylesController < Admin::ApplicationController
       s.resize_width = @image.width
       s.resize_height = @image.height
     end
-    respond_with :admin, @image_style.becomes(Image::Style)
+    respond_with :admin, @image_style.becomes(Image::Style), template: 'admin/image_styles/new'
   end
 
   def new_attachment
     @image_style = @image.custom_styles.attachments.new(type: 'Image::Style::Attachment')
-    respond_with :admin, @image_style.becomes(Image::Style)
+    respond_with :admin, @image_style.becomes(Image::Style), template: 'admin/image_styles/new'
   end
 
   def create
     @image_style = @image.custom_styles.create(image_style_params)
     flash_for @image_style, :created
-    respond_with :admin, @image_style.becomes(Image::Style), location: [:admin, @image]
+    respond_with :admin, @image_style.becomes(Image::Style), location: [:admin, @image], template: 'admin/image_styles/new'
   end
 
   def edit
-    respond_with :admin, @image_style.becomes(Image::Style)
+    respond_with :admin, @image_style.becomes(Image::Style), template: 'admin/image_styles/edit'
   end
 
   def update
     @image_style.update(image_style_params)
     flash_for @image_style, :updated
-    respond_with :admin, @image_style.becomes(Image::Style), location: [:admin, @image]
+    respond_with :admin, @image_style.becomes(Image::Style), location: [:admin, @image], template: 'admin/image_styles/edit'
   end
 
   def destroy

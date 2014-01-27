@@ -23,10 +23,10 @@
         - if checkboxes
           %td.checkbox-cell
             = check_box_tag 'attachment_ids[]', attachment.id, false, class: 'table-checkbox', id: nil
-        %td= link_to attachment.title, [:admin, attachment]
+        %td= link_to attachment.title, [:edit, :admin, attachment]
         %td= attachment.human_content_type
         %td.hidden-xs= number_to_human_size attachment.file_size
         %td.visible-lg= time_ago attachment.updated_at
         - if actions
           %td.actions
-            = action_buttons_for attachment, size: :mini, icon_only: true
+            = action_buttons_for attachment, size: :mini, icon_only: true, except: :show

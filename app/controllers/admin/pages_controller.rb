@@ -6,11 +6,6 @@ class Admin::PagesController < Admin::ApplicationController
 
   breadcrumbs do |b|
     b.append Page.model_name.human(count: 2), :admin_pages
-    if @parent_page
-      @parent_page.self_and_ancestors.each do |page|
-        b.append page.title, [:admin, page]
-      end
-    end
     b.append translate('breadcrumbs.new', model: Page.model_name.human), :new_admin_page if action_name.in? %w(new create)
     b.append @page.title, [:admin, @page] if action_name.in? %w(show edit update)
     b.append translate('breadcrumbs.edit', model: Page.model_name.human), [:edit, :admin, @page] if action_name.in? %w(edit update)
@@ -33,13 +28,13 @@ class Admin::PagesController < Admin::ApplicationController
         @page.embeddable.translations.build(locale: I18n.locale)
       end
     end
-    respond_with :admin, @page, layout: !request.xhr?
+    respond_with :admin, @page, layout: !request.xhr?, template: 'admin/pages/editor'
   end
 
   def create
     @page = Page.create(page_params)
     flash_for @page
-    respond_with :admin, @page
+    respond_with :admin, @page, template: 'admin/pages/editor'
   end
 
   def show
@@ -48,13 +43,13 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def edit
-    respond_with :admin, @page, layout: !request.xhr?
+    respond_with :admin, @page, layout: !request.xhr?, template: 'admin/pages/editor'
   end
 
   def update
     @page.update(page_params)
     flash_for @page
-    respond_with :admin, @page
+    respond_with :admin, @page, template: 'admin/pages/editor'
   end
 
   def destroy
@@ -210,8 +205,6 @@ class Admin::PagesController < Admin::ApplicationController
 
   def load_parent_page
     if parent_id = params[:page_id]
-      @parent_page = Page.find_by(id: parent_id)
-    elsif parent_id = params[:parent_id]
       @parent_page = Page.find_by(id: parent_id)
     elsif page_params = params[:page]
       @parent_page = Page.find_by(id: page_params[:parent_id])

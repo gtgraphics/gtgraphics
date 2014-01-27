@@ -1,13 +1,17 @@
-- if @image_style.new_record?
-  %ul.nav.nav-tabs
-    = active_link_to({ action: 'new' }, wrap_tag: :li, active: @image_style.variant?) do
-      %input{type: 'radio', checked: @image_style.variant?}
-      = Image::Style::Variant.model_name.human
-    = active_link_to({ action: 'new_attachment' }, wrap_tag: :li, active: @image_style.attachment?) do
-      %input{type: 'radio', checked: @image_style.attachment?}
-      = Image::Style::Attachment.model_name.human
-
 = simple_form_for [:admin, @image_style], as: :image_style, url: @image_style.new_record? ? admin_image_styles_path(@image) : admin_image_style_path(@image, @image_style), html: { class: 'form-horizontal' } do |form|
+
+  = toolbar do
+    .btn-group
+      = form.button :submit, class: 'btn-primary'
+
+  - if @image_style.new_record?
+    %ul.nav.nav-tabs
+      = active_link_to({ action: 'new' }, wrap_tag: :li, active: @image_style.variant?) do
+        %input{type: 'radio', checked: @image_style.variant?}
+        = Image::Style::Variant.model_name.human
+      = active_link_to({ action: 'new_attachment' }, wrap_tag: :li, active: @image_style.attachment?) do
+        %input{type: 'radio', checked: @image_style.attachment?}
+        = Image::Style::Attachment.model_name.human
 
   = form.input :type, as: :hidden if @image_style.new_record?
 

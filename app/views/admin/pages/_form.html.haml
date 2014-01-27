@@ -1,5 +1,10 @@
 = simple_form_for [:admin, @page], html: { class: 'form-horizontal', multipart: true } do |form|
 
+  = toolbar do
+    .btn-group
+      = form.button :button, type: 'submit', class: 'btn-primary' do
+        = prepend_icon(:save, translate(@page.new_record? ? :create : :update, scope: 'helpers.submit', model: Page.model_name.human))
+
   .embeddable-manager{data: { url: embeddable_fields_admin_pages_path }}
     .row
       .col-lg-8
@@ -31,7 +36,3 @@
             = form.input :state, collection: Page.states.invert, as: :radio_buttons, include_blank: false, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
             = form.input :menu_item, inline_label: translate('simple_form.inline_labels.page.menu_item'), label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
             = form.input :indexable, inline_label: translate('simple_form.inline_labels.page.indexable'), label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
-
-        = form.button :button, type: 'submit', class: 'btn-primary btn-block' do
-          = prepend_icon(:save, translate(@page.new_record? ? :create : :update, scope: 'helpers.submit', model: Page.model_name.human))
-        = button_link_to translate('helpers.links.cancel'), :admin_pages, block:true

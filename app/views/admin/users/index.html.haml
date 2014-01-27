@@ -1,12 +1,10 @@
 .gtg-admin-toolbar
   #toolbar.container
-    %h1= User.model_name.human(count: 2)
-    .clearfix
-      .btn-toolbar.pull-left
-        .btn-group
-          = create_button_link_for User, namespace: :admin
-      .btn-toolbar.pull-right
-        = paginate @users
+    = render 'breadcrumbs', toolbar: true
+    .btn-toolbar.pull-right
+      .btn-group
+        = create_button_link_for User, namespace: :admin
+      = paginate @users
 
 - if @users.any?
   = render 'table'  
