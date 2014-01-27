@@ -2,7 +2,8 @@
 
   = toolbar do
     .btn-group
-      = form.button :submit, class: 'btn-primary'
+      = form.button :button, type: 'submit', class: 'btn-primary' do
+        = prepend_icon(:save, translate(@user.new_record? ? :create : :update, scope: 'helpers.submit', model: User.model_name.human))
 
   %fieldset
     %legend= translate('views.forms.basics')
