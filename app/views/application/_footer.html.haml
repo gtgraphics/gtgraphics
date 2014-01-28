@@ -1,10 +1,4 @@
 %footer
   .container
     %hr
-    - Page.primary.accessible_by(current_ability).includes(:children).with_translations(I18n.locale).each do |page|
-      %li
-        %strong= link_to page.title, page
-        - if page.children.any?
-          %ul
-            - page.children.each do |child_page|
-              %li= link_to child_page.title, child_page
+    = present Page.accessible_by(current_ability).where(depth: 1..2).with_translations(I18n.locale), PageListPresenter
