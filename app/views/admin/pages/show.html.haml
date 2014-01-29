@@ -5,12 +5,12 @@
     = create_button_link_for Page, caption: translate('helpers.links.new', model: Page.model_name.human), url: [:new, :admin, @page, :child]
     
 .row
-  .col-lg-3.col-md-3
-    /#sitemap{data: { url: tree_admin_pages_path(format: :json) }}
-    .tree
-      = present Page.with_translations(I18n.locale), PageListPresenter, list_class: 'dd-list', item_class: 'dd-item', title_class: 'dd-handle'
+  .col-lg-4.col-md-4
+    #sitemap{data: { url: tree_admin_pages_path(format: :json) }}
+    /.tree
+    /  = present Page.with_translations(I18n.locale), PageListPresenter, list_class: 'dd-list', item_class: 'dd-item', title_class: 'dd-handle'
 
-  .col-lg-9.col-md-9
+  .col-lg-8.col-md-8
     #page_content
       %dl.dl-horizontal
         %dt= Page.human_attribute_name :embeddable_type

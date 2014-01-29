@@ -31,6 +31,7 @@ ul.jqtree-tree {
   .jqtree-toggler {
     display: block;
     position: absolute;
+    cursor: pointer;
     left: -1.5em;
     top: 20%;
     *top: 0;
@@ -51,7 +52,7 @@ ul.jqtree-tree {
     }
   }
   .jqtree-element {
-    cursor: pointer;
+
   }
   .checkbox-container {
     margin-top: 2px;
@@ -65,6 +66,7 @@ ul.jqtree-tree {
     }
     .jqtree-title {
       margin-left: 0;
+      cursor: move;
     }
   }
   .jqtree-toggler.jqtree-closed {

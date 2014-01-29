@@ -39,7 +39,7 @@ gem 'sass-rails', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer', platforms: :ruby
-gem 'jquery-rails'
+gem 'jquery-rails', github: 'rails/jquery-rails', tag: 'v3.1.0'
 gem 'jquery-turbolinks'
 gem 'jquery-ui-rails'
 gem 'turbolinks'
