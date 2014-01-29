@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/globalize/globalize.git
-  revision: 35f1692971b5577599ebd03494bd62e1b1c2aa5a
+  revision: 182b81db36bf1002fadf69fd192c98fbcc139d36
   specs:
     globalize (4.0.0)
       activemodel (>= 4.0.0, < 5)
@@ -184,7 +184,7 @@ GEM
     ref (1.0.5)
     request_store (1.0.5)
     ruby-graphviz (1.0.9)
-    sass (3.2.13)
+    sass (3.2.14)
     sass-rails (4.0.1)
       railties (>= 4.0.0, < 5.0)
       sass (>= 3.1.10)

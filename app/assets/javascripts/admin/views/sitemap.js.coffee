@@ -1,46 +1,6 @@
 $(document).ready ->
 
-  $sitemap = $('#sitemap')
-  $pageContent = $('#page_content')
+  $('.tree').nestable(maxDepth: 20)
 
-  $sitemap.tree
-    useContextMenu: false
-    dragAndDrop: true
-    autoOpen: true
-    openFolderDelay: 2000
-    closedIcon: '<i class="caret-right"></i>'
-    openedIcon: '<i class="caret"></i>'
-    onCreateLi: (node, $listItem) ->
-      $listItem.children('.jqtree-element').find('.jqtree-title').click (event) ->
-        document.location.href = node.url
-
-  $sitemap.on 'tree.refresh', ->
-    $sitemap.prepare()
-
-  $sitemap.on 'tree.select', (event) ->
-    node = event.node
-    if node
-      $pageContent.load node.url, ->
-        $pageContent.prepare()
-    else
-      # unselect
-      $pageContent.empty()
-
-  $sitemap.on 'tree.move', (event) ->
-    event.preventDefault()
-
-    moveInfo = event.move_info
-    movedNode = moveInfo.moved_node
-    moveUrl = movedNode.move_url
-    targetNodeId = moveInfo.target_node.id
-
-    jQuery.ajax
-      url: moveUrl
-      type: 'post'
-      data: { _method: 'patch', to: targetNodeId, position: moveInfo.position }
-      success: ->
-        selectedNodeId = $sitemap.tree('getState').selected_node
-        moveInfo.do_move()
-        if movedNode.id == selectedNodeId
-          $pageContent.load movedNode.url, ->
-            $pageContent.prepare()
+  $('.tree').on 'change', (event) ->
+    console.log event
