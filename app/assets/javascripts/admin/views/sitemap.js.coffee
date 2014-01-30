@@ -16,6 +16,7 @@ $(document).ready ->
       #$title = $listItem.children('.jqtree-element').find('.jqtree-title')
       #$link = $('<a />', href: node.url).text(node.name)
       #$title.html($link)
+      
       $listItem
     onIsMoveHandle: ($element) ->
       $element.is('.jqtree-title')

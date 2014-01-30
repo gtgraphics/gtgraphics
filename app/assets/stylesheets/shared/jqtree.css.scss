@@ -1,146 +1,59 @@
-ul.jqtree-tree {
-  /*
-  background-image: asset-url('admin/shadow.png');
-  background-position: right center;
-  background-size: 25px 100%;
-  background-repeat: no-repeat;
-  */
-  
-  margin-left: 20px;
+.jqtree-tree {
+  $toggler-width: 20px;
+
   list-style: none outside;
-  margin-bottom: 0;
+  margin: 0;
   padding: 0;
-  ul.jqtree_common {
+
+  ul {
     list-style: none outside;
-    margin-bottom: 0;
+    margin: 0;
     padding: 0;
-    display: block;
-    margin-left: 20px;
-    margin-right: 0;
-    padding-bottom: 3px;
+    padding-left: 20px;
   }
+
   li {
     &.jqtree-closed > ul.jqtree_common {
       display: none;
     }
-    &.jqtree_common {
-      clear: both;
-      list-style-type: none;
+
+    &.jqtree-ghost {
+      height: 31px;
+      border: 1px dashed lighten($gray-light, 25%);
+      margin-bottom: 5px;
+      @include border-radius(4px);
     }
-  }
-  .jqtree-toggler {
-    display: block;
-    position: absolute;
-    cursor: pointer;
-    left: -1.5em;
-    top: 20%;
-    *top: 0;
-    /* fix for ie7 */
-    font-size: 12px;
-    line-height: 12px;
-    width: 12px;
-    height: 12px;
-    text-align: center;
-    /* fix for ie9 */
-    border-bottom: none;
-    //color: darken($gray-lighter, 20%);
-    color: $text-color;
-    text-decoration: none;
-    &:hover {
-      color: $text-color;
-      //color: #000;
-    }
-  }
-  .jqtree-element {
 
-  }
-  .checkbox-container {
-    margin-top: 2px;
-    margin-right: 5px;
-  }
-  .jqtree-title {
-  }
-  li.jqtree-folder {
-    &.jqtree-closed {
-      margin-bottom: 1px;
-    }
-    .jqtree-title {
-      margin-left: 0;
-      cursor: move;
-    }
-  }
-  .jqtree-toggler.jqtree-closed {
-    background-position: 0 0;
-  }
-}
-
-span.jqtree-dragging {
-  color: $body-bg;
-  background: $text-color;
-  white-space: nowrap;
-  opacity: 0.6;
-  cursor: pointer;
-  padding: 3px 8px;
-  @include border-radius(4px);
-}
-
-ul.jqtree-tree {
-
-  $ghost-border: 2px dotted $link-color;
-
-  li.jqtree-ghost {
-    position: relative;
-    z-index: 10;
-    margin-right: 20px;
-    span {
-      display: block;
-      &.jqtree-circle {
-        height: 8px;
-        width: 8px;
-        position: absolute;
-        top: -4px;
-        left: 2px;
+    &.jqtree-folder {
+      .jqtree-toggler {
+        display: inline-block;
+        width: $toggler-width;
+        text-align: center;
       }
-      &.jqtree-line {
-        height: 0;
-        padding: 0;
-        position: absolute;
-        top: -1px;
-        left: 0px;
-        width: 100%;
-        border-bottom: $ghost-border;
+      .jqtree-element {
+        padding-left: 0;
       }
     }
-    &.jqtree-inside {
-      margin-left: 48px;
+
+    &:not(.jqtree-folder) {
+      .jqtree-element {
+        padding-left: $toggler-width;
+      }
     }
-  }
-  span.jqtree-border {
-    position: absolute;
-    display: block;
-    left: -25px;
-    right: -6px;
-    top: -1px;
-    height: 25px !important;
-    margin: 0;
-    border: $ghost-border;
-    @include border-radius(10px);
-  }
-  .jqtree-element {
-    width: 100%;
-    /* todo: why is this in here? */
-    *width: auto;
-    /* ie7 fix; issue 41 */
-    position: relative;
-  }
-  li.jqtree-selected > .jqtree-element {
-    font-weight: bold;
-    &:hover {
+
+    .jqtree-element {
+      border: 1px solid lighten($gray-light, 25%);
+      padding: 5px 12px;
+      margin-bottom: 5px;
+      @include border-radius(4px);
+
+      .jqtree-title {
+        cursor: move;
+      }
+      
+      .jqtree-toggler {
+        cursor: pointer;
+      }
     }
-  }
-  .jqtree-moving, .jqtree-moving * {
-    cursor: move !important;
-  }
-  .jqtree-moving > .jqtree-element .jqtree-title {
-  }
+  } 
 }
