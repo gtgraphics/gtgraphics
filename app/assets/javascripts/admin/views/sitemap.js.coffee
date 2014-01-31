@@ -4,7 +4,7 @@ $(document).ready ->
   $pageContent = $('#page_content')
 
   $sitemap.tree
-    selectable: false
+    selectable: true
     useContextMenu: false
     dragAndDrop: true
     autoOpen: true
@@ -13,13 +13,13 @@ $(document).ready ->
     closedIcon: '<b class="caret-right"></b>'
     openedIcon: '<b class="caret"></b>'
     onCreateLi: (node, $listItem) ->
-      #$title = $listItem.children('.jqtree-element').find('.jqtree-title')
-      #$link = $('<a />', href: node.url).text(node.name)
-      #$title.html($link)
-      
-      $listItem
+      if node.movable
+        $dragHandle = $('<div />', class: 'jqtree-handle')
+        $dragHandle.html('<i class="fa fa-bars"></i>')
+        $listItem.find('.jqtree-title').after($dragHandle)
+      $listItem.attr('data-url', node.url).find('.jqtree-element').attr('tabindex', 0)
     onIsMoveHandle: ($element) ->
-      $element.is('.jqtree-title')
+      $element.is('.jqtree-handle')
 
   $sitemap.on 'tree.refresh', ->
     $sitemap.prepare()
@@ -34,12 +34,14 @@ $(document).ready ->
       $pageContent.empty()
 
   $sitemap.on 'tree.move', (event) ->
-    event.preventDefault()
+    #event.preventDefault()
 
     moveInfo = event.move_info
     movedNode = moveInfo.moved_node
     moveUrl = movedNode.move_url
     targetNodeId = moveInfo.target_node.id
+
+    #moveInfo.do_move()
 
     jQuery.ajax
       url: moveUrl
@@ -47,7 +49,9 @@ $(document).ready ->
       data: { _method: 'patch', to: targetNodeId, position: moveInfo.position }
       success: ->
         selectedNodeId = $sitemap.tree('getState').selected_node
-        moveInfo.do_move()
+        #moveInfo.do_move()
         if movedNode.id == selectedNodeId
           $pageContent.load movedNode.url, ->
             $pageContent.prepare()
+
+  $sitemap

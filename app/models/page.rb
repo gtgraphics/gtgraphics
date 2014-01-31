@@ -58,7 +58,7 @@ class Page < ActiveRecord::Base
   validate :verify_embeddable_type_was_convertible, on: :update, if: :embeddable_type_changed?
 
   before_validation :generate_slug
-  before_validation :generate_path, if: :slug_changed?
+  before_validation :generate_path, if: -> { slug_changed? or parent_id_changed? }
   before_save :sanitize_regions
   before_destroy :destroyable?
   after_save :update_descendants_paths, if: :path_changed?

@@ -2086,6 +2086,7 @@ limitations under the License.
       if (can_move_to && area) {
         if (this.hovered_area !== area) {
           this.hovered_area = area;
+          this.stopOpenFolderTimer(); // added
           if (this.mustOpenFolderTimer(area)) {
             this.startOpenFolderTimer(area.node);
           }
@@ -2117,6 +2118,7 @@ limitations under the License.
       this.removeHover();
       this.removeDropHint();
       this.removeHitAreas();
+      this.stopOpenFolderTimer(); // added
       if (this.current_item) {
         this.current_item.$element.removeClass('jqtree-moving');
       }
@@ -2140,6 +2142,7 @@ limitations under the License.
 
     DragAndDropHandler.prototype.removeDropHint = function() {
       if (this.previous_ghost) {
+        //this.stopOpenFolderTimer(); // added
         return this.previous_ghost.remove();
       }
     };
@@ -2520,14 +2523,15 @@ limitations under the License.
   BorderDropHint = (function() {
     function BorderDropHint($element) {
       var $div, width;
-      $div = $element.children('.jqtree-element');
-      width = $element.width() - 4;
+      //$div = $element.children('.jqtree-element');
+      //width = $element.width() - 4;
       this.$hint = $('<span class="jqtree-border"></span>');
-      $div.append(this.$hint);
-      this.$hint.css({
-        width: width,
-        height: $div.height() - 4
-      });
+      //$div.append(this.$hint);
+      $element.after(this.$hint);
+      //this.$hint.css({
+      //  width: width,
+      //  height: $div.height() - 4
+      //});
     }
 
     BorderDropHint.prototype.remove = function() {

@@ -1,5 +1,7 @@
 .jqtree-tree {
+  $toggler-offset: 5px;
   $toggler-width: 20px;
+  $element-spacing: 5px;
 
   list-style: none outside;
   margin: 0;
@@ -17,17 +19,26 @@
       display: none;
     }
 
+    &.jqtree-selected {
+      > .jqtree-element {
+        @extend .active;
+      }
+    }
+
     &.jqtree-ghost {
       height: 31px;
-      border: 1px dashed lighten($gray-light, 25%);
-      margin-bottom: 5px;
-      @include border-radius(4px);
+      border-style: dashed;
+      margin-bottom: $element-spacing;
+      @include border-radius($border-radius-base);
+      border: 1px dashed $btn-default-border;
+      cursor: move;
     }
 
     &.jqtree-folder {
       .jqtree-toggler {
         display: inline-block;
         width: $toggler-width;
+        margin-left: $toggler-offset;
         text-align: center;
       }
       .jqtree-element {
@@ -37,23 +48,55 @@
 
     &:not(.jqtree-folder) {
       .jqtree-element {
-        padding-left: $toggler-width;
+        padding-left: $toggler-width + $toggler-offset;
       }
     }
 
     .jqtree-element {
-      border: 1px solid lighten($gray-light, 25%);
-      padding: 5px 12px;
-      margin-bottom: 5px;
-      @include border-radius(4px);
+      @extend .btn;
+      @extend .btn-default;
+      @extend .btn-block;
 
-      .jqtree-title {
-        cursor: move;
+      text-align: left;
+      margin-bottom: $element-spacing;
+      position: relative;
+      outline: none !important;
+
+      .jqtree-border {
+        background-color: blue;
+        height: 30px;
+        display: block
       }
-      
+
+      .jqtree-handle {
+        float: right;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        padding: 6px 15px;
+        cursor: move;
+        color: $gray-light;
+        position: absolute;
+        i {
+          pointer-events: none;
+        }
+      }
+
+
       .jqtree-toggler {
         cursor: pointer;
       }
     }
   } 
+}
+
+.jqtree-dragging {
+  cursor: move;
+  z-index: 1000;
+  white-space: nowrap;
+  @include border-radius($border-radius-base);
+  padding: 4px 10px;
+  opacity: 0.6;
+  background-color: $text-color;
+  color: $body-bg;
 }

@@ -91,7 +91,7 @@ class Admin::PagesController < Admin::ApplicationController
       end
 
       # Rename Slug if parent page already contains children with the same slug
-      if Page.where(parent_id: @page.parent_id, slug: @page.slug).count > 1
+      if Page.where(parent_id: @page.parent_id, slug: @page.slug).many?
         # TODO Rename slug
         raise ActiveRecord::Rollback, 'Slug has already been taken' 
       end
@@ -100,6 +100,9 @@ class Admin::PagesController < Admin::ApplicationController
       [@page.id, @page.parent_id, target_page.id, target_page.parent_id, previous_parent_id].compact.uniq.each do |page_id|
         Page.reset_counters(page_id, :children)
       end
+
+      # Update Path
+      @page.update_path!
     end
     respond_to do |format|
       format.html { head valid ? :ok : :bad_request }
