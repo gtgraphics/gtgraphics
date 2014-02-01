@@ -79,9 +79,8 @@ class Admin::PagesController < Admin::ApplicationController
   def move
     valid = true
     target_page = Page.find(params[:to])
+    previous_parent_id = @page.parent_id
     Page.transaction do
-      previous_parent_id = @page.parent_id
-
       # Move Page in Tree
       case params[:position]
       when 'inside' then @page.move_to_child_with_index(target_page, 0)
@@ -96,13 +95,13 @@ class Admin::PagesController < Admin::ApplicationController
         raise ActiveRecord::Rollback, 'Slug has already been taken' 
       end
 
+      # Update Path
+      @page.refresh_path!(true)
+
       # Update Counter Caches
       [@page.id, @page.parent_id, target_page.id, target_page.parent_id, previous_parent_id].compact.uniq.each do |page_id|
         Page.reset_counters(page_id, :children)
       end
-
-      # Update Path
-      @page.update_path!
     end
     respond_to do |format|
       format.html { head valid ? :ok : :bad_request }

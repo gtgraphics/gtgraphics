@@ -2,17 +2,14 @@
   %dl.dl-horizontal
     %dt= Page.human_attribute_name :embeddable_type
     %dd= @page.embeddable_class.model_name.human
-    %dt= Page.human_attribute_name :path
-    %dd
-      - if @page.path.present?
-        = File.join(*@page.self_and_ancestors.map { |page| link_to(page.slug.present? ? page.slug : request.host, page) }).html_safe
-      - else
-        = link_to request.host, :root
     - if @page.template.present?
       %dt= Page.human_attribute_name :template
       %dd= link_to @page.template.name, admin_template_path(@page.template)
     %dt= Page.human_attribute_name :state
     %dd= @page.state_name
+    - unless @page.root?
+      %dt= Page.human_attribute_name :path
+      %dd= @page.path
     %dt= Page.human_attribute_name :translated_locales
     %dd= @page.translated_locales.map { |locale| link_to(translate(locale, scope: :languages), page_path(@page, locale: locale)) }.sort.join(', ').html_safe
     %dt= Page.human_attribute_name :menu_item

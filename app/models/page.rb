@@ -57,8 +57,8 @@ class Page < ActiveRecord::Base
   validate :verify_root_uniqueness, if: :root?
   validate :verify_embeddable_type_was_convertible, on: :update, if: :embeddable_type_changed?
 
-  before_validation :generate_slug
-  before_validation :generate_path, if: -> { slug_changed? or parent_id_changed? }
+  before_validation :set_slug
+  before_validation :set_path, if: -> { slug_changed? or parent_id_changed? }
   before_save :sanitize_regions
   before_destroy :destroyable?
   after_save :update_descendants_paths, if: :path_changed?
@@ -195,6 +195,14 @@ class Page < ActiveRecord::Base
     !published?
   end
 
+  def refresh_path!(include_descendants = false)
+    if include_descendants
+      transaction { self_and_descendants.each(&:refresh_path!) }
+    else
+      update_column(:path, generate_path)
+    end
+  end
+
   def self_and_ancestors_and_siblings
     self.class.where(parent_id: self.self_and_ancestors.ids << nil)
   end
@@ -224,11 +232,6 @@ class Page < ActiveRecord::Base
     title
   end
 
-  def update_path!
-    generate_path
-    save!
-  end
-
   private
   def destroy_replaced_embeddable
     embeddable_class_was.destroy(embeddable_id_was) if embeddable_type_changed?
@@ -241,12 +244,7 @@ class Page < ActiveRecord::Base
       path_parts = [slug]
     end
     path_parts.reject!(&:blank?)
-    self.path = File.join(path_parts)
-  end
-
-  def generate_slug
-    self.slug = title(I18n.default_locale) if new_record? and slug.blank? and title.present?
-    self.slug = slug.parameterize if slug.present?
+    File.join(path_parts)
   end
 
   def sanitize_regions
@@ -259,8 +257,17 @@ class Page < ActiveRecord::Base
     end
   end
 
+  def set_path
+    self.path = generate_path
+  end
+
+  def set_slug
+    self.slug = title(I18n.default_locale) if new_record? and slug.blank? and title.present?
+    self.slug = slug.parameterize if slug.present?
+  end
+
   def update_descendants_paths
-    transaction { descendants.each(&:update_path!) }
+    transaction { descendants.each(&:refresh_path!) }
   end
 
   def verify_embeddable_type_was_convertible
