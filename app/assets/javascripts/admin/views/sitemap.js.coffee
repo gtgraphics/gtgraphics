@@ -1,3 +1,5 @@
+selectedNode = null
+
 $(document).ready ->
 
   $sitemap = $('#sitemap')
@@ -13,7 +15,7 @@ $(document).ready ->
     closedIcon: '<b class="caret-right"></b>'
     openedIcon: '<b class="caret"></b>'
     onCreateLi: (node, $listItem) ->
-      if node.movable
+      unless node.root
         $dragHandle = $('<div />', class: 'jqtree-handle')
         $dragHandle.html('<i class="fa fa-bars"></i>')
         $listItem.find('.jqtree-title').after($dragHandle)
@@ -25,33 +27,36 @@ $(document).ready ->
     $sitemap.prepare()
 
   $sitemap.on 'tree.select', (event) ->
-    node = event.node
-    if node
-      $pageContent.load node.url, ->
+    selectedNode = event.node
+    if selectedNode
+      $pageContent.load selectedNode.url, ->
         $pageContent.prepare()
     else
       # unselect
       $pageContent.empty()
 
+  $sitemap.on 'tree.open tree.opening', (event) ->
+    $sitemap.tree('addToSelection', selectedNode) if selectedNode
+
   $sitemap.on 'tree.move', (event) ->
-    #event.preventDefault()
+    event.preventDefault()
 
     moveInfo = event.move_info
     movedNode = moveInfo.moved_node
     moveUrl = movedNode.move_url
-    targetNodeId = moveInfo.target_node.id
+    targetNode = moveInfo.target_node
 
-    #moveInfo.do_move()
-
-    jQuery.ajax
-      url: moveUrl
-      type: 'post'
-      data: { _method: 'patch', to: targetNodeId, position: moveInfo.position }
-      success: ->
-        selectedNodeId = $sitemap.tree('getState').selected_node
-        #moveInfo.do_move()
-        if movedNode.id == selectedNodeId
-          $pageContent.load movedNode.url, ->
-            $pageContent.prepare()
+    if !targetNode.root or (targetNode.root and moveInfo.position == 'inside')
+      moveInfo.do_move()
+      jQuery.ajax
+        url: moveUrl
+        type: 'post'
+        data: { _method: 'patch', to: targetNode.id, position: moveInfo.position }
+        success: ->
+          selectedNodeId = $sitemap.tree('getState').selected_node
+          #moveInfo.do_move()
+          if movedNode.id == selectedNodeId
+            $pageContent.load movedNode.url, ->
+              $pageContent.prepare()
 
   $sitemap

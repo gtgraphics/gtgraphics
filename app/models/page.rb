@@ -28,7 +28,6 @@ class Page < ActiveRecord::Base
   STATES = %w(
     published
     hidden
-    drafted
   ).freeze
 
   EMBEDDABLE_TYPES = %w(
@@ -65,17 +64,15 @@ class Page < ActiveRecord::Base
   after_update :destroy_replaced_embeddable, if: :embeddable_changed?
 
   default_scope -> { order(:lft) }
-  scope :drafted, -> { with_state(:drafted) }
   scope :hidden, -> { with_state(:hidden) }
   scope :indexable, -> { where(indexable: true) }
   scope :menu_items, -> { where(menu_item: true) }
   scope :primary, -> { where(depth: 1) }
   scope :published, -> { with_state(:published) }
 
-  state_machine :state, initial: :drafted do
+  state_machine :state, initial: :hidden do
     state :published
     state :hidden
-    state :drafted
 
     event :publish do
       transition all => :published

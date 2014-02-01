@@ -57,7 +57,7 @@
               %dt= Image.human_attribute_name(:author)
               %dd
                 - if @image.author
-                  = link_to @image.author.name, [:admin, @image.author]
+                  = @image.author_name
                 - else
                   = @image.exif_data.artist
             - if @image.camera.present?

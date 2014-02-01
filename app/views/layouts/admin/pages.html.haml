@@ -21,9 +21,10 @@
         /  = present Page.with_translations(I18n.locale), PageListPresenter, list_class: 'dd-list', item_class: 'dd-item', title_class: 'dd-handle'
 
       .col-lg-8.col-md-4
-        - if content_for? :page_content
-          = yield :page_content
-        - else
-          = yield
+        #page_content
+          - if content_for? :page_content
+            = yield :page_content
+          - else
+            = yield
 
 = render template: 'layouts/admin/application'

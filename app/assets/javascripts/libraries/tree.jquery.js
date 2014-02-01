@@ -1665,6 +1665,9 @@ limitations under the License.
     FolderElement.prototype.open = function(on_finished, slide) {
       var $button, doOpen,
         _this = this;
+
+      _this.tree_widget._triggerEvent('tree.opening', { node: _this.node });
+
       if (slide == null) {
         slide = true;
       }
@@ -1694,6 +1697,9 @@ limitations under the License.
     FolderElement.prototype.close = function(slide) {
       var $button, doClose,
         _this = this;
+
+      _this.tree_widget._triggerEvent('tree.closing', { node: _this.node });
+
       if (slide == null) {
         slide = true;
       }

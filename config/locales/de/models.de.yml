@@ -249,7 +249,6 @@ de:
   page:
     states:
       published: Öffentlich
-      drafted: Entwurf
       hidden: Unsichtbar
 
   homepage: Startseite

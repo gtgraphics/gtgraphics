@@ -1,25 +1,24 @@
-#page_content
-  %dl.dl-horizontal
-    %dt= Page.human_attribute_name :embeddable_type
-    %dd= @page.embeddable_class.model_name.human
-    - if @page.template.present?
-      %dt= Page.human_attribute_name :template
-      %dd= link_to @page.template.name, admin_template_path(@page.template)
-    %dt= Page.human_attribute_name :state
-    %dd= @page.state_name
-    - unless @page.root?
-      %dt= Page.human_attribute_name :path
-      %dd= @page.path
-    %dt= Page.human_attribute_name :translated_locales
-    %dd= @page.translated_locales.map { |locale| link_to(translate(locale, scope: :languages), page_path(@page, locale: locale)) }.sort.join(', ').html_safe
-    %dt= Page.human_attribute_name :menu_item
-    %dd= link_to yes_or_no(@page.menu_item?), [:toggle_menu_item, :admin, @page], method: :patch
-    - begin
-      = render "admin/#{@page.embeddable_class.model_name.plural}/details", @page.embeddable_class.model_name.singular.to_sym => @page.embeddable
-    - rescue ActionView::MissingTemplate
-    
-    - if @page.author  
-      %dt= Page.human_attribute_name :author
-      %dd= link_to @page.author.name, [:admin, @page.author]
-    %dt= Page.human_attribute_name :updated_at
-    %dd= time_ago @page.updated_at
+%dl.dl-horizontal
+  %dt= Page.human_attribute_name :embeddable_type
+  %dd= @page.embeddable_class.model_name.human
+  - if @page.template.present?
+    %dt= Page.human_attribute_name :template
+    %dd= link_to @page.template.name, admin_template_path(@page.template)
+  %dt= Page.human_attribute_name :state
+  %dd= @page.state_name
+  - unless @page.root?
+    %dt= Page.human_attribute_name :path
+    %dd= @page.path
+  %dt= Page.human_attribute_name :translated_locales
+  %dd= @page.translated_locales.map { |locale| link_to(translate(locale, scope: :languages), page_path(@page, locale: locale)) }.sort.join(', ').html_safe
+  %dt= Page.human_attribute_name :menu_item
+  %dd= link_to yes_or_no(@page.menu_item?), [:toggle_menu_item, :admin, @page], method: :patch
+  - begin
+    = render "admin/#{@page.embeddable_class.model_name.plural}/details", @page.embeddable_class.model_name.singular.to_sym => @page.embeddable
+  - rescue ActionView::MissingTemplate
+  
+  - if @page.author
+    %dt= Page.human_attribute_name :author
+    %dd= @page.author_name
+  %dt= Page.human_attribute_name :updated_at
+  %dd= time_ago @page.updated_at
