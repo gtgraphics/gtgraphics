@@ -11,7 +11,7 @@ $(document).ready ->
     dragAndDrop: true
     autoOpen: true
     openFolderDelay: 2000
-    keyboardSupport: false
+    keyboardSupport: true
     closedIcon: '<b class="caret-right"></b>'
     openedIcon: '<b class="caret"></b>'
     onCreateLi: (node, $listItem) ->
@@ -19,9 +19,19 @@ $(document).ready ->
         $dragHandle = $('<div />', class: 'jqtree-handle')
         $dragHandle.html('<i class="fa fa-bars"></i>')
         $listItem.find('.jqtree-title').after($dragHandle)
-      $listItem.attr('data-url', node.url).find('.jqtree-element').attr('tabindex', 0)
+      $element = $listItem.attr('data-url', node.url).find('.jqtree-element')
+
     onIsMoveHandle: ($element) ->
       $element.is('.jqtree-handle')
+
+    #onCanSelectNode: (node) ->
+    #  console.log node
+
+    onCanMove: (node) ->
+      !node.root
+
+    onCanMoveTo: (movedNode, targetNode, position) ->
+      !(targetNode.root and position != 'inside')
 
   $sitemap.on 'tree.refresh', ->
     $sitemap.prepare()

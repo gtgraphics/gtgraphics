@@ -2717,7 +2717,8 @@ limitations under the License.
         return selectNode(_this.getPreviousNode(current_node));
       };
       moveRight = function() {
-        if (current_node.hasChildren() && !current_node.is_open) {
+        if ((current_node.hasChildren() || current_node.load_on_demand) && !current_node.is_open) {
+          // TODO Load Node
           _this.tree_widget.openNode(current_node);
           return false;
         } else {
