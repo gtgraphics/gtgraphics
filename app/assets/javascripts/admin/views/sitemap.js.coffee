@@ -2,10 +2,18 @@ selectedNode = null
 
 $(document).ready ->
 
+  # FIXME Events become re-applied to #sitemap on each request!!!
+
   $sitemap = $('#sitemap')
   $pageContent = $('#page_content')
 
+  return if $sitemap.hasClass('loaded')
+  $sitemap.addClass('loaded')
+
+  console.log 'init sitemap'
+
   $sitemap.tree
+    data: []
     selectable: true
     useContextMenu: false
     dragAndDrop: true
@@ -19,13 +27,15 @@ $(document).ready ->
         $dragHandle = $('<div />', class: 'jqtree-handle')
         $dragHandle.html('<i class="fa fa-bars"></i>')
         $listItem.find('.jqtree-title').after($dragHandle)
-      $element = $listItem.attr('data-url', node.url).find('.jqtree-element')
+      $listItem.attr('data-id', node.id)
+      $listItem.attr('data-url', node.url)
+      selectedNode = node if node.active
+      #$sitemap.tree('selectNode', selectedNode)
+      #$element = $listItem.find('.jqtree-element')
+      #$title = $element.find('.jqtree-title').wrap($('<a />', href: node.url))
 
     onIsMoveHandle: ($element) ->
       $element.is('.jqtree-handle')
-
-    #onCanSelectNode: (node) ->
-    #  console.log node
 
     onCanMove: (node) ->
       !node.root
@@ -33,17 +43,21 @@ $(document).ready ->
     onCanMoveTo: (movedNode, targetNode, position) ->
       !(targetNode.root and position != 'inside')
 
+  $sitemap.on 'tree.init', ->
+    $sitemap.tree('addToSelection', selectedNode)
+
   $sitemap.on 'tree.refresh', ->
+    $sitemap.tree('addToSelection', selectedNode)
     $sitemap.prepare()
 
+  $sitemap.on 'tree.click', (event) ->
+    event.preventDefault() if $sitemap.tree('isNodeSelected', event.node)
+
   $sitemap.on 'tree.select', (event) ->
-    selectedNode = event.node
-    if selectedNode
-      $pageContent.load selectedNode.url, ->
-        $pageContent.prepare()
-    else
-      # unselect
-      $pageContent.empty()
+    if selectedNode != event.node
+      selectedNode = event.node
+      console.log selectedNode
+      Turbolinks.visit(selectedNode.url)
 
   $sitemap.on 'tree.open tree.opening', (event) ->
     $sitemap.tree('addToSelection', selectedNode) if selectedNode

@@ -2,8 +2,9 @@ class PageTree
   include Rails.application.routes.url_helpers
   include RouteHelper
 
-  def initialize(pages)
+  def initialize(pages, options = {})
     @pages_by_parents = pages.group_by(&:parent_id)
+    @selected_page = options[:selected]
   end
 
   def to_json(options = {})
@@ -19,7 +20,8 @@ class PageTree
                     root: page.root?, destroyable: page.destroyable?,
                     url: admin_page_path(page, locale: I18n.locale),
                     move_url: move_admin_page_path(page, locale: I18n.locale) }
-      page_hash.merge!(children: serialize_pages(page.id)) if @pages_by_parents[page.id]
+      page_hash[:active] = page == @selected_page if @selected_page
+      page_hash[:children] = serialize_pages(page.id) if @pages_by_parents[page.id]
       page_hash
     end
   end

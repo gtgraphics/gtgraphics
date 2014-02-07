@@ -8,6 +8,10 @@
   
   - else
 
+    :coffee
+      $(document).ready ->
+        $('#sitemap').tree('loadData', `#{PageTree.new(Page.where(depth: 0..1).with_translations(I18n.locale), selected: @page).to_json}`)
+
     = toolbar do
       .btn-group.batch-control
         = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) }        
