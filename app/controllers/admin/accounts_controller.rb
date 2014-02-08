@@ -13,9 +13,7 @@ class Admin::AccountsController < Admin::ApplicationController
   end
 
   def update
-    # TODO
-    @user.update(user_params)
-    flash_for @user
+    flash_for @user if @user.update(user_params)
     respond_with :admin, @user, template: 'admin/users/editor', location: :admin_account
   end
 
