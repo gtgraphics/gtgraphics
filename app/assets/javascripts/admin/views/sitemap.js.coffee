@@ -1,25 +1,22 @@
-selectedNode = null
+SITEMAP_SELECTOR = '#sitemap'
 
 $(document).ready ->
+  $('#page_content').affix
+    offset:
+      top: ->
+        $('.gtg-admin-toolbar').offset().top - $('#navigation').outerHeight()
 
-  # FIXME Events become re-applied to #sitemap on each request!!!
-
-  $sitemap = $('#sitemap')
-  $pageContent = $('#page_content')
-
-  return if $sitemap.hasClass('loaded')
-  $sitemap.addClass('loaded')
-
-  console.log 'init sitemap'
-
+$(document).on 'page:change', ->
+  $sitemap = $(SITEMAP_SELECTOR)
   $sitemap.tree
-    data: []
+    data: $sitemap.data('pages')
     selectable: true
     useContextMenu: false
     dragAndDrop: true
     autoOpen: true
     openFolderDelay: 2000
     keyboardSupport: true
+    saveState: true
     closedIcon: '<b class="caret-right"></b>'
     openedIcon: '<b class="caret"></b>'
     onCreateLi: (node, $listItem) ->
@@ -27,12 +24,6 @@ $(document).ready ->
         $dragHandle = $('<div />', class: 'jqtree-handle')
         $dragHandle.html('<i class="fa fa-bars"></i>')
         $listItem.find('.jqtree-title').after($dragHandle)
-      $listItem.attr('data-id', node.id)
-      $listItem.attr('data-url', node.url)
-      selectedNode = node if node.active
-      #$sitemap.tree('selectNode', selectedNode)
-      #$element = $listItem.find('.jqtree-element')
-      #$title = $element.find('.jqtree-title').wrap($('<a />', href: node.url))
 
     onIsMoveHandle: ($element) ->
       $element.is('.jqtree-handle')
@@ -43,24 +34,39 @@ $(document).ready ->
     onCanMoveTo: (movedNode, targetNode, position) ->
       !(targetNode.root and position != 'inside')
 
-  $sitemap.on 'tree.init', ->
-    $sitemap.tree('addToSelection', selectedNode)
+    onGetStateFromStorage: ->
+      state = jQuery.cookie('sitemap_state')
+      if state
+        openNodes = _.map state.split(' '), (id) -> parseInt(id)
+      else
+        return false
+      JSON.stringify({ open_nodes: openNodes, selected_node: null })
 
-  $sitemap.on 'tree.refresh', ->
-    $sitemap.tree('addToSelection', selectedNode)
-    $sitemap.prepare()
+    onSetStateFromStorage: (state) ->
+      state = jQuery.parseJSON(state)
+      jQuery.cookie('sitemap_state', state.open_nodes.join(' '), path: '/')
+
+  # Mark selected node as active and scroll to it if necessary
+  selectedNode = $sitemap.tree('getNodeById', $sitemap.data('selectedPageId'))
+  $sitemap.tree('addToSelection', selectedNode)
 
   $sitemap.on 'tree.click', (event) ->
     event.preventDefault() if $sitemap.tree('isNodeSelected', event.node)
 
   $sitemap.on 'tree.select', (event) ->
-    if selectedNode != event.node
-      selectedNode = event.node
-      console.log selectedNode
+    console.log 'select'
+    if selectedNode = event.node
       Turbolinks.visit(selectedNode.url)
 
-  $sitemap.on 'tree.open tree.opening', (event) ->
-    $sitemap.tree('addToSelection', selectedNode) if selectedNode
+  selectedNodeForOpening = null
+
+  $sitemap.on 'tree.opening', ->
+    selectedNodeForOpening = $sitemap.tree('getSelectedNode')
+
+  $sitemap.on 'tree.open', (event) ->
+    if selectedNodeForOpening
+      $sitemap.tree('addToSelection', selectedNodeForOpening)
+      selectedNodeForOpening = null
 
   $sitemap.on 'tree.move', (event) ->
     event.preventDefault()
@@ -78,9 +84,21 @@ $(document).ready ->
         data: { _method: 'patch', to: targetNode.id, position: moveInfo.position }
         success: ->
           selectedNodeId = $sitemap.tree('getState').selected_node
-          #moveInfo.do_move()
-          if movedNode.id == selectedNodeId
-            $pageContent.load movedNode.url, ->
-              $pageContent.prepare()
 
-  $sitemap
+$(document).on 'page:load', ->
+  $sitemap = $(SITEMAP_SELECTOR)
+  if $sitemap.exists()
+    # Scroll to selected node
+    selectedNode = $sitemap.tree('getSelectedNode')
+    $selectedNode = $(selectedNode.element)
+    offset = $('#navigation').outerHeight() + $('#toolbar').outerHeight() + 20 + 2 * 37
+    scrollX = $selectedNode.offset().top - offset
+    $(document).scrollTop(scrollX)
+
+$(document).on 'page:receive', ->
+  $sitemap = $(SITEMAP_SELECTOR)
+  if $sitemap.exists()
+    # Turbolinks Fix to destroy all events before page is loaded with new content
+    _.each ['load_data', 'click', 'select', 'open', 'opening', 'move'], (eventName) ->
+      $sitemap.off("tree.#{eventName}")
+    $sitemap.tree('destroy')

@@ -1,2 +1,6 @@
-#sitemap {
+#page_content {
+  &.affix {
+    position: fixed;
+    top: 148px;
+  }
 }

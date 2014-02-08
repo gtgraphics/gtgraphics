@@ -3,18 +3,20 @@ class Admin::PagesController < Admin::ApplicationController
 
   before_action :load_page, only: %i(show edit update destroy toggle_menu_item move move_up move_down publish draft hide)
   before_action :load_parent_page, only: %i(index new create show edit update)
+  before_action :build_page_tree
 
   breadcrumbs do |b|
     b.append Page.model_name.human(count: 2), :admin_pages
+    b.append @parent_page.title, [:admin, @parent_page] if @parent_page and action_name.in? %w(new create)
     b.append translate('breadcrumbs.new', model: Page.model_name.human), :new_admin_page if action_name.in? %w(new create)
     b.append @page.title, [:admin, @page] if action_name.in? %w(show edit update)
     b.append translate('breadcrumbs.edit', model: Page.model_name.human), [:edit, :admin, @page] if action_name.in? %w(edit update)
   end
 
   def index
-    @pages = Page.with_translations(I18n.locale).where(depth: 0..1)
-    @page = Page.root
-    respond_with :admin, @pages, template: 'admin/pages/show'
+    respond_to do |format|
+      format.html { redirect_to [:admin, Page.root] }
+    end
   end
 
   def new
@@ -201,6 +203,17 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   private
+  def build_page_tree
+    open_nodes = (cookies[:sitemap_state] || '').split
+    conditions = [Page.arel_table[:depth].in(0..1)]
+    if open_nodes.any?
+      conditions << Page.arel_table[:id].in(open_nodes)
+      conditions << Page.arel_table[:parent_id].in(open_nodes)
+    end
+    pages = Page.where(conditions.reduce(:or))
+    @page_tree = PageTree.new(pages.with_translations(I18n.locale), selected: @page)
+  end
+
   def load_page
     @page = Page.find(params[:id])
   end

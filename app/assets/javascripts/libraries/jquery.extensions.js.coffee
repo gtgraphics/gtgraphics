@@ -11,6 +11,9 @@
       $scope = @
     $scope.length > 0
     
+  $.fn.exists = (filter) ->
+    @any(filter)
+
   $.fn.many = (filter) ->
     if filter
       $scope = @filter(filter)
