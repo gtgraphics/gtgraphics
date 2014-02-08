@@ -15,10 +15,10 @@
         = create_button_link_for Page, caption: translate('helpers.links.new', model: Page.model_name.human), url: [:new, :admin, @page, :child]
         
     .row
-      .col-lg-4.col-md-4
+      .col-lg-4.col-md-5.col-sm-12.col-xs-12
         #sitemap{data: { url: tree_admin_pages_path(format: :json), pages: @page_tree.to_json, selected_page_id: @page.id}}
 
-      .col-lg-8.col-md-4
+      .col-lg-8.col-md-7.hidden-sm.hidden-xs
         #page_content
           - if content_for? :page_content
             = yield :page_content

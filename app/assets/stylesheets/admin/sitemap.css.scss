@@ -2,5 +2,15 @@
   &.affix {
     position: fixed;
     top: 148px;
+    width: 780px;
+
+    @media (min-width: $screen-md) {
+      width: $container-md * 0.58333333333333336 - $grid-gutter-width;
+    }
+
+    @media (min-width: $screen-lg) {
+      width: $container-lg * 0.6666666666666666 - $grid-gutter-width;
+    }
+
   }
 }

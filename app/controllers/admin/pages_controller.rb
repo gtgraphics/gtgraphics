@@ -6,7 +6,7 @@ class Admin::PagesController < Admin::ApplicationController
   before_action :build_page_tree
 
   breadcrumbs do |b|
-    b.append Page.model_name.human(count: 2), :admin_pages
+    # b.append Page.model_name.human(count: 2), :admin_pages
     if @parent_page 
       @parent_page.self_and_ancestors.each do |page|
         b.append page.title, [:admin, page]

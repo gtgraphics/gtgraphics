@@ -35,7 +35,8 @@ module IconHelper
     end
     icon_class << ' fa-border' if options[:border]
     icon_class << ' fa-fw' if options[:fixed_width]
-    content_tag :i, nil, class: icon_class
+    icon_class << " #{options[:class]}" if options[:class]
+    content_tag :i, nil, class: icon_class, style: options[:style]
   end
 
   def append_icon(name, *args, &block)
