@@ -48,12 +48,9 @@ class Activity
   end
 
   def valid?(*)
-    valid = nil
     run_callbacks :validation do
-      valid = super
-      true
+      super
     end
-    valid
   end
 
   protected

@@ -5,8 +5,8 @@ class SignInActivity < Activity
 
   validates :email, presence: true
   validates :password, presence: true
-  validate :validate_credentials
-  validate :validate_user_is_unlocked
+  validate :verify_credentials
+  validate :verity_user_is_unlocked
 
   before_validation :set_user
   before_validation :remove_expired_lock
@@ -33,14 +33,14 @@ class SignInActivity < Activity
     end
   end
 
-  def validate_credentials
+  def verify_credentials
     if email.present? and password.present? and (user.nil? or !user.authenticate(password))
       errors.add :email, :invalid
       errors.add :password, :invalid
     end
   end
 
-  def validate_user_is_unlocked
+  def verity_user_is_unlocked
     if user and user.is_a?(Authenticatable::Lockable) and user.locked?
       # errors.add :base, :locked
       errors.add :email, :invalid

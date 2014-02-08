@@ -22,7 +22,7 @@ class Admin::UsersController < Admin::ApplicationController
   end
 
   def create
-    @user = User.create(create_user_params)
+    @user = User.create(user_params)
     flash_for @user
     respond_with :admin, @user, template: 'admin/users/editor'
   end
@@ -42,20 +42,16 @@ class Admin::UsersController < Admin::ApplicationController
   end
 
   def edit_password
+    @change_password_activity = ChangePasswordActivity.new(user: @user)
     respond_with :admin, @user
   end
 
   def update_password
-    # TODO Make activity out of it
-    if @user.current?
-      saved = @user.update_with_password(account_password_params)
-    else
-      saved = @user.update(user_password_params)
-    end
-    if saved
-      sign_in @user, bypass: true if @user.current?
+    @change_password_activity = ChangePasswordActivity.new(user: @user)
+    @change_password_activity.attributes = user_password_params
+    if @change_password_activity.execute
       respond_to do |format|
-        format.html { redirect_to [:admin, @user] }
+        format.html { redirect_to [:edit, :admin, @user] }
       end
     else
       respond_to do |format|
@@ -74,23 +70,17 @@ class Admin::UsersController < Admin::ApplicationController
     @user = User.find(params[:id])
   end
 
-  def create_user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :preferred_locale, :generate_password, :password, :password_confirmation)
-  end
-
   def redirect_if_current_user
     redirect_to params.slice(:action).merge(controller: 'accounts') if @user and @user.current?
   end
 
-  def update_user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :preferred_locale, :current_password, :password, :password_confirmation)
+  def user_params
+    params.require(:user).permit(:first_name, :last_name, :email, :preferred_locale)
   end
 
   def user_password_params
-    params.require(:user).permit(:generate_password, :password, :password_confirmation)
-  end
-
-  def account_password_params
-    params.require(:user).permit(:current_password, :generate_password, :password, :password_confirmation)
+    permitted_params = [:generate_password, :password, :password_confirmation]
+    permitted_params << :current_password if @user.current?
+    params.require(:user).permit(*permitted_params)
   end
 end

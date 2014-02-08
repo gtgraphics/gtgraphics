@@ -1,6 +1,6 @@
 module Authenticatable
   extend ActiveSupport::Concern
- 
+
   included do
     has_secure_password
 
@@ -13,7 +13,7 @@ module Authenticatable
 
     alias_method :current_user?, :current?
   end
- 
+
   module ClassMethods
     def anonymous?
       current.nil?
@@ -27,8 +27,8 @@ module Authenticatable
       Thread.current[:"current_#{self.name.underscore}"]
     end
 
-    def generate_password(length = 8)
-      # TODO
+    def generate_password
+      PasswordGenerator.generate
     end
   end
 
