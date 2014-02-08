@@ -2,7 +2,7 @@
 
 - if breadcrumbs.many?
   %ul.breadcrumb
-    - breadcrumbs.each_with_index do |breadcrumb, index|
+    - breadcrumbs.each do |breadcrumb|
       - if breadcrumb.last?
         %li.active
           - if breadcrumb.first? and toolbar

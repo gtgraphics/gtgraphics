@@ -7,7 +7,11 @@ class Admin::PagesController < Admin::ApplicationController
 
   breadcrumbs do |b|
     b.append Page.model_name.human(count: 2), :admin_pages
-    b.append @parent_page.title, [:admin, @parent_page] if @parent_page and action_name.in? %w(new create)
+    if @parent_page 
+      @parent_page.self_and_ancestors.each do |page|
+        b.append page.title, [:admin, page]
+      end
+    end
     b.append translate('breadcrumbs.new', model: Page.model_name.human), :new_admin_page if action_name.in? %w(new create)
     b.append @page.title, [:admin, @page] if action_name.in? %w(show edit update)
     b.append translate('breadcrumbs.edit', model: Page.model_name.human), [:edit, :admin, @page] if action_name.in? %w(edit update)

@@ -984,7 +984,7 @@ limitations under the License.
       if (!data) {
         return;
       }
-      this._triggerEvent('tree.load_data', {
+      this._triggerEvent('tree.loading_data', {
         tree_data: data
       });
       if (!parent_node) {
@@ -1002,6 +1002,9 @@ limitations under the License.
       if (this.is_dragging) {
         return this.dnd_handler.refreshHitAreas();
       }
+      this._triggerEvent('tree.load_data', {
+        tree_data: data
+      });
     };
 
     JqTreeWidget.prototype.getNodeById = function(node_id) {

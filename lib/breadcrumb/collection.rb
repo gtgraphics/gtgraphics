@@ -23,7 +23,7 @@ class Breadcrumb::Collection
     add_with_method(:unshift, caption, destination)
   end
 
-  delegate :clear, :count, :each, :index, :length, to: :@collection
+  delegate :clear, :count, :each, :index, :length, :[], to: :@collection
 
   private
   def add_with_method(method, caption, destination)
