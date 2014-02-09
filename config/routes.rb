@@ -100,7 +100,9 @@ GtGraphics::Application.routes.draw do
             get :translation_fields
             get :files_fields
           end
-          patch :make_default, on: :member
+          member do
+            delete 'destroy_region/:label', action: :destroy_region, as: :destroy_region
+          end
         end
 
         resources :users, except: :show do
@@ -135,27 +137,9 @@ GtGraphics::Application.routes.draw do
           end
         end
         
-        root "#{resource_name.to_s.pluralize}#show", as: nil, constraints: Routing::RootPageConstraint.new(page_type)
-
-=begin
-        case resource_name
-        when :contact_form
-
-          get '*path', to: "#{resource_name.to_s.pluralize}#show", Routing::PageConstraint.new(page_type)
-
-          resource(resource_name, page_options.merge(only: :edit)) do
-            #resource
-          end
-        when :image
-          resource(resource_name, page_options) do
-            get :download
-          end
-        else
-          resource(resource_name, page_options)
-        end
-=end
-        
+        root "#{resource_name.to_s.pluralize}#show", as: nil, constraints: Routing::RootPageConstraint.new(page_type)      
       end
+      
       root to: 'homepages#show'
     end
   end

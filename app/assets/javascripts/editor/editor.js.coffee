@@ -55,23 +55,24 @@ class @Editor
 
   createControls: ->
     @controls = []
-    $controls = $('<div />', class: 'editor-controls btn-toolbar')
+    $controls = $('<div />', class: 'editor-controls')
+    $toolbar = $('<div />', class: 'btn-toolbar').appendTo($controls)
 
     @options.controls.forEach (keyOrGroup) =>
       if jQuery.isArray(keyOrGroup)
-        $toolbar = $('<div />', class: 'btn-group')
+        $group = $('<div />', class: 'btn-group')
         keyOrGroup.forEach (key) =>
           controlClass = Editor.Controls.get(key)
           if controlClass
-            control = new controlClass(@, $toolbar)
+            control = new controlClass(@, $group)
             @controls.push(control)
           else
             console.warn "Control not found: #{key}"
-        $toolbar.appendTo($controls)
+        $group.appendTo($toolbar)
       else
         controlClass = Editor.Controls.get(keyOrGroup)
         if controlClass
-          control = new controlClass(@, $controls)
+          control = new controlClass(@, $toolbar)
           @controls.push(control)
         else
           console.warn "Control not found: #{keyOrGroup}"

@@ -28,19 +28,24 @@ de:
       destroy_selected: Ausgewählte löschen
       download: Herunterladen
       edit: Bearbeiten
+      editor_mode: Bearbeitungsmodus
       make_default: Als Standard festlegen
       move: Verschieben
       move_to: 'Verschieben zu %{model}'
       move_up: Nach oben
       move_down: Nach unten
       new: '%{model} erstellen'
+      page_settings: Seiteneinstellungen
+      preview: Vorschau
       remove: Entfernen
       reset: Zurücksetzen
       reply: Antworten
+      settings: Einstellungen
       sign_out: Abmelden
       uncrop: Original wiederherstellen
       upload: '%{model} hochladen'
       view: Ansehen
+      view_mode: Ansichtsmodus
     confirmations:
       destroy: '%{model} wirklich entfernen?'
       destroy_selected: 'Möchten Sie die ausgewählten %{model} wirklich entfernen?'

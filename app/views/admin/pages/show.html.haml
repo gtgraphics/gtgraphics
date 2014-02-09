@@ -22,3 +22,7 @@
     %dd= @page.author_name
   %dt= Page.human_attribute_name :updated_at
   %dd= time_ago @page.updated_at
+
+- begin
+  = render "admin/#{@page.embeddable_class.model_name.plural}/details", @page.embeddable_class.model_name.singular.to_sym => @page.embeddable
+- rescue ActionView::MissingTemplate

@@ -1,7 +1,7 @@
 class Admin::TemplatesController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_template, only: %i(show edit update destroy make_default)
+  before_action :load_template, only: %i(show edit update destroy destroy_region)
 
   breadcrumbs do |b|
     b.append Page.model_name.human(count: 2), :admin_pages
@@ -58,6 +58,13 @@ class Admin::TemplatesController < Admin::ApplicationController
     flash_for Template, :destroyed, multiple: true
     respond_to do |format|
       format.html { redirect_to :admin_templates }
+    end
+  end
+
+  def destroy_region
+    @template.region_definitions.destroy_all(label: params[:label])
+    respond_to do |format|
+      format.html { redirect_to [:admin, @template] }
     end
   end
 

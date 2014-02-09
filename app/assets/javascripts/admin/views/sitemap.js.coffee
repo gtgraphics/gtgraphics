@@ -45,13 +45,11 @@ $(document).on 'page:change', ->
   selectedNode = $sitemap.tree('getNodeById', $sitemap.data('selectedPageId'))
   $sitemap.tree('addToSelection', selectedNode) if selectedNode
 
+  # Check if a lazily loaded node is the selected one
   $sitemap.on 'tree.load_data', (event) ->
     _.each event.tree_data, (node) ->
       selectedNode = $sitemap.tree('getNodeById', $sitemap.data('selectedPageId'))
       $sitemap.tree('addToSelection', selectedNode) if selectedNode
-
-    #selectedNode = $sitemap.tree('getNodeById', $sitemap.data('selectedPageId'))
-    #$sitemap.tree('addToSelection', selectedNode) if selectedNode
 
   # Prevent nodes from being unselected
   $sitemap.on 'tree.click', (event) ->
@@ -80,7 +78,7 @@ $(document).on 'page:change', ->
         data: { _method: 'patch', to: targetNode.id, position: moveInfo.position }
         success: ->
           selectedNode = $sitemap.tree('getSelectedNode')
-          Turbolinks.visit(selectedNode.url)
+          Turbolinks.visit(selectedNode.url) if movedNode == selectedNode
 
 # Scroll to selected node
 $(document).on 'page:load', ->

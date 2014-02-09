@@ -1,27 +1,45 @@
-= view_headline_for @template.becomes(::Template) do
-  = action_buttons_for @template.becomes(::Template), except: :show
+/= view_headline_for @template.becomes(::Template) do
+/  = action_buttons_for @template.becomes(::Template), except: :show
+
+= toolbar do
+  .btn-group.batch-control
+    = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) }
+  .btn-group
+    = action_buttons_for @template.becomes(::Template), except: :show
 
 .row
   .col-lg-8
+    %fieldset
+      %legend= translate('views.admin.templates.headlines.details')
+      %dl.dl-horizontal
+        %dt= ::Template.human_attribute_name :type
+        %dd= @template.class.model_name.human
+        %dt= ::Template.human_attribute_name :file_name
+        %dd= @template.file_name
+        - if @template.region_definitions.any?
+          %dt= ::Template.human_attribute_name :region_labels
+          %dd= @template.region_definitions.pluck(:label).map { |label| content_tag(:code, label) }.join(', ').html_safe
+        %dt= ::Template.human_attribute_name :updated_at
+        %dd= time_ago @template.updated_at
+
+
     - if @template.description.present?
-      %h3= ::Template.human_attribute_name :description
-      .content
-        = @template.description
+      %fieldset
+        %legend= ::Template.human_attribute_name :description
+        .content
+          = @template.description.html_safe
 
   .col-lg-4
 
     .panel.panel-default
       .panel-heading
-        %h3.panel-title= translate('views.admin.templates.headlines.details')
+        %h3.panel-title Regionen
       .panel-body
-        / Details
-        %dl.dl-horizontal
-          %dt= ::Template.human_attribute_name :type
-          %dd= link_to @template.class.model_name.human, admin_templates_path(type: @template.type.demodulize)
-          %dt= ::Template.human_attribute_name :file_name
-          %dd= @template.file_name
-          - if @template.region_definitions.any?
-            %dt= ::Template.human_attribute_name :region_labels
-            %dd= @template.region_definitions.pluck(:label).map { |label| content_tag(:code, label) }.join(', ').html_safe
-          %dt= ::Template.human_attribute_name :updated_at
-          %dd= time_ago @template.updated_at
+        - if @region_definitions.any?
+          %ul#region_definitions
+            - @region_definitions.each do |region_definition|
+              = content_tag_for :li, region_definition, class: 'clearfix' do
+                .pull-left= region_definition.label
+                .actions.pull-right
+                  .btn-toolbar
+                    = destroy_button_link_for region_definition, url: destroy_region_admin_template_path(@template, label: region_definition.label), size: :mini, icon_only: true
