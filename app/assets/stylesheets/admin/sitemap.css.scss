@@ -1,10 +1,10 @@
 #sitemap_container {
   @media (min-width: $screen-md) {
-    width: $container-md * 0.416666666667 - $grid-gutter-width;
+    width: round($container-md * 0.416666666667 - $grid-gutter-width);
   }
 
   @media (min-width: $screen-lg) {
-    width: $container-lg * 0.333333333333 - $grid-gutter-width;
+    width: round($container-lg * 0.333333333333 - $grid-gutter-width);
   }
 
   position: fixed;
@@ -14,6 +14,25 @@
 
   &.affix {
     top: 127px;
+  }
+
+  &:after {
+    $shadow-height: 15px;
+    clear: both;
+    content: " ";
+    position: absolute;
+    z-index: 500;
+    bottom: -$shadow-height;
+    left: 0;
+    right: 0;
+    height: $shadow-height;
+    width: 100%;
+    pointer-events: none;
+    background: {
+      image: asset-url('admin/shadow_bottom.png');
+      repeat: no-repeat;
+      size: 100% $shadow-height;
+    }
   }
 }
 
@@ -38,6 +57,5 @@
     @media (min-width: $screen-lg) {
       width: $container-lg * 0.6666666666666666 - $grid-gutter-width;
     }
-
   }
 }

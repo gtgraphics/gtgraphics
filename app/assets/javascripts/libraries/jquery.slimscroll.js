@@ -82,16 +82,22 @@
       var o = $.extend(defaults, options);
 
       // do it for every element that matches selector
+
       this.each(function(){
 
-      var isOverPanel, isOverBar, isDragg, queueHide, touchDif,
+      var isDragg, queueHide, touchDif,
         barHeight, percentScroll, lastScroll,
         divS = '<div></div>',
-        minBarHeight = 30,
-        releaseScroll = false;
+        minBarHeight = 30;
+        //releaseScroll = false;
+
 
         // used in event handlers and for better minification
         var me = $(this);
+
+        me.data('releaseScroll', false);
+        me.data('isOverPanel', false);
+        me.data('isOverBar', false);
 
         // ensure we are not binding it again
         if (me.parent().hasClass(o.wrapperClass))
@@ -130,9 +136,15 @@
               else if ('destroy' in options)
               {
                 // remove slimscroll elements
+                me.data('isOverPanel', false);
+                me.data('isOverBar', false);
+                //releaseScroll = true;
+                me.data('releaseScroll', true);
                 bar.remove();
                 rail.remove();
                 me.unwrap();
+                detachWheel();
+                //$(document).unbind('.slimscroll')
                 return;
               }
 
@@ -242,18 +254,22 @@
 
         // on bar over
         bar.hover(function(){
-          isOverBar = true;
+          //isOverBar = true;
+          me.data('isOverBar', true);
         }, function(){
-          isOverBar = false;
+          //isOverBar = false;
+          me.data('isOverBar', false);
         });
 
         // show on parent mouseover
         me.hover(function(){
-          isOverPanel = true;
+          //isOverPanel = true;
+          me.data('isOverPanel', true);
           showBar();
           hideBar();
         }, function(){
-          isOverPanel = false;
+          //isOverPanel = false;
+          me.data('isOverPanel', false);
           hideBar();
         });
 
@@ -268,7 +284,7 @@
 
         me.bind('touchmove', function(e){
           // prevent scrolling the page if necessary
-          if(!releaseScroll)
+          if(!me.data('releaseScroll'))
           {
             e.originalEvent.preventDefault();
           }
@@ -307,7 +323,13 @@
         function _onWheel(e)
         {
           // use mouse wheel only when mouse is over
-          if (!isOverPanel) { return; }
+          if (!me.data('isOverPanel')) {
+            return;
+          }
+
+          //console.log("isOverPanel: " + isOverPanel);
+          //console.log("releaseScroll: " + releaseScroll);
+          //console.log('');
 
           var e = e || window.event;
 
@@ -323,13 +345,14 @@
 
           // stop window scroll
           // TODO: Gets never properly released in Chrome!!!
-          if (e.preventDefault && !releaseScroll) { e.preventDefault(); }
-          if (!releaseScroll) { e.returnValue = false; }
+          if (e.preventDefault && !me.data('releaseScroll')) { e.preventDefault(); }
+          if (!me.data('releaseScroll')) { e.returnValue = false; }
         }
 
         function scrollContent(y, isWheel, isJump)
         {
-          releaseScroll = false;
+          me.data('releaseScroll', false);
+          //releaseScroll = false;
           var delta = y;
           var maxTop = me.outerHeight() - bar.outerHeight();
 
@@ -380,12 +403,25 @@
         {
           if (window.addEventListener)
           {
-            this.addEventListener('DOMMouseScroll', _onWheel, false );
-            this.addEventListener('mousewheel', _onWheel, false );
+            this.addEventListener('DOMMouseScroll', _onWheel, false);
+            this.addEventListener('mousewheel', _onWheel, false);
           }
           else
           {
-            document.attachEvent("onmousewheel", _onWheel)
+            document.attachEvent("onmousewheel", _onWheel);
+          }
+        }
+
+        function detachWheel()
+        {
+          if (window.removeEventListener)
+          {
+            this.removeEventListener('DOMMouseScroll', _onWheel, false);
+            this.removeEventListener('mousewheel', _onWheel, false);
+          }
+          else
+          {
+            document.detachEvent("onmousewheel", _onWheel);
           }
         }
 
@@ -410,7 +446,8 @@
           if (percentScroll == ~~percentScroll)
           {
             //release wheel
-            releaseScroll = o.allowPageScroll;
+            me.data('releaseScroll', o.allowPageScroll);
+            //releaseScroll = o.allowPageScroll;
 
             // publish approporiate event
             if (lastScroll != percentScroll)
@@ -421,14 +458,16 @@
           }
           else
           {
-            releaseScroll = false;
+            me.data('releaseScroll', false);
+            //releaseScroll = false;
           }
           lastScroll = percentScroll;
 
           // show only when required
           if(barHeight >= me.outerHeight()) {
             //allow window scroll
-            releaseScroll = true;
+            //releaseScroll = true;
+            me.data('releaseScroll', true);
             return;
           }
           bar.stop(true,true).fadeIn('fast');
@@ -441,7 +480,7 @@
           if (!o.alwaysVisible)
           {
             queueHide = setTimeout(function(){
-              if (!(o.disableFadeOut && isOverPanel) && !isOverBar && !isDragg)
+              if (!(o.disableFadeOut && me.data('isOverPanel')) && !me.data('isOverBar') && !isDragg)
               {
                 bar.fadeOut('slow');
                 rail.fadeOut('slow');

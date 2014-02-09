@@ -80,20 +80,20 @@ $(document).on 'page:change', ->
           selectedNode = $sitemap.tree('getSelectedNode')
           Turbolinks.visit(selectedNode.url) if movedNode == selectedNode
 
-# Scroll to selected node
-$(document).on 'page:load page:update', ->
-  $sitemap = $(SITEMAP_SELECTOR)
-  if $sitemap.exists()
-    selectedNode = $sitemap.tree('getSelectedNode')
-    if selectedNode
-      $selectedNode = $(selectedNode.element)
-      scrollTop = $selectedNode.position().top - 20
-      $sitemap.slimScroll(scrollTo: scrollTop)
+cachedScrollTop = null
 
 # Fix for Turbolinks: Destroy all events before page is loaded with new content
+# Save scroll position to restore on page:load
+
 $(document).on 'page:receive', ->
   $sitemap = $(SITEMAP_SELECTOR)
   if $sitemap.exists()
+    cachedScrollTop = $sitemap.scrollTop()
+    $sitemap.slimScroll(destroy: true)
     _.each ['load_data', 'click', 'select', 'open', 'opening', 'move'], (eventName) ->
       $sitemap.off("tree.#{eventName}")
     $sitemap.tree('destroy')
+
+$(document).on 'page:load', ->
+  $sitemap = $(SITEMAP_SELECTOR)
+  $sitemap.slimScroll(scrollTo: cachedScrollTop) if cachedScrollTop
