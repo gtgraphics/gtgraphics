@@ -4,14 +4,14 @@ module ActionButtonHelper
     displayed_buttons &= Array(options.delete(:only)) if options[:only]
     displayed_buttons -= Array(options.delete(:except)) if options[:except]
 
-    content_tag :div, class: 'btn-toolbar' do
-      with_options options.merge(namespace: :admin) do |buttons|
-        html = ""
-        html << (capture(&block) || "").strip if block_given?
-        html << buttons.view_button_link_for(object) if displayed_buttons.include?(:show)
-        html << buttons.update_button_link_for(object) if displayed_buttons.include?(:edit)
-        html << buttons.destroy_button_link_for(object) if displayed_buttons.include?(:destroy)
-        html.html_safe
+    capture_haml do
+      haml_tag '.btn-toolbar' do
+        haml_concat capture(&block) if block_given?
+        with_options options.merge(namespace: :admin) do |buttons|
+          haml_tag '.btn-group', buttons.view_button_link_for(object) if displayed_buttons.include?(:show)
+          haml_tag '.btn-group', buttons.update_button_link_for(object) if displayed_buttons.include?(:edit)
+          haml_tag '.btn-group', buttons.destroy_button_link_for(object) if displayed_buttons.include?(:destroy)
+        end
       end
     end
   end

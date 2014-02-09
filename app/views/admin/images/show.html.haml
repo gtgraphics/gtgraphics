@@ -22,21 +22,13 @@
 .row
   .col-lg-8
     .content
-      /.actions.bottom.right
-      /  .btn-toolbar
-      /    = button_link_to prepend_icon(:crop, translate('helpers.links.crop')), [:crop, :admin, @image]
       = link_to @image.asset.url(:original_cropped), target: '_blank' do
         = image_tag(@image.asset.url(:preview), class: 'img-responsive img-rounded img-editable', alt: @image.title)
 
     .content
       = raw @image.description
 
-    /%h3= Image::Style.model_name.human(count: 2)
-    /.content
-    /  = render 'admin/image_styles/table'
-  
   .col-lg-4
-
     .panel.panel-default
       .panel-heading
         %h3.panel-title= translate('views.admin.images.headlines.details')

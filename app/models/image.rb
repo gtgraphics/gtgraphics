@@ -35,7 +35,8 @@ class Image < ActiveRecord::Base
     preview: { geometry: '1170x>', processors: [:manual_cropper] },
     medium: { geometry: '1280x780', processors: [:manual_cropper] },
     large: { geometry: '1920x1080', processors: [:manual_cropper] },
-    social: { geometry: '1500x1500#', format: :jpg, processors: [:manual_cropper] }
+    social: { geometry: '1500x1500#', format: :jpg, processors: [:manual_cropper] },
+    page_preview: { geometry: '780x150#', format: :jpg, processors: [:manual_cropper] }
   }.freeze
 
   has_many :custom_styles, class_name: 'Image::Style', autosave: true, inverse_of: :image, dependent: :destroy

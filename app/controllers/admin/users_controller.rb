@@ -28,7 +28,9 @@ class Admin::UsersController < Admin::ApplicationController
   end
 
   def show
-    respond_with :admin, @user
+    respond_to do |format|
+      format.html { redirect_to [:edit, :admin, @user] }
+    end
   end
 
   def edit

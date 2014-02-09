@@ -1,0 +1,20 @@
+%dl.dl-horizontal
+  %dt= Page.human_attribute_name :embeddable_type
+  %dd= @page.embeddable_class.model_name.human
+  - if @page.template.present?
+    %dt= Page.human_attribute_name :template
+    %dd= link_to @page.template.name, admin_template_path(@page.template)
+  %dt= Page.human_attribute_name :published
+  %dd= yes_or_no @page.published?
+  - unless @page.root?
+    %dt= Page.human_attribute_name :path
+    %dd= @page.path
+  %dt= Page.human_attribute_name :translated_locales
+  %dd= @page.translated_locales.map { |locale| link_to(translate(locale, scope: :languages), page_path(@page, locale: locale)) }.sort.join(', ').html_safe
+  - if content_for? :additional_page_details
+    = yield :additional_page_details
+  - if @page.author
+    %dt= Page.human_attribute_name :author
+    %dd= link_to @page.author_name, [:admin, @page.author]
+  %dt= Page.human_attribute_name :updated_at
+  %dd= time_ago @page.updated_at

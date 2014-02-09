@@ -62,9 +62,10 @@ class Admin::TemplatesController < Admin::ApplicationController
   end
 
   def destroy_region
-    @template.region_definitions.destroy_all(label: params[:label])
+    region_definition = @template.region_definitions.find_by!(label: params[:label])
+    region_definition.destroy
     respond_to do |format|
-      format.html { redirect_to [:admin, @template] }
+      format.html { redirect_to [:admin, @template.becomes(::Template)] }
     end
   end
 

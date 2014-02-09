@@ -15,9 +15,9 @@
 #  embeddable_id   :integer
 #  embeddable_type :string(255)
 #  menu_item       :boolean          default(TRUE), not null
-#  state           :string(255)      not null
 #  indexable       :boolean          default(TRUE), not null
 #  children_count  :integer          default(0), not null
+#  published       :boolean          default(TRUE), not null
 #
 
 class Page < ActiveRecord::Base
@@ -64,26 +64,11 @@ class Page < ActiveRecord::Base
   after_update :destroy_replaced_embeddable, if: :embeddable_changed?
 
   default_scope -> { order(:lft) }
-  scope :hidden, -> { with_state(:hidden) }
+  scope :hidden, -> { where(published: false) }
   scope :indexable, -> { where(indexable: true) }
   scope :menu_items, -> { where(menu_item: true) }
   scope :primary, -> { where(depth: 1) }
-  scope :published, -> { with_state(:published) }
-
-  state_machine :state, initial: :hidden do
-    state :published
-    state :hidden
-
-    event :publish do
-      transition all => :published
-    end
-    event :draft do
-      transition all => :drafted
-    end
-    event :hide do
-      transition all => :hidden
-    end
-  end
+  scope :published, -> { where(published: true) }
 
   delegate :name, to: :author, prefix: true, allow_nil: true
   delegate :name, to: :template, prefix: true, allow_nil: true
@@ -120,12 +105,6 @@ class Page < ActiveRecord::Base
 
     def embeddable_types
       EMBEDDABLE_TYPES
-    end
-
-    def states
-      STATES.inject(ActiveSupport::HashWithIndifferentAccess.new) do |states, state|
-        states.merge!(state => I18n.translate(state, scope: 'page.states'))
-      end.freeze
     end
 
     def without(page)
@@ -202,10 +181,6 @@ class Page < ActiveRecord::Base
 
   def self_and_ancestors_and_siblings
     self.class.where(parent_id: self.self_and_ancestors.ids << nil)
-  end
-
-  def state_name
-    I18n.translate(state, scope: 'page.states')
   end
 
   def template

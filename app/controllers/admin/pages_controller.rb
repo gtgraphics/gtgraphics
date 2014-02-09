@@ -34,7 +34,7 @@ class Admin::PagesController < Admin::ApplicationController
         @page.embeddable.translations.build(locale: I18n.locale)
       end
     end
-    respond_with :admin, @page, layout: !request.xhr?, template: 'admin/pages/editor'
+    respond_with :admin, @page, layout: !request.xhr?
   end
 
   def create
@@ -49,13 +49,13 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def edit
-    respond_with :admin, @page, layout: !request.xhr?, template: 'admin/pages/editor'
+    respond_with :admin, @page, layout: !request.xhr?
   end
 
   def update
     @page.update(page_params)
     flash_for @page
-    respond_with :admin, @page, template: 'admin/pages/editor'
+    respond_with :admin, @page
   end
 
   def destroy

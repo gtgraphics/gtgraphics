@@ -16,5 +16,7 @@ class Template < ActiveRecord::Base
     include UniquelyTranslated
 
     acts_as_uniquely_translated :template_id
+
+    validates :name, presence: true
   end
 end

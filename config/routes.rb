@@ -105,7 +105,7 @@ GtGraphics::Application.routes.draw do
           end
         end
 
-        resources :users, except: :show do
+        resources :users do
           member do
             get :edit_password
             patch :update_password
@@ -139,7 +139,7 @@ GtGraphics::Application.routes.draw do
         
         root "#{resource_name.to_s.pluralize}#show", as: nil, constraints: Routing::RootPageConstraint.new(page_type)      
       end
-      
+
       root to: 'homepages#show'
     end
   end

@@ -1,16 +1,16 @@
 class TokenCollection
   DEFAULTS = {
+    separator: ',',
     sort: false,
     unique: false
   }
-  TOKEN_SEPARATOR = ','
 
-  attr_reader :tokens
+  attr_reader :tokens, :options
 
   def initialize(tokens, options = {})
     @options = options.reverse_merge(DEFAULTS)
     if tokens.is_a?(String)
-      @tokens = tokens.split(TOKEN_SEPARATOR)
+      @tokens = tokens.split(@options[:separator])
     else
       @tokens = tokens.to_a
     end
@@ -23,7 +23,7 @@ class TokenCollection
   end
 
   def inspect
-    "#<#{self.class.name} tokens: #{tokens.inspect}>"
+    "#<#{self.class.name} tokens: #{tokens.inspect}, options: #{options.inspect}>"
   end
 
   def to_a
@@ -31,6 +31,6 @@ class TokenCollection
   end
 
   def to_s
-    tokens.join(TOKEN_SEPARATOR)
+    tokens.join(options[:separator])
   end
 end
