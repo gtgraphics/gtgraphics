@@ -26,10 +26,11 @@
             %li.divider
             %li= link_to prepend_icon(:trash, translate('helpers.links.destroy'), outline: true, fixed_width: true), [:admin, @page], method: :delete, data: { confirm: translate('helpers.confirmations.destroy', model: Page.model_name.human) }
 
-        
     .row
       .col-lg-4.col-md-5.col-sm-12.col-xs-12
-        #sitemap{data: { url: tree_admin_pages_path(format: :json), pages: @page_tree.to_json, selected_page_id: @page.id}}
+        #sitemap_container
+          #sitemap.slimscroll{data: { url: tree_admin_pages_path(format: :json), pages: @page_tree.to_json, selected_page_id: @page.id}}
+
 
       .col-lg-8.col-md-7.hidden-sm.hidden-xs
         #page_content

@@ -1,7 +1,7 @@
 SITEMAP_SELECTOR = '#sitemap'
 
 $(document).ready ->
-  $('#page_content').affix
+  $('#sitemap_container').affix
     offset:
       top: ->
         $('.gtg-admin-toolbar').offset().top - $('#navigation').outerHeight()
@@ -81,15 +81,14 @@ $(document).on 'page:change', ->
           Turbolinks.visit(selectedNode.url) if movedNode == selectedNode
 
 # Scroll to selected node
-$(document).on 'page:load', ->
+$(document).on 'page:load page:update', ->
   $sitemap = $(SITEMAP_SELECTOR)
   if $sitemap.exists()
     selectedNode = $sitemap.tree('getSelectedNode')
     if selectedNode
       $selectedNode = $(selectedNode.element)
-      offset = $('#navigation').outerHeight() + $('#toolbar').outerHeight() + 20 + 2 * 37
-      scrollX = $selectedNode.offset().top - offset
-      $(document).scrollTop(scrollX)
+      scrollTop = $selectedNode.position().top - 20
+      $sitemap.slimScroll(scrollTo: scrollTop)
 
 # Fix for Turbolinks: Destroy all events before page is loaded with new content
 $(document).on 'page:receive', ->

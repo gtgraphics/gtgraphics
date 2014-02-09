@@ -1,3 +1,30 @@
+#sitemap_container {
+  @media (min-width: $screen-md) {
+    width: $container-md * 0.416666666667 - $grid-gutter-width;
+  }
+
+  @media (min-width: $screen-lg) {
+    width: $container-lg * 0.333333333333 - $grid-gutter-width;
+  }
+
+  position: fixed;
+  //overflow: auto;
+  bottom: 0;
+  top: 147px;
+
+  &.affix {
+    top: 127px;
+  }
+}
+
+#sitemap {
+  padding: {
+    top: 20px;
+    bottom: 20px;
+    right: 30px;
+  }
+}
+
 #page_content {
   &.affix {
     position: fixed;

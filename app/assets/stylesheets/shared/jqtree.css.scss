@@ -92,7 +92,8 @@
 
 .jqtree-dragging {
   cursor: move;
-  z-index: 1000;
+  position: fixed !important;
+  z-index: 9000 !important;
   white-space: nowrap;
   @include border-radius($border-radius-base);
   padding: 4px 10px;
