@@ -1,8 +1,12 @@
+DEFAULTS = 
+  height: 'auto'
+  allowPageScroll: true
+
 jQuery.prepare ->
-  $('.slimscroll').slimScroll(height: 'auto')
+  $('.slimscroll').slimScroll(DEFAULTS)
 
 $(window).resize ->
-  $('.slimscroll').slimScroll(height: 'auto')
+  $('.slimscroll').slimScroll(DEFAULTS)
 
 $(window).scroll ->
-  $('.slimscroll').slimScroll(height: 'auto')
+  $('.slimscroll').slimScroll(DEFAULTS)
