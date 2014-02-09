@@ -94,7 +94,6 @@ $(document).on 'page:load page:update', ->
 $(document).on 'page:receive', ->
   $sitemap = $(SITEMAP_SELECTOR)
   if $sitemap.exists()
-    
     _.each ['load_data', 'click', 'select', 'open', 'opening', 'move'], (eventName) ->
       $sitemap.off("tree.#{eventName}")
     $sitemap.tree('destroy')
