@@ -7,12 +7,14 @@ class ChangePasswordActivity < Activity
 
   validates :user_id, presence: true
   validates :current_password, presence: true, if: :user_is_current?
-  validates :password, presence: true, unless: :generate_password?
-  validates :password_confirmation, presence: true, confirmation: true, unless: :generate_password?
+  validates :password, presence: true, confirmation: true, unless: :generate_password?
+  validates :password_confirmation, presence: true unless: :generate_password?
   validate :verify_current_password, if: :user_is_current?
 
   def perform
-    user
+    # Save new Password in User
+    user.password = user.password_confirmation = password
+    user.save!
   end
 
   def user
