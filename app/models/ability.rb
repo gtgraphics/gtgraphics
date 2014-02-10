@@ -41,7 +41,7 @@ class Ability
       can :manage, Page
     else
       # Guests
-      can :read, Page, state: 'published'
+      can :read, Page, published: true
     end
   end
 end
