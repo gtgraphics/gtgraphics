@@ -8,7 +8,7 @@ class Admin::PagesController < Admin::ApplicationController
   breadcrumbs do |b|
     # b.append Page.model_name.human(count: 2), :admin_pages
     if @parent_page 
-      @parent_page.self_and_ancestors.each do |page|
+      @parent_page.self_and_ancestors.where.not(parent_id: nil).with_translations(I18n.locale).each do |page|
         b.append page.title, [:admin, page]
       end
     end

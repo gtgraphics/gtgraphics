@@ -1,10 +1,10 @@
 SITEMAP_SELECTOR = '#sitemap'
 
-$(document).ready ->
-  $('#sitemap_container').affix
-    offset:
-      top: ->
-        $('.gtg-admin-toolbar').offset().top - $('#navigation').outerHeight()
+#$(document).ready ->
+#  $('#sitemap_container').affix
+#    offset:
+#      top: ->
+#        $('.gtg-admin-toolbar').offset().top - $('#navigation').outerHeight()
 
 $(document).on 'page:change', ->
   $sitemap = $(SITEMAP_SELECTOR)
@@ -96,4 +96,4 @@ $(document).on 'page:receive', ->
 
 $(document).on 'page:load', ->
   $sitemap = $(SITEMAP_SELECTOR)
-  $sitemap.slimScroll(scrollTo: cachedScrollTop) if cachedScrollTop
+  $sitemap.slimScroll(scrollTo: cachedScrollTop) if $sitemap.exists() and cachedScrollTop 

@@ -14,3 +14,7 @@ $(document).on 'page:receive', ->
   if originalHtml
     $container = $('.gtg-admin-breadcrumb-home')
     $container.html(originalHtml)
+
+# Tooltips Fix
+$(document).on 'page:change', ->
+  $('.tooltip').remove()

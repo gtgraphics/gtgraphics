@@ -1,3 +1,9 @@
+.ul-horizontal {
+  padding: 0;
+  list-style-type: none;
+  margin-left: 180px;
+}
+
 .gtg-admin-action-list {
   padding: 0;
   margin: 0;
@@ -5,5 +11,17 @@
 
   li + li {
     padding-top: 8px;
+  }
+}
+
+.gtg-admin-user-list {
+  @extend .ul-horizontal;
+  li {
+    .gravatar {
+      margin-right: 2px;
+    }
+    + li {
+      margin-top: 4px;
+    }
   }
 }

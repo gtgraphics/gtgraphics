@@ -7,12 +7,16 @@
   margin-bottom: 20px;
   
   ul.breadcrumb {
+    position: absolute;
     background-color: transparent;
     padding: 0;
     font-size: 24px;
     font-weight: 300;
     display: inline;
     line-height: 1.5em;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
     li {
       + li:before {
         padding-right: 0;
@@ -43,6 +47,24 @@
     @media (min-width: $screen-lg) {
       width: $container-lg - $grid-gutter-width;
     }
+
+    > .btn-toolbar {
+      background-color: white;
+      position: relative;
+      padding-left: 20px;
+      &:before {
+        $ellipsis-width: 50px;
+        content: " ";
+        position: absolute;
+        display: block;
+        left: -$ellipsis-width;
+        //background-color: red;
+        width: $ellipsis-width;
+        height: 33px;
+        pointer-events: none;
+        @include background(linear-gradient(top left, rgba(255, 255, 255, 0), white));
+      }
+    }
   }
 
   .affix-only-content {
@@ -55,7 +77,8 @@
     }
 
     .container {
-      @include background(linear-gradient(white, rgba(255,255,255,0.95)));
+      //@include background(linear-gradient(white, rgba(255,255,255,0.95)));
+      background-color: white;
       position: fixed;
       top: 50px;
       border-bottom: 1px solid #eee;
