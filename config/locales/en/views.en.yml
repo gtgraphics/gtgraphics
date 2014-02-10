@@ -1,5 +1,6 @@
 en:
   views:
+    title: GT Graphics
     forms:
       advanced_options: Advanced Options
       settings: Settings
@@ -12,6 +13,7 @@ en:
       next: "Next &rsaquo;"
       truncate: "..."
     admin:
+      title: GT Graphics Administration
       editor:
         target:
           self: This Window

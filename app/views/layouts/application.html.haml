@@ -3,7 +3,10 @@
 
   %head
     %title
-      = (["GT Graphics"] + breadcrumbs.collect(&:caption).drop(1)).join(' &middot; ').html_safe
+      - if content_for? :title
+        = yield :title
+      - else
+        = ([translate('views.title')] + breadcrumbs.collect(&:caption).drop(1)).join(' &middot; ').html_safe
 
     / Meta Elements
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'}

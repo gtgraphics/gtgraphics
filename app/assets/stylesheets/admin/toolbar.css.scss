@@ -6,30 +6,6 @@
   //margin-bottom: 0;
   margin-bottom: 20px;
   
-  ul.breadcrumb {
-    position: absolute;
-    background-color: transparent;
-    padding: 0;
-    font-size: 24px;
-    font-weight: 300;
-    display: inline;
-    line-height: 1.5em;
-    white-space: nowrap;
-    overflow: hidden;
-    width: 100%;
-    li {
-      + li:before {
-        padding-right: 0;
-      }
-      a {
-        color: $breadcrumb-color;
-        &:hover, &:focus {
-          color: $breadcrumb-active-color;
-        }
-      }
-    }
-  }
-
   .container {
     z-index: 1000;
     position: relative;
@@ -48,10 +24,36 @@
       width: $container-lg - $grid-gutter-width;
     }
 
+    ul.breadcrumb {
+      background-color: transparent;
+      padding: 0;
+      font-size: 24px;
+      font-weight: 300;
+      display: inline;
+      line-height: 1.5em;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100%;
+      li {
+        + li:before {
+          padding-right: 0;
+        }
+        a {
+          color: $breadcrumb-color;
+          &:hover, &:focus {
+            color: $breadcrumb-active-color;
+          }
+        }
+      }
+    }
+
     > .btn-toolbar {
+      position: absolute;
       background-color: white;
-      position: relative;
       padding-left: 20px;
+      margin-top: -16px;
+      top: 50%;
+      right: 0;
       &:before {
         $ellipsis-width: 50px;
         content: " ";

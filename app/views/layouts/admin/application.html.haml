@@ -1,8 +1,9 @@
-- content_for :content do   
+- content_for :title do
+  = ([translate('views.admin.title')] + breadcrumbs.collect(&:caption).drop(1)).join(' &middot; ').html_safe
 
+- content_for :content do   
   %nav#navigation.navbar.navbar-default.navbar-fixed-top.navbar-inverse{role: 'navigation'}
     .container
-
       .navbar-header
         - if signed_in?
           %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}

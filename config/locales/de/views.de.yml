@@ -1,5 +1,6 @@
 de:
   views:
+    title: GT Graphics
     forms:
       advanced_options: Erweiterte Optionen
       basics: Basisdaten
@@ -20,6 +21,7 @@ de:
       next: Nächste Seite
       truncate: "..."
     admin:
+      title: GT Graphics Administration
       account:
         breadcrumbs:
           my_account: Ich
