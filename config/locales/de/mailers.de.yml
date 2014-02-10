@@ -1,7 +1,10 @@
 de:
   mailers:
-    user_mailer:
+    message_notification_mailer:
+      send_notification_email:
+        signature: Versendet über GT Graphics
+    password_mailer:
       send_initial_password_email:
-        subject: 'Ihr initiales Passwort für GT Graphics'
-      send_updated_password_email:
-        subject: 'Ihr aktualisiertes Passwort für GT Graphics'
+        subject: Dein Passwort für GT Graphics
+      send_changed_password_email:
+        subject: Dein neues Passwort für GT Graphics

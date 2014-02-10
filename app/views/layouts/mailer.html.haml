@@ -1,0 +1,12 @@
+!!!
+%html
+  %head
+    %title= translate('views.title')
+    = yield :head
+    = yield :stylesheets
+
+  %body 
+    - if content_for? :content
+      = yield :content
+    - else 
+      = yield

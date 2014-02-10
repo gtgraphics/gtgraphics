@@ -5,7 +5,14 @@ class ContactFormsController < PagesController
     @message = @contact_form.messages.new
     if request.post?
       @message.attributes = message_params
-      return redirect_to contact_form_path(@contact_form) if @message.save
+      if @message.save
+        notifier_job = MessageNotificationJob.new(@message.id)
+        Delayed::Job.enqueue(notifier_job, queue: 'mailings')
+        flash_for @message
+        return respond_to do |format|
+          format.html { redirect_to contact_form_path(@contact_form) }
+        end
+      end
     end
     render_page
   end

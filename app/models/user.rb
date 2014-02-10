@@ -48,8 +48,6 @@ class User < ActiveRecord::Base
 
   before_validation :sanitize_preferred_locale
   before_validation :set_generated_password, if: :generate_password?
-  after_create :send_initial_password
-  after_update :send_updated_password, if: :password_changed?
 
   default_scope -> { order(:first_name, :last_name) }
 
@@ -67,16 +65,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  def change_password?
-    @change_password = false unless defined? @change_password
-    @change_password
-  end
-  alias_method :change_password, :change_password?
-
-  def change_password=(change_password)
-    @change_password = change_password.in?(ActiveRecord::ConnectionAdapters::Column::TRUE_VALUES)
-  end
-
   def full_name
     "#{first_name} #{last_name}".strip
   end
@@ -92,20 +80,20 @@ class User < ActiveRecord::Base
     @generate_password = generate_password.in?(ActiveRecord::ConnectionAdapters::Column::TRUE_VALUES)
   end
 
+  def mail_formatted_name
+    if full_name.present?
+      %{"#{full_name}" <#{email}>}
+    else
+      email
+    end
+  end
+
   def password_changed?
     new_record? or password.present?
   end
 
   def preferred_locale_name
     I18n.translate(preferred_locale, scope: :languages) if preferred_locale.present?
-  end
-
-  def recipient
-    if full_name.present?
-      %{"#{full_name}" <#{email}>}
-    else
-      email
-    end
   end
 
   def to_liquid
@@ -122,14 +110,6 @@ class User < ActiveRecord::Base
   private
   def sanitize_preferred_locale
     self.preferred_locale = preferred_locale.to_s.downcase.presence
-  end
-
-  def send_initial_password
-    UserMailer.send_initial_password_email(self).deliver
-  end
-
-  def send_updated_password
-    #UserMailer.send_updated_password_email(self).deliver
   end
 
   def set_generated_password

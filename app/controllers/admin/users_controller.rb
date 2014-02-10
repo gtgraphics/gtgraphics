@@ -22,8 +22,11 @@ class Admin::UsersController < Admin::ApplicationController
   end
 
   def create
-    @user = User.create(user_params)
-    flash_for @user
+    @user = User.new(user_params)
+    if @user.save
+      PasswordMailer.send_initial_password_email(@user, @user.password).deliver
+      flash_for @user
+    end
     respond_with :admin, @user, template: 'admin/users/editor'
   end
 
@@ -38,7 +41,7 @@ class Admin::UsersController < Admin::ApplicationController
   end
 
   def update
-    @user.update(update_user_params)
+    @user.update(user_params)
     flash_for @user
     respond_with :admin, @user, template: 'admin/users/editor'
   end
@@ -52,6 +55,9 @@ class Admin::UsersController < Admin::ApplicationController
     @change_password_activity = ChangePasswordActivity.new(user: @user)
     @change_password_activity.attributes = user_password_params
     if @change_password_activity.execute
+      sign_in @user, bypass: true if @user.current?
+      PasswordMailer.send_changed_password_email(@user, @user.password).deliver
+      flash_for @user
       respond_to do |format|
         format.html { redirect_to [:edit, :admin, @user] }
       end

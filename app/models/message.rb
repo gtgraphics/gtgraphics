@@ -13,6 +13,8 @@
 #
 
 class Message < ActiveRecord::Base
+  include PersistenceContextTrackable
+  
   belongs_to :contact_form, class_name: 'Page::ContactForm'
   has_many :recipiences, class_name: 'Message::Recipience', dependent: :destroy, inverse_of: :message
   has_many :recipients, through: :recipiences, source: :recipient

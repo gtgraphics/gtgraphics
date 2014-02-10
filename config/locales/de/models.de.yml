@@ -33,6 +33,11 @@ de:
         internal: Internes Bild
         width: Breite
         height: Höhe
+      change_password_activity:
+        current_password: Aktuelles Passwort
+        generate_password: Password generieren?
+        password: Passwort
+        password_confirmation: Password (Wdh.)
       sign_in_activity:
         email: E-Mail-Adresse
         password: Passwort

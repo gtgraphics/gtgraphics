@@ -18,19 +18,22 @@ class Admin::AccountsController < Admin::ApplicationController
   end
 
   def edit_password
+    @change_password_activity = ChangePasswordActivity.new(user: @user)
     respond_with :admin, @user, template: 'admin/users/edit_password'
   end
 
   def update_password
-    # TODO Make Activity out of it
-    if @user.update_with_password(user_password_params)
+    @change_password_activity = ChangePasswordActivity.new(user: @user)
+    @change_password_activity.attributes = account_password_params
+    if @change_password_activity.execute
       sign_in @user, bypass: true
+      flash_for @user
       respond_to do |format|
         format.html { redirect_to [:admin, @user] }
       end
     else
       respond_to do |format|
-        format.html { render :edit_password }
+        format.html { render 'admin/users/edit_password' }
       end
     end
   end
@@ -52,11 +55,17 @@ class Admin::AccountsController < Admin::ApplicationController
   end 
 
   private
-  def load_user
-    @user = User.find(current_user.id)
+  def account_password_params
+    permitted_params = [:generate_password, :password, :password_confirmation]
+    permitted_params << :current_password if @user.current?
+    params.require(:user).permit(*permitted_params)
   end
 
   def account_preferences_params
     params.permit(:image_view_mode)
+  end
+
+  def load_user
+    @user = User.find(current_user.id)
   end
 end
