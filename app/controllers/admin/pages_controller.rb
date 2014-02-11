@@ -98,6 +98,7 @@ class Admin::PagesController < Admin::ApplicationController
 
   def move
     valid = true
+    error_message = nil
     target_page = Page.find(params[:to])
     previous_parent_id = @page.parent_id
     Page.transaction do
@@ -111,7 +112,8 @@ class Admin::PagesController < Admin::ApplicationController
 
       # Rename Slug if parent page already contains children with the same slug
       if Page.where(parent_id: @page.parent_id, slug: @page.slug).many?
-        # TODO Rename slug
+        valid = false
+        error_message = translate('views.admin.pages.slug_taken_move_error', title: @page.title, slug: @page.slug)
         raise ActiveRecord::Rollback, 'Slug has already been taken' 
       end
 
@@ -124,7 +126,15 @@ class Admin::PagesController < Admin::ApplicationController
       end
     end
     respond_to do |format|
-      format.html { head valid ? :ok : :bad_request }
+      format.html do
+        if valid
+          head :ok
+        elsif error_message.present?
+          render text: error_message, status: :unprocessable_entity
+        else
+          head :unprocessable_entity
+        end
+      end
     end
   end
 

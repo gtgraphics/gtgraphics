@@ -58,6 +58,9 @@ de:
         empty_type: Bitte wählen Sie einen Seitentyp.
         root: Wurzel
         sitemap: Sitemap
+        slug_taken_move_error: >
+          Die Seite konnte nicht verschoben werden, da auf dieser Ebene bereits eine Seite den Slug "%{slug}" belegt.
+          Bitte benenne den Slug um und versuche es dann erneut.
       templates:
         headlines:
           details: Details

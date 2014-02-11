@@ -72,14 +72,17 @@ $(document).on 'page:change', ->
     movedNode = moveInfo.moved_node
     targetNode = moveInfo.target_node
     if !targetNode.root or (targetNode.root and moveInfo.position == 'inside')
-      moveInfo.do_move()
       jQuery.ajax
         url: movedNode.move_url
         type: 'post'
         data: { _method: 'patch', to: targetNode.id, position: moveInfo.position }
         success: ->
           selectedNode = $sitemap.tree('getSelectedNode')
+          moveInfo.do_move()
           Turbolinks.visit(selectedNode.url) if movedNode == selectedNode
+        error: (xhr) ->
+          alert xhr.responseText
+
 
 cachedScrollTop = null
 
