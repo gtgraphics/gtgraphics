@@ -10,7 +10,7 @@ class PagesController < ApplicationController
   helper_method :editing?
 
   breadcrumbs do |b|
-    @page.self_and_ancestors.published.each do |page|
+    @page.self_and_ancestors.accessible_by(current_ability).each do |page|
       b.append page.title, page
     end
   end

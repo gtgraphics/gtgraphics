@@ -17,13 +17,12 @@
         = render 'navbar'
         
   .container
-    = render_flash(flash.notice, type: :success)
-    = render_flash(flash.alert, type: :danger)
-
     #admin_content
       - if content_for? :admin_content
         = yield :admin_content
       - else
+        = render_flash(flash.notice, type: :success)
+        = render_flash(flash.alert, type: :danger)
         = yield
 
 = render template: 'layouts/application'

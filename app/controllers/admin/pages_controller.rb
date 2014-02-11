@@ -1,7 +1,7 @@
 class Admin::PagesController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_page, only: %i(show edit update destroy toggle_menu_item move move_up move_down publish draft hide)
+  before_action :load_page, only: %i(show edit update destroy move publish hide enable_in_menu disable_in_menu toggle_menu_item)
   before_action :load_parent_page, only: %i(index new create show edit update)
   before_action :build_page_tree
 
@@ -64,19 +64,33 @@ class Admin::PagesController < Admin::ApplicationController
     respond_with :admin, @page
   end
 
-  %w(publish draft hide).each do |action|
-    class_eval %{
-      def #{action}
-        @page.#{action}!
-        respond_to do |format|
-          format.html { redirect_to request.referer || [:admin, @page] }
-        end
-      end
-    }
+  def publish
+    @page.publish!
+    flash_for @page, :published
+    respond_to do |format|
+      format.html { redirect_to request.referer || [:admin, @page] }
+    end
   end
 
-  def toggle_menu_item
-    @page.toggle!(:menu_item)
+  def hide
+    @page.hide!
+    flash_for @page, :hid
+    respond_to do |format|
+      format.html { redirect_to request.referer || [:admin, @page] }
+    end
+  end
+
+  def enable_in_menu
+    @page.enable_in_menu!
+    flash_for @page, :enabled_in_menu
+    respond_to do |format|
+      format.html { redirect_to request.referer || [:admin, @page] }
+    end
+  end
+
+  def disable_in_menu
+    @page.disable_in_menu!
+    flash_for @page, :disabled_in_menu
     respond_to do |format|
       format.html { redirect_to request.referer || [:admin, @page] }
     end

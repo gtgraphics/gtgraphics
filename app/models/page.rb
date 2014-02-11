@@ -141,6 +141,22 @@ class Page < ActiveRecord::Base
     !root?
   end
 
+  def disable_in_menu
+    self.menu_item = false
+  end
+
+  def disable_in_menu!
+    update_column(:menu_item, false)
+  end
+
+  def enable_in_menu
+    self.menu_item = true
+  end
+
+  def enable_in_menu!
+    update_column(:menu_item, true)
+  end
+
   def embeddable_attributes=(attributes)
     raise 'invalid embeddable type' unless embeddable_class
     if attributes['id'].present?
@@ -167,8 +183,24 @@ class Page < ActiveRecord::Base
     children_count > 0
   end
 
+  def hide
+    self.published = false
+  end
+
+  def hide!
+    update_column(:published, false)
+  end
+
   def hidden?
     !published?
+  end
+
+  def publish
+    self.published = true
+  end
+
+  def publish!
+    update_column(:published, true)
   end
 
   def refresh_path!(include_descendants = false)

@@ -46,6 +46,10 @@
       }
     }
 
+    &.page-draft > .jqtree-element .jqtree-title {
+      @extend .text-muted;
+    }
+
     &:not(.jqtree-folder) {
       .jqtree-element {
         padding-left: $toggler-width + $toggler-offset;

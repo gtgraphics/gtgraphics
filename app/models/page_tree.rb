@@ -17,7 +17,7 @@ class PageTree
     pages = @pages_by_parents[parent_id]
     pages.collect do |page|
       page_hash = { id: page.id, label: page.title, load_on_demand: page.has_children?,
-                    root: page.root?, destroyable: page.destroyable?,
+                    root: page.root?, destroyable: page.destroyable?, published: page.published?,
                     url: admin_page_path(page, locale: I18n.locale),
                     move_url: move_admin_page_path(page, locale: I18n.locale) }
       page_hash[:active] = page == @selected_page if @selected_page

@@ -10,8 +10,13 @@ de:
         destroyed: '%{model} wurde erfolgreich entfernt.'
         destroyed_multiple: '%{model} wurden erfolgreich entfernt.'
       message:
-        marked_read: 'Nachricht wurde als gelesen markiert.'
-        marked_unread: 'Nachricht wurde als ungelesen markiert.'
+        marked_read: Nachricht wurde als gelesen markiert.
+        marked_unread: Nachricht wurde als ungelesen markiert.
+      page:
+        disabled_in_menu: Die Seite wird absofort in keinem Menü mehr angezeigt.
+        enabled_in_menu: Die Seite wird absofort in Menüs angezeigt.
+        hid: Die Seite wurde versteckt.
+        published: Die Seite wurde veröffentlicht.
       template:
         not_destroyed: 'Es gibt noch Seiten, die diese Vorlage verwenden. Ändern Sie vor dem Entfernen die den Seiten zugeordneten Vorlagen oder entfernen Sie die betreffenden Seiten.'
     titles:
@@ -26,9 +31,12 @@ de:
       crop: Zuschneiden
       destroy: Löschen
       destroy_selected: Ausgewählte löschen
+      disable_in_menu: In Menüs verstecken
       download: Herunterladen
       edit: Bearbeiten
       editor_mode: Bearbeitungsmodus
+      enable_in_menu: In Menüs anzeigen
+      hide: Verstecken
       make_default: Als Standard festlegen
       move: Verschieben
       move_to: 'Verschieben zu %{model}'
@@ -37,6 +45,7 @@ de:
       new: '%{model} erstellen'
       page_settings: Seiteneinstellungen
       preview: Vorschau
+      publish: Veröffentlichen
       remove: Entfernen
       reset: Zurücksetzen
       reply: Antworten

@@ -24,6 +24,7 @@ $(document).on 'page:change', ->
         $dragHandle = $('<div />', class: 'jqtree-handle')
         $dragHandle.html('<i class="fa fa-bars"></i>')
         $listItem.find('.jqtree-title').after($dragHandle)
+        $listItem.addClass('page-draft') unless node.published
     onIsMoveHandle: ($element) ->
       $element.is('.jqtree-handle')
     onCanMove: (node) ->

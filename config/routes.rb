@@ -74,10 +74,10 @@ GtGraphics::Application.routes.draw do
             patch :move
             patch :move_up
             patch :move_down
-            patch :toggle_menu_item
             patch :publish
-            patch :draft
             patch :hide
+            patch :enable_in_menu
+            patch :disable_in_menu
           end
         end
 
