@@ -107,11 +107,12 @@ class Page < ActiveRecord::Base
       EMBEDDABLE_TYPES
     end
 
-    def without(page)
-      if page.new_record?
-        all
+    def without(pages)
+      excluded_page_ids = Array(pages).select(&:persisted?).map(&:id)
+      if excluded_page_ids.any?
+        where.not(id: excluded_page_ids.one? ? excluded_page_ids.first : excluded_page_ids)
       else
-        where.not(id: page.id)
+        all
       end
     end
   end

@@ -56,6 +56,7 @@ class Image < ActiveRecord::Base
     by.title(default: true) { |column, dir| Image::Translation.arel_table[column].send(dir.to_sym) }
     by.updated_at
   end
+
   # preserve_attachment_between_requests_for :asset
 
   serialize :exif_data, OpenStruct
@@ -93,6 +94,18 @@ class Image < ActiveRecord::Base
       end
       custom_styles
     end
+  end
+
+  def embedding_page_ids
+  end
+
+  def embedding_page_ids=(page_ids)
+  end
+
+  def embedding_pages
+  end
+
+  def embedding_pages=(pages)
   end
 
   def styles

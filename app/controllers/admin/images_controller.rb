@@ -11,7 +11,7 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def index
-    @images = Image.with_translations(I18n.locale).includes(:author).sort(params[:sort], params[:direction]).page(params[:page]).per(16)
+    @images = Image.with_translations(I18n.locale).includes(:author, :custom_styles).sort(params[:sort], params[:direction]).page(params[:page]).per(16)
     respond_with :admin, @images
   end
 
@@ -22,8 +22,10 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def create
-    @image = Image.create(image_params)
-    flash_for @image
+    @image = Image.new(image_params)
+    if @image.save
+      flash_for @image
+    end
     respond_with :admin, @image
   end
 

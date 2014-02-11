@@ -6,7 +6,8 @@ $(document).on 'page:fetch submit', ->
 
   $container = $('.gtg-admin-breadcrumb-home')
   originalHtml = $container.html()
-  $container.html('<i class="fa fa-spinner fa-fw fa-spin">')
+  $loader = $('<i />', class: 'fa fa-spinner fa-fw fa-spin')
+  $container.html($loader)
 
 $(document).on 'page:receive', ->
   $('body').removeClass('loading')

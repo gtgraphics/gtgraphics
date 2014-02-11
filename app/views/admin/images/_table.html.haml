@@ -11,7 +11,7 @@
     .row
       - sliced_images.each do |image|
         .col-lg-3.col-md-3.col-sm-3.col-sx-3
-          = thumbnail image.asset.url(:large_thumbnail), [:admin, image], alt: image.title, class: 'loader-large' do
+          = thumbnail image.asset.url(:large_thumbnail), [:admin, image], alt: image.title do
             .actions.top.right
               = action_buttons_for image, size: :mini, icon_only: true
             %h3
@@ -45,7 +45,7 @@
               = check_box_tag 'image_ids[]', image.id, false, class: 'table-checkbox', id: nil
           %td.thumbnail-cell
             = link_to [:admin, image] do
-              = image_tag image.asset.url(:thumbnail), class: 'img-circle loader-small', alt: image.title, style: 'width: 75px; height: 75px;'
+              = image_tag image.asset.url(:thumbnail), class: 'img-circle', alt: image.title, style: 'width: 75px; height: 75px;'
           %td= link_to image.title, [:admin, image]
           %td.hidden-xs= image.human_content_type
           %td.hidden-xs= image.dimensions

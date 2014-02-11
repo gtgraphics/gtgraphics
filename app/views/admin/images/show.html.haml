@@ -23,7 +23,7 @@
   .col-lg-8
     .content
       = link_to @image.asset.url(:original_cropped), target: '_blank' do
-        = image_tag(@image.asset.url(:preview), class: 'img-responsive img-rounded img-editable', alt: @image.title)
+        = image_tag(@image.asset.url(:preview), class: 'img-responsive img-rounded', alt: @image.title)
 
     .content
       = raw @image.description
