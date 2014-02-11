@@ -97,15 +97,21 @@ class Image < ActiveRecord::Base
   end
 
   def embedding_page_ids
+    @embedding_page_ids ||= pages.reorder(:parent_id).uniq.pluck(:parent_id)
   end
 
   def embedding_page_ids=(page_ids)
+    @embedding_page_ids = page_ids.map(&:to_i).reject(&:zero?)
+    @embedding_pages = Page.where(id: @embedding_page_ids)
   end
 
   def embedding_pages
+    @embedding_pages ||= Page.where(id: embedding_page_ids)
   end
 
   def embedding_pages=(pages)
+    @embedding_pages = pages
+    @embedding_page_ids = pages.collect(&:id)
   end
 
   def styles
