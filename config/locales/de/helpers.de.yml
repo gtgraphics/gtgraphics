@@ -15,7 +15,7 @@ de:
       page:
         disabled_in_menu: Die Seite wird absofort in keinem Menü mehr angezeigt.
         enabled_in_menu: Die Seite wird absofort in Menüs angezeigt.
-        hid: Die Seite wurde versteckt.
+        hid: Die Seite ist jetzt nicht mehr öffentlich zugänglich.
         published: Die Seite wurde veröffentlicht.
       template:
         not_destroyed: 'Es gibt noch Seiten, die diese Vorlage verwenden. Ändern Sie vor dem Entfernen die den Seiten zugeordneten Vorlagen oder entfernen Sie die betreffenden Seiten.'
