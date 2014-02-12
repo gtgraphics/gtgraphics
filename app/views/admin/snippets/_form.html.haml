@@ -1,8 +1,7 @@
 = simple_form_for [:admin, @snippet], html: { class: 'form-horizontal' } do |form|
+
+  = toolbar do
+    .btn-group
+      = form.button :submit, class: 'btn-primary'
  
   = translation_manager_for form, url: translation_fields_admin_snippets_path
-
-  .form-group
-    .col-lg-10.col-lg-offset-2
-      = form.button :submit, class: 'btn-primary'
-      = button_link_to translate('helpers.links.cancel'), [:admin, @snippet]
