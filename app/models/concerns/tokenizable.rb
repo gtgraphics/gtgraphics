@@ -9,6 +9,7 @@ module Tokenizable
       methods.each do |method|
         method = method.to_sym
         if association = reflect_on_association(method)
+          # Are we working on an association?
           raise 'association must be a one-to-many association to be used by tokenizer' unless association.collection?
           singular_association_name = method.to_s.singularize
           class_eval %{
@@ -23,6 +24,7 @@ module Tokenizable
             end
           }
         elsif method_defined?(method)
+          # Are we working on a plain old Ruby method?
           singular_method_name = method.to_s.singularize
           class_eval %{
             def #{singular_method_name}_tokens
@@ -35,7 +37,7 @@ module Tokenizable
             end
           }
         else
-          raise 'association or method is not defined'
+          raise "Association or method #{self.name}##{method} is not defined"
         end
       end
     end
