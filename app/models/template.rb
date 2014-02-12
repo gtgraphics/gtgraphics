@@ -16,6 +16,7 @@
 class Template < ActiveRecord::Base
   include BatchTranslatable
   include ConcreteTemplate
+  include Excludable
   include PersistenceContextTrackable
   include Sortable
 
@@ -68,14 +69,6 @@ class Template < ActiveRecord::Base
 
     def template_types
       TEMPLATE_TYPES
-    end
-
-    def without(template)
-      if template.new_record?
-        all
-      else
-        where.not(id: template.id)
-      end
     end
   end
 

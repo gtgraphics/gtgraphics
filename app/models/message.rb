@@ -13,6 +13,7 @@
 #
 
 class Message < ActiveRecord::Base
+  include Excludable
   include PersistenceContextTrackable
   
   belongs_to :contact_form, class_name: 'Page::ContactForm'
@@ -26,16 +27,6 @@ class Message < ActiveRecord::Base
   validates :body, presence: true
 
   after_create :create_recipiences
-
-  class << self
-    def without(message)
-      if message.new_record?
-        all
-      else
-        where.not(id: message.id)
-      end
-    end
-  end
 
   def sender
     %{"#{sender_name}" <#{sender_email}>}

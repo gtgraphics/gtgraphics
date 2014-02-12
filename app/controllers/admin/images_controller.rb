@@ -24,6 +24,7 @@ class Admin::ImagesController < Admin::ApplicationController
   def create
     @image = Image.new(image_params)
     if @image.save
+      
       flash_for @image
     end
     respond_with :admin, @image

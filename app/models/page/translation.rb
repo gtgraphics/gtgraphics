@@ -17,6 +17,7 @@ class Page < ActiveRecord::Base
     include UniquelyTranslated
 
     acts_as_uniquely_translated :page_id
+    sanitizes :title, with: :squish
 
     validates :title, presence: true
 

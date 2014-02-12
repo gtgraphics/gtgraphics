@@ -27,6 +27,7 @@ class User < ActiveRecord::Base
   include Authenticatable
   include Authenticatable::Lockable
   include Authenticatable::Trackable
+  include Excludable
   include PersistenceContextTrackable
   include Sortable
 
@@ -53,16 +54,6 @@ class User < ActiveRecord::Base
 
   acts_as_sortable do |by|
     by.full_name(default: true) { |dir| [arel_table[:first_name].send(dir.to_sym), arel_table[:last_name].send(dir.to_sym)] }
-  end
-
-  class << self
-    def without(user)
-      if user.new_record?
-        all
-      else
-        where.not(id: user.id)
-      end
-    end
   end
 
   def full_name

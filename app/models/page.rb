@@ -23,6 +23,7 @@
 class Page < ActiveRecord::Base
   include Authorable
   include BatchTranslatable
+  include Excludable
   include PersistenceContextTrackable
 
   STATES = %w(
@@ -105,15 +106,6 @@ class Page < ActiveRecord::Base
 
     def embeddable_types
       EMBEDDABLE_TYPES
-    end
-
-    def without(pages)
-      excluded_page_ids = Array(pages).select(&:persisted?).map(&:id)
-      if excluded_page_ids.any?
-        where.not(id: excluded_page_ids.one? ? excluded_page_ids.first : excluded_page_ids)
-      else
-        all
-      end
     end
   end
 
