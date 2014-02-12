@@ -45,6 +45,7 @@ class Admin::AttachmentsController < Admin::ApplicationController
   def destroy_multiple
     attachment_ids = Array(params[:attachment_ids])
     Attachment.destroy_all(id: attachment_ids)
+    flash_for Attachment, :destroyed, multiple: true
     respond_to do |format|
       format.html { redirect_to :admin_attachments }
     end
@@ -71,7 +72,7 @@ class Admin::AttachmentsController < Admin::ApplicationController
         if valid
           redirect_to [:admin, @image]
         else
-          # TODO flash.alert = 'Could not move attachment to images'
+          flash_for Attachment, :unmovable, alert: true
           redirect_to [:admin, @attachment]
         end
       end

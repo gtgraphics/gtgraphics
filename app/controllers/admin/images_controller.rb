@@ -118,7 +118,7 @@ class Admin::ImagesController < Admin::ApplicationController
         if valid
           redirect_to [:admin, @attachment]
         else
-          # TODO flash.alert = 'Could not move attachment to images'
+          flash_for Image, :unmovable, alert: true
           redirect_to [:admin, @image]
         end
       end

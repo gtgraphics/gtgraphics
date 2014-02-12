@@ -8,7 +8,7 @@ module Sanitizable
     # end
     def sanitizes(*attribute_names, &block)
       options = attribute_names.extract_options!
-      options.asset_valid_keys(:with)
+      options.assert_valid_keys(:with)
       options.reverse_merge!(with: block_given? ? block : :strip)
       if sanitizer = options[:with]
         unless sanitizer.respond_to?(:call)

@@ -47,7 +47,7 @@ class Page < ActiveRecord::Base
   acts_as_nested_set counter_cache: :children_count, dependent: :destroy
 
   belongs_to :embeddable, polymorphic: true, autosave: true, dependent: :destroy
-  has_many :regions, dependent: :destroy, autosave: true
+  has_many :regions, class_name: 'Page::Region', dependent: :destroy, autosave: true
 
   validates :embeddable, presence: true
   validates :embeddable_type, inclusion: { in: EMBEDDABLE_TYPES }, allow_blank: true
@@ -74,7 +74,7 @@ class Page < ActiveRecord::Base
   delegate :name, to: :author, prefix: true, allow_nil: true
   delegate :name, to: :template, prefix: true, allow_nil: true
   delegate :meta_keywords, :meta_keywords=, to: :translation
-  delegate :supports_template?, :supports_regions?, to: :embeddable_class, allow_nil: true
+  delegate :template, to: :embeddable, allow_nil: true
 
   EMBEDDABLE_TYPES.each do |embeddable_type|
     scope embeddable_type.demodulize.underscore.pluralize, -> { where(embeddable_type: embeddable_type) }
@@ -208,8 +208,12 @@ class Page < ActiveRecord::Base
     self.class.where(parent_id: self.self_and_ancestors.ids << nil)
   end
 
-  def template
-    embeddable.template if supports_template?
+  def supports_regions?
+    embeddable_class.try(:supports_regions?) || false
+  end
+
+  def supports_template?
+    embeddable_class.try(:supports_template?) || false
   end
 
   def template_path

@@ -64,7 +64,7 @@
         width: $ellipsis-width;
         height: 33px;
         pointer-events: none;
-        @include background(linear-gradient(top left, rgba(255, 255, 255, 0), white));
+        @include background(linear-gradient(left, rgba(255, 255, 255, 0), white));
       }
     }
   }

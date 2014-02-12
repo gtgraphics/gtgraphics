@@ -16,6 +16,7 @@ class Attachment < ActiveRecord::Base
     include UniquelyTranslated
 
     acts_as_uniquely_translated :attachment_id
+    sanitizes :title, with: :squish
 
     validates :title, presence: true
   end

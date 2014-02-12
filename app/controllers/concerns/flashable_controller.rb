@@ -39,13 +39,12 @@ module FlashableController
       message = translate(affixed_action, scope: ['helpers.flash', klass.name.underscore], model: model_name, default: String.new).presence
       message ||= translate(affixed_action, scope: 'helpers.flash.defaults', model: model_name) 
       if message
-        if options[:successful]
-          flash.notice = message
-        else
+        if !options[:successful] or options[:alert]
           flash.alert = message
+        else
+          flash.notice = message
         end
       end
-      
     end
   end
 end

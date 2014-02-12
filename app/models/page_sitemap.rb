@@ -16,7 +16,7 @@ class PageSitemap
       @pages.find_each(batch_size: 50) do |page|
         if page.root?
           xml.url do
-            xml.comment! "Root"
+            xml.comment! 'Root'
             xml.loc root_url(host: HOST)
             xml.lastmod page.updated_at.iso8601
             xml.changefreq 'daily'

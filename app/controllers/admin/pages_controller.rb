@@ -113,7 +113,7 @@ class Admin::PagesController < Admin::ApplicationController
       # Rename Slug if parent page already contains children with the same slug
       if Page.where(parent_id: @page.parent_id, slug: @page.slug).many?
         valid = false
-        error_message = translate('views.admin.pages.slug_taken_move_error', title: @page.title, slug: @page.slug)
+        error_message = translate('helpers.flash.page.unmovable', model: Page.model_name.human, title: @page.title, slug: @page.slug)
         raise ActiveRecord::Rollback, 'Slug has already been taken' 
       end
 

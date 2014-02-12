@@ -5,7 +5,7 @@ module PagesHelper
   end
 
   def render_region(name)
-    raise Region::NotSupported.new(@page) unless @page.supports_regions?
+    raise Page::Region::NotSupported.new(@page) unless @page.supports_regions?
     if region_definition = @region_definitions.find { |definition| definition.label == name.to_s }
       if can? :update, @page
         data = { region: name, url: admin_page_path(@page), method: :patch }        
@@ -16,7 +16,7 @@ module PagesHelper
         end
       end
     else
-      raise Region::NotFound.new(name, @page.template) if Rails.env.development?
+      raise Page::Region::NotFound.new(name, @page.template) if Rails.env.development?
     end
   end
 end

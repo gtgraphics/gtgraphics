@@ -24,6 +24,7 @@ class Admin::UsersController < Admin::ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
+      # Do not delay password notification mail because of its sensitive information
       PasswordMailer.send_initial_password_email(@user, @user.password).deliver
       flash_for @user
     end
@@ -56,6 +57,7 @@ class Admin::UsersController < Admin::ApplicationController
     @change_password_activity.attributes = user_password_params
     if @change_password_activity.execute
       sign_in @user, bypass: true if @user.current?
+      # Do not delay password notification mail because of its sensitive information
       PasswordMailer.send_changed_password_email(@user, @user.password).deliver
       flash_for @user
       respond_to do |format|

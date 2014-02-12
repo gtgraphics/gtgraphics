@@ -39,7 +39,7 @@ class Admin::MessagesController < Admin::ApplicationController
   def destroy_multiple
     message_ids = Array(params[:message_ids]).reject(&:blank?).map(&:to_i)
     current_user.message_recipiences.joins(:message).where(messages: { id: message_ids }).readonly(false).destroy_all
-    flash_for :messages, :destroyed, multiple: true
+    flash_for Message, :destroyed, multiple: true
     respond_to do |format|
       format.html { redirect_to :admin_messages }
     end
