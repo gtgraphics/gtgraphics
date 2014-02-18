@@ -9,7 +9,7 @@ module I18nHelper
         I18n || (I18n = {});
         I18n.defaultLocale = '#{I18n.default_locale}';
         I18n.locale = '#{I18n.locale}';
-        I18n.translations = #{I18n.translate(:javascript, default: {}).to_json};
+        I18n.translations = #{I18n.translate(:javascript, default: {}).deep_transform_keys { |key| key.to_s.camelize(:lower) }.to_json};
       }
     end
   end

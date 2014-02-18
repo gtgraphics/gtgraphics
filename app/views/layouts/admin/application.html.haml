@@ -1,7 +1,7 @@
 - content_for :title do
   = ([translate('views.admin.title')] + breadcrumbs.collect(&:caption).drop(1)).join(' &middot; ').html_safe
 
-- content_for :content do   
+- content_for :content do 
   %nav#navigation.navbar.navbar-default.navbar-fixed-top.navbar-inverse{role: 'navigation'}
     .container
       .navbar-header
@@ -15,7 +15,7 @@
 
       - if signed_in?
         = render 'navbar'
-        
+    
   .container
     #admin_content
       - if content_for? :admin_content

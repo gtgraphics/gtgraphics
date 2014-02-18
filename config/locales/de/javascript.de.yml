@@ -29,6 +29,9 @@ de:
       embeddable:
         error: Der Editor konnte nicht geladen werden.
 
+    select2:
+      no_matches: Keine Ergebnisse
+
     timeago:
       prefix_ago: vor
       suffix_ago: ''
