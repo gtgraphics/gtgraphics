@@ -6,7 +6,7 @@ class @PageTranslationManager extends @TranslationManager
     #@addEmbeddableManagerEvents()
 
   addLocale: (locale) ->
-    return false if _.contains(@translatedLocales, locale)
+    return false if @loading or _.contains(@translatedLocales, locale)
     $button = @getAddLocaleButton(locale)
     $button.trigger('addingLocale.translationManager', locale)
 
@@ -17,6 +17,7 @@ class @PageTranslationManager extends @TranslationManager
       @refreshButtonStates()
 
     $localePanes = @getLocalePanes(locale, true)
+    console.log $localePanes
     if $localePanes.any()
       $localePanes.removeClass('removed')
       @markTranslationDestroyed(locale, false)

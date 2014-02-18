@@ -6,6 +6,7 @@ class @TranslationManager
     @applyEvents()
     @url = @container.data('url')
     @dataType = @container.data('dataType') || 'html'
+    @loading = false
 
   # Events
 
@@ -28,6 +29,7 @@ class @TranslationManager
     _this = @
     @container.on 'click', '.add-locale', (event) ->
       event.preventDefault()
+      console.log 'add locale'
       $link = $(@)
       unless $link.hasClass('disabled') and $link.prop('disabled')
         locale = $link.data('locale')
@@ -61,7 +63,7 @@ class @TranslationManager
     @showPanes(@selectedLocale)
 
   addLocale: (locale, callback) ->
-    return false if _.contains(@translatedLocales, locale)
+    return false if @loading or _.contains(@translatedLocales, locale)
     $button = @getAddLocaleButton(locale)
     $button.trigger('addingLocale.translationManager', locale)
 
@@ -82,7 +84,7 @@ class @TranslationManager
     true
 
   removeLocale: (locale) ->
-    return false unless _.contains(@translatedLocales, locale)
+    return false if @loading or not _.contains(@translatedLocales, locale)
     $button = @getRemoveLocaleButton(locale)
     $button.trigger('removingLocale.translationManager', locale)
     @markTranslationDestroyed(locale, true)
@@ -218,6 +220,7 @@ class @TranslationManager
     @getLocalePanes(locale, true).addClass('active')
 
   loadPane: (locale, callback) ->
+    @loading = true
     jQuery.ajax
       url: @url
       dataType: @dataType
@@ -227,6 +230,8 @@ class @TranslationManager
         callback() if callback  
       error: =>
         alert I18n.translate('translations.error')
+      complete: =>
+        @loading = false
 
   # Helpers
   getNeighborLocale: ->
@@ -255,4 +260,4 @@ $.fn.translationManager = (klass) ->
 
 
 jQuery.prepare ->
-  $('.translation-manager').translationManager()
+  $('.translation-manager', @).translationManager()
