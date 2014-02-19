@@ -1,5 +1,5 @@
 $(document).ready ->
-  $.extend $.fn.select2.defaults,
+  $.extend jQuery.fn.select2.defaults,
     formatNoMatches: -> I18n.translate('select2.noMatches')
     formatInputTooShort: (input, min) -> I18n.translate('select2.inputTooShort', min: min, required: min - input.length)
     formatInputTooLong: (input, max) -> I18n.translate('select2.inputTooLong', max: max, required: input.length - max)

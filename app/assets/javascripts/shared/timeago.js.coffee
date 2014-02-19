@@ -1,6 +1,6 @@
 $(document).ready ->
-  $.timeago.settings.allowFuture = true  
-  $.timeago.settings.strings =
+  jQuery.timeago.settings.allowFuture = true  
+  jQuery.timeago.settings.strings =
     prefixAgo: I18n.translate('timeago.prefixAgo')
     prefixFromNow: I18n.translate('timeago.prefixFromNow')
     suffixAgo: I18n.translate('timeago.suffixAgo')
