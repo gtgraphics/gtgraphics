@@ -23,7 +23,6 @@ class Page < ActiveRecord::Base
     validates :definition_id, presence: true
 
     delegate :label, to: :definition, prefix: true, allow_nil: true
-    delegate :body, to: :concrete_region
 
     class << self
       def labelled(label)

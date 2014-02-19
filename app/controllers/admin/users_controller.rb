@@ -12,7 +12,7 @@ class Admin::UsersController < Admin::ApplicationController
   end
 
   def index
-    @users = User.sort(params[:sort], params[:direction]).page(params[:page])
+    @users = User.search(params[:search]).sort(params[:sort], params[:direction]).page(params[:page])
     respond_with :admin, @users
   end
 

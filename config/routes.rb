@@ -141,18 +141,23 @@ GtGraphics::Application.routes.draw do
       end
 
       root to: 'homepages#show'
+
+      # Legacy URLs that have changed permanently (HTTP 301)
+      get 'image/:slug', constraints: Routing::Legacy::ImageConstraint.new, to: redirect { |params, request|
+        page = Page.images.find_by!(slug: params[:slug])
+        "/#{page.path}"
+      }
+      get 'category/:slug(/:page)', constraints: Routing::Legacy::CategoryConstraint.new, page: /\d/, to: redirect { |params, request|
+        slug = params[:slug].split(',').first
+        page = Page.find_by!(slug: slug)
+        url = "/#{page.path}"
+        page_index = params[:page].to_i
+        url << "?page=#{page_index}" if page_index > 1
+        url
+      }
+
+      # This route is a workaround throwing a routing error that can be caught by a controller
+      get '*path' => 'errors#unmatched_route'
     end
   end
-
-  # Legacy URLs that have changed permanently (HTTP 301)
-  #get '/category/:types/:page', to: redirect { |params, request|
-  #  type = params[:types].split(',').first.downcase
-  #  url = "/albums/#{type}"
-  #  page = params[:page].presence.try(:to_i)
-  #  if page and page > 1
-  #    url << "?page=#{page}"
-  #  else
-  #    url
-  #  end
-  #}
 end

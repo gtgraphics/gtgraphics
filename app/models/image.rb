@@ -89,30 +89,10 @@ class Image < ActiveRecord::Base
   end
 
   def custom_styles_hash
-    self.custom_styles.inject({}) do |custom_styles, custom_style|
-      if custom_style.variant? and custom_style.persisted?
-        custom_styles.merge!(custom_style.label => custom_style.transformations)
-      end
+    self.custom_styles.inject({}) do |custom_styles, style|
+      custom_styles.merge!(style.label => style.transformations) if style.variant? and style.persisted?
       custom_styles
     end
-  end
-
-  def embedding_page_ids
-    @embedding_page_ids ||= pages.reorder(:parent_id).uniq.pluck(:parent_id)
-  end
-
-  def embedding_page_ids=(page_ids)
-    @embedding_page_ids = page_ids.map(&:to_i).reject(&:zero?)
-    @embedding_pages = Page.where(id: @embedding_page_ids)
-  end
-
-  def embedding_pages
-    @embedding_pages ||= Page.where(id: embedding_page_ids)
-  end
-
-  def embedding_pages=(pages)
-    @embedding_pages = pages
-    @embedding_page_ids = pages.collect(&:id)
   end
 
   def styles
@@ -148,10 +128,6 @@ class Image < ActiveRecord::Base
         translation.title = generated_title if translation.title.blank?
       end
     end
-  end
-
-  def refresh_embedding_pages
-    # TODO
   end
 
   def set_exif_data

@@ -1,8 +1,8 @@
 class @Editor.Controls.AlignJustify extends @Editor.Controls.FontControl
   constructor: ->
-    @caption = 'align_justify'
+    @caption = 'alignJustify'
     @icon = 'align-justify'
     @command = 'justifyfull'
     super
 
-@Editor.Controls.register('align_justify', @Editor.Controls.AlignJustify)
+@Editor.Controls.register('alignJustify', @Editor.Controls.AlignJustify)

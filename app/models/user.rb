@@ -56,6 +56,21 @@ class User < ActiveRecord::Base
     by.full_name(default: true) { |dir| [arel_table[:first_name].send(dir.to_sym), arel_table[:last_name].send(dir.to_sym)] }
   end
 
+  class << self
+    def search(query)
+      if query.present?
+        terms = query.split
+        columns = [:first_name, :last_name]
+        conditions = terms.collect do |term|
+          columns.collect { |column_name| arel_table[column_name].matches("%#{term}%") }.reduce(:or)
+        end
+        where(conditions.reduce(:and))
+      else
+        all
+      end
+    end
+  end
+
   def full_name
     "#{first_name} #{last_name}".strip
   end

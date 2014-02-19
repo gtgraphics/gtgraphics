@@ -11,7 +11,7 @@ module PagesHelper
         data = { region: name, url: admin_page_path(@page), method: :patch }        
       end
       content_tag :div, class: 'region well', data: data do
-        if region = @page.regions.find_by(definition_id: region_definition.id)
+        if region = @page.regions.find_by(definition: region_definition)
           render_content(region.body)
         end
       end
