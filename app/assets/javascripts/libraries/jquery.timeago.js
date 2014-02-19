@@ -64,12 +64,12 @@
     },
     inWords: function(distanceMillis) {
       var $l = this.settings.strings;
-      var prefix = $l.prefixAgo;
-      var suffix = $l.suffixAgo;
+      var prefix = lazyEval($l.prefixAgo);
+      var suffix = lazyEval($l.suffixAgo);
       if (this.settings.allowFuture) {
         if (distanceMillis < 0) {
-          prefix = $l.prefixFromNow;
-          suffix = $l.suffixFromNow;
+          prefix = lazyEval($l.prefixFromNow);
+          suffix = lazyEval($l.suffixFromNow);
         }
       }
 
@@ -78,6 +78,11 @@
       var hours = minutes / 60;
       var days = hours / 24;
       var years = days / 365;
+
+      // added by Tobias Casper
+      function lazyEval(stringOrFunction) {
+        return jQuery.isFunction(stringOrFunction) ? stringOrFunction() : stringOrFunction;
+      }
 
       function substitute(stringOrFunction, number) {
         var string = $.isFunction(stringOrFunction) ? stringOrFunction(number, distanceMillis) : stringOrFunction;
