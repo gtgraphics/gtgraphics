@@ -10,4 +10,5 @@
   = form.input :asset, as: :image_preview, required: true, input_html: { preview_version: :thumbnail }, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
   = form.association :author, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
 
-  /= form.input :embedding_page_ids, collection: page_sitemap_collection_for_select(Page.without(@image.pages).with_translations(I18n.locale)), multiple: true, include_blank: false, input_html: { size: 8 }, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-4' }
+  /= simple_fields_for Page.new do |fields|
+  /  = fields.input :title
