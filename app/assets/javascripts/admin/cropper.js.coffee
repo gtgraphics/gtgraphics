@@ -252,7 +252,7 @@ class @Cropper
       @getCropY(),
       @getCropX() + @getCropWidth(),
       @getCropY() + @getCropHeight()
-    ])
+    ], false)
 
   # Helper Functions
 
@@ -267,10 +267,8 @@ class @Cropper
           $input.trigger('crop.cropper')
           @setCropAreaExplicitly = true
           callback() if callback
-
           @refreshCropAspectRatioState()
           @refreshResizeAspectRatioState() if @resizeable
-
           @updateCropArea()
         $input.data('prevValue', value)
 
