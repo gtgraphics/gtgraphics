@@ -14,7 +14,7 @@ module ErrorHandlingController
   protected
   def render_error(status)
     respond_to do |format|
-      format.html { render "errors/#{status}", status: status }
+      format.html { render "errors/#{status}", layout: 'errors', status: status }
       format.all { head status }
     end    
   end

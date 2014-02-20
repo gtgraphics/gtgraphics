@@ -1,0 +1,8 @@
+- content_for :content do
+  .container
+    - if content_for? :error_content
+      = yield :error_content
+    - else
+      = yield
+
+= render template: 'layouts/application'

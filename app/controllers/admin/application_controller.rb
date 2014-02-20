@@ -1,4 +1,6 @@
 class Admin::ApplicationController < ApplicationController
+  skip_maintenance_check
+
   authenticate
 
   reset_breadcrumbs
