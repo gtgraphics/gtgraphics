@@ -1,5 +1,6 @@
 class ChangePasswordActivity < Activity
-  attribute :user_id, Integer
+  embeds_one :user
+
   attribute :current_password, String
   attribute :generate_password, Boolean, default: false
   attribute :password, String
@@ -17,15 +18,6 @@ class ChangePasswordActivity < Activity
     # Save new Password in User
     user.password = user.password_confirmation = password
     user.save!
-  end
-
-  def user
-    @user ||= User.find(user_id)
-  end
-
-  def user=(user)
-    @user = user
-    self.user_id = user.id
   end
 
   private

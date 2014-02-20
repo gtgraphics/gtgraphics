@@ -27,19 +27,19 @@ class @Editor.Controls.ViewMode extends @Editor.Controls.ControlGroup
     $dropdown = $('<ul />', class: 'dropdown-menu').appendTo($group)
     
     $editor = $('<li><a /></li>').appendTo($dropdown).find('a').attr('href', '#')
-    $editor.html("<i class='fa fa-fw fa-font'></i> " + I18n.translate('editor.view_modes.editor'))
+    $editor.html("<i class='fa fa-fw fa-font'></i> " + I18n.translate('editor.viewModes.editor'))
     #$editor.text(I18n.translate('editor.view_modes.editor'))
     $editor.attr('data-view-mode', 'editor')
     @applyControlEvents($editor)
 
     $html = $('<li><a /></li>').appendTo($dropdown).find('a').attr('href', '#')
-    $html.html("<i class='fa fa-fw fa-code'></i> " + I18n.translate('editor.view_modes.html'))
+    $html.html("<i class='fa fa-fw fa-code'></i> " + I18n.translate('editor.viewModes.html'))
     #$html.text(I18n.translate('editor.view_modes.html'))
     $html.attr('data-view-mode', 'html')
     @applyControlEvents($html)
 
     $preview = $('<li><a /></li>').appendTo($dropdown).find('a').attr('href', '#')
-    $preview.html("<i class='fa fa-fw fa-file-o'></i> " + I18n.translate('editor.view_modes.preview'))
+    $preview.html("<i class='fa fa-fw fa-file-o'></i> " + I18n.translate('editor.viewModes.preview'))
     #$preview.text(I18n.translate('editor.view_modes.preview'))
     $preview.attr('data-view-mode', 'preview')
     @applyControlEvents($preview)

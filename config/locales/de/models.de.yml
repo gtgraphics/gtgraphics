@@ -38,6 +38,8 @@ de:
         generate_password: Password generieren?
         password: Passwort
         password_confirmation: Password (Wdh.)
+      image_page_embedding_activity:
+        parent_page_id: Seite erzeugen in
       sign_in_activity:
         email: E-Mail-Adresse
         password: Passwort

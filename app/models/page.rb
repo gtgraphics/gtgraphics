@@ -42,6 +42,8 @@ class Page < ActiveRecord::Base
 
   translates :title, :meta_description, :meta_keywords, fallbacks_for_empty_translations: true
 
+  composed_of :slug, mapping: %w(slug to_s), allow_nil: true, converter: :new
+
   acts_as_authorable
   acts_as_batch_translatable
   acts_as_nested_set counter_cache: :children_count, dependent: :destroy
@@ -77,10 +79,13 @@ class Page < ActiveRecord::Base
   delegate :template, to: :embeddable, allow_nil: true
 
   EMBEDDABLE_TYPES.each do |embeddable_type|
-    scope embeddable_type.demodulize.underscore.pluralize, -> { where(embeddable_type: embeddable_type) }
+    sanitized_type = embeddable_type.demodulize.underscore
+
+    scope sanitized_type.pluralize, -> { where(embeddable_type: embeddable_type) }
+    scope "except_#{sanitized_type.pluralize}", -> { where.not(embeddable_type: embeddable_type) }
 
     class_eval %{
-      def #{embeddable_type.demodulize.underscore}?
+      def #{sanitized_type}?
         embeddable_type == '#{embeddable_type}'
       end
     }
@@ -264,7 +269,6 @@ class Page < ActiveRecord::Base
 
   def set_slug
     self.slug = title(I18n.default_locale) if new_record? and slug.blank? and title.present?
-    self.slug = slug.parameterize if slug.present?
   end
 
   def update_descendants_paths

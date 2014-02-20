@@ -18,12 +18,15 @@ class Admin::ImagesController < Admin::ApplicationController
   def new
     @image = Image.new
     @image.translations.build(locale: I18n.locale)
+    @image_page_embedding_activity = ImagePageEmbeddingActivity.new
     respond_with :admin, @image
   end
 
   def create
     @image = Image.new(image_params)
-    if @image.save
+    @image_page_embedding_activity = ImagePageEmbeddingActivity.new(image_page_embedding_activity_params)
+    if @image_page_embedding_activity.valid? and @image.save
+      @image_page_embedding_activity.image = image
       flash_for @image
     end
     respond_with :admin, @image
@@ -145,7 +148,11 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def image_params
-    params.require(:image).permit! # TODO
+    params.require(:image).permit(:asset, :author_id, translations_attributes: [:id, :locale, :_destroy, :title, :description])
+  end
+
+  def image_page_embedding_activity_params
+    params.require(:image_page_embedding_activity).permit(:parent_page_id)
   end
 
   def image_crop_params

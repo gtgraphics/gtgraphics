@@ -66,7 +66,6 @@ class Image < ActiveRecord::Base
   before_validation :set_default_title, on: :create
   before_save :set_exif_data, if: :asset_changed?
   before_update :destroy_custom_styles, if: :asset_changed?
-  after_save :refresh_embedding_pages
 
   delegate :software, to: :exif_data, allow_nil: true
 
