@@ -7,10 +7,10 @@ module MaintainableController
   MAINTENANCE_FILE = Rails.root.join('public', 'system', '.maintenance')
 
   included do
-    #unless Rails.application.config.consider_all_requests_local
+    unless Rails.application.config.consider_all_requests_local
       before_action :check_for_maintenance
       rescue_from(Maintained) { render_error :service_unavailable }
-    #end
+    end
   end
 
   module ClassMethods
