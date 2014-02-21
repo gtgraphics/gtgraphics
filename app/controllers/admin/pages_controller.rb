@@ -61,7 +61,7 @@ class Admin::PagesController < Admin::ApplicationController
   def destroy
     @page.destroy
     flash_for @page
-    respond_with :admin, @page
+    respond_with :admin, @page, location: [:admin, @page.parent || Page.root]
   end
 
   def publish
@@ -103,19 +103,35 @@ class Admin::PagesController < Admin::ApplicationController
     previous_parent_id = @page.parent_id
     Page.transaction do
       # Move Page in Tree
+      slug = @page.slug
       case params[:position]
-      when 'inside' then @page.move_to_child_with_index(target_page, 0)
-      when 'before' then @page.move_to_left_of(target_page)
-      when 'after' then @page.move_to_right_of(target_page)
-      else return valid = false
+      when 'inside'
+        slug = slug.next while Page.without(@page).exists?(parent_id: target_page.id, slug: slug)
+        @page.update_column(:slug, slug)
+        @page.move_to_child_with_index(target_page, 0)
+      when 'before'
+        slug = slug.next while Page.without(@page).exists?(parent_id: target_page.parent_id, slug: slug)
+        @page.update_column(:slug, slug)
+        @page.move_to_left_of(target_page)
+      when 'after'
+        slug = slug.next while Page.without(@page).exists?(parent_id: target_page.parent_id, slug: slug)
+        @page.update_column(:slug, slug)
+        @page.move_to_right_of(target_page)
+      else
+        return valid = false
       end
 
       # Rename Slug if parent page already contains children with the same slug
-      if Page.where(parent_id: @page.parent_id, slug: @page.slug).many?
-        valid = false
-        error_message = translate('helpers.flash.page.unmovable', model: Page.model_name.human, title: @page.title, slug: @page.slug)
-        raise ActiveRecord::Rollback, 'Slug has already been taken' 
-      end
+      #slug = @page.slug
+      #slug = slug.next while Page.where(parent_id: @page.parent_id, slug: slug).any?
+      #raise slug.inspect
+      #@page.update_column(:slug, slug)
+
+      #if Page.where(parent_id: @page.parent_id, slug: @page.slug).many?
+      #  valid = false
+      #  error_message = translate('helpers.flash.page.unmovable', model: Page.model_name.human, title: @page.title, slug: @page.slug)
+      #  raise ActiveRecord::Rollback, 'Slug has already been taken' 
+      #end
 
       # Update Path
       @page.refresh_path!(true)

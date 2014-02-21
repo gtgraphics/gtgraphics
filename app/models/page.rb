@@ -63,8 +63,8 @@ class Page < ActiveRecord::Base
   before_validation :set_path, if: -> { slug_changed? or parent_id_changed? }
   before_save :sanitize_regions
   before_destroy :destroyable?
-  after_save :update_descendants_paths, if: :path_changed?
-  after_update :destroy_replaced_embeddable, if: :embeddable_changed?
+  around_save :update_descendants_paths
+  around_update :destroy_replaced_embeddable
 
   default_scope -> { order(:lft) }
   scope :hidden, -> { where(published: false) }
@@ -240,14 +240,16 @@ class Page < ActiveRecord::Base
 
   private
   def destroy_replaced_embeddable
-    embeddable_class_was.destroy(embeddable_id_was) if embeddable_type_changed?
+    embeddable_type_changed = self.embeddable_type_changed?
+    yield
+    embeddable_class_was.destroy(embeddable_id_was) if embeddable_type_changed
   end
 
   def generate_path
     if parent.present?
-      path_parts = parent.self_and_ancestors.pluck(:slug) << slug
+      path_parts = parent.self_and_ancestors.pluck(:slug) << slug.to_s
     else
-      path_parts = [slug]
+      path_parts = [slug.to_s]
     end
     path_parts.reject!(&:blank?)
     File.join(path_parts)
@@ -267,12 +269,18 @@ class Page < ActiveRecord::Base
     self.path = generate_path
   end
 
+  def set_previous_changes
+    @previously_changed = changes
+  end
+
   def set_slug
     self.slug = title(I18n.default_locale) if new_record? and slug.blank? and title.present?
   end
 
   def update_descendants_paths
-    transaction { descendants.each(&:refresh_path!) }
+    path_changed = self.path_changed?
+    yield
+    transaction { descendants.each(&:refresh_path!) } if path_changed
   end
 
   def verify_embeddable_type_was_convertible
