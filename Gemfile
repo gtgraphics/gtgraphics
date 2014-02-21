@@ -62,11 +62,6 @@ gem 'request_store'
 gem 'exifr'
 gem 'nokogiri'
 
-group :doc do
-  # bundle exec rake doc:rails generates the API under doc/api.
-  gem 'sdoc', require: false
-end
-
 # Deployment
 group :development do
   gem 'capistrano-rails'
