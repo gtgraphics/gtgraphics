@@ -11,7 +11,7 @@ set :ssh_options, { forward_agent: true }
 # set :default_env, { rvm_bin_path: '~/.rvm/bin' }
 # set :rvm_ruby_string, :local
 set :rvm_type, :user
-set :rvm_ruby_version, '2.1.0'
+set :rvm_ruby_version, '2.0.0'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
