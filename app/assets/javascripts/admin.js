@@ -7,7 +7,7 @@
 //= require turbolinks
 //= require jquery.turbolinks
 // require bootstrap
-//= require_tree ./core_ext
+// require_tree ./core_ext
 //= require_tree ./libraries
 // require_tree ./shared
 // require editor
