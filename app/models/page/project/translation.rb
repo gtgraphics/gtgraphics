@@ -14,9 +14,11 @@
 class Page < ActiveRecord::Base
   class Project < ActiveRecord::Base
     class Translation < Globalize::ActiveRecord::Translation
+      include Sanitizable
       include UniquelyTranslated
 
       acts_as_uniquely_translated :project_page_id
+
       sanitizes :name, with: :squish
     end
   end

@@ -14,9 +14,11 @@
 
 class Page < ActiveRecord::Base
   class Translation < Globalize::ActiveRecord::Translation
+    include Sanitizable
     include UniquelyTranslated
 
     acts_as_uniquely_translated :page_id
+    
     sanitizes :title, with: :squish
 
     validates :title, presence: true
