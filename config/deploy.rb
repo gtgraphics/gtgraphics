@@ -30,6 +30,7 @@ set :rvm_ruby_version, '2.0.0'
 
 # Default value for :pty is false
 set :pty, true
+set :normalize_asset_timestamps, %{public/images public/javascripts public/stylesheets}
 
 set :assets_roles, [:web, :app]
 
