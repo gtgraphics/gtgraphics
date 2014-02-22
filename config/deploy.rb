@@ -50,7 +50,7 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       execute :touch, release_path.join('tmp/restart.txt')
     end
-    invoke 'delayed_job:restart'
+    invoke 'deploy:delayed_job:restart'
   end
 
   after :publishing, :restart
@@ -61,6 +61,14 @@ namespace :deploy do
       # within release_path do
       #   execute :rake, 'cache:clear'
       # end
+    end
+  end
+
+  after :updated, :fix_permissions do
+    on roles(:web) do
+      within release_path.join('bin') do
+        execute :chmod, 700, :delayed_job
+      end
     end
   end
 end

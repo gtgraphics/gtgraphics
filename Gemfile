@@ -58,6 +58,7 @@ end
 gem 'better_errors'
 gem 'binding_of_caller'
 gem 'delayed_job_active_record'
+gem 'daemons'
 gem 'request_store'
 gem 'exifr'
 gem 'nokogiri'
