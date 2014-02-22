@@ -26,11 +26,6 @@ class Page < ActiveRecord::Base
   include Excludable
   include PersistenceContextTrackable
 
-  STATES = %w(
-    published
-    hidden
-  ).freeze
-
   EMBEDDABLE_TYPES = %w(
     Page::Content
     Page::ContactForm
@@ -275,6 +270,7 @@ class Page < ActiveRecord::Base
 
   def set_slug
     self.slug = title(I18n.default_locale) if new_record? and slug.blank? and title.present?
+    self.slug = '' if root?
   end
 
   def update_descendants_paths
