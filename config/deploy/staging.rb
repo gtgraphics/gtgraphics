@@ -1,3 +1,6 @@
+set :branch, 'staging'
+set :deploy_to, '/home/gtgraphics/staging'
+
 # Simple Role Syntax
 # ==================
 # Supports bulk-adding hosts to roles, the primary
