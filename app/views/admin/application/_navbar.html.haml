@@ -23,7 +23,7 @@
   %ul.nav.navbar-nav.navbar-right#nav_user
     %li.dropdown{class: request.path =~ /account|messages/ ? 'active' : nil}
       = active_link_to :admin_account, id: 'nav_account', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
-        %span.avatar= gravatar_image_tag current_user.email, default: :mm, size: 28, class: 'img-circle'
+        %span.avatar= gravatar_image_tag current_user.email, default: :mm, size: 24, class: 'img-circle'
         %span.name= current_user.name
         = caret
       %ul.dropdown-menu
