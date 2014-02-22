@@ -36,14 +36,22 @@ set :linked_dirs, %w(bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-# Asset Roles, defaults to :web
+# Custom Roles
 set :assets_roles, [:web, :app]
+set :delayed_job_server_role, :worker
 
+# Define Server
+server 'gtgraphics.de', user: 'gtgraphics', roles: %w(web app db worker)
+
+# Restart Server
 namespace :deploy do
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       execute :touch, release_path.join('tmp/restart.txt')
+    end
+    on roles(:worker) do
+      invoke 'delayed_job:restart'
     end
   end
 
