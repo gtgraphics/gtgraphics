@@ -1,4 +1,3 @@
-//= require_self
 // require ./shared
 //= require admin/table_checkbox
 //= require admin/cropper
