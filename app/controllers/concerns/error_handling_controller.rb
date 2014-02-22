@@ -3,7 +3,6 @@ module ErrorHandlingController
 
   included do
     unless Rails.application.config.consider_all_requests_local
-      rescue_from(Exception) { render_error :internal_server_error }
       rescue_from(ActiveRecord::RecordNotFound) { render_error :not_found }
       rescue_from(ActionController::UnknownFormat) { render_error :not_found }
       rescue_from(ActionController::RoutingError) { render_error :not_found }
