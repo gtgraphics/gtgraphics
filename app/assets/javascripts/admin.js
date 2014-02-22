@@ -1,5 +1,5 @@
 //= require_self
-//= require shared
+// require shared
 // require admin/table_checkbox
 // require admin/cropper
 // require admin/translation_manager
