@@ -7,6 +7,9 @@ set :application, 'gtgraphics'
 set :repo_url, 'git@tasdy.net:gtgraphics'
 set :ssh_options, { forward_agent: true }
 
+# RVM
+set :rvm_type, :user
+
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
@@ -43,7 +46,6 @@ namespace :deploy do
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
-      # Your restart mechanism here, for example:
       execute :touch, release_path.join('tmp/restart.txt')
     end
   end
