@@ -8,16 +8,11 @@ set :repo_url, 'git@tasdy.net:gtgraphics'
 set :ssh_options, { forward_agent: true }
 
 # RVM
-# set :default_env, { rvm_bin_path: '~/.rvm/bin' }
-# set :rvm_ruby_string, :local
 set :rvm_type, :user
 set :rvm_ruby_version, '2.0.0'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
-
-# Default value for :scm is :git
-# set :scm, :git
 
 # Default value for :format is :pretty
 # set :format, :pretty
@@ -27,9 +22,6 @@ set :rvm_ruby_version, '2.0.0'
 
 # Default value for :pty is false
 set :pty, true
-set :normalize_asset_timestamps, %{public/images public/javascripts public/stylesheets}
-
-set :assets_roles, [:web, :app]
 
 # Default value for :linked_files is []
 set :linked_files, %w(config/database.yml)
@@ -43,6 +35,9 @@ set :linked_dirs, %w(bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
+
+# Asset Roles, defaults to :web
+set :assets_roles, [:web, :app]
 
 namespace :deploy do
   desc 'Restart application'
