@@ -10,7 +10,7 @@ set :ssh_options, { forward_agent: true }
 # RVM
 # set :default_env, { rvm_bin_path: '~/.rvm/bin' }
 # set :rvm_ruby_string, :local
-set :rvm_type, :local
+set :rvm_type, :user
 set :rvm_ruby_version, '2.0.0'
 # set :default_env, { rvm_bin_path: '/home/gtgraphics/.rvm/bin:$PATH' }
 
