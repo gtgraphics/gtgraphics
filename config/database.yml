@@ -16,3 +16,9 @@ test:
   password: devel
   host: localhost
   database: gtgraphics_test
+
+staging:
+  <<: *defaults
+
+production:
+  <<: *defaults
