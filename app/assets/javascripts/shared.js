@@ -1,4 +1,4 @@
-//= require underscore
+// require underscore
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
