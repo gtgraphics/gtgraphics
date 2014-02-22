@@ -29,4 +29,9 @@ GtGraphics::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
+
+  #config.assets.debug = false
+  #config.serve_static_assets = false
+  #config.assets.js_compressor = :uglifier
+  #config.assets.precompile += %w(admin.js admin.css)
 end
