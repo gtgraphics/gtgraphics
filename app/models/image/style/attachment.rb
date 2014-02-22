@@ -30,6 +30,7 @@ class Image < ActiveRecord::Base
       validates_attachment :asset, presence: true, content_type: { content_type: ImageContainable::CONTENT_TYPES }
 
       after_validation :set_transformation_defaults, if: :asset_changed?
+      after_validation :reset_transformed_dimensions, if: :asset_changed?
       around_save :reprocess_asset
 
       delegate :path, :url, to: :asset, prefix: true
@@ -64,12 +65,18 @@ class Image < ActiveRecord::Base
           # https://github.com/thoughtbot/paperclip/issues/866
           asset.assign(asset)
           asset.save
+          update_column(:asset_updated_at, DateTime.now)
         end
       end
 
       def set_transformation_defaults
         self.cropped = false if cropped.nil?
         self.resized = false if resized.nil?
+      end
+
+      def reset_transformed_dimensions
+        self.transformed_width = width
+        self.transformed_height = height
       end
     end
   end

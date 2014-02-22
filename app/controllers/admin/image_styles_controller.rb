@@ -97,7 +97,7 @@ class Admin::ImageStylesController < Admin::ApplicationController
     image_style_params = params.require(:image_style)
     type = @image_style.try(:type) || image_style_params.fetch(:type)
     permitted_attributes = []
-    permitted_attributes << :type if @image_style.try(:new_record?)
+    permitted_attributes << :type unless @image_style.try(:persisted?)
     case type
     when 'Image::Style::Variant'
       image_style_crop_params

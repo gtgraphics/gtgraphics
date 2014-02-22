@@ -53,6 +53,7 @@ class Image < ActiveRecord::Base
   acts_as_batch_translatable
   acts_as_image_containable styles: ->(attachment) { attachment.instance.styles },
                             url: '/system/images/:id/:style.:extension'
+  acts_as_image_croppable
   acts_as_sortable do |by|
     by.author { |dir| [User.arel_table[:first_name].send(dir.to_sym), User.arel_table[:last_name].send(dir.to_sym)] }
     by.title(default: true) { |column, dir| Image::Translation.arel_table[column].send(dir.to_sym) }

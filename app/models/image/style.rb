@@ -29,8 +29,6 @@ class Image < ActiveRecord::Base
       Image::Style::Attachment
     ).freeze
 
-    store :customization_options
-
     belongs_to :image, inverse_of: :custom_styles
 
     after_initialize :set_transformation_defaults, if: :new_record?
@@ -39,6 +37,10 @@ class Image < ActiveRecord::Base
     validates :image, presence: true
 
     default_scope -> { order("#{table_name}.transformed_width * #{table_name}.transformed_height") }
+
+    store :customization_options
+    acts_as_image_croppable
+    acts_as_image_resizable
 
     TYPES.each do |type|
       scope type.demodulize.underscore.pluralize, -> { where(type: type) }
