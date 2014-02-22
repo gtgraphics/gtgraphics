@@ -64,11 +64,14 @@ namespace :deploy do
     end
   end
 
-  # after :updated, :fix_permissions do
-  #   on roles(:web) do
-  #     within release_path do
-  #       execute :chmod, 700, :'bin/delayed_job'
-  #     end
-  #   end
-  # end
+  after :updated, :fix_permissions do
+    on roles(:web) do
+      within release_path do
+        execute :chmod, 700, :'bin/bundle'
+        execute :chmod, 700, :'bin/rails'
+        execute :chmod, 700, :'bin/delayed_job'
+        execute :chmod, 700, :'bin/rake'
+      end
+    end
+  end
 end
