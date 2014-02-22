@@ -15,7 +15,7 @@ set :ssh_options, { forward_agent: true }
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
 # Default deploy_to directory is /var/www/my_app
-ask :deploy_to, -> { "home/gtgraphics/#{rails_env}" }
+
 
 # Default value for :scm is :git
 # set :scm, :git

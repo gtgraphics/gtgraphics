@@ -1,5 +1,5 @@
-set :rails_env, 'production'
 set :branch, 'production'
+set :deploy_to, '/home/gtgraphics/production'
 
 # Simple Role Syntax
 # ==================
