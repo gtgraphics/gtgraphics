@@ -1,2 +1,2 @@
-// require ./shared
-// require_tree ./application
+//= require ./shared
+//= require_tree ./application
