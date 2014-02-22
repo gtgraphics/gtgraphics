@@ -14,6 +14,8 @@
 #  width                 :integer
 #  height                :integer
 #  customization_options :text
+#  transformed_width     :integer
+#  transformed_height    :integer
 #
 
 class Image < ActiveRecord::Base
@@ -22,18 +24,23 @@ class Image < ActiveRecord::Base
       include ImageContainable
 
       acts_as_image_containable url: '/system/images/:image_id/:style_label.:extension',
-                                styles: { thumbnail: { geometry: '75x75#', format: :png } }
+                                styles: { transformed: { geometry: '100%x100%', processors: [:manual_cropper, :manual_resizer] },
+                                          thumbnail: { geometry: '75x75#', format: :png, processors: [:manual_cropper, :manual_resizer] } }
 
       validates_attachment :asset, presence: true, content_type: { content_type: ImageContainable::CONTENT_TYPES }
 
-      delegate :path, :url, to: :asset, prefix: true
+      after_validation :set_transformation_defaults, if: :asset_changed?
+      around_save :reprocess_asset
 
-      def cropped?
-        false
+      delegate :path, :url, to: :asset, prefix: true
+      alias_method :original_asset, :asset
+
+      def asset_path(style = :transformed)
+        asset.path(style)
       end
 
-      def resized?
-        false
+      def asset_url(style = :transformed)
+        asset.url(style)
       end
 
       Paperclip.interpolates :image_id do |attachment, style|
@@ -41,11 +48,28 @@ class Image < ActiveRecord::Base
       end
 
       Paperclip.interpolates :style_label do |attachment, style|
-        if style == :original
+        if style == :transformed
           attachment.instance.label
         else
           "#{attachment.instance.label}_#{style}"
         end
+      end
+
+      private
+      def reprocess_asset
+        changed = customization_options_changed?
+        yield
+        if changed
+          # This is a Paperclip hack to force reprocessing of the asset:
+          # https://github.com/thoughtbot/paperclip/issues/866
+          asset.assign(asset)
+          asset.save
+        end
+      end
+
+      def set_transformation_defaults
+        self.cropped = false if cropped.nil?
+        self.resized = false if resized.nil?
       end
     end
   end

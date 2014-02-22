@@ -3,7 +3,10 @@
     .col-lg-8
       .thumbnail
         .img-editable
-          = image_tag @image.asset.url, id: 'image_asset', class: 'img-croppable img-responsive', alt: @image.title, data: { original_width: @image.width, original_height: @image.height }
+          - if fields.object.is_a?(Image::Style)
+            = image_tag @image_style.original_asset.url, id: 'image_style_asset', class: 'img-croppable img-responsive', alt: @image.title, data: { original_width: @image_style.width, original_height: @image_style.height }
+          - else
+            = image_tag @image.asset.url, id: 'image_asset', class: 'img-croppable img-responsive', alt: @image.title, data: { original_width: @image.width, original_height: @image.height }
 
     .col-lg-4
 
@@ -13,7 +16,7 @@
         .panel.panel-default.crop-panel
           .panel-heading
             %h3.panel-title
-              - if fields.object.is_a? Image::Style
+              - if fields.object.is_a?(Image::Style)
                 %label.checkbox
                   = fields.check_box :cropped, class: 'crop-flag only-js'
                   = translate("views.admin.images.headlines.crop")
@@ -28,7 +31,7 @@
               = fields.input :crop_height, input_html: { class: 'crop-height', min: 1 , max: @image.height }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
 
               .form-group.js-only
-                %label.control-label.col-lg-4.sr-only{for: 'image_style_preserve_crop_aspect_ratio'}
+                %label.control-label.col-lg-4.sr-only{for: fields.object.is_a?(Image::Style) ? 'image_style_preserve_crop_aspect_ratio' : 'image_preserve_crop_aspect_ratio'}
                   = Image::Style.human_attribute_name(:preserve_aspect_ratio)
                 .col-lg-8
                   %label.checkbox
@@ -36,7 +39,7 @@
                     = Image::Style.human_attribute_name(:preserve_aspect_ratio)
 
         / Resize
-        - if fields.object.is_a? Image::Style
+        - if fields.object.is_a?(Image::Style)
           .panel.panel-default.resize-panel
             .panel-heading
               %h3.panel-title
@@ -50,7 +53,7 @@
                 = fields.input :resize_height, input_html: { class: 'resize-height', min: 1 }, as: :integer, required: true, label_html: { class: 'col-lg-4' }, container_html: { class: 'col-lg-8' }
 
                 .form-group.js-only
-                  %label.control-label.col-lg-4.sr-only{for: 'image_style_preserve_resize_aspect_ratio'}
+                  %label.control-label.col-lg-4.sr-only{for: fields.object.is_a?(Image::Style) ? 'image_style_preserve_resize_aspect_ratio' : 'image_preserve_resize_aspect_ratio' }
                     = Image::Style.human_attribute_name(:preserve_aspect_ratio)
                   .col-lg-8
                     %label.checkbox

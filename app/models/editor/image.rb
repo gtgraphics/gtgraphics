@@ -14,6 +14,8 @@
 #  updated_at            :datetime
 #  author_id             :integer
 #  customization_options :text
+#  transformed_width     :integer
+#  transformed_height    :integer
 #
 
 class Editor::Image

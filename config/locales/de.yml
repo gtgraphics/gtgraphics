@@ -11,3 +11,7 @@ de:
     wuxga: 'WUXGA (1920 × 1200, 16:10)'
     2k: '2K (2048 × 1536, 4:3)'
     4k: '4K (4096 × 3072, 4:3)'
+
+  unauthorized:
+    update:
+      image/style/variant: 'Dieser Typ von Bildformaten kann nicht aktualisiert werden'

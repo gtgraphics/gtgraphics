@@ -19,14 +19,7 @@ module Paperclip
     private
     def crop_command
       crop_command = []
-      crop_command += [
-        "-crop",
-        "#{target.crop_width}x" \
-          "#{target.crop_height}+" \
-          "#{target.crop_x}+" \
-          "#{target.crop_y}",
-        "+repage"
-      ] if target.cropped?
+      crop_command += ['-crop', target.crop_geometry, '+repage'] if target.cropped?
       crop_command
     end
   end

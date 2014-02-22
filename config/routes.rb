@@ -34,7 +34,10 @@ GtGraphics::Application.routes.draw do
 
         resources :images do
           resources :styles, controller: :image_styles, except: [:index, :show] do
-            get :new_attachment, on: :collection
+            member do
+              get :crop
+              patch :apply_crop
+            end
           end
           collection do
             patch :batch, as: :batch_process

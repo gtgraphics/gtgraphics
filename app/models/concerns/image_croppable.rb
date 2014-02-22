@@ -2,7 +2,7 @@ module ImageCroppable
   extend ActiveSupport::Concern
 
   included do
-    with_options allow_blank: true do |croppable|
+    with_options allow_blank: true, if: :cropped? do |croppable|
       croppable.validates :crop_x, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
       croppable.validates :crop_y, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
       croppable.validates :crop_width, numericality: { only_integer: true, greater_than: 0 }
@@ -11,23 +11,34 @@ module ImageCroppable
 
     validate :verify_crop_dimensions_consistency, on: :update, if: :cropped?
 
-    before_validation :clear_crop_area, if: :asset_changed?
+    # before_validation :clear_crop_area, if: :asset_changed?
+    before_save :clear_crop_area, unless: :cropped?
+
+    store_accessor :customization_options, :cropped, :crop_x, :crop_y, :crop_width, :crop_height
+    alias_method :cropped?, :cropped
+
+    %w(crop_x crop_y crop_width crop_height).each do |method|
+      class_eval %{
+        def #{method}=(value)
+          super(value.try(:to_i))
+        end
+      }
+    end
   end
 
   def crop_dimensions
     ImageDimensions.new(crop_width, crop_height) if cropped?
   end
 
-  def cropped?
-    crop_x.present? and crop_y.present? and crop_width.present? and crop_height.present?
+  def crop_geometry
+    "#{crop_width}x#{crop_height}+#{crop_x}+#{crop_y}" if cropped?
   end
 
-  def uncrop!
-    clear_crop_area
-    asset.reprocess!
+  def cropped=(cropped)
+    super(cropped.try(:in?, ActiveRecord::ConnectionAdapters::Column::TRUE_VALUES))
   end
 
-  private
+  protected
   def clear_crop_area
     self.crop_x = nil
     self.crop_y = nil
@@ -35,6 +46,7 @@ module ImageCroppable
     self.crop_height = nil
   end
 
+  private
   def verify_crop_dimensions_consistency
     if crop_x + crop_width > original_width
       errors.add(:crop_x, :invalid)

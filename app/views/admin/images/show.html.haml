@@ -12,7 +12,8 @@
           - if @image.cropped?
             %li= link_to prepend_icon(:undo, translate('helpers.links.uncrop'), fixed_width: true), [:uncrop, :admin, @image], method: :patch
           %li.divider
-          %li= link_to prepend_icon(:picture, translate('helpers.links.new', model: Image::Style.model_name.human), outline: true, fixed_width: true), [:new, :admin, @image, :style]
+          %li= link_to prepend_icon(:picture, translate('helpers.links.new', model: Image::Style::Variant.model_name.human), outline: true, fixed_width: true), [:new, :admin, @image, :style]
+          %li= link_to prepend_icon(:upload, translate('helpers.links.upload', model: Image::Style::Attachment.model_name.human), fixed_width: true), new_admin_image_style_path(@image, source: 'attachment')
           %li.divider
           %li= link_to prepend_icon(:download, translate('helpers.links.download'), fixed_width: true), [:download, :admin, @image]
           %li= link_to prepend_icon(:folder_open, translate('helpers.links.move_to', model: Attachment.model_name.human(count: 2)), outline: true, fixed_width: true), [:move_to_attachments, :admin, @image], method: :patch, data: { confirm: translate('helpers.confirmations.move', model: Image.model_name.human, other_model: Attachment.model_name.human(count: 2)) }
@@ -23,7 +24,7 @@
   .col-lg-8
     .content
       = link_to @image.asset.url(:original_cropped), target: '_blank' do
-        = image_tag(@image.asset.url(:preview), class: 'img-responsive img-rounded', alt: @image.title)
+        = image_tag(@image.asset.url(:preview), class: 'img-responsive img-rounded center-block', alt: @image.title)
 
     .content
       = raw @image.description

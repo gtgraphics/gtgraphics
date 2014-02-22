@@ -7,7 +7,12 @@ module ErrorHandlingController
       rescue_from(ActiveRecord::RecordNotFound) { render_error :not_found }
       rescue_from(ActionController::UnknownFormat) { render_error :not_found }
       rescue_from(ActionController::RoutingError) { render_error :not_found }
-      rescue_from(CanCan::AccessDenied) { render_error :unauthorized }
+      rescue_from CanCan::AccessDenied do |exception|
+        @error_message = exception.message
+        @attempted_action = exception.action
+        @subject = exception.subject
+        render_error :unauthorized
+      end
     end
   end
 

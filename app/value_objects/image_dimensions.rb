@@ -1,4 +1,6 @@
 class ImageDimensions
+  include Comparable
+
   attr_reader :width, :height
 
   def initialize(width, height)
@@ -6,8 +8,12 @@ class ImageDimensions
     @height = height || 0
   end
 
+  def <=>(other)
+    pixels <=> other.to_i
+  end
+
   def aspect_ratio
-    Rational(width, height) unless @width.zero? or @height.zero?
+    to_r unless @width.zero? or @height.zero?
   end
 
   def inspect
@@ -16,6 +22,14 @@ class ImageDimensions
 
   def pixels
     width * height
+  end
+
+  def to_i
+    pixels
+  end
+
+  def to_r
+    Rational(width, height)
   end
 
   def to_s

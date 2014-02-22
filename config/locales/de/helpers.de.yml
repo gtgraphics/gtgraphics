@@ -33,6 +33,7 @@ de:
       cancel: Abbrechen
       close: Schließen
       crop: Zuschneiden
+      crop_and_scale: 'Zuschneiden/Skalieren'
       destroy: Löschen
       destroy_selected: Ausgewählte löschen
       disable_in_menu: In Menüs verstecken

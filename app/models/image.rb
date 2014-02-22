@@ -14,6 +14,8 @@
 #  updated_at            :datetime
 #  author_id             :integer
 #  customization_options :text
+#  transformed_width     :integer
+#  transformed_height    :integer
 #
 
 class Image < ActiveRecord::Base
@@ -29,7 +31,7 @@ class Image < ActiveRecord::Base
   EXIF_CAPABLE_CONTENT_TYPES = [Mime::JPEG].freeze
 
   STYLES = {
-    original_cropped: { geometry: '100%x100%', processors: [:manual_cropper] },
+    transformed: { geometry: '100%x100%', processors: [:manual_cropper] },
     thumbnail: { geometry: '75x75#', format: :png, processors: [:manual_cropper] },
     large_thumbnail: { geometry: '253x190#', format: :png, processors: [:manual_cropper] },
     preview: { geometry: '1170x>', processors: [:manual_cropper] },
@@ -63,9 +65,14 @@ class Image < ActiveRecord::Base
 
   validates_attachment :asset, presence: true, content_type: { content_type: CONTENT_TYPES }
 
+  after_initialize :set_transformation_defaults, if: :new_record?
   before_validation :set_default_title, on: :create
-  before_save :set_exif_data, if: :asset_changed?
-  before_update :destroy_custom_styles, if: :asset_changed?
+  with_options if: :asset_changed? do |image|
+    image.after_validation :set_transformation_defaults
+    image.before_save :set_transformed_dimensions
+    image.before_save :set_exif_data
+    image.before_update :destroy_custom_styles
+  end
 
   delegate :software, to: :exif_data, allow_nil: true
 
@@ -89,7 +96,7 @@ class Image < ActiveRecord::Base
 
   def custom_styles_hash
     self.custom_styles.inject({}) do |custom_styles, style|
-      custom_styles.merge!(style.label => style.transformations) if style.variant? and style.persisted?
+      custom_styles.merge!(style.label => style.transformations) if style.variant? and style.persisted? and !style.marked_for_destruction?
       custom_styles
     end
   end
@@ -115,8 +122,14 @@ class Image < ActiveRecord::Base
     title
   end
 
+  def uncrop!
+    update(cropped: false)
+    asset.reprocess!
+  end
+
   private
   def destroy_custom_styles
+    # This actually destroys only the variants of the replaced image
     self.custom_styles.variants.destroy_all
   end
 
@@ -132,6 +145,20 @@ class Image < ActiveRecord::Base
   def set_exif_data
     if asset_content_type.in?(EXIF_CAPABLE_CONTENT_TYPES)
       self.exif_data = OpenStruct.new(EXIFR::JPEG.new(asset.queued_for_write[:original].path).to_hash) rescue nil
+    end
+  end
+
+  def set_transformation_defaults
+    self.cropped = false if cropped.nil?
+  end
+
+  def set_transformed_dimensions
+    if cropped?
+      self.transformed_width = crop_width
+      self.transformed_height = crop_height
+    else
+      self.transformed_width = width
+      self.transformed_height = height
     end
   end
 end

@@ -23,17 +23,18 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def create
-    @image = Image.new(image_params)
-    @image_page_embedding_activity = ImagePageEmbeddingActivity.new(image_page_embedding_activity_params)
-    if @image_page_embedding_activity.valid? and @image.save
-      @image_page_embedding_activity.image = image
-      flash_for @image
-    end
+    @image = Image.create(image_params)
+    flash_for @image
+    #@image_page_embedding_activity = ImagePageEmbeddingActivity.new(image_page_embedding_activity_params)
+    #if @image_page_embedding_activity.valid? and @image.save
+    #  @image_page_embedding_activity.image = image
+    #  flash_for @image
+    #end
     respond_with :admin, @image
   end
 
   def show
-    @image_styles = @image.custom_styles.ordered_by_dimensions
+    @image_styles = @image.custom_styles
     respond_with :admin, @image
   end
 
@@ -48,11 +49,11 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def crop
-    @image.tap do |i|
-      i.crop_x ||= 0
-      i.crop_y ||= 0
-      i.crop_width ||= i.width
-      i.crop_height ||= i.height
+    @image.tap do |image|
+      image.crop_x ||= 0
+      image.crop_y ||= 0
+      image.crop_width ||= image.width
+      image.crop_height ||= image.height
     end
     respond_with :admin, @image
   end
@@ -63,7 +64,7 @@ class Admin::ImagesController < Admin::ApplicationController
       @image.asset.reprocess!
     end
     flash_for @image
-    respond_with :admin, @image, template: :crop
+    respond_with :admin, @image
   end
 
   def uncrop

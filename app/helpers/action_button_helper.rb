@@ -42,7 +42,7 @@ module ActionButtonHelper
     options[:data][:confirm] = translate('helpers.confirmations.destroy', model: model_name)
 
     if icon_only
-      caption = icon(:trash, outline: true)
+      caption = icon(:trash, outline: true, fixed_width: true)
       options[:class] ||= ""
       options[:class] << " icon-only"
       options[:class].strip!
@@ -64,7 +64,7 @@ module ActionButtonHelper
     model_name = options.delete(:model) { object.class.model_name.human }
 
     if icon_only
-      caption = icon(:pencil)
+      caption = icon(:pencil, fixed_width: true)
       options[:class] ||= ""
       options[:class] << " icon-only"
       options[:class].strip!
@@ -87,7 +87,7 @@ module ActionButtonHelper
     model_name = options.delete(:model) { object.class.model_name.human }
 
     if icon_only
-      caption = icon(:info)
+      caption = icon(:info, fixed_width: true)
       options[:class] ||= ""
       options[:class] << " icon-only"
       options[:class].strip!
