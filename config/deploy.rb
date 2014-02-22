@@ -8,7 +8,8 @@ set :repo_url, 'git@tasdy.net:gtgraphics'
 set :ssh_options, { forward_agent: true }
 
 # RVM
-set :rvm_type, :user
+set :default_env, { rvm_bin_path: '~/.rvm/bin' }
+# set :rvm_type, :user
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
