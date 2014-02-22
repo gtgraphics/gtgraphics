@@ -1,5 +1,5 @@
 module PageSitemapHelper
-  def page_sitemap_collection_for_select(pages = Page.with_translations(I18n.locale))
+  def page_sitemap_collection_for_select(pages = Page.with_translations)
     pages_by_parents = pages.group_by(&:parent_id)
     collection = []
     page_sitemap_collection_for_select_recursive(collection, pages_by_parents, nil, 0)

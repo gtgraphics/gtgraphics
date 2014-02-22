@@ -115,7 +115,7 @@ class @TranslationManager
         localeWithErrors = locale
         return false
     initialLocale = localeWithErrors || I18n.locale
-    initialLocale = @translatedLocales.first() unless _.contains(@translatedLocales, initialLocale)
+    initialLocale = _.first(@translatedLocales) unless _.contains(@translatedLocales, initialLocale)
     initialLocale
 
   # Methods to refresh states for UI elements

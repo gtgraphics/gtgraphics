@@ -129,7 +129,6 @@ de:
       page/translation:
         meta_description: SEO-Beschreibung
         meta_keywords: SEO-Keywords
-      region_definition:
       shout:
         nickname: Verfasser
         message: Nachricht
@@ -213,18 +212,15 @@ de:
       page/redirection:
         one: Umleitung
         other: Umleitungen
+      page/region:
+        one: Region
+        other: Regionen
       project:
         one: Projekt
         other: Projekte
       redirection:
         one: Umleitung
         other: Umleitungen
-      region:
-        one: Region
-        other: Regionen
-      region_definition:
-        one: Vorlagenregion
-        other: Vorlagenregionen
       shout:
         one: Stern
         other: Sterne
@@ -249,6 +245,9 @@ de:
       template/project:
         one: Projektvorlage
         other: Projektvorlagen
+      template/region_definition:
+        one: Vorlagenregion
+        other: Vorlagenregionen
       user:
         one: Benutzer
         other: Benutzer

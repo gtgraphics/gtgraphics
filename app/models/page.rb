@@ -225,7 +225,7 @@ class Page < ActiveRecord::Base
       'type' => embeddable_class.model_name.human,
       'author' => author,
       'template' => template_name,
-      'children' => children.with_translations(I18n.locale).to_a
+      'children' => children.with_translations.to_a
     ).reverse_merge(embeddable.try(:to_liquid) || {})
   end
 

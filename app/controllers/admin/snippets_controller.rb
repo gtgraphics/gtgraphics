@@ -11,7 +11,7 @@ class Admin::SnippetsController < Admin::ApplicationController
   end
 
   def index
-    @snippets = Snippet.with_translations(I18n.locale).includes(:author).sort(params[:sort], params[:direction]).page(params[:page])
+    @snippets = Snippet.with_translations.includes(:author).sort(params[:sort], params[:direction]).page(params[:page])
     respond_with :admin, @snippets
   end
 

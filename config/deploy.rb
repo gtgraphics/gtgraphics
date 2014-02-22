@@ -11,13 +11,10 @@ set :ssh_options, { forward_agent: true }
 # set :default_env, { rvm_bin_path: '~/.rvm/bin' }
 # set :rvm_ruby_string, :local
 set :rvm_type, :user
-set :rvm_ruby_version, '2.0.0'
-# set :default_env, { rvm_bin_path: '/home/gtgraphics/.rvm/bin:$PATH' }
+set :rvm_ruby_version, '2.1.0'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
-
-# Default deploy_to directory is /var/www/my_app
 
 # Default value for :scm is :git
 # set :scm, :git

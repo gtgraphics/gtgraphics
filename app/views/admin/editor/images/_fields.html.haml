@@ -1,5 +1,5 @@
 = fields.input :external, collection: [[Editor::Image.human_attribute_name(:internal), false], [Editor::Image.human_attribute_name(:external), true]], as: :radio_buttons, label: false, container_html: { class: 'col-lg-offset-3 col-lg-9' }
-= fields.input :image_id, collection: Image.with_translations(I18n.locale), required: true, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
+= fields.input :image_id, collection: Image.with_translations, required: true, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
 = fields.input :image_style, collection: Image.attachment_definitions[:asset][:styles].keys.collect { |style| [style, style] }, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
 = fields.input :url, required: true, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
 = fields.input :width, container_html: { class: 'col-lg-3' }, label_html: { class: 'col-lg-3' }

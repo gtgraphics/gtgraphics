@@ -1,5 +1,5 @@
 namespace :deploy do
-  desc 'Seeds the remote database'
+  desc 'Seeds the database'
   task :seed => :set_rails_env do
     on roles(:app) do |host|
       within release_path do

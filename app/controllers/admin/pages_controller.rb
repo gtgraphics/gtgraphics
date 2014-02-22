@@ -8,7 +8,7 @@ class Admin::PagesController < Admin::ApplicationController
   breadcrumbs do |b|
     # b.append Page.model_name.human(count: 2), :admin_pages
     if @parent_page 
-      @parent_page.self_and_ancestors.where.not(parent_id: nil).with_translations(I18n.locale).each do |page|
+      @parent_page.self_and_ancestors.where.not(parent_id: nil).with_translations.each do |page|
         b.append page.title, [:admin, page]
       end
     end
@@ -44,7 +44,7 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def show
-    @pages = @page.self_and_ancestors_and_siblings.with_translations(I18n.locale)
+    @pages = @page.self_and_ancestors_and_siblings.with_translations
     respond_with :admin, @page, layout: !request.xhr?
   end
 
@@ -160,7 +160,7 @@ class Admin::PagesController < Admin::ApplicationController
     else
       pages = Page.where(depth: 0..1)
     end
-    @page_tree = PageTree.new(pages.with_translations(I18n.locale))
+    @page_tree = PageTree.new(pages.with_translations)
     respond_to do |format|
       format.json { render json: @page_tree }
     end
@@ -255,7 +255,7 @@ class Admin::PagesController < Admin::ApplicationController
       conditions << Page.arel_table[:parent_id].in(open_nodes)
     end
     pages = Page.where(conditions.reduce(:or))
-    @page_tree = PageTree.new(pages.with_translations(I18n.locale), selected: @page)
+    @page_tree = PageTree.new(pages.with_translations, selected: @page)
   end
 
   def load_page

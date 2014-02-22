@@ -28,7 +28,7 @@
   .col-lg-4
     .panel.panel-default
       .panel-heading
-        %h3.panel-title= RegionDefinition.model_name.human(count: 2)
+        %h3.panel-title= ::Template::RegionDefinition.model_name.human(count: 2)
       .panel-body
         - if @region_definitions.any?
           %ul#region_definitions.gtg-admin-action-list
@@ -40,4 +40,4 @@
                     = destroy_button_link_for region_definition, url: destroy_region_admin_template_path(@template, label: region_definition.label), size: :mini, icon_only: true
         - else
           .text-center
-            = translate('views.hints.empty', model: RegionDefinition.model_name.human(count: 2))
+            = translate('views.hints.empty', model: ::Template::RegionDefinition.model_name.human(count: 2))
