@@ -75,6 +75,9 @@ en:
       page:
         one: Page
         other: Pages
+      page/homepage:
+        one: Homepage
+        other: Homepages
       redirection: 
         one: Redirection
         other: Redirections
