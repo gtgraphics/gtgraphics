@@ -9,4 +9,4 @@
 //= require_tree ./core_ext
 //= require_tree ./libraries
 //= require_tree ./shared
-//= require ./editor
+//= require editor
