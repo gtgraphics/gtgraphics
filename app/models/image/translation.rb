@@ -17,6 +17,7 @@ class Image < ActiveRecord::Base
     include UniquelyTranslated
 
     acts_as_uniquely_translated :image_id
+    
     sanitizes :title, with: :squish
 
     validates :title, presence: true

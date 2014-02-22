@@ -39,6 +39,7 @@ class Image < ActiveRecord::Base
     default_scope -> { order("#{table_name}.transformed_width * #{table_name}.transformed_height") }
 
     store :customization_options
+    
     acts_as_image_croppable
     acts_as_image_resizable
 
