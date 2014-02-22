@@ -61,6 +61,7 @@ gem 'delayed_job_active_record'
 gem 'request_store'
 gem 'exifr'
 gem 'nokogiri'
+gem 'exception_notification', group: [:staging, :production]
 
 # Deployment
 group :development do

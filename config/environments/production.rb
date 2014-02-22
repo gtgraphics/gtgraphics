@@ -1,6 +1,12 @@
 GtGraphics::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  config.middleware.use ExceptionNotification::Rack, email: {
+    email_prefix: "[Production] ",
+    sender_address: %{"GT Graphics Exception Notifier" <error@gtgraphics.de>},
+    exception_recipients: %w(webmaster@gtgraphics.de)
+  }
+
   # Code is not reloaded between requests.
   config.cache_classes = true
 
