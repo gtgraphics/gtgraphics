@@ -15,4 +15,4 @@
 //= require admin/translation_manager
 //= require admin/page_translation_manager
 //= require admin/page_embeddable_manager
-//= require_tree ./admin/views
+// require_tree ./admin/views
