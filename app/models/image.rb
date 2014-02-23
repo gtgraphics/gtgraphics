@@ -47,7 +47,7 @@ class Image < ActiveRecord::Base
 
   translates :title, :description, fallbacks_for_empty_translations: true
 
-  store :customization_options, accessors: [:crop_x, :crop_y, :crop_width, :crop_height]
+  store :customization_options, accessors: [:cropped, :crop_x, :crop_y, :crop_width, :crop_height]
 
   acts_as_authorable default_to_current_user: false
   acts_as_batch_translatable
