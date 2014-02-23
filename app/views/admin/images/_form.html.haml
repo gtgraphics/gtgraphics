@@ -11,8 +11,8 @@
   = form.association :author, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
 
   - if @image.new_record?
-    %fieldset
-      %legend= Page.model_name.human(count: 2)
-      .content
-        = simple_fields_for @image_page_embedding_activity do |fields|
-          = fields.input :parent_page_id, collection: page_sitemap_collection_for_select(Page.except_images), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
+    /%fieldset
+    /  %legend= Page.model_name.human(count: 2)
+    /  .content
+    /    = simple_fields_for @image_page_embedding_activity do |fields|
+    /      = fields.input :parent_page_id, collection: page_sitemap_collection_for_select(Page.except_images), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
