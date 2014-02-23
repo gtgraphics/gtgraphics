@@ -75,7 +75,7 @@ class Image < ActiveRecord::Base
     image.before_update :destroy_custom_styles
   end
 
-  delegate :path, :url, to: :asset
+  delegate :path, :url, to: :asset, prefix: true
   delegate :software, to: :exif_data, allow_nil: true
 
   class << self
