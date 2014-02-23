@@ -86,6 +86,11 @@
         }
       }
 
+      .jqtree-title {
+        display: inline-block;
+        margin-right: 42px; // handle width
+        white-space: normal;
+      }
 
       .jqtree-toggler {
         cursor: pointer;
