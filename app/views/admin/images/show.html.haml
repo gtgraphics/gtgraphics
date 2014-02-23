@@ -23,7 +23,7 @@
 .row
   .col-lg-8
     .content
-      = link_to @image.asset.url(:original_cropped), target: '_blank' do
+      = link_to @image.asset.url(:transformed), target: '_blank' do
         = image_tag(@image.asset.url(:preview), class: 'img-responsive img-rounded center-block', alt: @image.title)
 
     .content

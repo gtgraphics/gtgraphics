@@ -16,8 +16,9 @@ class Admin::ImageStylesController < Admin::ApplicationController
       @image_style = @image.custom_styles.new(type: 'Image::Style::Attachment')
     else
       @image_style = @image.custom_styles.new(type: 'Image::Style::Variant') do |style|
-        style.crop_x = '1'
-        style.crop_y = '1'
+        style.cropped = true
+        style.crop_x = 0
+        style.crop_y = 0
         style.crop_width = @image.width
         style.crop_height = @image.height
         style.resize_width = @image.width

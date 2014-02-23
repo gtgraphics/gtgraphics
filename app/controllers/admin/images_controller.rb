@@ -50,6 +50,7 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def crop
     @image.tap do |image|
+      image.cropped = true
       image.crop_x ||= 0
       image.crop_y ||= 0
       image.crop_width ||= image.width
@@ -60,7 +61,9 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def apply_crop
     Image.transaction do
-      @image.update(image_crop_params)
+      @image.cropped = true
+      @image.attributes = image_crop_params
+      @image.save
       @image.asset.reprocess!
     end
     flash_for @image
