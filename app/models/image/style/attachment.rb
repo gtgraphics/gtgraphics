@@ -45,7 +45,9 @@ class Image < ActiveRecord::Base
       end
 
       def virtual_file_name
-        "#{image.title.parameterize.underscore}_#{transformed_dimensions.to_a.join('x')}" + File.extname(file_name).downcase
+        I18n.with_locale(I18n.default_locale) do
+          "#{image.title.parameterize.underscore}_#{transformed_dimensions.to_a.join('x')}" + File.extname(file_name).downcase
+        end
       end
 
       Paperclip.interpolates :image_id do |attachment, style|

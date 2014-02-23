@@ -23,7 +23,7 @@ class Admin::SnippetsController < Admin::ApplicationController
 
   def create
     @snippet = Snippet.create(snippet_params)
-    flash_for @snippet, :created
+    flash_for @snippet
     respond_with :admin, @snippet
   end
 
