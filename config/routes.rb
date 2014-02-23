@@ -123,19 +123,22 @@ GtGraphics::Application.routes.draw do
         page_embeddable_class = page_type.constantize
         resource_name = page_embeddable_class.resource_name
 
-        actions = { show: :get, edit: :get }
+        actions = {
+          show: { via: :get },
+          edit: { via: :get }
+        }
         case resource_name
-        when :contact_form then actions.merge!(show: [:get, :post])
-        when :image then actions.merge!(download: :get)
+        when :contact_form then actions.merge!(show: { via: [:get, :post] })
+        when :image then actions.merge!('download(/:style_id(/:dimensions))' => { action: :download, via: :get, as: :download_image })
         end
 
         scope constraints: Routing::PageConstraint.new(page_type) do
           controller_name = resource_name.to_s.pluralize
-          actions.each do |action_name, request_methods|
+          actions.each do |action_name, options|
             if action_name == :show
-              match '*path(.:format)', controller: controller_name, action: action_name, via: request_methods, as: resource_name
+              match '*path(.:format)', options.reverse_merge!(controller: controller_name, action: action_name, as: resource_name)
             else
-              match "*path/#{action_name}(.:format)", controller: controller_name, action: action_name, via: request_methods, as: "#{action_name}_#{resource_name}"
+              match "*path/#{action_name}(.:format)", options.reverse_merge!(controller: controller_name, action: action_name, as: "#{action_name}_#{resource_name}")
             end
           end
         end

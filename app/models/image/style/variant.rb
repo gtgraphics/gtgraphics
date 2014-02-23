@@ -21,14 +21,13 @@
 class Image < ActiveRecord::Base
   class Style < ActiveRecord::Base
     class Variant < Image::Style
-      # TODO Move Cropped, Resized, CropX, ..., ResizeHeight to a serialized data store
-
       validate :verify_either_cropped_or_resized
 
       before_save :set_dimensions
       around_save :reprocess_asset
       after_destroy :destroy_asset
 
+      delegate :file_name, :content_type, :format, :mime_type, to: :image
       delegate :asset, :width, :height, to: :image, prefix: :original
 
       def asset_path
@@ -37,6 +36,10 @@ class Image < ActiveRecord::Base
 
       def asset_url
         original_asset.url(label)
+      end
+
+      def virtual_file_name
+        "#{image.title.parameterize.underscore}_#{transformed_dimensions.to_a.join('x')}" + File.extname(file_name).downcase
       end
 
       private

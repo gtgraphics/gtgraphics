@@ -24,6 +24,10 @@ class ImageDimensions
     width * height
   end
 
+  def to_a
+    [width, height]
+  end
+
   def to_i
     pixels
   end

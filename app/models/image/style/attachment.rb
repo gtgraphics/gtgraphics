@@ -44,6 +44,10 @@ class Image < ActiveRecord::Base
         asset.url(style)
       end
 
+      def virtual_file_name
+        "#{image.title.parameterize.underscore}_#{transformed_dimensions.to_a.join('x')}" + File.extname(file_name).downcase
+      end
+
       Paperclip.interpolates :image_id do |attachment, style|
         attachment.instance.image_id
       end
