@@ -75,13 +75,20 @@ class Image < ActiveRecord::Base
     image.before_update :destroy_custom_styles
   end
 
-  delegate :path, :url, to: :asset, prefix: true
   delegate :software, to: :exif_data, allow_nil: true
 
   class << self
     def content_types
       CONTENT_TYPES
     end
+  end
+  
+  def asset_path(style = :transformed)
+    asset.path(style)
+  end
+
+  def asset_url(style = :transformed)
+    asset.url(style)
   end
   
   def camera
