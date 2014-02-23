@@ -1,25 +1,75 @@
-.navbar-toggle {
-  line-height: 15px;
-  color: white;
-}
-
-#nav_account {
-  .avatar {
-    display: block;
-    float: left;
-    margin-top: -2px;
-    margin-right: 6px;
+.navbar {
+  @media (min-width: $screen-sm-min) {
+    .navbar-nav:not(.navbar-right):first-child {
+      margin-left: -15px;
+    }
   }
-}
 
-#nav_messages {
-  .badge {
-    margin-left: 4px;
+  .navbar-brand {
+    $width: 200px;
+    position: absolute;
+    width: $width;
+    left: 50%;
+    margin-left: -$width / 2 !important;
+    background: {
+      color: $navbar-inverse-bg;
+      image: asset-url('brand.png');
+      repeat: no-repeat;
+      position: center;
+    }
+    text: {
+      align: center;
+      transform: uppercase;    
+    }
+    font: {
+      size: 16px;
+      weight: 700;
+    }
+    z-index: 1000;
+
+    &:hover, &:focus {
+      background-color: $navbar-inverse-bg;
+    }
+    
+    $ellipsis-width: 50px;
+
+    &:before, &:after {
+      content: " ";
+      position: absolute;
+      display: block;
+      top: 0;
+      width: $ellipsis-width;
+      height: $navbar-height;
+      pointer-events: none;
+    }
+
+    &:before {
+      left: -$ellipsis-width;
+      @include background(linear-gradient(left, rgba($navbar-inverse-bg, 0), $navbar-inverse-bg));
+    }
+    &:after {
+      right: -$ellipsis-width;
+      @include background(linear-gradient(right, rgba($navbar-inverse-bg, 0), $navbar-inverse-bg));
+    }
   }
-}
 
-.navbar-brand {
-  text-transform: uppercase;
-  font-weight: 700;
-  font-size: 16px;
+  .navbar-toggle {
+    line-height: 15px;
+    color: white;
+  }
+
+  #nav_account {
+    .avatar {
+      display: block;
+      float: left;
+      margin-top: -2px;
+      margin-right: 6px;
+    }
+  }
+
+  #nav_messages {
+    .badge {
+      margin-left: 4px;
+    }
+  }
 }

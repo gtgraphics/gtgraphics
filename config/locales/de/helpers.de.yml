@@ -60,6 +60,7 @@ de:
       upload: '%{model} hochladen'
       view: Ansehen
       view_mode: Ansichtsmodus
+      toggle_navigation: Navigation umschalten
     confirmations:
       destroy: '%{model} wirklich entfernen?'
       destroy_selected: 'Möchten Sie die ausgewählten %{model} wirklich entfernen?'

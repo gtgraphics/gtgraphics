@@ -1,7 +1,7 @@
 .col-lg-offset-4.col-lg-4
 
   .page-header
-    %h1= translate('views.admin.users.headlines.sign_in')
+    %h1.text-center= translate('views.admin.users.headlines.sign_in')
 
   = simple_form_for @sign_in_activity, as: :session, url: :admin_sign_in do |form|
 

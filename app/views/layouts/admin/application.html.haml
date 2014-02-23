@@ -7,11 +7,11 @@
       .navbar-header
         - if signed_in?
           %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
-            %span.sr-only Toggle Navigation
             = icon(:bars, fixed_width: true)
+            %span.sr-only= translate('helpers.links.toggle_navigation')
 
         = link_to :admin_root, class: 'navbar-brand' do
-          GT Graphics
+          %span.sr-only GT Graphics
 
       - if signed_in?
         = render 'navbar'

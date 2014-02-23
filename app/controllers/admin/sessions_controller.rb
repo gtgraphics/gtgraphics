@@ -1,5 +1,6 @@
 class Admin::SessionsController < Admin::ApplicationController
   skip_authentication only: %i(new create)
+  before_filter :redirect_to_dashboard, if: :signed_in?, only: %i(new create)
 
   def new
     @sign_in_activity = SignInActivity.new
@@ -32,6 +33,10 @@ class Admin::SessionsController < Admin::ApplicationController
   end
 
   private
+  def redirect_to_dashboard
+    redirect_to :admin_root
+  end
+
   def sign_in_params
     params.require(:session).permit(:email, :password, :permanent)
   end
