@@ -47,7 +47,7 @@ class Image < ActiveRecord::Base
 
   translates :title, :description, fallbacks_for_empty_translations: true
 
-  store :customization_options, accessors: [:cropped, :crop_x, :crop_y, :crop_width, :crop_height]
+  store :customization_options
 
   acts_as_authorable default_to_current_user: false
   acts_as_batch_translatable
@@ -83,15 +83,7 @@ class Image < ActiveRecord::Base
       CONTENT_TYPES
     end
   end
-
-  %w(crop_x crop_y crop_width crop_height).each do |method|
-    class_eval %{
-      def #{method}=(value)
-        super(value.try(:to_i))
-      end
-    }
-  end
-
+  
   def camera
     exif_data.try(:model)
   end
