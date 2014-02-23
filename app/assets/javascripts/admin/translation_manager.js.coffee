@@ -29,7 +29,6 @@ class @TranslationManager
     _this = @
     @container.on 'click', '.add-locale', (event) ->
       event.preventDefault()
-      console.log 'add locale'
       $link = $(@)
       unless $link.hasClass('disabled') and $link.prop('disabled')
         locale = $link.data('locale')

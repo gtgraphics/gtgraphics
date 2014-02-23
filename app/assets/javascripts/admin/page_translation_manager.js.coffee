@@ -17,7 +17,6 @@ class @PageTranslationManager extends @TranslationManager
       @refreshButtonStates()
 
     $localePanes = @getLocalePanes(locale, true)
-    console.log $localePanes
     if $localePanes.any()
       $localePanes.removeClass('removed')
       @markTranslationDestroyed(locale, false)

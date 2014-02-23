@@ -58,10 +58,11 @@
       - else
         = yield
 
-    %hr
-    = link_to 'Admin', :admin_root
-    \|
-    = link_to 'Edit Page', [:edit, :admin, @page]
+    - if signed_in?
+      %hr
+      = link_to 'Admin', :admin_root
+      \|
+      = link_to 'Edit Page', [:edit, :admin, @page]
 
   = render 'footer'
 
