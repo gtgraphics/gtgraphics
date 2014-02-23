@@ -20,10 +20,9 @@
     .container
 
       .navbar-header
-        - if signed_in?
-          %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
-            = icon(:bars, fixed_width: true)
-            %span.sr-only= translate('helpers.links.toggle_navigation')
+        %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
+          = icon(:bars, fixed_width: true)
+          %span.sr-only= translate('helpers.links.toggle_navigation')
 
         = link_to :root, class: 'navbar-brand' do
           %span.sr-only GT Graphics

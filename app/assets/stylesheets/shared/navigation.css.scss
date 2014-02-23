@@ -16,7 +16,11 @@
       image: asset-url('brand.png');
       repeat: no-repeat;
       position: center;
+      size: 166px 18px;
     }
+
+    @include retina-background-image('brand@2x.png');
+
     text: {
       align: center;
       transform: uppercase;    
@@ -55,6 +59,8 @@
 
   .navbar-toggle {
     line-height: 15px;
+    float: left;
+    margin-left: 15px;
     color: white;
   }
 
