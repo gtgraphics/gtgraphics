@@ -24,7 +24,7 @@ class Admin::SnippetsController < Admin::ApplicationController
   def create
     @snippet = Snippet.create(snippet_params)
     flash_for @snippet
-    respond_with :admin, @snippet
+    respond_with :admin, @snippet, location: :admin_snippets
   end
 
   def show
@@ -34,7 +34,7 @@ class Admin::SnippetsController < Admin::ApplicationController
   def update
     @snippet.update(snippet_params)
     flash_for @snippet
-    respond_with :admin, @snippet
+    respond_with :admin, @snippet, location: :admin_snippets
   end
 
   def destroy

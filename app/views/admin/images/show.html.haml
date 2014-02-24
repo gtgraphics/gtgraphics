@@ -27,7 +27,7 @@
         = image_tag(@image.asset.url(:preview), class: 'img-responsive img-rounded center-block', alt: @image.title)
 
     .content
-      = raw @image.description
+      = liquify @image.description, with: @image
 
   .col-lg-4
     .panel.panel-default
