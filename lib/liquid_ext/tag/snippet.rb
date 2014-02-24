@@ -7,7 +7,14 @@ class LiquidExt::Tag::Snippet < Liquid::Tag
   end
 
   def render(context)
-    snippet.body.html_safe if snippet
+    if snippet
+      template = Liquid::Template.parse(snippet.body)
+      attributes = snippet.to_liquid.merge(
+        'language' => I18n.translate(I18n.locale, scope: :languages),
+        'native_language' => I18n.translate(I18n.locale, scope: :languages, locale: I18n.locale)
+      )
+      template.render(attributes).html_safe
+    end
   end
 
   private
