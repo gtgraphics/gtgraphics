@@ -44,7 +44,7 @@ class Template < ActiveRecord::Base
   has_many :regions, through: :region_definitions
 
   validates :type, presence: true, inclusion: { in: TEMPLATE_TYPES }, on: :create
-  validates :file_name, presence: true, inclusion: { in: ->(template) { template.class.template_files } }
+  validates :file_name, presence: true, inclusion: { in: ->(template) { template.class.template_files }, if: :type? }
   validate :verify_region_labels_validity
 
   attr_readonly :type

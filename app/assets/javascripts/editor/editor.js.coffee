@@ -1,5 +1,5 @@
 class @Editor
-  DEFAULTS = {
+  @defaults = {
     viewMode: 'editor',
     controls: [
       ['bold', 'italic', 'underline', 'strikethrough'],
@@ -12,7 +12,7 @@ class @Editor
   }
 
   constructor: ($originalInput, options = {}) ->
-    @options = jQuery.extend({}, DEFAULTS, options)
+    @options = jQuery.extend({}, Editor.defaults, options)
 
     @input = $originalInput.hide()
     @input.attr('spellcheck', false)

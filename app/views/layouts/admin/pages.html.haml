@@ -45,7 +45,7 @@
         #sitemap_container
           #sitemap.slimscroll{data: { url: tree_admin_pages_path(format: :json), pages: @page_tree.to_json, selected_page_id: @page.id}}
 
-      .col-lg-8.col-md-7.hidden-sm.hidden-xs
+      .col-lg-8.col-md-7.col-sm-12.col-xs-12
         #page_content
           - if content_for? :page_content
             = yield :page_content

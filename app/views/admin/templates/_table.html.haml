@@ -12,8 +12,7 @@
         %th.checkbox-cell
           %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
       %th= sort_link_for templates, :name
-      - if @template_type.blank?
-        %th= ::Template.human_attribute_name :type
+      %th.hidden-xs= ::Template.human_attribute_name :type
       - if actions
         %th.actions
   %tbody
@@ -23,8 +22,7 @@
           %td.checkbox-cell
             = check_box_tag 'template_ids[]', template.id, false, class: 'table-checkbox', id: nil
         %td= link_to template.name, admin_template_path(template)
-        - if @template_type.blank?
-          %td= template.class.model_name.human
+        %td.hidden-xs= template.class.model_name.human
         - if actions
           %td.actions
             = action_buttons_for template.becomes(::Template), size: :mini, icon_only: true
