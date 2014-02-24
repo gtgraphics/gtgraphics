@@ -4,22 +4,18 @@ module PagesHelper
     template.render(@page.to_liquid).html_safe
   end
 
-  def render_region(name)
+  def render_region(label)
     raise Page::Region::NotSupported.new(@page) unless @page.supports_regions?
-    if region_definition = @region_definitions.find { |definition| definition.label == name.to_s }
-      if can? :update, @page
-        data = { region: name, url: update_region_admin_page_path(@page) }
-      end
+    if can? :update, @page and region_definition = @region_definitions.find { |definition| definition.label == label.to_s }
       region = @page.regions.find_by(definition: region_definition)
+      content = render_content(region.try(:body))
       if editing?
-        content_tag :div, class: 'region well', data: data do
-          region.try(:body)
-        end
+        content_tag :div, content, class: 'region well', data: { region: label, url: admin_page_region_path(@page, label) }
       else
-        render_content(region.try(:body))
+        content
       end
     else
-      raise Page::Region::NotFound.new(name, @page.template) if Rails.env.development?
+      raise Page::Region::NotFound.new(label, @page.template) if Rails.env.development?
     end
   end
 end

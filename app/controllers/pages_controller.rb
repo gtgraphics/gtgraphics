@@ -4,6 +4,8 @@ class PagesController < ApplicationController
   before_action :load_page
   before_action :load_template
 
+  authorize_resource class: 'Page', parent: false, only: :edit
+
   attr_reader :page
   protected :page
   helper_method :page

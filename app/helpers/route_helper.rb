@@ -3,7 +3,7 @@ module RouteHelper
     if page.path.present?
       send("edit_#{page.embeddable_class.model_name.element}_path", options.merge(path: page.path))
     else
-      root_path(options) # TODO
+      edit_root_path(options) # TODO
     end
   end
 
@@ -11,7 +11,7 @@ module RouteHelper
     if page.path.present?
       send("edit_#{page.embeddable_class.model_name.element}_url", options.merge(path: page.path))
     else
-      root_url(options) # TODO
+      edit_root_url(options) # TODO
     end
   end
 

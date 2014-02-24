@@ -66,6 +66,7 @@ GtGraphics::Application.routes.draw do
 
         resources :pages do
           resources :children, controller: :pages, only: :new
+          resources :regions, controller: :page_regions, only: :update
           collection do
             get :embeddable_fields
             get :embeddable_translation_fields
@@ -122,6 +123,7 @@ GtGraphics::Application.routes.draw do
       Page::EMBEDDABLE_TYPES.each do |page_type|
         page_embeddable_class = page_type.constantize
         resource_name = page_embeddable_class.resource_name
+        controller_name = resource_name.to_s.pluralize
 
         actions = {
           show: { via: :get },
@@ -133,19 +135,29 @@ GtGraphics::Application.routes.draw do
         end
 
         scope constraints: Routing::PageConstraint.new(page_type) do
-          controller_name = resource_name.to_s.pluralize
           actions.each do |action_name, options|
+            options = options.reverse_merge(controller: controller_name, action: action_name, via: :get)
             if action_name == :show
-              match '*path(.:format)', options.reverse_merge!(controller: controller_name, action: action_name, as: resource_name)
+              match '*path(.:format)', options.reverse_merge(as: resource_name)
             else
-              match "*path/#{action_name}(.:format)", options.reverse_merge!(controller: controller_name, action: action_name, as: "#{action_name}_#{resource_name}")
+              match "*path/#{action_name}(.:format)", options.reverse_merge(as: "#{action_name}_#{resource_name}")
             end
           end
         end
         
-        root "#{resource_name.to_s.pluralize}#show", as: nil, constraints: Routing::RootPageConstraint.new(page_type)      
+        scope constraints: Routing::RootPageConstraint.new(page_type) do
+          actions.each do |action_name, options|
+            options = options.reverse_merge(controller: controller_name, action: action_name, via: :get).merge(as: nil)
+            if action_name == :show
+              root options
+            else
+              match "#{action_name}(.:format)", options
+            end
+          end
+        end
       end
 
+      get 'edit' => 'homepages#edit', as: :edit_root
       root to: 'homepages#show'
 
       # Legacy URLs that have changed permanently (HTTP 301)
