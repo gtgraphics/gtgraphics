@@ -24,6 +24,22 @@ module RouteHelper
   end
   
   def page_path(page, options = {})
+    if options.delete(:edit_mode) { try(:editing?) }
+      edit_page_path(page, options)
+    else
+      show_page_path(page, options)
+    end
+  end
+
+  def page_url(page, options = {})
+    if options.delete(:edit_mode) { try(:editing?) }
+      edit_page_url(page, options)
+    else
+      show_page_url(page, options)
+    end
+  end
+
+  def show_page_path(page, options = {})
     if page.path.present?
       send("#{page.embeddable_class.model_name.element}_path", options.merge(path: page.path))
     else
@@ -31,7 +47,7 @@ module RouteHelper
     end
   end
 
-  def page_url(page, options = {})
+  def show_page_url(page, options = {})
     if page.path.present?
       send("#{page.embeddable_class.model_name.element}_url", options.merge(path: page.path))
     else

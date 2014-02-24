@@ -8,12 +8,15 @@ module PagesHelper
     raise Page::Region::NotSupported.new(@page) unless @page.supports_regions?
     if region_definition = @region_definitions.find { |definition| definition.label == name.to_s }
       if can? :update, @page
-        data = { region: name, url: admin_page_path(@page), method: :patch }        
+        data = { region: name, url: update_region_admin_page_path(@page) }
       end
-      content_tag :div, class: 'region well', data: data do
-        if region = @page.regions.find_by(definition: region_definition)
-          render_content(region.body)
+      region = @page.regions.find_by(definition: region_definition)
+      if editing?
+        content_tag :div, class: 'region well', data: data do
+          region.try(:body)
         end
+      else
+        render_content(region.try(:body))
       end
     else
       raise Page::Region::NotFound.new(name, @page.template) if Rails.env.development?

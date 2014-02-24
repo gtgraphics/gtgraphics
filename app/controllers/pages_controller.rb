@@ -10,7 +10,7 @@ class PagesController < ApplicationController
   helper_method :editing?
 
   breadcrumbs do |b|
-    @page.self_and_ancestors.accessible_by(current_ability).each do |page|
+    @page.self_and_ancestors.accessible_by(current_ability).with_translations.each do |page|
       b.append page.title, page
     end
   end
@@ -39,7 +39,7 @@ class PagesController < ApplicationController
 
   protected
   def editing?
-    action_name == 'edit'
+    action_name.in? %w(edit update)
   end
 
   def render_page(options = {})

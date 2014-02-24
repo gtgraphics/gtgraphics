@@ -30,7 +30,7 @@
       .navbar-collapse.collapse
         %ul.nav.navbar-nav
           - Page.primary.menu_items.accessible_by(current_ability).with_translations.each do |page|
-            = active_link_to page.title, page, wrap_tag: :li
+            = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page)
 
         %ul.nav.navbar-nav.navbar-right
           %li.dropdown
@@ -42,14 +42,15 @@
                 = active_link_to url_for(locale: locale), wrap_tag: :li, hreflang: locale, lang: locale do
                   = prepend_flag_icon(locale, translate(locale, scope: :languages, locale: locale))
 
-  - unless @page.published?
-    %p
-      %strong Warning: This Page has not been published yet.
-
   .container
     = render 'breadcrumbs'
     = render_flash(flash.notice, type: :success)
     = render_flash(flash.alert, type: :danger)
+
+    - unless @page.published?
+      .alert.alert-warning
+        %strong Warning!
+        This Page has not been published yet.
 
     #page_content
       - if content_for? :page_content
@@ -61,7 +62,12 @@
       %hr
       = link_to 'Admin', :admin_root
       \|
-      = link_to 'Edit Page', [:edit, :admin, @page]
+      = link_to 'Page Settings', [:edit, :admin, @page]
+      \|
+      - if editing?
+        = link_to 'View Mode', page_path(@page, edit_mode: false)
+      - else
+        = link_to 'Edit Mode', page_path(@page, edit_mode: true)
 
   = render 'footer'
 
