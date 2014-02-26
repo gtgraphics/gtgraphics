@@ -204,6 +204,16 @@ class Page < ActiveRecord::Base
     end
   end
 
+  def regions_hash
+    @regions_hash ||= RegionsHash.new(self)
+  end
+
+  def regions_hash=(regions_hash)
+    regions_hash.each do |label, body|
+      self.regions_hash[label] = body
+    end
+  end
+
   def self_and_ancestors_and_siblings
     self.class.where(parent_id: self.self_and_ancestors.ids << nil)
   end

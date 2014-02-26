@@ -10,7 +10,7 @@ module PagesHelper
       if editing? and can? :update, @page
         content_tag :div, content, class: 'region well', data: { region: label, url: admin_page_region_path(@page, label) }
       else
-        content
+        content_tag :span, content, class: 'region'
       end
     else
       raise Template::RegionDefinition::NotFound.new(label, @page.template) if Rails.env.development?
