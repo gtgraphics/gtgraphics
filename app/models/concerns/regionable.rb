@@ -14,17 +14,19 @@ module Regionable
   def fetch_region(label, options = {})
     options.reverse_merge!(locale: I18n.locale)
     if definition = template.region_definitions.find_by(label: label)
-      regions.with_translations(options[:locale]).find_by(definition: definition)
+      region = regions.with_translations(options[:locale]).find_by(definition: definition)
+      region.body
     else
       raise Template::RegionDefinition::NotFound.new(label, template)
     end
   end
 
-  def remove_region(label)
+  def remove_region(label, options = {})
+    options.reverse_merge!(locale: I18n.locale)
     if definition = template.region_definitions.find_by(label: label)
       if region = regions.detect { |region| !region.marked_for_destruction? and region.definition == definition }
         translations = region.translations.reject(&:marked_for_destruction?)
-        region_translation = translations.detect { |translation| translation.locale == I18n.locale }
+        region_translation = translations.detect { |translation| translation.locale == options[:locale] }
         if region_translation and translations.any? { |translation| translation != region_translation }
           # Only remove translation if other translations are available
           region_translation.mark_for_destruction
@@ -32,7 +34,7 @@ module Regionable
           # Remove entire region if no other translations than the current one are available
           region.mark_for_destruction 
         end
-        region
+        region.body
       end
     else
       raise Template::RegionDefinition::NotFound.new(label, template)
@@ -63,6 +65,7 @@ module Regionable
   def migrate_regions
     # If changing the embeddable type, migrates the regions to the defined regions on the new template
     if supports_regions?
+
       # TODO
       # self.regions = regions.slice(available_regions)
     else

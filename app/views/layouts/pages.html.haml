@@ -39,7 +39,7 @@
               %b.caret
             %ul.dropdown-menu
               - I18n.available_locales.sort_by { |locale| translate(locale, scope: :languages, locale: locale) }.each do |locale|
-                = active_link_to url_for(locale: locale), wrap_tag: :li, hreflang: locale, lang: locale do
+                = active_link_to url_for(locale: locale), wrap_tag: :li, hreflang: locale, lang: locale, data: { no_turbolink: true } do
                   = prepend_flag_icon(locale, translate(locale, scope: :languages, locale: locale))
 
   .container
