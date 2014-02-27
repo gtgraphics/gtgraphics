@@ -17,7 +17,11 @@ module ApplicationHelper
   def body_css
     classes = []
     classes << I18n.locale.to_s
-    classes << 'admin' if admin_controller?
+    if admin_controller?
+      classes << 'admin'
+    else
+      classes << 'editing' if try(:editing?)
+    end
     classes.join(' ')
   end
 

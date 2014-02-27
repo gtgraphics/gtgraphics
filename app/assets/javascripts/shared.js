@@ -6,5 +6,5 @@
 //= require jquery.turbolinks
 //= require bootstrap
 //= require_tree ./libraries
-//= require_tree ./shared
 //= require ./editor
+//= require_tree ./shared

@@ -1,4 +1,4 @@
-module PageRegionsHelper
+module RegionsHelper
   def render_region(label, options = {})
     raise Template::RegionDefinition::NotSupported.new(@page.template) unless @page.supports_regions?
     options.reverse_merge!(locale: I18n.locale)
@@ -12,10 +12,12 @@ module PageRegionsHelper
           content = render_page_content(region_translation.body, locale: options[:locale])
         end
       end
+      html_options = { class: "region #{additional_css}".strip, lang: html_lang }
       if editing? and can?(:update, @page)
-        content_tag :div, content, class: "region well #{additional_css}".strip, lang: html_lang, data: { region: label, url: admin_page_region_path(@page, label) }
+        html_options.merge!({ data: { region: label, url: admin_page_region_path(@page, label) } })
+        content_tag :div, content, html_options
       elsif content
-        content_tag :span, content, class: "region #{additional_css}".strip, lang: html_lang
+        content_tag :div, content, html_options
       end
     else
       raise Template::RegionDefinition::NotFound.new(label, @page.template) if Rails.env.development?

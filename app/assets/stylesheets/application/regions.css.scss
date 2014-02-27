@@ -1,0 +1,14 @@
+body.editing {
+  .region {
+    $border-width: 1px;
+    border: $border-width dotted $gray-light;
+    cursor: text;
+    min-height: $line-height-computed + 2 * $border-width;
+    &:hover {
+      background-color: $gray-lighter;
+    }
+    &.untranslated {
+      color: $gray-light;
+    }
+  }
+}
