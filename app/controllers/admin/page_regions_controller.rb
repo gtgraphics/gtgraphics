@@ -1,28 +1,36 @@
 class Admin::PageRegionsController < Admin::ApplicationController
   before_action :load_page
 
-  rescue_from ActiveRecord::RecordNotFound do |exception|
+  rescue_from Template::RegionDefinition::NotFound do |exception|
     respond_to do |format|
       format.html { head :not_found }
     end
   end
 
   def show
-    region = @page.regions.labelled(params[:id]).with_translations(I18n.locale).first!
+    body = @page.fetch_region(params[:id])
     respond_to do |format|
-      format.html { render text: region.body }
+      format.html { render text: body }
     end
   end
 
   def update
-    @page.regions_hash.store(params[:id], params[:body])
+    label = params[:id]
+    previous_body = @page.fetch_region(label)
+    @body = params.fetch(:body)
+    if @body.present?
+      @page.store_region(label, @body)
+    else
+      @page.remove_region(label)
+    end
     if @page.save
       respond_to do |format|
-        format.html { render text: params[:body] }
+        format.html { render layout: false }
       end
     else
+      @body = previous_body
       respond_to do |format|
-        format.html { head :unprocessable_entity }
+        format.html { render layout: false, status: :unprocessable_entity }
       end
     end
   end

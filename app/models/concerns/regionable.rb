@@ -15,7 +15,7 @@ module Regionable
     options.reverse_merge!(locale: I18n.locale)
     if definition = template.region_definitions.find_by(label: label)
       region = regions.with_translations(options[:locale]).find_by(definition: definition)
-      region.body
+      region.try(:body)
     else
       raise Template::RegionDefinition::NotFound.new(label, template)
     end
