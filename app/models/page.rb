@@ -25,6 +25,7 @@ class Page < ActiveRecord::Base
   include BatchTranslatable
   include Excludable
   include PersistenceContextTrackable
+  include Regionable
 
   EMBEDDABLE_TYPES = %w(
     Page::Content
@@ -44,7 +45,6 @@ class Page < ActiveRecord::Base
   acts_as_nested_set counter_cache: :children_count, dependent: :destroy
 
   belongs_to :embeddable, polymorphic: true, autosave: true, dependent: :destroy
-  has_many :regions, class_name: 'Page::Region', dependent: :destroy, autosave: true
 
   validates :embeddable, presence: true
   validates :embeddable_type, inclusion: { in: EMBEDDABLE_TYPES }, allow_blank: true
@@ -56,7 +56,6 @@ class Page < ActiveRecord::Base
 
   before_validation :set_slug
   before_validation :set_path, if: -> { slug_changed? or parent_id_changed? }
-  before_save :sanitize_regions
   before_destroy :destroyable?
   around_save :update_descendants_paths
   around_update :destroy_replaced_embeddable
@@ -111,10 +110,6 @@ class Page < ActiveRecord::Base
 
   def ancestors_and_siblings
     self.class.where(parent_id: self.ancestors.ids << nil)
-  end
-
-  def available_regions
-    @available_regions ||= (template && template.region_definitions.pluck(:label)) || []
   end
 
   def build_embeddable(attributes = {})
@@ -204,22 +199,22 @@ class Page < ActiveRecord::Base
     end
   end
 
-  def regions_hash
-    @regions_hash ||= RegionsHash.new(self)
-  end
+  # def regions_hash
+  #   @regions_hash ||= RegionsProxy.new(self)
+  # end
 
-  def regions_hash=(regions_hash)
-    regions_hash.each do |label, body|
-      self.regions_hash[label] = body
-    end
-  end
+  # def regions_hash=(hash)
+  #   removed_regions = self.regions_hash.defined_regions - hash.keys
+  #   removed_regions.each do |label|
+  #     self.regions_hash.delete(label)
+  #   end
+  #   hash.each do |label, body|
+  #     self.regions_hash[label] = body
+  #   end
+  # end
 
   def self_and_ancestors_and_siblings
     self.class.where(parent_id: self.self_and_ancestors.ids << nil)
-  end
-
-  def supports_regions?
-    embeddable_class.try(:supports_regions?) || false
   end
 
   def supports_template?
@@ -258,16 +253,6 @@ class Page < ActiveRecord::Base
     end
     path_parts.reject!(&:blank?)
     File.join(path_parts)
-  end
-
-  def sanitize_regions
-    # If changing the embeddable type, migrates the regions to the defined regions on the new template
-    if supports_regions?
-      # self.regions = regions.slice(available_regions) # TODO
-      
-    else
-      regions.destroy_all
-    end
   end
 
   def set_path

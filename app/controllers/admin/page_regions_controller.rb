@@ -1,18 +1,24 @@
 class Admin::PageRegionsController < Admin::ApplicationController
   before_action :load_page
-  before_action :load_region
+
+  rescue_from ActiveRecord::RecordNotFound do |exception|
+    respond_to do |format|
+      format.html { head :not_found }
+    end
+  end
 
   def show
+    region = @page.regions.labelled(params[:id]).with_translations(I18n.locale).first!
     respond_to do |format|
-      format.html { render text: @region.body }
+      format.html { render text: region.body }
     end
   end
 
   def update
-    @region.attributes = params[:body]
-    if @region.save
+    @page.regions_hash.store(params[:id], params[:body])
+    if @page.save
       respond_to do |format|
-        format.html { render text: @region.body }
+        format.html { render text: params[:body] }
       end
     else
       respond_to do |format|
@@ -24,10 +30,5 @@ class Admin::PageRegionsController < Admin::ApplicationController
   private
   def load_page
     @page = Page.find(params[:page_id])
-  end
-
-  def load_region
-    region_definition = @page.template.region_definitions.find_by!(label: params[:id])
-    @region = @page.regions.find_or_initialize_by(definition: region_definition)
   end
 end

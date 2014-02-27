@@ -1,12 +1,12 @@
 class Page < ActiveRecord::Base
-  class RegionsHash
+  class RegionsProxy
     include Enumerable
 
     def initialize(page)
       @page = page
       raise Template::RegionDefinition::NotSupported.new(template) unless page.supports_regions?
       @regions_hash = regions.inject(ActiveSupport::HashWithIndifferentAccess.new) do |regions_hash, region|
-        regions_hash.merge!(region.definition.label => region) unless region.marked_for_destruction?
+        regions_hash.merge!(region.definition.label => region.body) unless region.marked_for_destruction?
         regions_hash
       end
     end
@@ -19,33 +19,31 @@ class Page < ActiveRecord::Base
       store(label, body)
     end
 
-    def delete(label)
-      region_definition = region_definition_by_label(label)
-      region = region_by_definition(region_definition, false)
-      region_translation = region_translation_by_locale(region, I18n.locale, false)
-      if region.translations.reject(&:marked_for_destruction?).any? { |translation| translation != region_translation }
-        # Only remove translation if other translations are available
-        region_translation.mark_for_destruction
-      else
-        # Remove entire region if no other translations than the current one are available
-        region.mark_for_destruction 
-      end
+    def defined_regions
+      @regions_hash.keys
     end
 
-    delegate :each, :empty?, :to_h, :to_hash, to: :@regions_hash
+    def delete(label, &block)
+      region_definition = region_definition_by_label(label)
+      region = region_by_definition(region_definition, false)
+      if region
+        region_translation = region_translation_by_locale(region, I18n.locale, false)
+        if region_translation and region.translations.reject(&:marked_for_destruction?).any? { |translation| translation != region_translation }
+          # Only remove translation if other translations are available
+          region_translation.mark_for_destruction
+        else
+          # Remove entire region if no other translations than the current one are available
+          region.mark_for_destruction 
+        end
+      end
+      @regions_hash.delete(label, &block)
+    end
+
+    delegate :each, :empty?, :inspect, :to_h, :to_hash, :to_s, to: :@regions_hash
 
     def fetch(label, default = nil, &block)
       region_definition = region_definition_by_label(label)
       @regions_hash.fetch(region_definition.label, default, &block)
-    end
-
-    def inspect
-      regions_str = @regions_hash.collect { |label, region| "#{label}: #{region.body.inspect}" }.join(', ')
-      "#<#{self.class.name} #{regions_str}>"
-    end
-
-    def labels
-      @regions_hash.keys
     end
 
     def regions
