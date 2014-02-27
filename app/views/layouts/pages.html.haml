@@ -59,15 +59,16 @@
         = yield
 
     - if signed_in?
-      %hr
-      = link_to 'Admin', :admin_root
-      \|
-      = link_to 'Page Settings', [:edit, :admin, @page]
-      \|
-      - if editing?
-        = link_to 'View Mode', page_path(@page, edit_mode: false)
-      - else
-        = link_to 'Edit Mode', page_path(@page, edit_mode: true)
+      - I18n.with_locale(current_user.preferred_locale.presence || I18n.locale) do
+        %hr
+        = link_to 'Admin', :admin_root
+        \|
+        = link_to 'Page Settings', [:edit, :admin, @page]
+        \|
+        - if editing?
+          = link_to 'View Mode', page_path(@page, edit_mode: false)
+        - else
+          = link_to 'Edit Mode', page_path(@page, edit_mode: true)
 
   = render 'footer'
 
