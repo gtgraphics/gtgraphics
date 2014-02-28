@@ -5,8 +5,3 @@ class @Editor.Controls.AsyncFontControl extends @Editor.Controls.RichTextControl
     $button.html($('<i />', class: "fa fa-#{@icon}"))
     $button.tooltip(placement: 'top', container: 'body')
     $button
-
-  execCommand: ->
-
-  execCommandCallback: (html) ->
-    console.warn 'no callback defined yet'

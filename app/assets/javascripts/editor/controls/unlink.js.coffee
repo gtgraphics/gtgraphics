@@ -3,7 +3,7 @@ class @Editor.Controls.Unlink extends @Editor.Controls.FontControl
     @caption = @icon = @command = 'unlink'
     super
 
-  execCommand: ->
+  execCommandSync: ->
     # http://stackoverflow.com/questions/11015313/get-caret-html-position-in-contenteditable-div
     @editor.storeSelection()
     $node = @editor.getSelectedNode()

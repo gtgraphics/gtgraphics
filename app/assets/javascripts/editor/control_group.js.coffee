@@ -1,4 +1,4 @@
-class @Editor.Controls.ControlGroup extends @Editor.Controls.Base
+class @Editor.Controls.ControlGroup extends @Editor.Controls.Control
   createControl: ->
     $('<div />', class: 'btn-group pull-right')
 
@@ -10,6 +10,12 @@ class @Editor.Controls.ControlGroup extends @Editor.Controls.Base
     false
 
   deactivate: ->
+    false
+
+  enable: ->
+    false
+
+  disable: ->
     false
 
   applyEvents: ->

@@ -76,4 +76,4 @@ class @Editor.Controls.ViewMode extends @Editor.Controls.ControlGroup
       viewMode = $button.data('viewMode')
       @editor.changeViewMode(viewMode, true)
 
-@Editor.Controls.register('view_mode', @Editor.Controls.ViewMode)
+@Editor.Controls.register('viewMode', @Editor.Controls.ViewMode)

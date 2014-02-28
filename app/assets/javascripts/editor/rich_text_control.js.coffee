@@ -1,4 +1,4 @@
-class @Editor.Controls.RichTextControl extends @Editor.Controls.Base
+class @Editor.Controls.RichTextControl extends @Editor.Controls.Control
   constructor: ->
     super
     @isRichTextControl = true

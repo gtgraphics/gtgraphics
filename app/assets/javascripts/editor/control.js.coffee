@@ -8,34 +8,41 @@ AvailableControls = {}
   unregister: (key) ->
     delete AvailableControls[key]
 
-class @Editor.Controls.Base
+
+class @Editor.Controls.Control
   constructor: (@editor, $controls) ->
     @controls = $controls
 
     @control = @createControl()
     @control.appendTo(@controls)
-
     @control.data('control', @)
     @applyEvents()
-
-    @refreshState()
-    @control.on 'click', =>
-      @refreshState()
-    @editor.region.on 'click focus blur textchange', =>
-      @refreshState()
 
     @deactivate()
     @enable()
 
+  applyEvents: ->
+    @control.click (event) =>
+      event.preventDefault()
+      @control.trigger('executingCommand.editor')
+      @executeCommand =>
+        @editor.setChanged()
+        @editor.region.focus().triggerHandler('focus')
+        @control.trigger('executedCommand.editor')
+
+    @refreshState()
+    @control.on 'click', => @refreshState()
+    @editor.region.on 'click focus blur textchange', => @refreshState()
+
   createControl: ->
-    @createButton()
+    $('<button />', type: 'button', class: 'btn btn-default btn-sm', tabindex: '-1')
 
-  createButton: ->
-    $button = $('<button />', type: 'button', class: 'btn btn-default btn-sm', tabindex: '-1')
-    $button
+  executeCommand: (callback) ->
+    @executeCommandSync()
+    callback()
 
-  execCommand: ->
-    console.log.warn 'no action has been implemented'
+  executeCommandSync: ->
+    console.warn 'executeCommand or executeCommandSync have not been implemented'
 
   queryActive: ->
     false
@@ -78,10 +85,3 @@ class @Editor.Controls.Base
     else
       @disable()
     true
-
-  applyEvents: ->
-    @control.click (event) =>
-      event.preventDefault()
-      @execCommand()
-      @editor.setChanged()
-      @editor.region.focus().triggerHandler('focus')

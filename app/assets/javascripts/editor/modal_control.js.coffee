@@ -1,5 +1,5 @@
 class @Editor.Controls.ModalControl extends @Editor.Controls.AsyncFontControl
-  execCommand: ->
+  execCommand: (callback) ->
     Editor.active = @editor
     @editor.currentControl = @
 
@@ -23,17 +23,15 @@ class @Editor.Controls.ModalControl extends @Editor.Controls.AsyncFontControl
         $modal = $modalContainer.find('.modal').modal('show')
         @editor.currentModal = $modal
 
-  execCommandCallback: (html) ->
-    $modalContainer = @findOrCreateModalContainer()
-    $modalContainer.find('.modal').modal('hide')
+        @editor.restoreSelection()
 
-    @editor.restoreSelection()
+        $node = @editor.getSelectedNode()
+        if $node.is(@selector)
+          $node.replaceWith(html)
+        else
+          @editor.pasteHtml(html)
 
-    $node = @editor.getSelectedNode()
-    if $node.is(@selector)
-      $node.replaceWith(html)
-    else
-      @editor.pasteHtml(html)
+        callback()
 
   queryActive: ->
     @editor.getSelectedNode().is(@selector)

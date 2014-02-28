@@ -8,7 +8,7 @@ class @Editor.Controls.FontControl extends @Editor.Controls.RichTextControl
       $button.tooltip('hide')
     $button
 
-  execCommand: ->
+  executeCommandSync: ->
     document.execCommand(@command, false, null)
 
   queryActive: ->

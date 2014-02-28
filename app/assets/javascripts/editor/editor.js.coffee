@@ -7,7 +7,7 @@ class @Editor
       ['orderedList', 'unorderedList', 'indent', 'outdent'],
       #['link', 'unlink'],
       #'image',
-      'view_mode'
+      'viewMode'
     ]
   }
 
@@ -16,6 +16,10 @@ class @Editor
 
     @input = $originalInput.hide()
     @input.attr('spellcheck', false)
+
+    # TODO:
+    # If @input is a textarea, keep it
+    # If @input is a div, create a textarea holding the region's HTML content
 
     @createEditableRegion()
     @createContainer()
@@ -43,8 +47,8 @@ class @Editor
     @container = $('<div />', class: 'editor-container')
     @container.insertAfter(@input)
     @container.append(@createControls())
-    @container.append(@input)
     @container.append(@region)
+    @container.append(@input)
 
   createEditableRegion: ->
     inputId = @input.attr('id')
