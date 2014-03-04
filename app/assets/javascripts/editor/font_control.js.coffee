@@ -5,7 +5,7 @@ class @Editor.Controls.FontControl extends @Editor.Controls.RichTextControl
     $button.html($('<i />', class: "fa fa-#{@icon}"))
     $button.tooltip(placement: 'top', container: 'body')
     $button.click ->
-      $button.tooltip('hide')
+      $button.tooltip('destroy')
     $button
 
   executeCommandSync: ->
