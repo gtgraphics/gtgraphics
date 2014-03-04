@@ -1,8 +1,10 @@
 ( ($) ->
   
   $.fn.editor = (options = {}) ->
+    klass = options['class'] || Editor
+    delete options['class']
     @each ->
-      $input = $(@)
-      new Editor($input, options)
+      editor = new klass($(@), options)
+      $(@).data('editor', editor)
 
 ) jQuery

@@ -1,5 +1,6 @@
 //= require_tree ./editor/rangy
 //= require ./editor/editor
+//= require ./editor/inline_editor
 //= require ./editor/jquery.editor
 //= require ./editor/control
 //= require ./editor/control_group

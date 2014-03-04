@@ -15,18 +15,15 @@ class @Editor
     @options = jQuery.extend({}, Editor.defaults, options)
 
     @input = $originalInput.hide()
-    @input.attr('spellcheck', false)
+    @input.addClass('editor-html')
+    # @input.attr('spellcheck', false)
 
     # TODO:
     # If @input is a textarea, keep it
     # If @input is a div, create a textarea holding the region's HTML content
 
-    @createEditableRegion()
-    @createContainer()
+    @initElements()
     @changeViewMode(@options.viewMode, false)
-
-    @input.data('editor', @)
-    @input.addClass('editor-html')
 
     # Determine Disabled/Enabled State
     if @input.prop('disabled')
@@ -40,22 +37,11 @@ class @Editor
     # Change Management
     @setUnchanged()
 
-
   # Element Constructors
 
-  createContainer: ->
-    @container = $('<div />', class: 'editor-container')
-    @container.insertAfter(@input)
-    @container.append(@createControls())
-    @container.append(@region)
-    @container.append(@input)
-
-  createEditableRegion: ->
-    inputId = @input.attr('id')
-    @region = $('<div />', contenteditable: true, designmode: 'on', class: 'editor-region')
-    @region.attr('data-target', "##{inputId}") if inputId
-    @region.html(@input.val())
-    @region.attr('spellcheck', false)
+  initElements: ->
+    # @region and @input should be set at this point
+    jQuery.error 'Editor#initElements has not been implemented'
 
   createControls: ->
     @controls = []
@@ -125,7 +111,6 @@ class @Editor
     @region.on 'click', 'a', (event) =>
       event.preventDefault() if @viewMode == 'editor'
 
-
   # Callbacks
 
   onOpen: ->
@@ -135,7 +120,6 @@ class @Editor
   onClose: ->
     @region.removeClass('editing')
     @container.removeClass('focus')
-
 
   # Change Management
 
@@ -147,7 +131,6 @@ class @Editor
   setUnchanged: ->
     @changed = false
     @region.removeClass('changed')
-
 
   # Enabling/Disabling
 
@@ -162,7 +145,6 @@ class @Editor
     @region.addClass('disabled')
     @region.removeAttr('contenteditable')
     @input.prop('disabled', true)
-
 
   # View Mode Control
 
@@ -195,7 +177,6 @@ class @Editor
     @region.trigger('viewModeChanged.editor', viewMode, previousViewMode)
     #@setChanged()
 
-
   # Selection Handling
 
   removeSelection: ->
@@ -220,7 +201,6 @@ class @Editor
 
   setSelection: (storedSelection) ->
     range.restoreSelection(storedSelection)
-
 
   # HTML Input/Output
 
