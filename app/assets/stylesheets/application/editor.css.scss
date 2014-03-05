@@ -1,0 +1,7 @@
+body.editing {
+  $editor-toolbar-height: 36px;
+  margin-top: $editor-toolbar-height;
+  .navbar {
+    top: $editor-toolbar-height;
+  }
+}

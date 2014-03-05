@@ -11,5 +11,7 @@
   %dt= Page::Project.human_attribute_name :released_on
   %dd= project.released_on.year
 
+%hr
+
 .content
-  = raw project.description
+  = project.description.html_safe

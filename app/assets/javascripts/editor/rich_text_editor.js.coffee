@@ -1,12 +1,18 @@
 class @RichTextEditor extends @Editor
-  constructor: ($originalInput, options = {}) ->
+  onInit: ->
     super
+    @input = @element
 
-  initElements: ->
     @createEditableRegion()
-    @createContainer()
+    @createEditorContainer()
 
-  createContainer: ->
+    @input.hide()
+    if @input.prop('disabled')
+      @disable()
+    else
+      @enable()
+
+  createEditorContainer: ->
     @container = $('<div />', class: 'editor-container')
     @container.insertAfter(@input)
     @container.append(@createControls())
@@ -17,5 +23,11 @@ class @RichTextEditor extends @Editor
     inputId = @input.attr('id')
     @region = $('<div />', class: 'editor-region', contenteditable: true, designmode: 'on')
     @region.attr('data-target', "##{inputId}") if inputId
-    @region.attr('spellcheck', false)
     @region.html(@input.val())
+
+  applyEvents: ->
+    super
+    inputId = @input.attr('id')
+    if inputId
+      $("label[for='#{inputId}']").click =>
+        @region.focus().triggerHandler('focus')

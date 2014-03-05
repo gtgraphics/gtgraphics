@@ -11,63 +11,20 @@ class @Editor
     ]
   }
 
-  constructor: ($originalInput, options = {}) ->
+  constructor: ($element, options = {}) ->
+    @element = $element
     @options = jQuery.extend({}, Editor.defaults, options)
 
-    @input = $originalInput.hide()
-    @input.addClass('editor-html')
-    # @input.attr('spellcheck', false)
-
-    # TODO:
-    # If @input is a textarea, keep it
-    # If @input is a div, create a textarea holding the region's HTML content
-
-    @initElements()
+    @onInit()
     @changeViewMode(@options.viewMode, false)
-
-    # Determine Disabled/Enabled State
-    if @input.prop('disabled')
-      @disable()
-    else
-      @enable()
-
-    # Events
     @applyEvents()
-
-    # Change Management
     @setUnchanged()
 
   # Element Constructors
 
-  initElements: ->
-    # @region and @input should be set at this point
-    jQuery.error 'Editor#initElements has not been implemented'
-
   createControls: ->
-    @controls = []
-    $controls = $('<div />', class: 'editor-controls')
-    $toolbar = $('<div />', class: 'btn-toolbar').appendTo($controls)
-
-    @options.controls.forEach (keyOrGroup) =>
-      if jQuery.isArray(keyOrGroup)
-        $group = $('<div />', class: 'btn-group')
-        keyOrGroup.forEach (key) =>
-          controlClass = Editor.Controls.get(key)
-          if controlClass
-            control = new controlClass(@, $group)
-            @controls.push(control)
-          else
-            console.warn "Control not found: #{key}"
-        $group.appendTo($toolbar)
-      else
-        controlClass = Editor.Controls.get(keyOrGroup)
-        if controlClass
-          control = new controlClass(@, $toolbar)
-          @controls.push(control)
-        else
-          console.warn "Control not found: #{keyOrGroup}"
-
-    $controls
+    toolbar = new Editor.Toolbar(@)
+    toolbar.render()
 
   destroy: ->
     console.warn 'not fully implemented'
@@ -76,11 +33,8 @@ class @Editor
     # TODO Destroy Container etc.
 
   applyEvents: ->
-    # Change Label Behavior
-    $("label[for='#{@input.attr('id')}']").click =>
-      @region.focus().triggerHandler('focus')
-
-    @input.focus (event) =>
+    # alias focus
+    @element.focus (event) =>
       event.preventDefault()
       @region.focus().triggerHandler('focus')
 
@@ -94,17 +48,17 @@ class @Editor
       @onOpen()
 
     @region.blur =>
-      @input.blur()
+      @element.blur()
       @onClose()
 
     @region.on 'textchange', =>
       @setChanged()
       true
 
-    @input.on 'textchange', =>
+    @element.on 'textchange', =>
       @changed = true
       @region.addClass('changed')
-      @region.html(@input.val())
+      @region.html(@element.val())
       true
 
     # Prevent links from being followed in editor mode
@@ -112,6 +66,10 @@ class @Editor
       event.preventDefault() if @viewMode == 'editor'
 
   # Callbacks
+
+  onInit: ->
+    # @region and @element should be set at this point
+    @element.addClass('editor-html')
 
   onOpen: ->
     @region.addClass('editing')
@@ -126,7 +84,7 @@ class @Editor
   setChanged: ->
     @changed = true
     @region.addClass('changed')
-    @input.val(@getHtml())
+    @element.val(@getHtml())
 
   setUnchanged: ->
     @changed = false
@@ -138,13 +96,13 @@ class @Editor
     @disabled = false if updateState
     @region.removeClass('disabled')
     @region.attr('contenteditable', true)
-    @input.prop('disabled', false)
+    @element.prop('disabled', false)
 
   disable: (updateState = true) ->
     @disabled = true if updateState
     @region.addClass('disabled')
     @region.removeAttr('contenteditable')
-    @input.prop('disabled', true)
+    @element.prop('disabled', true)
 
   # View Mode Control
 
@@ -153,7 +111,7 @@ class @Editor
     @viewMode = viewMode
     switch @viewMode
       when 'editor'
-        @input.hide()
+        @element.hide()
         @region.show()
         if @disabled
           @region.addClass('disabled')
@@ -162,16 +120,16 @@ class @Editor
         @region.focus().triggerHandler('focus') if focus
       when 'preview'
         @removeSelection()
-        @input.hide()
+        @element.hide()
         @region.show()
         @disable(false)
         @region.removeClass('disabled')
         @region.focus().triggerHandler('focus') if focus
       when 'html'
         @region.hide()
-        @input.show()
+        @element.show()
         @enable(false) unless @disabled
-        @input.focus().triggerHandler('focus') if focus
+        @element.focus().triggerHandler('focus') if focus
       else
         return jQuery.error('invalid view mode: ' + viewMode)
     @region.trigger('viewModeChanged.editor', viewMode, previousViewMode)
