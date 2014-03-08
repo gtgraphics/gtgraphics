@@ -3,7 +3,6 @@ class @Editor.Controls.ControlGroup extends @Editor.Controls.Control
     $('<div />', class: 'btn-group pull-right')
 
   queryActive: ->
-    #@editor.viewMode == ''
     false
 
   activate: ->

@@ -1,3 +1,2 @@
 jQuery.prepare ->
-
-  $('.region').editor(class: EditableRegion)
+  $('.region', @).editor(class: RegionEditor)

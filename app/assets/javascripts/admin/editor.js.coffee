@@ -1,8 +1,8 @@
 jQuery.prepare ->
-  $('.editor', @).editor(class: RichTextEditor)
+  $('.editor', @).editor(class: TextareaEditor)
 
   $('.simple-editor', @).editor
-    class: RichTextEditor
+    class: TextareaEditor
     controls: [
       ['bold', 'italic', 'underline', 'strikethrough'],
       ['orderedList', 'unorderedList']

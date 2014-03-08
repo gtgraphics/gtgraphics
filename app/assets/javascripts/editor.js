@@ -1,13 +1,11 @@
 //= require_tree ./editor/rangy
 //= require ./editor/editor
 //= require ./editor/toolbar
-//= require ./editor/editable_region
-//= require ./editor/rich_text_editor
+//= require ./editor/textarea_editor
+//= require ./editor/region_editor
 //= require ./editor/jquery.editor
 //= require ./editor/control
 //= require ./editor/control_group
 //= require ./editor/rich_text_control
 //= require ./editor/font_control
-//= require ./editor/async_font_control
-//= require ./editor/modal_control
 //= require_tree ./editor/controls

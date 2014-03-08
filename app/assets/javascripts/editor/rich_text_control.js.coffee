@@ -1,5 +1,5 @@
 class @Editor.Controls.RichTextControl extends @Editor.Controls.Control
-  constructor: ->
+  constructor: ($toolbar) ->
     super
     @isRichTextControl = true
     @disable()

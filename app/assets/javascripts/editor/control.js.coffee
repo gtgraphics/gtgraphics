@@ -10,39 +10,43 @@ AvailableControls = {}
 
 
 class @Editor.Controls.Control
-  constructor: (@editor, $controls) ->
-    @controls = $controls
+  constructor: ($toolbar) ->
+    @toolbar = $toolbar
 
     @control = @createControl()
-    @control.appendTo(@controls)
+    @control.appendTo(@toolbar)
     @control.data('control', @)
-    @applyEvents()
+
+    # @applyEvents()
 
     @deactivate()
     @enable()
 
-  applyEvents: ->
-    @control.click (event) =>
-      event.preventDefault()
-      @control.trigger('executingCommand.editor')
-      @executeCommand =>
-        @editor.setChanged()
-        @editor.region.focus().triggerHandler('focus')
-        @control.trigger('executedCommand.editor')
+  # TODO Das zur Editor-Klasse verschieben, da eine Control nicht nur auf einem Editor verwendet werden kann!!
+  # applyEvents: ->
+  #   @control.click (event) =>
+  #     event.preventDefault()
+  #     @control.trigger('executingCommand.editor')
+  #   @executeCommand =>
+  #     @editor.setChanged()
+  #     @editor.region.focus().triggerHandler('focus')
+  #     @control.trigger('executedCommand.editor')
 
-    @refreshState()
-    @control.on 'click', => @refreshState()
-    @editor.region.on 'click focus blur textchange', => @refreshState()
+  # @refreshState()
+  # @control.on 'click', =>
+  #   @refreshState()
+  # @editor.region.on 'click focus blur textchange', =>
+  #   @refreshState()
 
   createControl: ->
     $('<button />', type: 'button', class: 'btn btn-default btn-sm', tabindex: '-1')
 
-  executeCommand: (callback) ->
-    @executeCommandSync()
+  executeCommand: (editor, callback) ->
+    @executeCommandSync(editor)
     callback()
 
-  executeCommandSync: ->
-    console.warn 'executeCommand or executeCommandSync have not been implemented'
+  executeCommandSync: (editor) ->
+    console.warn 'executeCommand() or executeCommandSync() have not been implemented'
 
   queryActive: ->
     false
