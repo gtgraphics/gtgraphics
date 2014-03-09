@@ -10,6 +10,9 @@
 
   $.extend I18n,
 
+    t: (keypath, options = {}) ->
+      @translate(keypath, options)
+
     translate: (keypath, options = {}) ->
       if !@translations or @translations.length == 0
         console.warn "I18n: no translations found (#{keypath})"
