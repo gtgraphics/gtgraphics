@@ -1,21 +1,15 @@
-class @Editor.Controls.ControlGroup extends @Editor.Controls.Control
-  createControl: ->
-    $('<div />', class: 'btn-group pull-right')
+class @Editor.Controls.ControlGroup
+  constructor: (controls) ->
+    @controls = controls || []
 
-  queryActive: ->
-    false
+  addControl: (control) ->
+    control = Editor.Controls.init(control) if _.isString(control)
+    @controls.push(control)
+    control
 
-  activate: ->
-    false
-
-  deactivate: ->
-    false
-
-  enable: ->
-    false
-
-  disable: ->
-    false
-
-  applyEvents: ->
-    false
+  render: ->
+    $group = $('<div />', class: 'btn-group')
+    $group.data('controlGroup', @)
+    _.each @controls, (control) =>
+      $group.append(control.render())
+    $group

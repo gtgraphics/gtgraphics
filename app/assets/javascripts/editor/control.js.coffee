@@ -2,7 +2,12 @@ AvailableControls = {}
 
 @Editor.Controls =
   get: (key) ->
-    AvailableControls[key]
+    control = AvailableControls[key]
+    jQuery.error "Control not found: #{key}" unless control
+    control
+  init: (key) ->
+    klass = @get(key)
+    new klass()
   register: (key, controlClass) ->
     AvailableControls[key] = controlClass
   unregister: (key) ->
@@ -10,27 +15,6 @@ AvailableControls = {}
 
 
 class @Editor.Controls.Control
-  constructor: ($toolbar) ->
-    @toolbar = $toolbar
-
-    @control = @createControl()
-    @control.appendTo(@toolbar)
-    @control.data('control', @)
-
-    # @applyEvents()
-
-    @deactivate()
-    @enable()
-
-  # TODO Das zur Editor-Klasse verschieben, da eine Control nicht nur auf einem Editor verwendet werden kann!!
-  # applyEvents: ->
-  #   @control.click (event) =>
-  #     event.preventDefault()
-  #     @control.trigger('executingCommand.editor')
-  #   @executeCommand =>
-  #     @editor.setChanged()
-  #     @editor.region.focus().triggerHandler('focus')
-  #     @control.trigger('executedCommand.editor')
 
   # @refreshState()
   # @control.on 'click', =>
@@ -38,54 +22,92 @@ class @Editor.Controls.Control
   # @editor.region.on 'click focus blur textchange', =>
   #   @refreshState()
 
+  constructor: ->
+    @updateState()
+
+  render: ->
+    unless @renderedControl
+      $control = @createControl()
+      $control.data('control', @)
+      @renderedControl = $control
+    @updateControlState()
+    @renderedControl
+
   createControl: ->
-    $('<button />', type: 'button', class: 'btn btn-default btn-sm', tabindex: '-1')
+    jQuery.error 'createControl() has not been implemented'
 
-  executeCommand: (editor, callback) ->
-    @executeCommandSync(editor)
-    callback()
+  executeCommand: (callback) ->
+    returnValue = @executeCommandSync()
+    callback() if callback
+    returnValue
 
-  executeCommandSync: (editor) ->
+  executeCommandSync: ->
     console.warn 'executeCommand() or executeCommandSync() have not been implemented'
 
+  # Refreshers
+
+  updateState: ->
+    if @querySupported() and @queryEnabled()
+      @disabled = false
+      if @queryActive()
+        @active = true
+      else
+        @active = false
+    else
+      @disabled = true
+    true
+
+  updateControlState: ->
+    console.warn 'updateControlState() has not been implemented'
+
+  refresh: ->
+    @updateState()
+    @updateControlState()
+
+  # when updateState is invoked, queryActive determines whether this input has an active state
   queryActive: ->
     false
 
+  # when updateState is invoked, queryActive determines whether this input has an enabled state
   queryEnabled: ->
     true
 
+  # when updateState is invoked, queryActive determines whether this input has a supported state
   querySupported: ->
     true
 
-  activate: ->
-    @control.addClass('active')
-    @active = true
+  # State Changers
+
+  activate: (active = true) ->
+    @active = active
+    if @renderedControl
+      @updateControlState()
+      @renderedControl.trigger('activated.control.editor', @)
+    true
 
   deactivate: ->
-    @control.removeClass('active')
     @active = false
+    if @renderedControl
+      @updateControlState()
+      @renderedControl.trigger('deactivated.control.editor', @)
+    true
 
   enable: ->
-    @control.prop('disabled', false)
     @disabled = false
+    if @renderedControl
+      @updateControlState()
+      @renderedControl.trigger('enabled.control.editor', @)
+    true
 
-  disable: ->
-    @control.prop('disabled', true)
-    @disabled = true
+  disable: (disabled = true) ->
+    @disabled = disabled
+    if @renderedControl
+      @updateControlState()
+      @renderedControl.trigger('disabled.control.editor', @)
+    true
 
   toggle: ->
     if @active
       @deactivate()
     else
       @activate()
-
-  refreshState: ->
-    if @querySupported() and @queryEnabled()
-      @enable()
-      if @queryActive()
-        @activate()
-      else
-        @deactivate()
-    else
-      @disable()
-    true

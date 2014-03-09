@@ -1,23 +1,22 @@
-class @Editor.Controls.FontControl extends @Editor.Controls.RichTextControl
-  createControl: ->
-    $button = super
-    $button.attr('title', I18n.translate("editor.#{@caption}"))
-    $button.html($('<i />', class: "fa fa-#{@icon}"))
-    $button.tooltip(placement: 'top', container: 'body')
-    $button.click ->
-      $button.tooltip('destroy')
-    $button
+class @Editor.Controls.FontControl extends @Editor.Controls.ButtonControl
+  getCommand: ->
+    jQuery.error 'no command defined for control'
 
   executeCommandSync: ->
-    document.execCommand(@command, false, null)
+    document.execCommand(@getCommand(), false, null)
 
   queryActive: ->
-    document.queryCommandState(@command, false, null)
+    document.queryCommandState(@getCommand(), false, null)
 
   queryEnabled: ->
     try 
-      document.queryCommandEnabled(@command, false, null)
+      document.queryCommandEnabled(@getCommand(), false, null)
     catch e
 
   querySupported: ->
-    document.queryCommandSupported(@command, false, null)
+    document.queryCommandSupported(@getCommand(), false, null)
+
+  createControl: ->
+    $button = super
+    # TODO Refresh when the selection in the target region becomes updated (focus blur textchange)
+    $button

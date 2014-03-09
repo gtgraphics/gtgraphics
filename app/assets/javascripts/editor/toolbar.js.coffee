@@ -1,29 +1,24 @@
 class @Editor.Toolbar
-  constructor: (editor) ->
-    @editor = editor
-    @config = @editor.options.controls
+  constructor: (config) ->
+    @config = config
     @controls = []
+    _.each @config, (control) =>
+      @addControl(control)
+
+  addControl: (control) ->
+    if _.isArray(control)
+      controlGroup = new Editor.ControlGroup()
+      _.each control, (nestedControl) =>
+        controlGroup.addControl(nestedControl)       
+      @controls.push(controlGroup)
+      controlGroup
+    else
+      control = Editor.Controls.init(control) if _.isString(control)
+      @controls.push(control)
+      control
 
   render: ->
-    $container = $('<div />', class: 'editor-controls')
-    $toolbar = $('<div />', class: 'btn-toolbar').appendTo($container)
-    jQuery.each @config, (index, keyOrGroup) =>
-      console.log keyOrGroup
-      if jQuery.isArray(keyOrGroup)
-        $group = $('<div />', class: 'btn-group')
-        jQuery.each keyOrGroup, (index, key) =>
-          controlClass = Editor.Controls.get(key)
-          if controlClass
-            control = new controlClass(@editor, $group)
-            @controls.push(control)
-          else
-            console.warn "Control not found: #{key}"
-        $group.appendTo($toolbar)
-      else
-        controlClass = Editor.Controls.get(keyOrGroup)
-        if controlClass
-          control = new controlClass(@editor, $toolbar)
-          @controls.push(control)
-        else
-          console.warn "Control not found: #{keyOrGroup}"
-    $container
+    $toolbar = $('<div />', class: 'btn-toolbar editor-controls')
+    _.each @controls, (control) =>
+      $toolbar.append(control.render())
+    $toolbar
