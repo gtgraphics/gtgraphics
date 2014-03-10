@@ -15,23 +15,20 @@ AvailableControls = {}
 
 
 class @Editor.Controls.Control
-
-  # @refreshState()
-  # @control.on 'click', =>
-  #   @refreshState()
-  # @editor.region.on 'click focus blur textchange', =>
-  #   @refreshState()
-
   constructor: ->
-    @updateState()
+    @refreshInternalState()
 
   render: ->
     unless @renderedControl
       $control = @createControl()
       $control.data('control', @)
       @renderedControl = $control
-    @updateControlState()
+    @refreshControlState()
     @renderedControl
+
+  destroy: ->
+    @renderedControl.remove() if @renderedControl
+    @renderedControl = null
 
   createControl: ->
     jQuery.error 'createControl() has not been implemented'
@@ -46,7 +43,11 @@ class @Editor.Controls.Control
 
   # Refreshers
 
-  updateState: ->
+  refresh: ->
+    @refreshInternalState()
+    @refreshControlState() if @renderedControl
+
+  refreshInternalState: ->
     if @querySupported() and @queryEnabled()
       @disabled = false
       if @queryActive()
@@ -57,12 +58,8 @@ class @Editor.Controls.Control
       @disabled = true
     true
 
-  updateControlState: ->
-    console.warn 'updateControlState() has not been implemented'
-
-  refresh: ->
-    @updateState()
-    @updateControlState()
+  refreshControlState: ->
+    console.warn 'refreshControlState() has not been implemented'
 
   # when updateState is invoked, queryActive determines whether this input has an active state
   queryActive: ->
@@ -81,28 +78,28 @@ class @Editor.Controls.Control
   activate: (active = true) ->
     @active = active
     if @renderedControl
-      @updateControlState()
+      @refreshControlState()
       @renderedControl.trigger('activated.control.editor', @)
     true
 
   deactivate: ->
     @active = false
     if @renderedControl
-      @updateControlState()
+      @refreshControlState()
       @renderedControl.trigger('deactivated.control.editor', @)
     true
 
   enable: ->
     @disabled = false
     if @renderedControl
-      @updateControlState()
+      @refreshControlState()
       @renderedControl.trigger('enabled.control.editor', @)
     true
 
   disable: (disabled = true) ->
     @disabled = disabled
     if @renderedControl
-      @updateControlState()
+      @refreshControlState()
       @renderedControl.trigger('disabled.control.editor', @)
     true
 

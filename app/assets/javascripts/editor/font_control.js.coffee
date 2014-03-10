@@ -1,6 +1,6 @@
 class @Editor.Controls.FontControl extends @Editor.Controls.ButtonControl
   getCommand: ->
-    jQuery.error 'no command defined for control'
+    console.error 'no command defined for control'
 
   executeCommandSync: ->
     document.execCommand(@getCommand(), false, null)

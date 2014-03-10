@@ -5,18 +5,18 @@ class Editor.Controls.ButtonControl extends Editor.Controls.Control
     $button.html($('<i />', class: "fa fa-#{@getIcon()}"))
     $button.tooltip(placement: 'top', container: 'body')
     $button.click =>
-      $button.tooltip('hide') # fix
       @executeCommand =>
         @refresh()
+      $button.tooltip('hide') # fix for assigned tooltips
     $button
 
   getCaption: ->
-    jQuery.error 'no caption defined for control'
+    console.error 'no caption defined for control'
 
   getIcon: ->
-    jQuery.error 'no icon defined for control'
+    console.error 'no icon defined for control'
 
-  updateControlState: ->
+  refreshControlState: ->
     @renderedControl.prop('disabled', @disabled)
     if @active
       @renderedControl.addClass('active')

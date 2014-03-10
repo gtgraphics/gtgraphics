@@ -1,82 +1,106 @@
 class @TextareaEditor extends @Editor
   constructor: ($element, options = {}) ->
     jQuery.error 'element must be a textarea' unless $element.is('textarea')
+    @input = $element
     super
 
-  onInit: ->
-    @createToolbar()
-    @createRegion()
-    @createContainer()
+  # Refreshers
 
-    # carry over properties from original textarea
-    @element.hide()
-    if @element.prop('disabled')
-      @disable()
-    else
-      @enable()
+  refreshInternalState: ->
+    @disabled = @input.prop('disabled')
 
   getToolbar: ->
-    @toolbar
+    @toolbar ||= @createToolbar() 
 
   getRegion: ->
-    @region
+    @region ||= @createRegion()
 
-  applyEvents: ->
-    super
-    inputId = @element.attr('id')
-    if inputId
-      $("label[for='#{inputId}']").click =>
-        @region.focus().triggerHandler('focus')
+  createEditor: ->
+    $editor = $('<div />', class: 'editor-container')
+    $editor.insertAfter(@input)
+    $editor.append(@getToolbar())
+    $editor.append(@getRegion())
+    $editor.append(@input)
 
   createToolbar: ->
-    toolbar = new Editor.Toolbar(@)
-    @toolbar = toolbar.render()
-
-  createContainer: ->
-    @container = $('<div />', class: 'editor-container')
-    @container.insertAfter(@element)
-    @container.append(@toolbar)
-    @container.append(@region)
-    @container.append(@element)
+    toolbar = new Editor.Toolbar(@options.controls)
+    toolbar.render()
 
   createRegion: ->
-    inputId = @element.attr('id')
-    @region = $('<div />', class: 'editor-region', contenteditable: true, designmode: 'on')
-    @region.attr('data-target', "##{inputId}") if inputId
-    @region.html(@element.val())
+    inputId = @input.attr('id')
+    $region = $('<div />', class: 'editor-region', contenteditable: true, designmode: 'on')
+    $region.attr('data-target', "##{inputId}") if inputId
+    $region.html(@input.val())
 
-  changeViewMode: (viewMode, focus = false) ->
-    previousViewMode = @viewMode
-    @viewMode = viewMode
-    switch @viewMode
+    $region.click =>
+      $region.triggerHandler('focus')
+    $region.focus =>
+      @onOpen()
+    $region.blur =>
+      @onClose()      
+    $region.on 'click', 'a', (event) =>
+      # Prevent links from being clicked in editor mode
+      event.preventDefault() if @viewMode == 'editor'
+    $('*', $region).focus =>
+      @onOpen()
+
+    # redirect focus to region
+    @input.focus (event) =>
+      event.preventDefault()
+      $region.focus().triggerHandler('focus')
+
+    # change region when input is changed
+    @input.on 'textchange', =>
+      $region.html(@input.val())
+
+    # redirect label clicks from input to region
+    $("label[for='#{inputId}']").click =>
+      @region.focus().triggerHandler('focus')
+
+  onOpen: ->
+    super
+    @region.addClass('editing')
+    @container.addClass('focus')
+
+  onClose: ->
+    super
+    @region.removeClass('editing')
+    @container.removeClass('focus')
+
+  enable: ->
+    super
+    @input.prop('disabled', false)
+    if @region
+      @region.removeClass('disabled')
+      @region.attr('contenteditable', true)
+    true
+
+  disable: ->
+    super
+    @input.prop('disabled', true)
+    if @region
+      @region.addClass('disabled')
+      @region.removeAttr('contenteditable')
+    true
+
+  updateViewModeState: (viewMode) ->
+    switch viewMode
       when 'editor'
-        @element.hide()
+        @input.hide()
         @region.show()
         if @disabled
           @region.addClass('disabled')
         else
           @enable(false)
-        @region.focus().triggerHandler('focus') if focus
       when 'preview'
-        @removeSelection()
-        @element.hide()
+        #@removeSelection()
+        @input.hide()
         @region.show()
         @disable(false)
         @region.removeClass('disabled')
-        @region.focus().triggerHandler('focus') if focus
       when 'html'
         @region.hide()
-        @element.show()
+        @input.show()
         @enable(false) unless @disabled
-        @element.focus().triggerHandler('focus') if focus
       else
-        return jQuery.error('invalid view mode: ' + viewMode)
-    @region.trigger('viewModeChanged.editor', viewMode, previousViewMode)
-
-  onOpen: ->
-    @region.addClass('editing')
-    @container.addClass('focus')
-
-  onClose: ->
-    @region.removeClass('editing')
-    @container.removeClass('focus')
+        console.error "invalid view mode: #{viewMode}"

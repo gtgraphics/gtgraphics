@@ -1,14 +1,15 @@
 class @Editor.Toolbar
-  constructor: (config) ->
-    @config = config
+  constructor: (configuration) ->
+    @configuration = configuration || []
     @controls = []
-    _.each @config, (control) =>
+    _.each @configuration, (control) =>
       @addControl(control)
 
   addControl: (control) ->
+    # TODO Add Control to rendered toolbar
     if _.isArray(control)
       controlGroup = new Editor.ControlGroup()
-      _.each control, (nestedControl) =>
+      _.each control, (nestedControl) ->
         controlGroup.addControl(nestedControl)       
       @controls.push(controlGroup)
       controlGroup
@@ -18,7 +19,12 @@ class @Editor.Toolbar
       control
 
   render: ->
-    $toolbar = $('<div />', class: 'btn-toolbar editor-controls')
+    @renderedToolbar ||= $('<div />', class: 'btn-toolbar editor-controls').data('toolbar', @)
+    @renderedToolbar.empty()
     _.each @controls, (control) =>
-      $toolbar.append(control.render())
-    $toolbar
+      @renderedToolbar.append(control.render())
+    @renderedToolbar
+
+  destroy: ->
+    @renderedToolbar.remove() if @renderedToolbar
+    @renderedToolbar = null
