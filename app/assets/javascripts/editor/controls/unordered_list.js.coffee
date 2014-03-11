@@ -1,8 +1,11 @@
 class @Editor.Controls.UnorderedList extends @Editor.Controls.FontControl
-  constructor: ->
-    @caption = 'unorderedList'
-    @icon = 'list-ul'
-    @command = 'insertunorderedlist'
-    super
+  getCommand: ->
+    'insertunorderedlist'
+
+  getCaption: ->
+    I18n.translate('editor.unorderedList')
+
+  getIcon: ->
+    'list-ul'
 
 @Editor.Controls.register('unorderedList', @Editor.Controls.UnorderedList)

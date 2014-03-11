@@ -21,3 +21,4 @@ class @Editor.ControlGroup
   destroy: ->
     @renderedGroup.remove() if @renderedGroup
     @renderedGroup = null
+    true

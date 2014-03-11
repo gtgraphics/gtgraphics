@@ -19,10 +19,11 @@ class @Editor.Toolbar
       control
 
   render: ->
-    @renderedToolbar ||= $('<div />', class: 'btn-toolbar editor-controls').data('toolbar', @)
-    @renderedToolbar.empty()
+    @renderedToolbar ||= $('<div />', class: 'editor-controls').data('toolbar', @)
+    $toolbar = $('<div />', class: 'btn-toolbar')
     _.each @controls, (control) =>
-      @renderedToolbar.append(control.render())
+      $toolbar.append(control.render())
+    @renderedToolbar.html($toolbar)
     @renderedToolbar
 
   destroy: ->

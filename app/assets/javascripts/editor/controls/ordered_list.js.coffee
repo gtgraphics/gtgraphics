@@ -1,8 +1,11 @@
 class @Editor.Controls.OrderedList extends @Editor.Controls.FontControl
-  constructor: ->
-    @caption = 'orderedList'
-    @icon = 'list-ol'
-    @command = 'insertorderedlist'
-    super
+  getCommand: ->
+    'insertorderedlist'
+
+  getCaption: ->
+    I18n.translate('editor.orderedList')
+
+  getIcon: ->
+    'list-ol'
 
 @Editor.Controls.register('orderedList', @Editor.Controls.OrderedList)

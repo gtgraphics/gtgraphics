@@ -9,6 +9,9 @@ class @TextareaEditor extends @Editor
   refreshInternalState: ->
     @disabled = @input.prop('disabled')
 
+  refreshControlState: ->
+    @renderedEditor.prop('disabled', @disabled)
+
   getToolbar: ->
     @toolbar ||= @createToolbar() 
 
@@ -21,6 +24,7 @@ class @TextareaEditor extends @Editor
     $editor.append(@getToolbar())
     $editor.append(@getRegion())
     $editor.append(@input)
+    $editor
 
   createToolbar: ->
     toolbar = new Editor.Toolbar(@options.controls)
@@ -28,6 +32,7 @@ class @TextareaEditor extends @Editor
 
   createRegion: ->
     inputId = @input.attr('id')
+
     $region = $('<div />', class: 'editor-region', contenteditable: true, designmode: 'on')
     $region.attr('data-target', "##{inputId}") if inputId
     $region.html(@input.val())
@@ -49,23 +54,30 @@ class @TextareaEditor extends @Editor
       event.preventDefault()
       $region.focus().triggerHandler('focus')
 
+    @input.blur (event) =>
+      event.preventDefault()
+      $region.blur().triggerHandler('blur')
+
     # change region when input is changed
-    @input.on 'textchange', =>
-      $region.html(@input.val())
+    @input.on 'textchange', ->
+      $region.html($(@).val())
+
+    $region
 
     # redirect label clicks from input to region
-    $("label[for='#{inputId}']").click =>
-      @region.focus().triggerHandler('focus')
+    #$("label[for='#{inputId}']").click =>
+    #  @region.focus().triggerHandler('focus')
 
   onOpen: ->
     super
     @region.addClass('editing')
-    @container.addClass('focus')
+    @renderedEditor.addClass('focus')
 
   onClose: ->
     super
     @region.removeClass('editing')
-    @container.removeClass('focus')
+    #@container.removeClass('focus')
+    @renderedEditor.removeClass('focus')
 
   enable: ->
     super

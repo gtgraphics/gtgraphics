@@ -29,6 +29,7 @@ class @Editor.Controls.Control
   destroy: ->
     @renderedControl.remove() if @renderedControl
     @renderedControl = null
+    true
 
   createControl: ->
     jQuery.error 'createControl() has not been implemented'

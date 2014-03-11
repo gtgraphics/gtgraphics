@@ -32,6 +32,7 @@ class @Editor
   destroy: ->
     @renderedEditor.remove() if @renderedEditor
     @renderedEditor = null
+    true
 
   # Refreshers
 
@@ -78,11 +79,11 @@ class @Editor
 
   # View Mode
 
-  changeViewMode: (viewMode, focus = false) ->
+  changeViewMode: (viewMode) ->
     previousViewMode = @viewMode
     @updateViewModeState(viewMode)
     @viewMode = viewMode
-    @input.focus().triggerHandler('focus') if focus
+    @input.focus().triggerHandler('focus') # if focus
     @region.trigger('viewModeChanged.editor', viewMode, previousViewMode)
 
   updateViewModeState: (viewMode) ->
