@@ -16,7 +16,7 @@ class @Editor.Controls.FontControl extends @Editor.Controls.ButtonControl
   querySupported: ->
     document.queryCommandSupported(@getCommand(), false, null)
 
-  createControl: ->
-    $button = super
-    # TODO Refresh when the selection in the target region becomes updated (focus blur textchange)
-    $button
+  # createControl: ->
+  #   $button = super
+  #   # TODO Refresh when the selection in the target region becomes updated (focus blur textchange)
+  #   $button

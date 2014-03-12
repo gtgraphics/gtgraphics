@@ -46,7 +46,10 @@ class @Editor.Controls.Control
 
   refresh: ->
     @refreshInternalState()
-    @refreshControlState() if @renderedControl
+    @refreshControlState() if @isRendered()
+
+  isRendered: ->
+    @renderedControl? and @renderedControl != undefined
 
   refreshInternalState: ->
     if @querySupported() and @queryEnabled()

@@ -9,7 +9,7 @@ class @TextareaEditor extends @Editor
   refreshInternalState: ->
     @disabled = @input.prop('disabled')
 
-  refreshControlState: ->
+  refreshInputState: ->
     @renderedEditor.prop('disabled', @disabled)
 
   getToolbar: ->
@@ -18,12 +18,33 @@ class @TextareaEditor extends @Editor
   getRegion: ->
     @region ||= @createRegion()
 
+  getControls: ->
+    toolbar = @getToolbar().data('toolbar')
+    toolbar.controls
+
   createEditor: ->
     $editor = $('<div />', class: 'editor-container')
     $editor.insertAfter(@input)
-    $editor.append(@getToolbar())
-    $editor.append(@getRegion())
+
+    $toolbar = @getToolbar()
+    $editor.append($toolbar)
+
+    $region = @getRegion()
+    $editor.append($region)
+    
     $editor.append(@input)
+
+    # change region when input is changed
+    @input.on 'textchange', =>
+      @refreshRegionContent()
+
+    $region.on 'keyup paste change.editor', =>
+      @refreshInputContent()
+
+    $editor.on 'executed.editor.control', (event, control) =>
+      if control instanceof Editor.Controls.ButtonControl
+        @refreshInputContent()
+
     $editor
 
   createToolbar: ->
@@ -49,24 +70,32 @@ class @TextareaEditor extends @Editor
     $('*', $region).focus =>
       @onOpen()
 
+    # update states of all controls
+    $region.on 'keyup focus blur', =>
+      @refreshControlStates()
+
     # redirect focus to region
-    @input.focus (event) =>
-      event.preventDefault()
-      $region.focus().triggerHandler('focus')
+    @input.on 'click focus', (event) =>
+      if @options.viewMode == 'editor'
+        event.preventDefault()
+        $region.focus().triggerHandler('focus')
 
     @input.blur (event) =>
-      event.preventDefault()
-      $region.blur().triggerHandler('blur')
-
-    # change region when input is changed
-    @input.on 'textchange', ->
-      $region.html($(@).val())
+      if @options.viewMode == 'editor'
+        event.preventDefault()
+        $region.blur().triggerHandler('blur')
 
     $region
 
     # redirect label clicks from input to region
     #$("label[for='#{inputId}']").click =>
     #  @region.focus().triggerHandler('focus')
+
+  refreshRegionContent: ->
+    @region.html(@input.val())
+
+  refreshInputContent: ->
+    @input.val(@region.html())
 
   onOpen: ->
     super

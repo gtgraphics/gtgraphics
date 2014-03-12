@@ -5,8 +5,10 @@ class Editor.Controls.ButtonControl extends Editor.Controls.Control
     $button.html($('<i />', class: "fa fa-#{@getIcon()}"))
     $button.tooltip(placement: 'top', container: 'body')
     $button.click =>
+      $button.trigger('execute.editor.control', @)
       @executeCommand =>
         @refresh()
+        $button.trigger('executed.editor.control', @)
       $button.tooltip('hide') # fix for assigned tooltips
     $button
 

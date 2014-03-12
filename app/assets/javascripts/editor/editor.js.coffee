@@ -3,15 +3,14 @@
 class @Editor
   @defaults = {
     viewMode: 'editor',
-    #controls: [
-    #  ['bold', 'italic', 'underline', 'strikethrough'],
-    #  ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify'],
-    #  ['orderedList', 'unorderedList', 'indent', 'outdent'],
-    #  #['link', 'unlink'],
-    #  #'image',
-    #  'viewMode'
-    #],
-    controls: [['bold']]
+    controls: [
+      ['bold', 'italic', 'underline', 'strikethrough'],
+      ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify'],
+      ['orderedList', 'unorderedList', 'indent', 'outdent'],
+      #['link', 'unlink'],
+      #'image',
+      'viewMode'
+    ],
   }
 
   constructor: ($element, options = {}) ->
@@ -21,16 +20,20 @@ class @Editor
     # @changeViewMode(@options.viewMode, false)
 
   render: ->
-    unless @renderedEditor
+    unless @isRendered()
       $editor = @createEditor()
       $editor.data('editor', @)
       @renderedEditor = $editor
-    @refreshControlState()
+    @refreshInputState()
+    @refreshControlStates() 
     @updateViewModeState(@options.viewMode)
     @renderedEditor
 
+  isRendered: ->
+    @renderedEditor? and @renderedEditor != undefined
+
   destroy: ->
-    @renderedEditor.remove() if @renderedEditor
+    @renderedEditor.remove() if @isRendered()
     @renderedEditor = null
     true
 
@@ -38,24 +41,43 @@ class @Editor
 
   refresh: ->
     @refreshInternalState()
-    @refreshControlState() if @renderedEditor
+    if @isRendered()
+      @refreshInputState()
+      @refreshControlStates()
+    true
 
   # Updates the internal state (e.g. disabled) stored as instance variable
   # within the current object
   refreshInternalState: ->
     console.warn 'refreshInternalState() has not been implemented'
 
-  # Updates the state of the control in the DOM
-  refreshControlState: ->
-    console.warn 'refreshControlState() has not been implemented'
+  # Updates the state of the input in the DOM
+  refreshInputState: ->
+    console.warn 'refreshInputState() has not been implemented'
+
+  # Updates the states of the toolbar controls in the DOM
+  refreshControlStates: ->
+    if @isRendered()
+      controls = @getControls()
+      _.each controls, (control) ->
+        control.refresh()
+      true
+    else
+      false
 
   # Getters
+
+  getControls: ->
+    console.warn 'getControls() has not been implemented'
 
   getToolbar: ->
     console.warn 'no toolbar found'
 
   getRegion: ->
     console.warn 'no region found'
+
+  createEditor: ->
+    console.warn 'createEditor() has not been implemented'
 
   # Callbacks
 
