@@ -38,7 +38,7 @@ class @TextareaEditor extends @Editor
     @input.on 'textchange', =>
       @refreshRegionContent()
 
-    $region.on 'keyup paste change.editor', =>
+    $region.on 'click keyup paste', =>
       @refreshInputContent()
 
     $editor.on 'executed.editor.control', (event, control) =>
