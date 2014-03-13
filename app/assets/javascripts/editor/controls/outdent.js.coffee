@@ -1,6 +1,11 @@
 class @Editor.Controls.Outdent extends @Editor.Controls.FontControl
-  constructor: ->
-    @caption = @icon = @command = 'outdent'
-    super
+  getCommand: ->
+    'outdent'
+
+  getCaption: ->
+    I18n.translate('editor.outdent')
+
+  getIcon: ->
+    'outdent'
 
 @Editor.Controls.register('outdent', @Editor.Controls.Outdent)

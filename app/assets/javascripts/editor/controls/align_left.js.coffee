@@ -1,8 +1,11 @@
 class @Editor.Controls.AlignLeft extends @Editor.Controls.FontControl
-  constructor: ->
-    @caption = 'alignLeft'
-    @icon = 'align-left'
-    @command = 'justifyleft'
-    super
+  getCommand: ->
+    'justifyleft'
+
+  getCaption: ->
+    I18n.translate('editor.alignLeft')
+
+  getIcon: ->
+    'align-left'
 
 @Editor.Controls.register('alignLeft', @Editor.Controls.AlignLeft)

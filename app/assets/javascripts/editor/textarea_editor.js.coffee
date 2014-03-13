@@ -1,7 +1,7 @@
 class @TextareaEditor extends @Editor
   constructor: ($element, options = {}) ->
     jQuery.error 'element must be a textarea' unless $element.is('textarea')
-    @input = $element
+    @input = $element.addClass('editor-html')
     super
 
   # Refreshers
@@ -19,15 +19,14 @@ class @TextareaEditor extends @Editor
     @region ||= @createRegion()
 
   getControls: ->
-    toolbar = @getToolbar().data('toolbar')
-    toolbar.controls
+    @getToolbar().data('toolbar').controls
 
   createEditor: ->
     $editor = $('<div />', class: 'editor-container')
     $editor.insertAfter(@input)
 
     $toolbar = @getToolbar()
-    $editor.append($toolbar)
+    $editor.append($('<div />', class: 'editor-controls').html($toolbar))
 
     $region = @getRegion()
     $editor.append($region)
@@ -44,11 +43,13 @@ class @TextareaEditor extends @Editor
     $editor.on 'executed.editor.control', (event, control) =>
       if control instanceof Editor.Controls.ButtonControl
         @refreshInputContent()
+        $region.focus().triggerHandler('focus')
 
     $editor
 
   createToolbar: ->
     toolbar = new Editor.Toolbar(@options.controls)
+    toolbar.editor = @ # the created toolbar is bound to this editor
     toolbar.render()
 
   createRegion: ->
@@ -66,7 +67,7 @@ class @TextareaEditor extends @Editor
       @onClose()      
     $region.on 'click', 'a', (event) =>
       # Prevent links from being clicked in editor mode
-      event.preventDefault() if @viewMode == 'editor'
+      event.preventDefault() if @viewMode == 'richText'
     $('*', $region).focus =>
       @onOpen()
 
@@ -74,14 +75,17 @@ class @TextareaEditor extends @Editor
     $region.on 'keyup focus blur', =>
       @refreshControlStates()
 
+    @input.on 'keyup focus blur', =>
+      @refreshControlStates()
+
     # redirect focus to region
     @input.on 'click focus', (event) =>
-      if @options.viewMode == 'editor'
+      if @viewMode == 'richText'
         event.preventDefault()
         $region.focus().triggerHandler('focus')
 
     @input.blur (event) =>
-      if @options.viewMode == 'editor'
+      if @viewMode == 'richText'
         event.preventDefault()
         $region.blur().triggerHandler('blur')
 
@@ -126,22 +130,21 @@ class @TextareaEditor extends @Editor
 
   updateViewModeState: (viewMode) ->
     switch viewMode
-      when 'editor'
+      when 'richText'
         @input.hide()
         @region.show()
-        if @disabled
-          @region.addClass('disabled')
-        else
-          @enable(false)
+        @region.attr('contenteditable', true)
+        @region.attr('designmode', 'on')
+        @region.height(@input.height())
+      when 'html'
+        @input.show()
+        @region.hide()
+        @input.height(@region.height())
       when 'preview'
+        # TODO Load Preview with Interpolations (Liquid)
         #@removeSelection()
         @input.hide()
         @region.show()
-        @disable(false)
-        @region.removeClass('disabled')
-      when 'html'
-        @region.hide()
-        @input.show()
-        @enable(false) unless @disabled
+        @region.removeAttr('contenteditable').removeAttr('designmode')
       else
         console.error "invalid view mode: #{viewMode}"

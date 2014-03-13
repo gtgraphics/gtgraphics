@@ -2,7 +2,7 @@
 
 class @Editor
   @defaults = {
-    viewMode: 'editor',
+    viewMode: 'richText',
     controls: [
       ['bold', 'italic', 'underline', 'strikethrough'],
       ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify'],
@@ -16,14 +16,12 @@ class @Editor
   constructor: ($element, options = {}) ->
     @element = $element
     @options = jQuery.extend({}, Editor.defaults, options)
+    @viewMode = @options.viewMode
     @refreshInternalState()
     # @changeViewMode(@options.viewMode, false)
 
   render: ->
-    unless @isRendered()
-      $editor = @createEditor()
-      $editor.data('editor', @)
-      @renderedEditor = $editor
+    @renderedEditor ||= @createEditor().data('editor', @)
     @refreshInputState()
     @refreshControlStates() 
     @updateViewModeState(@options.viewMode)
@@ -69,12 +67,15 @@ class @Editor
 
   getControls: ->
     console.warn 'getControls() has not been implemented'
+    null
 
   getToolbar: ->
     console.warn 'no toolbar found'
+    null
 
   getRegion: ->
     console.warn 'no region found'
+    null
 
   createEditor: ->
     console.warn 'createEditor() has not been implemented'

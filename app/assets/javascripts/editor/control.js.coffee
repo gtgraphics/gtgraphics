@@ -15,14 +15,15 @@ AvailableControls = {}
 
 
 class @Editor.Controls.Control
-  constructor: ->
+  constructor: (toolbar) ->
+    @toolbar = toolbar
+    @group = null
     @refreshInternalState()
 
   render: ->
     unless @renderedControl
-      $control = @createControl()
-      $control.data('control', @)
-      @renderedControl = $control
+      @renderedControl = @createControl().data('control', @)
+      @onCreateControl()
     @refreshControlState()
     @renderedControl
 
@@ -33,6 +34,8 @@ class @Editor.Controls.Control
 
   createControl: ->
     jQuery.error 'createControl() has not been implemented'
+
+  onCreateControl: ->
 
   executeCommand: (callback) ->
     returnValue = @executeCommandSync()

@@ -21,9 +21,9 @@ de:
       indent: Einrücken
       outdent: Ausrücken
       view_modes:
-        editor: Editor
-        preview: Vorschau
+        rich_text: Rich Text
         html: HTML
+        preview: Vorschau
 
     pages:
       embeddable:

@@ -1,14 +1,17 @@
 class @Editor.ControlGroup
-  constructor: (configuration) ->
-    @configuration = configuration || []
+  constructor: (toolbar, configuration = []) ->
+    @toolbar = toolbar
+    @configuration = configuration
     @controls = []
     _.each @configuration, (control) =>
       @addControl(control)
 
   addControl: (control) ->
-    # TODO Add Control to rendered control group
     control = Editor.Controls.init(control) if _.isString(control)
+    control.group = @
+    control.toolbar = @toolbar
     @controls.push(control)
+    @renderedGroup.append(control.render) if @isRendered()
     control
 
   render: ->
@@ -17,6 +20,9 @@ class @Editor.ControlGroup
     _.each @controls, (control) =>
       @renderedGroup.append(control.render())
     @renderedGroup
+
+  isRendered: ->
+    @renderedGroup? and @renderedGroup != undefined
 
   destroy: ->
     @renderedGroup.remove() if @renderedGroup
