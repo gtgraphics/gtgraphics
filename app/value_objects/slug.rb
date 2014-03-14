@@ -4,7 +4,7 @@ class Slug < String
   attr_reader :options
 
   def initialize(str, options = {})
-    @options = options.reverse_merge!(separator: DEFAULT_SEPARATOR)
+    @options = options.reverse_merge(separator: DEFAULT_SEPARATOR)
     super(str.parameterize(@options[:separator]))
   end
 

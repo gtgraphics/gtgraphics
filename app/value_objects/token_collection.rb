@@ -14,8 +14,8 @@ class TokenCollection
     else
       @tokens = tokens.to_a
     end
-    @tokens.sort! if options[:sort]
-    @tokens.uniq! if options[:unique]
+    @tokens.sort! if @options[:sort]
+    @tokens.uniq! if @options[:unique]
   end
 
   def self.parse(tokens, options = {})
