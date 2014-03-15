@@ -32,16 +32,16 @@ class LocalizedDate < String
   end
 
   def inspect
-    "#<#{self.class.name} #{super}, format: #{format.inspect}, locale: #{locale.inspect}>"
+    "#<#{self.class.name} #{super}, format: #{@format.inspect}, locale: #{@locale.inspect}>"
   end
 
   def to_date
-    Date.strptime(self, format)
+    Date.strptime(self, @format)
   end
 
   def valid_date?
     begin
-      Date.strptime(self, format)
+      Date.strptime(self, @format)
       true
     rescue
       false
