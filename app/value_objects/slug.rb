@@ -15,12 +15,12 @@ class Slug < String
   end
 
   def succ
-    if self =~ Regexp.new(Regexp.escape(options[:separator]) + '[0-9]+\z')
+    if self =~ Regexp.new(Regexp.escape(@options[:separator]) + '[0-9]+\z')
       str = super
     else
-      str = "#{self}-2"
+      str = "#{self}#{@options[:separator]}-2"
     end
-    self.class.new(str, options)
+    self.class.new(str, @options)
   end
 
   alias_method :next, :succ
