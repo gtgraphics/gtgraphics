@@ -8,8 +8,16 @@ $(document).ready ->
   $toolbarWrapper = $('<div />', id: 'editor_toolbar', class: 'editor-controls').appendTo($body)
   $toolbarContainer = $('<div />', class: 'container').appendTo($toolbarWrapper)
 
-  toolbar = new Editor.Toolbar()
+
+  controls = [
+    ['save'],
+    ['bold', 'italic', 'underline', 'strikethrough'],
+    ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify'],
+    ['orderedList', 'unorderedList', 'indent', 'outdent']
+  ]
+
+  toolbar = new Editor.Toolbar(controls)
   $toolbar = toolbar.render() 
   $toolbar.appendTo($toolbarContainer)
 
-  $('.region', $body).editor(class: RegionEditor, toolbar: $toolbar)
+  $('.region').editor(class: RegionEditor, toolbar: $toolbar)

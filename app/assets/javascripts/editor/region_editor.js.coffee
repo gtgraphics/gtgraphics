@@ -8,3 +8,7 @@ class @RegionEditor extends @Editor
 
   refreshInternalState: ->
 
+  onOpen: ->
+
+  onClose: ->
+    
