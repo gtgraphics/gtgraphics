@@ -1,6 +1,15 @@
 class @Editor.Toolbar
+  @defaultConfig = [
+    ['bold', 'italic', 'underline', 'strikethrough'],
+    ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify'],
+    ['orderedList', 'unorderedList', 'indent', 'outdent'],
+    #['link', 'unlink'],
+    #'image',
+    'viewMode'
+  ]
+
   constructor: (configuration) ->
-    @configuration = configuration || []
+    @configuration = configuration || Editor.Toolbar.defaultConfig
     @groupedControls = []
     @controls = []
     @editor = null

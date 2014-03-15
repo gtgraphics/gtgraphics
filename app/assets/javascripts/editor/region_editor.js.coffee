@@ -5,3 +5,6 @@ class @RegionEditor extends @Editor
     @region = @element
 
   # A region
+
+  refreshInternalState: ->
+

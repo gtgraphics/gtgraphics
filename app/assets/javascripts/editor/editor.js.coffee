@@ -1,31 +1,23 @@
 # An Editor is for a single Region
 
 class @Editor
-  @defaults = {
-    viewMode: 'richText',
-    controls: [
-      ['bold', 'italic', 'underline', 'strikethrough'],
-      ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify'],
-      ['orderedList', 'unorderedList', 'indent', 'outdent'],
-      #['link', 'unlink'],
-      #'image',
-      'viewMode'
-    ],
-  }
+  @defaults =
+    viewMode: 'richText'
 
   constructor: ($element, options = {}) ->
     @element = $element
     @options = jQuery.extend({}, Editor.defaults, options)
+    @options.controls ||= Editor.Toolbar.defaultConfig
     @viewMode = @options.viewMode
+    @toolbar = @options.toolbar
     @refreshInternalState()
-    # @changeViewMode(@options.viewMode, false)
 
   render: ->
-    @renderedEditor ||= @createEditor().data('editor', @)
+    $editor = @getEditor()
     @refreshInputState()
     @refreshControlStates() 
     @updateViewModeState(@options.viewMode)
-    @renderedEditor
+    $editor
 
   isRendered: ->
     @renderedEditor? and @renderedEditor != undefined
@@ -65,17 +57,17 @@ class @Editor
 
   # Getters
 
-  getControls: ->
-    console.warn 'getControls() has not been implemented'
-    null
+  getEditor: ->
+    @renderedEditor ||= @createEditor()
 
   getToolbar: ->
-    console.warn 'no toolbar found'
-    null
+    @toolbar ||= @createToolbar() 
 
   getRegion: ->
-    console.warn 'no region found'
-    null
+    @region ||= @createRegion()
+
+  getControls: ->
+    @getToolbar().data('toolbar').controls
 
   createEditor: ->
     console.warn 'createEditor() has not been implemented'
@@ -83,10 +75,10 @@ class @Editor
   # Callbacks
 
   onOpen: ->
-    @element.trigger('open.editor')
+    @element.trigger('open.editor', @)
 
   onClose: ->
-    @element.trigger('close.editor')
+    @element.trigger('close.editor', @)
 
   # Enabling/Disabling
 
@@ -111,5 +103,6 @@ class @Editor
 
   updateViewModeState: (viewMode) ->
     console.warn 'updateViewModeState() has not been implemented'
+
 
 Editor.controls = {}

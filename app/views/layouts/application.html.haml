@@ -17,10 +17,6 @@
     = yield :head
 
     / Stylesheets
-    - if admin_controller?
-      = stylesheet_link_tag 'admin', media: 'all', data: { turbolinks_track: true }
-    - else
-      = stylesheet_link_tag 'application', media: 'all', data: { turbolinks_track: true }
     = yield :stylesheets
 
     / JavaScripts
@@ -28,10 +24,6 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js" type="text/javascript"></script>
     <![endif]-->
 
-    - if admin_controller?
-      = javascript_include_tag 'admin', data: { turbolinks_track: true }
-    - else
-      = javascript_include_tag 'application', data: { turbolinks_track: true }
     = yield :javascripts
 
   %body{class: body_css, data: { controller: controller_name, action: action_name, locale: I18n.locale }}

@@ -12,15 +12,6 @@ class @TextareaEditor extends @Editor
   refreshInputState: ->
     @renderedEditor.prop('disabled', @disabled)
 
-  getToolbar: ->
-    @toolbar ||= @createToolbar() 
-
-  getRegion: ->
-    @region ||= @createRegion()
-
-  getControls: ->
-    @getToolbar().data('toolbar').controls
-
   createEditor: ->
     $editor = $('<div />', class: 'editor-container')
     $editor.insertAfter(@input)
