@@ -1,3 +1,5 @@
+# composed_of :meta_keywords, class_name: 'TokenCollection', mapping: %w(meta_keywords to_s), converter: :new
+
 class TokenCollection
   DEFAULTS = {
     separator: ',',
@@ -18,19 +20,15 @@ class TokenCollection
     @tokens.uniq! if @options[:unique]
   end
 
-  def self.parse(tokens, options = {})
-    new(tokens, options)
-  end
-
   def inspect
     "#<#{self.class.name} tokens: #{tokens.inspect}, options: #{options.inspect}>"
   end
 
   def to_a
-    tokens
+    @tokens
   end
 
   def to_s
-    tokens.join(options[:separator])
+    @tokens.join(options[:separator])
   end
 end

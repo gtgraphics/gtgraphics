@@ -1,3 +1,5 @@
+# composed_of :slug, mapping: %w(slug to_s), allow_nil: true, converter: :new
+
 class Slug < String
   DEFAULT_SEPARATOR = '-'
 

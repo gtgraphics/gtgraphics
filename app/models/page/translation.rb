@@ -23,6 +23,6 @@ class Page < ActiveRecord::Base
 
     validates :title, presence: true
 
-    composed_of :meta_keywords, class_name: 'TokenCollection', mapping: %w(meta_keywords to_s), converter: :parse
+    composed_of :meta_keywords, class_name: 'TokenCollection', mapping: %w(meta_keywords to_s), converter: :new
   end
 end

@@ -1,41 +1,45 @@
+# composed_of :released_on, class_name: 'LocalizedDate', mapping: %w(released_on to_s), converter: :new
+
 class LocalizedDate < String
   DEFAULT_FORMAT = :default
 
-  attr_reader :options
+  attr_reader :locale
 
-  def initialize(*args)
-    options = args.extract_options!
-    options.assert_valid_keys(:format, :locale)
-    @options = options.reverse_merge(format: DEFAULT_FORMAT, locale: I18n.locale)
-    super(*args)
-  end
-
-  def self.parse(date, options = {})
-    options = options.reverse_merge(format: DEFAULT_FORMAT, locale: I18n.locale)
-    if date.is_a?(Date)
-      format = options[:format]
-      if format.is_a?(Symbol)
-        date = I18n.localize(date, format: format, locale: options[:locale])
+  def initialize(date, options = {})
+    @format = options.fetch(:format, DEFAULT_FORMAT)
+    @locale = options.fetch(:locale, I18n.locale)
+    representation = case date
+    when String
+      date
+    when Date
+      if @format.is_a?(Symbol)
+        date = I18n.localize(date, format: @format, locale: @locale)
       else
-        date = date.strftime(format)
+        date = date.strftime(@format)
       end
+    else
+      raise ArgumentError, "unable to convert given #{date.class.name} to #{self.class.name}"
     end
-    new(date, options)
+    super(representation)
   end
 
   def format
-    if options[:format].is_a?(Symbol)
-      I18n.translate(options[:format], scope: 'date.formats', locale: options[:locale]) 
+    if @format.is_a?(Symbol)
+      I18n.translate(@format, scope: 'date.formats', locale: @locale) 
     else
-      options[:format]
+      @format
     end
+  end
+
+  def inspect
+    "#<#{self.class.name} #{super}, format: #{format.inspect}, locale: #{locale.inspect}>"
   end
 
   def to_date
     Date.strptime(self, format)
   end
 
-  def valid?
+  def valid_date?
     begin
       Date.strptime(self, format)
       true
