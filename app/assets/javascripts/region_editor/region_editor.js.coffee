@@ -16,7 +16,7 @@ $(document).ready ->
     ['orderedList', 'unorderedList', 'indent', 'outdent']
   ]
 
-  toolbar = new Editor.Toolbar(controls)
+  toolbar = new Editor.Toolbar(controls: controls, tooltip: { placement: 'bottom', container: '#editor_toolbar' })
   $toolbar = toolbar.render() 
   $toolbar.appendTo($toolbarContainer)
 

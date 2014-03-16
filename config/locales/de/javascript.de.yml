@@ -13,13 +13,14 @@ de:
       align_center: Zentriert
       align_right: Rechtsbündig
       align_justify: Blocksatz
-      ordered_list: Geordnete Liste
-      unordered_list: Ungeordnete Liste
-      link: Verknüpfung
-      unlink: Verknüpfung entfernen
       image: Bild
       indent: Einrücken
+      link: Verknüpfung
+      ordered_list: Geordnete Liste
       outdent: Ausrücken
+      save: Speichern
+      unlink: Verknüpfung entfernen
+      unordered_list: Ungeordnete Liste
       view_modes:
         rich_text: Rich Text
         html: HTML

@@ -1,19 +1,21 @@
 class @Editor.Toolbar
-  @defaultConfig = [
-    ['bold', 'italic', 'underline', 'strikethrough'],
-    ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify'],
-    ['orderedList', 'unorderedList', 'indent', 'outdent'],
-    #['link', 'unlink'],
-    #'image',
-    'viewMode'
-  ]
+  @defaults = {
+    controls: [
+      ['bold', 'italic', 'underline', 'strikethrough'],
+      ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify'],
+      ['orderedList', 'unorderedList', 'indent', 'outdent'],
+      #['link', 'unlink'],
+      #'image',
+      'viewMode'
+    ]
+  }
 
-  constructor: (configuration) ->
-    @configuration = configuration || Editor.Toolbar.defaultConfig
+  constructor: (options = {}) ->
+    @options = jQuery.extend({}, Editor.Toolbar.defaults, options)
     @groupedControls = []
     @controls = []
     @editor = null
-    _.each @configuration, (control) =>
+    _.each @options.controls, (control) =>
       @addControl(control)
 
   addControl: (control) ->

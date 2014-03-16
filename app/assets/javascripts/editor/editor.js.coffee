@@ -7,7 +7,7 @@ class @Editor
   constructor: ($element, options = {}) ->
     @element = $element
     @options = jQuery.extend({}, Editor.defaults, options)
-    @options.controls ||= Editor.Toolbar.defaultConfig
+    @options.controls ||= Editor.Toolbar.defaults.controls
     @viewMode = @options.viewMode
     @toolbar = @options.toolbar
     @refreshInternalState()

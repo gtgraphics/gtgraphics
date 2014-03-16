@@ -1,9 +1,11 @@
 class Editor.Controls.ButtonControl extends Editor.Controls.Control
   createControl: ->
+    tooltipOptions = jQuery.extend({ placement: 'top', container: 'body' }, @toolbar.options.tooltip)
+
     $button = $('<button />', type: 'button', class: 'btn btn-default btn-sm', tabindex: '-1')
     $button.attr('title', @getCaption())
     $button.html($('<i />', class: "fa fa-#{@getIcon()}"))
-    $button.tooltip(placement: 'top', container: 'body')
+    $button.tooltip(tooltipOptions)
     $button.click =>
       $button.trigger('execute.editor.control', @)
       @executeCommand =>
