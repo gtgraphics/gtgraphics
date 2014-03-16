@@ -35,6 +35,12 @@ class Admin::PageRegionsController < Admin::ApplicationController
     end
   end
 
+  def update_multiple
+    respond_to do |format|
+      format.html { head :ok }
+    end
+  end
+
   private
   def load_page
     @page = Page.find(params[:page_id])

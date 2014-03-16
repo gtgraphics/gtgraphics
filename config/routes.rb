@@ -66,7 +66,11 @@ GtGraphics::Application.routes.draw do
 
         resources :pages do
           resources :children, controller: :pages, only: :new
-          resources :regions, controller: :page_regions, only: [:show, :update]
+          resources :regions, controller: :page_regions, only: [:show, :update] do
+            collection do
+              patch :update_multiple
+            end
+          end
           collection do
             get :embeddable_fields
             get :embeddable_translation_fields

@@ -1,14 +1,14 @@
-class @RegionEditor extends @Editor
+class @RegionEditor
 
-  # A region
+  @defaults =
+    selector: '.region'
 
+  constructor: (options = {}) ->
+    @options = jQuery.extend({}, RegionEditor.defaults, options)
 
-  createRegion: ->
-    #@element.on 'focus'
-    @element.data('editor', @)
+    
 
-  refreshInternalState: ->
-
-  onOpen: ->
-
-  onClose: ->
+    $(@options.selector).each ->
+      $region = $(@)
+      $region.attr('contenteditable', true)
+      $region.attr('designmode', 'on')

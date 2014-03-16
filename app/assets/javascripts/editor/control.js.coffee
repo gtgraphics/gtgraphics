@@ -1,19 +1,3 @@
-AvailableControls = {}
-
-@Editor.Controls =
-  get: (key) ->
-    control = AvailableControls[key]
-    jQuery.error "Control not found: #{key}" unless control
-    control
-  init: (key) ->
-    klass = @get(key)
-    new klass()
-  register: (key, controlClass) ->
-    AvailableControls[key] = controlClass
-  unregister: (key) ->
-    delete AvailableControls[key]
-
-
 class @Editor.Controls.Control
   constructor: (toolbar) ->
     @toolbar = toolbar
@@ -21,15 +5,15 @@ class @Editor.Controls.Control
     @refreshInternalState()
 
   render: ->
-    unless @renderedControl
-      @renderedControl = @createControl().data('control', @)
+    unless @$control
+      @$control = @createControl().data('control', @)
       @onCreateControl()
     @refreshControlState()
-    @renderedControl
+    @$control
 
   destroy: ->
-    @renderedControl.remove() if @renderedControl
-    @renderedControl = null
+    @$control.remove() if @$control
+    @$control = null
     true
 
   createControl: ->
@@ -52,7 +36,7 @@ class @Editor.Controls.Control
     @refreshControlState() if @isRendered()
 
   isRendered: ->
-    @renderedControl? and @renderedControl != undefined
+    @$control? and @$control != undefined
 
   refreshInternalState: ->
     if @querySupported() and @queryEnabled()
@@ -84,30 +68,30 @@ class @Editor.Controls.Control
 
   activate: (active = true) ->
     @active = active
-    if @renderedControl
+    if @$control
       @refreshControlState()
-      @renderedControl.trigger('activated.control.editor', @)
+      @$control.trigger('activated.control.editor', @)
     true
 
   deactivate: ->
     @active = false
-    if @renderedControl
+    if @$control
       @refreshControlState()
-      @renderedControl.trigger('deactivated.control.editor', @)
+      @$control.trigger('deactivated.control.editor', @)
     true
 
   enable: ->
     @disabled = false
-    if @renderedControl
+    if @$control
       @refreshControlState()
-      @renderedControl.trigger('enabled.control.editor', @)
+      @$control.trigger('enabled.control.editor', @)
     true
 
   disable: (disabled = true) ->
     @disabled = disabled
-    if @renderedControl
+    if @$control
       @refreshControlState()
-      @renderedControl.trigger('disabled.control.editor', @)
+      @$control.trigger('disabled.control.editor', @)
     true
 
   toggle: ->

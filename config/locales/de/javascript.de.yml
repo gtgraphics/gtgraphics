@@ -18,12 +18,13 @@ de:
       link: Verknüpfung
       ordered_list: Geordnete Liste
       outdent: Ausrücken
+      page_settings: Einstellungen
       save: Speichern
       unlink: Verknüpfung entfernen
       unordered_list: Ungeordnete Liste
       view_modes:
         rich_text: Rich Text
-        html: HTML
+        html: HTML-Quelltext
         preview: Vorschau
 
     pages:

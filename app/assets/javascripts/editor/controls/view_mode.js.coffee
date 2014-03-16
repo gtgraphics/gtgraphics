@@ -24,9 +24,11 @@ class @Editor.Controls.ViewMode extends @Editor.Controls.ButtonControl
     @toolbar.editor.viewMode
 
   queryDropdownItemStates: ->
-    $dropdown = @renderedControl.find('.dropdown-menu')
+    $dropdown = @$control.find('.dropdown-menu')
     $buttons = $dropdown.find('li').removeClass('active')
-    $buttons.filter(-> $(@).data('viewMode') == @toolbar.editor.viewMode).addClass('active') if @toolbar.editor
+    #if @toolbar.editor and @toolbar.editor.options
+    #  console.log @toolbar.editor.options.viewMode
+    #  $buttons.filter(-> $(@).data('viewMode') == @toolbar.editor.options.viewMode).addClass('active')
 
   createDropdownListItem: (viewMode, caption, icon) ->
     $item = $('<li />').attr('data-view-mode', viewMode)

@@ -7,6 +7,15 @@
  * MIT License
  */
 
+.select2-search-choice-close {
+  font-size: 12px;
+  color: #aaa;
+  padding: 0 2px;
+  &:hover, &:focus {
+    color: #777;
+  }
+}
+
 /**
  * Reset Bootstrap 3 .form-control styles which - if applied to the
  * original <select>-element the Select2-plugin may be run against -

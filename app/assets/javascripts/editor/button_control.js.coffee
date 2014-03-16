@@ -7,10 +7,10 @@ class Editor.Controls.ButtonControl extends Editor.Controls.Control
     $button.html($('<i />', class: "fa fa-#{@getIcon()}"))
     $button.tooltip(tooltipOptions)
     $button.click =>
-      $button.trigger('execute.editor.control', @)
+      $button.trigger('editor:performAction', @)
       @executeCommand =>
         @refresh()
-        $button.trigger('executed.editor.control', @)
+        $button.trigger('editor:performedAction', @)
       $button.tooltip('hide') # fix for assigned tooltips
     $button
 
@@ -21,8 +21,8 @@ class Editor.Controls.ButtonControl extends Editor.Controls.Control
     console.error 'no icon defined for control'
 
   refreshControlState: ->
-    @renderedControl.prop('disabled', @disabled)
+    @$control.prop('disabled', @disabled)
     if @active
-      @renderedControl.addClass('active')
+      @$control.addClass('active')
     else
-      @renderedControl.removeClass('active')
+      @$control.removeClass('active')

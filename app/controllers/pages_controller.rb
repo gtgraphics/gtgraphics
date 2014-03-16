@@ -36,6 +36,8 @@ class PagesController < ApplicationController
   end
 
   def edit
+    #I18n.locale = current_user.preferred_locale if current_user.preferred_locale
+    #respond_with @page, layout: 'page_editor'
     show
   end
 

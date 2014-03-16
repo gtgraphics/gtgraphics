@@ -1,37 +1,124 @@
 class @TextareaEditor extends @Editor
-  constructor: ($element, options = {}) ->
-    jQuery.error 'element must be a textarea' unless $element.is('textarea')
-    @input = $element.addClass('editor-html')
-    super
+  @defaults =
+    viewMode: 'richText'
 
   # Refreshers
 
+  constructor: ($input, options = {}) ->
+    jQuery.error 'input must be a textarea' unless $input.is('textarea')
+    @$input = $input.addClass('editor-html')
+
+    @options = jQuery.extend({}, TextareaEditor.defaults, options)
+    @options.controls ||= Editor.Toolbar.defaults.controls
+    
+    # Get or create toolbar of this Editor (this is only the toolbar class not the rendered one)
+
+
+
+
+    @refreshInternalState()
+
+  render: ->
+    unless @isRendered()
+      inputId = @$input.attr('id')
+
+      # First render region
+      @$region = $('<div />', class: 'editor-region', contenteditable: true, designmode: 'on')
+      @$region.attr('data-target', "##{inputId}") if inputId
+      @$region.html(@$input.val())
+
+      # Then a toolbar can be appended to the region
+      @toolbar = @options.toolbar
+      @toolbar ||= new Editor.Toolbar(@$region)
+
+      # Finally, wrap all elements with a container
+      @$editor = $('<div />', class: 'editor-container')
+      @$editor.insertAfter(@$input)
+
+      # Preserve original input as HTML container
+      $toolbarWrapper = $('<div />', class: 'editor-controls')
+      @toolbar.render().appendTo($toolbarWrapper)
+      @$editor.append($toolbarWrapper)
+      @$editor.append(@$region)
+      @$editor.append(@$input)
+
+    console.log @$editor
+
+    @refreshInputState()
+    @refreshControlStates() 
+    @updateViewModeState(@options.viewMode)
+
+    @$editor
+
+  isRendered: ->
+    @$editor? and @$editor != undefined
+
+  destroy: ->
+    @$editor.remove() if @isRendered()
+    @$editor = null
+    @$region = null # Region DOM element should have been destroyed with the editor
+    @toolbar = null # Do not delete the toolbar DOM elements
+    true
+
+  # Refreshers
+
+  refresh: ->
+    @refreshInternalState()
+    if @isRendered()
+      @refreshInputState()
+      @refreshControlStates()
+    true
+
+  # Getters
+
+  getToolbar: ->
+
+    
+
+  getRegion: ->
+    @$region ||= @createRegion()
+
+  getControls: ->
+    @toolbar.controls
+
+  # Callbacks
+
   refreshInternalState: ->
-    @disabled = @input.prop('disabled')
+    @disabled = @$input.prop('disabled')
 
   refreshInputState: ->
-    @renderedEditor.prop('disabled', @disabled)
+    @$editor.prop('disabled', @disabled)
+
+  refreshControlStates: ->
+    if @isRendered()
+      controls = @getControls()
+      _.each controls, (control) ->
+        control.refresh()
+      true
+    else
+      false
 
   createEditor: ->
     $editor = $('<div />', class: 'editor-container')
-    $editor.insertAfter(@input)
-
-    $toolbar = @getToolbar()
-    $editor.append($('<div />', class: 'editor-controls').html($toolbar))
+    $editor.insertAfter(@$input)
+    $editor.append(@$input)
 
     $region = @getRegion()
     $editor.append($region)
+
+    $toolbar = @getToolbar()
+    $editor.append($('<div />', class: 'editor-controls').html($toolbar))
     
-    $editor.append(@input)
+
 
     # change region when input is changed
-    @input.on 'textchange', =>
+    @$input.on 'textchange', =>
       @refreshRegionContent()
 
     $region.on 'click keyup paste', =>
       @refreshInputContent()
 
-    $editor.on 'executed.editor.control', (event, control) =>
+    $editor.on 'editor:performedAction', (event, control) =>
       if control instanceof Editor.Controls.ButtonControl
         @refreshInputContent()
         $region.focus().triggerHandler('focus')
@@ -39,16 +126,16 @@ class @TextareaEditor extends @Editor
     $editor
 
   createToolbar: ->
-    toolbar = new Editor.Toolbar(@options.controls)
+    toolbar = new Editor.Toolbar(@$region, @options.controls)
     toolbar.editor = @ # the created toolbar is bound to this editor
     toolbar.render()
 
   createRegion: ->
-    inputId = @input.attr('id')
+    inputId = @$input.attr('id')
 
     $region = $('<div />', class: 'editor-region', contenteditable: true, designmode: 'on')
     $region.attr('data-target', "##{inputId}") if inputId
-    $region.html(@input.val())
+    $region.html(@$input.val())
 
     $region.click =>
       $region.triggerHandler('focus')
@@ -58,7 +145,7 @@ class @TextareaEditor extends @Editor
       @onClose()      
     $region.on 'click', 'a', (event) =>
       # Prevent links from being clicked in editor mode
-      event.preventDefault() if @viewMode == 'richText'
+      event.preventDefault() if @options.viewMode == 'richText'
     $('*', $region).focus =>
       @onOpen()
 
@@ -66,76 +153,80 @@ class @TextareaEditor extends @Editor
     $region.on 'keyup focus blur', =>
       @refreshControlStates()
 
-    @input.on 'keyup focus blur', =>
+    @$input.on 'keyup focus blur', =>
       @refreshControlStates()
 
     # redirect focus to region
-    @input.on 'click focus', (event) =>
-      if @viewMode == 'richText'
+    @$input.on 'click focus', (event) =>
+      if @options.viewMode == 'richText'
         event.preventDefault()
         $region.focus().triggerHandler('focus')
 
-    @input.blur (event) =>
-      if @viewMode == 'richText'
+    @$input.blur (event) =>
+      if @options.viewMode == 'richText'
         event.preventDefault()
         $region.blur().triggerHandler('blur')
 
     $region
 
-    # redirect label clicks from input to region
-    #$("label[for='#{inputId}']").click =>
-    #  @region.focus().triggerHandler('focus')
-
   refreshRegionContent: ->
-    @region.html(@input.val())
+    @$region.html(@$input.val())
 
   refreshInputContent: ->
-    @input.val(@region.html())
+    @$input.val(@$region.html())
 
   onOpen: ->
-    super
-    @region.addClass('editing')
-    @renderedEditor.addClass('focus')
+    @$region.addClass('editing')
+    @$editor.addClass('focus')
+    @$input.trigger('editor:opened', @)
 
   onClose: ->
-    super
-    @region.removeClass('editing')
-    #@container.removeClass('focus')
-    @renderedEditor.removeClass('focus')
+    @$region.removeClass('editing')
+    @$editor.removeClass('focus')
+    @$input.trigger('editor:closed', @)
 
   enable: ->
-    super
-    @input.prop('disabled', false)
-    if @region
-      @region.removeClass('disabled')
-      @region.attr('contenteditable', true)
+    @disabled = false
+    @$input.prop('disabled', false)
+    if @$region
+      @$region.removeClass('disabled')
+      @$region.attr('contenteditable', true)
+    @$input.trigger('editor:enabled', @)
     true
 
   disable: ->
-    super
-    @input.prop('disabled', true)
-    if @region
-      @region.addClass('disabled')
-      @region.removeAttr('contenteditable')
+    @disabled = true
+    @$input.prop('disabled', true)
+    if @$region
+      @$region.addClass('disabled')
+      @$region.removeAttr('contenteditable')
+    @$input.trigger('editor:disabled', @)
     true
+
+  changeViewMode: (viewMode) ->
+    previousViewMode = @options.viewMode
+    @updateViewModeState(viewMode)
+    @options.viewMode = viewMode
+    @$input.focus().triggerHandler('focus') # if focus
+    @$region.trigger('editor:changedView', viewMode, previousViewMode)
 
   updateViewModeState: (viewMode) ->
     switch viewMode
       when 'richText'
-        @input.hide()
-        @region.show()
-        @region.attr('contenteditable', true)
-        @region.attr('designmode', 'on')
-        @region.height(@input.height())
+        @$input.hide()
+        @$region.show()
+        @$region.attr('contenteditable', true)
+        @$region.attr('designmode', 'on')
+        @$region.height(@$input.height())
       when 'html'
-        @input.show()
-        @region.hide()
-        @input.height(@region.height())
+        @$input.show()
+        @$region.hide()
+        @$input.height(@$region.height())
       when 'preview'
         # TODO Load Preview with Interpolations (Liquid)
         #@removeSelection()
-        @input.hide()
-        @region.show()
-        @region.removeAttr('contenteditable').removeAttr('designmode')
+        @$input.hide()
+        @$region.show()
+        @$region.removeAttr('contenteditable').removeAttr('designmode')
       else
         console.error "invalid view mode: #{viewMode}"
