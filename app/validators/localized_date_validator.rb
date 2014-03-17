@@ -1,6 +1,6 @@
 class LocalizedDateValidator < ActiveModel::EachValidator
   def initialize(options = {})
-    super(options.reverse_merge(message: :invalid))
+    super(options.reverse_merge(message: :invalid_date))
   end
 
   def validate_each(record, attribute, value)

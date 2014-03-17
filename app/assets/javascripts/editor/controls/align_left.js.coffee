@@ -1,4 +1,4 @@
-class @Editor.Controls.AlignLeft extends @Editor.Controls.FontControl
+class @Editor.Control.AlignLeft extends @Editor.Control.FontControl
   getCommand: ->
     'justifyleft'
 
@@ -8,4 +8,4 @@ class @Editor.Controls.AlignLeft extends @Editor.Controls.FontControl
   getIcon: ->
     'align-left'
 
-@Editor.Controls.register('alignLeft', @Editor.Controls.AlignLeft)
+@Editor.Control.register('alignLeft', @Editor.Control.AlignLeft)

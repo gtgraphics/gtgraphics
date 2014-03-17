@@ -1,4 +1,4 @@
-class @Editor.Controls.AlignCenter extends @Editor.Controls.FontControl
+class @Editor.Control.AlignCenter extends @Editor.Control.FontControl
   getCommand: ->
     'justifycenter'
 
@@ -8,4 +8,4 @@ class @Editor.Controls.AlignCenter extends @Editor.Controls.FontControl
   getIcon: ->
     'align-center'
 
-@Editor.Controls.register('alignCenter', @Editor.Controls.AlignCenter)
+@Editor.Control.register('alignCenter', @Editor.Control.AlignCenter)

@@ -1,4 +1,4 @@
-class @Editor.Controls.UnorderedList extends @Editor.Controls.FontControl
+class @Editor.Control.UnorderedList extends @Editor.Control.FontControl
   getCommand: ->
     'insertunorderedlist'
 
@@ -8,4 +8,4 @@ class @Editor.Controls.UnorderedList extends @Editor.Controls.FontControl
   getIcon: ->
     'list-ul'
 
-@Editor.Controls.register('unorderedList', @Editor.Controls.UnorderedList)
+@Editor.Control.register('unorderedList', @Editor.Control.UnorderedList)

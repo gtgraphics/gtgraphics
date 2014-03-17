@@ -1,4 +1,4 @@
-class @Editor.Controls.AlignJustify extends @Editor.Controls.FontControl
+class @Editor.Control.AlignJustify extends @Editor.Control.FontControl
   getCommand: ->
     'justifyfull'
 
@@ -8,4 +8,4 @@ class @Editor.Controls.AlignJustify extends @Editor.Controls.FontControl
   getIcon: ->
     'align-justify'
 
-@Editor.Controls.register('alignJustify', @Editor.Controls.AlignJustify)
+@Editor.Control.register('alignJustify', @Editor.Control.AlignJustify)

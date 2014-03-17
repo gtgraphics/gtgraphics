@@ -1,4 +1,4 @@
-class @Editor.Controls.Indent extends @Editor.Controls.FontControl
+class @Editor.Control.Indent extends @Editor.Control.FontControl
   getCommand: ->
     'indent'
 
@@ -8,4 +8,4 @@ class @Editor.Controls.Indent extends @Editor.Controls.FontControl
   getIcon: ->
     'indent'
 
-@Editor.Controls.register('indent', @Editor.Controls.Indent)
+@Editor.Control.register('indent', @Editor.Control.Indent)

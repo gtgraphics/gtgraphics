@@ -1,7 +1,7 @@
-class @Editor.Controls.Control
+class @Editor.Control
   constructor: (toolbar) ->
     @toolbar = toolbar
-    @group = null
+    @controlGroup = null
     @refreshInternalState()
 
   render: ->
@@ -70,28 +70,28 @@ class @Editor.Controls.Control
     @active = active
     if @$control
       @refreshControlState()
-      @$control.trigger('activated.control.editor', @)
+      @$control.trigger('editor:control:activated', @)
     true
 
   deactivate: ->
     @active = false
     if @$control
       @refreshControlState()
-      @$control.trigger('deactivated.control.editor', @)
+      @$control.trigger('editor:control:deactivated', @)
     true
 
   enable: ->
     @disabled = false
     if @$control
       @refreshControlState()
-      @$control.trigger('enabled.control.editor', @)
+      @$control.trigger('editor:control:enabled', @)
     true
 
   disable: (disabled = true) ->
     @disabled = disabled
     if @$control
       @refreshControlState()
-      @$control.trigger('disabled.control.editor', @)
+      @$control.trigger('editor:control:disabled', @)
     true
 
   toggle: ->
@@ -99,3 +99,19 @@ class @Editor.Controls.Control
       @deactivate()
     else
       @activate()
+
+
+availableControls = []
+
+@Editor.Control =
+  get: (key) ->
+    control = availableControls[key]
+    jQuery.error "Control not found: #{key}" unless control
+    control
+  init: (key, toolbar) ->
+    klass = @get(key)
+    new klass(toolbar)
+  register: (key, controlClass) ->
+    availableControls[key] = controlClass
+  unregister: (key) ->
+    delete availableControls[key]

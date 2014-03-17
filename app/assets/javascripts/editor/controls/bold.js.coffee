@@ -1,4 +1,4 @@
-class @Editor.Controls.Bold extends @Editor.Controls.FontControl
+class @Editor.Control.Bold extends @Editor.Control.FontControl
   getCommand: ->
     'bold'
 
@@ -8,4 +8,4 @@ class @Editor.Controls.Bold extends @Editor.Controls.FontControl
   getIcon: ->
     'bold'
 
-@Editor.Controls.register('bold', @Editor.Controls.Bold)
+@Editor.Control.register('bold', @Editor.Control.Bold)

@@ -1,4 +1,4 @@
-class @Editor.Controls.Italic extends @Editor.Controls.FontControl
+class @Editor.Control.Italic extends @Editor.Control.FontControl
   getCommand: ->
     'italic'
 
@@ -8,4 +8,4 @@ class @Editor.Controls.Italic extends @Editor.Controls.FontControl
   getIcon: ->
     'italic'
 
-@Editor.Controls.register('italic', @Editor.Controls.Italic)
+@Editor.Control.register('italic', @Editor.Control.Italic)

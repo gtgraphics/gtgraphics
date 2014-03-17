@@ -1,4 +1,4 @@
-class @Editor.Controls.FontControl extends @Editor.Controls.ButtonControl
+class @Editor.Control.FontControl extends @Editor.Control.ButtonControl
   getCommand: ->
     console.error 'no command defined for control'
 

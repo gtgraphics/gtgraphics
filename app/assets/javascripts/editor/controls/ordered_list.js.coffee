@@ -1,4 +1,4 @@
-class @Editor.Controls.OrderedList extends @Editor.Controls.FontControl
+class @Editor.Control.OrderedList extends @Editor.Control.FontControl
   getCommand: ->
     'insertorderedlist'
 
@@ -8,4 +8,4 @@ class @Editor.Controls.OrderedList extends @Editor.Controls.FontControl
   getIcon: ->
     'list-ol'
 
-@Editor.Controls.register('orderedList', @Editor.Controls.OrderedList)
+@Editor.Control.register('orderedList', @Editor.Control.OrderedList)

@@ -1,4 +1,4 @@
-class @Editor.Controls.Outdent extends @Editor.Controls.FontControl
+class @Editor.Control.Outdent extends @Editor.Control.FontControl
   getCommand: ->
     'outdent'
 
@@ -8,4 +8,4 @@ class @Editor.Controls.Outdent extends @Editor.Controls.FontControl
   getIcon: ->
     'outdent'
 
-@Editor.Controls.register('outdent', @Editor.Controls.Outdent)
+@Editor.Control.register('outdent', @Editor.Control.Outdent)

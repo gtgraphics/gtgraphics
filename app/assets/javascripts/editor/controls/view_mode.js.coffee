@@ -1,4 +1,4 @@
-class @Editor.Controls.ViewMode extends @Editor.Controls.ButtonControl
+class @Editor.Control.ViewMode extends @Editor.Control.ButtonControl
   createControl: ->
     $buttonGroup = $('<div />', class: 'btn-group pull-right')
     $button = $('<button />', class: 'btn btn-default btn-sm dropdown-toggle', type: 'button', tabindex: '-1', 'data-toggle': 'dropdown')
@@ -39,4 +39,4 @@ class @Editor.Controls.ViewMode extends @Editor.Controls.ButtonControl
       @toolbar.editor.changeViewMode(viewMode, true)
     $item
 
-@Editor.Controls.register('viewMode', @Editor.Controls.ViewMode)
+@Editor.Control.register('viewMode', @Editor.Control.ViewMode)

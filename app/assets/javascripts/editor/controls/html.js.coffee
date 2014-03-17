@@ -1,4 +1,4 @@
-class @Editor.Controls.Html extends @Editor.Controls.ButtonControl
+class @Editor.Control.Html extends @Editor.Control.ButtonControl
   executeCommandSync: ->
     alert 'Hello!'
 
@@ -8,4 +8,4 @@ class @Editor.Controls.Html extends @Editor.Controls.ButtonControl
   getIcon: ->
     'code'
 
-@Editor.Controls.register('html', @Editor.Controls.Html)
+@Editor.Control.register('html', @Editor.Control.Html)

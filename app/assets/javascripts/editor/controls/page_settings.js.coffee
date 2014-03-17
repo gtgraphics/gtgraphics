@@ -1,6 +1,6 @@
-class @Editor.Controls.PageSettings extends @Editor.Controls.ButtonControl
+class @Editor.Control.PageSettings extends @Editor.Control.ButtonControl
   executeCommandSync: ->
-    Turbolinks.visit(Editor.Controls.PageSettings.url)
+    Turbolinks.visit(Editor.Control.PageSettings.url)
 
   getCaption: ->
     I18n.translate('editor.pageSettings')
@@ -8,4 +8,4 @@ class @Editor.Controls.PageSettings extends @Editor.Controls.ButtonControl
   getIcon: ->
     'cogs'
 
-@Editor.Controls.register('pageSettings', @Editor.Controls.PageSettings)
+@Editor.Control.register('pageSettings', @Editor.Control.PageSettings)

@@ -7,24 +7,23 @@ class @Editor.ControlGroup
       @addControl(control)
 
   addControl: (control) ->
-    control = Editor.Controls.init(control) if _.isString(control)
-    control.group = @
-    control.toolbar = @toolbar
+    control = Editor.Controls.init(control, @toolbar) if _(control).isString()
+    control.controlGroup = @
     @controls.push(control)
-    @renderedGroup.append(control.render) if @isRendered()
+    @$group.append(control.render()) if @isRendered()
     control
 
   render: ->
-    @renderedGroup ||= $('<div />', class: 'btn-group').data('controlGroup', @)
-    @renderedGroup.empty()
-    _.each @controls, (control) =>
-      @renderedGroup.append(control.render())
-    @renderedGroup
+    @$group ||= $('<div />', class: 'btn-group').data('controlGroup', @)
+    @$group.empty()
+    _(@controls).each (control) =>
+      @$group.append(control.render())
+    @$group
 
   isRendered: ->
-    @renderedGroup? and @renderedGroup != undefined
+    @$group? and @$group != undefined
 
   destroy: ->
-    @renderedGroup.remove() if @renderedGroup
-    @renderedGroup = null
+    @$group.remove() if @$group
+    @$group = null
     true

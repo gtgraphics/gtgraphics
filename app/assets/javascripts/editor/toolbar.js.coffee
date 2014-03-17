@@ -10,41 +10,35 @@ class @Editor.Toolbar
     ]
   }
 
-  constructor: ($regions, options = {}) ->
-    @$regions = $regions
-    @options = jQuery.extend({}, Editor.Toolbar.defaults, options)
+  constructor: (editors, options = {}) ->
+    @editors = editors
+    @options = _(options).defaults(Editor.Toolbar.defaults)
     @groupedControls = []
     @controls = []
-    _.each @options.controls, (control) =>
+    _(@options.controls).each (control) =>
       @addControl(control)
 
   addControl: (control) ->
-    if _.isArray(control)
-      controlGroup = new Editor.ControlGroup()
-      controlGroup.toolbar = @
-      _.each control, (nestedControl) =>
-        nestedControl = Editor.Controls.init(nestedControl) if _.isString(nestedControl)
-        nestedControl.toolbar = @
+    if _(control).isArray()
+      controlGroup = new Editor.ControlGroup(@)
+      _(control).each (nestedControl) =>
         controlGroup.addControl(nestedControl)
-        @controls.push(nestedControl)        
       @groupedControls.push(controlGroup)
+      @controls.concat(controlGroup.controls)
+
       @$toolbar.append(controlGroup.render()) if @isRendered()
       controlGroup
     else
-      control = Editor.Controls.init(control) if _.isString(control)
-      control.toolbar = @
+      control = Editor.Controls.init(control, @) if _(control).isString()
       @groupedControls.push(control)
       @controls.push(control)
       @$toolbar.append(control.render()) if @isRendered()
       control
 
-  registerEditor: (editor) ->
-    @editors.push(editor)
-
   render: ->
     @$toolbar ||= $('<div />', class: 'btn-toolbar').data('toolbar', @)
     @$toolbar.empty()
-    _.each @groupedControls, (control) =>
+    _(@groupedControls).each (control) =>
       @$toolbar.append(control.render())
     @$toolbar
 

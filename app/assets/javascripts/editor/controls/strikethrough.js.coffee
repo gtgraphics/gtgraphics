@@ -1,4 +1,4 @@
-class @Editor.Controls.Strikethrough extends @Editor.Controls.FontControl
+class @Editor.Control.Strikethrough extends @Editor.Control.FontControl
   getCommand: ->
     'strikethrough'
 
@@ -8,4 +8,4 @@ class @Editor.Controls.Strikethrough extends @Editor.Controls.FontControl
   getIcon: ->
     'strikethrough'
 
-@Editor.Controls.register('strikethrough', @Editor.Controls.Strikethrough)
+@Editor.Control.register('strikethrough', @Editor.Control.Strikethrough)

@@ -1,7 +1,7 @@
-class @Editor.Controls.Save extends @Editor.Controls.ButtonControl
+class @Editor.Control.Save extends @Editor.Control.ButtonControl
   executeCommandSync: ->
     if confirm 'Do you really want to save?'
-      alert "Saved to #{Editor.Controls.Save.url}"
+      alert "Saved to #{Editor.Control.Save.url}"
 
   getCaption: ->
     I18n.translate('editor.save')
@@ -9,4 +9,4 @@ class @Editor.Controls.Save extends @Editor.Controls.ButtonControl
   getIcon: ->
     'save'
 
-@Editor.Controls.register('save', @Editor.Controls.Save)
+@Editor.Control.register('save', @Editor.Control.Save)

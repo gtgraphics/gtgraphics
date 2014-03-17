@@ -1,4 +1,4 @@
-class @Editor.Controls.Underline extends @Editor.Controls.FontControl
+class @Editor.Control.Underline extends @Editor.Control.FontControl
   getCommand: ->
     'underline'
 
@@ -8,4 +8,4 @@ class @Editor.Controls.Underline extends @Editor.Controls.FontControl
   getIcon: ->
     'underline'
 
-@Editor.Controls.register('underline', @Editor.Controls.Underline)
+@Editor.Control.register('underline', @Editor.Control.Underline)

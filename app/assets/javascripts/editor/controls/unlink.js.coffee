@@ -1,4 +1,4 @@
-class @Editor.Controls.Unlink extends @Editor.Controls.FontControl
+class @Editor.Control.Unlink extends @Editor.Control.FontControl
   constructor: ->
     @caption = @icon = @command = 'unlink'
     super
@@ -19,4 +19,4 @@ class @Editor.Controls.Unlink extends @Editor.Controls.FontControl
   querySupported: ->
     true
 
-@Editor.Controls.register('unlink', @Editor.Controls.Unlink)
+@Editor.Control.register('unlink', @Editor.Control.Unlink)

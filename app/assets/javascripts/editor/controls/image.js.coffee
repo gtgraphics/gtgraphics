@@ -1,4 +1,4 @@
-class @Editor.Controls.Image extends @Editor.Controls.AsyncFontControl
+class @Editor.Control.Image extends @Editor.Control.AsyncFontControl
   constructor: ->
     @caption = 'image'
     @icon = 'picture-o'
@@ -74,4 +74,4 @@ class @Editor.Controls.Image extends @Editor.Controls.AsyncFontControl
   unselectImage: ->
 
 
-@Editor.Controls.register('image', @Editor.Controls.Image)
+@Editor.Control.register('image', @Editor.Control.Image)

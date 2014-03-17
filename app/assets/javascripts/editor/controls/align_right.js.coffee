@@ -1,4 +1,4 @@
-class @Editor.Controls.AlignRight extends @Editor.Controls.FontControl
+class @Editor.Control.AlignRight extends @Editor.Control.FontControl
   getCommand: ->
     'justifyright'
 
@@ -8,4 +8,4 @@ class @Editor.Controls.AlignRight extends @Editor.Controls.FontControl
   getIcon: ->
     'align-right'
 
-@Editor.Controls.register('alignRight', @Editor.Controls.AlignRight)
+@Editor.Control.register('alignRight', @Editor.Control.AlignRight)
