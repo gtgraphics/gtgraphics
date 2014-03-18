@@ -77,7 +77,7 @@ class Template < ActiveRecord::Base
   end
   
   def region_labels=(labels)
-    @region_labels = TokenCollection.parse(labels, sort: true, unique: true)
+    @region_labels = TokenCollection.new(labels, sort: true, unique: true)
     tokens = @region_labels.tokens
     tokens.each do |label|
       if region_definitions.none? { |region_definition| region_definition.label == label }

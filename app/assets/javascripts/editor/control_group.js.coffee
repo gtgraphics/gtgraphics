@@ -1,13 +1,10 @@
 class @Editor.ControlGroup
-  constructor: (toolbar, configuration = []) ->
+  constructor: (toolbar) ->
     @toolbar = toolbar
-    @configuration = configuration
     @controls = []
-    _.each @configuration, (control) =>
-      @addControl(control)
 
   addControl: (control) ->
-    control = Editor.Controls.init(control, @toolbar) if _(control).isString()
+    control = Editor.Control.init(control, @toolbar) if _(control).isString()
     control.controlGroup = @
     @controls.push(control)
     @$group.append(control.render()) if @isRendered()

@@ -1,4 +1,4 @@
-class Editor.Control.ButtonControl extends Editor.Control
+class @Editor.Control.ButtonControl extends @Editor.Control
   createControl: ->
     tooltipOptions = jQuery.extend({ placement: 'top', container: 'body' }, @toolbar.options.tooltip)
 
@@ -7,10 +7,10 @@ class Editor.Control.ButtonControl extends Editor.Control
     $button.html($('<i />', class: "fa fa-#{@getIcon()}"))
     $button.tooltip(tooltipOptions)
     $button.click =>
-      $button.trigger('editor:control:execute', @)
+      $button.trigger('editor:command:execute', @)
       @executeCommand =>
         @refresh()
-        $button.trigger('editor:control:executed', @)
+        $button.trigger('editor:command:executed', @)
       $button.tooltip('hide') # fix for assigned tooltips
     $button
 

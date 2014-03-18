@@ -12,6 +12,7 @@ class @Editor.Toolbar
 
   constructor: (editors, options = {}) ->
     @editors = editors
+    @activeEditor = null
     @options = _(options).defaults(Editor.Toolbar.defaults)
     @groupedControls = []
     @controls = []
@@ -24,8 +25,8 @@ class @Editor.Toolbar
       _(control).each (nestedControl) =>
         controlGroup.addControl(nestedControl)
       @groupedControls.push(controlGroup)
-      @controls.concat(controlGroup.controls)
-
+      _(controlGroup.controls).each (control) =>
+        @controls.push(control)
       @$toolbar.append(controlGroup.render()) if @isRendered()
       controlGroup
     else

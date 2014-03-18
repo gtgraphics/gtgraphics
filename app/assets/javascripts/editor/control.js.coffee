@@ -103,7 +103,7 @@ class @Editor.Control
 
 availableControls = []
 
-@Editor.Control =
+_(@Editor.Control).extend
   get: (key) ->
     control = availableControls[key]
     jQuery.error "Control not found: #{key}" unless control

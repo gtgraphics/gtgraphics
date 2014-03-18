@@ -11,6 +11,8 @@ class @TextareaEditor
     @options = jQuery.extend({}, TextareaEditor.defaults, options)
     @options.controls ||= Editor.Toolbar.defaults.controls
     
+    @toolbar = @options.toolbar || new Editor.Toolbar(@, controls: @options.controls)
+
     # Get or create toolbar of this Editor (this is only the toolbar class not the rendered one)
 
     @refreshInternalState()
@@ -25,26 +27,75 @@ class @TextareaEditor
       @$region.html(@$textarea.val())
 
       # Then a toolbar can be appended to the region
-      @toolbar = @options.toolbar || new Editor.Toolbar(@)
+      @$toolbar = @toolbar.render()
+      $toolbarWrapper = $('<div />', class: 'editor-controls').append(@$toolbar)
 
       # Finally, wrap all elements with a container
       @$editor = $('<div />', class: 'editor-container')
       @$editor.insertAfter(@$textarea)
 
       # Preserve original input as HTML container
-      $toolbarWrapper = $('<div />', class: 'editor-controls')
-      @toolbar.render().appendTo($toolbarWrapper)
       @$editor.append($toolbarWrapper)
       @$editor.append(@$region)
       @$editor.append(@$textarea)
 
-    console.log @$editor
+      # Define events on newly created elements
+      @applyEvents()
 
     @refreshInputState()
     @refreshControlStates() 
     @updateViewModeState(@options.viewMode)
 
     @$editor
+
+  applyEvents: ->
+    # Textarea Events
+    
+    @$textarea.on 'textchange', =>
+      @refreshRegionContent()
+      @$editor.trigger('editor:change', @)
+      
+    @$textarea.on 'focus blur keyup paste', =>
+      @refreshControlStates()
+
+    @$textarea.focus =>
+      @$editor.addClass('focus')
+      @$editor.trigger('editor:open', @)
+
+    @$textarea.blur =>
+      @$editor.removeClass('focus')
+      @$editor.trigger('editor:close', @)
+
+    # Region Events
+
+    @$region.on 'keyup paste', =>
+      @refreshInputContent()
+      @$editor.trigger('editor:change', @)
+
+    @$region.on 'focus blur keyup paste', =>
+      @refreshControlStates()
+
+    @$region.focus =>
+      @$editor.addClass('focus')
+      @$editor.trigger('editor:open', @)
+
+    @$region.blur =>
+      @$editor.removeClass('focus')
+      @$editor.trigger('editor:close', @)
+
+    @$region.click =>
+      @$region.triggerHandler('focus')
+  
+    @$region.on 'click', 'a[href]', (event) =>
+      # prevent links in regions from being clicked in Rich Text view
+      event.preventDefault() if @options.viewMode == 'richText'
+
+    # Controls
+
+    @$editor.on 'editor:command:executed', (event, control) =>
+      if control instanceof Editor.Control.ButtonControl
+        @refreshInputContent()
+        $region.focus().triggerHandler('focus') 
 
   isRendered: ->
     @$editor? and @$editor != undefined
@@ -53,6 +104,7 @@ class @TextareaEditor
     @$editor.remove() if @isRendered()
     @$editor = null
     @$region = null # Region DOM element should have been destroyed with the editor
+    @$toolbar = null
     @toolbar = null # Do not delete the toolbar DOM elements
     true
 
@@ -65,20 +117,6 @@ class @TextareaEditor
       @refreshControlStates()
     true
 
-  # Getters
-
-  getToolbar: ->
-
-    
-
-  getRegion: ->
-    @$region ||= @createRegion()
-
-  getControls: ->
-    @toolbar.controls
-
-  # Callbacks
-
   refreshInternalState: ->
     @disabled = @$textarea.prop('disabled')
 
@@ -87,83 +125,12 @@ class @TextareaEditor
 
   refreshControlStates: ->
     if @isRendered()
-      controls = @getControls()
-      _.each controls, (control) ->
+      console.log @toolbar.controls
+      _(@toolbar.controls).each (control) ->
         control.refresh()
       true
     else
       false
-
-  createEditor: ->
-    $editor = $('<div />', class: 'editor-container')
-    $editor.insertAfter(@$textarea)
-    $editor.append(@$textarea)
-
-    $region = @getRegion()
-    $editor.append($region)
-
-    $toolbar = @getToolbar()
-    $editor.append($('<div />', class: 'editor-controls').html($toolbar))
-    
-
-
-    # change region when input is changed
-    @$textarea.on 'textchange', =>
-      @refreshRegionContent()
-
-    $region.on 'click keyup paste', =>
-      @refreshInputContent()
-
-    $editor.on 'editor:performedAction', (event, control) =>
-      if control instanceof Editor.Controls.ButtonControl
-        @refreshInputContent()
-        $region.focus().triggerHandler('focus')
-
-    $editor
-
-  createToolbar: ->
-    toolbar = new Editor.Toolbar(@$region, @options.controls)
-    toolbar.editor = @ # the created toolbar is bound to this editor
-    toolbar.render()
-
-  createRegion: ->
-    inputId = @$textarea.attr('id')
-
-    $region = $('<div />', class: 'editor-region', contenteditable: true, designmode: 'on')
-    $region.attr('data-target', "##{inputId}") if inputId
-    $region.html(@$textarea.val())
-
-    $region.click =>
-      $region.triggerHandler('focus')
-    $region.focus =>
-      @onOpen()
-    $region.blur =>
-      @onClose()      
-    $region.on 'click', 'a', (event) =>
-      # Prevent links from being clicked in editor mode
-      event.preventDefault() if @options.viewMode == 'richText'
-    $('*', $region).focus =>
-      @onOpen()
-
-    # update states of all controls
-    $region.on 'keyup focus blur', =>
-      @refreshControlStates()
-
-    @$textarea.on 'keyup focus blur', =>
-      @refreshControlStates()
-
-    # redirect focus to region
-    @$textarea.on 'click focus', (event) =>
-      if @options.viewMode == 'richText'
-        event.preventDefault()
-        $region.focus().triggerHandler('focus')
-
-    @$textarea.blur (event) =>
-      if @options.viewMode == 'richText'
-        event.preventDefault()
-        $region.blur().triggerHandler('blur')
-
-    $region
 
   refreshRegionContent: ->
     @$region.html(@$textarea.val())
@@ -171,20 +138,12 @@ class @TextareaEditor
   refreshInputContent: ->
     @$textarea.val(@$region.html())
 
-  onOpen: ->
-    @$region.addClass('editing')
-    @$editor.addClass('focus')
-    @$textarea.trigger('editor:opened', @)
-
-  onClose: ->
-    @$region.removeClass('editing')
-    @$editor.removeClass('focus')
-    @$textarea.trigger('editor:closed', @)
+  # Enable / Disable
 
   enable: ->
     @disabled = false
     @$textarea.prop('disabled', false)
-    if @$region
+    if @isRendered()
       @$region.removeClass('disabled')
       @$region.attr('contenteditable', true)
     @$textarea.trigger('editor:enabled', @)
@@ -193,36 +152,45 @@ class @TextareaEditor
   disable: ->
     @disabled = true
     @$textarea.prop('disabled', true)
-    if @$region
+    if @isRendered()
       @$region.addClass('disabled')
       @$region.removeAttr('contenteditable')
     @$textarea.trigger('editor:disabled', @)
     true
 
+  # View Mode
+
   changeViewMode: (viewMode) ->
     previousViewMode = @options.viewMode
-    @updateViewModeState(viewMode)
     @options.viewMode = viewMode
-    @$textarea.focus().triggerHandler('focus') # if focus
-    @$region.trigger('editor:changedView', viewMode, previousViewMode)
+    if @isRendered()
+      @updateViewModeState(viewMode)
+      switch viewMode 
+        when 'richText' then @$textarea.focus()
+        when 'html' then @$region.focus()
+      @$editor.trigger('editor:change:view', viewMode, previousViewMode)
 
   updateViewModeState: (viewMode) ->
-    switch viewMode
-      when 'richText'
-        @$textarea.hide()
-        @$region.show()
-        @$region.attr('contenteditable', true)
-        @$region.attr('designmode', 'on')
-        @$region.height(@$textarea.height())
-      when 'html'
-        @$textarea.show()
-        @$region.hide()
-        @$textarea.height(@$region.height())
-      when 'preview'
-        # TODO Load Preview with Interpolations (Liquid)
-        #@removeSelection()
-        @$textarea.hide()
-        @$region.show()
-        @$region.removeAttr('contenteditable').removeAttr('designmode')
-      else
-        console.error "invalid view mode: #{viewMode}"
+    if @isRendered()
+      switch viewMode
+        when 'richText'
+          @$textarea.hide()
+          @$region.show()
+          @$region.attr('contenteditable', true)
+          @$region.attr('designmode', 'on')
+          @$region.height(@$textarea.height())
+        when 'html'
+          @$textarea.show()
+          @$region.hide()
+          @$textarea.height(@$region.height())
+        when 'preview'
+          # TODO Load Preview with Interpolations (Liquid)
+          #@removeSelection()
+          @$textarea.hide()
+          @$region.show()
+          @$region.removeAttr('contenteditable').removeAttr('designmode')
+        else
+          console.error "invalid view mode: #{viewMode}"
+      true
+    else
+      false
