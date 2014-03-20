@@ -1,4 +1,15 @@
-.form-group {
+.editor-container {
+  &.focus .editor-region {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  }
+
+  &.disabled .editor-region {
+    cursor: not-allowed;
+    background-color: #eee;
+  }
 
   .editor-region {
     position: relative;
@@ -21,26 +32,6 @@
     resize: vertical;
     //height: 200px;
 
-    &:focus {
-      border-color: #66afe9;
-      outline: 0;
-      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
-      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
-    }
-
-    &.disabled {
-      cursor: not-allowed;
-      background-color: #eee;
-    }
-
-    &[contenteditable="true"] {
-      img {
-        cursor: move;
-        &[data-editor-state="selected"] {
-          border: 2px solid red;
-        }
-      }
-    }
   }
 
   .editor-html, .editor-region {
@@ -48,7 +39,7 @@
     height: 200px;
   }
 
-  .form-control.editor-html {
+  .editor-html {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     font-family: monospace, serif;
@@ -65,23 +56,22 @@
     background-color: #f5f5f5;
     padding: 6px 12px;
   }
+}
 
-  &.has-error {
-    .editor-controls {
-      border-color: #b94a48;
-    }
-
-    .editor-region {
-      border-color: #b94a48;
-      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-
-      &:focus {
-        border-color: #953b39;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
-      }
-    }
+.form-group.has-error {
+  .editor-controls {
+    border-color: #b94a48;
   }
 
+  .editor-region {
+    border-color: #b94a48;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+
+    &:focus {
+      border-color: #953b39;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
+    }
+  }
 }

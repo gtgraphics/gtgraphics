@@ -3,18 +3,36 @@ class @Editor.Control.FontControl extends @Editor.Control.ButtonControl
     console.error 'no command defined for control'
 
   executeCommandSync: ->
-    document.execCommand(@getCommand(), false, null)
+    doc = @getRegionDocument()
+    doc.execCommand(@getCommand(), false, null) if doc
 
   queryActive: ->
-    document.queryCommandState(@getCommand(), false, null)
+    doc = @getRegionDocument()
+    if doc
+      doc.queryCommandState(@getCommand(), false, null)
+    else
+      false
 
   queryEnabled: ->
     try 
-      document.queryCommandEnabled(@getCommand(), false, null)
+      doc = @getRegionDocument()
+      if doc
+        doc.queryCommandEnabled(@getCommand(), false, null)
+      else
+        false
     catch e
+      false
 
   querySupported: ->
-    document.queryCommandSupported(@getCommand(), false, null)
+    doc = @getRegionDocument()
+    if doc
+      doc.queryCommandSupported(@getCommand(), false, null)
+    else
+      false
+
+  getRegionDocument: ->
+    if @toolbar.activeEditor and @toolbar.activeEditor.isRendered()
+      @toolbar.activeEditor.$regionFrame.get(0).contentDocument
 
   # createControl: ->
   #   $button = super

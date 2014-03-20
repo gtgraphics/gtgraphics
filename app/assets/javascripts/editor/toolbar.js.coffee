@@ -10,8 +10,11 @@ class @Editor.Toolbar
     ]
   }
 
-  constructor: (editors, options = {}) ->
-    @editors = editors
+  constructor: (editorOrEditors, options = {}) ->
+    if _(editorOrEditors).isArray()
+      @editors = editorOrEditors
+    else
+      @editors = [editorOrEditors]
     @activeEditor = null
     @options = _(options).defaults(Editor.Toolbar.defaults)
     @groupedControls = []

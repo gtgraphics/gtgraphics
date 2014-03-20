@@ -1,6 +1,7 @@
 class @TextareaEditor
   @defaults =
     viewMode: 'richText'
+    stylesheetFile: '<%= asset_url('textarea_editor.css') %>'
 
   # Refreshers
 
@@ -22,9 +23,14 @@ class @TextareaEditor
       inputId = @$textarea.attr('id')
 
       # First render region
-      @$region = $('<div />', class: 'editor-region', contenteditable: true, designmode: 'on')
-      @$region.attr('data-target', "##{inputId}") if inputId
-      @$region.html(@$textarea.val())
+      #@$region = $('<div />', class: 'editor-region', contenteditable: true, designmode: 'on')
+      #@$region.attr('data-target', "##{inputId}") if inputId
+      #@$region.html(@$textarea.val())
+
+      # Wrap iframe around region to prevent invalid HTML from destroying the page layout
+
+
+      #@$region = $regionFrame
 
       # Then a toolbar can be appended to the region
       @$toolbar = @toolbar.render()
@@ -36,7 +42,16 @@ class @TextareaEditor
 
       # Preserve original input as HTML container
       @$editor.append($toolbarWrapper)
-      @$editor.append(@$region)
+
+      # Wrap iframe around region to avoid conflicts when injecting invalid HTML
+      @$regionFrame = $('<iframe />', 'data-target': "##{inputId}", seamless: true).css(width: '100%').addClass('editor-region')
+      @$regionFrame.appendTo(@$editor)
+      $stylesheet = $('<link />', href: @options.stylesheetFile, media: 'all', rel: 'stylesheet')
+      @$regionFrame.contents().find('head').append($stylesheet)
+      @$region = @$regionFrame.contents().find('body')
+      @$region.attr('contenteditable', true)
+
+      # Move HTML text area with editor container
       @$editor.append(@$textarea)
 
       # Define events on newly created elements
@@ -58,15 +73,21 @@ class @TextareaEditor
     @$textarea.on 'focus blur keyup paste', =>
       @refreshControlStates()
 
+    @$textarea.click (event) =>
+      if @options.viewMode == 'richText'
+        event.preventDefault()
+        @$region.focus().triggerHandler('focus')
+
     @$textarea.focus =>
-      @$editor.addClass('focus')
-      @$editor.trigger('editor:open', @)
+      @onOpen()
 
     @$textarea.blur =>
-      @$editor.removeClass('focus')
-      @$editor.trigger('editor:close', @)
+      @onClose()
 
     # Region Events
+
+    @$regionFrame.on 'click', =>
+      @$region.focus().triggerHandler('focus')
 
     @$region.on 'keyup paste', =>
       @refreshInputContent()
@@ -76,12 +97,10 @@ class @TextareaEditor
       @refreshControlStates()
 
     @$region.focus =>
-      @$editor.addClass('focus')
-      @$editor.trigger('editor:open', @)
+      @onOpen()
 
     @$region.blur =>
-      @$editor.removeClass('focus')
-      @$editor.trigger('editor:close', @)
+      @onClose()
 
     @$region.click =>
       @$region.triggerHandler('focus')
@@ -107,6 +126,19 @@ class @TextareaEditor
     @$toolbar = null
     @toolbar = null # Do not delete the toolbar DOM elements
     true
+
+  # Hooks
+
+  onOpen: ->
+    @toolbar.activeEditor = @
+    if @isRendered()
+      @$editor.addClass('focus')
+      @$editor.trigger('editor:open', @)
+
+  onClose: ->
+    if @isRendered()
+      @$editor.removeClass('focus')
+      @$editor.trigger('editor:close', @)
 
   # Refreshers
 
@@ -174,20 +206,17 @@ class @TextareaEditor
       switch viewMode
         when 'richText'
           @$textarea.hide()
-          @$region.show()
-          @$region.attr('contenteditable', true)
-          @$region.attr('designmode', 'on')
-          @$region.height(@$textarea.height())
+          @$region.attr('contenteditable', true).attr('designmode', 'on')
+          @$regionFrame.show().height(@$textarea.height())
         when 'html'
-          @$textarea.show()
-          @$region.hide()
-          @$textarea.height(@$region.height())
+          @$textarea.show().height(@$regionFrame.height())
+          @$regionFrame.hide()
         when 'preview'
           # TODO Load Preview with Interpolations (Liquid)
           #@removeSelection()
           @$textarea.hide()
-          @$region.show()
           @$region.removeAttr('contenteditable').removeAttr('designmode')
+          @$regionFrame.show()
         else
           console.error "invalid view mode: #{viewMode}"
       true
