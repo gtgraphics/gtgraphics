@@ -33,7 +33,7 @@ class @Editor.Toolbar
       @$toolbar.append(controlGroup.render()) if @isRendered()
       controlGroup
     else
-      control = Editor.Controls.init(control, @) if _(control).isString()
+      control = Editor.Control.init(control, @) if _(control).isString()
       @groupedControls.push(control)
       @controls.push(control)
       @$toolbar.append(control.render()) if @isRendered()

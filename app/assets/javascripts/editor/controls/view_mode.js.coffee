@@ -9,6 +9,10 @@ class @Editor.Control.ViewMode extends @Editor.Control.ButtonControl
     @createDropdownListItem('preview', I18n.translate('editor.viewModes.preview'), 'file-o').appendTo($dropdown)
     $buttonGroup
 
+  getEditor: ->
+    # @toolbar.activeEditor does not work here, because it may not be set yet
+    _(@toolbar.editors).first()
+
   onCreateControl: ->
     @refreshControlState()
 
@@ -20,15 +24,11 @@ class @Editor.Control.ViewMode extends @Editor.Control.ButtonControl
     @queryDropdownItemStates()
     true
 
-  getViewMode: ->
-    @toolbar.editor.viewMode
-
   queryDropdownItemStates: ->
+    viewMode = @getEditor().options.viewMode
     $dropdown = @$control.find('.dropdown-menu')
     $buttons = $dropdown.find('li').removeClass('active')
-    #if @toolbar.editor and @toolbar.editor.options
-    #  console.log @toolbar.editor.options.viewMode
-    #  $buttons.filter(-> $(@).data('viewMode') == @toolbar.editor.options.viewMode).addClass('active')
+    $buttons.filter(-> $(@).data('viewMode') == viewMode).addClass('active')
 
   createDropdownListItem: (viewMode, caption, icon) ->
     $item = $('<li />').attr('data-view-mode', viewMode)
@@ -36,7 +36,7 @@ class @Editor.Control.ViewMode extends @Editor.Control.ButtonControl
     $link.html("<span class='prepend-icon'><i class='fa fa-fw fa-#{icon}'></i><span class='caption'>#{caption}</span></span>")
     $link.click (event) =>
       event.preventDefault()
-      @toolbar.editor.changeViewMode(viewMode, true)
+      @getEditor().changeViewMode(viewMode, true)
     $item
 
 @Editor.Control.register('viewMode', @Editor.Control.ViewMode)

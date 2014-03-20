@@ -9,7 +9,9 @@ class @TextareaEditor
     jQuery.error 'input must be a textarea' unless $textarea.is('textarea')
     @$textarea = $textarea.addClass('editor-html')
 
-    @options = _(options).defaults(TextareaEditor.defaults)
+    @options = options
+    @options = _(@options).defaults(TextareaEditor.defaults)
+    @options = _(@options).defaults(_($textarea.data()).pick('previewUrl'))
     @options.controls ||= Editor.Toolbar.defaults.controls
     
     @toolbar = @options.toolbar || new Editor.Toolbar(@, controls: @options.controls)
@@ -22,37 +24,34 @@ class @TextareaEditor
     unless @isRendered()
       inputId = @$textarea.attr('id')
 
-      # First render region
-      #@$region = $('<div />', class: 'editor-region', contenteditable: true, designmode: 'on')
-      #@$region.attr('data-target', "##{inputId}") if inputId
-      #@$region.html(@$textarea.val())
-
-      # Wrap iframe around region to prevent invalid HTML from destroying the page layout
-
-
-      #@$region = $regionFrame
-
-      # Then a toolbar can be appended to the region
+      # Create the toolbar
       @$toolbar = @toolbar.render()
       $toolbarWrapper = $('<div />', class: 'editor-controls').append(@$toolbar)
 
-      # Finally, wrap all elements with a container
+      # Create a container around all editor elements
       @$editor = $('<div />', class: 'editor-container')
       @$editor.insertAfter(@$textarea)
 
       # Preserve original input as HTML container
       @$editor.append($toolbarWrapper)
 
-      # Wrap iframe around region to avoid conflicts when injecting invalid HTML
-      @$regionFrame = $('<iframe />', 'data-target': "##{inputId}", seamless: true).css(width: '100%').addClass('editor-region')
-      @$regionFrame.appendTo(@$editor)
+      # Add iframe with editable body to avoid conflicts when injecting invalid HTML
+      @$regionFrame = $('<iframe />', 'data-target': "##{inputId}", class: 'editor-region', seamless: true).css(width: '100%').appendTo(@$editor)
       $stylesheet = $('<link />', href: @options.stylesheetFile, media: 'all', rel: 'stylesheet')
       @$regionFrame.contents().find('head').append($stylesheet)
-      @$region = @$regionFrame.contents().find('body')
-      @$region.attr('contenteditable', true)
+      @$region = @$regionFrame.contents().find('body').attr('contenteditable', true)
+
+      # Preview iframe
+      @$previewFrame = $('<iframe />', 'data-target': "##{inputId}", class: 'editor-preview', seamless: true).css(width: '100%').appendTo(@$editor)
+      $stylesheet = $('<link />', href: @options.stylesheetFile, media: 'all', rel: 'stylesheet')
+      @$previewFrame.contents().find('head').append($stylesheet)
+      @$preview = @$previewFrame.contents().find('body')
 
       # Move HTML text area with editor container
       @$editor.append(@$textarea)
+
+      # Copy HTML from textarea to region and preview containers
+      @refreshRegionContent()
 
       # Define events on newly created elements
       @applyEvents()
@@ -86,9 +85,6 @@ class @TextareaEditor
 
     # Region Events
 
-    @$regionFrame.on 'click', =>
-      @$region.focus().triggerHandler('focus')
-
     @$region.on 'keyup paste', =>
       @refreshInputContent()
       @$editor.trigger('editor:change', @)
@@ -97,7 +93,7 @@ class @TextareaEditor
       @refreshControlStates()
 
     @$region.focus =>
-      @onOpen()
+      @onOpen() if @options.viewMode == 'richText'
 
     @$region.blur =>
       @onClose()
@@ -122,7 +118,10 @@ class @TextareaEditor
   destroy: ->
     @$editor.remove() if @isRendered()
     @$editor = null
+    @$regionFrame = null
     @$region = null # Region DOM element should have been destroyed with the editor
+    @$previewFrame = null
+    @$preview = null
     @$toolbar = null
     @toolbar = null # Do not delete the toolbar DOM elements
     true
@@ -175,7 +174,7 @@ class @TextareaEditor
     @disabled = false
     @$textarea.prop('disabled', false)
     if @isRendered()
-      @$region.removeClass('disabled')
+      @$editor.removeClass('disabled')
       @$region.attr('contenteditable', true)
     @$textarea.trigger('editor:enabled', @)
     true
@@ -184,7 +183,7 @@ class @TextareaEditor
     @disabled = true
     @$textarea.prop('disabled', true)
     if @isRendered()
-      @$region.addClass('disabled')
+      @$editor.addClass('disabled')
       @$region.removeAttr('contenteditable')
     @$textarea.trigger('editor:disabled', @)
     true
@@ -197,26 +196,32 @@ class @TextareaEditor
     if @isRendered()
       @updateViewModeState(viewMode)
       switch viewMode 
-        when 'richText' then @$textarea.focus()
-        when 'html' then @$region.focus()
+        when 'richText' then @$region.focus().triggerHandler('focus')
+        when 'html' then @$textarea.focus().triggerHandler('focus')
+      @refreshControlStates()
       @$editor.trigger('editor:change:view', viewMode, previousViewMode)
 
   updateViewModeState: (viewMode) ->
     if @isRendered()
       switch viewMode
         when 'richText'
-          @$textarea.hide()
-          @$region.attr('contenteditable', true).attr('designmode', 'on')
           @$regionFrame.show().height(@$textarea.height())
+          @$textarea.hide()
+          @$previewFrame.hide()
         when 'html'
-          @$textarea.show().height(@$regionFrame.height())
           @$regionFrame.hide()
+          @$textarea.show().height(@$regionFrame.height())
+          @$previewFrame.hide()
         when 'preview'
           # TODO Load Preview with Interpolations (Liquid)
-          #@removeSelection()
+          @$regionFrame.hide()
           @$textarea.hide()
-          @$region.removeAttr('contenteditable').removeAttr('designmode')
-          @$regionFrame.show()
+          @$previewFrame.show().height(@$regionFrame.height())
+
+          # First load a preview captured from HTML content of the textarea,
+          # then load a proper preview (with interpolations) from a specified URL
+          @$preview.html(@$textarea.val())
+          @$preview.load(@options.previewUrl) if @options.previewUrl
         else
           console.error "invalid view mode: #{viewMode}"
       true

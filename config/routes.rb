@@ -99,6 +99,7 @@ GtGraphics::Application.routes.draw do
           collection do
             delete :destroy_multiple
             get :translation_fields
+            get :editor_preview
           end
         end
         

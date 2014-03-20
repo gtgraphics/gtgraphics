@@ -61,6 +61,12 @@ class Admin::SnippetsController < Admin::ApplicationController
     end
   end
 
+  def editor_preview
+    respond_to do |format|
+      format.html { render text: 'Bla' }
+    end
+  end
+
   private
   def load_snippet
     @snippet = Snippet.find(params[:id])
