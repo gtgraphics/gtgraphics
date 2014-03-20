@@ -220,8 +220,11 @@ class @TextareaEditor
 
           # First load a preview captured from HTML content of the textarea,
           # then load a proper preview (with interpolations) from a specified URL
-          @$preview.html(@$textarea.val())
-          @$preview.load(@options.previewUrl) if @options.previewUrl
+          html = @$textarea.val()
+          @$preview.html(html)
+          if @options.previewUrl
+            jQuery.get @options.previewUrl, { html: html }, (html) =>
+              @$preview.html(html)
         else
           console.error "invalid view mode: #{viewMode}"
       true

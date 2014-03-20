@@ -62,8 +62,10 @@ class Admin::SnippetsController < Admin::ApplicationController
   end
 
   def editor_preview
+    html = params[:html] || ''
+    # TODO Liquidize
     respond_to do |format|
-      format.html { render text: 'Bla' }
+      format.html { render text: html }
     end
   end
 
