@@ -8,7 +8,7 @@ class @TextareaEditor
     jQuery.error 'input must be a textarea' unless $textarea.is('textarea')
     @$textarea = $textarea.addClass('editor-html')
 
-    @options = jQuery.extend({}, TextareaEditor.defaults, options)
+    @options = _(options).defaults(TextareaEditor.defaults)
     @options.controls ||= Editor.Toolbar.defaults.controls
     
     @toolbar = @options.toolbar || new Editor.Toolbar(@, controls: @options.controls)
@@ -95,7 +95,7 @@ class @TextareaEditor
     @$editor.on 'editor:command:executed', (event, control) =>
       if control instanceof Editor.Control.ButtonControl
         @refreshInputContent()
-        $region.focus().triggerHandler('focus') 
+        @$region.focus().triggerHandler('focus') 
 
   isRendered: ->
     @$editor? and @$editor != undefined
@@ -125,7 +125,6 @@ class @TextareaEditor
 
   refreshControlStates: ->
     if @isRendered()
-      console.log @toolbar.controls
       _(@toolbar.controls).each (control) ->
         control.refresh()
       true
