@@ -23,7 +23,7 @@ class @Editor.Control
 
   executeCommand: (callback) ->
     returnValue = @executeCommandSync()
-    callback() if callback
+    callback()
     returnValue
 
   executeCommandSync: ->

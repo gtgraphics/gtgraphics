@@ -7,5 +7,6 @@
 //= require ./editor/control_group
 //= require ./editor/control
 //= require ./editor/button_control
+//= require ./editor/dialog_button_control
 //= require ./editor/font_control
 //= require_tree ./editor/controls

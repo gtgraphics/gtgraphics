@@ -1,4 +1,4 @@
-class @Editor.Control.Image extends @Editor.Control.AsyncFontControl
+class @Editor.Control.Image extends @Editor.Control.DialogButtonControl
   constructor: ->
     @caption = 'image'
     @icon = 'picture-o'

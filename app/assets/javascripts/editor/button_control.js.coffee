@@ -7,9 +7,11 @@ class @Editor.Control.ButtonControl extends @Editor.Control
     $button.html($icon).attr('title', @getCaption())
     $button.tooltip(tooltipOptions)
     $button.click =>
+      @onExecute()      
       $button.trigger('editor:command:execute', @)
       @executeCommand =>
         @refresh()
+        @onExecuted()
         $button.trigger('editor:command:executed', @)
       $button.tooltip('hide') # fix for assigned tooltips
     $button
@@ -26,3 +28,7 @@ class @Editor.Control.ButtonControl extends @Editor.Control
       @$control.addClass('active')
     else
       @$control.removeClass('active')
+
+  onExecute: ->
+
+  onExecuted: ->
