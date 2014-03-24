@@ -11,8 +11,8 @@ GtGraphics::Application.routes.draw do
         end
 
         namespace :editor do
-          resource :link, only: [:show, :update]
-          resource :image, only: [:show, :update]
+          resource :link, only: [:show, :create]
+          resource :image, only: [:show, :create]
         end
 
         resource :account, except: [:new, :create, :show] do

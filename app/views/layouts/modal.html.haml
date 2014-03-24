@@ -1,4 +1,4 @@
-.modal.fade{role: 'dialog'}
+.modal.fade{role: 'dialog', id: 'modal'}
   .modal-dialog
     .modal-content
   
@@ -7,16 +7,21 @@
           = button_tag icon(:times), type: 'button', class: 'close', data: { dismiss: 'modal' }, 'aria-hidden' => true
           %h4.modal-title
             = yield :title
-  
-      - if content_for? :body_content
-        = yield :body_content
-      - else
+
+
+      - if content_for? :body
         .modal-body
-          - if content_for? :content
-            = yield :content
+          - if content_for? :body
+            = yield :body
           - else
             = yield
 
         - if content_for? :footer
           .modal-footer
             = yield :footer
+
+      - elsif content_for? :content
+        = yield :content
+      
+      - else
+        = yield

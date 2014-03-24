@@ -31,6 +31,7 @@ de:
         alternative_text: Alternativtext
         external: Externes Bild
         internal: Internes Bild
+        size: Größe
         width: Breite
         height: Höhe
       change_password_activity:

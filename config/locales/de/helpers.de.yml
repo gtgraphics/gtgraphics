@@ -76,3 +76,4 @@ de:
       no_subject: '– Kein Betreff –'
     units:
       pixels: Pixel
+      pixels_abbr: px

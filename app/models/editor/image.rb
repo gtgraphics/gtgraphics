@@ -18,10 +18,7 @@
 #  transformed_height    :integer
 #
 
-class Editor::Image
-  include ActiveModel::Model
-  include Virtus.model
-
+class Editor::Image < Activity
   attribute :external, Boolean, default: false
   attribute :image_id, Integer
   attribute :image_style, String

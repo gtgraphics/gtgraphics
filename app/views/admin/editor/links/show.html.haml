@@ -1,7 +1,7 @@
 - content_for :title do
   = translate(@editor_link.persisted? ? :edit : :new, scope: 'helpers.titles', model: Editor::Link.model_name.human)
 
-- content_for :body_content do
+- content_for :content do
   = simple_form_for [:admin, @editor_link], url: admin_editor_link_path, method: :patch, remote: true, html: { class: 'form-horizontal' } do |form|
 
     .modal-body.editor-fields

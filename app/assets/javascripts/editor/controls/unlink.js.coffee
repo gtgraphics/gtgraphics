@@ -1,22 +1,8 @@
-class @Editor.Control.Unlink extends @Editor.Control.FontControl
-  constructor: ->
-    @caption = @icon = @command = 'unlink'
-    super
+class @Editor.Control.Unlink extends @Editor.Control.ButtonControl
+  getCaption: ->
+    I18n.translate('editor.unlink')
 
-  execCommandSync: ->
-    # http://stackoverflow.com/questions/11015313/get-caret-html-position-in-contenteditable-div
-    @editor.storeSelection()
-    $node = @editor.getSelectedNode()
-    $node.replaceWith($node.text())
-    @editor.restoreSelection()
-
-  queryActive: ->
-    false
-
-  queryEnabled: ->
-    @editor.getSelectedNode().is('a[href]')
-
-  querySupported: ->
-    true
+  getIcon: ->
+    'unlink'
 
 @Editor.Control.register('unlink', @Editor.Control.Unlink)

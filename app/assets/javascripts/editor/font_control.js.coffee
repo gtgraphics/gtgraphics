@@ -14,13 +14,10 @@ class @Editor.Control.FontControl extends @Editor.Control.ButtonControl
       false
 
   queryEnabled: ->
-    try 
-      doc = @getRegionDocument()
-      if doc and @isInRichTextView()
-        doc.queryCommandEnabled(@getCommand(), false, null)
-      else
-        false
-    catch e
+    doc = @getRegionDocument()
+    if doc and @isInRichTextView()
+      doc.queryCommandEnabled(@getCommand(), false, null)
+    else
       false
 
   querySupported: ->
@@ -29,15 +26,3 @@ class @Editor.Control.FontControl extends @Editor.Control.ButtonControl
       doc.queryCommandSupported(@getCommand(), false, null)
     else
       false
-
-  isInRichTextView: ->
-    @toolbar.activeEditor and @toolbar.activeEditor.options.viewMode == 'richText'
-
-  getRegionDocument: ->
-    if @toolbar.activeEditor and @toolbar.activeEditor.isRendered()
-      @toolbar.activeEditor.$regionFrame.get(0).contentDocument
-
-  # createControl: ->
-  #   $button = super
-  #   # TODO Refresh when the selection in the target region becomes updated (focus blur textchange)
-  #   $button

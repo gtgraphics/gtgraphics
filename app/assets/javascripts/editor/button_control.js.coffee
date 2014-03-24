@@ -32,3 +32,10 @@ class @Editor.Control.ButtonControl extends @Editor.Control
   onExecute: ->
 
   onExecuted: ->
+
+  getRegionDocument: ->
+    if @toolbar.activeEditor and @toolbar.activeEditor.isRendered()
+      @toolbar.activeEditor.$regionFrame.get(0).contentDocument
+
+  isInRichTextView: ->
+    @toolbar.activeEditor and @toolbar.activeEditor.options.viewMode == 'richText'

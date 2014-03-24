@@ -8,6 +8,10 @@
   = ([translate('views.admin.title')] + breadcrumbs.collect(&:caption).drop(1)).join(' &middot; ').html_safe
 
 - content_for :content do 
+  :coffee
+    Editor.Control.Image.dialogUrl = '#{admin_editor_image_path}'
+    Editor.Control.Link.dialogUrl = '#{admin_editor_link_path}'
+
   %nav#navigation.navbar.navbar-default.navbar-fixed-top.navbar-inverse{role: 'navigation'}
     .container
       .navbar-header
