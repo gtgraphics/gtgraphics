@@ -1,6 +1,6 @@
 .editor-container {
   &.focus .editor-region {
-    border-color: #66afe9;
+    border-color: $input-border-focus;
     outline: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
@@ -8,20 +8,16 @@
 
   &.disabled .editor-region {
     cursor: not-allowed;
-    background-color: #eee;
+    background-color: $input-bg-disabled;
   }
 
   .editor-region, .editor-preview {
     position: relative;
     height: auto;
     display: block;
-    padding: 6px 12px;
-    font-size: 14px;
-    line-height: 1.428571429;
-    color: #555555;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    background-color: $input-bg;
+    border: 1px solid $input-border;
+    border-radius: $input-border-radius;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
@@ -30,11 +26,9 @@
     transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
     overflow: auto;
     resize: vertical;
-    //height: 200px;
-
   }
 
-  .editor-html, .editor-region {
+  .editor-html, .editor-region, .editor-preview {
     min-height: 200px;
     height: 200px;
   }
@@ -48,7 +42,7 @@
   }
 
   .editor-controls {
-    border-radius: 4px;
+    border-radius: $input-border-radius;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     border: 1px solid #ccc;
@@ -65,13 +59,11 @@
 
   .editor-region {
     border-color: #b94a48;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075));
 
     &:focus {
       border-color: #953b39;
-      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
-      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
+      @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392);
     }
   }
 }

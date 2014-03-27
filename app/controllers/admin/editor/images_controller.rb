@@ -3,6 +3,6 @@ class Admin::Editor::ImagesController < Admin::Editor::ApplicationController
 
   private
   def image_params
-    params.require(:image).permit(:external, :url, :image_id, :image_style, :alternative_text, :width, :height)
+    params.require(:editor_image).permit(:external, :url, :image_id, :image_style, :alternative_text, :width, :height)
   end
 end

@@ -1,37 +1,28 @@
-updateContainerVisibility = ($radio) ->
-  $destinationImageContainers = $('.editor_image_image_id, .editor_image_image_style')
-  $destinationUrlContainer = $('.editor_image_url')
+RADIOS = '#editor_image_external_true, #editor_image_external_false'
 
-  checked = $radio.prop('checked')
-  external = $radio.val() == 'true'
-  if checked
-    if external
-      $destinationImageContainers.hide()
-      $destinationUrlContainer.show()
-    else
-      $destinationImageContainers.show()
-      $destinationUrlContainer.hide()
+refreshContainerStates = ($scope) ->
+  $radios = $(RADIOS, $scope)
+  $checkedRadio = $radios.filter(':checked')
+  $internalFields = $('.editor-internal-image-fields')
+  $externalFields = $('.editor-external-image-fields')
+  if $checkedRadio.val() == 'true'
+    $internalFields.hide()
+    $externalFields.show()
+  else
+    $internalFields.show()
+    $externalFields.hide()
 
-initRadios = ->
-  $radios = $('#editor_image_external_true, #editor_image_external_false')
-  $radios.each ->
-    updateContainerVisibility($(@))
-  $radios.click ->
-    updateContainerVisibility($(@))
+jQuery.prepare ->
+  refreshContainerStates(@)
+
+$(document).on 'change ifChanged', RADIOS, ->
+  refreshContainerStates()
 
 $(document).on 'show.bs.modal ajax:success', ->
-  initRadios()
+  refreshContainerStates()
 
 $(document).on 'change', '#editor_image_image_id, #editor_image_image_style', ->
   $style = $('#editor_image_image_style')
   $image = $('#editor_image_image_id')
   $width = $('#editor_image_width')
   $height = $('#editor_image_height')
-
-  id = $image.val()
-  style = $style.val()
-
-  if id isnt ''
-    jQuery.getJSON "/admin/images/#{id}/dimensions.json", { style: style }, (dimensions) ->
-      $width.val(dimensions.width)
-      $height.val(dimensions.height)

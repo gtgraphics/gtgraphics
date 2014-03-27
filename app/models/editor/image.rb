@@ -18,9 +18,10 @@
 #  transformed_height    :integer
 #
 
-class Editor::Image < Activity
+class Editor::Image < EditorActivity
+  embeds_one :image, class_name: '::Image'
+  
   attribute :external, Boolean, default: false
-  attribute :image_id, Integer
   attribute :image_style, String
   attribute :url, String
   attribute :alternative_text, String
@@ -30,6 +31,8 @@ class Editor::Image < Activity
 
   validates :url, presence: true, if: :external?
   validates :image_id, presence: true, if: :internal?
+  validates :width, numericality: { only_integer: true }, allow_blank: true
+  validates :height, numericality: { only_integer: true }, allow_blank: true
 
   def internal?
     !external?
@@ -39,15 +42,6 @@ class Editor::Image < Activity
 
   def internal=(internal)
     self.external = !internal
-  end
-
-  def image
-    @image ||= ::Image.find(image_id)
-  end
-
-  def image=(image)
-    self.image_id = image.id
-    @image = image
   end
 
   def self.from_html(html)
@@ -74,8 +68,8 @@ class Editor::Image < Activity
     end
   end
 
-  def to_html(template)
+  def to_html
     src = internal? ? image.asset.url(image_style) : url
-    template.tag(:img, src: src, width: width, height: height, alt: alternative_text || '', data: { image_id: image_id, image_style: image_style }).html_safe
+    tag(:img, src: src, width: width, height: height, alt: alternative_text || '', data: { image_id: image_id, image_style: image_style }).html_safe
   end
 end

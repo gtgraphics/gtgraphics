@@ -100,6 +100,10 @@ class @Editor.Control
     else
       @activate()
 
+  # Getters
+
+  getActiveEditor: ->
+    @toolbar.activeEditor
 
 availableControls = []
 

@@ -1,27 +1,23 @@
 class @Editor.Control.DialogButtonControl extends @Editor.Control.ButtonControl
   executeCommand: (callback) ->
     # TODO Wait for modal to dispose and then trigger callback
-
-    dialogUrl = @getDialogUrl()
-    console.log dialogUrl
-
-    $body = $('body')
-    jQuery.get(dialogUrl).fail(callback).done (html) =>
-      $modal = $(html).appendTo($body).prepare()
+    control = @
+    jQuery.get(@getDialogUrl()).fail(callback).done (html) =>
+      $modal = $(html).appendTo($('body')).prepare()
       $modal.data('toolbar', @toolbar)
       $modal.modal('show')
 
-      $forms = $modal.find('.editor-form')
-      $forms.submit (event) ->
+      $modal.on 'hidden.bs.modal', ->
+        $modal.remove()
+        callback()
+
+      $modal.on 'submit', '.editor-form', (event) ->
         event.preventDefault()
 
         $form = $(@)
         formUrl = $form.attr('action')
         method = $form.attr('method')
         params = $form.serializeArray()
-        
-        console.log method
-        console.log params
 
         jQuery.ajax
           url: formUrl
@@ -30,14 +26,16 @@ class @Editor.Control.DialogButtonControl extends @Editor.Control.ButtonControl
           dataType: 'html'
           success: (html) ->
             console.log html
-          error: (xhr, textStatus, errorThrown) ->
-            console.error xhr
-            console.error textStatus
-            console.error errorThrown
-
-      $modal.on 'hidden.bs.modal', ->
-        $modal.remove()
-        callback()
+            $modal.modal('hide')
+            editor = control.getActiveEditor()
+            editor.$region.append(html) if editor.isRendered() # TODO
+          error: (xhr) ->
+            # Validation failed, replace form to show validation messages
+            if xhr.status == 422
+              html = xhr.responseText
+              $newForm = $(html)
+              $form.replaceWith($newForm)
+              $newForm.prepare()
 
   getDialogUrl: ->
     console.error 'no dialog URL defined'

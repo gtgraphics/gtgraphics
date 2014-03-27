@@ -22,7 +22,7 @@ class Admin::Editor::ApplicationController < Admin::ApplicationController
         respond_to do |format|
           format.html do
             if valid
-              render layout: false
+              render text: @#{name}.to_html, layout: false
             else
               render :show, layout: false, status: :unprocessable_entity
             end
@@ -31,7 +31,7 @@ class Admin::Editor::ApplicationController < Admin::ApplicationController
       end
 
       def #{name}_params
-        params.require(:#{name}).permit!
+        params.require(:editor_#{name}).permit!
       end
       private :#{name}_params
     }

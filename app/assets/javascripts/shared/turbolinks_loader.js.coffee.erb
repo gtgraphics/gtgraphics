@@ -1,7 +1,7 @@
 originalCursor = null
 originalHtml = null
 
-$(document).on 'page:fetch submit', ->
+$(document).on 'page:fetch', ->
   $('body').addClass('loading')
 
   $container = $('.gtg-admin-breadcrumb-home')
