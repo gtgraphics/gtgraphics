@@ -1,23 +1,22 @@
-updateContainerVisibility = ($radio) ->
-  $destinationPageContainers = $('.editor_link_page_id, .editor_link_locale')
-  $destinationUrlContainer = $('.editor_link_url')
+RADIOS = '#editor_link_external_true, #editor_link_external_false'
 
-  checked = $radio.prop('checked')
-  external = $radio.val() == 'true'
-  if checked
-    if external
-      $destinationPageContainers.hide()
-      $destinationUrlContainer.show()
-    else
-      $destinationPageContainers.show()
-      $destinationUrlContainer.hide()
+refreshContainerStates = ($scope) ->
+  $radios = $(RADIOS, $scope)
+  $checkedRadio = $radios.filter(':checked')
+  $internalFields = $('.editor-internal-link-fields')
+  $externalFields = $('.editor-external-link-fields')
+  if $checkedRadio.val() == 'true'
+    $internalFields.hide()
+    $externalFields.show()
+  else
+    $internalFields.show()
+    $externalFields.hide()
 
-initRadios = ->
-  $radios = $('#editor_link_external_true, #editor_link_external_false')
-  $radios.each ->
-    updateContainerVisibility($(@))
-  $radios.click ->
-    updateContainerVisibility($(@))
+jQuery.prepare ->
+  refreshContainerStates(@)
+
+$(document).on 'change ifChanged', RADIOS, ->
+  refreshContainerStates()
 
 $(document).on 'show.bs.modal ajax:success', ->
-  initRadios()
+  refreshContainerStates()

@@ -15,5 +15,4 @@ class @Editor.Control.Image extends @Editor.Control.DialogButtonControl
     else
       false
 
-
 @Editor.Control.register('image', @Editor.Control.Image)

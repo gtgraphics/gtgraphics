@@ -11,8 +11,10 @@ GtGraphics::Application.routes.draw do
         end
 
         namespace :editor do
-          resource :link, only: [:show, :create]
-          resource :image, only: [:show, :create]
+          with_options only: [:show, :create] do |r|
+            r.resource :link
+            r.resource :image
+          end
         end
 
         resource :account, except: [:new, :create, :show] do

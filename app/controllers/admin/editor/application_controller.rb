@@ -17,7 +17,7 @@ class Admin::Editor::ApplicationController < Admin::ApplicationController
       end
 
       def create
-        @#{name} = ::Editor::Image.new(#{name}_params)
+        @#{name} = #{class_name}.new(#{name}_params)
         valid = @#{name}.valid?
         respond_to do |format|
           format.html do
