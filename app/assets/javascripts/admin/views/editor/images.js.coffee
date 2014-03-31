@@ -20,9 +20,3 @@ $(document).on 'change ifChanged', RADIOS, ->
 
 $(document).on 'show.bs.modal ajax:success', ->
   refreshContainerStates()
-
-$(document).on 'change', '#editor_image_image_id, #editor_image_image_style', ->
-  $style = $('#editor_image_image_style')
-  $image = $('#editor_image_image_id')
-  $width = $('#editor_image_width')
-  $height = $('#editor_image_height')

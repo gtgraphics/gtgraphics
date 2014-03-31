@@ -9,4 +9,6 @@
 //= require ./editor/button_control
 //= require ./editor/dialog_button_control
 //= require ./editor/font_control
+//= require ./editor/activity
 //= require_tree ./editor/controls
+//= require_tree ./editor/activities

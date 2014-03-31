@@ -3,6 +3,6 @@ class Admin::Editor::LinksController < Admin::Editor::ApplicationController
 
   private
   def link_params
-    params.require(:editor_link).permit(:caption, :external, :url, :page_id, :locale, :target)
+    params.require(:editor_link).permit(:content, :external, :url, :page_id, :locale, :target)
   end
 end

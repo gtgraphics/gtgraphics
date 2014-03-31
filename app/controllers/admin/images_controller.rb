@@ -11,8 +11,14 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def index
-    @images = Image.with_translations.includes(:author, :custom_styles).sort(params[:sort], params[:direction]).page(params[:page]).per(16)
-    respond_with :admin, @images
+    if params[:id].present?
+      redirect_to admin_image_path(params[:id], format: params[:format])
+    else
+      @images = Image.with_translations(I18n.locale).includes(:author, :custom_styles).search(params[:query]).sort(params[:sort], params[:direction]).page(params[:page]).per(16)
+      respond_with :admin, @images do |format|
+        format.json
+      end
+    end
   end
 
   def new
@@ -35,7 +41,9 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def show
     @image_styles = @image.custom_styles
-    respond_with :admin, @image
+    respond_with :admin, @image do |format|
+      format.json
+    end
   end
 
   def edit

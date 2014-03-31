@@ -4,7 +4,7 @@ class Editor::Link < EditorActivity
 
   embeds_one :page
 
-  attribute :caption, String
+  attribute :content, String
   attribute :external, Boolean, default: false
   attribute :page_id, Integer
   attribute :locale, Symbol
@@ -12,7 +12,6 @@ class Editor::Link < EditorActivity
   attribute :target, String
   attribute :persisted, Boolean, default: false
 
-  validates :caption, presence: true
   validates :url, presence: true, if: :external?
   validates :page_id, presence: true, if: :internal?
 
@@ -28,7 +27,7 @@ class Editor::Link < EditorActivity
 
   def self.from_html(html)
     fragment = Nokogiri::HTML::DocumentFragment.parse(html)
-    new(caption: fragment.text).tap do |instance|
+    new(content: fragment.text).tap do |instance|
       anchor = fragment.css('a')
       if anchor.present? and url = anchor.attribute('href').to_s and url.present?
         instance.persisted = true
@@ -59,6 +58,6 @@ class Editor::Link < EditorActivity
       data[:locale] = locale if locale.present?
       options[:data] = data
     end
-    content_tag(:a, caption, options).html_safe
+    content_tag(:a, content, options).html_safe
   end
 end

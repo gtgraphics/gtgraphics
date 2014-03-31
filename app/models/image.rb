@@ -81,6 +81,19 @@ class Image < ActiveRecord::Base
     def content_types
       CONTENT_TYPES
     end
+
+    def search(query)
+      if query.present?
+        terms = query.split
+        columns = [Image::Translation.arel_table[:title]]
+        conditions = terms.collect do |term|
+          columns.collect { |column| column.matches("%#{term}%") }.reduce(:or)
+        end
+        where(conditions.reduce(:and))
+      else
+        all
+      end
+    end
   end
   
   def asset_path(style = :transformed)

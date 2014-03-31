@@ -4,7 +4,7 @@
 = simple_form_for [:admin, @link], url: admin_editor_link_path, html: { class: 'form-horizontal editor-form' } do |form|
 
   .modal-body
-    = form.input :caption, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
+    = form.input :content, as: :hidden
     = form.input :external, collection: [[Editor::Link.human_attribute_name(:internal), false], [Editor::Link.human_attribute_name(:external), true]], as: :radio_buttons, label: false, container_html: { class: 'col-lg-offset-3 col-lg-9' }
     .editor-internal-link-fields      
       = form.input :page_id, collection: page_sitemap_collection_for_select, required: true, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }

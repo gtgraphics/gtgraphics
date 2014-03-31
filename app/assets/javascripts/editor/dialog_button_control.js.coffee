@@ -1,6 +1,5 @@
 class @Editor.Control.DialogButtonControl extends @Editor.Control.ButtonControl
   executeCommand: (callback) ->
-    # TODO Wait for modal to dispose and then trigger callback
     control = @
     jQuery.get(@getDialogUrl()).fail(callback).done (html) =>
       $modal = $(html).appendTo($('body')).prepare()
@@ -13,12 +12,10 @@ class @Editor.Control.DialogButtonControl extends @Editor.Control.ButtonControl
 
       $modal.on 'submit', '.editor-form', (event) ->
         event.preventDefault()
-
         $form = $(@)
         formUrl = $form.attr('action')
         method = $form.attr('method')
         params = $form.serializeArray()
-
         jQuery.ajax
           url: formUrl
           type: method
@@ -32,8 +29,7 @@ class @Editor.Control.DialogButtonControl extends @Editor.Control.ButtonControl
           error: (xhr) ->
             # Validation failed, replace form to show validation messages
             if xhr.status == 422
-              html = xhr.responseText
-              $newForm = $(html)
+              $newForm = $(xhr.responseText)
               $form.replaceWith($newForm)
               $newForm.prepare()
 
@@ -41,10 +37,7 @@ class @Editor.Control.DialogButtonControl extends @Editor.Control.ButtonControl
     console.error 'no dialog URL defined'
 
   onExecute: ->
-    # TODO Create and show modal and load content
+    console.log 'show modal'
 
   onExecuted: ->
-    # TODO Hide modal
-    #@$modal = null
-
-    console.log 'finished!!!'
+    console.log 'hide modal'

@@ -4,6 +4,39 @@ de:
       links:
         browse: Durchsuchen
 
+    errors: &errors
+      format: '%{attribute} %{message}'
+      messages:
+        accepted: muss akzeptiert werden
+        blank: muss ausgefüllt werden
+        confirmation: stimmt nicht mit der Bestätigung überein
+        empty: muss ausgefüllt werden
+        equal_to: 'muss genau %{count} sein'
+        even: muss gerade sein
+        exclusion: ist nicht verfügbar
+        greater_than: 'muss größer als %{count} sein'
+        greater_than_or_equal_to: 'muss größer oder gleich %{count} sein'
+        inclusion: ist kein gültiger Wert
+        invalid: ist nicht gültig
+        invalid_url: ist kein gültiger URL
+        contains_invalid: enthält ungültige Werte
+        less_than: 'muss kleiner als %{count} sein'
+        less_than_or_equal_to: 'muss kleiner oder gleich %{count} sein'
+        not_a_number: ist keine Zahl
+        not_an_integer: muss ganzzahlig sein
+        odd: muss ungerade sein
+        record_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
+        taken: ist bereits vergeben
+        too_long: 'ist zu lang (mehr als %{count} Zeichen)'
+        too_short: 'ist zu kurz (weniger als %{count} Zeichen)'
+        wrong_length: 'hat die falsche Länge (muss genau %{count} Zeichen haben)'
+        not_equal_to_mismatch: 'darf nicht mit %{other_value} überein stimmen'
+      template:
+        body: 'Bitte überprüfen Sie die folgenden Felder:'
+        header:
+          one: 'Konnte %{model} nicht speichern: ein Fehler.'
+          other: 'Konnte %{model} nicht speichern: %{count} Fehler.'
+
     editor:
       bold: Fett
       italic: Kursiv
@@ -32,7 +65,9 @@ de:
         error: Der Editor konnte nicht geladen werden.
 
     select2:
-      no_matches: Keine Ergebnisse
+      no_matches: Es wurden keine Ergebnisse gefunden.
+      input_too_short: Bitte geben Sie weitere Zeichen ein.
+      searching: Suche...
 
     timeago:
       prefix_ago: vor

@@ -1,4 +1,7 @@
-class @Editor.Control.Unlink extends @Editor.Control.ButtonControl
+class @Editor.Control.Unlink extends @Editor.Control.FontControl
+  getCommand: ->
+    'unlink'
+
   getCaption: ->
     I18n.translate('editor.unlink')
 

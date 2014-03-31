@@ -33,6 +33,7 @@ gem 'active_link_to'
 gem 'jbuilder', '~> 1.2'
 gem 'liquid'
 gem 'builder'
+gem 'coffeebeans'
 
 # Assets
 gem 'execjs'
