@@ -34,8 +34,8 @@ class Editor::Image < EditorActivity
 
   validates :url, presence: true, if: :external?
   validates :image_id, presence: true, if: :internal?
-  validates :width, numericality: { only_integer: true }, allow_blank: true
-  validates :height, numericality: { only_integer: true }, allow_blank: true
+  validates :width, numericality: { only_integer: true, greater_than: 0 }, allow_blank: true
+  validates :height, numericality: { only_integer: true, greater_than: 0 }, allow_blank: true
   validates :alignment, inclusion: { in: ALIGNMENTS }, allow_blank: true
 
   class << self
@@ -81,7 +81,7 @@ class Editor::Image < EditorActivity
   end
 
   def to_html
-    src = internal? ? image.asset.url(image_style.presence) : url
+    src = internal? ? image.asset_url(image_style.presence || :transformed) : url
     tag(:img, src: src, width: width, height: height, alt: alternative_text || '', data: { image_id: image_id, image_style: image_style }).html_safe
   end
 end

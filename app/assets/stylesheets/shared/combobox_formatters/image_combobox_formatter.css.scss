@@ -1,0 +1,16 @@
+.image-combobox-result {
+  .image-combobox-thumbnail {
+    margin-right: 8px;
+    img {
+      $size: 40px;
+      width: $size;
+      height: $size;
+    }
+  }
+  .image-combobox-title {
+
+  }
+  .image-combobox-info {
+    color: $gray;
+  }
+}

@@ -12,8 +12,8 @@
       /= form.input :image_style, collection: Image.attachment_definitions[:asset][:styles].keys.collect { |style| [style, style] }, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
     .editor-external-image-fields
       = form.input :url, required: true, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
-    = form.input :width, container_html: { class: 'col-lg-4' }, label_html: { class: 'col-lg-3' }
-    = form.input :height, container_html: { class: 'col-lg-4' }, label_html: { class: 'col-lg-3' }
+    = form.input :width, as: :integer, input_html: { min: 1}, container_html: { class: 'col-lg-4' }, label_html: { class: 'col-lg-3' }
+    = form.input :height, as: :integer, input_html: { min: 1 }, container_html: { class: 'col-lg-4' }, label_html: { class: 'col-lg-3' }
     = form.input :alternative_text, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
     = form.input :alignment, collection: Editor::Image.alignments.invert, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
       

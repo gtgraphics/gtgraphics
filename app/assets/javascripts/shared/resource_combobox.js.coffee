@@ -4,7 +4,7 @@ jQuery.prepare ->
   
     resourceUrl = $select.data('resourceUrl')
     formatterClass = $select.data('formatter')
-    formatter = window[formatterClass] if formatterClass
+    formatter = new window[formatterClass]() if formatterClass
 
     options = 
       minimumInputLength: 1
@@ -23,7 +23,9 @@ jQuery.prepare ->
 
     if formatter
       _(options).extend
-        formatResult: formatter.formatResult
-        formatSelection: formatter.formatSelection
+        formatResult: (result, container, query, escapeMarkup) ->
+          formatter.formatResult(result, container, query, escapeMarkup)
+        formatSelection: (data, container, escapeMarkup) ->
+          formatter.formatSelection(data, container, escapeMarkup)
 
     $select.select2(options)
