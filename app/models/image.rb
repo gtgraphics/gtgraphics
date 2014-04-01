@@ -94,6 +94,12 @@ class Image < ActiveRecord::Base
         all
       end
     end
+
+    def style_names
+      STYLES.keys.inject({}) do |style_names, style_name|
+        style_names.merge!(style_name.to_s => I18n.translate(style_name, scope: 'image.styles'))
+      end
+    end
   end
   
   def asset_path(style = :transformed)

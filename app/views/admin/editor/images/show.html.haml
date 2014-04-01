@@ -8,8 +8,8 @@
     .editor-internal-image-fields
       = form.input :image_id, required: true, input_html: { class: 'resource-combobox', data: { resource_url: admin_images_path(format: :json), formatter: 'ImageComboboxFormatter' } }, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
       / TODO
-      = form.input :image_style, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
-      /= form.input :image_style, collection: Image.attachment_definitions[:asset][:styles].keys.collect { |style| [style, style] }, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
+      = form.input :style_name, collection: ::Image.style_names.invert.sort_by(&:first), container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
+      = form.input :style_id, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
     .editor-external-image-fields
       = form.input :url, required: true, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
     = form.input :width, as: :integer, input_html: { min: 1}, container_html: { class: 'col-lg-4' }, label_html: { class: 'col-lg-3' }

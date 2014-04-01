@@ -324,9 +324,34 @@
  */
 
 .select2-results {
-
   padding: 0;
-  margin: 5px 0;
+  margin: 6px 0;
+
+  /*
+  padding: 11px 0;
+
+  &:before, &:after {
+    $shadow-height: 15px;
+    position: absolute;
+    background: {
+      repeat: no-repeat;
+      size: 100% $shadow-height;
+    }
+    pointer-events: none;
+    content: ' ';
+    left: 0;
+    right: 0;
+    z-index: 9000;
+    height: $shadow-height;
+  }
+  &:before {
+    background-image: asset-url('admin/shadow_bottom.png');
+    top: 0;
+  }
+  &:after {
+    background-image: asset-url('admin/shadow_top.png');
+    bottom: 0;
+  }*/
 
   .select2-highlighted {
     //color: $dropdown-link-active-color;

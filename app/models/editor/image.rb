@@ -20,11 +20,14 @@
 
 class Editor::Image < EditorActivity
   ALIGNMENTS = %w(left right top middle bottom).freeze
+  STYLE_SOURCES = %w(none predefined custom).freeze
 
   embeds_one :image, class_name: '::Image'
-  
+  embeds_one :style, class_name: '::Image::Style'
+
   attribute :external, Boolean, default: false
-  attribute :image_style, String
+  attribute :style_source, String, default: STYLE_SOURCES.first
+  attribute :style_name, String
   attribute :url, String
   attribute :alternative_text, String
   attribute :persisted, Boolean, default: false
@@ -37,6 +40,10 @@ class Editor::Image < EditorActivity
   validates :width, numericality: { only_integer: true, greater_than: 0 }, allow_blank: true
   validates :height, numericality: { only_integer: true, greater_than: 0 }, allow_blank: true
   validates :alignment, inclusion: { in: ALIGNMENTS }, allow_blank: true
+  validates :style_id, presence: true, if: :custom_style?
+  validates :style_name, presence: true, inclusion: { in: ->(image) { ::Image.style_names.keys } }, if: :predefined_style?
+
+  before_validation :sanitize_style
 
   class << self
     def alignments
@@ -70,18 +77,52 @@ class Editor::Image < EditorActivity
     end
   end
 
+  def custom_style?
+    style_source == 'custom'
+  end
+
   def internal?
     !external?
   end
-
   alias_method :internal, :internal?
 
   def internal=(internal)
     self.external = !internal
   end
 
+  def image_src
+    if external?
+      url
+    else
+      if custom_style?
+        style.asset_url
+      else
+        image.asset_url(style_name.presence || :transformed)
+      end
+    end
+  end
+
+  def predefined_style?
+    style_source == 'predefined'
+  end
+
   def to_html
-    src = internal? ? image.asset_url(image_style.presence || :transformed) : url
-    tag(:img, src: src, width: width, height: height, alt: alternative_text || '', data: { image_id: image_id, image_style: image_style }).html_safe
+    html_options = { src: image_src, width: width, height: height }
+    html_options[:alt] = alternative_text || ''
+    html_options[:align] = alignment.presence
+    html_options[:data] = { image_id: image_id, image_style: style }
+    tag(:img, html_options).html_safe
+  end
+
+  private
+  def sanitize_style
+    if predefined_style?
+      self.style_id = nil
+    elsif custom_style?
+      self.style_name = nil
+    else
+      self.style_id = nil
+      self.style_name = nil
+    end
   end
 end

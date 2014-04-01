@@ -7,7 +7,6 @@ jQuery.prepare ->
     formatter = new window[formatterClass]() if formatterClass
 
     options = 
-      minimumInputLength: 1
       ajax:
         url: resourceUrl
         dataType: 'json'

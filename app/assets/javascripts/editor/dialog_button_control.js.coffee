@@ -37,7 +37,7 @@ class @Editor.Control.DialogButtonControl extends @Editor.Control.ButtonControl
     console.error 'no dialog URL defined'
 
   onExecute: ->
-    console.log 'show modal'
+    @$control.prop('disabled', true) if @isRendered()
 
   onExecuted: ->
-    console.log 'hide modal'
+    @$control.prop('disabled', false) if @isRendered()

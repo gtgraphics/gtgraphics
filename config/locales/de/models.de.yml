@@ -35,6 +35,9 @@ de:
         width: Breite
         height: Höhe
         alignment: Ausrichtung
+        custom_style: Benutzerdefinierter Stil
+        style_name: Stil
+        style_id: Stil
       change_password_activity:
         current_password: Aktuelles Passwort
         generate_password: Password generieren?
@@ -260,6 +263,18 @@ de:
       hidden: Unsichtbar
 
   homepage: Startseite
+
+  image:
+    styles:
+      original: Original
+      transformed: Angepasst
+      thumbnail: Thumbnail
+      large_thumbnail: Großer Thumbnail
+      medium: Mittlere Größe
+      large: Großformat
+      social: Soziale Netzwerke
+      preview: Vorschau
+      page_preview: Seitenvorschau
 
   editor/image:
     alignments:
