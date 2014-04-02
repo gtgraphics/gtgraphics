@@ -53,6 +53,10 @@ class Image < ActiveRecord::Base
       }
     end
 
+    def caption
+      I18n.translate(:dimensions, width: transformed_width, height: transformed_height)
+    end
+
     def dimensions
       ImageDimensions.new(width, height)
     end
@@ -74,6 +78,7 @@ class Image < ActiveRecord::Base
 
     protected
     def set_transformation_defaults
+      # do nothing here, override in subclasses
     end
 
     private

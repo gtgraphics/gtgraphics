@@ -1,9 +1,11 @@
 jQuery.prepare ->
+  
   $('.resource-combobox').each ->
     $select = $(@)
   
     resourceUrl = $select.data('resourceUrl')
     formatterClass = $select.data('formatter')
+    additionalParams = $select.data('params')
     formatter = new window[formatterClass]() if formatterClass
 
     options = 
@@ -11,7 +13,7 @@ jQuery.prepare ->
         url: resourceUrl
         dataType: 'json'
         data: (term, page) ->
-          { query: term, page: page }
+          _(additionalParams).defaults(query: term, page: page)
         results: (data, page) ->
           { results: data.records, more: data.more }
       initSelection: (element, callback) ->

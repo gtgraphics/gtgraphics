@@ -129,6 +129,10 @@ class Image < ActiveRecord::Base
     exif_data.try(:date_time_original).try(:to_datetime)
   end
 
+  def transformed_dimensions
+    ImageDimensions.new(transformed_width, transformed_height)
+  end
+
   def to_liquid
     attributes.slice(*%w(title width height updated_at)).merge(customization_options).merge(
       'author' => author,

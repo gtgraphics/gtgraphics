@@ -31,6 +31,6 @@ class Presenter
   end
  
   def respond_to_missing?(method_name, include_private = false)
-    (template and template.respond_to?(method_name)) or super
+    (template and template.respond_to?(method_name, include_private)) or super
   end
 end

@@ -4,12 +4,14 @@
 = simple_form_for [:admin, @image], url: :admin_editor_image, html: { class: 'form-horizontal editor-form' } do |form|
 
   .modal-body
-    = form.input :external, collection: [[Editor::Image.human_attribute_name(:internal), false], [Editor::Image.human_attribute_name(:external), true]], as: :radio_buttons, label: false, container_html: { class: 'col-lg-offset-3 col-lg-9' }
+    = form.input :external, collection: [[Editor::Image.human_attribute_name(:internal), false], [Editor::Image.human_attribute_name(:external), true]], as: :radio_buttons, label: Editor::Image.human_attribute_name(:source), required: true, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
     .editor-internal-image-fields
-      = form.input :image_id, required: true, input_html: { class: 'resource-combobox', data: { resource_url: admin_images_path(format: :json), formatter: 'ImageComboboxFormatter' } }, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
-      / TODO
-      = form.input :style_name, collection: ::Image.style_names.invert.sort_by(&:first), container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
-      = form.input :style_id, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
+      = form.input :image_id, required: true, input_html: { class: 'resource-combobox', data: { resource_url: admin_images_path(format: :json), formatter: 'ImageComboboxFormatter', params: { include_custom_styles: true } } }, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
+      = form.input :style_source, as: :radio_buttons, required: true, collection: Editor::Image.style_sources.invert, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
+      .editor-internal-image-predefined-styles-fields
+        = form.input :style_name, collection: ::Image.style_names.invert.sort_by(&:first), label: false, container_html: { class: 'col-lg-9 col-lg-offset-3' }
+      .editor-internal-image-custom-styles-fields
+        = form.input :style_id, label: false, container_html: { class: 'col-lg-9 col-lg-offset-3' }
     .editor-external-image-fields
       = form.input :url, required: true, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
     = form.input :width, as: :integer, input_html: { min: 1}, container_html: { class: 'col-lg-4' }, label_html: { class: 'col-lg-3' }

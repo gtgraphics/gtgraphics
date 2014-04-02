@@ -20,7 +20,7 @@
 
 class Editor::Image < EditorActivity
   ALIGNMENTS = %w(left right top middle bottom).freeze
-  STYLE_SOURCES = %w(none predefined custom).freeze
+  STYLE_SOURCES = %w(original predefined custom).freeze
 
   embeds_one :image, class_name: '::Image'
   embeds_one :style, class_name: '::Image::Style'
@@ -49,6 +49,12 @@ class Editor::Image < EditorActivity
     def alignments
       ALIGNMENTS.inject({}) do |alignments_hash, alignment|
         alignments_hash.merge!(alignment => I18n.translate(alignment, scope: 'editor/image.alignments'))
+      end
+    end
+
+    def style_sources
+      STYLE_SOURCES.inject({}) do |style_sources_hash, style_source|
+        style_sources_hash.merge!(style_source => I18n.translate(style_source, scope: 'editor/image.style_sources'))
       end
     end
 

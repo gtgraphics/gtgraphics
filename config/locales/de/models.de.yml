@@ -34,10 +34,12 @@ de:
         size: Größe
         width: Breite
         height: Höhe
+        style_source: Stil
         alignment: Ausrichtung
         custom_style: Benutzerdefinierter Stil
         style_name: Stil
         style_id: Stil
+        source: Quelle
       change_password_activity:
         current_password: Aktuelles Passwort
         generate_password: Password generieren?
@@ -283,3 +285,7 @@ de:
       top: Oben
       middle: Mitte
       bottom: Unten
+    style_sources:
+      original: Original
+      predefined: Vordefinierter Stil
+      custom: Benutzerdefinierter Stil
