@@ -73,18 +73,18 @@ class Template < ActiveRecord::Base
   end
 
   def region_labels
-    @region_labels ||= TokenCollection.new(region_definitions.pluck(:label), sort: true)
+    @region_labels ||= TokenCollection.new(self.region_definitions.pluck(:label), sort: true, unique: true)
   end
   
   def region_labels=(labels)
     @region_labels = TokenCollection.new(labels, sort: true, unique: true)
     tokens = @region_labels.tokens
     tokens.each do |label|
-      if region_definitions.none? { |region_definition| region_definition.label == label }
-        region_definitions.build(label: label)
+      if self.region_definitions.none? { |region_definition| region_definition.label == label }
+        self.region_definitions.build(label: label)
       end
     end
-    region_definitions.reject { |region_definition| tokens.include?(region_definition.label) }.each(&:mark_for_destruction)
+    self.region_definitions.reject { |region_definition| region_definition.label.in?(tokens) }.each(&:mark_for_destruction)
   end
 
   def view_path
