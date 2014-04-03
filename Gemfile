@@ -24,7 +24,6 @@ gem 'email_validator'
 gem 'globalize', github: 'globalize/globalize' #, branch: 'rails4'
 gem 'state_machine'
 gem 'virtus'
-# gem 'sortable', github: 'tlux/sortable', tag: 'v0.1'
 
 # Views
 gem 'haml-rails'
