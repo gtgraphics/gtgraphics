@@ -2,6 +2,7 @@
 #
 # Table name: taggings
 #
+#  id            :integer          not null, primary key
 #  tag_id        :integer          not null
 #  taggable_id   :integer          not null
 #  taggable_type :string(255)      not null

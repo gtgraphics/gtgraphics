@@ -10,4 +10,6 @@ class Tag < ActiveRecord::Base
   has_many :taggings, dependent: :delete_all
 
   validates :label, presence: true, uniqueness: true
+
+  default_scope -> { order(:label) }
 end

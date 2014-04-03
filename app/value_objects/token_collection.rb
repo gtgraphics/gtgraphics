@@ -7,7 +7,10 @@ class TokenCollection
     unique: false
   }
 
+  include Enumerable
+
   attr_reader :tokens, :options
+  delegate :each, :[], to: :to_a
 
   def initialize(tokens, options = {})
     @options = options.reverse_merge(DEFAULTS)
@@ -17,7 +20,7 @@ class TokenCollection
       @tokens = tokens.to_a
     end
     @tokens.sort! if @options[:sort]
-    @tokens.uniq! if @options[:unique]
+    @tokens = @tokens.to_set if @options[:unique]
   end
 
   def inspect
@@ -25,10 +28,10 @@ class TokenCollection
   end
 
   def to_a
-    @tokens
+    @tokens.to_a
   end
 
   def to_s
-    @tokens.join(options[:separator])
+    to_a.join(options[:separator])
   end
 end

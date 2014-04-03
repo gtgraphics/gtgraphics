@@ -26,6 +26,7 @@ class Image < ActiveRecord::Base
   include ImageCroppable
   include PersistenceContextTrackable
   include Sortable
+  include Taggable
 
   CONTENT_TYPES = ImageContainable::CONTENT_TYPES
   EXIF_CAPABLE_CONTENT_TYPES = [Mime::JPEG].freeze

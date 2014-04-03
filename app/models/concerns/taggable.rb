@@ -2,8 +2,6 @@ module Taggable
   extend ActiveSupport::Concern
 
   included do
-    composed_of :tags, class_name: 'TokenCollection', mapping: %w(meta_keywords to_s), converter: :new
-
     has_many :taggings, as: :taggable, dependent: :delete_all, autosave: true
     has_many :tags, through: :taggings
 
@@ -12,7 +10,7 @@ module Taggable
 
   module ClassMethods
     def tagged(label)
-      joins(taggings: :tags).where(tags: { label: label }).readonly(false)
+      joins(:tags).where(tags: { label: label }).readonly(false)
     end
   end
 
@@ -22,14 +20,14 @@ module Taggable
   
   def tag_tokens=(labels)
     @tag_tokens = TokenCollection.new(labels, sort: true, unique: true)
-    tokens = @tag_tokens.tokens
-    tokens.each do |label|
+    labels = @tag_tokens.to_a
+    labels.each do |label|
       if self.taggings.none? { |tagging| tagging.label == label }
         tag = Tag.find_or_initialize_by(label: label)
         self.taggings.build(tag: tag)
       end
     end
-    self.taggings.reject { |tagging| tagging.label.in?(tokens) }.each(&:mark_for_destruction)
+    self.taggings.reject { |tagging| tagging.label.in?(labels) }.each(&:mark_for_destruction)
   end
 
   private
