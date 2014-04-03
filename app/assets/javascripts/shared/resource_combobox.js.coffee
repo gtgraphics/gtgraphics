@@ -5,7 +5,7 @@ jQuery.prepare ->
   
     resourceUrl = $select.data('resourceUrl')
     formatterClass = $select.data('formatter')
-    additionalParams = $select.data('params')
+    additionalParams = $select.data('params') || {}
     formatter = new window[formatterClass]() if formatterClass
 
     options = 
@@ -18,7 +18,9 @@ jQuery.prepare ->
           { results: data.records, more: data.more }
       initSelection: (element, callback) ->
         id = $(element).val()
-        jQuery.get(resourceUrl, { id: id }, callback) unless id == ''
+        unless id == ''
+          params = _(additionalParams).defaults(id: id)
+          jQuery.get(resourceUrl, params, callback)
       escapeMarkup: (markup) ->
         markup
 

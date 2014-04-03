@@ -11,7 +11,7 @@
       .editor-internal-image-predefined-styles-fields
         = form.input :style_name, collection: ::Image.style_names.invert.sort_by(&:first), label: false, container_html: { class: 'col-lg-9 col-lg-offset-3' }
       .editor-internal-image-custom-styles-fields
-        = form.input :style_id, label: false, container_html: { class: 'col-lg-9 col-lg-offset-3' }
+        = form.input :style_id, collection: [], label: false, container_html: { class: 'col-lg-9 col-lg-offset-3' }
     .editor-external-image-fields
       = form.input :url, required: true, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
     = form.input :width, as: :integer, input_html: { min: 1 }, container_html: { class: 'col-lg-4' }, label_html: { class: 'col-lg-3' }
