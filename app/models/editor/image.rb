@@ -116,7 +116,8 @@ class Editor::Image < EditorActivity
     html_options = { src: image_src, width: width, height: height }
     html_options[:alt] = alternative_text || ''
     html_options[:align] = alignment.presence
-    html_options[:data] = { image_id: image_id, image_style: style }
+    html_options[:data] = { image_id: image_id, style_source: style_source,
+                            style_name: style_name.presence, style_id: style_id }
     tag(:img, html_options).html_safe
   end
 
