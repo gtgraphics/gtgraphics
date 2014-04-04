@@ -10,7 +10,8 @@ class Admin::Editor::ApplicationController < Admin::ApplicationController
 
     class_eval %{
       def show
-        @#{name} = #{class_name}.from_html(params[:html])
+        # @#{name} = #{class_name}.from_html(params[:html])
+        @#{name} = #{class_name}.from_params(params)
         respond_to do |format|
           format.html
         end
@@ -28,6 +29,10 @@ class Admin::Editor::ApplicationController < Admin::ApplicationController
             end
           end
         end
+      end
+
+      def update
+        create
       end
 
       def #{name}_params

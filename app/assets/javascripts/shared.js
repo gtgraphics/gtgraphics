@@ -1,4 +1,5 @@
 //= require underscore
+//= require underscore.string
 //= require jquery
 //= require jquery_ujs
 //= require_tree ./core_ext

@@ -21,12 +21,12 @@ class @Editor.Control
 
   onCreateControl: ->
 
-  executeCommand: (callback) ->
-    returnValue = @executeCommandSync()
+  executeCommand: (callback, contextData = {}) ->
+    returnValue = @executeCommandSync(contextData)
     callback()
     returnValue
 
-  executeCommandSync: ->
+  executeCommandSync: (contextData) ->
     console.warn 'executeCommand() or executeCommandSync() have not been implemented'
 
   # Refreshers
@@ -51,6 +51,8 @@ class @Editor.Control
 
   refreshControlState: ->
     console.warn 'refreshControlState() has not been implemented'
+
+  onInitEditor: (editor) ->
 
   # when updateState is invoked, queryActive determines whether this input has an active state
   queryActive: ->

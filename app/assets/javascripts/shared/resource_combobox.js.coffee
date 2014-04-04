@@ -20,7 +20,8 @@ jQuery.prepare ->
         id = $(element).val()
         unless id == ''
           params = _(additionalParams).defaults(id: id)
-          jQuery.get(resourceUrl, params, callback)
+          jQuery.get resourceUrl, params, (html) ->
+            callback(html)
       escapeMarkup: (markup) ->
         markup
 

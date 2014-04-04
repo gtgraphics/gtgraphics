@@ -38,9 +38,9 @@ gem 'coffeebeans'
 # Assets
 gem 'execjs'
 gem 'therubyracer'
-gem 'sass-rails'#, '~> 4.0.3'
-gem 'coffee-rails'#, '~> 4.0.3'
-gem 'uglifier'#, '>= 1.3.0'
+gem 'sass-rails' #, '~> 4.0.3'
+gem 'coffee-rails' #, '~> 4.0.3'
+gem 'uglifier' #, '>= 1.3.0'
 gem 'jquery-rails' #, github: 'rails/jquery-rails', tag: 'v3.1.0'
 gem 'jquery-turbolinks'
 gem 'turbolinks'
@@ -48,6 +48,7 @@ gem 'compass-rails' # github: 'Compass/compass-rails', branch: 'rails4-hack' # h
 gem 'bootstrap-sass'
 gem 'select2-bootstrap-css'
 gem 'underscore-rails'
+gem 'underscore-string-rails'
 
 # Tools
 group :development do

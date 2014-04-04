@@ -36,10 +36,11 @@ refreshCustomStyles = ($scope) ->
   $customCheckbox = $('#editor_image_style_source_custom')
   unless $imageSelect.val() == ''
     image = $imageSelect.select2('data')
-    _(image.customStyles).each (customStyle) ->
-      $option = $('<option />', value: customStyle.id).text(customStyle.caption)
-      $option.data('customStyle', customStyle)
-      $option.appendTo($styleSelect)
+    if image
+      _(image.customStyles).each (customStyle) ->
+        $option = $('<option />', value: customStyle.id).text(customStyle.caption)
+        $option.data('customStyle', customStyle)
+        $option.appendTo($styleSelect)
 
 refreshCustomCheckboxState = ($scope) ->
   $imageSelect = $(IMAGE_ID_SELECTOR, $scope)
@@ -48,20 +49,20 @@ refreshCustomCheckboxState = ($scope) ->
     $checkbox.iCheck('disable')
   else
     image = $imageSelect.select2('data')
-    if image.customStyles and image.customStyles.length > 0
-      $checkbox.iCheck('enable')
-    else
-      $checkbox.iCheck('disable')
-      if $checkbox.prop('checked')
-        $('#editor_image_style_source_original').iCheck('check')
+    if image
+      if image.customStyles and image.customStyles.length > 0
+        $checkbox.iCheck('enable')
+      else
+        $checkbox.iCheck('disable')
+        $('#editor_image_style_source_original').iCheck('check') if $checkbox.prop('checked')
 
 refreshDimensions = ($scope) ->
   $imageSelect = $(IMAGE_ID_SELECTOR, $scope)
   $predefinedStyleSelect = $(STYLE_NAME_SELECTOR, $scope)
   $customStyleSelect = $(STYLE_ID_SELECTOR, $scope)
   styleSource = $(STYLE_RADIO_SELECTOR).filter(':checked').val()
-  $imageWidth = $(IMAGE_WIDTH_SELECTOR, $scope).val('')
-  $imageHeight = $(IMAGE_HEIGHT_SELECTOR, $scope).val('')
+  $imageWidth = $(IMAGE_WIDTH_SELECTOR, $scope)
+  $imageHeight = $(IMAGE_HEIGHT_SELECTOR, $scope)
   switch styleSource
     when 'original'
       image = $imageSelect.select2('data')
@@ -81,10 +82,22 @@ jQuery.prepare ->
   refreshCustomStyles(@)
   refreshCustomCheckboxState(@)
 
-$(document).on 'change ifChanged', SOURCE_RADIO_SELECTOR, ->
+$(document).on 'change', IMAGE_ID_SELECTOR, ->
+  $select = $(@)
+  image = $select.select2('data')
+  $('#editor_image_url').val(image.assetUrl)
+  $('#editor_image_alternative_text').val(image.title)
+  refreshDimensions()
+  refreshCustomStyles()
+  refreshCustomCheckboxState()
+
+$(document).on 'change', STYLE_ID_SELECTOR, ->
+  refreshDimensions()
+
+$(document).on 'ifChanged', SOURCE_RADIO_SELECTOR, ->
   refreshSourceContainerStates()
 
-$(document).on 'change ifChanged', STYLE_RADIO_SELECTOR, ->
+$(document).on 'ifChanged', STYLE_RADIO_SELECTOR, ->
   refreshStyleContainerStates()
   refreshDimensions()
 
@@ -93,18 +106,3 @@ $(document).on 'show.bs.modal ajax:success', ->
   refreshStyleContainerStates()
   refreshCustomStyles()
   refreshCustomCheckboxState()
-
-$(document).on 'change', IMAGE_ID_SELECTOR, ->
-  $select = $(@)
-  image = $select.select2('data')
-  $('#editor_image_url').val(image.assetUrl)
-  $(IMAGE_WIDTH_SELECTOR).val(image.dimensions.width)
-  $(IMAGE_HEIGHT_SELECTOR).val(image.dimensions.height)
-  # refreshDimensions()
-  $('#editor_image_alternative_text').val(image.title)
-  refreshDimensions()
-  refreshCustomStyles()
-  refreshCustomCheckboxState()
-
-$(document).on 'change', STYLE_ID_SELECTOR, ->
-  refreshDimensions()

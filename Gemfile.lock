@@ -263,6 +263,7 @@ GEM
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     underscore-rails (1.5.2)
+    underscore-string-rails (0.0.1)
     uniform_notifier (1.4.0)
     user_agent (1.1.1)
     virtus (1.0.1)
@@ -325,5 +326,6 @@ DEPENDENCIES
   turbolinks
   uglifier
   underscore-rails
+  underscore-string-rails
   user_agent
   virtus

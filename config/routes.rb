@@ -11,7 +11,7 @@ GtGraphics::Application.routes.draw do
         end
 
         namespace :editor do
-          with_options only: [:show, :create] do |r|
+          with_options only: [:show, :create, :update] do |r|
             r.resource :link
             r.resource :image
           end

@@ -1,7 +1,7 @@
 class @Editor.Control.DialogButtonControl extends @Editor.Control.ButtonControl
-  executeCommand: (callback) ->
+  executeCommand: (callback, context = {}) ->
     control = @
-    jQuery.get(@getDialogUrl()).fail(callback).done (html) =>
+    jQuery.get(@getDialogUrl(), context.params || {}).fail(callback).done (html) =>
       $modal = $(html).appendTo($('body')).prepare()
       $modal.data('toolbar', @toolbar)
       $modal.modal('show')
@@ -22,10 +22,15 @@ class @Editor.Control.DialogButtonControl extends @Editor.Control.ButtonControl
           data: params
           dataType: 'html'
           success: (html) ->
-            console.log html
+            console.log html # TODO Remove
             $modal.modal('hide')
             editor = control.getActiveEditor()
-            editor.$region.append(html) if editor.isRendered() # TODO
+            if editor.isRendered()
+              if context.element
+                context.element.replaceWith(html)
+              else
+                editor.$region.append(html) # TODO Do not append
+
           error: (xhr) ->
             # Validation failed, replace form to show validation messages
             if xhr.status == 422

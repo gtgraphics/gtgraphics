@@ -56,9 +56,12 @@ class @TextareaEditor
       # Define events on newly created elements
       @applyEvents()
 
+      @$editor.trigger('editor:created', @)
+
     @refreshInputState()
     @refreshControlStates() 
     @updateViewModeState(@options.viewMode)
+    @$editor.trigger('editor:rendered', @)
 
     @$editor
 
@@ -106,6 +109,9 @@ class @TextareaEditor
       event.preventDefault() if @options.viewMode == 'richText'
 
     # Controls
+
+    _(@toolbar.controls).each (control) =>
+      control.onInitEditor(@)
 
     @$editor.on 'editor:command:executed', (event, control) =>
       if control instanceof Editor.Control.ButtonControl
