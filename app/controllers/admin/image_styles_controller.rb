@@ -2,13 +2,26 @@ class Admin::ImageStylesController < Admin::ApplicationController
   respond_to :html
 
   before_action :load_image
-  before_action :load_image_style, only: %i(edit update crop apply_crop destroy)
+  before_action :load_image_style, only: %i(show edit update crop apply_crop destroy)
 
   breadcrumbs do |b|
     b.append Image.model_name.human(count: 2), :admin_images
     b.append @image.title, [:admin, @image]
     b.append translate('breadcrumbs.new', model: Image::Style.model_name.human), [:new, :admin, @image, :style] if action_name.in? %w(new new_attachment create)
     b.append translate('breadcrumbs.edit', model: Image::Style.model_name.human), edit_admin_image_style_path(@image, @image_style) if action_name.in? %w(edit crop update)
+  end
+
+  def index
+    @image_styles = @image.custom_styles.page(params[:page])
+    respond_to do |format|
+      format.json
+    end
+  end
+
+  def show
+    respond_to do |format|
+      format.json
+    end
   end
 
   def new

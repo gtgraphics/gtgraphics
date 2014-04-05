@@ -35,7 +35,7 @@ GtGraphics::Application.routes.draw do
         end
 
         resources :images do
-          resources :styles, controller: :image_styles, except: [:index, :show] do
+          resources :styles, controller: :image_styles do
             member do
               get :crop
               patch :apply_crop

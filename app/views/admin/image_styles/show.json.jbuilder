@@ -1,0 +1,1 @@
+json.partial! 'image_style', image_style: @image_style

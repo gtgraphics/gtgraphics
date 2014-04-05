@@ -34,8 +34,11 @@ refreshCustomStyles = ($scope) ->
   $styleSelect.empty()
   $('<option />', value: '').appendTo($styleSelect)
   $customCheckbox = $('#editor_image_style_source_custom')
-  unless $imageSelect.val() == ''
+  imageId = $imageSelect.val()
+  unless imageId == ''
     image = $imageSelect.select2('data')
+    # console.log imageId
+    # console.log image
     if image
       _(image.customStyles).each (customStyle) ->
         $option = $('<option />', value: customStyle.id).text(customStyle.caption)
@@ -79,17 +82,17 @@ refreshDimensions = ($scope) ->
 jQuery.prepare ->
   refreshSourceContainerStates(@)
   refreshStyleContainerStates(@)
-  refreshCustomStyles(@)
   refreshCustomCheckboxState(@)
+  refreshCustomStyles(@)
 
 $(document).on 'change', IMAGE_ID_SELECTOR, ->
   $select = $(@)
   image = $select.select2('data')
   $('#editor_image_url').val(image.assetUrl)
   $('#editor_image_alternative_text').val(image.title)
-  refreshDimensions()
-  refreshCustomStyles()
   refreshCustomCheckboxState()
+  refreshCustomStyles()
+  refreshDimensions()
 
 $(document).on 'change', STYLE_ID_SELECTOR, ->
   refreshDimensions()
