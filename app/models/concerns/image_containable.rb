@@ -23,16 +23,14 @@ module ImageContainable
       before_save :set_dimensions, if: :asset_changed?
 
       delegate :aspect_ratio, :pixels, to: :dimensions
+
+      composed_of :dimensions, class_name: 'ImageDimensions', mapping: [%w(width), %w(height)], allow_nil: true, converter: :parse
     end
 
     module ClassMethods
       def content_types
         ImageContainable::CONTENT_TYPES
       end
-    end
-
-    def dimensions
-      ImageDimensions.new(width, height)
     end
 
     def format
@@ -45,9 +43,7 @@ module ImageContainable
 
     private
     def set_dimensions
-      geometry = Paperclip::Geometry.from_file(asset.queued_for_write[:original].path)
-      self.width = geometry.width.to_i
-      self.height = geometry.height.to_i
+      self.dimensions = Paperclip::Geometry.from_file(asset.queued_for_write[:original].path)
     end
   end
 end

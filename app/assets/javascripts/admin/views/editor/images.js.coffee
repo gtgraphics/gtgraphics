@@ -1,11 +1,54 @@
 IMAGE_ID_SELECTOR = '#editor_image_image_id'
-STYLE_ID_SELECTOR = '#editor_image_style_id'
-STYLE_NAME_SELECTOR = '#editor_image_style_name'
+STYLE_SELECTOR = '#editor_image_style'
 SOURCE_RADIO_SELECTOR = '#editor_image_external_true, #editor_image_external_false'
-STYLE_RADIO_SELECTOR = '#editor_image_style_source_original, #editor_image_style_source_predefined, #editor_image_style_source_custom'
+STYLE_CHECKBOX_SELECTOR = '#editor_image_original_style'
 IMAGE_WIDTH_SELECTOR = '#editor_image_width'
 IMAGE_HEIGHT_SELECTOR = '#editor_image_height'
 
+
+refreshStyles = ($scope) ->
+  $image = $(IMAGE_ID_SELECTOR, $scope)
+  $style = $(STYLE_SELECTOR, $scope)
+  $style.empty()
+  $('<option />', value: '').appendTo($style)
+  imageId = $image.val()
+  unless imageId == ''
+    image = $image.select2('data')
+    if image
+      _(image.styles).each (style) ->
+        if style.type == 'predefined'
+          value = style.styleName
+        else
+          value = style.id
+        $option = $('<option />', value: value).text(style.caption)
+        $option.data('style', style)
+        $option.appendTo($style)
+
+refreshDimensions = ($scope) ->
+  $image = $(IMAGE_ID_SELECTOR, $scope)
+  $style = $(STYLE_SELECTOR, $scope)
+  $originalStyle = $(STYLE_CHECKBOX_SELECTOR)
+  $imageWidth = $(IMAGE_WIDTH_SELECTOR, $scope)
+  $imageHeight = $(IMAGE_HEIGHT_SELECTOR, $scope)
+  if image = $image.select2('data')
+    $imageWidth.val(image.dimensions.width)
+    $imageHeight.val(image.dimensions.height)
+  if !$originalStyle.prop('checked') and style = $style.find('option:selected').data('style')
+    $imageWidth.val(style.dimensions.width)
+    $imageHeight.val(style.dimensions.height)
+
+refreshOriginalStyleCheckboxState = ($scope) ->
+  $image = $(IMAGE_ID_SELECTOR, $scope)
+  $checkbox = $(STYLE_CHECKBOX_SELECTOR)
+  if $image.val() == ''
+    $checkbox.iCheck('disable')
+  else
+    image = $image.select2('data')
+    if image and image.styles and image.styles.length > 0
+      $checkbox.iCheck('enable')
+    else
+      $checkbox.iCheck('disable')
+      $checkbox.iCheck('check') if $checkbox.prop('checked')
 
 refreshSourceContainerStates = ($scope) ->
   $radios = $(SOURCE_RADIO_SELECTOR, $scope)
@@ -20,92 +63,46 @@ refreshSourceContainerStates = ($scope) ->
     $externalFields.hide()
 
 refreshStyleContainerStates = ($scope) ->
-  $radios = $(STYLE_RADIO_SELECTOR, $scope)
-  $checkedRadio = $radios.filter(':checked')
-  $predefinedFields = $('.editor-internal-image-predefined-styles-fields').hide()
-  $customFields = $('.editor-internal-image-custom-styles-fields').hide()
-  switch $checkedRadio.val()
-    when 'predefined' then $predefinedFields.show()
-    when 'custom' then $customFields.show()
-
-refreshCustomStyles = ($scope) ->
-  $imageSelect = $(IMAGE_ID_SELECTOR, $scope)
-  $styleSelect = $(STYLE_ID_SELECTOR, $scope)
-  $styleSelect.empty()
-  $('<option />', value: '').appendTo($styleSelect)
-  $customCheckbox = $('#editor_image_style_source_custom')
-  imageId = $imageSelect.val()
-  unless imageId == ''
-    image = $imageSelect.select2('data')
-    # console.log imageId
-    # console.log image
-    if image
-      _(image.customStyles).each (customStyle) ->
-        $option = $('<option />', value: customStyle.id).text(customStyle.caption)
-        $option.data('customStyle', customStyle)
-        $option.appendTo($styleSelect)
-
-refreshCustomCheckboxState = ($scope) ->
-  $imageSelect = $(IMAGE_ID_SELECTOR, $scope)
-  $checkbox = $('#editor_image_style_source_custom')
-  if $imageSelect.val() == ''
-    $checkbox.iCheck('disable')
+  $checkbox = $(STYLE_CHECKBOX_SELECTOR, $scope)
+  $fields = $('.editor-internal-image-styles-fields')
+  if $checkbox.prop('checked')
+    $fields.hide()
   else
-    image = $imageSelect.select2('data')
-    if image
-      if image.customStyles and image.customStyles.length > 0
-        $checkbox.iCheck('enable')
-      else
-        $checkbox.iCheck('disable')
-        $('#editor_image_style_source_original').iCheck('check') if $checkbox.prop('checked')
-
-refreshDimensions = ($scope) ->
-  $imageSelect = $(IMAGE_ID_SELECTOR, $scope)
-  $predefinedStyleSelect = $(STYLE_NAME_SELECTOR, $scope)
-  $customStyleSelect = $(STYLE_ID_SELECTOR, $scope)
-  styleSource = $(STYLE_RADIO_SELECTOR).filter(':checked').val()
-  $imageWidth = $(IMAGE_WIDTH_SELECTOR, $scope)
-  $imageHeight = $(IMAGE_HEIGHT_SELECTOR, $scope)
-  switch styleSource
-    when 'original'
-      image = $imageSelect.select2('data')
-      if image
-        $imageWidth.val(image.dimensions.width)
-        $imageHeight.val(image.dimensions.height)
-    when 'custom'
-      customStyle = $customStyleSelect.find('option:selected').data('customStyle')
-      if customStyle
-        $imageWidth.val(customStyle.dimensions.width)
-        $imageHeight.val(customStyle.dimensions.height)
+    $fields.show()
 
 
 jQuery.prepare ->
   refreshSourceContainerStates(@)
   refreshStyleContainerStates(@)
-  refreshCustomCheckboxState(@)
-  refreshCustomStyles(@)
+  refreshOriginalStyleCheckboxState(@)
+  #refreshStyles(@)
 
 $(document).on 'change', IMAGE_ID_SELECTOR, ->
   $select = $(@)
   image = $select.select2('data')
   $('#editor_image_url').val(image.assetUrl)
   $('#editor_image_alternative_text').val(image.title)
-  refreshCustomCheckboxState()
-  refreshCustomStyles()
+  
+  refreshStyles()
+  refreshOriginalStyleCheckboxState()
   refreshDimensions()
 
-$(document).on 'change', STYLE_ID_SELECTOR, ->
+#$(document).on 'select2-init', IMAGE_ID_SELECTOR, ->
+#  refreshStyles()
+#  refreshOriginalStyleCheckboxState()
+
+$(document).on 'change', STYLE_SELECTOR, ->
   refreshDimensions()
 
 $(document).on 'ifChanged', SOURCE_RADIO_SELECTOR, ->
   refreshSourceContainerStates()
 
-$(document).on 'ifChanged', STYLE_RADIO_SELECTOR, ->
+$(document).on 'ifChanged', STYLE_CHECKBOX_SELECTOR, ->
   refreshStyleContainerStates()
   refreshDimensions()
 
 $(document).on 'show.bs.modal ajax:success', ->
   refreshSourceContainerStates()
   refreshStyleContainerStates()
-  refreshCustomStyles()
-  refreshCustomCheckboxState()
+  refreshStyles()
+  refreshOriginalStyleCheckboxState()

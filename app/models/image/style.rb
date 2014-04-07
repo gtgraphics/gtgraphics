@@ -43,6 +43,9 @@ class Image < ActiveRecord::Base
     acts_as_image_croppable
     acts_as_image_resizable
 
+    composed_of :dimensions, class_name: 'ImageDimensions', mapping: [%w(width), %w(height)], allow_nil: true, converter: :parse
+    composed_of :transformed_dimensions, class_name: 'ImageDimensions', mapping: [%w(transformed_width width), %w(transformed_height height)], allow_nil: true, converter: :parse
+
     TYPES.each do |type|
       scope type.demodulize.underscore.pluralize, -> { where(type: type) }
 
@@ -54,11 +57,7 @@ class Image < ActiveRecord::Base
     end
 
     def caption
-      I18n.translate(:dimensions, width: transformed_width, height: transformed_height)
-    end
-
-    def dimensions
-      ImageDimensions.new(width, height)
+      I18n.translate('image/style.custom_caption_format', dimensions: transformed_dimensions.to_s)
     end
 
     def label
@@ -70,10 +69,6 @@ class Image < ActiveRecord::Base
       convert_options << " -crop #{crop_geometry} +repage" if cropped?
       convert_options << " -resize #{resize_geometry}" if resized?
       { geometry: '100%x100%', convert_options: convert_options }
-    end
-
-    def transformed_dimensions
-      ImageDimensions.new(transformed_width, transformed_height)
     end
 
     protected

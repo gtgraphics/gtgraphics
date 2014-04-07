@@ -12,7 +12,7 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def index
     if params[:id].present?
-      redirect_to admin_image_path(params[:id], format: params[:format])
+      redirect_to params.merge(action: :show)
     else
       @images = Image.with_translations(I18n.locale).includes(:author, :custom_styles).search(params[:query]).sort(params[:sort], params[:direction]).page(params[:page]).per(16)
       respond_with :admin, @images do |format|

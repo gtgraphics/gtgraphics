@@ -2,20 +2,21 @@
 #
 # Table name: images
 #
-#  id                    :integer          not null, primary key
-#  asset_file_name       :string(255)
-#  asset_content_type    :string(255)
-#  asset_file_size       :integer
-#  asset_updated_at      :datetime
-#  width                 :integer
-#  height                :integer
-#  exif_data             :text
-#  created_at            :datetime
-#  updated_at            :datetime
-#  author_id             :integer
-#  customization_options :text
-#  transformed_width     :integer
-#  transformed_height    :integer
+#  id                          :integer          not null, primary key
+#  asset_file_name             :string(255)
+#  asset_content_type          :string(255)
+#  asset_file_size             :integer
+#  asset_updated_at            :datetime
+#  width                       :integer
+#  height                      :integer
+#  exif_data                   :text
+#  created_at                  :datetime
+#  updated_at                  :datetime
+#  author_id                   :integer
+#  customization_options       :text
+#  transformed_width           :integer
+#  transformed_height          :integer
+#  predefined_style_dimensions :text
 #
 
 class Image < ActiveRecord::Base
@@ -43,16 +44,18 @@ class Image < ActiveRecord::Base
   }.freeze
 
   has_many :custom_styles, class_name: 'Image::Style', autosave: true, inverse_of: :image, dependent: :destroy
-  has_many :image_pages, class_name: 'Page::Image', dependent: :delete_all
+  has_many :image_pages, class_name: 'Page::Image', dependent: :destroy
   has_many :pages, through: :image_pages
 
   translates :title, :description, fallbacks_for_empty_translations: true
 
+  serialize :exif_data, OpenStruct
   store :customization_options
+  store :predefined_style_dimensions
 
   acts_as_authorable default_to_current_user: false
   acts_as_batch_translatable
-  acts_as_image_containable styles: ->(attachment) { attachment.instance.styles },
+  acts_as_image_containable styles: ->(attachment) { attachment.instance.convert_styles },
                             url: '/system/images/:id/:style.:extension'
   acts_as_image_croppable
   acts_as_sortable do |by|
@@ -63,12 +66,11 @@ class Image < ActiveRecord::Base
 
   # preserve_attachment_between_requests_for :asset
 
-  serialize :exif_data, OpenStruct
-
   validates_attachment :asset, presence: true, content_type: { content_type: CONTENT_TYPES }
 
   after_initialize :set_transformation_defaults, if: :new_record?
   before_validation :set_default_title, on: :create
+  before_save :set_predefined_style_dimensions
   with_options if: :asset_changed? do |image|
     image.after_validation :set_transformation_defaults
     image.before_save :set_transformed_dimensions
@@ -76,11 +78,19 @@ class Image < ActiveRecord::Base
     image.before_update :destroy_custom_styles
   end
 
+  composed_of :transformed_dimensions, class_name: 'ImageDimensions', mapping: [%w(transformed_width width), %w(transformed_height height)], allow_nil: true, converter: :parse
+
   delegate :software, to: :exif_data, allow_nil: true
 
   class << self
     def content_types
       CONTENT_TYPES
+    end
+
+    def predefined_style_names
+      STYLES.keys.inject({}) do |style_names, style_name|
+        style_names.merge!(style_name.to_s => I18n.translate(style_name, scope: 'image.predefined_styles'))
+      end
     end
 
     def search(query)
@@ -93,12 +103,6 @@ class Image < ActiveRecord::Base
         where(conditions.reduce(:and))
       else
         all
-      end
-    end
-
-    def style_names
-      STYLES.keys.inject({}) do |style_names, style_name|
-        style_names.merge!(style_name.to_s => I18n.translate(style_name, scope: 'image.styles'))
       end
     end
   end
@@ -115,23 +119,27 @@ class Image < ActiveRecord::Base
     exif_data.try(:model)
   end
 
-  def custom_styles_hash
-    self.custom_styles.inject({}) do |custom_styles, style|
+  def convert_styles
+    STYLES.reverse_merge(custom_convert_styles).deep_symbolize_keys
+  end
+
+  def custom_convert_styles
+    custom_styles.inject({}) do |custom_styles, style|
       custom_styles.merge!(style.label => style.transformations) if style.variant? and style.persisted? and !style.marked_for_destruction?
       custom_styles
     end
   end
 
+  def predefined_styles
+    STYLES.except(:transformed).keys.map { |style_name| Image::Style::Predefined.new(self, style_name) }
+  end
+
   def styles
-    STYLES.reverse_merge(custom_styles_hash).deep_symbolize_keys
+    predefined_styles + custom_styles
   end
 
   def taken_at
     exif_data.try(:date_time_original).try(:to_datetime)
-  end
-
-  def transformed_dimensions
-    ImageDimensions.new(transformed_width, transformed_height)
   end
 
   def to_liquid
@@ -173,17 +181,23 @@ class Image < ActiveRecord::Base
     end
   end
 
+  def set_predefined_style_dimensions
+    predefined_style_dimensions_will_change! if asset.queued_for_write[:original]
+    self.predefined_style_dimensions ||= {}
+    STYLES.except(:transformed).keys.each do |style_name|
+      if style_file = asset.queued_for_write[style_name]
+        geometry = Paperclip::Geometry.from_file(style_file.path)
+        width, height = geometry.width.to_i, geometry.height.to_i
+        predefined_style_dimensions[style_name] = ImageDimensions.new(width, height)
+      end
+    end
+  end
+
   def set_transformation_defaults
     self.cropped = false if cropped.nil?
   end
 
   def set_transformed_dimensions
-    if cropped?
-      self.transformed_width = crop_width
-      self.transformed_height = crop_height
-    else
-      self.transformed_width = width
-      self.transformed_height = height
-    end
+    self.transformed_dimensions = cropped? ? [crop_width, crop_height] : dimensions
   end
 end

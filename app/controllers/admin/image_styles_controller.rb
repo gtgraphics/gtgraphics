@@ -11,13 +11,6 @@ class Admin::ImageStylesController < Admin::ApplicationController
     b.append translate('breadcrumbs.edit', model: Image::Style.model_name.human), edit_admin_image_style_path(@image, @image_style) if action_name.in? %w(edit crop update)
   end
 
-  def index
-    @image_styles = @image.custom_styles.page(params[:page])
-    respond_to do |format|
-      format.json
-    end
-  end
-
   def show
     respond_to do |format|
       format.json

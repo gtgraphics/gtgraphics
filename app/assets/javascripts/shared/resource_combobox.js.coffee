@@ -3,33 +3,38 @@ jQuery.prepare ->
   $('.resource-combobox').each ->
     $select = $(@)
   
-    resourceUrl = $select.data('resourceUrl')
-    formatterClass = $select.data('formatter')
-    additionalParams = $select.data('params') || {}
-    formatter = new window[formatterClass]() if formatterClass
-
     options = 
       ajax:
-        url: resourceUrl
+        url: ->
+          $select.data('resourceUrl')
         dataType: 'json'
         data: (term, page) ->
-          _(additionalParams).defaults(query: term, page: page)
+          jQuery.extend({}, $select.data('params') || {}, { query: term, page: page })
         results: (data, page) ->
           { results: data.records, more: data.more }
       initSelection: (element, callback) ->
         id = $(element).val()
         unless id == ''
-          params = _(additionalParams).defaults(id: id)
-          jQuery.get resourceUrl, params, (html) ->
-            callback(html)
+          resourceUrl = $select.data('resourceUrl')
+          params = jQuery.extend({}, $select.data('params') || {}, { id: id })
+          jQuery.get resourceUrl, params, (record) ->
+            callback(record)
+            $select.trigger('select2-init')
       escapeMarkup: (markup) ->
         markup
-
-    if formatter
-      _(options).extend
-        formatResult: (result, container, query, escapeMarkup) ->
+      formatResult: (result, container, query, escapeMarkup) ->
+        formatterClass = $select.data('formatter')
+        formatter = new window[formatterClass]() if formatterClass
+        if formatter
           formatter.formatResult(result, container, query, escapeMarkup)
-        formatSelection: (data, container, escapeMarkup) ->
+        else
+          Select2.util.escapeMarkup(result.text)
+      formatSelection: (data, container, escapeMarkup) ->
+        formatterClass = $select.data('formatter')
+        formatter = new window[formatterClass]() if formatterClass
+        if formatter
           formatter.formatSelection(data, container, escapeMarkup)
+        else
+          Select2.util.escapeMarkup(result.text)
 
     $select.select2(options)

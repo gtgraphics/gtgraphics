@@ -8,6 +8,22 @@ class ImageDimensions
     @height = height || 0
   end
 
+  def self.parse(dimensions)
+    if dimensions.nil?
+      nil
+    elsif dimensions.respond_to?(:width) and dimensions.respond_to?(:height)
+      new(dimensions.width.to_i, dimensions.height.to_i)
+    elsif dimensions.is_a?(String)
+      new(*dimensions.split('x'))
+    elsif dimensions.is_a?(Array)
+      new(*dimensions)
+    elsif dimensions.is_a?(Rational)
+      new(dimensions.numerator, dimensions.denominator)
+    else
+      raise ArgumentError, "#{dimensions.inspect} cannot be converted to #{self.name}"
+    end
+  end
+
   def <=>(other)
     pixels <=> other.to_i
   end

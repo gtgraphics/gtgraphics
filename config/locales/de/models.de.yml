@@ -40,6 +40,7 @@ de:
         style_name: Stil
         style_id: Stil
         source: Quelle
+        original_style: Original verwenden
       change_password_activity:
         current_password: Aktuelles Passwort
         generate_password: Password generieren?
@@ -266,8 +267,9 @@ de:
 
   homepage: Startseite
 
-  image:
-    styles:
+  image/style:
+    predefined_caption_format: '%{dimensions} (%{style_name})'
+    predefined_names:
       original: Original
       transformed: Angepasst
       thumbnail: Thumbnail
@@ -277,6 +279,7 @@ de:
       social: Soziale Netzwerke
       preview: Vorschau
       page_preview: Seitenvorschau
+    custom_caption_format: '%{dimensions}'
 
   editor/image:
     alignments:
