@@ -160,7 +160,7 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def image_params
-    params.require(:image).permit(:asset, :author_id, translations_attributes: [:id, :locale, :_destroy, :title, :description])
+    params.require(:image).permit(:asset, :author_id, :tag_tokens, translations_attributes: [:id, :locale, :_destroy, :title, :description])
   end
 
   def image_page_embedding_activity_params

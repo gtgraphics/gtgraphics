@@ -8,6 +8,7 @@ de:
     file_size: Dateigröße
     name: Name
     slug: URL-Token
+    tag_tokens: Tags
     template: Vorlage
     title: Titel
     translated_locales: Lokalisierungen

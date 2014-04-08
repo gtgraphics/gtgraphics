@@ -9,7 +9,5 @@ $.extend jQuery.fn.select2.defaults,
 jQuery.prepare ->
   unless Modernizr.touch
     $('.combobox', @).select2()
-    $('.tags', @).select2(multiple: true)
     $('.tokenizer', @).select2(tags: [], tokenSeparators: [','])
     $('.space-tokenizer', @).select2(tags: [], tokenSeparators: [' ', ','])
-

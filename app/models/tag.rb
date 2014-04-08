@@ -14,16 +14,36 @@ class Tag < ActiveRecord::Base
   default_scope -> { order(:label) }
 
   class << self
+    def popular
+      taggings_counts
+    end
+
+    def search(query)
+      if query.present?
+        where(arel_table[:label].matches("%#{query}%"))
+      else
+        all
+      end
+    end
+
     def usage
       usage_by(:id)
     end
 
     def usage_by(column_name)
+      taggings_counts(column_name).inject({}) do |result, tag|
+        result.merge!(tag.attributes[column_name.to_s] => tag.taggings_count)
+      end
+    end
+
+    private
+    def taggings_counts(*columns)
+      columns = columns.map { |column| arel_table[column] }
+      columns << arel_table[Arel.star] if columns.empty?
       taggings = Tagging.arel_table
-      select_expression = arel_table.project(arel_table[column_name], taggings[:id].count.as('taggings_count')).projections
+      select_expression = arel_table.project(*columns, taggings[:id].count.as('taggings_count')).projections
       join_expression = arel_table.join(taggings, Arel::Nodes::OuterJoin).on(taggings[:tag_id].eq(arel_table[:id])).join_sources
-      joins(join_expression).select(select_expression).group(arel_table[:id]). \
-        inject({}) { |result, tag| result.merge!(tag.attributes[column_name.to_s] => tag.taggings_count) }
+      joins(join_expression).select(select_expression).group(arel_table[:id]).reorder('taggings_count DESC')
     end
   end
 end

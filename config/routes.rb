@@ -104,6 +104,8 @@ GtGraphics::Application.routes.draw do
             get :editor_preview
           end
         end
+
+        resources :tags, only: :index
         
         resources :templates do
           collection do

@@ -12,5 +12,12 @@ class Tagging < ActiveRecord::Base
   belongs_to :tag, autosave: true
   belongs_to :taggable, polymorphic: true
 
+  after_destroy :destroy_unused_tag
+
   delegate :label, to: :tag
+
+  private
+  def destroy_unused_tag
+    tag.destroy unless Tagging.exists?(tag: tag)
+  end
 end

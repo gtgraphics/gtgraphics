@@ -68,6 +68,7 @@ de:
       no_matches: Es wurden keine Ergebnisse gefunden.
       input_too_short: Bitte geben Sie weitere Zeichen ein.
       searching: Suche...
+      load_more: Lade...
 
     timeago:
       prefix_ago: vor
