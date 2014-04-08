@@ -44,8 +44,9 @@ class Page < ActiveRecord::Base
   acts_as_batch_translatable
   acts_as_nested_set counter_cache: :children_count, dependent: :destroy
 
-  belongs_to :embeddable, polymorphic: true, autosave: true, dependent: :destroy
+  belongs_to :embeddable, polymorphic: true, autosave: true
 
+  # Destruction must be done via callback, because "dependent: :destroy" leads to an infinite loop
   validates :embeddable, presence: true
   validates :embeddable_type, inclusion: { in: EMBEDDABLE_TYPES }, allow_blank: true
   validates :slug, presence: { unless: :root? }, uniqueness: { scope: :parent_id, if: :slug_changed? }
@@ -59,6 +60,7 @@ class Page < ActiveRecord::Base
   before_destroy :destroyable?
   around_save :update_descendants_paths
   around_update :destroy_replaced_embeddable
+  after_destroy :destroy_embeddable
 
   default_scope -> { order(:lft) }
   scope :hidden, -> { where(published: false) }
@@ -199,20 +201,6 @@ class Page < ActiveRecord::Base
     end
   end
 
-  # def regions_hash
-  #   @regions_hash ||= RegionsProxy.new(self)
-  # end
-
-  # def regions_hash=(hash)
-  #   removed_regions = self.regions_hash.defined_regions - hash.keys
-  #   removed_regions.each do |label|
-  #     self.regions_hash.delete(label)
-  #   end
-  #   hash.each do |label, body|
-  #     self.regions_hash[label] = body
-  #   end
-  # end
-
   def self_and_ancestors_and_siblings
     self.class.where(parent_id: self.self_and_ancestors.ids << nil)
   end
@@ -239,6 +227,10 @@ class Page < ActiveRecord::Base
   end
 
   private
+  def destroy_embeddable
+    embeddable.destroy
+  end
+
   def destroy_replaced_embeddable
     embeddable_type_changed = self.embeddable_type_changed?
     yield
