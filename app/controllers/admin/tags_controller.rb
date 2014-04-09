@@ -3,10 +3,11 @@ class Admin::TagsController < Admin::ApplicationController
 
   def index
     if params[:query].present?
-      @tags = Tag.search(params[:query]).page(params[:page])
+      @tags = Tag.search(params[:query])
     else
-      @tags = Tag.popular.limit(10)
+      @tags = Tag.popular
     end
+    @tags = @tags.page(params[:page])
     respond_with @tags
   end
 end

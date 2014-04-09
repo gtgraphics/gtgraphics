@@ -6,18 +6,18 @@ jQuery.prepare ->
     options = 
       ajax:
         url: ->
-          $select.data('resourceUrl')
+          $select.data('from')
         dataType: 'json'
         data: (term, page) ->
           jQuery.extend({}, $select.data('params') || {}, { query: term, page: page })
         results: (data, page) ->
-          { results: data.records, more: data.more }
+          resourceName = $select.data('resource')
+          { results: data[resourceName], more: data.more }
       initSelection: (element, callback) ->
         id = $(element).val()
         unless id == ''
-          resourceUrl = $select.data('resourceUrl')
-          params = jQuery.extend({}, $select.data('params') || {}, { id: id })
-          jQuery.get resourceUrl, params, (record) ->
+          url = $select.data('from')
+          jQuery.get url, { id: id }, (record) ->
             callback(record)
             $select.trigger('select2-init')
       escapeMarkup: (markup) ->

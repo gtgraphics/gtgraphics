@@ -1,16 +1,15 @@
 class EditorActivity < Activity
    include ActionView::Helpers::TagHelper
 
-   after_initialize do
-     self.persisted = false if @persisted.nil?
+   def initialize(attributes = {})
+     self.persisted = attributes.any?
+     super
    end
 
    def self.from_params(params)
      attribute_names = attribute_set.map(&:name)
      attributes = params.slice(*attribute_names)
-     new(attributes).tap do |activity|
-       activity.persisted = attributes.any?
-     end
+     new(attributes)
    end
 
    def persisted?

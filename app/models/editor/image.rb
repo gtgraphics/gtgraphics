@@ -25,7 +25,7 @@ class Editor::Image < EditorActivity
   embeds_one :image, class_name: '::Image'
 
   attribute :external, Boolean, default: false
-  attribute :original_style, Boolean, default: true
+  attribute :original_style, Boolean
   attribute :style, String
   attribute :url, String
   attribute :alternative_text, String
@@ -40,6 +40,7 @@ class Editor::Image < EditorActivity
   validates :height, numericality: { only_integer: true, greater_than: 0 }, allow_blank: true
   validates :alignment, inclusion: { in: ALIGNMENTS }, allow_blank: true
 
+  after_initialize :set_defaults
   before_validation :sanitize_image_id_and_url
 
   class << self
@@ -70,7 +71,13 @@ class Editor::Image < EditorActivity
       if original_style?
         image.asset_url
       else
-        image.styles.find { |s| custom_style? ? s.id == style.to_i : s.style_name.to_s == style }.asset_url
+        image.styles.find do |style|
+          if style.respond_to?(:style_name)
+            style.style_name.to_s == self.style.to_s
+          else
+            style.id == self.style.to_i
+          end
+        end.asset_url
       end
     end
   end
@@ -96,6 +103,14 @@ class Editor::Image < EditorActivity
       self.image_id = nil
     else
       self.url = nil
+    end
+  end
+
+  def set_defaults
+    if persisted?
+      self.original_style = style.blank?
+    else
+      self.original_style = true
     end
   end
 end
