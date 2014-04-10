@@ -36,13 +36,15 @@ class Editor::Link < EditorActivity
 
   def to_html
     href = external? ? url : page_path(page, locale: locale)
-    content = href if content.blank?
     options = { href: href }
     options[:target] = target if target.present?
     if internal? and page_id.present?
       data = { page_id: page_id }
       data[:locale] = locale if locale.present?
       options[:data] = data
+      content = page.title(locale)
+    else
+      content = url
     end
     content_tag(:a, content, options).html_safe
   end

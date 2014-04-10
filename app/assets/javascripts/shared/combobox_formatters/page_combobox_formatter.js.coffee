@@ -6,8 +6,9 @@ class @PageComboboxFormatter extends @ComboboxFormatter
     $title = $('<div />', class: 'page-combobox-title').appendTo($container)
     $title.html(@markMatch(page.title, query.term, escapeMarkup))
     # if query.term != ''
-    # $info = $('<div />', class: 'page-combobox-info').appendTo($container)
-    # $info.text(page.type)
+    if page.path != ''
+      $info = $('<div />', class: 'page-combobox-info').appendTo($container)
+      $info.html(@markMatch(page.path, query.term, escapeMarkup))
     $('<div />').text(page.format).appendTo($container)
     $container
 

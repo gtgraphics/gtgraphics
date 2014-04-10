@@ -117,7 +117,7 @@ class Page < ActiveRecord::Base
     def search(query)
       if query.present?
         terms = query.to_s.split.uniq.map { |term| "%#{term}%" }
-        ransack(translations_title_matches_any: terms).result
+        ransack(translations_title_or_path_matches_any: terms).result
       else
         all
       end

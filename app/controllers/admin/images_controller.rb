@@ -15,7 +15,7 @@ class Admin::ImagesController < Admin::ApplicationController
       if image_id_or_ids.is_a?(Array)
         @images = Image.where(id: image_id_or_ids)
       else
-        redirect_to params.merge(action: :show)
+        redirect_to params.merge(action: :show) and return
       end
     else
       @images = Image.search(params[:query])
