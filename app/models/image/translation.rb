@@ -13,6 +13,7 @@
 
 class Image < ActiveRecord::Base
   class Translation < Globalize::ActiveRecord::Translation
+    include GlobalizedModelTouchable
     include Sanitizable
     include UniquelyTranslated
 

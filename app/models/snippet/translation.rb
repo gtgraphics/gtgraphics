@@ -13,6 +13,7 @@
 
 class Snippet < ActiveRecord::Base
   class Translation < Globalize::ActiveRecord::Translation
+    include GlobalizedModelTouchable
     include UniquelyTranslated
 
     acts_as_uniquely_translated :snippet_id
