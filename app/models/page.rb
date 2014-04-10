@@ -89,7 +89,12 @@ class Page < ActiveRecord::Base
 
   class << self
     def assignable_as_parent_of(page)
-      where.not(id: page.self_and_descendants.pluck(:id))
+      if page.present?
+        page = find(page) unless page.is_a?(Page)
+        where.not(id: page.self_and_descendants.reorder(arel_table[:lft].asc).pluck(:id))
+      else
+        all
+      end
     end
 
     def creatable_embeddable_classes

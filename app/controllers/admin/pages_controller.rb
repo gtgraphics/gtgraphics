@@ -32,16 +32,11 @@ class Admin::PagesController < Admin::ApplicationController
         else
           @pages = Page.search(params[:query])
         end
-        @pages = @pages.with_translations(I18n.locale).page(params[:page]).per(16)
-        @pages = @pages.includes(:custom_styles) if params[:include_styles].to_b
+        @pages = @pages.with_translations(I18n.locale).page(params[:page])
+        if assignable_id = params[:parent_assignable_id] and assignable_id.present?
+          @pages = @pages.assignable_as_parent_of(assignable_id)
+        end
       end
-    end
-  end
-
-  def parent_candidates
-    @pages = Page.assignable_as_parent_of(@page)
-    respond_to do |format|
-      format.json { render :index }
     end
   end
 
@@ -66,8 +61,9 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def show
-    @pages = @page.self_and_ancestors_and_siblings.with_translations
-    respond_with :admin, @page, layout: !request.xhr? do |format|
+    @pages = @page.self_and_ancestors_and_siblings.with_translations(I18n.locale)
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
       format.json
     end
   end
