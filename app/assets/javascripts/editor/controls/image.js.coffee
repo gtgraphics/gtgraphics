@@ -30,6 +30,6 @@ class @Editor.Control.Image extends @Editor.Control.DialogButtonControl
         params.external = !$image.data('imageId')
         _($image.data()).each (value, key) ->
           params[_(key).underscored()] = value
-        control.perform(element: $image, params: params)
+        control.perform(element: $image, params: { editor: params })
 
 @Editor.Control.register('image', @Editor.Control.Image)

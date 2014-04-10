@@ -1,4 +1,16 @@
 GIT
+  remote: git://github.com/activerecord-hackery/ransack.git
+  revision: 8009ae93e3e00325e41edd231b4b917c45a2c6c2
+  branch: rails-4
+  specs:
+    ransack (1.1.0)
+      actionpack (>= 4.0)
+      activerecord (>= 4.0)
+      activesupport (>= 4.0)
+      i18n
+      polyamorous (~> 0.6.0)
+
+GIT
   remote: git://github.com/globalize/globalize.git
   revision: 15b3364559378471089663d2953d74e673206ae0
   specs:
@@ -177,6 +189,8 @@ GEM
       cocaine (~> 0.5.3)
       mime-types
     pg (0.17.1)
+    polyamorous (0.6.4)
+      activerecord (>= 3.0)
     polyglot (0.3.4)
     pry (0.9.12.6)
       coderay (~> 1.0)
@@ -316,6 +330,7 @@ DEPENDENCIES
   quiet_assets
   rails (= 4.0.3)
   rails-erd
+  ransack!
   request_store
   sass-rails
   sdoc

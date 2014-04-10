@@ -25,6 +25,7 @@ de:
         target: Ziel
         external: Externer Link
         internal: Interner Link
+        link_type: Typ
       editor/image:
         url: URL
         image_id: Bild
@@ -293,3 +294,9 @@ de:
       original: Original
       predefined: Vordefinierter Stil
       custom: Benutzerdefinierter Stil
+
+  editor/link:
+    targets:
+      self: Aktueller Frame
+      _blank: Neue Seite
+      _top: Oberste Seite

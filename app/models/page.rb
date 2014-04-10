@@ -108,6 +108,15 @@ class Page < ActiveRecord::Base
     def embeddable_types
       EMBEDDABLE_TYPES
     end
+
+    def search(query)
+      if query.present?
+        terms = query.to_s.split.uniq.map { |term| "%#{term}%" }
+        ransack(translations_title_matches_any: terms).result
+      else
+        all
+      end
+    end    
   end
 
   def ancestors_and_siblings

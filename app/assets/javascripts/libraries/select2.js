@@ -1724,11 +1724,12 @@ the specific language governing permissions and limitations under the Apache Lic
         // abstract
         getPlaceholder: function () {
             var placeholderOption;
-            return this.opts.element.attr("placeholder") ||
+            var placeholder = this.opts.element.attr("placeholder") ||
                 this.opts.element.attr("data-placeholder") || // jquery 1.4 compat
                 this.opts.element.data("placeholder") ||
                 this.opts.placeholder ||
                 ((placeholderOption = this.getPlaceholderOption()) !== undefined ? placeholderOption.text() : undefined);
+            return placeholder;
         },
 
         // abstract
@@ -2024,7 +2025,8 @@ the specific language governing permissions and limitations under the Apache Lic
                 this.clear();
                 killEventImmediately(e);
                 this.close();
-                this.selection.focus();
+                // FIXME this.selection.focus();
+                this.focusser.focus(); // FIXED
             }));
 
             selection.on("mousedown", this.bind(function (e) {
@@ -2807,7 +2809,7 @@ the specific language governing permissions and limitations under the Apache Lic
                 enabledItem = $(
                     "<li class='select2-search-choice'>" +
                     "    <div></div>" +
-                    "    <a href='#' onclick='return false;' class='select2-search-choice-close' tabindex='-1'><i class='fa fa-times'></i></a>" +
+                    "    <a href='#' onclick='return false;' class='select2-search-choice-close' tabindex='-1'></a>" +
                     "</li>"),
                 disabledItem = $(
                     "<li class='select2-search-choice select2-locked'>" +

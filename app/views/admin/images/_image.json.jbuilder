@@ -1,7 +1,6 @@
 json.extract! image, :id, :title, :asset_url
 json.thumbnail_asset_url image.asset_url(:thumbnail)
 json.dimensions image.transformed_dimensions
-json.url admin_image_path(image, format: :json)
 
 if params.fetch(:include_styles, false).to_bool
   json.styles do

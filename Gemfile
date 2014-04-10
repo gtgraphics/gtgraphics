@@ -23,6 +23,7 @@ gem 'paperclip'
 gem 'email_validator'
 gem 'globalize', github: 'globalize/globalize' #, branch: 'rails4'
 gem 'state_machine'
+gem 'ransack', github: 'activerecord-hackery/ransack', branch: 'rails-4'
 gem 'virtus'
 
 # Views

@@ -19,7 +19,29 @@ class Admin::PagesController < Admin::ApplicationController
 
   def index
     respond_to do |format|
-      format.html { redirect_to [:admin, Page.root] }
+      format.html do
+        redirect_to [:admin, Page.root]
+      end
+      format.json do
+        if page_id_or_ids = params[:id] and page_id_or_ids.present?
+          if page_id_or_ids.is_a?(Array)
+            @pages = Page.where(id: page_id_or_ids)
+          else
+            redirect_to params.merge(action: :show) and return
+          end
+        else
+          @pages = Page.search(params[:query])
+        end
+        @pages = @pages.with_translations(I18n.locale).page(params[:page]).per(16)
+        @pages = @pages.includes(:custom_styles) if params[:include_styles].to_b
+      end
+    end
+  end
+
+  def parent_candidates
+    @pages = Page.assignable_as_parent_of(@page)
+    respond_to do |format|
+      format.json { render :index }
     end
   end
 
@@ -45,7 +67,9 @@ class Admin::PagesController < Admin::ApplicationController
 
   def show
     @pages = @page.self_and_ancestors_and_siblings.with_translations
-    respond_with :admin, @page, layout: !request.xhr?
+    respond_with :admin, @page, layout: !request.xhr? do |format|
+      format.json
+    end
   end
 
   def edit

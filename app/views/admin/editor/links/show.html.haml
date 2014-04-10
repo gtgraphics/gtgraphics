@@ -5,13 +5,13 @@
 
   .modal-body
     = form.input :content, as: :hidden
-    = form.input :external, collection: [[Editor::Link.human_attribute_name(:internal), false], [Editor::Link.human_attribute_name(:external), true]], as: :radio_buttons, label: false, container_html: { class: 'col-lg-offset-3 col-lg-9' }
+    = form.input :external, collection: [[Editor::Link.human_attribute_name(:internal), false], [Editor::Link.human_attribute_name(:external), true]], as: :radio_buttons, label: Editor::Link.human_attribute_name(:link_type), required: true, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
     .editor-internal-link-fields      
       = form.input :page_id, collection: page_sitemap_collection_for_select, required: true, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
       = form.input :locale, collection: available_locales_for_select, include_blank: translate('helpers.prompts.custom'), container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
     .editor-external-link-fields
       = form.input :url, required: true, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
-    = form.input :target, collection: [[translate('views.admin.editor.target.blank'), '_blank'], [translate('views.admin.editor.target.top'), '_top']], include_blank: translate('views.admin.editor.target.self'), container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
+    = form.input :target, collection: Editor::Link.targets.invert, as: :radio_buttons, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
       
   .modal-footer
     = form.button :submit, class: 'btn-primary'

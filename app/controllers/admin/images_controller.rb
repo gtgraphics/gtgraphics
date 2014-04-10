@@ -11,13 +11,22 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def index
-    if params[:id].present?
-      redirect_to params.merge(action: :show)
-    else
-      @images = Image.with_translations(I18n.locale).includes(:author, :custom_styles).search(params[:query]).sort(params[:sort], params[:direction]).page(params[:page]).per(16)
-      respond_with :admin, @images do |format|
-        format.json
+    if image_id_or_ids = params[:id] and image_id_or_ids.present?
+      if image_id_or_ids.is_a?(Array)
+        @images = Image.where(id: image_id_or_ids)
+      else
+        redirect_to params.merge(action: :show)
       end
+    else
+      @images = Image.search(params[:query])
+    end
+  
+    @images = @images.with_translations(I18n.locale).includes(:author) \
+      .sort(params[:sort], params[:direction]).page(params[:page]).per(16)
+    @images = @images.includes(:custom_styles) if params[:include_styles].to_b
+  
+    respond_with :admin, @images do |format|
+      format.json
     end
   end
 

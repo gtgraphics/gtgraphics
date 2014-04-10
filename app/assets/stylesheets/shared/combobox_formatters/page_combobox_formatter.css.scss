@@ -1,0 +1,13 @@
+.page-combobox-result {
+  .page-combobox-info {
+    color: $gray;
+    font-size: 12px;
+    line-height: 1.5em;
+  }
+
+  @for $i from 0 through 10 {
+    &.depth-#{$i} {
+      padding-left: $i * 12px;
+    }
+  }
+}

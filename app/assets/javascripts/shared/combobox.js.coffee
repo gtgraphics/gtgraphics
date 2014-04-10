@@ -8,6 +8,12 @@ $.extend jQuery.fn.select2.defaults,
 
 jQuery.prepare ->
   unless Modernizr.touch
-    $('.combobox', @).select2()
+    $('.combobox', @).each ->
+      $input = $(@)
+      $input.select2
+        allowClear: $input.data('includeBlank')
+
     $('.tokenizer', @).select2(tags: [], tokenSeparators: [','])
+
     $('.space-tokenizer', @).select2(tags: [], tokenSeparators: [' ', ','])
+

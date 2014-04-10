@@ -43,7 +43,6 @@ refreshDimensions = ($scope) ->
       $imageHeight.val(dimensions.height)
 
 refreshOriginalStyleCheckboxState = ($scope) ->
-  console.log 'checkbox style'
   $image = $(IMAGE_ID_SELECTOR, $scope)
   $style = $(STYLE_SELECTOR, $scope)
   if $image.any() and $style.any()
@@ -91,12 +90,12 @@ jQuery.prepare ->
 $(document).on 'change', IMAGE_ID_SELECTOR, ->
   $select = $(@)
   image = $select.select2('data')
-  $('#editor_image_url').val(image.assetUrl)
-  $('#editor_image_alternative_text').val(image.title)
-  
-  refreshStyles()
-  refreshOriginalStyleCheckboxState()
-  refreshDimensions()
+  if image
+    $('#editor_image_url').val(image.assetUrl)
+    $('#editor_image_alternative_text').val(image.title)
+    refreshStyles()
+    refreshOriginalStyleCheckboxState()
+    refreshDimensions()
 
 #$(document).on 'select2-init', IMAGE_ID_SELECTOR, ->
 #  refreshStyles()

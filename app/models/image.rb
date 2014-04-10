@@ -95,11 +95,8 @@ class Image < ActiveRecord::Base
 
     def search(query)
       if query.present?
-        columns = [Image::Translation.arel_table[:title]]
-        conditions = query.to_s.split.map do |term|
-          columns.map { |column| column.matches("%#{term}%") }.reduce(:or)
-        end.reduce(:and)
-        where(conditions)
+        terms = query.to_s.split.uniq.map { |term| "%#{term}%" }
+        ransack(translations_title_or_tags_label_matches_any: terms).result
       else
         all
       end
