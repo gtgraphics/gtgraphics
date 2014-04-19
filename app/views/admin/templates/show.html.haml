@@ -18,7 +18,6 @@
         %dt= ::Template.human_attribute_name :updated_at
         %dd= time_ago @template.updated_at
 
-
     - if @template.description.present?
       %fieldset
         %legend= ::Template.human_attribute_name :description

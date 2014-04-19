@@ -10,7 +10,7 @@
   - images.each_slice(4) do |sliced_images|
     .row
       - sliced_images.each do |image|
-        .col-lg-3.col-md-3.col-sm-3.col-sx-3
+        .col-lg-3.col-md-3.col-sm-3.col-xs-6
           = thumbnail image.asset.url(:large_thumbnail), [:admin, image], alt: image.title do
             .actions.top.right
               = action_buttons_for image, size: :mini, icon_only: true
@@ -20,7 +20,7 @@
               .badge.pull-right= image.format.upcase
               = image.dimensions
             - if image.tags.any?
-              %ul.tags.tags-inline
+              %ul.tags.tags-inline.hidden-xs.hidden-sm
                 - image.tags.each do |tag|
                   %li= tagged_link_to(tag, admin_images_path(query: tag.label), size: :sm)
 
