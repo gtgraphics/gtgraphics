@@ -12,14 +12,15 @@ class @Editor.Control.Unlink extends @Editor.Control.FontControl
 
   executeCommandSync: ->
     $content = @getClosestAnchor().contents().unwrap()
-    @getActiveEditor().setSelectionAroundNodes($content.first().get(0), $content.last().get(0))
+    firstChild = $content.first().get(0)
+    lastChild = $content.last().get(0)
+    @getActiveEditor().setSelectionAroundNodes(firstChild, lastChild)
 
   queryEnabled: ->
     @getClosestAnchor().any()
 
   getClosestAnchor: ->
     range = @getActiveEditor().getSelectedRange()
-    $(range.getNodes()).filter(ELEMENT_SELECTOR)
-    #$(range.commonAncestorContainer).closest(ELEMENT_SELECTOR)
+    $(range.getNodes()).filter(ELEMENT_SELECTOR).add($(range.commonAncestorContainer).closest(ELEMENT_SELECTOR)).first()
 
 @Editor.Control.register('unlink', @Editor.Control.Unlink)
