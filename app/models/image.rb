@@ -96,7 +96,8 @@ class Image < ActiveRecord::Base
     def search(query)
       if query.present?
         terms = query.to_s.split.uniq.map { |term| "%#{term}%" }
-        ransack(translations_title_or_tags_label_matches_any: terms).result
+        # we go over taggings association here, because we probably want to include tags manually
+        ransack(translations_title_or_taggings_tag_label_matches_any: terms).result
       else
         all
       end

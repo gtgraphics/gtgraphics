@@ -12,6 +12,14 @@
   .fa {
     color: #777 !important;
   }
+  .caption {
+    display: inline-block;
+    padding: 0;
+    max-width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   @include box-shadow(none);
   position: relative;
   &:before, &:after {
@@ -33,10 +41,20 @@
     left: -9px;
     color: white;
   }
+
+  &.tag-sm {
+    font-size: 12px;
+    padding: 2px 7px 2px 4px;
+  }
+
+  &.tag-xs {
+    font-size: 12px;
+    padding: 1px 6px 1px 3px;
+  }
 }
 
 a.tag {
-  &:hover, &:focus {
+  &:hover, &:focus, &:active, &.active {
     background-color: #ebebeb;
     border-color: #adadad;
     color: #333;
@@ -48,6 +66,9 @@ a.tag {
       color: #ebebeb;
     }
   }
+  &:active, &.active {
+    @include box-shadow(inset 0 0 3px rgba(0, 0, 0, 0.125));
+  }
 }
 
 ul.tags {
@@ -58,5 +79,24 @@ ul.tags {
   li {
     display: inline-block;
     margin: 2px 1px;
+  }
+
+  &.tags-inline {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+    &:after {
+      $ellipsis-width: 20px;
+      content: " ";
+      position: absolute;
+      display: block;
+      width: $ellipsis-width;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      pointer-events: none;
+      @include background(linear-gradient(left, rgba(255, 255, 255, 0), white));
+    }
   }
 }

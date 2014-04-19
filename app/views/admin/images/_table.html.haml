@@ -17,9 +17,12 @@
             %h3
               = image.title
             %p
-              = image.human_content_type
-              %br
+              .badge.pull-right= image.format.upcase
               = image.dimensions
+            - if image.tags.any?
+              %ul.tags.tags-inline
+                - image.tags.each do |tag|
+                  %li= tagged_link_to(tag, admin_images_path(query: tag.label), size: :sm)
 
 - else
 

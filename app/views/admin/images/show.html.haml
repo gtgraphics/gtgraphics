@@ -71,7 +71,10 @@
         / Image Styles
         .panel.panel-default
           .panel-heading
-            %h3.panel-title= prepend_icon(:picture, Image::Style.model_name.human(count: 2), outline: true, fixed_width: true)
+            %h3.panel-title
+              = prepend_icon(:picture, Image::Style.model_name.human(count: 2), outline: true, fixed_width: true)
+              %span.text-muted
+                (#{@image_styles.size})
           .panel-body
             = render 'admin/image_styles/table'
 
@@ -79,7 +82,10 @@
         / Tags
         .panel.panel-default
           .panel-heading
-            %h3.panel-title= prepend_icon(:tags, Tag.model_name.human(count: 2), fixed_width: true)
+            %h3.panel-title
+              = prepend_icon(:tags, Tag.model_name.human(count: 2), fixed_width: true)
+              %span.text-muted
+                (#{@tags.size})
           .panel-collapsible
             .panel-body
               %ul.tags

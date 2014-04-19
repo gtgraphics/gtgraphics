@@ -28,7 +28,9 @@
   .col-lg-4
     .panel.panel-default
       .panel-heading
-        %h3.panel-title= prepend_icon(:puzzle_piece, ::Template::RegionDefinition.model_name.human(count: 2), fixed_width: true)
+        %h3.panel-title
+          = prepend_icon(:puzzle_piece, ::Template::RegionDefinition.model_name.human(count: 2), fixed_width: true)
+          %span.text-muted (#{@region_definitions.size})
       .panel-body
         - if @region_definitions.any?
           %ul#region_definitions.gtg-admin-action-list

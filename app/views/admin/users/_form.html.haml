@@ -6,7 +6,7 @@
         = prepend_icon(:save, translate(@user.new_record? ? :create : :update, scope: 'helpers.submit', model: User.model_name.human))
 
   %fieldset
-    %legend= translate('views.forms.basics')
+    %legend= prepend_icon(:user, translate('views.forms.basics'), fixed_width: true)
     .fields
       = form.input :first_name, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
       = form.input :last_name, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }  
@@ -14,7 +14,7 @@
       = form.input :preferred_locale, collection: available_locales_for_select, include_blank: translate('helpers.prompts.custom'), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-6' }
 
   %fieldset
-    %legend= translate('views.forms.password')
+    %legend= prepend_icon(:lock, translate('views.forms.password'), fixed_width: true)
     .fields
       - if @user.new_record?
         = render 'password_fields', fields: form
