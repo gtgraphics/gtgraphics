@@ -15,6 +15,9 @@ body {
     }
     a[href] {
       cursor: default;
+      img {
+        border: 1px dashed $link-color;
+      }
     }
   }
 }
