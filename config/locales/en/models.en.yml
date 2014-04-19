@@ -69,6 +69,9 @@ en:
       image:
         one: Image
         other: Images
+      message:
+        one: Message
+        other: Messages
       shout:
         one: Shout
         other: Shouts
@@ -81,6 +84,12 @@ en:
       redirection: 
         one: Redirection
         other: Redirections
+      tag:
+        one: Tag
+        other: Tags
+      tagging:
+        one: Tagging
+        other: Taggings
       template:
         one: Template
         other: Templates

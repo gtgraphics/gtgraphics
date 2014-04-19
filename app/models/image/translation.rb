@@ -14,7 +14,6 @@
 class Image < ActiveRecord::Base
   class Translation < Globalize::ActiveRecord::Translation
     include GlobalizedModelTouchable
-    include Sanitizable
     include UniquelyTranslated
 
     acts_as_uniquely_translated :image_id

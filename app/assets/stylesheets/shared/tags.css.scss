@@ -1,0 +1,62 @@
+.tag {
+  display: inline-block;
+  color: #555;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 1px 7px 1px 4px;
+  border-left-radius: 3px;
+  border-right-radius: 3px;
+  margin: 0;
+  margin-left: 10px;
+  .fa {
+    color: #777 !important;
+  }
+  @include box-shadow(none);
+  position: relative;
+  &:before, &:after {
+    display: block;
+    position: absolute;
+    border-right: 10px solid;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    content: " ";
+    width: 10px;
+    color: #ccc;
+    top: 0px;
+    bottom: 0px;
+  }
+  &:before {
+    left: -10px;
+  }
+  &:after {
+    left: -9px;
+    color: white;
+  }
+}
+
+a.tag {
+  &:hover, &:focus {
+    background-color: #ebebeb;
+    border-color: #adadad;
+    color: #333;
+    text-decoration: none;
+    &:before {
+      color: #adadad;
+    }
+    &:after {
+      color: #ebebeb;
+    }
+  }
+}
+
+ul.tags {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: inline-block;
+  li {
+    display: inline-block;
+    margin: 2px 1px;
+  }
+}

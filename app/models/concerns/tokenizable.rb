@@ -5,6 +5,10 @@ module Tokenizable
 
   module ClassMethods
     def acts_as_tokenizable(*methods)
+      tokenizes(*methods)
+    end
+    
+    def tokenizes(*methods)
       options = methods.extract_options!.reverse_merge(token: DEFAULT_TOKEN)
       methods.each do |method|
         method = method.to_sym

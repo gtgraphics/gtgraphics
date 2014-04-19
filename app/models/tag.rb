@@ -46,4 +46,8 @@ class Tag < ActiveRecord::Base
       joins(join_expression).select(select_expression).group(arel_table[:id]).reorder('taggings_count DESC')
     end
   end
+
+  def to_s
+    label
+  end
 end

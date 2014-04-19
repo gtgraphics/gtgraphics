@@ -9,7 +9,7 @@
 .row
   .col-lg-8
     %fieldset
-      %legend= translate('views.admin.templates.headlines.details')
+      %legend= prepend_icon(:info, translate('views.admin.templates.headlines.details'), fixed_width: true)
       %dl.dl-horizontal
         %dt= ::Template.human_attribute_name :type
         %dd= @template.class.model_name.human
@@ -28,7 +28,7 @@
   .col-lg-4
     .panel.panel-default
       .panel-heading
-        %h3.panel-title= ::Template::RegionDefinition.model_name.human(count: 2)
+        %h3.panel-title= prepend_icon(:puzzle_piece, ::Template::RegionDefinition.model_name.human(count: 2), fixed_width: true)
       .panel-body
         - if @region_definitions.any?
           %ul#region_definitions.gtg-admin-action-list

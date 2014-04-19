@@ -40,16 +40,12 @@ class Admin::ImagesController < Admin::ApplicationController
   def create
     @image = Image.create(image_params)
     flash_for @image
-    #@image_page_embedding_activity = ImagePageEmbeddingActivity.new(image_page_embedding_activity_params)
-    #if @image_page_embedding_activity.valid? and @image.save
-    #  @image_page_embedding_activity.image = image
-    #  flash_for @image
-    #end
     respond_with :admin, @image
   end
 
   def show
     @image_styles = @image.custom_styles
+    @tags = @image.tags
     respond_with :admin, @image do |format|
       format.json
     end
