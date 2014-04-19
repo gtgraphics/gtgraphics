@@ -34,18 +34,25 @@ class Editor::Link < EditorActivity
     self.external = !internal
   end
 
+  def persisted?
+    page_id.present? or url.present?
+  end
+
   def to_html
     href = external? ? url : page_path(page, locale: locale)
     options = { href: href }
     options[:target] = target if target.present?
     if internal? and page_id.present?
       data = { page_id: page_id }
-      data[:locale] = locale if locale.present?
+      if locale.present?
+        data[:locale] = locale 
+        options[:hreflang] = locale
+      end
       options[:data] = data
       content = page.title(locale)
     else
       content = url
     end
-    content_tag(:a, content, options).html_safe
+    content_tag(:a, (self.content.presence || content).html_safe, options).html_safe
   end
 end

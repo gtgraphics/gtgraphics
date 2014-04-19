@@ -1,6 +1,20 @@
 class @Editor.Control.DialogButtonControl extends @Editor.Control.ButtonControl
   executeCommand: (callback, context = {}) ->
     control = @
+
+    # Determine if the selected element is a link, if yes open the edit hyperlink modal
+    unless context.element?
+      editor = @getActiveEditor()
+      $element = @getElementFromSelection()
+      if $element? and $element.any()
+        # existing html node
+        editor.setSelectionAroundNode($element.get(0))
+        context.element = $element
+        context.params = @extractContextParams(editor, $element)
+      else 
+        # text node
+        context.params = @extractContextParams(editor, editor.getSelectedHtml())
+
     jQuery.get(@getDialogUrl(), context.params || {}).fail(callback).done (html) =>
       $modal = $(html).appendTo($('body')).prepare()
       $modal.data('toolbar', @toolbar)
@@ -22,14 +36,16 @@ class @Editor.Control.DialogButtonControl extends @Editor.Control.ButtonControl
           data: params
           dataType: 'html'
           success: (html) ->
-            console.log html # TODO Remove
             $modal.modal('hide')
             editor = control.getActiveEditor()
             if editor.isRendered()
               if context.element
-                context.element.replaceWith(html)
+                $html = $(html).replaceAll(context.element)
+                firstChild = $html.first().get(0)
+                lastChild = $html.last().get(0)
+                editor.setSelectionAroundNodes(firstChild, lastChild)
               else
-                editor.$region.append(html) # TODO Do not append
+                editor.insertHtml(html)
 
           error: (xhr) ->
             # Validation failed, replace form to show validation messages
@@ -46,3 +62,10 @@ class @Editor.Control.DialogButtonControl extends @Editor.Control.ButtonControl
 
   onExecuted: ->
     @$control.prop('disabled', false) if @isRendered()
+
+  getElementFromSelection: ->
+    console.warn 'getElementFromSelection() has not been implemented'
+
+  extractContextParams: ->
+    console.warn 'extractContextParams() has not been implemented'
+    {}

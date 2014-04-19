@@ -8,6 +8,7 @@ class @TextareaEditor
   constructor: ($textarea, options = {}) ->
     jQuery.error 'input must be a textarea' unless $textarea.is('textarea')
     @$textarea = $textarea.addClass('editor-html')
+    @$textarea.data('editor', @)
 
     @options = options
     @options = _(@options).defaults(TextareaEditor.defaults)
@@ -37,8 +38,9 @@ class @TextareaEditor
 
       # Add iframe with editable body to avoid conflicts when injecting invalid HTML
       @$regionFrame = $('<iframe />', 'data-target': "##{inputId}", class: 'editor-region', seamless: true).css(width: '100%').appendTo(@$editor)
+      $base = $('<base />', target: '_parent')
       $stylesheet = $('<link />', href: @options.stylesheetFile, media: 'all', rel: 'stylesheet')
-      @$regionFrame.contents().find('head').append($stylesheet)
+      @$regionFrame.contents().find('head').append($base).append($stylesheet)
       @$region = @$regionFrame.contents().find('body').attr('contenteditable', true)
 
       # Preview iframe
@@ -103,10 +105,6 @@ class @TextareaEditor
 
     @$region.click =>
       @$region.triggerHandler('focus')
-  
-    @$region.on 'click', 'a[href]', (event) =>
-      # prevent links in regions from being clicked in Rich Text view
-      event.preventDefault() if @options.viewMode == 'richText'
 
     # Controls
 
@@ -236,3 +234,54 @@ class @TextareaEditor
       true
     else
       false
+
+  # Selection
+
+  getSelection: ->
+    jQuery.error 'editor has not been rendered' unless @isRendered()
+    rangy.getIframeSelection(@$regionFrame.get(0))
+
+  getSelectedRange: ->
+    @getSelection().getRangeAt(0)
+
+  deleteSelectedContent: ->
+    range = @getSelectedRange()
+    range.deleteContents()
+
+  getSelectedText: ->
+    @getSelectedRange().toString()
+
+  getSelectedHtml: ->
+    @getSelectedRange().toHtml()
+
+  insertText: (text) ->
+    @insertNode(document.createTextNode(text))
+
+  insertHtml: (html) ->
+    html = html.html() if html instanceof jQuery
+    range = @getSelectedRange()
+    @insertNode(range.createContextualFragment(html))
+
+  insertNode: (node) ->
+    node = node.get(0) if node instanceof jQuery
+    selection = @getSelection()
+    range = @getSelectedRange()
+    range.deleteContents()
+    firstChild = node.firstChild
+    lastChild = node.lastChild
+    range.insertNode(node)
+    @setSelectionAroundNodes(firstChild, lastChild)
+    @refreshInputContent()
+    @$textarea.trigger('editor:inserted', @, node)
+
+  setSelectionAroundNode: (node) ->
+    @setSelectionAroundNodes(node, node)
+
+  setSelectionAroundNodes: (startNode, endNode) ->
+    startNode = startNode.get(0) if startNode instanceof jQuery
+    endNode = endNode.get(0) if endNode instanceof jQuery
+    range = rangy.createRange()
+    range.setStartBefore(startNode)
+    range.setEndAfter(endNode)
+    selection = @getSelection()
+    selection.setSingleRange(range)

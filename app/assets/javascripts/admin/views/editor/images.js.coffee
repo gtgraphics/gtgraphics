@@ -81,7 +81,7 @@ refreshStyleContainerStates = ($scope) ->
 jQuery.prepare ->
   refreshSourceContainerStates(@)
   refreshStyleContainerStates(@)
-  refreshDimensions(@)
+  #refreshDimensions(@)
 
 #$(document).on 'select2-init', IMAGE_ID_SELECTOR, ->
 #  refreshOriginalStyleCheckboxState()

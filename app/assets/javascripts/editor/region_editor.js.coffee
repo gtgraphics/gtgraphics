@@ -5,8 +5,7 @@ class @RegionEditor
 
   constructor: (options = {}) ->
     @options = jQuery.extend({}, RegionEditor.defaults, options)
-
-    
+   
 
     $(@options.selector).each ->
       $region = $(@)

@@ -33,7 +33,6 @@ jQuery.prepare ->
         unless id == ''
           url = $select.data('from')
           jQuery.get url, { id: id }, (record) ->
-            console.log record
             callback(record)
             $select.trigger('select2-init')
       escapeMarkup: (markup) ->
