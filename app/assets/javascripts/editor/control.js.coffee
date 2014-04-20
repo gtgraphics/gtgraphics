@@ -20,6 +20,7 @@ class @Editor.Control
     jQuery.error 'createControl() has not been implemented'
 
   onCreateControl: ->
+    # may apply events to the control that has been created
 
   executeCommand: (callback, contextData = {}) ->
     returnValue = @executeCommandSync(contextData)
@@ -107,17 +108,38 @@ class @Editor.Control
   getActiveEditor: ->
     @toolbar.activeEditor
 
-availableControls = []
+availableControls = {}
 
 _(@Editor.Control).extend
+  getControls: ->
+    _(availableControls).values()
+
+  getControlNames: ->
+    _(availableControls).keys()
+
+  load: ($control, toolbar) ->
+    jQuery.error 'Control must be a jQuery object' unless $control instanceof jQuery
+    control = $control.data('control')
+    unless control? and control instanceof @Editor.Control
+      controlName = $control.data('command')
+      control = @init(controlName, toolbar)
+      control.$control = $control
+      control.onCreateControl() # triggers callback to act as if this control has been created
+    control.refreshControlState()
+    control
+
   get: (key) ->
+    jQuery.error "No key specified" unless key
     control = availableControls[key]
     jQuery.error "Control not found: #{key}" unless control
     control
+
   init: (key, toolbar) ->
     klass = @get(key)
     new klass(toolbar)
+
   register: (key, controlClass) ->
     availableControls[key] = controlClass
+
   unregister: (key) ->
     delete availableControls[key]
