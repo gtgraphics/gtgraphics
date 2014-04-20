@@ -10,13 +10,6 @@ GtGraphics::Application.routes.draw do
           match :sign_out, action: :destroy, via: [:get, :delete]
         end
 
-        namespace :editor do
-          with_options only: [:show, :create, :update] do |r|
-            r.resource :link
-            r.resource :image
-          end
-        end
-
         resource :account, except: [:new, :create, :show] do
           get :edit_password
           patch :update_password
@@ -31,6 +24,13 @@ GtGraphics::Application.routes.draw do
           member do
             get :download
             patch :move_to_images
+          end
+        end
+
+        namespace :editor do
+          with_options only: [:show, :create, :update] do |r|
+            r.resource :link
+            r.resource :image
           end
         end
 
@@ -64,6 +64,11 @@ GtGraphics::Application.routes.draw do
           member do
             patch :toggle
           end
+        end
+
+        scope 'pages/editor' do
+          get '*path', to: 'editor/pages#edit', as: :page_editor
+          patch '*path', to: 'editor/pages#update', as: nil
         end
 
         resources :pages do
@@ -135,8 +140,7 @@ GtGraphics::Application.routes.draw do
         controller_name = resource_name.to_s.pluralize
 
         actions = {
-          show: { via: :get },
-          edit: { via: :get }
+          show: { via: :get }
         }
         case resource_name
         when :contact_form then actions.merge!(show: { via: [:get, :post] })

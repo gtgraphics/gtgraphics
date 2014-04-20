@@ -1,4 +1,6 @@
 class Admin::Editor::ImagesController < Admin::Editor::ApplicationController
+  include Admin::Editor::DialogProvidingController
+
   editor_actions_for :image
 
   private

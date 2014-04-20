@@ -1,4 +1,6 @@
 class Admin::ApplicationController < ApplicationController
+  include Admin::RouteHelper
+
   skip_maintenance_check
 
   authenticate

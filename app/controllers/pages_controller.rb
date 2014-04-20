@@ -35,12 +35,6 @@ class PagesController < ApplicationController
     respond_with_page
   end
 
-  def edit
-    #I18n.locale = current_user.preferred_locale if current_user.preferred_locale
-    #respond_with @page, layout: 'page_editor'
-    show
-  end
-
   protected
   def editing?
     action_name.in? %w(edit update)
@@ -62,7 +56,7 @@ class PagesController < ApplicationController
     if params[:path].blank?
       @page = Page.accessible_by(current_ability).roots.first!
     else
-      @page = Page.accessible_by(current_ability).find_by_path!(params[:path])
+      @page = Page.accessible_by(current_ability).find_by!(path: params[:path])
     end
   end
 

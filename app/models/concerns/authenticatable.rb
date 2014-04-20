@@ -36,11 +36,11 @@ module Authenticatable
     self == self.class.current
   end
 
+  private
   def password_hash
     BCrypt::Password.new(password_digest)
   end
-
-  private
+  
   def set_generated_password
     self.password = self.password_confirmation = self.class.generate_password
   end

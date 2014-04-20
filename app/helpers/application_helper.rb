@@ -24,4 +24,8 @@ module ApplicationHelper
   def microtimestamp
     (Time.now.to_f * 1_000_000).to_i
   end
+
+  def controller_namespace
+    controller.class.name.deconstantize.underscore.presence
+  end
 end

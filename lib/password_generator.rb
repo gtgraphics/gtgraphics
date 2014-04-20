@@ -28,10 +28,4 @@ class PasswordGenerator
   def inspect
     "#<#{self.class.name} length: #{length.inspect}>"
   end
-
-  private
-  def sanitize_option!(name)
-    value = options[name]
-    options[name] = value.is_a?(Range) ? value : value..value
-  end
 end
