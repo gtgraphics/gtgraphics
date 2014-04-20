@@ -21,3 +21,8 @@ $(document).ready ->
   #toolbar = new Editor.Toolbar(controls: controls)
   #$toolbar = toolbar.render() 
   #$toolbar.appendTo($toolbarContainer)
+
+  $page = $('#editor_frame')
+  pageDocument = $page.get(0).contentDocument
+  $(pageDocument).on 'page:load', (event) ->
+    console.log(pageDocument.location.pathname)

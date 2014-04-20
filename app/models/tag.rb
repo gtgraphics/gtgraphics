@@ -47,6 +47,10 @@ class Tag < ActiveRecord::Base
     end
   end
 
+  def appliers
+    taggings.includes(:taggable).collect(&:taggable)
+  end
+
   def to_s
     label
   end
