@@ -2,8 +2,6 @@ $(document).ready ->
 
   $body = $('body')
 
-  console.log $body
-
   $body.addClass('editing')
 
   # TODO Add Toolbar
@@ -20,12 +18,6 @@ $(document).ready ->
     ['pageSettings', 'html']
   ]
 
-  toolbar = new Editor.Toolbar(controls: controls, tooltip: { placement: 'bottom', container: '#editor_toolbar' })
-  $toolbar = toolbar.render() 
-  $toolbar.appendTo($toolbarContainer)
-
-
-  editor = new RegionEditor(selector: '.region')
-
-
-  #$('.region').editor(class: RegionEditor, toolbar: $toolbar)
+  #toolbar = new Editor.Toolbar(controls: controls)
+  #$toolbar = toolbar.render() 
+  #$toolbar.appendTo($toolbarContainer)

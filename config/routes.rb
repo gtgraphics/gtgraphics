@@ -1,5 +1,6 @@
 GtGraphics::Application.routes.draw do
-  resource :sitemap, controller: :page_sitemaps, only: :show
+  get 'sitemap.:format', to: 'sitemaps#index', as: :sitemaps
+  get 'sitemap.:page.:format', to: 'sitemaps#show', as: :sitemap
     
   scope '(:locale)', constraints: { locale: /[a-z]{2}/ } do
     scope constraints: Routing::LocaleConstraint.new do
