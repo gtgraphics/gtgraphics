@@ -8,10 +8,12 @@ module RouteHelper
   end
 
   def page_path(page, options = {})
-    options = options.reverse_merge(locale: Page.locale)
+    options = options.deep_dup
     edit_mode = options.delete(:edit_mode) { try(:editing?) }
     if page.path.present?
       if edit_mode
+        options[:locale] = options[:editor_locale] || @editor_locale || I18n.locale
+        options[:page_locale] = options[:locale] || @page_locale || I18n.locale
         admin_page_editor_page_path(page, options)
       else
         send("#{page.embeddable_class.model_name.element}_path", options.merge(path: page.path))
@@ -22,7 +24,7 @@ module RouteHelper
   end
 
   def page_url(page, options = {})
-    options = options.reverse_merge(edit_mode: try(:editing?) || false, locale: Page.locale)
+    options = options.reverse_merge(edit_mode: try(:editing?) || false)
     path_method_prefix = "admin_page_editor_" if options.delete(:edit_mode)
     if page.path.present?
       send("#{path_method_prefix}#{page.embeddable_class.model_name.element}_url", options.merge(path: page.path))

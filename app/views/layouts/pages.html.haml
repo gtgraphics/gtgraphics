@@ -1,8 +1,10 @@
 - content_for :stylesheets do
   = stylesheet_link_tag 'application', media: 'all', data: { turbolinks_track: true }
+  = stylesheet_link_tag 'page_editor', media: 'all', data: { turbolinks_track: true } if editing?
 
 - content_for :javascripts do
   = javascript_include_tag 'application', data: { turbolinks_track: true }
+  = javascript_include_tag 'page_editor', data: { turbolinks_track: true } if editing?
 
 - content_for :head do
   %meta{name: 'description', content: @page.meta_description || ''}
@@ -44,7 +46,7 @@
               %b.caret
             %ul.dropdown-menu
               - I18n.available_locales.sort_by { |locale| translate(locale, scope: :languages, locale: locale) }.each do |locale|
-                = active_link_to url_for(locale: locale), wrap_tag: :li, hreflang: locale, lang: locale, data: { no_turbolink: true } do
+                = active_link_to page_path(@page, locale: locale), wrap_tag: :li, hreflang: locale, lang: locale, active: locale == I18n.locale, data: { no_turbolink: true } do
                   = prepend_flag_icon(locale, translate(locale, scope: :languages, locale: locale))
 
   .container
@@ -64,16 +66,17 @@
         = yield
 
     - if signed_in?
-      - I18n.with_locale(current_user.preferred_locale.presence || I18n.locale) do
-        %hr
-        = link_to 'Admin', admin_root_path(locale: I18n.locale), data: { no_turbolink: true }
-        \|
-        = link_to 'Page Settings', edit_admin_page_path(@page, locale: I18n.locale), data: { no_turbolink: true }
-        \|
-        - if editing?
-          = link_to 'View Mode', page_path(@page, edit_mode: false)
-        - else
-          = link_to 'Edit Mode', page_path(@page, edit_mode: true)
+      #admin_panel{lang: @editor_locale}
+        - I18n.with_locale(@editor_locale || current_user.preferred_locale.presence || I18n.locale) do
+          %hr
+          = link_to 'Admin', admin_root_path(locale: I18n.locale), data: { no_turbolink: true }
+          \|
+          = link_to 'Page Settings', edit_admin_page_path(@page, locale: I18n.locale), data: { no_turbolink: true }
+          \|
+          - if editing?
+            = link_to 'View Mode', page_path(@page, edit_mode: false)
+          - else
+            = link_to 'Edit Mode', page_path(@page, edit_mode: true)
 
   = render 'footer'
 

@@ -45,7 +45,6 @@ GtGraphics::Application.routes.draw do
 
   scope '(:locale)', constraints: { locale: /[a-z]{2}/ } do
     scope constraints: Routing::LocaleConstraint.new do
-
       scope 'admin/pages/editor(/:page_locale)', constraints: { page_locale: /[a-z]{2}/ }, as: :admin_page_editor, editor: true do
         scope constraints: Routing::LocaleConstraint.new(:page_locale) do
           concerns :page_containable

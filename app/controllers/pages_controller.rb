@@ -1,6 +1,4 @@
 class PagesController < ApplicationController
-  layout :page_layout
-
   respond_to :html
 
   before_action :set_page_locale
@@ -39,13 +37,17 @@ class PagesController < ApplicationController
   end
 
   protected
+  def editable?
+    can?(:update, @page || Page)
+  end
+
   def editing?
-    params[:editor].to_b
+    editable? and params[:editor].to_b
   end
 
   def default_url_options(options = {})
     if editing?
-      super
+      super.merge(page_locale: @page_locale)
     else
       super
     end
@@ -78,15 +80,17 @@ class PagesController < ApplicationController
     end
   end
 
-  def page_layout
-    editing? ? 'page_editor' : 'pages'
-  end
-
   def set_page_locale
     if editing?
-      Page.locale = params[:page_locale]
+      available_locales = I18n.available_locales.map(&:to_s)
+      if page_locale = params[:page_locale] and page_locale.in?(available_locales)
+        @editor_locale = params[:locale]
+        @page_locale = I18n.locale = page_locale
+      else
+        @page_locale = @editor_locale = I18n.locale
+      end
     else
-      Page.locale = I18n.locale
+      @page_locale = I18n.locale
     end
   end
 end
