@@ -7,14 +7,10 @@ module ErrorHandlingController
       rescue_from(ActionController::UnknownFormat) { render_error :not_found }
       rescue_from(ActionController::RoutingError) { render_error :not_found }
       rescue_from CanCan::AccessDenied do |exception|
-        # if signed_in?
-          @error_message = exception.message
-          @attempted_action = exception.action
-          @subject = exception.subject
-          render_error :unauthorized
-        # else
-        #   redirect_to admin_sign_in_path
-        # end
+        @error_message = exception.message
+        @attempted_action = exception.action
+        @subject = exception.subject
+        render_error :unauthorized
       end
     end
   end

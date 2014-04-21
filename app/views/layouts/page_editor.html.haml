@@ -4,4 +4,9 @@
 - content_for :javascripts do
   = javascript_include_tag 'page_editor', data: { turbolinks_track: true }
 
-= render template: 'layouts/application'
+- content_for :content do
+  %iframe{src: 'about:blank', seamless: true, width: '100%', height: '100%'}
+    - I18n.with_locale(Page.locale) do
+      = render template: 'layouts/pages'
+
+/= render template: 'layouts/application'

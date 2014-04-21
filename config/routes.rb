@@ -2,8 +2,56 @@ GtGraphics::Application.routes.draw do
   get 'sitemap.:format', to: 'sitemaps#index', as: :sitemaps
   get 'sitemap.:page.:format', to: 'sitemaps#show', as: :sitemap
     
+  concern :page_containable do
+    Page::EMBEDDABLE_TYPES.each do |page_type|
+      page_embeddable_class = page_type.constantize
+      resource_name = page_embeddable_class.resource_name
+      controller_name = resource_name.to_s.pluralize
+
+      actions = {
+        show: { via: :get }
+      }
+      case resource_name
+      when :contact_form then actions.merge!(show: { via: [:get, :post] })
+      when :image then actions.merge!('download(/:style_id(/:dimensions))' => { action: :download, via: :get, as: :download_image })
+      end
+
+      scope constraints: Routing::PageConstraint.new(page_type) do
+        actions.each do |action_name, options|
+          options = options.reverse_merge(controller: controller_name, action: action_name, via: :get)
+          if action_name == :show
+            match '*path(.:format)', options.reverse_merge(as: resource_name)
+          else
+            match "*path/#{action_name}(.:format)", options.reverse_merge(as: "#{action_name}_#{resource_name}")
+          end
+        end
+      end
+      
+      scope constraints: Routing::RootPageConstraint.new(page_type) do
+        actions.each do |action_name, options|
+          options = options.reverse_merge(controller: controller_name, action: action_name, via: :get).merge(as: nil)
+          if action_name == :show
+            root options
+          else
+            match "#{action_name}(.:format)", options
+          end
+        end
+      end
+    end
+
+    get 'edit' => 'homepages#edit', as: :edit_root
+    root to: 'homepages#show'
+  end
+
   scope '(:locale)', constraints: { locale: /[a-z]{2}/ } do
     scope constraints: Routing::LocaleConstraint.new do
+
+      scope 'admin/pages/editor(/:page_locale)', constraints: { page_locale: /[a-z]{2}/ }, as: :admin_page_editor, editor: true do
+        scope constraints: Routing::LocaleConstraint.new(:page_locale) do
+          concerns :page_containable
+        end
+      end
+
       namespace :admin do
         scope controller: :sessions do
           get :sign_in, action: :new
@@ -27,6 +75,11 @@ GtGraphics::Application.routes.draw do
             patch :move_to_images
           end
         end
+
+        #scope 'pages/editor' do
+        #  get '*path', to: 'editor/pages#edit', as: :page_editor
+        #  patch '*path', to: 'editor/pages#update', as: nil
+        #end
 
         namespace :editor do
           with_options only: [:show, :create, :update] do |r|
@@ -65,11 +118,6 @@ GtGraphics::Application.routes.draw do
           member do
             patch :toggle
           end
-        end
-
-        scope 'pages/editor' do
-          get '*path', to: 'editor/pages#edit', as: :page_editor
-          patch '*path', to: 'editor/pages#update', as: nil
         end
 
         resources :pages do
@@ -135,44 +183,7 @@ GtGraphics::Application.routes.draw do
         root to: redirect('/admin/pages')
       end
 
-      Page::EMBEDDABLE_TYPES.each do |page_type|
-        page_embeddable_class = page_type.constantize
-        resource_name = page_embeddable_class.resource_name
-        controller_name = resource_name.to_s.pluralize
-
-        actions = {
-          show: { via: :get }
-        }
-        case resource_name
-        when :contact_form then actions.merge!(show: { via: [:get, :post] })
-        when :image then actions.merge!('download(/:style_id(/:dimensions))' => { action: :download, via: :get, as: :download_image })
-        end
-
-        scope constraints: Routing::PageConstraint.new(page_type) do
-          actions.each do |action_name, options|
-            options = options.reverse_merge(controller: controller_name, action: action_name, via: :get)
-            if action_name == :show
-              match '*path(.:format)', options.reverse_merge(as: resource_name)
-            else
-              match "*path/#{action_name}(.:format)", options.reverse_merge(as: "#{action_name}_#{resource_name}")
-            end
-          end
-        end
-        
-        scope constraints: Routing::RootPageConstraint.new(page_type) do
-          actions.each do |action_name, options|
-            options = options.reverse_merge(controller: controller_name, action: action_name, via: :get).merge(as: nil)
-            if action_name == :show
-              root options
-            else
-              match "#{action_name}(.:format)", options
-            end
-          end
-        end
-      end
-
-      get 'edit' => 'homepages#edit', as: :edit_root
-      root to: 'homepages#show'
+      concerns :page_containable
 
       # Legacy URLs that have changed permanently (HTTP 301)
       get 'image/:slug', constraints: Routing::Legacy::ImageConstraint.new, to: redirect { |params, request|
@@ -188,7 +199,7 @@ GtGraphics::Application.routes.draw do
         url
       }
 
-      # This route is a workaround throwing a routing error that can be caught by a controller
+      # This route is a workaround for Error Pages by throwing a routing error that can be caught by a controller
       get '*path' => 'errors#unmatched_route'
     end
   end

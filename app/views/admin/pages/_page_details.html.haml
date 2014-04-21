@@ -10,7 +10,7 @@
     %dt= Page.human_attribute_name :path
     %dd= @page.path
   %dt= Page.human_attribute_name :translated_locales
-  %dd= @page.translated_locales.map { |locale| link_to(translate(locale, scope: :languages), admin_page_editor_path(@page, page: { locale: locale })) }.sort.join(', ').html_safe
+  %dd= @page.translated_locales.map { |locale| link_to(translate(locale, scope: :languages), admin_page_editor_page_path(@page, page: { locale: locale })) }.sort.join(', ').html_safe
   - if content_for? :additional_page_details
     = yield :additional_page_details
   - if @page.author

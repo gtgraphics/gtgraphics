@@ -1,11 +1,6 @@
 module Admin::RouteHelper
-  def admin_page_editor_path(*args)
-    options = args.extract_options!
-    if page = args.first
-      page_path_options = options.delete(:page) { Hash.new }
-      path = page_path(page, page_path_options).sub(/\A\//, '') # strip leading slash
-      options.merge!(path: path)
-    end
-    super(options)
+  def admin_page_editor_page_path(page, options = {})
+    page_path_options = options.delete(:page) { Hash.new }.merge(edit_mode: false)
+    send("admin_page_editor_#{page.embeddable_class.model_name.element}_path", options.merge(path: page.path, locale: I18n.locale, page_locale: Page.locale))
   end
 end

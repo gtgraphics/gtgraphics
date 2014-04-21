@@ -114,6 +114,14 @@ class Page < ActiveRecord::Base
       EMBEDDABLE_TYPES
     end
 
+    def locale
+      Thread.current[:page_locale]
+    end
+
+    def locale=(locale)
+      Thread.current[:page_locale] = locale
+    end
+
     def search(query)
       if query.present?
         terms = query.to_s.split.uniq.map { |term| "%#{term}%" }

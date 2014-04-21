@@ -1,6 +1,9 @@
 class PagesController < ApplicationController
+  layout :page_layout
+
   respond_to :html
 
+  before_action :set_page_locale
   before_action :load_page
   before_action :load_template
 
@@ -37,7 +40,15 @@ class PagesController < ApplicationController
 
   protected
   def editing?
-    action_name.in? %w(edit update)
+    params[:editor].to_b
+  end
+
+  def default_url_options(options = {})
+    if editing?
+      super
+    else
+      super
+    end
   end
 
   def render_page(options = {})
@@ -64,6 +75,18 @@ class PagesController < ApplicationController
     if @page.supports_template?
       @template = @page.template 
       @region_definitions = @template.try(:region_definitions) if @page.supports_regions?
+    end
+  end
+
+  def page_layout
+    editing? ? 'page_editor' : 'pages'
+  end
+
+  def set_page_locale
+    if editing?
+      Page.locale = params[:page_locale]
+    else
+      Page.locale = I18n.locale
     end
   end
 end
