@@ -43,8 +43,8 @@ class Image < ActiveRecord::Base
     acts_as_image_croppable
     acts_as_image_resizable
 
-    composed_of :dimensions, class_name: 'ImageDimensions', mapping: [%w(width), %w(height)], allow_nil: true, converter: :parse
-    composed_of :transformed_dimensions, class_name: 'ImageDimensions', mapping: [%w(transformed_width width), %w(transformed_height height)], allow_nil: true, converter: :parse
+    composed_of :dimensions, class_name: 'ImageDimensions', mapping: [%w(width), %w(height)], allow_nil: true, constructor: :parse, converter: :parse
+    composed_of :transformed_dimensions, class_name: 'ImageDimensions', mapping: [%w(transformed_width width), %w(transformed_height height)], allow_nil: true, constructor: :parse, converter: :parse
 
     TYPES.each do |type|
       scope type.demodulize.underscore.pluralize, -> { where(type: type) }

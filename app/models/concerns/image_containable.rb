@@ -24,7 +24,7 @@ module ImageContainable
 
       delegate :aspect_ratio, :pixels, to: :dimensions
 
-      composed_of :dimensions, class_name: 'ImageDimensions', mapping: [%w(width), %w(height)], allow_nil: true, converter: :parse
+      composed_of :dimensions, class_name: 'ImageDimensions', mapping: [%w(width), %w(height)], allow_nil: true, constructor: :parse, converter: :parse
     end
 
     module ClassMethods
