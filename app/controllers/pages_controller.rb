@@ -10,7 +10,7 @@ class PagesController < ApplicationController
   attr_reader :page
   protected :page
   helper_method :page
-  helper_method :editing?
+  helper_method :editable?, :editing?
 
   breadcrumbs do |b|
     @page.self_and_ancestors.accessible_by(current_ability).with_translations.each do |page|
@@ -42,7 +42,7 @@ class PagesController < ApplicationController
   end
 
   def editing?
-    editable? and params[:editor].to_b
+    editable? and params[:editing].to_b
   end
 
   def default_url_options(options = {})
@@ -85,7 +85,7 @@ class PagesController < ApplicationController
       available_locales = I18n.available_locales.map(&:to_s)
       if page_locale = params[:page_locale] and page_locale.in?(available_locales)
         @editor_locale = params[:locale]
-        @page_locale = I18n.locale = page_locale
+        I18n.locale = @page_locale = page_locale
       else
         @page_locale = @editor_locale = I18n.locale
       end

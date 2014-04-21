@@ -31,21 +31,20 @@ GtGraphics::Application.routes.draw do
         actions.each do |action_name, options|
           options = options.reverse_merge(controller: controller_name, action: action_name, via: :get).merge(as: nil)
           if action_name == :show
-            root options
+            root options.reverse_merge(as: "#{resource_name}_root")
           else
-            match "#{action_name}(.:format)", options
+            match "#{action_name}(.:format)", options.reverse_merge(as: "#{action_name}_#{resource_name}_root")
           end
         end
       end
     end
 
-    get 'edit' => 'homepages#edit', as: :edit_root
     root to: 'homepages#show'
   end
 
   scope '(:locale)', constraints: { locale: /[a-z]{2}/ } do
     scope constraints: Routing::LocaleConstraint.new do
-      scope 'admin/pages/editor(/:page_locale)', constraints: { page_locale: /[a-z]{2}/ }, as: :admin_page_editor, editor: true do
+      scope 'admin/pages/editor(/:page_locale)', constraints: { page_locale: /[a-z]{2}/ }, as: :admin_page_editor, editing: true do
         scope constraints: Routing::LocaleConstraint.new(:page_locale) do
           concerns :page_containable
         end
