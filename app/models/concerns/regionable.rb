@@ -7,8 +7,23 @@ module Regionable
     before_update :migrate_regions, if: :embeddable_type_changed?
   end
 
+  def assign_regions(region_assigns, options = {})
+    region_assigns = region_assigns.stringify_keys
+    assigned_regions = region_assigns.keys
+    removed_regions = persisted_regions - assigned_regions
+    removed_regions.each { |label| remove_region(label, options) }
+    region_assigns.each do |label, body|
+      store_region(label, body, options)
+    end
+    true
+  end
+
   def available_regions
     @available_regions ||= (template && template.region_definitions.pluck(:label)) || []
+  end
+
+  def defined_regions
+    regions.joins(:definition).select(Template::RegionDefinition.arel_table[:label]).pluck(:label)
   end
 
   def fetch_region(label, options = {})
@@ -65,7 +80,6 @@ module Regionable
   def migrate_regions
     # If changing the embeddable type, migrates the regions to the defined regions on the new template
     if supports_regions?
-
       # TODO
       # self.regions = regions.slice(available_regions)
     else

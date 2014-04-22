@@ -1,7 +1,6 @@
 class PagesController < ApplicationController
   respond_to :html
 
-  before_action :set_page_locale
   before_action :load_page
   before_action :load_template
 
@@ -77,20 +76,6 @@ class PagesController < ApplicationController
     if @page.supports_template?
       @template = @page.template 
       @region_definitions = @template.try(:region_definitions) if @page.supports_regions?
-    end
-  end
-
-  def set_page_locale
-    if editing?
-      available_locales = I18n.available_locales.map(&:to_s)
-      if page_locale = params[:page_locale] and page_locale.in?(available_locales)
-        @editor_locale = params[:locale]
-        I18n.locale = @page_locale = page_locale
-      else
-        @page_locale = @editor_locale = I18n.locale
-      end
-    else
-      @page_locale = I18n.locale
     end
   end
 end

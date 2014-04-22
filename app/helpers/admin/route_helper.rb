@@ -1,17 +1,9 @@
 module Admin::RouteHelper
-  def admin_page_editor_page_path(page, options = {})
-    if page.path.present?
-      send("admin_page_editor_#{page.embeddable_class.model_name.element}_path", options.merge(path: page.path))
-    else
-      admin_page_editor_root_path(options)
-    end
+  def admin_page_editor_path(page, options = {})
+    super(options.merge(id: page.to_param).reverse_merge(locale: I18n.locale))
   end
 
   def admin_page_editor_page_url(page, options = {})
-    if page.path.present?
-      send("admin_page_editor_#{page.embeddable_class.model_name.element}_url", options.merge(path: page.path))
-    else
-      admin_page_editor_root_url(options)
-    end
+    # TODO
   end
 end
