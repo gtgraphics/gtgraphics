@@ -1,9 +1,20 @@
-- content_for :stylesheets do
-  = stylesheet_link_tag 'admin', media: 'all', data: { turbolinks_track: true }
+- content_for :admin_stylesheets do
   = stylesheet_link_tag 'page_editor', media: 'all', data: { turbolinks_track: true }
 
-- content_for :javascripts do
-  = javascript_include_tag 'admin', data: { turbolinks_track: true }
+- content_for :admin_javascripts do
   = javascript_include_tag 'page_editor', data: { turbolinks_track: true }
 
-= render template: 'layouts/application'
+- content_for :admin_body do
+  %nav#navigation.navbar.navbar-default.navbar-fixed-top{role: 'navigation'}
+    .container
+      .navbar-header
+        %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
+          = icon(:bars, fixed_width: true)
+          %span.sr-only= translate('helpers.links.toggle_navigation')
+
+      .navbar-collapse.collapse
+        = render 'user_menu'
+
+  = yield
+
+= render template: 'layouts/admin/application'

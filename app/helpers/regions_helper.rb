@@ -1,10 +1,15 @@
 module RegionsHelper
   def render_region(label, options = {})
     raise Template::RegionDefinition::NotSupported.new(@page.template) unless @page.supports_regions?
-    options.reverse_merge!(locale: I18n.locale)
+    options.reverse_merge!(locale: @page_locale || I18n.locale, editing: try(:editing?) || false)
     if region_definition = @region_definitions.find { |definition| definition.label == label.to_s }
       if region = @page.regions.find_by(definition: region_definition)
-        region_translation = Globalize.fallbacks(options[:locale]).collect { |locale| region.translation_for(locale, false) }.compact.first
+        if options[:editing]
+          # disable Globalize fallbacks in editor mode
+          region_translation = region.translation_for(locale, false)
+        else
+          region_translation = Globalize.fallbacks(options[:locale]).collect { |locale| region.translation_for(locale, false) }.compact.first
+        end
         if region_translation
           untranslated = region_translation.locale != options[:locale]
           html_lang = untranslated ? region_translation.locale : nil

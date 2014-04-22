@@ -10,7 +10,9 @@ module Regionable
   def assign_regions(region_assigns, options = {})
     region_assigns = region_assigns.stringify_keys
     assigned_regions = region_assigns.keys
-    removed_regions = persisted_regions - assigned_regions
+    invalid_region = assigned_regions.detect { |label| !label.in?(available_regions) }
+    raise Template::RegionDefinition::NotFound.new(invalid_region, template) if invalid_region
+    removed_regions = self.defined_regions - assigned_regions
     removed_regions.each { |label| remove_region(label, options) }
     region_assigns.each do |label, body|
       store_region(label, body, options)

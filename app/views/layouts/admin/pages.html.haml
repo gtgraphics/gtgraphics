@@ -25,8 +25,8 @@
             .sr-only= translate('helpers.links.settings')
           %ul.dropdown-menu{role: 'menu', aria_labelledby: 'dLabel'}
             %li= link_to prepend_icon(:eye, translate('helpers.links.view_mode'), fixed_width: true), @page
-            %li= link_to prepend_icon(:edit, translate('helpers.links.editor_mode'), fixed_width: true), admin_page_editor_path(@page, page_locale: I18n.locale)
             %li.divider
+            %li= link_to prepend_icon(:edit, translate('helpers.links.editor_mode'), fixed_width: true), admin_page_editor_path(@page, page_locale: I18n.locale)
             %li= link_to prepend_icon(:wrench, translate('helpers.links.page_settings'), fixed_width: true), [:edit, :admin, @page]
             %li.divider
             - if @page.published?

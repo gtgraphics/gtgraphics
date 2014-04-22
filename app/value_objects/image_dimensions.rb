@@ -8,19 +8,27 @@ class ImageDimensions
     @height = height || 0
   end
 
-  def self.parse(dimensions)
-    if dimensions.nil?
-      nil
-    elsif dimensions.respond_to?(:width) and dimensions.respond_to?(:height)
-      new(dimensions.width.to_i, dimensions.height.to_i)
-    elsif dimensions.is_a?(String)
-      new(*dimensions.split('x'))
-    elsif dimensions.is_a?(Array)
-      new(*dimensions)
-    elsif dimensions.is_a?(Rational)
-      new(dimensions.numerator, dimensions.denominator)
+  def self.parse(*args)
+    case args.size
+    when 1
+      dimensions = args.first
+      if dimensions.nil?
+        nil
+      elsif dimensions.respond_to?(:width) and dimensions.respond_to?(:height)
+        new(dimensions.width.to_i, dimensions.height.to_i)
+      elsif dimensions.is_a?(String)
+        new(*dimensions.split('x'))
+      elsif dimensions.is_a?(Array)
+        new(*dimensions)
+      elsif dimensions.is_a?(Rational)
+        new(dimensions.numerator, dimensions.denominator)
+      else
+        raise ArgumentError, "#{dimensions.inspect} cannot be converted to #{self.name}"
+      end
+    when 2
+      new(*args)
     else
-      raise ArgumentError, "#{dimensions.inspect} cannot be converted to #{self.name}"
+      raise ArgumentError, "wrong number of arguments (#{args.size} for 1..2)"
     end
   end
 

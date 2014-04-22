@@ -11,7 +11,7 @@ class Admin::Editor::PagesController < Admin::Editor::ApplicationController
   end
 
   def update
-    @page.assign_regions(region_params)
+    @page.assign_regions(region_params, locale: @page_locale)
     saved = @page.save
     respond_to do |format|
       format.html { head saved ? :ok : :unprocessable_entity }

@@ -1,8 +1,10 @@
 - content_for :stylesheets do
   = stylesheet_link_tag 'admin', media: 'all', data: { turbolinks_track: true }
+  = yield :admin_stylesheets
 
 - content_for :javascripts do
   = javascript_include_tag 'admin', data: { turbolinks_track: true }
+  = yield :admin_javascripts
 
 - content_for :title do
   = ([translate('views.admin.title')] + breadcrumbs.collect(&:caption).drop(1)).join(' &middot; ').html_safe
@@ -12,27 +14,31 @@
     Editor.Control.Image.dialogUrl = '#{admin_editor_image_path}'
     Editor.Control.Link.dialogUrl = '#{admin_editor_link_path}'
 
-  %nav#navigation.navbar.navbar-default.navbar-fixed-top.navbar-inverse{role: 'navigation'}
-    .container
-      .navbar-header
-        - if signed_in?
-          %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
-            = icon(:bars, fixed_width: true)
-            %span.sr-only= translate('helpers.links.toggle_navigation')
-
-        = link_to :admin_root, class: 'navbar-brand' do
-          %span.sr-only GT Graphics
-
-      - if signed_in?
-        = render 'navbar'
+  - if content_for? :admin_body
+    = yield :admin_body
     
-  .container
-    #admin_content
-      - if content_for? :admin_content
-        = yield :admin_content
-      - else
-        = render_flash(flash.notice, type: :success)
-        = render_flash(flash.alert, type: :danger)
-        = yield
+  - else
+    %nav#navigation.navbar.navbar-default.navbar-fixed-top.navbar-inverse{role: 'navigation'}
+      .container
+        .navbar-header
+          - if signed_in?
+            %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
+              = icon(:bars, fixed_width: true)
+              %span.sr-only= translate('helpers.links.toggle_navigation')
+
+          = link_to :admin_root, class: 'navbar-brand' do
+            %span.sr-only GT Graphics
+
+        - if signed_in?
+          = render 'navbar'
+      
+    .container
+      #admin_content
+        - if content_for? :admin_content
+          = yield :admin_content
+        - else
+          = render_flash(flash.notice, type: :success)
+          = render_flash(flash.alert, type: :danger)
+          = yield
 
 = render template: 'layouts/application'

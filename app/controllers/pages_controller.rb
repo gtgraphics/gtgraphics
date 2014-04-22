@@ -44,14 +44,6 @@ class PagesController < ApplicationController
     editable? and params[:editing].to_b
   end
 
-  def default_url_options(options = {})
-    if editing?
-      super.merge(page_locale: @page_locale)
-    else
-      super
-    end
-  end
-
   def render_page(options = {})
     render @page.template_path, options
   end
