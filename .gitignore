@@ -21,3 +21,6 @@
 
 # Ignore generated sitemaps.
 /public/sitemap.xml
+
+# Ignore generated ERDs.
+erd.pdf
