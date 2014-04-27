@@ -1,20 +1,26 @@
-originalCursor = null
-originalHtml = null
-
-$(document).on 'page:fetch', ->
+showLoader = ->
   $('body').addClass('loading')
+  $('#loader').fadeIn('fast')
 
-  $container = $('.gtg-admin-breadcrumb-home')
-  originalHtml = $container.html()
-  $loader = $('<i />', class: 'fa fa-spinner fa-fw fa-spin')
-  $container.html($loader)
-
-$(document).on 'page:receive', ->
+hideLoader = ->
   $('body').removeClass('loading')
+  $('#loader').fadeOut('fast')
 
-  if originalHtml
-    $container = $('.gtg-admin-breadcrumb-home')
-    $container.html(originalHtml)
+$(document)
+  .on 'page:fetch', ->
+    showLoader()
+
+  .on 'page:receive page:restore', ->
+    hideLoader()
+
+  .on 'submit', "form:not([data-remote=true])", ->
+    showLoader()
+
+  .on 'ajax:beforeSend', "form[data-remote=true]", ->
+    showLoader()
+
+  .on 'ajax:complete', "form[data-remote=true]", ->
+    hideLoader()
 
 # Tooltips Fix
 $(document).on 'page:change', ->

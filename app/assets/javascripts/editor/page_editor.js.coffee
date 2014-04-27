@@ -1,10 +1,10 @@
-class @RegionEditor
+class @PageEditor
 
   @defaults =
     selector: '.region'
 
   constructor: (options = {}) ->
-    @options = jQuery.extend({}, RegionEditor.defaults, options)
+    @options = jQuery.extend({}, PageEditor.defaults, options)
    
 
     $(@options.selector).each ->

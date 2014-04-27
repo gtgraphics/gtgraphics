@@ -18,8 +18,9 @@ class @Editor.Control.Link extends @Editor.Control.DialogButtonControl
       false
 
   queryActive: ->
+    doc = @getRegionDocument()
     $element = @getElementFromSelection()
-    $element? and $element.any()
+    ($element? and $element.any()) or (doc? and doc.queryCommandState('createlink'))
 
   onInitEditor: (editor) ->
     control = @

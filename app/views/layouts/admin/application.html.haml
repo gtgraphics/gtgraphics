@@ -14,24 +14,60 @@
     Editor.Control.Image.dialogUrl = '#{admin_editor_image_path}'
     Editor.Control.Link.dialogUrl = '#{admin_editor_link_path}'
 
+  %nav#admin_navigation.navbar.navbar-default.navbar-fixed-top{role: 'navigation'}
+    .container
+      #loader.loader
+
+      .navbar-header
+        - if signed_in?
+          %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
+            = icon(:bars, fixed_width: true)
+            %span.sr-only= translate('helpers.links.toggle_navigation')
+
+        = link_to :admin_root, class: 'navbar-brand' do
+          %span.sr-only GT Graphics
+
+      - if signed_in?
+        .navbar-collapse.collapse
+          / Main Menu
+          %ul.nav.navbar-nav#nav_primary
+            - if content_for?(:admin_navigation)
+              %li.dropdown
+                = link_to :admin_root, wrap_tag: :li, class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+                  = icon(:bars)
+                  .sr-only Menu
+                %ul.dropdown-menu
+                  = active_link_to Page.model_name.human(count: 2), :admin_pages, wrap_tag: :li
+                  = active_link_to ::Template.model_name.human(count: 2), :admin_templates, wrap_tag: :li
+                  = active_link_to Snippet.model_name.human(count: 2), :admin_snippets, wrap_tag: :li
+                  = active_link_to Image.model_name.human(count: 2), :admin_images, wrap_tag: :li
+                  = active_link_to Attachment.model_name.human(count: 2), :admin_attachments, wrap_tag: :li
+                  = active_link_to User.model_name.human(count: 2), :admin_users, wrap_tag: :li
+              %li.divider
+              = yield(:admin_navigation)
+            - else
+              %li.dropdown.hidden-xs{class: request.path =~ /pages|templates|snippets/ ? ' active' : nil}
+                = link_to :admin_pages, wrap_tag: :li, class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+                  = Page.model_name.human(count: 2)
+                  = caret
+                %ul.dropdown-menu
+                  = active_link_to translate('views.admin.pages.sitemap'), :admin_pages, wrap_tag: :li
+                  %li.divider
+                  = active_link_to ::Template.model_name.human(count: 2), :admin_templates, wrap_tag: :li
+                  = active_link_to Snippet.model_name.human(count: 2), :admin_snippets, wrap_tag: :li
+              = active_link_to Page.model_name.human(count: 2), :admin_pages, wrap_tag: :li, class: 'visible-xs'
+              = active_link_to ::Template.model_name.human(count: 2), :admin_templates, wrap_tag: :li, class: 'visible-xs'
+              = active_link_to Snippet.model_name.human(count: 2), :admin_snippets, wrap_tag: :li, class: 'visible-xs'
+              = active_link_to Image.model_name.human(count: 2), :admin_images, wrap_tag: :li
+              = active_link_to Attachment.model_name.human(count: 2), :admin_attachments, wrap_tag: :li
+              = active_link_to User.model_name.human(count: 2), :admin_users, wrap_tag: :li
+
+          / User Menu
+          = render 'user_menu'
+
   - if content_for? :admin_body
     = yield :admin_body
-    
   - else
-    %nav#navigation.navbar.navbar-default.navbar-fixed-top.navbar-inverse{role: 'navigation'}
-      .container
-        .navbar-header
-          - if signed_in?
-            %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
-              = icon(:bars, fixed_width: true)
-              %span.sr-only= translate('helpers.links.toggle_navigation')
-
-          = link_to :admin_root, class: 'navbar-brand' do
-            %span.sr-only GT Graphics
-
-        - if signed_in?
-          = render 'navbar'
-      
     .container
       #admin_content
         - if content_for? :admin_content

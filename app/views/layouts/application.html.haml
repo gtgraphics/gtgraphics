@@ -26,7 +26,7 @@
 
     = yield :javascripts
 
-  %body{class: body_css, data: { namespace: controller_namespace, controller: controller_name, action: action_name, locale: I18n.locale, preferred_locale: current_user.try(:preferred_locale) }}
+  %body{id: yield(:body_id).presence, class: body_css, data: { namespace: controller_namespace, controller: controller_name, action: action_name, locale: I18n.locale }}
     = i18n_javascript
 
     - if content_for? :content
