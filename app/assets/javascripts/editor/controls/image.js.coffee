@@ -19,10 +19,7 @@ class @Editor.Control.Image extends @Editor.Control.DialogButtonControl
 
   queryActive: ->
     $element = @getElementFromSelection()
-    if $element and $element.any()
-      true
-    else
-      false
+    $element? and $element.any()
 
   onInitEditor: (editor) ->
     control = @
