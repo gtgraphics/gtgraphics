@@ -244,6 +244,9 @@ class @TextareaEditor
   getSelectedRange: ->
     @getSelection().getRangeAt(0)
 
+  getSelectedNodes: ->
+    $(@getSelectedRange().getNodes())
+
   deleteSelectedContent: ->
     range = @getSelectedRange()
     range.deleteContents()
