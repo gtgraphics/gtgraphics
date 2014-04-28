@@ -9,7 +9,7 @@ set :ssh_options, { forward_agent: true }
 
 # RVM
 set :rvm_type, :user
-set :rvm_ruby_version, '2.0.0'
+set :rvm_ruby_version, '2.1.0'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
