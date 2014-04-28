@@ -71,6 +71,12 @@ class Image < ActiveRecord::Base
       { geometry: '100%x100%', convert_options: convert_options }
     end
 
+    def virtual_file_name
+      I18n.with_locale(I18n.default_locale) do
+        "#{image.title.parameterize.underscore}_#{transformed_dimensions.to_a.join('x')}" + File.extname(file_name).downcase
+      end
+    end
+
     protected
     def set_transformation_defaults
       # do nothing here, override in subclasses
