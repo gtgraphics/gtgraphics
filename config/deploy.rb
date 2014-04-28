@@ -4,7 +4,7 @@ lock '3.1.0'
 set :application, 'gtgraphics'
 
 # Git
-set :repo_url, 'git@tasdy.net:gtgraphics'
+set :repo_url, 'git@github.com:gtgraphics/gtgraphics.git'
 set :ssh_options, { forward_agent: true }
 
 # RVM
