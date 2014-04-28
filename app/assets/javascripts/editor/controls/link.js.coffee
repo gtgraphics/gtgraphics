@@ -61,7 +61,9 @@ class @Editor.Control.Link extends @Editor.Control.DialogButtonControl
     editorParams = { content: editor.getSelectedHtml() }
     if $link instanceof jQuery
       # only if an anchor tag is selected
-      editorParams.href = $link.attr('href')
+      pageId = $link.data('pageId')
+      editorParams.external = true unless pageId
+      editorParams.url = $link.attr('href')
       editorParams.target = $link.attr('target')
       _($link.data()).each (value, key) ->
         editorParams[_(key).underscored()] = value
