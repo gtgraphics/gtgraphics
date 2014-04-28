@@ -10,7 +10,8 @@ module RouteHelper
   def page_path(*args)
     options = args.extract_options!
     page = args.first
-    options = options.reverse_merge(editing: try(:editing?).presence)
+    format = options[:format].try(:to_s)
+    options = options.reverse_merge(editing: try(:editing?).presence) if format.nil? or format == 'html'
     if page and page.path.present?
       send("#{page.embeddable_class.model_name.element}_path", options.merge(path: page.path))
     else
@@ -21,7 +22,8 @@ module RouteHelper
   def page_url(*args)
     options = args.extract_options!
     page = args.first
-    options = options.reverse_merge(editing: try(:editing?).presence)
+    format = options[:format].try(:to_s)
+    options = options.reverse_merge(editing: try(:editing?).presence) if format.nil? or format == 'html'
     if page and page.path.present?
       send("#{page.embeddable_class.model_name.element}_url", options.merge(path: page.path))
     else

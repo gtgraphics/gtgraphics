@@ -137,6 +137,8 @@ GtGraphics::Application.routes.draw do
         root to: redirect('/admin/pages')
       end
 
+      Routing::Page.draw(self)
+=begin
       Page::EMBEDDABLE_TYPES.each do |page_type|
         page_embeddable_class = page_type.constantize
         resource_name = page_embeddable_class.resource_name
@@ -172,7 +174,7 @@ GtGraphics::Application.routes.draw do
           end
         end
       end
-
+=end
       root to: 'homepages#show'
 
       # Legacy URLs that have changed permanently (HTTP 301)

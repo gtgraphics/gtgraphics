@@ -5,7 +5,8 @@ module PageEmbeddable
 
   module ClassMethods
     def acts_as_page_embeddable(options = {})
-      @page_type_options = options.reverse_merge(
+      class_attribute :page_type_options, instance_accessor: false
+      self.page_type_options = options.reverse_merge(
         convertible: true,
         creatable: true,
         resource_name: self.model_name.element.to_sym,
@@ -32,15 +33,15 @@ module PageEmbeddable
 
     module ClassMethods
       def convertible?
-        @page_type_options[:convertible]
+        page_type_options[:convertible]
       end
 
       def creatable?
-        @page_type_options[:creatable]
+        page_type_options[:creatable]
       end
 
       def resource_name
-        @page_type_options[:resource_name]
+        page_type_options[:resource_name]
       end
 
       def supports_regions?
@@ -56,7 +57,7 @@ module PageEmbeddable
       end
 
       def template_type
-        @page_type_options[:template_class].try(:to_s)
+        page_type_options[:template_class].try(:to_s)
       end
     end
   end

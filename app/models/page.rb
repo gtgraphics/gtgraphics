@@ -24,8 +24,12 @@ class Page < ActiveRecord::Base
   include Authorable
   include BatchTranslatable
   include Excludable
+  include MenuContainable
+  include NestedSetRepresentable
   include PersistenceContextTrackable
+  include Publishable
   include Regionable
+  include Sluggable
 
   EMBEDDABLE_TYPES = %w(
     Page::Content
@@ -36,13 +40,11 @@ class Page < ActiveRecord::Base
     Page::Redirection
   ).freeze
 
+  has_slug param: false
   translates :title, :meta_description, :meta_keywords, fallbacks_for_empty_translations: true
-
-  composed_of :slug, mapping: %w(slug to_s), allow_nil: true, converter: :new
 
   acts_as_authorable
   acts_as_batch_translatable
-  acts_as_nested_set counter_cache: :children_count, dependent: :destroy
 
   belongs_to :embeddable, polymorphic: true, autosave: true
 
@@ -51,7 +53,6 @@ class Page < ActiveRecord::Base
   validates :embeddable_type, inclusion: { in: EMBEDDABLE_TYPES }, allow_blank: true
   validates :slug, presence: { unless: :root? }, uniqueness: { scope: :parent_id, if: :slug_changed? }
   validates :path, presence: { unless: :root? }, uniqueness: { if: :path_changed? }
-  validate :verify_parent_assignability, if: :parent_id_changed?
   validate :verify_root_uniqueness, if: :root?
   validate :verify_embeddable_type_was_convertible, on: :update, if: :embeddable_type_changed?
 
@@ -63,11 +64,8 @@ class Page < ActiveRecord::Base
   after_destroy :destroy_embeddable
 
   default_scope -> { order(:lft) }
-  scope :hidden, -> { where(published: false) }
   scope :indexable, -> { where(indexable: true) }
-  scope :menu_items, -> { where(menu_item: true) }
   scope :primary, -> { where(depth: 1) }
-  scope :published, -> { where(published: true) }
 
   delegate :name, to: :author, prefix: true, allow_nil: true
   delegate :name, to: :template, prefix: true, allow_nil: true
@@ -88,17 +86,8 @@ class Page < ActiveRecord::Base
   end
 
   class << self
-    def assignable_as_parent_of(page)
-      if page.present?
-        page = find(page) unless page.is_a?(Page)
-        where.not(id: page.self_and_descendants.reorder(arel_table[:lft].asc).pluck(:id))
-      else
-        all
-      end
-    end
-
     def creatable_embeddable_classes
-      @@creatable_embeddable_classes ||= embeddable_classes.select(&:creatable?).freeze
+      embeddable_classes.select(&:creatable?).freeze
     end
 
     def embedding(*types)
@@ -124,10 +113,6 @@ class Page < ActiveRecord::Base
     end    
   end
 
-  def ancestors_and_siblings
-    self.class.where(parent_id: self.ancestors.ids << nil)
-  end
-
   def build_embeddable(attributes = {})
     raise 'invalid embeddable type' unless embeddable_class
     self.embeddable = embeddable_class.new(attributes)
@@ -137,28 +122,8 @@ class Page < ActiveRecord::Base
     children.embedding(*types).includes(:embeddable)
   end
 
-  def descendants_count
-    self_and_descendants.pluck(:children_count).sum
-  end
-
   def destroyable?
     !root?
-  end
-
-  def disable_in_menu
-    self.menu_item = false
-  end
-
-  def disable_in_menu!
-    update_column(:menu_item, false)
-  end
-
-  def enable_in_menu
-    self.menu_item = true
-  end
-
-  def enable_in_menu!
-    update_column(:menu_item, true)
   end
 
   def embeddable_attributes=(attributes)
@@ -183,40 +148,12 @@ class Page < ActiveRecord::Base
     embeddable_type_changed? or embeddable_id_changed?
   end
 
-  def has_children?
-    children_count > 0
-  end
-
-  def hide
-    self.published = false
-  end
-
-  def hide!
-    update_column(:published, false)
-  end
-
-  def hidden?
-    !published?
-  end
-
-  def publish
-    self.published = true
-  end
-
-  def publish!
-    update_column(:published, true)
-  end
-
   def refresh_path!(include_descendants = false)
     if include_descendants
       transaction { self_and_descendants.each(&:refresh_path!) }
     else
       update_column(:path, generate_path)
     end
-  end
-
-  def self_and_ancestors_and_siblings
-    self.class.where(parent_id: self.self_and_ancestors.ids << nil)
   end
 
   def supports_template?
@@ -265,10 +202,6 @@ class Page < ActiveRecord::Base
     self.path = generate_path
   end
 
-  def set_previous_changes
-    @previously_changed = changes
-  end
-
   def set_slug
     self.slug = title(I18n.default_locale) if new_record? and slug.blank? and title.present?
     self.slug = '' if root?
@@ -282,10 +215,6 @@ class Page < ActiveRecord::Base
 
   def verify_embeddable_type_was_convertible
     errors.add(:embeddable_type, :invalid) unless embeddable_class_was.convertible?
-  end
-
-  def verify_parent_assignability
-    errors.add(:parent_id, :invalid) if self_and_descendants.pluck(:id).include?(parent_id)
   end
 
   def verify_root_uniqueness
