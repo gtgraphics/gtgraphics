@@ -14,12 +14,16 @@ $(document)
     hideLoader()
 
   .on 'submit', "form:not([data-remote=true])", ->
+    console.log 'bla'
     showLoader()
 
   .on 'ajax:beforeSend', "form[data-remote=true]", ->
     showLoader()
 
   .on 'ajax:complete', "form[data-remote=true]", ->
+    hideLoader()
+
+  .ajaxComplete ->
     hideLoader()
 
 # Tooltips Fix
