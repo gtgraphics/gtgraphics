@@ -1,0 +1,20 @@
+- content_for :body_id, 'page_editor'
+
+- content_for :admin_navigation do
+  - %w(bold italic underline strikethrough).each do |command|
+    %li= link_to icon(command), '#', title: translate(command, scope: 'javascript.editor'), data: { command: command.camelize(:lower), toggle: 'tooltip', placement: 'bottom', container: 'body' }
+  %li.divider
+  - %w(align_left align_center align_right align_justify).each do |command|
+    %li= link_to icon(command), '#', title: translate(command, scope: 'javascript.editor'), data: { command: command.camelize(:lower), toggle: 'tooltip', placement: 'bottom', container: 'body' }
+  %li.divider
+  %li= link_to icon(:list_ol), '#', title: translate('javascript.editor.ordered_list'), data: { command: 'orderedList', toggle: 'tooltip', placement: 'bottom', container: 'body' }
+  %li= link_to icon(:list_ul), '#', title: translate('javascript.editor.unordered_list'), data: { command: 'unorderedList', toggle: 'tooltip', placement: 'bottom', container: 'body' }
+  %li.divider
+  %li= link_to icon(:link), '#', title: translate('javascript.editor.link'), data: { command: 'link', toggle: 'tooltip', placement: 'bottom', container: 'body' }
+  %li= link_to icon(:unlink), '#', title: translate('javascript.editor.unlink'), data: { command: 'unlink', toggle: 'tooltip', placement: 'bottom', container: 'body' }
+  %li.divider
+  %li= link_to icon(:picture, outline: true), '#', title: translate('javascript.editor.image'), data: { command: 'image', toggle: 'tooltip', placement: 'bottom', container: 'body' }
+  %li.divider
+  %li= link_to icon(:info), [:edit, :admin, @page]
+
+= render template: 'layouts/admin/application'

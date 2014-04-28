@@ -43,8 +43,8 @@ class Image < ActiveRecord::Base
     acts_as_image_croppable
     acts_as_image_resizable
 
-    composed_of :dimensions, class_name: 'ImageDimensions', mapping: [%w(width), %w(height)], allow_nil: true, converter: :parse
-    composed_of :transformed_dimensions, class_name: 'ImageDimensions', mapping: [%w(transformed_width width), %w(transformed_height height)], allow_nil: true, converter: :parse
+    composed_of :dimensions, class_name: 'ImageDimensions', mapping: [%w(width), %w(height)], allow_nil: true, constructor: :parse, converter: :parse
+    composed_of :transformed_dimensions, class_name: 'ImageDimensions', mapping: [%w(transformed_width width), %w(transformed_height height)], allow_nil: true, constructor: :parse, converter: :parse
 
     TYPES.each do |type|
       scope type.demodulize.underscore.pluralize, -> { where(type: type) }
@@ -69,6 +69,12 @@ class Image < ActiveRecord::Base
       convert_options << " -crop #{crop_geometry} +repage" if cropped?
       convert_options << " -resize #{resize_geometry}" if resized?
       { geometry: '100%x100%', convert_options: convert_options }
+    end
+
+    def virtual_file_name
+      I18n.with_locale(I18n.default_locale) do
+        "#{image.title.parameterize.underscore}_#{transformed_dimensions.to_a.join('x')}" + File.extname(file_name).downcase
+      end
     end
 
     protected

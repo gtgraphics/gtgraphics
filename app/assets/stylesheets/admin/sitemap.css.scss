@@ -29,7 +29,7 @@
   bottom: 0;
   top: $navbar-height + 1px;
 
-  &:before {
+  /*&:before {
     $shadow-height: 15px;
     position: absolute;
     top: 0;
@@ -65,8 +65,7 @@
       repeat: no-repeat;
       size: 100% $shadow-height;
     }
-  }
-
+  }*/
 }
 
 #sitemap {
@@ -75,7 +74,6 @@
     bottom: 20px;
     right: $grid-gutter-width;
   }
-
 }
 
 #page_content {

@@ -61,3 +61,14 @@
   border-right: $size solid;
   border-left: 0;
 }
+
+// Unselectable
+
+@mixin unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

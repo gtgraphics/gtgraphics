@@ -1,0 +1,39 @@
+#page_editor {
+  #editor_frame_wrapper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 51px;
+    //background-color: $navbar-default-bg;
+
+    .loader {
+      $height: 76px;
+      @include unselectable;
+      cursor: default;
+      background: {
+        image: asset-url('admin/loader_large.gif');
+        position: center 5px;
+        repeat: no-repeat;
+      }
+      position: absolute;
+      z-index: 1;
+      top: 50%;
+      left: 10px;
+      right: 10px;
+      height: $height;
+      margin-top: -$height / 2;
+      padding-top: 45px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 300;
+      color: #999;
+    }
+  }
+
+  #editor_frame {
+    border: none;
+    position: relative;
+    z-index: 2;
+  }
+}

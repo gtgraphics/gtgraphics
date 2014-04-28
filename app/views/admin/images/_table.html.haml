@@ -52,7 +52,7 @@
           %td= link_to image.title, [:admin, image]
           %td.hidden-xs= image.human_content_type
           %td.hidden-xs= image.dimensions
-          %td.visible-lg= image.author
+          %td.visible-lg= link_to image.author, [:admin, image.author] if image.author
           %td.visible-lg= time_ago image.updated_at
           - if actions
             %td.actions

@@ -23,7 +23,7 @@ class Admin::AttachmentsController < Admin::ApplicationController
   def create
     @attachment = Attachment.create(attachment_params)
     flash_for @attachment
-    respond_with :admin, @attachment
+    respond_with :admin, @attachment, location: :admin_attachments
   end
 
   def edit
@@ -33,13 +33,13 @@ class Admin::AttachmentsController < Admin::ApplicationController
   def update
     @attachment.update(attachment_params)
     flash_for @attachment
-    respond_with :admin, @attachment
+    respond_with :admin, @attachment, location: :admin_attachments
   end
 
   def destroy
     @attachment.destroy
     flash_for @attachment
-    respond_with :admin, @attachment
+    respond_with :admin, @attachment, location: :admin_attachments
   end
 
   def destroy_multiple

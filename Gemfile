@@ -15,8 +15,8 @@ gem 'http_accept_language'
 
 # Models
 gem 'acts_as_list'
-gem 'acts_as_tree'
 gem 'acts_as_sanitizable'
+gem 'acts_as_tree'
 gem 'awesome_nested_set', '3.0.0.rc.2'
 gem 'annotate'
 gem 'bcrypt-ruby'
@@ -30,6 +30,7 @@ gem 'virtus'
 # Views
 gem 'haml-rails'
 gem 'simple_form'#, '3.0.0.rc'
+gem 'draper'
 gem 'kaminari'
 gem 'active_link_to'
 gem 'jbuilder', '~> 1.2'

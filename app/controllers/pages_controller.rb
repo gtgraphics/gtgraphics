@@ -9,7 +9,7 @@ class PagesController < ApplicationController
   attr_reader :page
   protected :page
   helper_method :page
-  helper_method :editing?
+  helper_method :editable?, :editing?
 
   breadcrumbs do |b|
     @page.self_and_ancestors.accessible_by(current_ability).with_translations.each do |page|
@@ -36,8 +36,12 @@ class PagesController < ApplicationController
   end
 
   protected
+  def editable?
+    can?(:update, @page || Page)
+  end
+
   def editing?
-    action_name.in? %w(edit update)
+    editable? and params[:editing].to_b
   end
 
   def render_page(options = {})

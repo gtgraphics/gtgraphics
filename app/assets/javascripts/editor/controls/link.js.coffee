@@ -17,6 +17,11 @@ class @Editor.Control.Link extends @Editor.Control.DialogButtonControl
     else
       false
 
+  queryActive: ->
+    doc = @getRegionDocument()
+    $element = @getElementFromSelection()
+    ($element? and $element.any()) or (doc? and doc.queryCommandState('createlink'))
+
   onInitEditor: (editor) ->
     control = @
 
@@ -63,8 +68,11 @@ class @Editor.Control.Link extends @Editor.Control.DialogButtonControl
     { editor: editorParams }
 
   getElementFromSelection: ->
-    range = @getActiveEditor().getSelectedRange()
-    # $(range.commonAncestorContainer).closest(ELEMENT_SELECTOR)
-    $(range.getNodes()).filter(ELEMENT_SELECTOR)
+    editor = @getActiveEditor()
+    if editor
+      $nodes = editor.getSelectedNodes()
+      $nodes.filter(ELEMENT_SELECTOR).add($nodes.closest(ELEMENT_SELECTOR))
+    else
+      jQuery()
 
 @Editor.Control.register('link', @Editor.Control.Link)

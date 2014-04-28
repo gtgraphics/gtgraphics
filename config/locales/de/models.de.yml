@@ -112,6 +112,7 @@ de:
         embeddable_id: Seitenobjekt
         path: Pfad
         parent: Elternseite
+        parent_id: Elternseite
         published: Öffentlich?
         template: Vorlage
         author: Autor

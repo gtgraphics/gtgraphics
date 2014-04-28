@@ -17,6 +17,10 @@ class @Editor.Control.Image extends @Editor.Control.DialogButtonControl
     else
       false
 
+  queryActive: ->
+    $element = @getElementFromSelection()
+    $element? and $element.any()
+
   onInitEditor: (editor) ->
     control = @
 
@@ -50,6 +54,9 @@ class @Editor.Control.Image extends @Editor.Control.DialogButtonControl
 
   getElementFromSelection: ->
     editor = @getActiveEditor()
-    $(editor.getSelectedRange().getNodes()).filter(ELEMENT_SELECTOR)
+    if editor
+      editor.getSelectedNodes().filter(ELEMENT_SELECTOR)
+    else
+      jQuery()
 
 @Editor.Control.register('image', @Editor.Control.Image)

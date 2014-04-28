@@ -38,12 +38,6 @@ class Image < ActiveRecord::Base
         original_asset.url(label)
       end
 
-      def virtual_file_name
-        I18n.with_locale(I18n.default_locale) do
-          "#{image.title.parameterize.underscore}_#{transformed_dimensions.to_a.join('x')}" + File.extname(file_name).downcase
-        end
-      end
-
       private
       def destroy_asset
         File.delete(asset_path)

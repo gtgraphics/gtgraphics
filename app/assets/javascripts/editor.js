@@ -2,8 +2,8 @@
 //= require ./editor/editor
 //= require ./editor/toolbar
 //= require ./editor/textarea_editor
-//= require ./editor/region_editor
 //= require ./editor/jquery.editor
+//= require ./editor/page_editor
 //= require ./editor/control_group
 //= require ./editor/control
 //= require ./editor/button_control

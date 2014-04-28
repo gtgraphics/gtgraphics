@@ -1,0 +1,114 @@
+#admin_navigation.navbar {
+  @media (min-width: $screen-sm-min) {
+    .navbar-nav:not(.navbar-right):first-child {
+      //margin-left: -15px;
+    }
+  }
+
+  &:after {
+    $shadow-height: 12px;
+    display: block;
+    content: " ";
+    position: absolute;
+    top: 51px;
+    right: 0;
+    left: 0;
+    height: $shadow-height;
+    pointer-events: none;
+    z-index: 500;
+    background: {
+      image: asset-url('admin/shadow_bottom.png');
+      repeat: no-repeat;
+      size: 100% $shadow-height;
+    }
+  }
+
+  .navbar-nav {
+    > li.divider {
+      background-color: #e5e5e5;
+      width: 1px;
+      height: 34px;
+      margin: 8px;
+    }
+  }
+
+  .container {
+    position: relative;
+    .loader {
+      $size: 16px;
+      position: absolute;
+      background: {
+        image: asset-url('admin/loader_navigation.gif');
+        repeat: no-repeat;
+        size: 100%;
+      }
+      width: $size;
+      height: $size;
+      margin-top: -$size / 2;
+      top: 50%;
+      left: -12px;
+      display: none;
+      pointer-events: none;
+    }
+  }
+
+  .navbar-brand {
+    //position: absolute;
+    width: 85px;
+    background: {
+      image: asset-url('admin/brand.png');
+      repeat: no-repeat;
+      position: center;
+    }
+
+    @include retina-background-image('admin/brand@2x.png');
+
+    text: {
+      align: center;
+      transform: uppercase;    
+    }
+    font: {
+      size: 16px;
+      weight: 700;
+    }
+    z-index: 1000;
+  }
+
+  #nav_account {
+    .badge {
+      background-color: $brand-danger;
+      //border: 1px solid $navbar-default-bg;
+      border-radius: 50%;
+      font-size: 10px;
+      width: 16px;
+      height: 16px;
+      text-align: center;
+      overflow: hidden;
+      position: absolute;
+      top: 8px;
+      left: 10px;
+      font-weight: normal;
+      padding: 4px 0px;
+    }
+    .avatar {
+      display: block;
+      float: left;
+      margin-top: -2px;
+      margin-right: 6px;
+      margin-left: 2px;
+    }
+    .name {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100px;
+    }
+  }
+
+  #nav_messages {
+    .badge {
+      margin-left: 4px;
+    }
+  }
+}
