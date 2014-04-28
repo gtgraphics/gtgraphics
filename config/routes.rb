@@ -138,43 +138,7 @@ GtGraphics::Application.routes.draw do
       end
 
       Routing::Page.draw(self)
-=begin
-      Page::EMBEDDABLE_TYPES.each do |page_type|
-        page_embeddable_class = page_type.constantize
-        resource_name = page_embeddable_class.resource_name
-        controller_name = resource_name.to_s.pluralize
 
-        actions = {
-          show: { via: :get }
-        }
-        case resource_name
-        when :contact_form then actions.merge!(show: { via: [:get, :post] })
-        when :image then actions.merge!('download(/:style_id(/:dimensions))' => { action: :download, via: :get, as: :download_image })
-        end
-
-        scope constraints: Routing::PageConstraint.new(page_type) do
-          actions.each do |action_name, options|
-            options = options.reverse_merge(controller: controller_name, action: action_name, via: :get)
-            if action_name == :show
-              match '*path(.:format)', options.reverse_merge(as: resource_name)
-            else
-              match "*path/#{action_name}(.:format)", options.reverse_merge(as: "#{action_name}_#{resource_name}")
-            end
-          end
-        end
-        
-        scope constraints: Routing::RootPageConstraint.new(page_type) do
-          actions.each do |action_name, options|
-            options = options.reverse_merge(controller: controller_name, action: action_name, via: :get).merge(as: nil)
-            if action_name == :show
-              root options.reverse_merge(as: "#{resource_name}_root")
-            else
-              match "#{action_name}(.:format)", options.reverse_merge(as: "#{action_name}_#{resource_name}_root")
-            end
-          end
-        end
-      end
-=end
       root to: 'homepages#show'
 
       # Legacy URLs that have changed permanently (HTTP 301)
