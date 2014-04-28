@@ -2,7 +2,10 @@
   
   $.fn.editor = (options = {}) ->
     $(@).each ->
-      editor = new TextareaEditor($(@), options)
-      editor.render()
+      $textarea = $(@)
+      editor = $textarea.data('editor')
+      unless editor
+        editor = new TextareaEditor($textarea, options)
+        editor.render()
 
 ) jQuery

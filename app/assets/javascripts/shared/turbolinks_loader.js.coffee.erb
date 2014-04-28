@@ -23,6 +23,9 @@ $(document)
   .on 'ajax:complete', "form[data-remote=true]", ->
     hideLoader()
 
+  .ajaxSend ->
+    showLoader()
+
   .ajaxComplete ->
     hideLoader()
 
