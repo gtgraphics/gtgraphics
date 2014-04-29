@@ -78,7 +78,7 @@ class Image < ActiveRecord::Base
     image.before_update :destroy_custom_styles
   end
 
-  composed_of :transformed_dimensions, class_name: 'ImageDimensions', mapping: [%w(transformed_width width), %w(transformed_height height)], allow_nil: true, constructor: :parse, converter: :parse
+  has_dimensions :transformed_dimensions, from: [:transformed_width, :transformed_height]
 
   delegate :software, to: :exif_data, allow_nil: true
 

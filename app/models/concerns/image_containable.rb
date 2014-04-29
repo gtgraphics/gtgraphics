@@ -15,7 +15,7 @@ module ImageContainable
     extend ActiveSupport::Concern
 
     included do
-      # validates_attachment :asset, presence: true, content_type: { content_type: CONTENT_TYPES }
+      include Dimensionable
 
       alias_attribute :original_width, :width
       alias_attribute :original_height, :height
@@ -24,7 +24,7 @@ module ImageContainable
 
       delegate :aspect_ratio, :pixels, to: :dimensions
 
-      composed_of :dimensions, class_name: 'ImageDimensions', mapping: [%w(width), %w(height)], allow_nil: true, constructor: :parse, converter: :parse
+      has_dimensions :dimensions, from: [:width, :height]      
     end
 
     module ClassMethods
