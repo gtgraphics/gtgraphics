@@ -8,27 +8,11 @@ module RouteHelper
   end
 
   def page_path(*args)
-    options = args.extract_options!
-    page = args.first
-    format = options[:format].try(:to_s)
-    options = options.reverse_merge(editing: try(:editing?).presence) if format.nil? or format == 'html'
-    if page and page.path.present?
-      send("#{page.embeddable_class.model_name.element}_path", options.merge(path: page.path))
-    else
-      root_path(options)
-    end
+    _page_url(:path, *args)
   end
 
   def page_url(*args)
-    options = args.extract_options!
-    page = args.first
-    format = options[:format].try(:to_s)
-    options = options.reverse_merge(editing: try(:editing?).presence) if format.nil? or format == 'html'
-    if page and page.path.present?
-      send("#{page.embeddable_class.model_name.element}_url", options.merge(path: page.path))
-    else
-      root_url(options)
-    end
+    _page_url(:url, *args)
   end
 
   def root_page_path(options = {})
@@ -37,5 +21,18 @@ module RouteHelper
 
   def root_page_url(options = {})
     page_url(options)
+  end
+
+  private
+  def _page_url(suffix, *args)
+    options = args.extract_options!
+    page = args.first
+    format = options[:format].try(:to_s)
+    options = options.reverse_merge(editing: try(:editing?).presence) if format.nil? or format == 'html'
+    if page and page.path.present?
+      send("#{page.embeddable_class.model_name.element}_#{suffix}", options.merge(path: page.path))
+    else
+      send("root_#{suffix}", options)
+    end
   end
 end
