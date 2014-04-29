@@ -32,7 +32,9 @@ module Sluggable
     private
     def set_slug
       if source_attribute = self.class.slug_options[:from]
-        slug = source_attribute.to_proc.instance_eval(self)
+        source_proc = source_attribute.to_proc
+        proc_args = [self].slice(0...source_proc.arity)
+        slug = self.instance_exec(*proc_args, &source_proc)
         self.send("#{self.class.slug_attribute}=", slug)
       end
     end
