@@ -1,19 +1,7 @@
 module PresenterHelper
-  def present(object, *args)
-    options = args.extract_options!
-    klass = args.first || begin
-      if object.is_a?(ActiveRecord::Relation)
-        "#{object.klass.name.pluralize}Presenter".constantize
-      else
-        "#{object.class}Presenter".constantize
-      end
-    end
-    presenter = klass.new(object, self, options)
-    if block_given?
-      yield presenter
-      presenter
-    else
-      presenter.render
-    end
+  def present(presenter_name, attributes = {})
+    class_name = presenter_name.to_s.classify.gsub(/Presenter\z/, '')
+    class_name += 'Presenter'
+    class_name.constantize.new(self, attributes).render
   end
 end

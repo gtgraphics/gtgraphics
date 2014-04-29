@@ -1,4 +1,4 @@
 %footer
   .container
     %hr
-    = present Page.accessible_by(current_ability).where(depth: 1..2).with_translations, PageListPresenter
+    = present :page_list, pages: Page.accessible_by(current_ability).where(depth: 1..2).with_translations

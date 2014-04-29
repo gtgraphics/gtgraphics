@@ -1,6 +1,4 @@
 class PageTreePresenter < Presenter
-  presents :pages
-
   def render
     level = parent_page.try(:depth).try(:next) || 0
     capture_haml do
