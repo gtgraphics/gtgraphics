@@ -58,8 +58,8 @@ GEM
       rake (>= 0.8.7)
     arel (4.0.2)
     atomic (1.1.14)
-    awesome_nested_set (3.0.0.rc.2)
-      activerecord (~> 4.0.0)
+    awesome_nested_set (3.0.0.rc.3)
+      activerecord (>= 4.0.0, < 5)
     axiom-types (0.0.5)
       descendants_tracker (~> 0.0.1)
       ice_nine (~> 0.9)
@@ -301,7 +301,7 @@ DEPENDENCIES
   acts_as_sanitizable
   acts_as_tree
   annotate
-  awesome_nested_set (= 3.0.0.rc.2)
+  awesome_nested_set (= 3.0.0.rc.3)
   bcrypt-ruby
   better_errors
   binding_of_caller

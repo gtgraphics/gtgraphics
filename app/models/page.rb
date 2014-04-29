@@ -37,10 +37,9 @@ class Page < ActiveRecord::Base
     Page::Homepage
     Page::Image
     Page::Project
-    Page::Redirection
   ).freeze
 
-  has_slug param: false
+  has_slug :slug, param: false, from: -> { root? ? '' : title(I18n.default_locale) }, if: -> { new_record? and slug.blank? and title(I18n.default_locale).present? }
   translates :title, :meta_description, :meta_keywords, fallbacks_for_empty_translations: true
 
   acts_as_authorable
@@ -56,7 +55,6 @@ class Page < ActiveRecord::Base
   validate :verify_root_uniqueness, if: :root?
   validate :verify_embeddable_type_was_convertible, on: :update, if: :embeddable_type_changed?
 
-  before_validation :set_slug
   before_validation :set_path, if: -> { slug_changed? or parent_id_changed? }
   before_destroy :destroyable?
   around_save :update_descendants_paths
@@ -200,11 +198,6 @@ class Page < ActiveRecord::Base
 
   def set_path
     self.path = generate_path
-  end
-
-  def set_slug
-    self.slug = title(I18n.default_locale) if new_record? and slug.blank? and title.present?
-    self.slug = '' if root?
   end
 
   def update_descendants_paths

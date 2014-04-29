@@ -2,16 +2,22 @@ module NestedSetRepresentable
   extend ActiveSupport::Concern
 
   included do
+    include Excludable
+
     acts_as_nested_set counter_cache: :children_count, dependent: :destroy
 
     validate :verify_parent_assignability, if: :parent_id_changed?
   end
 
   module ClassMethods
-    def assignable_as_parent_of(record)
-      if record.present?
-        record = find(record) unless record.is_a?(self.class)
-        where.not(id: record.self_and_descendants.reorder(arel_table[:lft].asc).pluck(:id))
+    def assignable_as_parent_of(record_or_id)
+      if record_or_id.present?
+        if record_or_id.is_a?(self.class)
+          record = record_or_id
+        else
+          record = self.unscoped.find(record_or_id) 
+        end
+        without(record, record.descendants)
       else
         all
       end
