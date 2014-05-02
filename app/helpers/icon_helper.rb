@@ -10,7 +10,13 @@ module IconHelper
   # Font Awesome
 
   def icon(name, options = {})
-    FontAwesome::Icon.new(self, options.merge(name: name)).render
+    icon = FontAwesome::Icon.new(name, options)
+    content_tag :i, nil, icon.tag_options
+  end
+
+  def icon_stack(options = {}, &block)
+    icon_stack = FontAwesome::IconStack.new(options)
+    content_tag :span, icon_stack.tag_options, &block
   end
 
   def append_icon(*args, &block)

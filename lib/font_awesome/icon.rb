@@ -1,32 +1,70 @@
-class FontAwesome::Icon < Presenter
-  default shape: nil, direction: nil, spin: false, outline: false, size: nil,
-          rotate: 0, flip: nil, inverse: false, border: false, fixed_width: false
+class FontAwesome::Icon < FontAwesome::Iconish
+  VALID_OPTIONS = :shape, :direction, :outline, :spin, :size, :rotate, :flip, :inverse, :border, :fixed_width
 
-  def render
-    css = ['fa']
+  attr_reader :name
 
-    name_css = "fa-#{name.to_s.dasherize}"
-    name_css << "-#{shape.to_s.dasherize}" if shape
-    name_css << '-o' if outline
-    name_css << "-#{direction.to_s.dasherize}" if direction
+  def initialize(name, options = {})
+    @name = name
+    @html_options = options.except(*VALID_OPTIONS)
+    @options = options.slice(*VALID_OPTIONS).reverse_merge(
+      border: false,
+      fixed_width: false,
+      inverse: false,
+      outline: false,
+      rotate: 0,
+      spin: false
+    )
+  end
+
+  protected
+  def css_classes
+    css = %w(fa)
     css << name_css
+    set_size(css)
+    set_fixed_width(css)
+    set_transform(css)
+    set_color(css)
+    set_border(css)
+    set_spin(css)
+    css
+  end
 
-    css << 'fa-spin' if spin
-    if size
-      if size == :large
-        css << 'fa-lg'
+  private
+  def name_css
+    name_css = "fa-#{name.to_s.dasherize}"
+    name_css << "-#{@options[:shape].to_s.dasherize}" if @options[:shape]
+    name_css << '-o' if @options[:outline]
+    name_css << "-#{@options[:direction].to_s.dasherize}" if @options[:direction]
+    name_css
+  end
+
+  def set_border(css)
+    css << 'fa-border' if @options[:border]
+  end
+
+  def set_color(css)
+    css << 'fa-inverse' if @options[:inverse]
+  end
+
+  def set_fixed_width(css)
+    css << 'fa-fw' if @options[:fixed_width]
+  end
+
+  def set_flip(css)
+    if @options[:flip]
+      if @options[:flip].to_sym.in? [:horizontal, :vertical]
+        css << "fa-flip-#{@options[:flip]}"
       else
-        css << "fa-#{size}x"
+        raise ArgumentError, ':flip must be :horizontal or :vertical'
       end
     end
-    css << 'fa-inverse' if inverse
-    css << "fa-rotate-#{rotate}" if rotate and rotate != 0
-    css << "fa-flip-#{flip}" if flip
-    css << 'fa-border' if border
-    css << 'fa-fw' if fixed_width
-    css += local_assigns[:class].to_s.split
-    css.uniq!
+  end
 
-    content_tag :i, nil, class: css.join(' '), style: css
+  def set_spin(css)
+    css << 'fa-spin' if @options[:spin]
+  end
+
+  def set_transform(css)
+    css << "fa-rotate-#{@options[:rotate]}" if @options[:rotate] and @options[:rotate] != 0
   end
 end
