@@ -9,10 +9,10 @@ module PersistenceContextTrackable
   end
 
   def created?
-    errors.empty? and @record_was_created
+    errors.empty? and persisted? and @record_was_created
   end
 
   def updated?
-    errors.empty? and !@record_was_created
+    errors.empty? and persisted? and !@record_was_created
   end
 end

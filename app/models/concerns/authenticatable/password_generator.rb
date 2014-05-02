@@ -1,4 +1,4 @@
-class PasswordGenerator
+class Authenticatable::PasswordGenerator
   CHARS = [
     ('A'..'Z').to_a,
     ('a'..'z').to_a,
@@ -24,8 +24,4 @@ class PasswordGenerator
     length.times.collect { CHARS.sample }.shuffle.join
   end
   alias_method :to_s, :generate
-
-  def inspect
-    "#<#{self.class.name} length: #{length.inspect}>"
-  end
 end

@@ -3,8 +3,8 @@ class Activity
   include Virtus.model
   extend ActiveModel::Callbacks
 
-  extend Activity::EmbedsOneExtension
-  extend Activity::EmbedsManyExtension
+  include Activity::EmbedsOneExtension
+  include Activity::EmbedsManyExtension
  
   define_model_callbacks :initialize, :validation, :execute
 

@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
 
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :email, presence: true
+  validates :email, presence: true, email: true
 
   before_validation :sanitize_preferred_locale
   before_validation :set_generated_password, if: :generate_password?

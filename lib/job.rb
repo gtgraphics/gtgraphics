@@ -2,6 +2,8 @@ module Job
   extend ActiveSupport::Concern
 
   included do
+    class_attribute :callbacks, instance_accessor: false
+
     %w(before success error after failure).each do |method|
       instance_eval %{
         def #{method}(method_name = nil, &block)
@@ -20,18 +22,6 @@ module Job
   end
 
   module ClassMethods
-    def callbacks
-      @callbacks ||= {}
-    end
-
-    def inherited(base)
-      cloned_callbacks = callbacks.dup
-      cloned_callbacks.each do |key, value|
-        cloned_callbacks[key] = value.dup if value.respond_to?(:dup)
-      end
-      base.instance_variable_set("@callbacks", cloned_callbacks)
-    end
-
     private
     def _add_callback(event, type, method_name, &block)
       callback = block_given? ? block : method_name
@@ -58,8 +48,6 @@ module Job
       false
     end
   end
-
-  # TODO Copy callbacks on inheritance
 
   def before(job)
     _execute_callbacks(:before, job)

@@ -3,7 +3,7 @@ class SignInActivity < Activity
   attribute :password, String
   attribute :permanent, Boolean, default: false
 
-  validates :email, presence: true
+  validates :email, presence: true, email: true
   validates :password, presence: true
   validate :verify_credentials
   validate :verity_user_is_unlocked
@@ -42,7 +42,6 @@ class SignInActivity < Activity
 
   def verity_user_is_unlocked
     if user and user.is_a?(Authenticatable::Lockable) and user.locked?
-      # errors.add :base, :locked
       errors.add :email, :invalid
       errors.add :password, :invalid
     end

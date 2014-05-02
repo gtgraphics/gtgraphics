@@ -11,10 +11,9 @@ module AuthenticatableController
 
       def parse(dump)
         return nil unless dump.is_a?(Array) and dump.length == 2
-        user_id = dump.first
-        password_salt = dump.second
+        user_id, password_salt = dump
         user = User.find_by(id: user_id)
-        user && user.password_salt == password_salt ? user : nil
+        user if user and user.password_salt == password_salt
       end
     end
   end
