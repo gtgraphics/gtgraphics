@@ -51,12 +51,9 @@ module IconHelper
     options = args.extract_options!
     caption = args.first
     caption ||= capture(&block) if block_given?
-    raise ArgumentError, 'no text supplied' if caption.nil?
 
     caption_options = options.delete(:caption_html) { Hash.new }
-    caption_options[:class] ||= ''
-    caption_options[:class] << ' caption'
-    caption_options[:class].strip!
+    caption_options[:class] = (caption_options[:class].split << caption).uniq.join(' ')
 
     content_tag :span, class: "#{location}-#{prefix.to_s.dasherize}icon" do
       concat send("#{prefix}icon", name, options) if location == :prepend

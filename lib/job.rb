@@ -85,7 +85,7 @@ module Job
   def _execute_callbacks(event, job, *args)
     Array(self.class.callbacks[event.to_sym]).each do |callback|
       callback = method(callback) unless callback.is_a? Proc
-      callback_args = args[0..callback.arity]
+      callback_args = args[0...callback.arity]
       job.instance_exec(*callback_args, &callback)
     end
   end
