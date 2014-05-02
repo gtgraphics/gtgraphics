@@ -53,7 +53,7 @@ module IconHelper
     caption ||= capture(&block) if block_given?
 
     caption_options = options.delete(:caption_html) { Hash.new }
-    caption_options[:class] = (caption_options[:class].split << caption).uniq.join(' ')
+    caption_options[:class] = (caption_options[:class].to_s.split << 'caption').uniq.join(' ')
 
     content_tag :span, class: "#{location}-#{prefix.to_s.dasherize}icon" do
       concat send("#{prefix}icon", name, options) if location == :prepend
