@@ -57,10 +57,11 @@ class @Editor.Control.Link extends @Editor.Control.DialogButtonControl
         event.preventDefault()
         control.perform(element: $link, params: control.extractContextParams(editor, $link))
 
-  extractContextParams: (editor, $link) ->
-    editorParams = { content: editor.getSelectedHtml() }
-    if $link instanceof jQuery
-      # only if an anchor tag is selected
+  extractContextParams: (editor, link) ->
+    editorParams = { content: @getElementFromSelection().html() }
+    console.log editorParams
+    if link instanceof jQuery
+      $link = link
       pageId = $link.data('pageId')
       editorParams.external = true unless pageId
       editorParams.url = $link.attr('href')
