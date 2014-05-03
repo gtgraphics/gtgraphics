@@ -3,7 +3,7 @@ class @Editor.Control.Indent extends @Editor.Control.FontControl
     'indent'
 
   getCaption: ->
-    I18n.translate('editor.indent')
+    I18n.translate('javascript.editor.indent')
 
   getIcon: ->
     'indent'

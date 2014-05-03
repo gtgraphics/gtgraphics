@@ -1,5 +1,0 @@
-class @PageEditor
-
-$(document).ready ->
-
-  

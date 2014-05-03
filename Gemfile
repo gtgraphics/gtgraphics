@@ -51,7 +51,7 @@ gem 'turbolinks'
 gem 'compass-rails' # github: 'Compass/compass-rails', branch: 'rails4-hack' # hack until compass has official Rails 4 support
 gem 'bootstrap-sass'
 gem 'select2-bootstrap-css'
-gem 'underscore-rails'
+gem 'underscore-rails', github: 'rweng/underscore-rails', tag: 'v1.6.0'
 gem 'underscore-string-rails'
 
 # Tools
@@ -62,6 +62,7 @@ group :development do
   gem 'rails-erd'
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'thin'
 end
 gem 'delayed_job_active_record'
 gem 'daemons'

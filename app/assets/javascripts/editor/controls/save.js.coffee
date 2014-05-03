@@ -4,7 +4,7 @@ class @Editor.Control.Save extends @Editor.Control.ButtonControl
       alert "Saved to #{Editor.Control.Save.url}"
 
   getCaption: ->
-    I18n.translate('editor.save')
+    I18n.translate('javascript.editor.save')
 
   getIcon: ->
     'save'

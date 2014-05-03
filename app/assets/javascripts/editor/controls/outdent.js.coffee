@@ -3,7 +3,7 @@ class @Editor.Control.Outdent extends @Editor.Control.FontControl
     'outdent'
 
   getCaption: ->
-    I18n.translate('editor.outdent')
+    I18n.translate('javascript.editor.outdent')
 
   getIcon: ->
     'outdent'

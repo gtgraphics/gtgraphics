@@ -2,7 +2,7 @@ class @Editor.Control.Image extends @Editor.Control.DialogButtonControl
   ELEMENT_SELECTOR = 'img'
 
   getCaption: ->
-    I18n.translate('editor.image')
+    I18n.translate('javascript.editor.image')
 
   getDialogUrl: ->
     Editor.Control.Image.dialogUrl

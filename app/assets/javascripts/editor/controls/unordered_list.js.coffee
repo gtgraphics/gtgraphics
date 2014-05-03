@@ -3,7 +3,7 @@ class @Editor.Control.UnorderedList extends @Editor.Control.FontControl
     'insertunorderedlist'
 
   getCaption: ->
-    I18n.translate('editor.unorderedList')
+    I18n.translate('javascript.editor.unorderedList')
 
   getIcon: ->
     'list-ul'

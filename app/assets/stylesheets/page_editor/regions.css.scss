@@ -1,14 +1,23 @@
-body.editing {
-  .region {
-    $border-width: 1px;
-    border: $border-width dotted $gray-light;
-    cursor: text;
-    min-height: $line-height-computed + 2 * $border-width;
-    &:hover {
-      background-color: $gray-lighter;
-    }
-    &.untranslated {
-      color: $gray-light;
-    }
+.region {
+  $border-width: 1px;
+  border: $border-width dashed $gray-light;
+  cursor: text;
+  min-height: $line-height-computed + 2 * $border-width + 10px;
+  //margin: -5px;
+  margin: 2px 0;
+  padding: 5px;
+  border-radius: $border-radius-base;
+  outline: none;
+  &:hover {
+    border-color: $link-color; 
+  }
+  &:focus {
+    border-color: $link-hover-color; 
+  }
+  &.untranslated {
+    color: $gray-light;
+  }
+  + .region {
+    margin-top: 10px;
   }
 }

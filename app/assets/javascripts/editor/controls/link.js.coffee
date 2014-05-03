@@ -2,7 +2,7 @@ class @Editor.Control.Link extends @Editor.Control.DialogButtonControl
   ELEMENT_SELECTOR = 'a[href]'
 
   getCaption: ->
-    I18n.translate('editor.link')
+    I18n.translate('javascript.editor.link')
 
   getDialogUrl: ->
     Editor.Control.Link.dialogUrl

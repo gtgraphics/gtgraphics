@@ -3,7 +3,7 @@ class @Editor.Control.Strikethrough extends @Editor.Control.FontControl
     'strikethrough'
 
   getCaption: ->
-    I18n.translate('editor.strikethrough')
+    I18n.translate('javascript.editor.strikethrough')
 
   getIcon: ->
     'strikethrough'

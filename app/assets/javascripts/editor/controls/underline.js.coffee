@@ -3,7 +3,7 @@ class @Editor.Control.Underline extends @Editor.Control.FontControl
     'underline'
 
   getCaption: ->
-    I18n.translate('editor.underline')
+    I18n.translate('javascript.editor.underline')
 
   getIcon: ->
     'underline'

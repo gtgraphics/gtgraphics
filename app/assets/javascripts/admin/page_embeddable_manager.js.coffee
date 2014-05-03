@@ -42,7 +42,7 @@ class @PageEmbeddableManager
         @getTranslationManager().showSelectedLocalePanes()
         callback() if callback
       error: =>
-        alert I18n.translate('pages.embeddable.error')
+        alert I18n.translate('javascript.pages.embeddable.error')
         @setEmbeddableType(@embeddableType) # restore select to previous embeddable type
 
   # DOM Element Getters

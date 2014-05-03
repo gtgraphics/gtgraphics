@@ -6,20 +6,6 @@ String::blank = (trimmed = true) ->
 String::boolify = ->
   _.contains(TRUE_VALUES, @toLowerCase())
 
-String::camelize = ->
-  pieces = @split(/[\W_-]/)
-  jQuery.map(pieces, (piece) -> piece.capitalize()).join("")
-
-String::capitalize = ->
-  @charAt(0).toUpperCase() + @slice(1);
-
-String::dasherize = ->
-  @replace("_", "-")
-
 String::interpolate = (interpolations = {}) ->
   @replace /%\{(.*?)\}/g, (whole, expression) ->
-    interpolations[expression] || ""
-
-String::underscore = ->
-  @replace(/[\W]/g, "").replace /[A-Z]/g, (match) ->
-    "_#{match.toLowerCase()}"
+    interpolations[expression] || ''

@@ -49,7 +49,7 @@ class @PageTranslationManager extends @TranslationManager
         @showSelectedLocalePanes()
         callback() if callback
       error: =>
-        alert I18n.translate('translations.error')
+        alert I18n.translate('javascript.translations.error')
 
   getAdditionalUrlParams: ->
     { embeddable_type: @getEmbeddableType() }

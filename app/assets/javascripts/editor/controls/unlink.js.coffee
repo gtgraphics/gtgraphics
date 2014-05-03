@@ -5,7 +5,7 @@ class @Editor.Control.Unlink extends @Editor.Control.FontControl
     'unlink'
 
   getCaption: ->
-    I18n.translate('editor.unlink')
+    I18n.translate('javascript.editor.unlink')
 
   getIcon: ->
     'unlink'

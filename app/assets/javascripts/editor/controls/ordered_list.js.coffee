@@ -3,7 +3,7 @@ class @Editor.Control.OrderedList extends @Editor.Control.FontControl
     'insertorderedlist'
 
   getCaption: ->
-    I18n.translate('editor.orderedList')
+    I18n.translate('javascript.editor.orderedList')
 
   getIcon: ->
     'list-ol'

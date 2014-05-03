@@ -228,7 +228,7 @@ class @TranslationManager
         $(data).appendTo(@container.find('.tab-content')).prepare() if @dataType == 'html'
         callback() if callback  
       error: =>
-        alert I18n.translate('translations.error')
+        alert I18n.translate('javascript.translations.error')
       complete: =>
         @loading = false
 

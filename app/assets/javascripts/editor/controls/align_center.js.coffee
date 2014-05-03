@@ -3,7 +3,7 @@ class @Editor.Control.AlignCenter extends @Editor.Control.FontControl
     'justifycenter'
 
   getCaption: ->
-    I18n.translate('editor.alignCenter')
+    I18n.translate('javascript.editor.alignCenter')
 
   getIcon: ->
     'align-center'

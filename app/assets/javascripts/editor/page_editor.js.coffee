@@ -3,6 +3,10 @@ class @PageEditor
   @defaults =
     selector: '.region'
 
+  @open = (pageId, locale) ->
+    console.log pageId
+    console.log locale
+
   constructor: (options = {}) ->
     @options = jQuery.extend({}, PageEditor.defaults, options)
    

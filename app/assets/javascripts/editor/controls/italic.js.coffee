@@ -3,7 +3,7 @@ class @Editor.Control.Italic extends @Editor.Control.FontControl
     'italic'
 
   getCaption: ->
-    I18n.translate('editor.italic')
+    I18n.translate('javascript.editor.italic')
 
   getIcon: ->
     'italic'

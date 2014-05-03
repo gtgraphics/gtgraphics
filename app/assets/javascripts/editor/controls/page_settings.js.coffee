@@ -3,7 +3,7 @@ class @Editor.Control.PageSettings extends @Editor.Control.ButtonControl
     Turbolinks.visit(Editor.Control.PageSettings.url)
 
   getCaption: ->
-    I18n.translate('editor.pageSettings')
+    I18n.translate('javascript.editor.pageSettings')
 
   getIcon: ->
     'cogs'

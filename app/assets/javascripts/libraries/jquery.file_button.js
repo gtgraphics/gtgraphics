@@ -23,7 +23,7 @@ $.fn.fileButton = function() {
     $fileInput.attr('tabindex', -1);
 
     // Set the word to be displayed on the button
-    var buttonWord = I18n.translate('helpers.links.browse');
+    var buttonWord = I18n.translate('javascript.helpers.links.browse');
 
     if (typeof $fileInput.attr('title') != 'undefined') {
       buttonWord = $fileInput.attr('title');

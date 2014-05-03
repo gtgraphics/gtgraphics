@@ -66,7 +66,7 @@ loadEmbeddableEditor = ($embeddableFields, $embeddableSettings, $pageSettings, b
         $embeddableFields.show()
         $embeddableType.val('').change()
         $loader.hide()
-        alert(I18n.translate('pages.embeddable.error'))
+        alert(I18n.translate('javascript.pages.embeddable.error'))
         $embeddableFields.trigger('fail.embeddable')
         $embeddableFields.trigger('loaded.embeddable', false)
 

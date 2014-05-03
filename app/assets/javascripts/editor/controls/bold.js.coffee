@@ -3,7 +3,7 @@ class @Editor.Control.Bold extends @Editor.Control.FontControl
     'bold'
 
   getCaption: ->
-    I18n.translate('editor.bold')
+    I18n.translate('javascript.editor.bold')
 
   getIcon: ->
     'bold'

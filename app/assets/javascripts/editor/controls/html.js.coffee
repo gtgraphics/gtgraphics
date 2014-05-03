@@ -3,7 +3,7 @@ class @Editor.Control.Html extends @Editor.Control.ButtonControl
     alert 'Hello!'
 
   getCaption: ->
-    I18n.translate('editor.viewModes.html')
+    I18n.translate('javascript.editor.viewModes.html')
 
   getIcon: ->
     'code'

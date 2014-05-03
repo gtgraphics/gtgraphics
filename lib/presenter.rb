@@ -35,7 +35,6 @@ class Presenter
   end
  
   def render
-    raise NotImplemented
   end
 
   def respond_to_missing?(method_name, include_private = false)
