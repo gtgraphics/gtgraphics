@@ -99,6 +99,7 @@
     }
     .name {
       display: inline-block;
+      vertical-align: top;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
