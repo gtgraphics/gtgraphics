@@ -36,21 +36,24 @@ class @TextareaEditor
       # Preserve original input as HTML container
       @$editor.append($toolbarWrapper)
 
+      # Move HTML text area with editor container
+      @$editor.append(@$textarea)
+
       # Add iframe with editable body to avoid conflicts when injecting invalid HTML
-      @$regionFrame = $('<iframe />', 'data-target': "##{inputId}", class: 'editor-region', seamless: true).css(width: '100%').appendTo(@$editor)
+      @$regionFrame = $('<iframe />', 'data-target': "##{inputId}", class: 'editor-region', seamless: true)
+      @$regionFrame.appendTo(@$editor).css(width: '100%')
       $base = $('<base />', target: '_parent')
       $stylesheet = $('<link />', href: @options.stylesheetFile, media: 'all', rel: 'stylesheet')
       @$regionFrame.contents().find('head').append($base).append($stylesheet)
       @$region = @$regionFrame.contents().find('body').attr('contenteditable', true)
 
       # Preview iframe
-      @$previewFrame = $('<iframe />', 'data-target': "##{inputId}", class: 'editor-preview', seamless: true).css(width: '100%').appendTo(@$editor)
+      @$previewFrame = $('<iframe />', 'data-target': "##{inputId}", class: 'editor-preview', seamless: true)
+      @$previewFrame.appendTo(@$editor).css(width: '100%')
+      $base = $('<base />', target: '_parent')
       $stylesheet = $('<link />', href: @options.stylesheetFile, media: 'all', rel: 'stylesheet')
-      @$previewFrame.contents().find('head').append($stylesheet)
+      @$previewFrame.contents().find('head').append($base).append($stylesheet)
       @$preview = @$previewFrame.contents().find('body')
-
-      # Move HTML text area with editor container
-      @$editor.append(@$textarea)
 
       # Copy HTML from textarea to region and preview containers
       @refreshRegionContent()

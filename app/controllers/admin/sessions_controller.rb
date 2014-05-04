@@ -17,7 +17,7 @@ class Admin::SessionsController < Admin::ApplicationController
           user = @sign_in_activity.user
           sign_in user, permanent: @sign_in_activity.permanent?
           user.track_sign_in!(request.ip)
-          redirect_to flash[:after_sign_in_path] || :admin_root
+          redirect_to session.delete(:after_sign_in_path) || :admin_root
         else
           render :new
         end

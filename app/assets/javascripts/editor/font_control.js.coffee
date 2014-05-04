@@ -9,20 +9,29 @@ class @Editor.Control.FontControl extends @Editor.Control.ButtonControl
   queryActive: ->
     doc = @getRegionDocument()
     if doc and @isInRichTextView()
-      doc.queryCommandState(@getCommand(), false, null)
+      try
+        doc.queryCommandState(@getCommand(), false, null)
+      catch
+        false
     else
       false
 
   queryEnabled: ->
     doc = @getRegionDocument()
     if doc and @isInRichTextView()
-      doc.queryCommandEnabled(@getCommand(), false, null)
+      try
+        doc.queryCommandEnabled(@getCommand(), false, null)
+      catch
+        false
     else
       false
 
   querySupported: ->
     doc = @getRegionDocument()
     if doc and @isInRichTextView()
-      doc.queryCommandSupported(@getCommand(), false, null)
+      try
+        doc.queryCommandSupported(@getCommand(), false, null)
+      catch
+        false
     else
       false

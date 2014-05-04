@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   def force_authentication
     respond_to do |format|
       format.html do
-        flash[:after_sign_in_path] = request.path
+        session[:after_sign_in_path] = request.path
         redirect_to :admin_sign_in
       end
       format.all { head :unauthorized }
