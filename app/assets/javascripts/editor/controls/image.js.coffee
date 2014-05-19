@@ -13,7 +13,10 @@ class @Editor.Control.Image extends @Editor.Control.DialogButtonControl
   queryEnabled: ->
     doc = @getRegionDocument()
     if doc and @isInRichTextView()
-      doc.queryCommandEnabled('insertimage', false, null)
+      try
+        doc.queryCommandEnabled('insertimage', false, null)
+      catch
+        false
     else
       false
 

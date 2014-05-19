@@ -13,14 +13,20 @@ class @Editor.Control.Link extends @Editor.Control.DialogButtonControl
   queryEnabled: ->
     doc = @getRegionDocument()
     if doc and @isInRichTextView()
-      doc.queryCommandEnabled('createlink', false, null)
+      try
+        doc.queryCommandEnabled('createlink', false, null)
+      catch
+        false
     else
       false
 
   queryActive: ->
-    doc = @getRegionDocument()
-    $element = @getElementFromSelection()
-    ($element? and $element.any()) or (doc? and doc.queryCommandState('createlink'))
+    try
+      doc = @getRegionDocument()
+      $element = @getElementFromSelection()
+      ($element? and $element.any()) or (doc? and doc.queryCommandState('createlink'))
+    catch
+      false
 
   onInitEditor: (editor) ->
     control = @
