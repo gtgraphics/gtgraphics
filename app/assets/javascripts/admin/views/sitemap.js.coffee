@@ -58,8 +58,8 @@ $(document).on 'page:change', ->
 
   # Visit the particular page via Turbolinks when a node is selected
   $sitemap.on 'tree.select', (event) ->
-    if selectedNode = event.node
-      Turbolinks.visit(selectedNode.url)
+    selectedNode = event.node
+    Turbolinks.visit(selectedNode.url) if selectedNode
 
   # Fix for jqTree: Prevent selection of a node from being removed when expanding a node
   $sitemap.on 'tree.opening tree.open', (event) ->
