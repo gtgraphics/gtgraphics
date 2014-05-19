@@ -7,20 +7,20 @@ hideLoader = ->
   $('#loader').fadeOut('fast')
 
 $(document)
-  #.on 'page:fetch', ->
-  #  showLoader()
+  .on 'page:fetch', ->
+    showLoader()
 
-  #.on 'page:receive page:restore', ->
-  #  hideLoader()
+  .on 'page:receive page:restore', ->
+    hideLoader()
 
   .on 'submit', "form:not([data-remote=true])", ->
     showLoader()
 
-  #.on 'ajax:beforeSend', "form[data-remote=true]", ->
-  #  showLoader()
+  .on 'ajax:beforeSend', "form[data-remote=true]", ->
+    showLoader()
 
-  #.on 'ajax:complete', "form[data-remote=true]", ->
-  #  hideLoader()
+  .on 'ajax:complete', "form[data-remote=true]", ->
+    hideLoader()
 
   .ajaxStart ->
     showLoader()
