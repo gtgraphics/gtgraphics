@@ -58,7 +58,7 @@ class @Editor.Control.Link extends @Editor.Control.DialogButtonControl
         control.perform(element: $link, params: control.extractContextParams(editor, $link))
 
   extractContextParams: (editor, link) ->
-    editorParams = { content: @getElementFromSelection().html() }
+    editorParams = { content: @getSelectedHtml() }
     console.log editorParams
     if link instanceof jQuery
       $link = link
@@ -69,6 +69,17 @@ class @Editor.Control.Link extends @Editor.Control.DialogButtonControl
       _($link.data()).each (value, key) ->
         editorParams[_(key).underscored()] = value
     { editor: editorParams }
+
+  getSelectedHtml: ->
+    editor = @getActiveEditor()
+    if editor
+      $href = @getElementFromSelection()
+      if $href.any()
+        $href.html()
+      else
+        editor.getSelectedHtml()
+    else
+      null
 
   getElementFromSelection: ->
     editor = @getActiveEditor()

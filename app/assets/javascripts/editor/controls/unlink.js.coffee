@@ -20,7 +20,11 @@ class @Editor.Control.Unlink extends @Editor.Control.FontControl
     @getClosestAnchor().any()
 
   getClosestAnchor: ->
-    range = @getActiveEditor().getSelectedRange()
-    $(range.getNodes()).filter(ELEMENT_SELECTOR).add($(range.commonAncestorContainer).closest(ELEMENT_SELECTOR)).first()
-
+    editor = @getActiveEditor()
+    if editor
+      range = editor.getSelectedRange()
+      $(range.getNodes()).filter(ELEMENT_SELECTOR).add($(range.commonAncestorContainer).closest(ELEMENT_SELECTOR)).first()
+    else
+      jQuery()
+      
 @Editor.Control.register('unlink', @Editor.Control.Unlink)
