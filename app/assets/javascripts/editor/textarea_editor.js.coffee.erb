@@ -5,7 +5,7 @@ class @TextareaEditor
 
   # Refreshers
 
-  constructor: ($textarea, options = {}) ->   
+  constructor: ($textarea, options = {}) ->  
     jQuery.error 'input must be a textarea' unless $textarea.is('textarea')
     @$textarea = $textarea.addClass('editor-html')
     @$textarea.data('editor', @)
