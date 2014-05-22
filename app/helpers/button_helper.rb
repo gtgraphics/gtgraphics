@@ -15,9 +15,7 @@ module ButtonHelper
       link_to *args, &block
     else
       options = args.extract_options!
-      options[:class] ||= ""
-      options[:class] << " disabled"
-      options[:class].strip!
+      options[:class] = "#{options[:class]} disabled".strip
       content_tag :div, block_given? ? capture(&block) : args.first, options
     end
   end

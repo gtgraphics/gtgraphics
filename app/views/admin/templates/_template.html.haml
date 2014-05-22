@@ -1,0 +1,10 @@
+%tr
+  - if checkbox
+    %td.checkbox-cell
+      = check_box_tag 'template_ids[]', template.id, false, class: 'table-checkbox', id: nil
+  %td= link_to template.name, template.show_path
+  %td.hidden-xs= template.class.model_name.human
+  - if actions
+    %td.actions
+      = template.action_buttons
+      /= action_buttons_for template.becomes(::Template), size: :mini, icon_only: true

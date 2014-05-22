@@ -21,10 +21,6 @@ module AssetContainable
       !asset.queued_for_write[:original].nil?
     end
 
-    def human_content_type
-      I18n.translate(content_type, scope: :content_types, default: I18n.translate('content_types.default', extension: File.extname(file_name).from(1).upcase, default: content_type))
-    end
-
     def virtual_file_name
       I18n.with_locale(I18n.default_locale) do
         title.parameterize.underscore + File.extname(file_name).downcase

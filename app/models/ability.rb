@@ -36,12 +36,21 @@ class Ability
   end
 
   def declare
+    # Guests
+    can :create, Message
+    can :read, Page, published: true
+
     if user
       # Admins
+      can :show, Message::Recipience
+      can :destroy, Message::Recipience
+
+      can :manage, Attachment
+      can :manage, Image
       can :manage, Page
-    else
-      # Guests
-      can :read, Page, published: true
+      can :manage, Snippet
+      can :manage, Template
+      can :manage, User
     end
   end
 end

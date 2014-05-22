@@ -17,14 +17,6 @@
         %th.actions
   %tbody
     - templates.each do |template|
-      %tr
-        - if checkboxes
-          %td.checkbox-cell
-            = check_box_tag 'template_ids[]', template.id, false, class: 'table-checkbox', id: nil
-        %td= link_to template.name, admin_template_path(template)
-        %td.hidden-xs= template.class.model_name.human
-        - if actions
-          %td.actions
-            = action_buttons_for template.becomes(::Template), size: :mini, icon_only: true
+      = render 'template', template: decorate(template, with: Admin::TemplateDecorator), checkbox: checkboxes, actions: actions
 
 = paginate templates

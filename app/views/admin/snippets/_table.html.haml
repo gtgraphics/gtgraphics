@@ -17,14 +17,6 @@
         %th.actions
   %tbody
     - snippets.each do |snippet|
-      = content_tag_for :tr, snippet do
-        - if checkboxes
-          %td.checkbox-cell
-            = check_box_tag 'snippet_ids[]', snippet.id, false, class: 'table-checkbox', id: nil
-        %td= link_to snippet.name, [:edit, :admin, snippet]
-        %td= time_ago snippet.updated_at
-        - if actions
-          %td.actions
-            = action_buttons_for snippet, size: :mini, except: :show, icon_only: true
+      = render 'snippet', snippet: decorate(snippet, with: Admin::SnippetDecorator), checkbox: checkboxes, actions: actions
 
 = paginate snippets
