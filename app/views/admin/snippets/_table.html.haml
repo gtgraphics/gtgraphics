@@ -17,6 +17,6 @@
         %th.actions
   %tbody
     - snippets.each do |snippet|
-      = render 'snippet', snippet: decorate(snippet, with: Admin::SnippetDecorator), checkbox: checkboxes, actions: actions
+      = render 'snippet', snippet: snippet, checkbox: checkboxes, actions: actions
 
 = paginate snippets

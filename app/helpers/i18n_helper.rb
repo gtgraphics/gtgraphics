@@ -5,7 +5,7 @@ module I18nHelper
 
   def i18n_javascript
     fallbacks = I18n.try(:fallbacks)
-    locales = Array(fallbacks ? fallbacks[I18n.locale] : I18n.locale)
+    locales = Array(fallbacks ? fallbacks[I18n.locale] : I18n.locale).sort
 
     capture do
       concat javascript_tag <<-JAVASCRIPT.strip_heredoc
@@ -15,7 +15,7 @@ module I18nHelper
         I18n.locale = #{I18n.locale.to_json};
       JAVASCRIPT
       concat "\n"
-      concat javascript_include_tag("/static/locales/#{locales.join('+')}.js")  
+      concat javascript_include_tag("/static/locales/#{locales.join('+')}.js")
     end
   end
 end

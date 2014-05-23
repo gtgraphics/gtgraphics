@@ -1,9 +1,10 @@
-= content_tag_for :tr, snippet do
-  - if checkbox
-    %td.checkbox-cell
-      = check_box_tag 'snippet_ids[]', snippet.id, false, class: 'table-checkbox', id: nil
-  %td= link_to snippet.name, snippet.edit_path
-  %td= time_ago snippet.updated_at
-  - if actions
-    %td.actions
-      = snippet.action_buttons
+- present snippet, with: Admin::SnippetPresenter do |snippet|
+  = content_tag_for :tr, snippet do
+    - if checkbox
+      %td.checkbox-cell
+        = check_box_tag 'snippet_ids[]', snippet.id, false, class: 'table-checkbox', id: nil
+    %td= link_to snippet.name, snippet.edit_path
+    %td= snippet.updated_at
+    - if actions
+      %td.actions
+        = snippet.action_buttons

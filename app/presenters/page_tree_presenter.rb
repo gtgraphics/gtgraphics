@@ -33,11 +33,12 @@ class PageTreePresenter < Presenter
     pages = Array(pages_by_parents[parent_id])
     pages.each do |page|
       children_loaded = !!pages_by_parents[page.id]
-      css = "page page-#{page.state}"
-      css << ' active' if page == active_page
+
+      css = ['page', "page-#{page.state}"]
+      css << 'active' if page == active_page
       if page.has_children?
-        css << ' with-descendants'
-        css << ' open' if children_loaded
+        css << 'with-descendants'
+        css << 'open' if children_loaded
       end
       haml_tag :li, id: "page_#{page.id}", class: css, data: { page_id: page.id } do
         haml_tag 'span.node' do

@@ -19,4 +19,4 @@
         %th.actions
   %tbody
     - attachments.each do |attachment|
-      = render 'attachment', attachment: decorate(attachment, with: Admin::AttachmentDecorator), checkbox: checkboxes, actions: actions
+      = render 'attachment', attachment: attachment, checkbox: checkboxes, actions: actions

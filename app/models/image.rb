@@ -139,15 +139,6 @@ class Image < ActiveRecord::Base
     exif_data.try(:date_time_original).try(:to_datetime)
   end
 
-  def to_liquid
-    attributes.slice(*%w(title width height updated_at)).merge(customization_options).merge(
-      'author' => author,
-      'file_name' => asset_file_name,
-      'file_size' => asset_file_size,
-      'format' => human_content_type
-    )
-  end
-
   def to_s
     title
   end

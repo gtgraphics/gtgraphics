@@ -10,19 +10,20 @@
   - images.each_slice(4) do |sliced_images|
     .row
       - sliced_images.each do |image|
-        .col-lg-3.col-md-3.col-sm-3.col-xs-6
-          = thumbnail image.asset.url(:large_thumbnail), [:admin, image], alt: image.title do
-            .actions.top.right
-              = action_buttons_for image, size: :mini, icon_only: true
-            %h3
-              = image.title
-            %p
-              .badge.pull-right= image.format.upcase
-              = image.dimensions
-            - if image.tags.any?
-              %ul.tags.tags-inline.hidden-xs.hidden-sm
-                - image.tags.each do |tag|
-                  %li= tagged_link_to(tag, admin_images_path(query: tag.label), size: :sm)
+        - present image, with: Admin::ImagePresenter do |image|
+          .col-lg-3.col-md-3.col-sm-3.col-xs-6
+            = thumbnail image.asset.url(:large_thumbnail), [:admin, image], alt: image.title do
+              .actions.top.right
+                = action_buttons_for image, size: :mini, icon_only: true
+              %h3
+                = image.title
+              %p
+                .badge.pull-right= image.format.upcase
+                = image.dimensions
+              - if image.tags.any?
+                %ul.tags.tags-inline.hidden-xs.hidden-sm
+                  - image.tags.each do |tag|
+                    %li= tagged_link_to(tag, admin_images_path(query: tag.label), size: :sm)
 
 - else
 
@@ -42,18 +43,19 @@
           %th.actions
     %tbody
       - images.each do |image|
-        = content_tag_for :tr, image do
-          - if checkboxes
-            %td.checkbox-cell
-              = check_box_tag 'image_ids[]', image.id, false, class: 'table-checkbox', id: nil
-          %td.thumbnail-cell
-            = link_to [:admin, image] do
-              = image_tag image.asset.url(:thumbnail), class: 'img-circle', alt: image.title, style: 'width: 75px; height: 75px;'
-          %td= link_to image.title, [:admin, image]
-          %td.hidden-xs= image.human_content_type
-          %td.hidden-xs= image.dimensions
-          %td.visible-lg= link_to image.author, [:admin, image.author] if image.author
-          %td.visible-lg= time_ago image.updated_at
-          - if actions
-            %td.actions
-              = action_buttons_for image, size: :mini, icon_only: true
+        - present image, with: Admin::ImagePresenter do |image|
+          = content_tag_for :tr, image do
+            - if checkboxes
+              %td.checkbox-cell
+                = check_box_tag 'image_ids[]', image.id, false, class: 'table-checkbox', id: nil
+            %td.thumbnail-cell
+              = link_to [:admin, image] do
+                = image_tag image.asset.url(:thumbnail), class: 'img-circle', alt: image.title, style: 'width: 75px; height: 75px;'
+            %td= link_to image.title, [:admin, image]
+            %td.hidden-xs= image.content_type
+            %td.hidden-xs= image.dimensions
+            %td.visible-lg= image.author
+            %td.visible-lg= image.updated_at
+            - if actions
+              %td.actions
+                = image.action_buttons

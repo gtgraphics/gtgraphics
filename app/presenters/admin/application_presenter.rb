@@ -1,8 +1,8 @@
-class Admin::ApplicationDecorator < Draper::Decorator
-  delegate_all
-
+class Admin::ApplicationPresenter < Presenter
   class_attribute :action_buttons, instance_accessor: false
   self.action_buttons = [:show, :edit, :destroy]
+
+  delegate :to_param, to: :object
 
   def action_buttons
     h.content_tag :div, class: 'btn-toolbar' do
@@ -14,6 +14,14 @@ class Admin::ApplicationDecorator < Draper::Decorator
 
   def action_button_options
     { size: :mini }
+  end
+
+  def created_at
+    h.time_ago(super)
+  end
+
+  def updated_at
+    h.time_ago(super)
   end
 
   def destroyable?
@@ -36,7 +44,7 @@ class Admin::ApplicationDecorator < Draper::Decorator
   end
 
   def show_path
-    h.polymorphic_path([:admin, object], locale: I18n.locale)
+    h.polymorphic_path([:admin, object])
   end
 
   def edit_button
@@ -47,7 +55,7 @@ class Admin::ApplicationDecorator < Draper::Decorator
   end
 
   def edit_path
-    h.polymorphic_path([:edit, :admin, object], locale: I18n.locale)
+    h.polymorphic_path([:edit, :admin, object])
   end
 
   def destroy_button

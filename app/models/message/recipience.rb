@@ -18,7 +18,6 @@ class Message < ActiveRecord::Base
 
     validates :recipient_id, presence: true
 
-    after_create :send_notification_email
     after_destroy :destroy_message
 
     scope :read, -> { where(read: true) }
@@ -48,10 +47,6 @@ class Message < ActiveRecord::Base
     private
     def destroy_message
       message.destroy if message.recipiences.empty?
-    end
-
-    def send_notification_email
-      # TODO
     end
   end
 end

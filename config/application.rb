@@ -20,6 +20,7 @@ module GtGraphics
 
     # Autoload files in root of lib folder
     config.autoload_paths << Rails.root.join('lib').to_s
+    config.autoload_paths << Rails.root.join('app', 'presenters', 'concerns').to_s
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     config.i18n.enforce_available_locales = true

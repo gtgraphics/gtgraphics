@@ -17,6 +17,6 @@
         %th.actions
   %tbody
     - templates.each do |template|
-      = render 'template', template: decorate(template, with: Admin::TemplateDecorator), checkbox: checkboxes, actions: actions
+      = render 'template', template: template, checkbox: checkboxes, actions: actions
 
 = paginate templates
