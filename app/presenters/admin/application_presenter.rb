@@ -7,13 +7,9 @@ class Admin::ApplicationPresenter < Presenter
   def action_buttons
     h.content_tag :div, class: 'btn-toolbar' do
       self.class.action_buttons.each do |action_button|
-        h.concat h.content_tag(:div, send("#{action_button}_button"), class: 'btn-group')
+        h.concat h.content_tag(:div, send("#{action_button}_button", size: :xs), class: 'btn-group')
       end
     end
-  end
-
-  def action_button_options
-    { size: :mini }
   end
 
   def created_at
@@ -36,34 +32,34 @@ class Admin::ApplicationPresenter < Presenter
     h.can? :read, object
   end
 
-  def show_button
+  def show_button(options = {})
     h.button_link_to_if readable?,
                         button_caption(:view, :eye),
                         show_path,
-                        action_button_options
+                        options
   end
 
   def show_path
     h.polymorphic_path([:admin, object])
   end
 
-  def edit_button
+  def edit_button(options = {})
     h.button_link_to_if editable?,
                         button_caption(:edit, :pencil),
                         edit_path,
-                        action_button_options
+                        options
   end
 
   def edit_path
     h.polymorphic_path([:edit, :admin, object])
   end
 
-  def destroy_button
+  def destroy_button(options = {})
     confirmation_hint = I18n.translate('helpers.confirmations.destroy', model: object.class.model_name.human)
     h.button_link_to_if destroyable?,
                         button_caption(:destroy, :trash, outline: true),
                         destroy_path,
-                        action_button_options.deep_merge(type: :danger, data: { confirm: confirmation_hint })
+                        options.deep_merge(type: :danger, data: { confirm: confirmation_hint })
   end
 
   def destroy_path

@@ -27,6 +27,7 @@ class User < ActiveRecord::Base
   include Authenticatable
   include Authenticatable::Lockable
   include Authenticatable::Trackable
+  include Authorizable
   include Excludable
   include PersistenceContextTrackable
   include Sortable
@@ -83,7 +84,7 @@ class User < ActiveRecord::Base
   alias_method :generate_password, :generate_password?
 
   def generate_password=(generate_password)
-    @generate_password = generate_password.in?(ActiveRecord::ConnectionAdapters::Column::TRUE_VALUES)
+    @generate_password = generate_password.to_b
   end
 
   def mail_formatted_name

@@ -9,7 +9,8 @@ class Admin::MessagesController < Admin::ApplicationController
   end
 
   def index
-    @message_recipiences = current_user.message_recipiences.includes(:message).sort(params[:sort], params[:direction]).page(params[:page])
+    @message_recipiences = current_user.message_recipiences.includes(message: :recipients).references(:messages) \
+                                       .sort(params[:sort], params[:direction]).page(params[:page])
     respond_with :admin, @message_recipiences
   end
 

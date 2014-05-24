@@ -40,7 +40,7 @@ class Admin::ImagesController < Admin::ApplicationController
   def create
     @image = Image.create(image_params)
     flash_for @image
-    respond_with :admin, @image
+    respond_with :admin, @image, location: [:crop, :admin, @image]
   end
 
   def show

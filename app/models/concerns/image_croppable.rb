@@ -36,7 +36,7 @@ module ImageCroppable
 
       class_eval %{
         def cropped=(cropped)
-          super(cropped.try(:in?, ActiveRecord::ConnectionAdapters::Column::TRUE_VALUES))
+          super(cropped.to_b)
         end
       }
     end

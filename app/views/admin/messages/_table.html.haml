@@ -19,22 +19,23 @@
         %th.actions
   %tbody
     - message_recipiences.each do |recipience|
-      = content_tag_for :tr, recipience do
-        - if checkboxes
-          %td.checkbox-cell
-            = check_box_tag 'message_ids[]', recipience.message.id, false, class: 'table-checkbox', id: nil
-        %td
-          = content_tag recipience.unread? ? :strong : :span do
-            = link_to recipience.subject.presence || translate('helpers.prompts.no_subject'), [:admin, recipience.message]
-        %td.text-center.visible-lg.visible.md
-          - if recipience.read? 
-            = link_to icon(:circle, outline: true), [:toggle, :admin, recipience.message], method: :patch, class: 'message-read', title: translate('views.admin.messages.mark_unread'), data: { toggle: 'tooltip' }
-          - else
-            = link_to icon(:circle, outline: false), [:toggle, :admin, recipience.message], method: :patch, class: 'message-unread', title: translate('views.admin.messages.mark_read'), data: { toggle: 'tooltip' }
-        %td= mail_to recipience.sender_email, recipience.sender_name
-        %td= time_ago recipience.created_at
-        - if actions
-          %td.actions
-            = action_buttons_for recipience.message, size: :mini, icon_only: true, only: [:show, :destroy]
+      - present recipience.message, with: Admin::MessagePresenter do |message|
+        = content_tag_for :tr, message do
+          - if checkboxes
+            %td.checkbox-cell
+              = check_box_tag 'message_ids[]', message.id, false, class: 'table-checkbox', id: nil
+          %td
+            = content_tag recipience.unread? ? :strong : :span do
+              = link_to message.subject.presence || translate('helpers.prompts.no_subject'), message.show_path
+          %td.text-center.visible-lg.visible.md
+            - if recipience.read? 
+              = link_to icon(:circle, outline: true), [:toggle, :admin, message], method: :patch, class: 'message-read', title: translate('views.admin.messages.mark_unread'), data: { toggle: 'tooltip' }
+            - else
+              = link_to icon(:circle, outline: false), [:toggle, :admin, message], method: :patch, class: 'message-unread', title: translate('views.admin.messages.mark_read'), data: { toggle: 'tooltip' }
+          %td= mail_to message.sender_email, message.sender_name
+          %td= message.created_at
+          - if actions
+            %td.actions
+              = message.action_buttons
 
 = paginate message_recipiences

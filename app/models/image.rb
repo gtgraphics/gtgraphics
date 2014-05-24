@@ -139,6 +139,10 @@ class Image < ActiveRecord::Base
     exif_data.try(:date_time_original).try(:to_datetime)
   end
 
+  def to_param
+    "#{id}-#{title.parameterize}"
+  end
+
   def to_s
     title
   end

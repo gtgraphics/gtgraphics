@@ -32,7 +32,7 @@ module ImageResizable
 
       class_eval %{
         def resized=(resized)
-          super(resized.try(:in?, ActiveRecord::ConnectionAdapters::Column::TRUE_VALUES))
+          super(resized.to_b)
         end
       }
     end

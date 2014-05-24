@@ -42,8 +42,9 @@ class Ability
 
     if user
       # Admins
-      can :show, Message::Recipience
-      can :destroy, Message::Recipience
+      can [:read, :destroy], Message, Message.joins(:recipients).where(users: { id: @user.id }) do |message|
+        message.recipient_ids.include?(@user.id)
+      end
 
       can :manage, Attachment
       can :manage, Image

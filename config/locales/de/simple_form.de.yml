@@ -21,6 +21,10 @@ de:
       template:
         default: Als Standardvorlage für Seiten dieses Typs verwenden
 
+  helpers:
+    submit:
+      create_and_crop: '%{model} erstellen und zuschneiden'
+
     # Labels and hints examples
     # labels:
     #   defaults:

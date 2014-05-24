@@ -14,7 +14,7 @@
           .col-lg-3.col-md-3.col-sm-3.col-xs-6
             = thumbnail image.asset.url(:large_thumbnail), [:admin, image], alt: image.title do
               .actions.top.right
-                = action_buttons_for image, size: :mini, icon_only: true
+                = image.action_buttons
               %h3
                 = image.title
               %p
@@ -36,7 +36,7 @@
         %th.thumbnail-cell
         %th.hidden-xs= sort_link_for images, :title
         %th.hidden-xs= Image.human_attribute_name :content_type
-        %th= Image.human_attribute_name :dimensions
+        /%th= Image.human_attribute_name :dimensions
         %th.visible-lg= sort_link_for images, :author
         %th.visible-lg= sort_link_for images, :updated_at
         - if actions
@@ -53,7 +53,7 @@
                 = image_tag image.asset.url(:thumbnail), class: 'img-circle', alt: image.title, style: 'width: 75px; height: 75px;'
             %td= link_to image.title, [:admin, image]
             %td.hidden-xs= image.content_type
-            %td.hidden-xs= image.dimensions
+            /%td.hidden-xs= image.dimensions
             %td.visible-lg= image.author
             %td.visible-lg= image.updated_at
             - if actions

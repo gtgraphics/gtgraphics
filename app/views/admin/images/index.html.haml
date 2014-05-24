@@ -11,6 +11,24 @@
     = paginate @images
 
   - if @images.any?
+    /.row
+    /  .col-sm-3
+    /    .panel-group
+    /      = panel prepend_icon(:filter, 'Filter', fixed_width: true) do
+    /        Bla
+    /      = panel prepend_icon(:tags, 'Tags', fixed_width: true) do
+    /        Bla
+    /  .col-sm-9
+    /    - @images.each_slice(3) do |images|
+    /      .row
+    /        - images.each do |image|
+    /          .col-sm-4
+    /            - present image, with: Admin::ImagePresenter do |image|
+    /              = link_to image.show_path, class: 'thumbnail' do
+    /                = image_tag image.asset.url(:large_thumbnail), alt: image.title
+    /              .caption
+    /                %h3= image.title
+
     = render 'table', checkboxes: true
   - else
     .well.text-center
