@@ -11,6 +11,10 @@
  *= require_self
  */
 
+// Bootstrap
+@import "application/bootstrap_overrides";
+@import "bootstrap";
+
 // Shared
 @import "shared";
 

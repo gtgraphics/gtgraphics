@@ -1,0 +1,23 @@
+//
+// Bootstrap Customization
+//
+// For all available variables have a look at the
+// Bootstrap Customizer provided by the authors:
+//
+// http://getbootstrap.com/customize/#less-variables
+//
+// Or you can look into the SCSS variables to see
+// the Sass equivalents:
+//
+// https://github.com/twbs/bootstrap-sass/blob/master/vendor/assets/stylesheets/bootstrap/_variables.scss
+
+// Customization
+// -------------------------
+
+$body-bg:                    white;
+$font-family-sans-serif:     Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family-sans-serif-alt: "Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family-serif:          "Roboto Slab", Georgia, "Times New Roman", Times, serif;
+$headings-font-weight:       300;
+$line-height-base:           1.4;
+$text-color:                 lighten(#000, 20%);

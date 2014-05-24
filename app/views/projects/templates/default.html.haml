@@ -1,17 +1,14 @@
-.page-header
-  %h1= project.name
+- present project do |project|
+  .page-header
+    %h1= project.name
 
-%dl.dl-horizontal
-  %dt= Page::Project.human_attribute_name :client_name
-  %dd
-    - if project.client_url.present?
-      = link_to project.client_name, project.client_url, target: '_blank'
-    - else
-      = project.client_name
-  %dt= Page::Project.human_attribute_name :released_on
-  %dd= project.released_on.year
+  %dl.dl-horizontal
+    %dt= Page::Project.human_attribute_name :client_name
+    %dd= project.client
+    %dt= Page::Project.human_attribute_name :released_on
+    %dd= project.released_on.year
 
-%hr
+  %hr
 
-.content
-  = project.description.html_safe
+  .content
+    = project.description
