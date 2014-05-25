@@ -1,8 +1,10 @@
-= form_tag :destroy_multiple_admin_images, method: :delete do
+= form_tag :batch_process_admin_images, method: :patch do
 
   = toolbar do
     .btn-group.batch-control
-      = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) }
+      = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), name: 'destroy', class: 'btn btn-danger', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) }
+    .btn-group.batch-control
+      = button_tag prepend_icon(:hand, translate('helpers.links.assign_to_gallery'), direction: :right, outline: true), name: 'assign_to_gallery', class: 'btn btn-default', data: {  }
     .btn-group
       = create_button_link_for Image, icon: :upload, namespace: :admin, caption: translate('helpers.links.upload', model: Image.model_name.human), url: :new_admin_image
     .btn-group

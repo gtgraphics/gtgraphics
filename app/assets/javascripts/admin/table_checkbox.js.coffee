@@ -31,22 +31,24 @@ $(document).ready ->
 
   $tables = $(TABLE_SELECTOR)
   
-    .on 'ifChanged', GLOBAL_CHECKBOX_SELECTOR, ->
+    #.on 'ifChanged', GLOBAL_CHECKBOX_SELECTOR, ->
+    .on 'change', GLOBAL_CHECKBOX_SELECTOR, ->
       $toggler = $(@)
       $table = $toggler.closest(TABLE_SELECTOR)
       $checkboxes = $table.find(SINGLE_CHECKBOX_SELECTOR)
       if $toggler.prop('indeterminate')
-        $toggler.attr('indeterminate', false).prop('checked', true)
+        $toggler.prop('indeterminate', false).prop('checked', true)
       else
         if allCheckboxesChecked($checkboxes)
           $checkboxes.prop('checked', false)
         else
           $checkboxes.prop('checked', true)
-      $checkboxes.iCheck('update')
-      $toggler.iCheck('update')
+      #$checkboxes.iCheck('update')
+      #$toggler.iCheck('update')
       $table.trigger('toggled', [checkStatus($checkboxes)])
 
-    .on 'ifChanged', SINGLE_CHECKBOX_SELECTOR, ->
+    #.on 'ifChanged', SINGLE_CHECKBOX_SELECTOR, ->
+    .on 'change', SINGLE_CHECKBOX_SELECTOR, ->
       $checkbox = $(@)
       $table = $checkbox.closest(TABLE_SELECTOR)
       $toggler = $table.find(GLOBAL_CHECKBOX_SELECTOR)
@@ -61,14 +63,14 @@ $(document).ready ->
       cs = checkStatus($checkboxes)
       switch cs
         when 'all'
-          $toggler.attr('indeterminate', false).prop('checked', true)
+          $toggler.prop('indeterminate', false).prop('checked', true)
         when 'some'
-          $toggler.attr('indeterminate', true).prop('checked', false)
+          $toggler.prop('indeterminate', true).prop('checked', false)
         else
-          $toggler.attr('indeterminate', false).prop('checked', false)
+          $toggler.prop('indeterminate', false).prop('checked', false)
 
-      $toggler.iCheck('update')
-      $checkboxes.iCheck('update')
+      #$toggler.iCheck('update')
+      #$checkboxes.iCheck('update')
 
       $table.trigger('toggled', [cs])
 

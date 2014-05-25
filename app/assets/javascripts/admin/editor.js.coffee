@@ -1,5 +1,5 @@
 jQuery.prepare ->
-  $('.editor', @).editor(class: TextareaEditor)
+  $('.editor, [data-behavior="editor"]', @).editor(class: TextareaEditor)
 
   $('.pictureless-editor', @).editor(class: TextareaEditor, controls: [
     ['bold', 'italic', 'underline', 'strikethrough'],

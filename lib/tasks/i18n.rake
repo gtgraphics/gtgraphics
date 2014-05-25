@@ -1,4 +1,40 @@
 namespace :i18n do
+  task :scaffold => :environment do
+    Rails.application.eager_load!
+    ActiveRecord::Base.descendants.each do |model|
+      I18n.available_locales.each do |locale|
+        model_path = model.name.underscore.split('/').map(&:pluralize).join('/')
+        path = "#{Rails.root}/config/locales/#{locale}/#{model_path}.yml"
+        if File.exists?(path)
+          puts "#{path} exists: skipping"
+        else
+          FileUtils.mkdir_p(File.dirname(path))
+          File.open(path, 'w') do |file|
+
+
+            file.puts %{#{locale}:
+  activerecord:
+    attributes:}
+
+            begin
+              model.column_names.each do |column_name|
+                file.puts "      #{column_name}: #{column_name.humanize}"
+              end
+            rescue
+            end
+
+            file.puts %{
+  models:
+    #{model.name.underscore}:
+      one: #{model.name.humanize}
+      other: #{model.name.humanize.pluralize}}
+          end
+          puts "#{path} created"
+        end
+      end
+    end
+  end
+
   desc 'Generates I18n Javascript files and stores them in public/static/locales'
   task :generate_js => :environment do
     # Generate contained directory

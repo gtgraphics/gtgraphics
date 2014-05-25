@@ -21,8 +21,48 @@ class @TextareaEditor
 
     @refreshInternalState()
 
+  prepareRegionFrame: ($regionFrame) ->
+    @$regionFrame = $regionFrame
+
+    console.log 'loaded region frame'
+
+    @$regionFrame.css(width: '100%')
+    $base = $('<base />', target: '_parent')
+    $stylesheet = $('<link />', href: @options.stylesheetFile, media: 'all', rel: 'stylesheet')
+    @$regionFrame.contents().find('head').append($base).append($stylesheet)
+    @$region = @$regionFrame.contents().find('body').attr('contenteditable', true)
+
+
+  preparePreviewFrame: ($previewFrame) ->
+    @$previewFrame = $previewFrame
+
+    @$previewFrame.css(width: '100%')
+    $base = $('<base />', target: '_parent')
+    $stylesheet = $('<link />', href: @options.stylesheetFile, media: 'all', rel: 'stylesheet')
+    @$previewFrame.contents().find('head').append($base).append($stylesheet)
+    @$preview = @$previewFrame.contents().find('body')
+
+  prepareFrames: ->
+    # Copy HTML from textarea to region and preview containers
+    @refreshRegionContent()
+
+    # Define events on newly created elements
+    @applyEvents()
+
+    @refreshInputState()
+    @refreshControlStates() 
+    @updateViewModeState(@options.viewMode)
+
   render: ->
-    unless @isRendered()
+    if @isRendered()
+
+      @refreshInputState()
+      @refreshControlStates() 
+      @updateViewModeState(@options.viewMode)
+      @$editor.trigger('editor:rendered', @)
+
+    else
+
       inputId = @$textarea.attr('id')
 
       # Create the toolbar
@@ -40,33 +80,22 @@ class @TextareaEditor
       @$editor.append(@$textarea)
 
       # Add iframe with editable body to avoid conflicts when injecting invalid HTML
-      @$regionFrame = $('<iframe />', 'data-target': "##{inputId}", class: 'editor-region', seamless: true)
-      @$regionFrame.appendTo(@$editor).css(width: '100%')
-      $base = $('<base />', target: '_parent')
-      $stylesheet = $('<link />', href: @options.stylesheetFile, media: 'all', rel: 'stylesheet')
-      @$regionFrame.contents().find('head').append($base).append($stylesheet)
-      @$region = @$regionFrame.contents().find('body').attr('contenteditable', true)
+      $regionFrame = $('<iframe />', 'data-target': "##{inputId}", class: 'editor-region', seamless: true).appendTo(@$editor)
+      $previewFrame = $('<iframe />', 'data-target': "##{inputId}", class: 'editor-preview', seamless: true).appendTo(@$editor)
 
-      # Preview iframe
-      @$previewFrame = $('<iframe />', 'data-target': "##{inputId}", class: 'editor-preview', seamless: true)
-      @$previewFrame.appendTo(@$editor).css(width: '100%')
-      $base = $('<base />', target: '_parent')
-      $stylesheet = $('<link />', href: @options.stylesheetFile, media: 'all', rel: 'stylesheet')
-      @$previewFrame.contents().find('head').append($base).append($stylesheet)
-      @$preview = @$previewFrame.contents().find('body')
+      @prepareRegionFrame($regionFrame)
+      @preparePreviewFrame($previewFrame)
+      @prepareFrames()
 
-      # Copy HTML from textarea to region and preview containers
-      @refreshRegionContent()
-
-      # Define events on newly created elements
-      @applyEvents()
+      # FF Fix
+      $regionFrame.on 'load', => 
+        @prepareRegionFrame($regionFrame)
+        $previewFrame.on 'load', => 
+          @preparePreviewFrame($previewFrame)
+          @prepareFrames()
 
       @$editor.trigger('editor:created', @)
-
-    @refreshInputState()
-    @refreshControlStates() 
-    @updateViewModeState(@options.viewMode)
-    @$editor.trigger('editor:rendered', @)
+      @$editor.trigger('editor:rendered', @)
 
     @$editor
 
@@ -202,6 +231,7 @@ class @TextareaEditor
     @options.viewMode = viewMode
     if @isRendered()
       @updateViewModeState(viewMode)
+      # TODO FF Fix
       switch viewMode 
         when 'richText' then @$region.focus().triggerHandler('focus')
         when 'html' then @$textarea.focus().triggerHandler('focus')

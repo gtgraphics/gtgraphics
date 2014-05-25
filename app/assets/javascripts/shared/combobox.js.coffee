@@ -13,7 +13,7 @@ jQuery.prepare ->
       $input.select2
         allowClear: $input.data('includeBlank')
 
-    $('.tokenizer', @).select2(tags: [], tokenSeparators: [','])
+    $('.tokenizer, [data-behavior="tokenizer"]', @).select2(tags: [], tokenSeparators: [','])
 
     $('.space-tokenizer', @).select2(tags: [], tokenSeparators: [' ', ','])
 

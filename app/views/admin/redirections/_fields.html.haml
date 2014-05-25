@@ -1,12 +1,8 @@
-= render 'translation_tabs', object: fields.object, url: translation_fields_admin_pages_path(embeddable_type: fields.object.class.name)
-
-= loader size: :large
-
 .tab-content#translations
   = fields.simple_fields_for :translations do |translation_fields|
     = render 'admin/redirections/translation_fields', fields: translation_fields
 
-= fields.input :external, collection: [[Redirection.human_attribute_name(:internal), false], [Redirection.human_attribute_name(:external), true]], as: :radio_buttons, label: false, container_html: { class: 'col-lg-offset-2 col-lg-10' }
-= fields.association :destination_page, required: true, collection: page_sitemap_collection_for_select(Page.without(@page)), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }
-= fields.input :destination_url, required: true, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }
-= fields.input :permanent, inline_label: translate('simple_form.inline_labels.redirection.permanent'), label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }
+= fields.input :external, collection: [[Redirection.human_attribute_name(:internal), false], [Redirection.human_attribute_name(:external), true]], as: :radio_buttons
+= fields.association :destination_page, required: true, collection: page_sitemap_collection_for_select(Page.without(@page))
+= fields.input :destination_url, required: true
+= fields.input :permanent, inline_label: translate('simple_form.inline_labels.redirection.permanent'), wrapper: :horizontal_boolean

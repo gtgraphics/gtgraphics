@@ -37,6 +37,7 @@ class Page < ActiveRecord::Base
     Page::Homepage
     Page::Image
     Page::Project
+    Page::Redirection
   ).freeze
 
   has_slug :slug, param: false, from: -> { root? ? '' : title(I18n.default_locale) }, if: -> { new_record? and slug.blank? and title(I18n.default_locale).present? }

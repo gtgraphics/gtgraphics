@@ -8,7 +8,7 @@ class Breadcrumb::Collection
     @controller = controller
   end
 
-  def append(caption, destination)
+  def append(caption, destination = nil)
     add_with_method(:push, caption, destination)
   end
 

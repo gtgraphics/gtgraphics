@@ -50,9 +50,10 @@ GtGraphics::Application.routes.draw do
             end
           end
           collection do
-            patch :batch, as: :batch_process
+            patch :batch, action: :batch_process, as: :batch_process
             delete :destroy_multiple
             get :translation_fields
+            get :assign_to_gallery
           end
           member do
             get :context_menu

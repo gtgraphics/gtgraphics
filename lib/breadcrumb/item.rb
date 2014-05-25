@@ -4,20 +4,21 @@ class Breadcrumb::Item
   attr_reader :collection, :caption, :destination, :path, :url
   private :collection
 
-  def initialize(collection, caption, destination)
+  def initialize(collection, caption, destination = nil)
     unless collection.is_a? Breadcrumb::Collection
       raise ArgumentError, 'no breadcrumb collection specified'
     end
-    raise ArgumentError, 'no destination specified' if destination.nil?
 
     @collection = collection
     @caption = caption
     @destination = destination
-    if @destination.is_a? String
-      @path = @url = @destination
-    else
-      @path = collection.controller.url_for(destination)
-      @url = collection.controller.url_for(destination)
+    if @destination
+      if @destination.is_a? String
+        @path = @url = @destination
+      else
+        @path = collection.controller.url_for(destination)
+        @url = collection.controller.url_for(destination)
+      end
     end
   end
 

@@ -1,3 +1,5 @@
-= fields.association :template, container_html: { class: 'col-lg-5' }, label_html: { class: 'col-lg-2' }
+= fields.association :template
+
 %hr
-= fields.input :image_id, required: true, input_html: { class: 'resource-combobox', data: { resource: 'images', from: admin_images_path(include_styles: true, format: :json), formatter: 'ImageComboboxFormatter', paginated: true, include_blank: true } }, container_html: { class: 'col-lg-7' }, label_html: { class: 'col-lg-2' }
+
+= fields.input :image_id, required: true, input_html: { class: 'resource-combobox', data: { resource: 'images', from: admin_images_path(include_styles: true, format: :json), formatter: 'ImageComboboxFormatter', paginated: true, include_blank: true } }

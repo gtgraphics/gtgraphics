@@ -23,5 +23,5 @@ initRadios = ->
 $(document).ready ->
   initRadios()
 
-$(document).on 'loaded.embeddable', ->
+$(document).on 'changedEmbeddableType.pageEmbeddableManager', ->
   initRadios()

@@ -1,5 +1,5 @@
-= fields.association :template, container_html: { class: 'col-lg-5' }, label_html: { class: 'col-lg-2' }
+= fields.association :template
 
 %hr
 
-= fields.association :recipients, as: :check_boxes, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-10' }
+= fields.association :recipients, as: :check_boxes, wrapper: :horizontal_radio_and_checkboxes

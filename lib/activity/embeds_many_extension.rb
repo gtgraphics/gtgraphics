@@ -3,7 +3,7 @@ class Activity
     extend ActiveSupport::Concern
 
     module ClassMethods
-      def embeds_many(association_name)
+      def embeds_many(association_name, options = {})
         singular_association_name = association_name.to_s.singularize
         options.reverse_merge!(class_name: association_name.to_s.classify)
         klass = options[:class_name]

@@ -30,7 +30,7 @@ gem 'virtus'
 
 # Views
 gem 'haml-rails'
-gem 'simple_form'#, '3.0.0.rc'
+gem 'simple_form', '3.1.0.rc1'
 gem 'kaminari'
 gem 'active_link_to'
 gem 'jbuilder', '~> 1.2'

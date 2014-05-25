@@ -1,17 +1,17 @@
 - content_for :title do
   = translate(@link.persisted? ? :edit : :new, scope: 'helpers.titles', model: Editor::Link.model_name.human)
 
-= simple_form_for [:admin, @link], url: admin_editor_link_path, html: { class: 'form-horizontal editor-form' } do |form|
+= simple_form_for [:admin, @link], url: admin_editor_link_path, wrappers: :horizontal_form, html: { class: 'form-horizontal editor-form' } do |form|
 
   .modal-body
     = form.input :content, as: :hidden
-    = form.input :external, collection: [[Editor::Link.human_attribute_name(:internal), false], [Editor::Link.human_attribute_name(:external), true]], as: :radio_buttons, label: Editor::Link.human_attribute_name(:link_type), required: true, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
+    = form.input :external, collection: [[Editor::Link.human_attribute_name(:internal), false], [Editor::Link.human_attribute_name(:external), true]], as: :radio_buttons, label: Editor::Link.human_attribute_name(:link_type), required: true, wrapper: :horizontal_radio_and_checkboxes
     .editor-internal-link-fields      
-      = form.input :page_id, required: true, input_html: { class: 'resource-combobox', data: { resource: 'pages', from: admin_pages_path(format: :json), formatter: 'PageComboboxFormatter', include_blank: false } }, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
-      = form.input :locale, collection: available_locales_for_select, include_blank: translate('helpers.prompts.custom'), container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
+      = form.input :page_id, required: true, input_html: { class: 'resource-combobox', data: { resource: 'pages', from: admin_pages_path(format: :json), formatter: 'PageComboboxFormatter', include_blank: false } }
+      = form.input :locale, collection: available_locales_for_select, include_blank: translate('helpers.prompts.custom')
     .editor-external-link-fields
-      = form.input :url, required: true, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
-    = form.input :target, collection: Editor::Link.targets.invert, as: :radio_buttons, container_html: { class: 'col-lg-9' }, label_html: { class: 'col-lg-3' }
+      = form.input :url, required: true
+    = form.input :target, collection: Editor::Link.targets.invert, as: :radio_buttons, wrapper: :horizontal_radio_and_checkboxes
       
   .modal-footer
     = form.button :submit, class: 'btn-primary'

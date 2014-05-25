@@ -285,7 +285,7 @@ class Admin::PagesController < Admin::ApplicationController
   def load_parent_page
     if parent_id = params[:page_id]
       @parent_page = Page.find_by(id: parent_id)
-    elsif page_params = params[:page]
+    elsif !request.get? and page_params = params[:page]
       @parent_page = Page.find_by(id: page_params[:parent_id])
     elsif @page
       @parent_page = @page.parent

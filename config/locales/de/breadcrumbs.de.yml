@@ -4,3 +4,4 @@ de:
     home: Startseite
     new: '%{model} erstellen'
     upload: '%{model} hochladen'
+    assign_to_gallery: '%{model} zu Galerie hinzufügen'

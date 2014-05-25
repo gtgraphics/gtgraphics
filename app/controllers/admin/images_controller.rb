@@ -5,9 +5,13 @@ class Admin::ImagesController < Admin::ApplicationController
 
   breadcrumbs do |b|
     b.append Image.model_name.human(count: 2), :admin_images
-    b.append translate('breadcrumbs.new', model: Image.model_name.human), :new_admin_image if action_name.in? %w(new create)
+    if action_name.in? %w(new create)
+      b.append translate('breadcrumbs.new', model: Image.model_name.human), :new_admin_image
+    end
     b.append @image.title, [:admin, @image] if action_name.in? %w(show edit update crop apply_crop)
-    b.append translate('breadcrumbs.edit', model: Image.model_name.human), [:edit, :admin, @image] if action_name.in? %w(edit update crop apply_crop)
+    if action_name.in? %w(edit update crop apply_crop)
+      b.append translate('breadcrumbs.edit', model: Image.model_name.human), [:edit, :admin, @image]
+    end
   end
 
   def index
@@ -95,12 +99,38 @@ class Admin::ImagesController < Admin::ApplicationController
     respond_with :admin, @image
   end
 
-  def destroy_multiple
-    image_ids = Array(params[:image_ids])
-    Image.destroy_all(id: image_ids)
-    flash_for Image, :destroyed, multiple: true
-    respond_to do |format|
-      format.html { redirect_to :admin_images }
+  def batch_process
+    if params.key?(:destroy)
+      destroy_multiple
+    elsif params.key?(:assign_to_gallery)
+      image_ids = Array(params[:image_ids]).reject(&:blank?)
+      respond_to do |format|
+        format.html { redirect_to assign_to_gallery_admin_images_path(image_ids: image_ids) }
+      end
+    else
+      respond_to do |format|
+        format.html { head :bad_request }
+      end
+    end
+  end
+
+  def assign_to_gallery
+    breadcrumbs.append translate('breadcrumbs.assign_to_gallery', model: Image.model_name.human(count: 2))
+    if request.post?
+      raise 'sent'
+    else
+      image_ids = Array(params[:image_ids])
+      images = Image.accessible_by(current_ability).find(image_ids)
+      if images.empty?
+        respond_to do |format|
+          format.html { head :bad_request }
+        end
+      else
+        @assignment_activity = ImageGalleryAssignmentActivity.new()
+        respond_to do |format|
+          format.html
+        end
+      end
     end
   end
 
@@ -160,6 +190,15 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   private
+  def destroy_multiple
+    image_ids = Array(params[:image_ids])
+    Image.accessible_by(current_ability).destroy_all(id: image_ids)
+    flash_for Image, :destroyed, multiple: true
+    respond_to do |format|
+      format.html { redirect_to :admin_images }
+    end
+  end
+
   def load_image
     @image = Image.find(params[:id])
   end

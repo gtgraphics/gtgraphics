@@ -123,7 +123,7 @@ de:
       page/contact_form:
         recipients: Empfänger
       page/image:
-        image: Bild
+        image_id: Bild
       page/project:
         client_name: Auftraggeber
         client_url: Website

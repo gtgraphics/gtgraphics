@@ -3,9 +3,9 @@ CHECKBOX_INDETERMINATE_TEMPLATE = '<span class="check-indeterminate-indicator"><
 RADIO_TEMPLATE = '<span class="radio-indicator"><i class="fa fa-circle"></i></span>'
 
 jQuery.prepare ->
-  $(':checkbox, :radio', @).iCheck(
-    checkboxClass: 'checkbox-container btn btn-default'
-    radioClass: 'radio-container btn btn-default'
-    insert: CHECKBOX_DETERMINATE_TEMPLATE + CHECKBOX_INDETERMINATE_TEMPLATE + RADIO_TEMPLATE
-    increaseArea: '30%'
-  )
+  #$(':checkbox, :radio', @).iCheck(
+  #  checkboxClass: 'checkbox-container btn btn-default'
+  #  radioClass: 'radio-container btn btn-default'
+  #  insert: CHECKBOX_DETERMINATE_TEMPLATE + CHECKBOX_INDETERMINATE_TEMPLATE + RADIO_TEMPLATE
+  #  increaseArea: '30%'
+  #)
