@@ -8,21 +8,24 @@
   }
 }
 
-.panel-title .checkbox {
-  //margin: 0;
-  padding: 0;
-  min-height: auto;
-  input[type="checkbox"] {
-    margin-left: 0;
-    margin-right: 6px;
-    margin-top: 3px;
-  }
-}
-
 .panel-title {
   font-weight: 500;
 }
 
 .panel-heading .dl-horizontal {
   margin: 0;
+}
+
+.panel-title {
+  label.checkbox {
+    padding: 0 !important;
+    min-height: auto;
+    input[type="checkbox"] {
+      margin: {
+        left: 0;
+        top: 5px;
+        right: 8px;
+      }
+    }
+  }
 }
