@@ -1,9 +1,9 @@
-.col-lg-offset-4.col-lg-4
+.col-sm-offset-4.col-sm-4
 
   .page-header
     %h1.text-center= translate('views.admin.users.headlines.sign_in')
 
-  = simple_form_for @sign_in_activity, as: :session, wrapper: :dialog_form, url: :admin_sign_in do |form|
+  = simple_form_for @sign_in_activity, as: :session, url: :admin_sign_in, wrapper: :dialog_form do |form|
 
     = form.input :email, autofocus: true, placeholder: SignInActivity.human_attribute_name(:email), input_html: { class: 'input-lg', autocomplete: 'off' }
     = form.input :password, placeholder: SignInActivity.human_attribute_name(:password), input_html: { class: 'input-lg' }

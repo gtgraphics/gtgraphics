@@ -32,7 +32,7 @@
       %tr
         - if checkboxes
           %th.checkbox-cell
-            %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
+            %input{type: 'checkbox', class: 'js-only table-checkbox-all'}
         %th.thumbnail-cell
         %th.hidden-xs= sort_link_for images, :title
         %th.hidden-xs= Image.human_attribute_name :content_type

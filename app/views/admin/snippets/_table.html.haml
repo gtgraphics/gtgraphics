@@ -10,7 +10,7 @@
     %tr
       - if checkboxes
         %th.checkbox-cell
-          %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
+          %input{type: 'checkbox', class: 'js-only table-checkbox-all'}
       %th= sort_link_for snippets, :name
       %th= sort_link_for snippets, :updated_at
       - if actions

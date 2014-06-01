@@ -10,7 +10,7 @@
     %tr
       - if checkboxes
         %th.checkbox-cell
-          %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
+          %input{type: 'checkbox', class: 'js-only table-checkbox-all'}
       %th= sort_link_for templates, :name
       %th.hidden-xs= ::Template.human_attribute_name :type
       - if actions

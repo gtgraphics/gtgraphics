@@ -10,7 +10,7 @@
     %tr
       - if checkboxes
         %th.checkbox-cell
-          %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
+          %input{type: 'checkbox', class: 'js-only table-checkbox-all'}
       %th= sort_link_for message_recipiences, :subject
       %th.text-center.visible-lg.visible.md= sort_link_for message_recipiences, :read
       %th= sort_link_for message_recipiences, :sender_name

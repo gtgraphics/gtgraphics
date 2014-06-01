@@ -10,7 +10,7 @@
     %tr
       - if checkboxes
         %th.checkbox-cell
-          %input{type: 'checkbox', class: 'only-js table-checkbox-all'}
+          %input{type: 'checkbox', class: 'js-only table-checkbox-all'}
       %th= sort_link_for attachments, :title
       %th= Attachment.human_attribute_name :content_type
       %th.hidden-xs= sort_link_for attachments, :file_size
