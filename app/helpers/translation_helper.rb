@@ -4,7 +4,7 @@ module TranslationHelper
   end
 
   def translation_manager_for(fields_or_object, options = {}, &block)
-    content_tag :div, class: 'translation-manager', data: options do
+    content_tag :div, class: 'translation-manager', data: options.deep_merge(behavior: 'translationManager') do
       inner_html = render 'locale_changer', object: block_given? ? fields_or_object : fields_or_object.object
       inner_html << content_tag(:div, class: 'tab-content') do
         if block_given?

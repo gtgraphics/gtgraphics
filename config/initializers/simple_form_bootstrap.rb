@@ -15,6 +15,15 @@ SimpleForm.setup do |config|
     end
   end
 
+  config.wrappers :dialog_form, tag: 'div', class: 'form-group', error_class: 'has-error' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.use :label, class: 'control-label sr-only'
+    b.use :input, class: 'form-control'
+    b.use :error, wrap_with: { tag: 'span', class: 'help-block text-center' }
+    b.use :hint,  wrap_with: { tag: 'p', class: 'help-block text-center' }
+  end
+
   config.wrappers :vertical_file_input, tag: 'div', class: 'form-group', error_class: 'has-error' do |b|
     b.use :html5
     b.use :placeholder

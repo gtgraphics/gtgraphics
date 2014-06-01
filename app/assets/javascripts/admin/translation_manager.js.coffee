@@ -27,7 +27,7 @@ class @TranslationManager
 
   applyAddLocaleEvent: ->
     _this = @
-    @container.on 'click', '.add-locale', (event) ->
+    @container.on 'click', '[data-behavior="addLocale"]', (event) ->
       event.preventDefault()
       $link = $(@)
       unless $link.hasClass('disabled') and $link.prop('disabled')
@@ -37,7 +37,7 @@ class @TranslationManager
 
   applyRemoveLocaleEvent: ->
     _this = @
-    @container.on 'click', '.remove-locale', (event) ->
+    @container.on 'click', '[data-behavior="removeLocale"]', (event) ->
       event.preventDefault()
       $link = $(@)
       unless $link.hasClass('disabled') and $link.prop('disabled')
@@ -184,22 +184,22 @@ class @TranslationManager
     @getChangeLocaleButtons().filter(localeFilter(locale))
 
   getChangeLocaleButtons: ->
-    $('.change-locale', @container)
+    $('[data-behavior="changeLocale"]', @container)
 
   getRemoveLocaleButton: (locale) ->
     @getRemoveLocaleButtons().filter(localeFilter(locale))
 
   getRemoveLocaleButtons: ->
-    $('.remove-locale', @container)
+    $('[data-behavior="removeLocale"]', @container)
 
   getAddLocaleButton: (locale) ->
     @getAddLocaleButtons().filter(localeFilter(locale))
 
   getAddLocaleButtons: ->
-    $('.add-locale', @container)
+    $('[data-behavior="addLocale"]', @container)
 
   getDestroyTranslationInputs: (locale) ->
-    @getLocalePanes(locale).find('.destroy-translation')
+    @getLocalePanes(locale).find('.destroy-translation') # TODO Replace with data attribute
 
   getAdditionalUrlParams: ->
     {}
@@ -225,7 +225,9 @@ class @TranslationManager
       dataType: @dataType
       data: jQuery.extend({}, @getAdditionalUrlParams(), translated_locale: locale)
       success: (data) =>
-        $(data).appendTo(@container.find('.tab-content')).prepare() if @dataType == 'html'
+        if @dataType == 'html'
+          $pane = $('.tab-content', @container) # is this correct?
+          $(data).appendTo($pane).prepare() 
         callback() if callback  
       error: =>
         alert I18n.translate('javascript.translations.error')
@@ -259,4 +261,4 @@ $.fn.translationManager = (klass) ->
 
 
 jQuery.prepare ->
-  $('.translation-manager', @).translationManager()
+  $('.translation-manager, [data-behavior="translationManager"]', @).translationManager()

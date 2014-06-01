@@ -1,20 +1,35 @@
 - content_for :body_id, 'page_editor'
 
 - content_for :admin_navigation do
+  %li
+    = link_to icon(:file, outline: true, fixed_width: true), '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' }
+    %ul.dropdown-menu
+      %li= link_to prepend_icon(:folder_open, 'Öffnen', outline: true, fixed_width: true)
+      %li= link_to prepend_icon(:save, 'Speichern', fixed_width: true)
+      %li.divider
+      %li= link_to prepend_icon(:times, 'Beenden', fixed_width: true), [:edit, :admin, @page]
+  %li
+    = link_to icon(:globe, fixed_width: true), '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' }
+    %ul.dropdown-menu
+      - available_locales.each do |locale|
+        = active_link_to prepend_flag_icon(locale, translate(locale, scope: :languages)), admin_page_editor_path(@page, page_locale: locale), wrap_tag: :li
+  %li.divider
+
   - %w(bold italic underline strikethrough).each do |command|
     %li= link_to icon(command), '#', title: translate(command, scope: 'javascript.editor'), data: { command: command.camelize(:lower), toggle: 'tooltip', placement: 'bottom', container: 'body' }
   %li.divider
   - %w(align_left align_center align_right align_justify).each do |command|
     %li= link_to icon(command), '#', title: translate(command, scope: 'javascript.editor'), data: { command: command.camelize(:lower), toggle: 'tooltip', placement: 'bottom', container: 'body' }
   %li.divider
-  %li= link_to icon(:list_ol), '#', title: translate('javascript.editor.ordered_list'), data: { command: 'orderedList', toggle: 'tooltip', placement: 'bottom', container: 'body' }
-  %li= link_to icon(:list_ul), '#', title: translate('javascript.editor.unordered_list'), data: { command: 'unorderedList', toggle: 'tooltip', placement: 'bottom', container: 'body' }
+  %li= link_to icon(:list_ol, fixed_width: true), '#', title: translate('javascript.editor.ordered_list'), data: { command: 'orderedList', toggle: 'tooltip', placement: 'bottom', container: 'body' }
+  %li= link_to icon(:list_ul, fixed_width: true), '#', title: translate('javascript.editor.unordered_list'), data: { command: 'unorderedList', toggle: 'tooltip', placement: 'bottom', container: 'body' }
   %li.divider
-  %li= link_to icon(:link), '#', title: translate('javascript.editor.link'), data: { command: 'link', toggle: 'tooltip', placement: 'bottom', container: 'body' }
-  %li= link_to icon(:unlink), '#', title: translate('javascript.editor.unlink'), data: { command: 'unlink', toggle: 'tooltip', placement: 'bottom', container: 'body' }
+  %li{title: translate('javascript.editor.link'), data: { toggle: 'tooltip', placement: 'bottom', container: 'body' }}
+    = link_to icon(:link, fixed_width: true), '#', data: { command: 'link' }
+  %li= link_to icon(:unlink, fixed_width: true), '#', title: translate('javascript.editor.unlink'), data: { command: 'unlink', toggle: 'tooltip', placement: 'bottom', container: 'body' }
   %li.divider
-  %li= link_to icon(:picture, outline: true), '#', title: translate('javascript.editor.image'), data: { command: 'image', toggle: 'tooltip', placement: 'bottom', container: 'body' }
+  %li= link_to icon(:picture, fixed_width: true, outline: true), '#', title: translate('javascript.editor.image'), data: { command: 'image', toggle: 'tooltip', placement: 'bottom', container: 'body' }
   %li.divider
-  %li= link_to icon(:info), [:edit, :admin, @page]
+  %li= link_to icon(:info, fixed_width: true), [:edit, :admin, @page]
 
 = render template: 'layouts/admin/application'

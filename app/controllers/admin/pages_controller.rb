@@ -57,7 +57,14 @@ class Admin::PagesController < Admin::ApplicationController
   def create
     @page = Page.create(page_params)
     flash_for @page
-    respond_with :admin, @page, template: 'admin/pages/editor'
+    if @page.errors.empty?
+      if params.key?(:save_and_open)
+        location = admin_page_editor_path(@page)
+      else
+        location = admin_page_path(@page)
+      end
+    end
+    respond_with :admin, @page, location: location
   end
 
   def show
@@ -75,7 +82,14 @@ class Admin::PagesController < Admin::ApplicationController
   def update
     @page.update(page_params)
     flash_for @page
-    respond_with :admin, @page
+    if @page.errors.empty?
+      if params.key?(:save_and_open)
+        location = admin_page_editor_path(@page)
+      else
+        location = admin_page_path(@page)
+      end
+    end
+    respond_with :admin, @page, location: location
   end
 
   def destroy

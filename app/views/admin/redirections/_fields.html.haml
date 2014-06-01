@@ -1,4 +1,4 @@
-.tab-content#translations
+.tab-content#translations{data: { contains: 'translatedContent' }}
   = fields.simple_fields_for :translations do |translation_fields|
     = render 'admin/redirections/translation_fields', fields: translation_fields
 

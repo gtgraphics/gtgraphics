@@ -2,9 +2,9 @@
   / List of added locales
   - available_locales.each do |locale|
     %li
-      = link_to '#', class: 'change-locale clearfix', data: { locale: locale } do
+      = link_to '#', class: 'change-locale clearfix', data: { behavior: 'changeLocale', locale: locale } do
         = prepend_flag_icon(locale, translate(locale, scope: :languages), caption_html: { class: 'hidden-xs' })
-        %button.pull-right.remove-locale{type: 'button', title: translate('helpers.links.remove', model: object.class.translation_class.model_name.human), tabindex: 0, data: { locale: locale, toggle: 'tooltip', placement: 'top' }}
+        %button.pull-right.remove-locale{type: 'button', title: translate('helpers.links.remove', model: object.class.translation_class.model_name.human), tabindex: 0, data: { behavior: 'removeLocale', locale: locale }}
           = icon(:times)
           %span.sr-only
             = translate('helpers.links.remove', model: object.class.translation_class.model_name.human)
@@ -12,10 +12,14 @@
   / Dropdown Menu with addable locales
   %li.dropdown.pull-right
     = link_to '#', class: 'dropdown-toggle add-locale-menu', data: { toggle: 'dropdown' } do
-      = prepend_icon(:plus, translate('helpers.links.add', model: object.class.translation_class.model_name.human), caption_html: { class: 'hidden-xs'} )
+      = prepend_icon(:globe, translate('helpers.links.add', model: object.class.translation_class.model_name.human, fixed_width: true), caption_html: { class: 'hidden-xs'} )
       %b.caret
     %ul.dropdown-menu
       - available_locales.each do |locale|
         %li
-          = link_to "#", class: 'add-locale', data: { locale: locale } do
+          = link_to "#", class: 'add-locale', data: { behavior: 'addLocale', locale: locale } do
             = prepend_flag_icon(locale, translate(locale, scope: :languages))
+      /%li.divider
+      /%li
+      /  = link_to '#', class: 'bla', data: { behavior: 'removeSelectedLocale' } do
+      /    = prepend_icon :times, 'Entfernen', fixed_width: true

@@ -66,7 +66,7 @@ class @PageEmbeddableManager
     @getEmbeddableTypeSelect().select2('val')
 
   getTranslationManager: ->
-    $('.translation-manager', @container).data('translationManager')
+    $('.translation-manager, [data-behavior="translationManager"]', @container).data('translationManager')
 
   getTranslatedLocales: ->
     @getTranslationManager().translatedLocales

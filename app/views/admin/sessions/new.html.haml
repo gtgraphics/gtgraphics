@@ -3,11 +3,11 @@
   .page-header
     %h1.text-center= translate('views.admin.users.headlines.sign_in')
 
-  = simple_form_for @sign_in_activity, as: :session, url: :admin_sign_in do |form|
+  = simple_form_for @sign_in_activity, as: :session, wrapper: :dialog_form, url: :admin_sign_in do |form|
 
-    = form.input :email, autofocus: true, placeholder: SignInActivity.human_attribute_name(:email), input_html: { class: 'input-lg', autocomplete: 'off' }, label_html: { class: 'sr-only' }
-    = form.input :password, placeholder: SignInActivity.human_attribute_name(:password), input_html: { class: 'input-lg' }, label_html: { class: 'sr-only' }
-    = form.input :permanent, as: :boolean, inline_label: SignInActivity.human_attribute_name(:permanent), label_html: { class: 'sr-only' }
+    = form.input :email, autofocus: true, placeholder: SignInActivity.human_attribute_name(:email), input_html: { class: 'input-lg', autocomplete: 'off' }
+    = form.input :password, placeholder: SignInActivity.human_attribute_name(:password), input_html: { class: 'input-lg' }
+    = form.input :permanent, as: :boolean, wrapper: :vertical_boolean
 
     .form-group
       = form.button :button, translate('views.admin.users.sign_in'), class: 'btn-primary btn-block'
