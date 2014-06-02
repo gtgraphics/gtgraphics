@@ -1,12 +1,6 @@
 class EditorActivity < Activity
    include ActionView::Helpers::TagHelper
 
-   def self.from_params(params)
-     attribute_names = attribute_set.map(&:name)
-     attributes = (params || {}).symbolize_keys.slice(*attribute_names)
-     new(attributes)
-   end
-
    def persisted?
      attributes.values.any?(&:present?)
    end

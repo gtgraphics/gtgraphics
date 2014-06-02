@@ -1,7 +1,7 @@
 class @Editor.Control.ViewMode extends @Editor.Control.ButtonControl
   createControl: ->
     $buttonGroup = $('<div />', class: 'btn-group pull-right')
-    $button = $('<button />', class: 'btn btn-default btn-sm dropdown-toggle', type: 'button', tabindex: '-1', 'data-toggle': 'dropdown')
+    $button = $('<button />', class: 'btn btn-default dropdown-toggle', type: 'button', tabindex: '-1', 'data-toggle': 'dropdown')
     $button.append($('<b />', class: 'caret')).appendTo($buttonGroup)
     $dropdown = $('<ul />', class: 'dropdown-menu').appendTo($buttonGroup)
     @createDropdownListItem('richText', I18n.translate('javascript.editor.viewModes.richText'), 'font').appendTo($dropdown)
@@ -25,10 +25,12 @@ class @Editor.Control.ViewMode extends @Editor.Control.ButtonControl
     true
 
   queryDropdownItemStates: ->
-    viewMode = @getEditor().options.viewMode
-    $dropdown = @$control.find('.dropdown-menu')
-    $buttons = $dropdown.find('li').removeClass('active')
-    $buttons.filter(-> $(@).data('viewMode') == viewMode).addClass('active')
+    editor = @getEditor()
+    if editor? and editor.options?
+      viewMode = editor.options.viewMode
+      $dropdown = @$control.find('.dropdown-menu')
+      $buttons = $dropdown.find('li').removeClass('active')
+      $buttons.filter(-> $(@).data('viewMode') == viewMode).addClass('active')
 
   createDropdownListItem: (viewMode, caption, icon) ->
     $item = $('<li />').attr('data-view-mode', viewMode)

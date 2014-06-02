@@ -1,16 +1,10 @@
-#admin_navigation.navbar {
-  @media (min-width: $screen-sm-min) {
-    .navbar-nav:not(.navbar-right):first-child {
-      //margin-left: -15px;
-    }
-  }
-
+#admin_navigation, #admin_navigation_toolbar {
   &:after {
     $shadow-height: 8px;
     display: block;
     content: " ";
     position: absolute;
-    top: 51px;
+    bottom: -$shadow-height - 1px;
     right: 0;
     left: 0;
     height: $shadow-height;
@@ -20,6 +14,14 @@
       image: asset-url('admin/shadow_bottom.png');
       repeat: no-repeat;
       size: 100% $shadow-height;
+    }
+  }
+}
+
+#admin_navigation {
+  @media (min-width: $screen-sm-min) {
+    .navbar-nav:not(.navbar-right):first-child {
+      //margin-left: -15px;
     }
   }
 
@@ -110,6 +112,35 @@
   #nav_messages {
     .badge {
       margin-left: 4px;
+    }
+  }
+}
+
+#admin_navigation_toolbar {
+  top: $navbar-height;
+  padding: 12px 0;
+  border-bottom: 1px solid $navbar-default-border;
+  // background-color: lighten($navbar-default-bg, 2%);
+  background-color: $body-bg;
+  z-index: $zindex-navbar - 1;
+
+  .divider {
+    background-color: #e5e5e5;
+    width: 1px;
+    height: 34px;
+    margin: 0 13px;
+    float: left;
+    display: inline-block;
+    vertical-align: middle;
+
+    + .btn-group {
+      margin-left: 0;
+    }
+  }
+
+  .editor-controls {
+    .btn-group:first-child {
+      margin-left: 0;
     }
   }
 }

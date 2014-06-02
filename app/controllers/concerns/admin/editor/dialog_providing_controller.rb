@@ -8,14 +8,16 @@ module Admin::Editor::DialogProvidingController
   module ClassMethods
     def editor_actions_for(name, options = {})
       class_name = options.fetch(:class_name, "::Editor::#{name.to_s.classify}")
+      permitted_params = Array(options[:params])
 
       attr_reader name
       private name
       helper_method name
 
-      class_eval %{
+      class_eval <<-RUBY, __FILE__, __LINE__ + 1
         def show
-          @#{name} = #{class_name}.from_params(params[:editor])
+          editor_params = Hash(params[:editor]).slice(*#{permitted_params.inspect})
+          @#{name} = #{class_name}.new(editor_params)
           respond_to do |format|
             format.html
           end
@@ -47,11 +49,17 @@ module Admin::Editor::DialogProvidingController
           create
         end
 
+        protected
         def #{name}_params
-          params.require(:editor_#{name}).permit!
+          permitted_params = #{permitted_params.inspect}
+          editor_params = params.require(:editor_#{name})
+          if permitted_params.empty?
+            editor_params.permit!
+          else
+            editor_params.permit(*permitted_params)
+          end
         end
-        private :#{name}_params
-      }
+      RUBY
     end
   end
 end

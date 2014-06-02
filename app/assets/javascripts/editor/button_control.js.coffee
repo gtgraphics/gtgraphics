@@ -1,8 +1,8 @@
 class @Editor.Control.ButtonControl extends @Editor.Control
   createControl: ->
     tooltipOptions = _(@toolbar.options.tooltip || {}).defaults(placement: 'top', container: 'body')
-    $button = $('<button />', type: 'button', class: 'btn btn-default btn-sm', tabindex: '-1')
-    $('<i />', class: "fa fa-#{@getIcon()}").appendTo($button)
+    $button = $('<button />', type: 'button', class: 'btn btn-default', tabindex: '-1')
+    $('<i />', class: "fa fa-#{@getIcon()} fa-fw").appendTo($button)
     $('<span />', class: 'sr-only').text(@getCaption()).appendTo($button)
     $button.attr('title', @getCaption())
     $button.tooltip(tooltipOptions)

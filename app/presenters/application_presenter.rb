@@ -1,2 +1,0 @@
-class ApplicationPresenter < Presenter
-end
