@@ -1,27 +1,27 @@
-#crop_fields
+#image_manipulator
   .row
-    .col-lg-8
-      .thumbnail
-        .img-editable
-          - if fields.object.is_a?(Image::Style)
-            = image_tag @image_style.original_asset.url, id: 'image_style_asset', class: 'img-croppable img-responsive', alt: @image.title, data: { original_width: @image_style.variant? ? @image.width : @image_style.width, original_height: @image_style.variant? ? @image.height : @image_style.height }
-          - else
-            = image_tag @image.asset.url, id: 'image_asset', class: 'img-croppable img-responsive', alt: @image.title, data: { original_width: @image.width, original_height: @image.height }
+    .col-md-8
+      .img-editable
+        - if fields.object.is_a?(Image::Style)
+          = image_tag @image_style.original_asset.url, id: 'image_style_asset', class: 'img-croppable img-responsive', alt: @image.title, data: { original_width: @image_style.variant? ? @image.width : @image_style.width, original_height: @image_style.variant? ? @image.height : @image_style.height }
+        - else
+          = image_tag @image.asset.url, id: 'image_asset', class: 'img-croppable img-responsive', alt: @image.title, data: { original_width: @image.width, original_height: @image.height }
 
-    .col-lg-4
+    .col-md-4
 
       .panel-group
 
         / Crop
         .panel.panel-default.crop-panel
           .panel-heading
-            .panel-title
+            %span.panel-title
               - if fields.object.is_a?(Image::Style)
                 %label.checkbox
-                  = fields.check_box :cropped, class: 'crop-flag js-only'
+                  = fields.check_box :cropped, class: 'js-only', data: { toggle: 'crop' }
                   = translate("views.admin.images.headlines.crop")
               - else
-                = translate("views.admin.images.headlines.crop")
+                .panel-title
+                  = translate("views.admin.images.headlines.crop")
 
           .panel-collapse{class: fields.object.cropped? ? 'in' : 'collapse'}
             .panel-body
@@ -35,16 +35,16 @@
                   = Image::Style.human_attribute_name(:preserve_aspect_ratio)
                 .col-sm-9
                   %label.checkbox
-                    %input{type: 'checkbox', checked: false, class: 'crop-aspect-ratio'}
+                    %input{type: 'checkbox', checked: false, class: 'crop-aspect-ratio', data: { control: 'preserveCropAspectRatio' }}
                     = Image::Style.human_attribute_name(:preserve_aspect_ratio)
 
         / Resize
         - if fields.object.is_a?(Image::Style)
           .panel.panel-default.resize-panel
             .panel-heading
-              .panel-title
+              %span.panel-title
                 %label.checkbox
-                  = fields.check_box :resized, class: 'resize-flag js-only'
+                  = fields.check_box :resized, class: 'js-only', data: { toggle: 'resize' }
                   = translate("views.admin.images.headlines.scale")
 
             .panel-collapse{class: fields.object.resized? ? 'in' : 'collapse'}
@@ -53,15 +53,15 @@
                 = fields.input :resize_height, input_html: { class: 'resize-height', min: 1, data: { control: 'resizeHeight' } }, as: :integer, required: true
 
                 .form-group.js-only
-                  %label.control-label.col-lg-4.sr-only{for: fields.object.is_a?(Image::Style) ? 'image_style_preserve_resize_aspect_ratio' : 'image_preserve_resize_aspect_ratio' }
+                  %label.control-label.col-sm-3.sr-only{for: fields.object.is_a?(Image::Style) ? 'image_style_preserve_resize_aspect_ratio' : 'image_preserve_resize_aspect_ratio' }
                     = Image::Style.human_attribute_name(:preserve_aspect_ratio)
-                  .col-lg-8
+                  .col-sm-9
                     %label.checkbox
-                      %input{type: 'checkbox', checked: true, class: 'resize-aspect-ratio'}
+                      %input{type: 'checkbox', checked: true, class: 'resize-aspect-ratio', data: { control: 'preserveResizeAspectRatio' }}
                       = Image::Style.human_attribute_name(:preserve_aspect_ratio)
 
                 .form-group.js-only
-                  .col-lg-8.col-lg-offset-4
+                  .col-sm-9.col-sm-offset-3
                     .btn-group
                       %button{type: 'button', class: 'btn btn-default resize-scale', value: 0.5, data: { control: 'scale' }} 50%
                       %button{type: 'button', class: 'btn btn-default resize-scale', value: 1, data: { control: 'scale' }} 100%

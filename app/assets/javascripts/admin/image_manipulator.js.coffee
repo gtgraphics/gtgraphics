@@ -1,31 +1,35 @@
-class @Cropper
+class ImageManipulator
   constructor: ($container) ->
     @container = $container
+
     @image = $('.img-croppable', $container)
     @originalWidth = @image.data('originalWidth')
     @originalHeight = @image.data('originalHeight')
+
+    @inputs = {}
     @panels = {
       crop: $('.crop-panel', $container)
       resize: $('.resize-panel', $container)
     }
-    @inputs = {
-      cropped: $('.crop-flag', $container)
-      cropX: $('.crop-x', @panels.crop)
-      cropY: $('.crop-y', @panels.crop)
-      cropWidth: $('.crop-width', @panels.crop)
-      cropHeight: $('.crop-height', @panels.crop)
-      cropAspectRatio: $('.crop-aspect-ratio', @panels.crop)
-    }
-    @croppable = true
+
+    @croppable = @panels.crop.any()
+    if @croppable
+      @inputs = _(@inputs).extend
+        cropped: $('[data-toggle="crop"]', $container)
+        cropX: $('[data-control="cropX"]', $container)
+        cropY: $('[data-control="cropY"]', $container)
+        cropWidth: $('[data-control="cropWidth"]', $container)
+        cropHeight: $('[data-control="cropHeight"]', $container)
+        cropAspectRatio: $('[data-control="preserveCropAspectRatio"]', $container)
+
     @resizeable = @panels.resize.any()
     if @resizeable
-      jQuery.extend @inputs, {
-        resized: $('.resize-flag', $container)
-        resizeWidth: $('.resize-width', @panels.resize)
-        resizeHeight: $('.resize-height', @panels.resize)
-        resizeAspectRatio: $('.resize-aspect-ratio', @panels.resize)
-        resizeScaleButtons: $('.resize-scale', @panels.resize)
-      }
+      @inputs = _(@inputs).extend
+        resized: $('[data-toggle="resize"]', $container)
+        resizeWidth: $('[data-control="resizeWidth"]', $container)
+        resizeHeight: $('[data-control="resizeHeight"]', $container)
+        resizeAspectRatio: $('[data-control="preserveResizeAspectRatio"]', $container)
+        scale: $('[data-control="scale"]', $container)
 
     @applyImageEvents()
 
@@ -80,7 +84,7 @@ class @Cropper
         $panelCollapse.collapse('show')
       else
         $panelCollapse.collapse('hide')
-    $panelCollapse.find(':input').prop('disabled', !enabled).iCheck('update')
+    $panelCollapse.find(':input').prop('disabled', !enabled)
     @refreshSubmitButtonState()
 
   refreshSubmitButtonState: ->
@@ -88,18 +92,24 @@ class @Cropper
     $(':submit', @container).prop('disabled', !enabled)
 
   applyInputEvents: ->
-    @applyCropInputEvents()
-    @applyResizeInputEvents() if @resizeable
+    @applyCropEvents() if @croppable
+    @applyResizeEvents() if @resizeable
 
-  applyCropInputEvents: ->
+  applyCropEvents: ->
     if @inputs.cropped.any()
       @refreshCroppedState(true)
-      @inputs.cropped.on 'ifChanged', =>
+      @inputs.cropped.on 'change', =>
         @refreshCroppedState(false)
 
-    @applyInputEvent @inputs.cropX
+    @applyInputEvent @inputs.cropX, =>
+      totalWidth = @getCropX() + @getCropWidth()
+      if totalWidth > @originalWidth
+        @inputs.cropWidth.val(@originalWidth - @getCropX())
 
-    @applyInputEvent @inputs.cropY
+    @applyInputEvent @inputs.cropY, =>
+      totalHeight = @getCropY() + @getCropHeight()
+      if totalHeight > @originalHeight
+        @inputs.cropHeight.val(@originalHeight - @getCropY())
 
     @applyInputEvent @inputs.cropWidth, =>
       if @inputs.cropAspectRatio.prop('checked')
@@ -110,13 +120,13 @@ class @Cropper
         @setCropWidth(@cropAspectRatio.width * @getCropHeight())
 
     @refreshCropAspectRatioState()
-    @inputs.cropAspectRatio.on 'ifChanged', =>
+    @inputs.cropAspectRatio.on 'change', =>
       @refreshCropAspectRatioState()
 
-  applyResizeInputEvents: ->
+  applyResizeEvents: ->
     if @inputs.resized.any()
       @refreshResizedState(true)
-      @inputs.resized.on 'ifChanged', =>
+      @inputs.resized.on 'change', =>
         @refreshResizedState(false)
 
     @applyInputEvent @inputs.resizeWidth, =>
@@ -131,23 +141,23 @@ class @Cropper
     @inputs.resizeAspectRatio.on 'ifChanged', =>
       @refreshResizeAspectRatioState()
 
-    @applyResizeScaleButtonEvents()
+    @applyScaleEvents()
 
-  applyResizeScaleButtonEvents: ->
+  applyScaleEvents: ->
     _this = @
 
-    @inputs.resizeScaleButtons.click ->
+    @inputs.scale.click ->
       $button = $(@)
-      factor = $button.data('factor')
+      factor = $button.val()
       _this.setResizeWidth(factor * _this.getCropWidth())
       _this.setResizeHeight(factor * _this.getCropHeight())
       _this.refreshCropAspectRatioState() if _this.croppable
       _this.refreshResizeAspectRatioState() if _this.resizeable
 
     @container.on 'init.cropper crop.cropper resize.cropper', ->
-      _this.inputs.resizeScaleButtons.each ->
+      _this.inputs.scale.each ->
         $button = $(@)
-        factor = $button.data('factor')
+        factor = $button.val()
         scaledWidth = _this.getCropWidth() * factor
         scaledHeight = _this.getCropHeight() * factor
         if scaledWidth == _this.getResizeWidth() and scaledHeight == _this.getResizeHeight()
@@ -264,22 +274,19 @@ class @Cropper
 
     $input.on 'textchange', (event) =>
       value = $input.val()
-      if presentString(value)
+      unless emptyString(value)
         if $input.data('prevValue') != value
           $input.trigger('crop.cropper')
           @setCropAreaExplicitly = true
-          callback(event)
+          callback(event) if callback
           @updateCropArea()
         $input.data('prevValue', value)
 
   emptyString = (value) ->
     jQuery.trim(value) == ''
 
-  presentString = (value) ->
-    !emptyString(value)
-
   parseValue = (value) ->
-    value = parseInt(value)
+    value = Number(value)
     value = 0 if isNaN(value)
     value
 
@@ -317,8 +324,5 @@ class @Cropper
     @resizeCropRatio = @getResizeCropRatio() if @resizeable
 
 $(document).ready ->
-
-  @cropper = new Cropper($('#crop_fields'))
-
-  # cropper = new Cropper($image, cropX: $cropX, cropY: $cropY, cropWidth: $cropWidth, cropHeight: $cropHeight, resizeWidth: $resizeWidth, resizeHeight: $resizeHeight)
-
+  $imageManipulator = $('#image_manipulator')
+  new ImageManipulator($imageManipulator)

@@ -9,4 +9,4 @@
   - if @image_style.attachment? and not action_name.in? %w(crop apply_crop)
     = form.input :asset, as: :image_preview, required: true, input_html: { preview_version: :thumbnail }, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
   - else
-    = render 'admin/images/crop_fields', fields: form
+    = render 'admin/images/manipulator_fields', fields: form
