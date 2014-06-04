@@ -18,7 +18,7 @@ class Slug < String
     if self =~ Regexp.new(Regexp.escape(@options[:separator]) + '[0-9]+\z')
       str = super
     else
-      str = "#{self}#{@options[:separator]}-2"
+      str = "#{self}#{@options[:separator]}#{@options[:separator]}2"
     end
     self.class.new(str, @options)
   end
