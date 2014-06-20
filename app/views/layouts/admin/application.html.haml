@@ -64,8 +64,8 @@
         - if content_for? :admin_content
           = yield :admin_content
         - else
-          = render_flash(flash.notice, type: :success)
-          = render_flash(flash.alert, type: :danger)
+          = render_flashes
+          = render 'breadcrumbs'
           = yield
 
 = render template: 'layouts/application'

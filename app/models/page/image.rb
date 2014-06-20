@@ -9,7 +9,7 @@
 
 class Page < ActiveRecord::Base
   class Image < ActiveRecord::Base
-    include PageEmbeddable
+    include Page::Embeddable
 
     acts_as_page_embeddable template_class: 'Template::Image'
 

@@ -18,8 +18,6 @@ class Admin::PagePresenter < Admin::ApplicationPresenter
   end
 
   def translated_locales
-    super.map do |locale|
-      h.link_to I18n.translate(locale, scope: :languages), h.admin_page_editor_path(page, page_locale: locale)
-    end.sort.join(', ').html_safe
+    super.map { |locale| I18n.translate(locale, scope: :languages) }.sort.join(', ').html_safe
   end
 end

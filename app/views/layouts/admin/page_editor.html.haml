@@ -1,31 +1,40 @@
-- content_for :body_id, 'page_editor'
+- content_for :admin_content do
 
-- content_for :navigation_toolbar do
-  .btn-toolbar
-    .btn-group
-      = button_link_to [:edit, :admin, @page], type: :primary, class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
-        = prepend_icon(:bars, 'Menü', fixed_width: true, caption_html: { class: 'sr-only' })
-      %ul.dropdown-menu
-        %li= link_to prepend_icon(:eye, translate('helpers.links.view'), fixed_width: true), page_path(@page)
-        %li= link_to prepend_icon(:times, translate('helpers.links.close'), fixed_width: true), [:edit, :admin, @page]
+  - if content_for? :page_content
+    = yield :page_content
+  - else
+    .embeddable-manager{data: { url: embeddable_fields_admin_pages_path }}
+      .row
+        .col-sm-offset-0.col-sm-12
+          = render_flashes
+          = render 'breadcrumbs'
+      .row
+        .col-sm-offset-0.col-sm-12
+          .page-header.clearfix
+            .row
+              .col-sm-7.col-sm-offset-1
+                %h1= @page.title
 
-    .divider
+      .row
+        .col-sm-8.col-sm-offset-1
+          = yield
 
-    .btn-group.js-only
-      = text_field_tag :page, @page.id, id: 'page_editor_switcher', class: 'resource-combobox', style: 'width: 200px', data: { resource: 'pages', from: admin_pages_path(locale: @page_locale, format: :json), formatter: 'PageComboboxFormatter', placeholder: 'Seite auswählen' }
-
-    .btn-group
-      = button_link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
-        = prepend_flag_icon(@page_locale, translate(@page_locale, scope: :languages), fixed_width: true, caption_html: { class: 'sr-only' })
-      %ul.dropdown-menu
-        - available_locales.each do |locale|
-          = active_link_to admin_page_editor_path(@page, page_locale: locale), wrap_tag: :li do
-            = prepend_flag_icon(locale, translate(locale, scope: :languages))
-
-    .divider
-
-    #editor_controls.editor-controls
-
-
+        .col-sm-2.col-sm-offset-1
+          .tabs-right
+            %ul.nav.nav-tabs
+              %li.nav-header Sprache
+              - I18n.available_locales.sort_by { |locale| translate(locale, scope: :languages) }.each do |locale|
+                %li{class: locale == I18n.locale ? 'active' : nil}
+                  = link_to '#' do
+                    = prepend_flag_icon locale, translate(locale, scope: :languages), size: 16, fixed_width: true
+              %li.divider
+              %li.nav-header Einstellungen
+              = active_link_to [:edit, :admin, @page], wrap_tag: :li do
+                = prepend_icon :wrench, 'Allgemein', fixed_width: true
+              = active_link_to [:admin, @page, :regions], wrap_tag: :li do
+                = prepend_icon :file_text, 'Inhalte', outline: true, fixed_width: true
+              = active_link_to [:edit, :admin, @page, :metadata], wrap_tag: :li, class: 'disabled' do
+                = prepend_icon :history, 'Verlauf', fixed_width: true
+              %li.divider
 
 = render template: 'layouts/admin/application'

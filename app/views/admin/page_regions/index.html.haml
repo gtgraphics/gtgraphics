@@ -1,0 +1,5 @@
+%fieldset
+  %legend Inhalte
+  .fields
+    - if @page.template
+      = @page.template.region_definitions.to_a

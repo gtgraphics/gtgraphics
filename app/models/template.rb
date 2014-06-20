@@ -52,6 +52,10 @@ class Template < ActiveRecord::Base
   class << self
     attr_accessor :template_lookup_path
 
+    def default
+      first!
+    end
+
     def template_files(full_paths = false)
       raise 'method can only be called on subclasses of Template' if self.name == 'Template'
       Dir[File.join([VIEW_ROOT, template_lookup_path, '*'].compact)].map do |template_file|

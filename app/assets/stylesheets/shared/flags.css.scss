@@ -1,0 +1,27 @@
+@import "flags/flag-16/*.png";
+@import "flags/flag-24/*.png";
+
+@include all-flag-16-sprites;
+@include all-flag-24-sprites;
+
+.flag {
+  display: inline-block;
+  border-radius: 50%;
+  font-size: 1.33333333em;
+  line-height: 0.75em;
+  vertical-align: -15%;
+
+  &.flag-fw {
+    margin: 0 1px;
+  }
+
+  &.flag-16 {
+    width: 16px;
+    height: 16px;
+  }
+
+  &.flag-24 {
+    width: 24px;
+    height: 24px;
+  }
+}

@@ -30,12 +30,11 @@ module IconHelper
   # Flags
   
   def flag_icon(locale, options = {})
-    size = options.fetch(:size, 16)
-    options = options.reverse_merge(alt: translate(locale, scope: :languages)).merge(width: size, height: size)
-    options[:class] ||= ""
-    options[:class] << " flag-icon img-circle"
+    size = options.delete(:size) { 16 }
+    options[:class] = "#{options[:class]} flag flag-#{size} flag-#{size}-#{locale}"
+    options[:class] << ' flag-fw' if options.delete(:fixed_width)
     options[:class].strip!
-    image_tag("flags/#{size}/#{locale}.png", options)
+    content_tag :i, nil, options
   end
 
   def append_flag_icon(*args, &block)

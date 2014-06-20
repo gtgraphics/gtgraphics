@@ -24,43 +24,22 @@ class Page < ActiveRecord::Base
   include Authorable
   include BatchTranslatable
   include Excludable
-  include MenuContainable
   include NestedSetRepresentable
+  include Page::Abstract
+  include Page::MenuContainable
+  include Page::Regionable
+  include Page::UrlAccessible
   include PersistenceContextTrackable
   include Publishable
-  include Regionable
-  include Sluggable
 
-  EMBEDDABLE_TYPES = %w(
-    Page::Content
-    Page::ContactForm
-    Page::Homepage
-    Page::Image
-    Page::Project
-    Page::Redirection
-  ).freeze
-
-  has_slug :slug, param: false, from: -> { root? ? '' : title(I18n.default_locale) }, if: -> { new_record? and slug.blank? and title(I18n.default_locale).present? }
   translates :title, :meta_description, :meta_keywords, fallbacks_for_empty_translations: true
 
   acts_as_authorable
   acts_as_batch_translatable
 
-  belongs_to :embeddable, polymorphic: true, autosave: true
-
-  # Destruction must be done via callback, because "dependent: :destroy" leads to an infinite loop
-  validates :embeddable, presence: true
-  validates :embeddable_type, inclusion: { in: EMBEDDABLE_TYPES }, allow_blank: true
-  validates :slug, presence: { unless: :root? }, uniqueness: { scope: :parent_id, if: :slug_changed? }
-  validates :path, presence: { unless: :root? }, uniqueness: { if: :path_changed? }
   validate :verify_root_uniqueness, if: :root?
-  validate :verify_embeddable_type_was_convertible, on: :update, if: :embeddable_type_changed?
 
-  before_validation :set_path, if: -> { slug_changed? or parent_id_changed? }
   before_destroy :destroyable?
-  around_save :update_descendants_paths
-  around_update :destroy_replaced_embeddable
-  after_destroy :destroy_embeddable
 
   default_scope -> { order(:lft) }
   scope :indexable, -> { where(indexable: true) }
@@ -69,98 +48,18 @@ class Page < ActiveRecord::Base
   delegate :name, to: :author, prefix: true, allow_nil: true
   delegate :name, to: :template, prefix: true, allow_nil: true
   delegate :meta_keywords, :meta_keywords=, to: :translation
-  delegate :template, to: :embeddable, allow_nil: true
 
-  EMBEDDABLE_TYPES.each do |embeddable_type|
-    sanitized_type = embeddable_type.demodulize.underscore
-
-    scope sanitized_type.pluralize, -> { where(embeddable_type: embeddable_type) }
-    scope "except_#{sanitized_type.pluralize}", -> { where.not(embeddable_type: embeddable_type) }
-
-    class_eval %{
-      def #{sanitized_type}?
-        embeddable_type == '#{embeddable_type}'
-      end
-    }
-  end
-
-  class << self
-    def creatable_embeddable_classes
-      embeddable_classes.select(&:creatable?).freeze
+  def self.search(query)
+    if query.present?
+      terms = query.to_s.split.uniq.map { |term| "%#{term}%" }
+      ransack(translations_title_or_path_matches_any: terms).result
+    else
+      all
     end
-
-    def embedding(*types)
-      types = Array(types).flatten.map { |type| "Page::#{type.to_s.classify}" }
-      where(embeddable_type: types.many? ? types : types.first)
-    end
-
-    def embeddable_classes
-      @@embeddable_classes ||= embeddable_types.map(&:constantize).freeze
-    end
-
-    def embeddable_types
-      EMBEDDABLE_TYPES
-    end
-
-    def search(query)
-      if query.present?
-        terms = query.to_s.split.uniq.map { |term| "%#{term}%" }
-        ransack(translations_title_or_path_matches_any: terms).result
-      else
-        all
-      end
-    end    
-  end
-
-  def build_embeddable(attributes = {})
-    raise 'invalid embeddable type' unless embeddable_class
-    self.embeddable = embeddable_class.new(attributes)
-  end
-
-  def children_with_embedded(*types)
-    children.embedding(*types).includes(:embeddable)
   end
 
   def destroyable?
     !root?
-  end
-
-  def embeddable_attributes=(attributes)
-    raise 'invalid embeddable type' unless embeddable_class
-    if attributes['id'].present?
-      embeddable_id = attributes['id'].to_i
-      self.embeddable = embeddable_class.find_by(id: embeddable_id) if self.embeddable_id != embeddable_id
-    end
-    build_embeddable if embeddable.nil?
-    self.embeddable.attributes = attributes
-  end
-
-  def embeddable_class
-    embeddable_type.in?(EMBEDDABLE_TYPES) ? embeddable_type.constantize : nil
-  end
-
-  def embeddable_class_was
-    embeddable_type_was.try(:constantize)
-  end
-
-  def embeddable_changed?
-    embeddable_type_changed? or embeddable_id_changed?
-  end
-
-  def refresh_path!(include_descendants = false)
-    if include_descendants
-      transaction { self_and_descendants.each(&:refresh_path!) }
-    else
-      update_column(:path, generate_path)
-    end
-  end
-
-  def supports_template?
-    embeddable_class.try(:supports_template?) || false
-  end
-
-  def template_path
-    template.try(:view_path)
   end
 
   def to_liquid
@@ -177,40 +76,6 @@ class Page < ActiveRecord::Base
   end
 
   private
-  def destroy_embeddable
-    embeddable.destroy
-  end
-
-  def destroy_replaced_embeddable
-    embeddable_type_changed = self.embeddable_type_changed?
-    yield
-    embeddable_class_was.destroy(embeddable_id_was) if embeddable_type_changed
-  end
-
-  def generate_path
-    if parent.present?
-      path_parts = parent.self_and_ancestors.pluck(:slug) << slug.to_s
-    else
-      path_parts = [slug.to_s]
-    end
-    path_parts.reject!(&:blank?)
-    File.join(path_parts)
-  end
-
-  def set_path
-    self.path = generate_path
-  end
-
-  def update_descendants_paths
-    path_changed = self.path_changed?
-    yield
-    transaction { descendants.each(&:refresh_path!) } if path_changed
-  end
-
-  def verify_embeddable_type_was_convertible
-    errors.add(:embeddable_type, :invalid) unless embeddable_class_was.convertible?
-  end
-
   def verify_root_uniqueness
     errors.add(:parent_id, :taken) if self.class.roots.without(self).exists?
   end

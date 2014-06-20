@@ -52,14 +52,13 @@
                   = prepend_flag_icon(locale, translate(locale, scope: :languages, locale: locale))
 
   .container
-    = render 'breadcrumbs'
-    = render_flash(flash.notice, type: :success)
-    = render_flash(flash.alert, type: :danger)
-
+    = render_flashes
     - unless @page.published?
       .alert.alert-warning
         %strong Warning!
         This Page has not been published yet.
+    
+    = render 'breadcrumbs'
 
     #page_content
       - if content_for? :page_content

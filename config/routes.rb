@@ -4,6 +4,11 @@ GtGraphics::Application.routes.draw do
     
   scope '(:locale)', constraints: { locale: /[a-z]{2}/ } do
     scope constraints: Routing::LocaleConstraint.new do
+      scope 'admin' do
+        get 'pages/:page_type/new' => 'admin/pages#new', as: :new_admin_page
+        get 'pages/:page_id/children/:page_type/new' => 'admin/pages#new', as: :new_admin_page_child
+      end
+
       namespace :admin do
         scope controller: :sessions do
           get :sign_in, action: :new
@@ -25,13 +30,6 @@ GtGraphics::Application.routes.draw do
           member do
             get :download
             patch :move_to_images
-          end
-        end
-
-        scope 'pages/editor(/:page_locale)/:id', constraints: { page_locale: /[a-z]{2}/, id: /[0-9]+/ } do
-          scope constraints: Routing::LocaleConstraint.new(:page_locale) do
-            get '/', to: 'editor/pages#edit', as: :page_editor
-            patch '/', to: 'editor/pages#update', as: nil
           end
         end
 
@@ -75,9 +73,10 @@ GtGraphics::Application.routes.draw do
           end
         end
 
-        resources :pages do
-          resources :children, controller: :pages, only: :new
-          resources :regions, controller: :page_regions, only: [:show, :update] do
+        resources :pages, except: :new do
+          #resources :children, controller: :pages, only: :new
+          resource :metadata, controller: :page_metadata, only: :edit
+          resources :regions, controller: :page_regions do
             collection do
               patch :update_multiple
             end
@@ -90,6 +89,7 @@ GtGraphics::Application.routes.draw do
             get :tree
           end
           member do
+            get :seo
             patch :move
             patch :move_up
             patch :move_down

@@ -1,7 +1,13 @@
-@import url("//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css");
+@import url("//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css");
 
 .append-icon {
-  .caption + i {
+  .caption + i.fa {
+    margin-left: 6px;
+  }
+}
+
+.append-flag-icon {
+  .caption + i.flag {
     margin-left: 6px;
   }
 }
@@ -12,7 +18,13 @@
   }
 }
 
-.append-icon, .prepend-icon {
+.prepend-flag-icon {
+  i.flag + .caption {
+    margin-left: 6px;
+  }
+}
+
+.append-icon, .prepend-icon, .prepend-flag-icon, .append-flag-icon {
   .caption {
     vertical-align: bottom;
   }
@@ -25,8 +37,20 @@
     }
   }
 
+  .append-flag-icon {
+    .caption + i.flag {
+      margin-left: 3px;
+    }
+  }
+
   .prepend-icon {
     i.fa + .caption {
+      margin-left: 3px;
+    }
+  }
+
+  .prepend-flag-icon {
+    i.flag + .caption {
       margin-left: 3px;
     }
   }
@@ -39,29 +63,21 @@
     }
   }
 
+  .append-flag-icon {
+    .caption + i.flag {
+      margin-left: 6px;
+    }
+  }
+
   .prepend-icon {
     i.fa + .caption {
       margin-left: 6px;
     }
   }
-}
 
-/*.dropdown-menu .fa {
-  width: 16px;
-  margin-right: 2px;
-  text-align: center;
-}*/
-
-// Flags
-
-.prepend-flag-icon, .append-flag-icon {
-  .flag-icon {
-    margin-top: -2px;   
+  .prepend-flag-icon {
+    i.flag + .caption {
+      margin-left: 6px;
+    }
   }
-}
-
-.prepend-flag-icon {
-  .flag-icon + .caption {
-    margin-left: 5px;
-  }  
 }

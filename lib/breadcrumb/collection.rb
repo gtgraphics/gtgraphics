@@ -4,7 +4,7 @@ class Breadcrumb::Collection
   attr_reader :controller
 
   def initialize(controller)
-    @collection = []
+    @items = []
     @controller = controller
   end
 
@@ -15,18 +15,17 @@ class Breadcrumb::Collection
   alias_method :add, :append
 
   def inspect
-    substr = " " + map { |item| "\"#{item.caption}\"=>\"#{item.path}\"" }.join(', ')
-    "#<#{self.class.name}#{substr.strip}>"
+    "#<#{self.class.name} count: #{@items.count}>"
   end
 
   def prepend(caption, destination)
     add_with_method(:unshift, caption, destination)
   end
 
-  delegate :clear, :count, :each, :index, :length, :[], to: :@collection
+  delegate :clear, :count, :each, :first, :index, :last, :length, :[], to: :@items
 
   private
   def add_with_method(method, caption, destination)
-    @collection.send(method, Breadcrumb::Item.new(self, caption, destination))
+    @items.send(method, Breadcrumb::Item.new(self, caption, destination))
   end
 end

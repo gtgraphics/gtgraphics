@@ -264,6 +264,7 @@ de:
         other: Benutzer
 
   page:
+    default_title: Unbenannte Seite
     states:
       published: Öffentlich
       hidden: Unsichtbar

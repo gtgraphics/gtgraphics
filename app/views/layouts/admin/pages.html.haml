@@ -1,49 +1,24 @@
 - content_for :admin_content do
 
   - if action_name.in? %w(new create edit update)
+    = render_flashes
+    = render 'breadcrumbs'
+
     - if content_for? :page_content
       = yield :page_content
     - else
       = yield
   
   - else
-
     .row
-      .col-lg-8.col-md-7.col-lg-offset-4.col-md-offset-5.col-sm-12.col-xs-12
-        = render_flash(flash.notice, type: :success)
-        = render_flash(flash.alert, type: :danger)
-
-    = toolbar id: 'sitemap_toolbar' do
-      .btn-group
-        = create_button_link_for Page, caption: translate('helpers.links.new', model: Page.model_name.human), url: [:new, :admin, @page, :child]
-      - if @page
-        .btn-group.pull-right
-          = button_link_to '#', data: { toggle: 'dropdown' }, class: 'dropdown-toggle' do
-            = icon(:cog, fixed_width: true)
-            .sr-only= translate('helpers.links.settings')
-          %ul.dropdown-menu{role: 'menu', aria_labelledby: 'dLabel'}
-            %li= link_to prepend_icon(:eye, translate('helpers.links.view_mode'), fixed_width: true), @page
-            %li.divider
-            %li= link_to prepend_icon(:edit, translate('helpers.links.editor_mode'), fixed_width: true), admin_page_editor_path(@page, page_locale: I18n.locale)
-            %li= link_to prepend_icon(:wrench, translate('helpers.links.page_settings'), fixed_width: true), [:edit, :admin, @page]
-            %li.divider
-            - if @page.published?
-              %li= link_to prepend_icon(:lock, translate('helpers.links.hide'), fixed_width: true), [:hide, :admin, @page], method: :patch            
-            - else
-              %li= link_to prepend_icon(:unlock, translate('helpers.links.publish'), fixed_width: true), [:publish, :admin, @page], method: :patch
-            - if @page.menu_item?
-              %li= link_to prepend_icon(:square, translate('helpers.links.disable_in_menu'), outline: true, fixed_width: true), [:disable_in_menu, :admin, @page], method: :patch            
-            - else
-              %li= link_to prepend_icon(:check_square, translate('helpers.links.enable_in_menu'), outline: true, fixed_width: true), [:enable_in_menu, :admin, @page], method: :patch
-            %li.divider
-            %li= link_to prepend_icon(:trash, translate('helpers.links.destroy'), outline: true, fixed_width: true), [:admin, @page], method: :delete, data: { confirm: translate('helpers.confirmations.destroy', model: Page.model_name.human) }
-
-    .row
-      .col-lg-4.col-md-5.col-sm-12.col-xs-12
+      .col-sm-4
         #sitemap_container
           #sitemap.slimscroll{data: { url: tree_admin_pages_path(format: :json), pages: @page_tree.to_json, selected_page_id: @page.id}}
 
-      .col-lg-8.col-md-7.col-sm-12.col-xs-12
+      .col-sm-8
+        = render_flashes
+        = render 'breadcrumbs'
+
         #page_content
           - if content_for? :page_content
             = yield :page_content

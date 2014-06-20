@@ -12,7 +12,7 @@
 class Page < ActiveRecord::Base
   class Project < ActiveRecord::Base
     include BatchTranslatable
-    include PageEmbeddable
+    include Page::Embeddable
 
     acts_as_page_embeddable template_class: 'Template::Project'
 

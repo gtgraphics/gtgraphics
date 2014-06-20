@@ -8,7 +8,7 @@
 
 class Page < ActiveRecord::Base
   class Content < ActiveRecord::Base
-    include PageEmbeddable
+    include Page::Embeddable
     
     acts_as_page_embeddable template_class: 'Template::Content'
   end

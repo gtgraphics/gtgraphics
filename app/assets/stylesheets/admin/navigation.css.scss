@@ -144,3 +144,11 @@
     }
   }
 }
+
+.nav-circles {
+  > li {
+    > a {
+      display: inline-block;
+    }
+  }
+}

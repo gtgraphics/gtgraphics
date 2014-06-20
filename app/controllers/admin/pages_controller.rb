@@ -41,30 +41,27 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def new
-    @page = Page.new(parent: @parent_page || Page.root)
-    @page.parent_id = params[:page_id] if params[:page_id]
-    @page.translations.build(locale: I18n.locale)
-    @page.embeddable_type = params[:type] || 'Page::Content'
-    if @page.embeddable_class and @page.embeddable.nil?
-      @page.embeddable = @page.embeddable_class.new
-      if @page.embeddable_class.reflect_on_association(:translations)
-        @page.embeddable.translations.build(locale: I18n.locale)
+    @page = Page.new
+    @page.parent = @parent_page || Page.root
+    @page.published = false
+    @page.embeddable_type = params[:page_type] ? "Page::#{params[:page_type].strip.classify}" : 'Page::Content'
+    translation = @page.translations.build(locale: I18n.locale)
+    translation.title = I18n.translate('page.default_title')
+    @page.next_available_slug(translation.title.parameterize)
+    if @page.embeddable_type.in?(Page.embeddable_types)
+      concrete_page = @page.build_embeddable
+      concrete_page.template = concrete_page.class.template_class.default if concrete_page.class.supports_template?
+      if concrete_page.class.reflect_on_association(:translations)
+        concrete_page.translations.build(locale: I18n.locale)
       end
-    end
-    respond_with :admin, @page, layout: !request.xhr?
-  end
-
-  def create
-    @page = Page.create(page_params)
-    flash_for @page
-    if @page.errors.empty?
-      if params.key?(:save_and_open)
-        location = admin_page_editor_path(@page)
-      else
-        location = admin_page_path(@page)
+      @page.save!      
+      respond_to do |format|
+        format.html { redirect_to [:edit, :admin, @page] }
       end
+    else
+      # Invalid page_type specified
+      head :bad_request
     end
-    respond_with :admin, @page, location: location
   end
 
   def show
@@ -76,7 +73,11 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def edit
-    respond_with :admin, @page, layout: !request.xhr?
+    respond_with :admin, @page, layout: 'admin/page_editor'
+  end
+
+  def meta
+    respond_with :admin, @page, layout: 'admin/page_editor'
   end
 
   def update
@@ -89,7 +90,7 @@ class Admin::PagesController < Admin::ApplicationController
         location = admin_page_path(@page)
       end
     end
-    respond_with :admin, @page, location: location
+    respond_with :admin, @page, layout: 'admin/page_editor', location: location
   end
 
   def destroy

@@ -1,38 +1,41 @@
 = simple_form_for [:admin, @page], wrappers: :horizontal_form, html: { class: 'form-horizontal', multipart: true } do |form|
 
-  = toolbar do
-    .btn-group
-      = form.button :button, name: 'save', type: 'submit', class: 'btn-primary' do
-        = prepend_icon(:save, translate(@page.new_record? ? :create : :update, scope: 'helpers.submit', model: Page.model_name.human))
-    .btn-group
-      = form.button :button, name: 'save_and_open', type: 'submit', class: 'btn-default' do
-        = prepend_icon(:file, translate(:save_and_open, scope: 'helpers.submit', model: Page.model_name.human), outline: true)
+  / Editor
+  /= translation_manager_for @page, url: translation_fields_admin_pages_path(format: :js), data_type: 'script', type: 'PageTranslationManager' do
 
-  .embeddable-manager{data: { url: embeddable_fields_admin_pages_path }}
-    .row
-      .col-lg-8
-        / Editor
-        = translation_manager_for @page, url: translation_fields_admin_pages_path(format: :js), data_type: 'script', type: 'PageTranslationManager' do
-          .page-fields
-            .translations
-              = form.simple_fields_for :translations do |translation_fields|
-                = render 'translation_fields', fields: translation_fields
-            
-          .embeddable-fields{data: { translation_url: embeddable_translation_fields_admin_pages_path, type: @page.embeddable_type }}
-            = render 'embeddable_fields', fields: form
+  %fieldset
+    %legend Einstellungen
+    .fields
+      - @page.translations.each_with_index do |translation, index|
+        = form.simple_fields_for translation, index: index do |fields|
+          %div{data: { contains: 'translation', locale: fields.object.locale }}
+            = fields.input :locale, as: :hidden
+            = fields.input :title, autofocus: index.zero?
 
-      .col-lg-4
-        / Settings
-        #page_settings.panel.panel-default.control-panel
-          .panel-heading
-            %h3.panel-title= translate('views.forms.settings')
+      = form.input :parent_id, input_html: { class: 'resource-combobox', data: { resource: 'pages', from: admin_pages_path(parent_assignable_id: @page.persisted? ? @page.id : nil, format: :json), formatter: 'PageComboboxFormatter', include_blank: false } }
+      - if @page.new_record? or !@page.root?
+        = form.input :slug, required: true, input_html: { autocomplete: 'off' }
+      - if @page.embeddable_class.supports_template?
+        = form.input :template_id, required: true, collection: @page.available_templates, input_html: { autocomplete: 'off' }
 
-          .panel-body
-            - if @page.new_record? or @page.embeddable_class.convertible?
-              = form.input :embeddable_type, collection: page_types_for_select, include_blank: false, input_html: { class: 'embeddable-type-select combobox' }
-            - if @page.new_record? or !@page.root?
-              = form.input :slug, input_html: { autocomplete: 'off' }
-              = form.input :parent_id, input_html: { class: 'resource-combobox', data: { resource: 'pages', from: admin_pages_path(parent_assignable_id: @page.persisted? ? @page.id : nil, format: :json), formatter: 'PageComboboxFormatter', include_blank: false } }
-            = form.input :published, as: :radio_buttons, include_blank: false, wrapper: :horizontal_radio_and_checkboxes
-            = form.input :menu_item, wrapper: :horizontal_boolean#, inline_label: translate('simple_form.inline_labels.page.menu_item')
-            = form.input :indexable, wrapper: :horizontal_boolean#, inline_label: translate('simple_form.inline_labels.page.indexable')
+  %fieldset
+    %legend Sichtbarkeit
+    .fields
+      = form.input :published, as: :radio_buttons, include_blank: false, wrapper: :horizontal_radio_and_checkboxes
+      = form.input :menu_item, wrapper: :horizontal_boolean
+
+  %fieldset
+    %legend Suchmaschinenoptimierung
+    .fields
+      = form.input :indexable, wrapper: :horizontal_boolean
+      - @page.translations.each_with_index do |translation, index|
+        = form.simple_fields_for translation, index: index do |fields|
+          %div{data: { contains: 'translation', locale: fields.object.locale }}
+            = fields.input :meta_description
+            = fields.input :meta_keywords, input_html: { data: { behavior: 'tokenizer' } }
+
+  = form_actions do
+    = form.button :button, name: 'save', type: 'submit', class: 'btn-primary' do
+      = prepend_icon(:save, translate(@page.new_record? ? :create : :update, scope: 'helpers.submit', model: Page.model_name.human))
+    = form.button :button, name: 'save_and_open', type: 'submit', class: 'btn-default' do
+      = prepend_icon(:file, translate(:save_and_open, scope: 'helpers.submit', model: Page.model_name.human), outline: true)

@@ -37,7 +37,6 @@ class Admin::ImagesController < Admin::ApplicationController
   def new
     @image = Image.new
     @image.translations.build(locale: I18n.locale)
-    @image_page_embedding_activity = ImagePageEmbeddingActivity.new
     respond_with :admin, @image
   end
 

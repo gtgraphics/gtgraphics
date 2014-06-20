@@ -12,7 +12,7 @@
 class Page < ActiveRecord::Base
   class Redirection < ActiveRecord::Base
     include BatchTranslatable
-    include PageEmbeddable
+    include Page::Embeddable
 
     acts_as_page_embeddable
 
