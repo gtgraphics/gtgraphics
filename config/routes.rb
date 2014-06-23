@@ -82,7 +82,7 @@ GtGraphics::Application.routes.draw do
                 get ':page_type', on: :new, action: :new, as: :typed
               end
 
-              resources :regions, controller: :page_regions do
+              resources :regions, controller: :'page/regions' do
                 collection do
                   patch :update_multiple
                 end
