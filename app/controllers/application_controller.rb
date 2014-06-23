@@ -34,7 +34,7 @@ class ApplicationController < ActionController::Base
   def set_locale
     available_locales = I18n.available_locales.map(&:to_s)
     if locale = params[:locale] and locale.in?(available_locales)
-      I18n.locale = locale.to_sym
+      Globalize.locale = I18n.locale = locale.to_sym
     else
       # if user is logged in his preferred locale will be used
       # if none of the above is set the locale will be determined through the HTTP Accept Language header from the browser

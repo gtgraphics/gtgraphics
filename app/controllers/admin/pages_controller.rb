@@ -329,7 +329,7 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def new_page_params
-    params.require(:page).permit(:embeddable_type, :parent_id, :title)
+    params.require(:page).permit(:embeddable_type, :parent_id, :title, :parent_id)
   end
 
   def page_params

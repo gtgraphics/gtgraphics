@@ -3,6 +3,7 @@
     = form.input :embeddable_type, as: :hidden
     = form.input :parent_id, as: :hidden
     = form.input :title, input_html: { autofocus: true }
+    = form.input :parent_id, input_html: { class: 'resource-combobox', data: { resource: 'pages', from: admin_pages_path(parent_assignable_id: @page.persisted? ? @page.id : nil, format: :json), formatter: 'PageComboboxFormatter', include_blank: false } }
 
   .modal-footer
     = form.button :button, type: 'submit', class: 'btn-primary' do

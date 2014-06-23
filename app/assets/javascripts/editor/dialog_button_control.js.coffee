@@ -16,7 +16,7 @@ class @Editor.Control.DialogButtonControl extends @Editor.Control.ButtonControl
         context.params = @extractContextParams(editor, editor.getSelectedHtml())
 
     jQuery.get(@getDialogUrl(), context.params || {}).fail(callback).done (html) =>
-      $modal = $(html).appendTo($('body')).prepare()
+      $modal = $(html).appendTo($('body')) #.prepare() # 
       $modal.data('toolbar', @toolbar)
       $modal.modal('show')
 

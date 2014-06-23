@@ -1,6 +1,7 @@
 class PagesController < ApplicationController
   respond_to :html
 
+  # before_action :set_translation_locale
   before_action :load_page
   before_action :load_template
 
@@ -70,4 +71,8 @@ class PagesController < ApplicationController
       @region_definitions = @template.try(:region_definitions) if @page.supports_regions?
     end
   end
+
+  # def set_translation_locale
+  #   Globalize.locale = I18n.locale
+  # end
 end
