@@ -1,6 +1,8 @@
+# TODO: Replace with Sorcery: https://github.com/NoamB/sorcery
+
 class Admin::SessionsController < Admin::ApplicationController
   skip_authentication only: %i(new create)
-  before_filter :redirect_to_dashboard, if: :signed_in?, only: %i(new create)
+  before_action :redirect_to_dashboard, if: :signed_in?, only: %i(new create)
 
   def new
     @sign_in_activity = SignInActivity.new

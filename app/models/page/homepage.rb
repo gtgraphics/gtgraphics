@@ -10,6 +10,6 @@ class Page < ActiveRecord::Base
   class Homepage < ActiveRecord::Base
     include Page::Embeddable
     
-    acts_as_page_embeddable template_class: 'Template::Homepage'
+    acts_as_page_embeddable creatable: false, template_class: 'Template::Homepage'
   end
 end

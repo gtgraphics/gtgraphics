@@ -4,138 +4,145 @@ GtGraphics::Application.routes.draw do
     
   scope '(:locale)', constraints: { locale: /[a-z]{2}/ } do
     scope constraints: Routing::LocaleConstraint.new do
-      scope 'admin' do
-        get 'pages/:page_type/new' => 'admin/pages#new', as: :new_admin_page
-        get 'pages/:page_id/children/:page_type/new' => 'admin/pages#new', as: :new_admin_page_child
-      end
+      # scope 'admin' do
+      #   get 'pages/:page_type/new' => 'admin/pages#new', as: :new_admin_page
+      #   get 'pages/:page_id/children/:page_type/new' => 'admin/pages#new', as: :new_admin_page_child
+      #   #get 'pages/:id/edit(/:editor_locale)' => 'admin/pages#edit', as: :edit_admin_page
+      # end
 
       namespace :admin do
-        scope controller: :sessions do
-          get :sign_in, action: :new
-          post :sign_in, action: :create
-          match :sign_out, action: :destroy, via: [:get, :delete]
-        end
+        scope constraints: { translations: /[a-z]{2}/ } do
+          scope constraints: Routing::LocaleConstraint.new(:translations) do
 
-        resource :account, except: [:new, :create, :show] do
-          get :edit_password
-          patch :update_password
-          patch :update_preferences
-        end
-
-        resources :attachments do
-          collection do
-            delete :destroy_multiple
-            get :translation_fields
-          end
-          member do
-            get :download
-            patch :move_to_images
-          end
-        end
-
-        namespace :editor do
-          with_options only: [:show, :create, :update] do |r|
-            r.resource :link
-            r.resource :image
-          end
-        end
-
-        resources :images do
-          resources :styles, controller: :image_styles, except: :index do
-            member do
-              get :crop
-              patch :apply_crop
+            scope controller: :sessions do
+              get :sign_in, action: :new
+              post :sign_in, action: :create
+              match :sign_out, action: :destroy, via: [:get, :delete]
             end
-          end
-          collection do
-            patch :batch, action: :batch_process, as: :batch_process
-            delete :destroy_multiple
-            get :translation_fields
-            get :assign_to_gallery
-          end
-          member do
-            get :context_menu
-            get :crop
-            patch :crop, action: :apply_crop
-            patch :uncrop
-            get :download
-            get :dimensions
-            patch :move_to_attachments
-          end
-        end
 
-        resources :messages, only: [:index, :show, :destroy] do
-          collection do
-            delete :destroy_multiple
-          end
-          member do
-            patch :toggle
-          end
-        end
-
-        resources :pages, except: :new do
-          #resources :children, controller: :pages, only: :new
-          resource :metadata, controller: :page_metadata, only: :edit
-          resources :regions, controller: :page_regions do
-            collection do
-              patch :update_multiple
+            resource :account, except: [:new, :create, :show] do
+              get :edit_password
+              patch :update_password
+              patch :update_preferences
             end
-          end
-          collection do
-            get :embeddable_fields
-            get :embeddable_translation_fields
-            get :preview_path
-            get :translation_fields
-            get :tree
-          end
-          member do
-            get :seo
-            patch :move
-            patch :move_up
-            patch :move_down
-            patch :publish
-            patch :hide
-            patch :enable_in_menu
-            patch :disable_in_menu
+
+            resources :attachments do
+              collection do
+                delete :destroy_multiple
+                get :translation_fields
+              end
+              member do
+                get :download
+                patch :move_to_images
+              end
+            end
+
+            namespace :editor do
+              with_options only: [:show, :create, :update] do |r|
+                r.resource :link
+                r.resource :image
+              end
+            end
+
+            resources :images do
+              resources :styles, controller: :image_styles, except: :index do
+                member do
+                  get :crop
+                  patch :apply_crop
+                end
+              end
+              collection do
+                patch :batch, action: :batch_process, as: :batch_process
+                delete :destroy_multiple
+                get :translation_fields
+                get :assign_to_gallery
+              end
+              member do
+                get :context_menu
+                get :crop
+                patch :crop, action: :apply_crop
+                patch :uncrop
+                get :download
+                get :dimensions
+                patch :move_to_attachments
+              end
+            end
+
+            resources :messages, only: [:index, :show, :destroy] do
+              collection do
+                delete :destroy_multiple
+              end
+              member do
+                patch :toggle
+              end
+            end
+
+            resources :pages, except: :new do
+              resources :children, controller: :pages, only: :new do
+                get ':page_type', on: :new, action: :new, as: :typed
+              end
+
+              resources :regions, controller: :page_regions do
+                collection do
+                  patch :update_multiple
+                end
+              end
+              collection do
+                get :embeddable_fields
+                get :embeddable_translation_fields
+                get :preview_path
+                get :translation_fields
+                get :tree
+              end
+              member do
+                patch :move
+                patch :move_up
+                patch :move_down
+                patch :publish
+                patch :hide
+                patch :enable_in_menu
+                patch :disable_in_menu
+              end
+            end
+
+            resources :redirections, only: [] do
+              get :translation_fields, on: :collection
+            end
+
+            resources :shouts
+
+            resources :snippets, except: :show do
+              collection do
+                delete :destroy_multiple
+                get :translation_fields
+                get :editor_preview
+              end
+            end
+
+            resources :tags, only: :index
+            
+            resources :templates do
+              collection do
+                delete :destroy_multiple
+                get :translation_fields
+                get :files_fields
+              end
+              member do
+                delete 'destroy_region/:label', action: :destroy_region, as: :destroy_region
+              end
+            end
+
+            resources :users do
+              member do
+                get :edit_password
+                patch :update_password
+              end
+            end 
+            
+            #root 'dashboard#index'
+            root to: redirect('/admin/pages')
           end
         end
-
-        resources :redirections, only: [] do
-          get :translation_fields, on: :collection
-        end
-
-        resources :shouts
-
-        resources :snippets, except: :show do
-          collection do
-            delete :destroy_multiple
-            get :translation_fields
-            get :editor_preview
-          end
-        end
-
-        resources :tags, only: :index
-        
-        resources :templates do
-          collection do
-            delete :destroy_multiple
-            get :translation_fields
-            get :files_fields
-          end
-          member do
-            delete 'destroy_region/:label', action: :destroy_region, as: :destroy_region
-          end
-        end
-
-        resources :users do
-          member do
-            get :edit_password
-            patch :update_password
-          end
-        end 
-        
-        #root 'dashboard#index'
-        root to: redirect('/admin/pages')
       end
 
       Routing::Page.draw(self)

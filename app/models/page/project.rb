@@ -11,13 +11,13 @@
 
 class Page < ActiveRecord::Base
   class Project < ActiveRecord::Base
-    include BatchTranslatable
+    # include BatchTranslatable
     include Page::Embeddable
 
     acts_as_page_embeddable template_class: 'Template::Project'
 
     translates :name, :description, fallbacks_for_empty_translations: true
-    acts_as_batch_translatable
+    # acts_as_batch_translatable
 
     validates :client_name, presence: true
     validates :client_url, url: true, allow_blank: true

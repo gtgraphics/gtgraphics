@@ -6,15 +6,10 @@
   %fieldset
     %legend Einstellungen
     .fields
-      - @page.translations.each_with_index do |translation, index|
-        = form.simple_fields_for translation, index: index do |fields|
-          %div{data: { contains: 'translation', locale: fields.object.locale }}
-            = fields.input :locale, as: :hidden
-            = fields.input :title, autofocus: index.zero?
-
+      = form.input :title, autofocus: true
       = form.input :parent_id, input_html: { class: 'resource-combobox', data: { resource: 'pages', from: admin_pages_path(parent_assignable_id: @page.persisted? ? @page.id : nil, format: :json), formatter: 'PageComboboxFormatter', include_blank: false } }
       - if @page.new_record? or !@page.root?
-        = form.input :slug, required: true, input_html: { autocomplete: 'off' }
+        = form.input :slug, required: true, input_html: { class: 'monospace', autocomplete: 'off' }
       - if @page.embeddable_class.supports_template?
         = form.input :template_id, required: true, collection: @page.available_templates, input_html: { autocomplete: 'off' }
 
@@ -28,14 +23,9 @@
     %legend Suchmaschinenoptimierung
     .fields
       = form.input :indexable, wrapper: :horizontal_boolean
-      - @page.translations.each_with_index do |translation, index|
-        = form.simple_fields_for translation, index: index do |fields|
-          %div{data: { contains: 'translation', locale: fields.object.locale }}
-            = fields.input :meta_description
-            = fields.input :meta_keywords, input_html: { data: { behavior: 'tokenizer' } }
+      = form.input :meta_description
+      = form.input :meta_keywords, input_html: { data: { behavior: 'tokenizer' } }
 
   = form_actions do
-    = form.button :button, name: 'save', type: 'submit', class: 'btn-primary' do
+    = form.button :button, type: 'submit', class: 'btn-primary' do
       = prepend_icon(:save, translate(@page.new_record? ? :create : :update, scope: 'helpers.submit', model: Page.model_name.human))
-    = form.button :button, name: 'save_and_open', type: 'submit', class: 'btn-default' do
-      = prepend_icon(:file, translate(:save_and_open, scope: 'helpers.submit', model: Page.model_name.human), outline: true)

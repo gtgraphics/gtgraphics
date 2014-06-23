@@ -115,11 +115,14 @@ de:
         parent_id: Elternseite
         published: Öffentlich?
         template: Vorlage
+        template_id: Vorlage
         author: Autor
         menu_item: Menüpunkt?
         indexable: Indexiert?
         updated_at: Aktualisierung
         state: Status
+        meta_description: Meta-Beschreibung
+        meta_keywords: Meta-Schlüsselwörter
       page/contact_form:
         recipients: Empfänger
       page/image:
@@ -137,9 +140,6 @@ de:
         internal: Interne Umleitung
         permanent: Permanent?
         destination: Ziel
-      page/translation:
-        meta_description: SEO-Beschreibung
-        meta_keywords: SEO-Keywords
       shout:
         nickname: Verfasser
         message: Nachricht

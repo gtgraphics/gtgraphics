@@ -1,16 +1,15 @@
 - content_for :stylesheets do
   = stylesheet_link_tag 'application', media: 'all', data: { turbolinks_track: true }
-  = stylesheet_link_tag 'page_editor', media: 'all', data: { turbolinks_track: true } if editing?
 
 - content_for :javascripts do
   = javascript_include_tag 'application', data: { turbolinks_track: true }
-  = javascript_include_tag 'page_editor', data: { turbolinks_track: true } if editing?
 
 - content_for :head do
   %meta{name: 'description', content: @page.meta_description || ''}
   %meta{name: 'keywords', content: @page.meta_keywords || ''}
   %meta{name: 'robots', content: @page.indexable? ? 'index,follow' : 'noindex,follow'}
 
+  - # Meta Elements for OpenGraph/Social Media integration
   - if content_for? :social_meta_tags
     = yield :social_meta_tags
   - else
@@ -18,13 +17,12 @@
     %meta{property: 'og:description', content: @page.meta_description || ''}
   %meta{property: 'og:url', content: page_url(@page)}
 
+  - # References to other translations
   %link{rel: 'canonical', href: page_url(@page)}  
   - @page.translated_locales.reject { |locale| locale == I18n.locale }.each do |translated_locale|
     %link{rel: 'alternate', hreflang: translated_locale, href: page_url(@page, locale: translated_locale)}
     
 - content_for :content do
-  = page_editor if editing?
-
   %nav.navbar.navbar-default.navbar-fixed-top.navbar-inverse{role: 'navigation'}
     .container
 
@@ -38,7 +36,7 @@
 
       .navbar-collapse.collapse
         %ul.nav.navbar-nav
-          - Page.primary.menu_items.accessible_by(current_ability).with_translations.each do |page|
+          - Page.primary.published.menu_items.accessible_by(current_ability).with_translations.each do |page|
             = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page)
 
         %ul.nav.navbar-nav.navbar-right
@@ -52,12 +50,7 @@
                   = prepend_flag_icon(locale, translate(locale, scope: :languages, locale: locale))
 
   .container
-    = render_flashes
-    - unless @page.published?
-      .alert.alert-warning
-        %strong Warning!
-        This Page has not been published yet.
-    
+    = render_flashes    
     = render 'breadcrumbs'
 
     #page_content

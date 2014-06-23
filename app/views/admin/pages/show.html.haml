@@ -3,15 +3,16 @@
     = @page.title
   .btn-toolbar.pull-right
     .btn-group.pull-right
-      = button_link_to new_admin_page_child_path(@page, :content), type: :success do
+      = button_link_to typed_new_admin_page_child_path(@page, page_type: :content), type: :success, remote: true, accesskey: 'N' do
         = prepend_icon :plus, translate('helpers.links.new', model: Page.model_name.human), fixed_width: true
       = button_link_to '#', class: 'dropdown-toggle', type: :success, data: { toggle: 'dropdown' } do
         = caret
       %ul.dropdown-menu
-        - Page.creatable_embeddable_classes.each do |embeddable_class|
-          %li
-            = link_to new_admin_page_child_path(@page, embeddable_class.name.demodulize.underscore) do
-              = embeddable_class.model_name.human
+        - concrete_page_types.each do |embeddable_class|
+          - if can? :create, embeddable_class
+            %li
+              = link_to typed_new_admin_page_child_path(@page, page_type: embeddable_class.name.demodulize.underscore), remote: true do
+                = embeddable_class.model_name.human
 
       /= create_button_link_for Page, caption: translate('helpers.links.new', model: Page.model_name.human), url: new_admin_page_child_path(@page, 'content')
     - if @page
@@ -20,7 +21,7 @@
           = icon(:cog, fixed_width: true)
           .sr-only= translate('helpers.links.settings')
         %ul.dropdown-menu{role: 'menu', aria_labelledby: 'dLabel'}
-          %li= link_to prepend_icon(:eye, translate('helpers.links.view_mode'), fixed_width: true), @page
+          %li= link_to prepend_icon(:eye, translate('helpers.links.view_mode'), fixed_width: true), page_path(@page, locale: Globalize.locale, translations: nil)
           %li.divider
           %li= link_to prepend_icon(:edit, translate('helpers.links.edit_regions'), fixed_width: true), [:admin, @page, :regions]
           %li= link_to prepend_icon(:wrench, translate('helpers.links.page_settings'), fixed_width: true), [:edit, :admin, @page]
@@ -33,8 +34,9 @@
             %li= link_to prepend_icon(:square, translate('helpers.links.disable_in_menu'), outline: true, fixed_width: true), [:disable_in_menu, :admin, @page], method: :patch            
           - else
             %li= link_to prepend_icon(:check_square, translate('helpers.links.enable_in_menu'), outline: true, fixed_width: true), [:enable_in_menu, :admin, @page], method: :patch
-          %li.divider
-          %li= link_to prepend_icon(:trash, translate('helpers.links.destroy'), outline: true, fixed_width: true), [:admin, @page], method: :delete, data: { confirm: translate('helpers.confirmations.destroy', model: Page.model_name.human) }
+          - if can? :destroy, @page
+            %li.divider
+            %li= link_to prepend_icon(:trash, translate('helpers.links.destroy'), outline: true, fixed_width: true), [:admin, @page], method: :delete, data: { hotkey: 'del', confirm: translate('helpers.confirmations.destroy', model: Page.model_name.human) }
 
 
 - begin

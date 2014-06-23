@@ -33,11 +33,13 @@ class Message < ActiveRecord::Base
     end
 
     def mark_read!
-      update_column(:read, true)
+      update_column(:read, true) if unread?
+      self
     end
 
     def mark_unread!
-      update_column(:read, false)
+      update_column(:read, false) if read?
+      self
     end
 
     def unread?

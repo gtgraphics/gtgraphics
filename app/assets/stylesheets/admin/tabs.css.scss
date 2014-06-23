@@ -1,50 +1,16 @@
-.tabs-below .nav-tabs, .tabs-right .nav-tabs, .tabs-left .nav-tabs {
-  border-bottom: 0;
-}
-
-.tab-content > .tab-pane, .pill-content > .pill-pane {
-  display: none;
-}
-
-.tab-content > .active, .pill-content > .active {
-  display: block;
-}
-
-.tabs-below .nav-tabs {
-  border-top: 1px solid $nav-tabs-border-color;
-  > {
-    li {
-      margin-top: -1px;
-      margin-bottom: 0;
-      > a {
-        @include border-radius(0 0 4px 4px);
-        &:hover, &:focus {
-          border-top-color: $nav-tabs-border-color;
-          border-bottom-color: transparent;
-        }
-      }
-    }
-    .active > a {
-      border-color: transparent $nav-tabs-border-color $nav-tabs-border-color $nav-tabs-border-color;
-      &:hover, &:focus {
-        border-color: transparent $nav-tabs-border-color $nav-tabs-border-color $nav-tabs-border-color;
-      }
-    }
-  }
-}
-
-.tabs-left .nav-tabs > li, .tabs-right > .nav-tabs > li {
+.tabs-left .nav-tabs > li, .tabs-right .nav-tabs > li {
   float: none;
 }
 
-.tabs-left .nav-tabs > li > a, .tabs-right > .nav-tabs > li > a {
-  min-width: 74px;
+.tabs-left .nav-tabs > li > a, .tabs-right .nav-tabs > li > a {
+  min-width: 7$border-radius-base;
   margin-right: 0;
   margin-bottom: 3px;
 }
 
 .tabs-left .nav-tabs,
 .tabs-right .nav-tabs {
+  border-bottom: 0;
   > li {
     &.divider {
       height: 12px;
@@ -59,38 +25,19 @@
   }
 }
 
-.tabs-left {
+.tabs-left .nav-tabs {
   background: {
     image: asset-url('admin/shadow_right.png');
     position: center right;
-    size: 15px 100%;
+    size: 13px 100%;
     repeat: no-repeat;
   }
-  .nav-tabs > li.active {
-    /*> a, > a:hover, > a:focus {
-      padding-left: 12px;
-      border-left: 4px solid $brand-primary;
-    }*/
-  }
-}
-
-.tabs-right {
-  background: {
-    image: asset-url('admin/shadow_left.png');
-    position: center left;
-    size: 15px 100%;
-    repeat: no-repeat;
-  }
-}
-
-.tabs-left .nav-tabs {
-  //float: left;
   margin-right: 0px;
   border-right: 1px solid $nav-tabs-border-color;
 
   > li > a {
     margin-right: -1px;
-    @include border-radius(4px 0 0 4px);
+    @include border-radius($border-radius-base 0 0 $border-radius-base);
     &:hover, &:focus {
       border-color: $gray-lighter $nav-tabs-border-color $gray-lighter $gray-lighter;
     }
@@ -106,12 +53,17 @@
 }
 
 .tabs-right .nav-tabs {
-  //float: right;
+  background: {
+    image: asset-url('admin/shadow_left.png');
+    position: center left;
+    size: 13px 100%;
+    repeat: no-repeat;
+  }
   margin-left: 0px;
   border-left: 1px solid $nav-tabs-border-color;
   > li > a {
     margin-left: -1px;
-    @include border-radius(0 4px 4px 0);
+    @include border-radius(0 $border-radius-base $border-radius-base 0);
     &:hover, &:focus {
       border-color: $gray-lighter $gray-lighter $gray-lighter $nav-tabs-border-color;
     }

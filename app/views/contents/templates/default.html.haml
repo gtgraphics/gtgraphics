@@ -1,10 +1,6 @@
 .page-header
   %h1= page.title
 
-- unless page.translated_locales.include?(I18n.locale)
-  %p{style: 'border: 1px solid red; padding: 10px;'}
-    Not translated to #{I18n.locale}
-
 = render_region :main
 
 - if @content_pages.any?

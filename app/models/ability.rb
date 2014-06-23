@@ -48,7 +48,16 @@ class Ability
 
       can :manage, Attachment
       can :manage, Image
-      can :manage, Page
+
+      can [:read, :create, :update], Page
+      can :destroy, Page, Page.where.not(parent_id: nil) do |page|
+        page.destroyable?
+      end
+      Page.embeddable_classes.each do |embeddable_class|
+        can [:read, :update], embeddable_class
+        can :create, embeddable_class, &:creatable?
+      end
+
       can :manage, Snippet
       can :manage, Template
       can :manage, User

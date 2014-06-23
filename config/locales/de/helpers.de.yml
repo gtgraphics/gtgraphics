@@ -16,7 +16,7 @@ de:
       page:
         disabled_in_menu: Die Seite wird absofort in keinem Menü mehr angezeigt.
         enabled_in_menu: Die Seite wird absofort in Menüs angezeigt.
-        hid: Die Seite ist jetzt nicht mehr öffentlich zugänglich.
+        hidden: Die Seite ist jetzt nicht mehr öffentlich zugänglich.
         published: Die Seite wurde veröffentlicht.
         unmovable: >
           Die Seite konnte nicht verschoben werden, da auf dieser Ebene bereits eine Seite den Slug "%{slug}" belegt.
@@ -55,6 +55,7 @@ de:
       remove: Entfernen
       reset: Zurücksetzen
       reply: Antworten
+      save: Speichern
       settings: Einstellungen
       sign_out: Abmelden
       uncrop: Original wiederherstellen

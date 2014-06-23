@@ -1,7 +1,7 @@
 class Routing::LocaleConstraint
-  def initialize(param_name = nil)
+  def initialize(param_name = :locale)
     @available_locales = I18n.available_locales.map(&:to_s)
-    @param_name = param_name || :locale
+    @param_name = param_name
   end
 
   def matches?(request)

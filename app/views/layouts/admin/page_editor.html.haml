@@ -1,40 +1,44 @@
 - content_for :admin_content do
-
   - if content_for? :page_content
     = yield :page_content
   - else
-    .embeddable-manager{data: { url: embeddable_fields_admin_pages_path }}
-      .row
-        .col-sm-offset-0.col-sm-12
-          = render_flashes
-          = render 'breadcrumbs'
-      .row
-        .col-sm-offset-0.col-sm-12
-          .page-header.clearfix
-            .row
-              .col-sm-7.col-sm-offset-1
-                %h1= @page.title
+    .row
+      .col-sm-offset-0.col-sm-12
+        = render_flashes
+        = render 'breadcrumbs'
+    .row
+      .col-sm-offset-1.col-sm-8
+        .page-header
+          %h1= @page.title
 
-      .row
-        .col-sm-8.col-sm-offset-1
-          = yield
+    .row
+      .col-sm-8.col-sm-offset-1
+        = yield
 
-        .col-sm-2.col-sm-offset-1
-          .tabs-right
-            %ul.nav.nav-tabs
-              %li.nav-header Sprache
-              - I18n.available_locales.sort_by { |locale| translate(locale, scope: :languages) }.each do |locale|
-                %li{class: locale == I18n.locale ? 'active' : nil}
-                  = link_to '#' do
-                    = prepend_flag_icon locale, translate(locale, scope: :languages), size: 16, fixed_width: true
-              %li.divider
-              %li.nav-header Einstellungen
-              = active_link_to [:edit, :admin, @page], wrap_tag: :li do
-                = prepend_icon :wrench, 'Allgemein', fixed_width: true
-              = active_link_to [:admin, @page, :regions], wrap_tag: :li do
-                = prepend_icon :file_text, 'Inhalte', outline: true, fixed_width: true
-              = active_link_to [:edit, :admin, @page, :metadata], wrap_tag: :li, class: 'disabled' do
-                = prepend_icon :history, 'Verlauf', fixed_width: true
-              %li.divider
+      .col-sm-2.col-sm-offset-1
+        .tabs-right
+          %ul.nav.nav-tabs
+            - # Page specific configuration
+            %li.nav-header Einstellungen
+            = active_link_to [:edit, :admin, @page], wrap_tag: :li, active: controller_name == 'pages' do
+              = prepend_icon :wrench, 'Allgemein', fixed_width: true
+            %li
+              = link_to '#' do
+                = prepend_icon :users, 'Empfänger', fixed_width: true
+
+            = active_link_to [:admin, @page, :regions], wrap_tag: :li, active: controller_name == 'page_regions' do
+              = prepend_icon :file_text, 'Inhalte', outline: true, fixed_width: true
+            /%li.disabled
+            /  = link_to [:edit, :admin, @page] do
+            /    = prepend_icon :history, 'Verlauf', fixed_width: true
+            %li.divider
+
+            - # Editor Locale Selection
+            %li.nav-header Sprache
+            - I18n.available_locales.sort_by { |locale| translate(locale, scope: :languages) }.each do |locale|
+              %li{class: locale == Globalize.locale ? 'active' : nil}
+                = link_to url_for(translations: locale != I18n.locale ? locale : nil) do
+                  = prepend_flag_icon locale, translate(locale, scope: :languages), size: 16, fixed_width: true
+            %li.divider
 
 = render template: 'layouts/admin/application'

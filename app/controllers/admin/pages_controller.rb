@@ -1,4 +1,6 @@
 class Admin::PagesController < Admin::ApplicationController
+  layout :determine_layout
+
   respond_to :html
 
   before_action :load_page, only: %i(show edit update destroy move publish hide enable_in_menu disable_in_menu toggle_menu_item)
@@ -6,20 +8,23 @@ class Admin::PagesController < Admin::ApplicationController
   before_action :build_page_tree
 
   breadcrumbs do |b|
-    # b.append Page.model_name.human(count: 2), :admin_pages
     if @parent_page 
       @parent_page.self_and_ancestors.where.not(parent_id: nil).with_translations.each do |page|
         b.append page.title, [:admin, page]
       end
     end
-    b.append translate('breadcrumbs.new', model: Page.model_name.human), :new_admin_page if action_name.in? %w(new create)
-    b.append @page.title, [:admin, @page] if action_name.in? %w(show edit update)
-    b.append translate('breadcrumbs.edit', model: Page.model_name.human), [:edit, :admin, @page] if action_name.in? %w(edit update)
+    if @page
+      b.append @page.title, [:admin, @page] 
+      if action_name.in? %w(edit update)
+        b.append translate('breadcrumbs.edit', model: Page.model_name.human), [:edit, :admin, @page]
+      end
+    end
   end
 
   def index
     respond_to do |format|
       format.html do
+        # Redirect to root page
         redirect_to [:admin, Page.root]
       end
       format.json do
@@ -40,30 +45,6 @@ class Admin::PagesController < Admin::ApplicationController
     end
   end
 
-  def new
-    @page = Page.new
-    @page.parent = @parent_page || Page.root
-    @page.published = false
-    @page.embeddable_type = params[:page_type] ? "Page::#{params[:page_type].strip.classify}" : 'Page::Content'
-    translation = @page.translations.build(locale: I18n.locale)
-    translation.title = I18n.translate('page.default_title')
-    @page.next_available_slug(translation.title.parameterize)
-    if @page.embeddable_type.in?(Page.embeddable_types)
-      concrete_page = @page.build_embeddable
-      concrete_page.template = concrete_page.class.template_class.default if concrete_page.class.supports_template?
-      if concrete_page.class.reflect_on_association(:translations)
-        concrete_page.translations.build(locale: I18n.locale)
-      end
-      @page.save!      
-      respond_to do |format|
-        format.html { redirect_to [:edit, :admin, @page] }
-      end
-    else
-      # Invalid page_type specified
-      head :bad_request
-    end
-  end
-
   def show
     @pages = @page.self_and_ancestors_and_siblings.with_translations(I18n.locale)
     respond_to do |format|
@@ -72,25 +53,67 @@ class Admin::PagesController < Admin::ApplicationController
     end
   end
 
+  def new
+    @page = Page.new
+    @page.title = I18n.translate('page.default_title')
+    @page.embeddable_type = params[:page_type] ? "Page::#{params[:page_type].strip.classify}" : 'Page::Content'
+    @page.parent = @parent_page || Page.root
+    respond_to do |format|
+      format.js
+    end
+
+    # @page = Page.new
+    # @page.title = I18n.translate('page.default_title')
+    # @page.parent = @parent_page || Page.root
+    # @page.published = false
+    # @page.embeddable_type = params[:page_type] ? "Page::#{params[:page_type].strip.classify}" : 'Page::Content'
+    # # translation = @page.translations.build(locale: I18n.locale)
+    # # translation.title = I18n.translate('page.default_title')
+    # @page.next_available_slug(translation.title.parameterize)
+    # if @page.embeddable_type.in?(Page.embeddable_types)
+    #   concrete_page = @page.build_embeddable
+    #   concrete_page.template = concrete_page.class.template_class.default if concrete_page.class.supports_template?
+    #   if concrete_page.class.reflect_on_association(:translations)
+    #     concrete_page.translations.build(locale: I18n.locale)
+    #   end
+    #   @page.save!
+    #   respond_to do |format|
+    #     format.html { redirect_to [:edit, :admin, @page] }
+    #   end
+    # else
+    #   # Invalid page_type specified
+    #   head :bad_request
+    # end
+  end
+
+  def create
+    @page = Page.new(new_page_params)
+    @page.published = false
+    @page.next_available_slug(@page.title.parameterize) if @page.title.present?
+    if @page.embeddable_type.in?(Page.embeddable_types)
+      concrete_page = @page.build_embeddable
+      if @page.embeddable_class.supports_template?
+        concrete_page.template = concrete_page.class.template_class.default
+      end
+    end
+    @page.save
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def edit
-    respond_with :admin, @page, layout: 'admin/page_editor'
+    respond_with :admin, @page
   end
 
   def meta
-    respond_with :admin, @page, layout: 'admin/page_editor'
+    respond_with :admin, @page
   end
 
   def update
     @page.update(page_params)
     flash_for @page
-    if @page.errors.empty?
-      if params.key?(:save_and_open)
-        location = admin_page_editor_path(@page)
-      else
-        location = admin_page_path(@page)
-      end
-    end
-    respond_with :admin, @page, layout: 'admin/page_editor', location: location
+    respond_with :admin, @page, location: request.referer || edit_admin_page_path(@page)
   end
 
   def destroy
@@ -109,7 +132,7 @@ class Admin::PagesController < Admin::ApplicationController
 
   def hide
     @page.hide!
-    flash_for @page, :hid
+    flash_for @page, :hidden
     respond_to do |format|
       format.html { redirect_to request.referer || [:admin, @page] }
     end
@@ -136,6 +159,7 @@ class Admin::PagesController < Admin::ApplicationController
     error_message = nil
     target_page = Page.find(params[:to])
     previous_parent_id = @page.parent_id
+
     Page.transaction do
       # Move Page in Tree
       slug = @page.slug
@@ -156,18 +180,6 @@ class Admin::PagesController < Admin::ApplicationController
         return valid = false
       end
 
-      # Rename Slug if parent page already contains children with the same slug
-      #slug = @page.slug
-      #slug = slug.next while Page.where(parent_id: @page.parent_id, slug: slug).any?
-      #raise slug.inspect
-      #@page.update_column(:slug, slug)
-
-      #if Page.where(parent_id: @page.parent_id, slug: @page.slug).many?
-      #  valid = false
-      #  error_message = translate('helpers.flash.page.unmovable', model: Page.model_name.human, title: @page.title, slug: @page.slug)
-      #  raise ActiveRecord::Rollback, 'Slug has already been taken' 
-      #end
-
       # Update Path
       @page.refresh_path!(true)
 
@@ -176,6 +188,7 @@ class Admin::PagesController < Admin::ApplicationController
         Page.reset_counters(page_id, :children)
       end
     end
+
     respond_to do |format|
       format.html do
         if valid
@@ -293,6 +306,14 @@ class Admin::PagesController < Admin::ApplicationController
     @page_tree = PageTree.new(pages.with_translations, selected: @page)
   end
 
+  def determine_layout
+    if action_name.in? %w(new create edit update)
+      'admin/page_editor'
+    else
+      'admin/pages'
+    end
+  end
+
   def load_page
     @page = Page.find(params[:id])
   end
@@ -307,6 +328,10 @@ class Admin::PagesController < Admin::ApplicationController
     end
   end
 
+  def new_page_params
+    params.require(:page).permit(:embeddable_type, :parent_id, :title)
+  end
+
   def page_params
     page_params = params.require(:page)
     embeddable_attributes_params = case page_params[:embeddable_type]
@@ -317,6 +342,6 @@ class Admin::PagesController < Admin::ApplicationController
     when 'Page::Project' then [:id, :template_id, :client_name, :client_url, :released_on, { translations_attributes: [:_destroy, :id, :locale, :name, :description] }]
     when 'Page::Redirection' then [:id, :external, :destination_page_id, :destination_url, :permanent, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     end
-    page_params.permit(:embeddable_id, :embeddable_type, :slug, :parent_id, :published, :menu_item, :indexable, translations_attributes: [:_destroy, :id, :locale, :title, :meta_keywords, :meta_description], embeddable_attributes: embeddable_attributes_params || {}) 
+    page_params.permit(:title, :meta_keywords, :meta_description, :embeddable_id, :embeddable_type, :slug, :parent_id, :published, :menu_item, :indexable, embeddable_attributes: embeddable_attributes_params || {}) 
   end
 end

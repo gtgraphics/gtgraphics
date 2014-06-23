@@ -76,7 +76,7 @@
     z-index: 1000;
   }
 
-  #nav_account {
+  #nav_account, #nav_language {
     .badge {
       background-color: $brand-danger;
       //border: 1px solid $navbar-default-bg;
@@ -92,14 +92,14 @@
       font-weight: normal;
       padding: 4px 0px;
     }
-    .avatar {
+    .icon {
       display: block;
       float: left;
       margin-top: -2px;
       margin-right: 6px;
       margin-left: 2px;
     }
-    .name {
+    .caption {
       display: inline-block;
       vertical-align: top;
       white-space: nowrap;

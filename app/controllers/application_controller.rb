@@ -15,11 +15,12 @@ class ApplicationController < ActionController::Base
 
   rescue_from Authenticatable::AccessDenied, with: :force_authentication
 
-  private
-  def default_url_options(options = {})
+  protected
+  def default_url_options(options = nil)
     { locale: I18n.locale }
   end
 
+  private
   def force_authentication
     respond_to do |format|
       format.html do

@@ -15,7 +15,7 @@ class Admin::MessagesController < Admin::ApplicationController
   end
 
   def show
-    @message_recipience.mark_read! if @message_recipience.unread?
+    @message_recipience.mark_read!
     respond_with :admin, @message_recipience
   end
 
