@@ -29,7 +29,9 @@ class Image < ActiveRecord::Base
   include Sortable
   include Taggable
 
-  CONTENT_TYPES = ImageContainable::CONTENT_TYPES
+  include Image::ExifStorable
+
+  CONTENT_TYPES = [Mime::JPEG, Mime::GIF, Mime::PNG].freeze
   EXIF_CAPABLE_CONTENT_TYPES = [Mime::JPEG].freeze
 
   STYLES = {
@@ -43,13 +45,12 @@ class Image < ActiveRecord::Base
     page_preview: { geometry: '780x150#', format: :jpg, processors: [:manual_cropper] }
   }.freeze
 
-  has_many :custom_styles, class_name: 'Image::Style', autosave: true, inverse_of: :image, dependent: :destroy
+  # TODO Set default style to :transformed
+  has_many :custom_styles, class_name: 'Image::Style', inverse_of: :image, dependent: :destroy
   has_many :image_pages, class_name: 'Page::Image', dependent: :destroy
   has_many :pages, through: :image_pages
 
   translates :title, :description, fallbacks_for_empty_translations: true
-
-  serialize :exif_data, OpenStruct
   store :customization_options
   store :predefined_style_dimensions
 
@@ -80,8 +81,6 @@ class Image < ActiveRecord::Base
 
   has_dimensions :transformed_dimensions, from: [:transformed_width, :transformed_height]
 
-  delegate :software, to: :exif_data, allow_nil: true
-
   class << self
     def content_types
       CONTENT_TYPES
@@ -111,10 +110,6 @@ class Image < ActiveRecord::Base
   def asset_url(style = :transformed)
     asset.url(style)
   end
-  
-  def camera
-    exif_data.try(:model)
-  end
 
   def convert_styles
     STYLES.reverse_merge(custom_convert_styles).deep_symbolize_keys
@@ -133,10 +128,6 @@ class Image < ActiveRecord::Base
 
   def styles
     predefined_styles + custom_styles
-  end
-
-  def taken_at
-    exif_data.try(:date_time_original).try(:to_datetime)
   end
 
   def to_param
@@ -164,12 +155,6 @@ class Image < ActiveRecord::Base
       translations.each do |translation|
         translation.title = generated_title if translation.title.blank?
       end
-    end
-  end
-
-  def set_exif_data
-    if asset_content_type.in?(EXIF_CAPABLE_CONTENT_TYPES)
-      self.exif_data = OpenStruct.new(EXIFR::JPEG.new(asset.queued_for_write[:original].path).to_hash) rescue nil
     end
   end
 
