@@ -1,2 +1,0 @@
-= nested_form_content_for @page, :embeddable, translations: { generate_index: true } do |fields|
-  = render("admin/pages/#{@page.embeddable_class.model_name.element.pluralize}/translation_fields", fields: fields) rescue nil

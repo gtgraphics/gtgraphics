@@ -68,7 +68,14 @@ SPECIAL_KEYS = {
 }
 
 $(document).on 'keyup', (event) ->
-  $('[data-hotkey]').each ->
+  # If modal is displayed, prevent catching hotkeys from body
+  $modal = $('#modal')
+  if $modal.length > 0 or $modal.is(':visible')
+    $scope = $modal
+  else
+    $scope = null
+
+  $('[data-hotkey]', $scope).each ->
     $element = $(@)
 
     keys = $element.data('hotkey').toLowerCase().split(MODIFIER_SEPARATOR_CHAR)

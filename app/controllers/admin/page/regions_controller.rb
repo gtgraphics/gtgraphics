@@ -1,24 +1,14 @@
-class Admin::Page::RegionsController < Admin::ApplicationController
-  layout 'admin/page_editor'
-  
-  respond_to :html
-  
-  before_action :load_page
-
-  breadcrumbs do |b|
-    @page.self_and_ancestors.where.not(parent_id: nil).with_translations.each do |page|
-      b.append page.title, [:admin, page]
+class Admin::Page::RegionsController < Admin::Page::ApplicationController
+  rescue_from Template::NotSupported do |exception|
+    respond_to do |format|
+      format.html { redirect_to [:admin, @page], alert: translate }
+      format.any { head :not_found }
     end
-    b.append translate('breadcrumbs.edit', model: Page.model_name.human), [:edit, :admin, @page]
   end
 
   def index
+    raise Template::NotSupported.new(@page) unless @page.supports_template?
     @regions = @page.regions
     respond_with :admin, @page, @regions
-  end
-
-  private
-  def load_page
-    @page = Page.find(params[:page_id])
   end
 end

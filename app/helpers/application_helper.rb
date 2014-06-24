@@ -28,4 +28,9 @@ module ApplicationHelper
   def controller_namespace
     controller.class.name.deconstantize.underscore.presence
   end
+
+  def try_render(*args)
+    render(*args)
+  rescue ActionView::MissingTemplate
+  end
 end

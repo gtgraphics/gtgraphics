@@ -18,27 +18,13 @@
       .col-sm-2.col-sm-offset-1
         .tabs-right
           %ul.nav.nav-tabs
-            - # Page specific configuration
-            %li.nav-header Einstellungen
-            = active_link_to [:edit, :admin, @page], wrap_tag: :li, active: controller_name == 'pages' do
-              = prepend_icon :wrench, 'Allgemein', fixed_width: true
-            %li
-              = link_to '#' do
-                = prepend_icon :users, 'Empfänger', fixed_width: true
-
-            = active_link_to [:admin, @page, :regions], wrap_tag: :li, active: controller_name == 'page_regions' do
-              = prepend_icon :file_text, 'Inhalte', outline: true, fixed_width: true
-            /%li.disabled
-            /  = link_to [:edit, :admin, @page] do
-            /    = prepend_icon :history, 'Verlauf', fixed_width: true
             %li.divider
-
-            - # Editor Locale Selection
-            %li.nav-header Sprache
-            - I18n.available_locales.sort_by { |locale| translate(locale, scope: :languages) }.each do |locale|
-              %li{class: locale == Globalize.locale ? 'active' : nil}
-                = link_to url_for(translations: locale != I18n.locale ? locale : nil) do
-                  = prepend_flag_icon locale, translate(locale, scope: :languages), size: 16, fixed_width: true
+            = active_link_to [:edit, :admin, @page], wrap_tag: :li, active: controller_name == 'pages' do
+              = prepend_icon :wrench, 'Allgemein', fixed_width: true, size: :lg
+            - if @page.supports_regions?
+              = active_link_to [:admin, @page, :regions], wrap_tag: :li, active: controller_name == 'regions' do
+                = prepend_icon :edit, 'Inhalte', fixed_width: true, size: :lg
+            = try_render("admin/#{@page.embeddable_type.underscore.pluralize}/editor_menu_items")
             %li.divider
 
 = render template: 'layouts/admin/application'

@@ -1,3 +1,0 @@
-= fields.simple_fields_for :embeddable do |embeddable_fields|
-  = render "admin/pages/#{embeddable_fields.object.class.model_name.element.pluralize}/fields", fields: embeddable_fields
-  = embeddable_fields.input :id, as: :hidden if embeddable_fields.object.new_record?

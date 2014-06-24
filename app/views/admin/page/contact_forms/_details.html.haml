@@ -1,11 +1,9 @@
-= render 'page_details', page: page
-
 %fieldset
   %legend= Page::ContactForm.human_attribute_name :recipients
   .content
-    %ul.gtg-admin-user-list
-      - embeddable.recipients.order(:first_name, :last_name).each do |recipient|
-        %li
+    %dl.dl-horizontal
+      - @page.embeddable.recipients.order(:first_name, :last_name).each do |recipient|
+        %dd
           %span.gravatar
             = link_to gravatar_image_tag(recipient.email, default: :mm, class: 'img-circle', size: 28, alt: recipient.name), [:admin, recipient]
           %span.name= link_to recipient.name, [:admin, recipient]

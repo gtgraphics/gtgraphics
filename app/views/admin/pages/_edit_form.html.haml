@@ -1,14 +1,11 @@
 = simple_form_for [:admin, @page], wrappers: :horizontal_form, html: { class: 'form-horizontal', multipart: true } do |form|
 
-  / Editor
-  /= translation_manager_for @page, url: translation_fields_admin_pages_path(format: :js), data_type: 'script', type: 'PageTranslationManager' do
-
   %fieldset
     %legend Einstellungen
     .fields
       = form.input :title, autofocus: true
       = form.input :parent_id, input_html: { class: 'resource-combobox', data: { resource: 'pages', from: admin_pages_path(parent_assignable_id: @page.persisted? ? @page.id : nil, format: :json), formatter: 'PageComboboxFormatter', include_blank: false } }
-      - if @page.new_record? or !@page.root?
+      - unless @page.root?
         = form.input :slug, required: true, input_html: { class: 'monospace', autocomplete: 'off' }
       - if @page.embeddable_class.supports_template?
         = form.input :template_id, required: true, collection: @page.available_templates, input_html: { autocomplete: 'off' }

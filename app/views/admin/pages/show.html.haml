@@ -2,6 +2,43 @@
   %h1.pull-left
     = @page.title
   .btn-toolbar.pull-right
+    - if @page
+      .btn-group.pull-right
+        = button_link_to [:edit, :admin, @page], data: { toggle: 'dropdown' }, class: 'dropdown-toggle' do
+          = prepend_icon :cog, translate('helpers.links.settings'), fixed_width: true, caption_html: { class: 'sr-only' }
+        %ul.dropdown-menu{role: 'menu', aria_labelledby: 'dLabel'}
+          - if can? :read, @page
+            %li
+              = link_to page_path(@page, locale: Globalize.locale, translations: nil) do
+                = prepend_icon :picture, translate('helpers.links.view'), outline: true, fixed_width: true
+
+          - if can? :edit, @page
+            %li
+              = link_to [:edit, :admin, @page] do
+                = prepend_icon :pencil, translate('helpers.links.edit'), fixed_width: true
+            %li
+              = link_to [:admin, @page, :regions] do
+                = prepend_icon :edit, translate('helpers.links.edit_regions'), fixed_width: true
+
+            %li.divider
+            - if @page.published?
+              %li
+                = link_to [:hide, :admin, @page], method: :patch do
+                  = prepend_icon :eye_slash, translate('helpers.links.hide'), fixed_width: true
+            - else
+              %li
+                = link_to [:publish, :admin, @page], method: :patch do
+                  = prepend_icon :eye, translate('helpers.links.publish'), fixed_width: true
+            - if @page.menu_item?
+              %li= link_to prepend_icon(:square, translate('helpers.links.disable_in_menu'), outline: true, fixed_width: true), [:disable_in_menu, :admin, @page], method: :patch            
+            - else
+              %li= link_to prepend_icon(:check_square, translate('helpers.links.enable_in_menu'), outline: true, fixed_width: true), [:enable_in_menu, :admin, @page], method: :patch
+            
+          - if can? :destroy, @page
+            %li.divider
+            %li= link_to prepend_icon(:trash, translate('helpers.links.destroy'), outline: true, fixed_width: true), [:admin, @page], method: :delete, data: { hotkey: 'del', confirm: translate('helpers.confirmations.destroy', model: Page.model_name.human) }
+
+
     .btn-group.pull-right
       = button_link_to typed_new_admin_page_child_path(@page, page_type: :content), type: :success, remote: true, accesskey: 'N' do
         = prepend_icon :plus, translate('helpers.links.new', model: Page.model_name.human), fixed_width: true
@@ -14,32 +51,13 @@
               = link_to typed_new_admin_page_child_path(@page, page_type: embeddable_class.name.demodulize.underscore), remote: true do
                 = embeddable_class.model_name.human
 
-      /= create_button_link_for Page, caption: translate('helpers.links.new', model: Page.model_name.human), url: new_admin_page_child_path(@page, 'content')
-    - if @page
-      .btn-group
-        = button_link_to '#', data: { toggle: 'dropdown' }, class: 'dropdown-toggle' do
-          = icon(:cog, fixed_width: true)
-          .sr-only= translate('helpers.links.settings')
-        %ul.dropdown-menu{role: 'menu', aria_labelledby: 'dLabel'}
-          %li= link_to prepend_icon(:eye, translate('helpers.links.view_mode'), fixed_width: true), page_path(@page, locale: Globalize.locale, translations: nil)
-          %li.divider
-          %li= link_to prepend_icon(:edit, translate('helpers.links.edit_regions'), fixed_width: true), [:admin, @page, :regions]
-          %li= link_to prepend_icon(:wrench, translate('helpers.links.page_settings'), fixed_width: true), [:edit, :admin, @page]
-          %li.divider
-          - if @page.published?
-            %li= link_to prepend_icon(:lock, translate('helpers.links.hide'), fixed_width: true), [:hide, :admin, @page], method: :patch            
-          - else
-            %li= link_to prepend_icon(:unlock, translate('helpers.links.publish'), fixed_width: true), [:publish, :admin, @page], method: :patch
-          - if @page.menu_item?
-            %li= link_to prepend_icon(:square, translate('helpers.links.disable_in_menu'), outline: true, fixed_width: true), [:disable_in_menu, :admin, @page], method: :patch            
-          - else
-            %li= link_to prepend_icon(:check_square, translate('helpers.links.enable_in_menu'), outline: true, fixed_width: true), [:enable_in_menu, :admin, @page], method: :patch
-          - if can? :destroy, @page
-            %li.divider
-            %li= link_to prepend_icon(:trash, translate('helpers.links.destroy'), outline: true, fixed_width: true), [:admin, @page], method: :delete, data: { hotkey: 'del', confirm: translate('helpers.confirmations.destroy', model: Page.model_name.human) }
+- present @page, with: Admin::PagePresenter do |page|
+  %dl.dl-horizontal
+    = page.list_item :embeddable_type
+    = page.list_item :path unless page.root?
+    = page.list_item :template if page.template.present?
+    = page.list_item :published
+    = page.list_item :translated_locales
+    = page.list_item :updated_at
 
-
-- begin
-  = render "admin/pages/#{@page.embeddable_class.model_name.element.pluralize}/details", page: @page, embeddable: @page.embeddable
-- rescue ActionView::MissingTemplate
-  = render 'page_details', page: @page
+= try_render "admin/#{@page.embeddable_type.underscore.pluralize}/details"

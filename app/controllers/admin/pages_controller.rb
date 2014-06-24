@@ -56,44 +56,22 @@ class Admin::PagesController < Admin::ApplicationController
   def new
     @page = Page.new
     @page.title = I18n.translate('page.default_title')
-    @page.embeddable_type = params[:page_type] ? "Page::#{params[:page_type].strip.classify}" : 'Page::Content'
     @page.parent = @parent_page || Page.root
+    @page.embeddable_type = params[:page_type] ? "Page::#{params[:page_type].strip.classify}" : 'Page::Content'
+    @page.build_embeddable
     respond_to do |format|
       format.js
     end
-
-    # @page = Page.new
-    # @page.title = I18n.translate('page.default_title')
-    # @page.parent = @parent_page || Page.root
-    # @page.published = false
-    # @page.embeddable_type = params[:page_type] ? "Page::#{params[:page_type].strip.classify}" : 'Page::Content'
-    # # translation = @page.translations.build(locale: I18n.locale)
-    # # translation.title = I18n.translate('page.default_title')
-    # @page.next_available_slug(translation.title.parameterize)
-    # if @page.embeddable_type.in?(Page.embeddable_types)
-    #   concrete_page = @page.build_embeddable
-    #   concrete_page.template = concrete_page.class.template_class.default if concrete_page.class.supports_template?
-    #   if concrete_page.class.reflect_on_association(:translations)
-    #     concrete_page.translations.build(locale: I18n.locale)
-    #   end
-    #   @page.save!
-    #   respond_to do |format|
-    #     format.html { redirect_to [:edit, :admin, @page] }
-    #   end
-    # else
-    #   # Invalid page_type specified
-    #   head :bad_request
-    # end
   end
 
   def create
     @page = Page.new(new_page_params)
     @page.published = false
     @page.next_available_slug(@page.title.parameterize) if @page.title.present?
+    @page.build_embeddable if @page.embeddable.nil?
     if @page.embeddable_type.in?(Page.embeddable_types)
-      concrete_page = @page.build_embeddable
       if @page.embeddable_class.supports_template?
-        concrete_page.template = concrete_page.class.template_class.default
+        @page.template = @page.embeddable_class.template_class.default
       end
     end
     @page.save
@@ -222,78 +200,6 @@ class Admin::PagesController < Admin::ApplicationController
     end
   end
 
-  def embeddable_fields
-    embeddable_type = params.fetch(:embeddable_type)
-    translated_locales = params.fetch(:translated_locales)
-
-    @page = Page.new(embeddable_type: embeddable_type)
-    if @page.embeddable_class
-      @page.embeddable ||= @page.embeddable_class.new
-      if @page.embeddable_class.reflect_on_association(:translations)
-        translated_locales.each do |translated_locale|
-          @page.embeddable.translations.build(locale: translated_locale)
-        end
-      end
-    end
-
-    respond_to do |format|
-      format.html do
-        if @page.embeddable_class
-          render layout: false
-        else
-          head :not_found
-        end
-      end
-    end
-  end
-
-  def embeddable_translation_fields
-    embeddable_type = params.fetch(:embeddable_type)
-    translated_locale = params.fetch(:translated_locale)
-
-    @page = Page.new(embeddable_type: embeddable_type)
-    if @page.embeddable_class
-      @page.embeddable ||= @page.embeddable_class.new
-      if @page.embeddable_class.reflect_on_association(:translations)
-        @page.embeddable.translations.build(locale: translated_locale)
-      end
-    end
-
-    respond_to do |format|
-      format.html do
-        if @page.embeddable_class
-          render layout: false
-        else
-          head :not_found
-        end
-      end
-    end
-  end
-
-  def translation_fields
-    embeddable_type = params.fetch(:embeddable_type)
-    translated_locale = params.fetch(:translated_locale)
-
-    @page = Page.new(embeddable_type: embeddable_type)
-    @page.translations.build(locale: translated_locale)
-    if @page.embeddable_class
-      @page.embeddable ||= @page.embeddable_class.new
-      if @page.embeddable_class.reflect_on_association(:translations)
-        @page.embeddable.translations.build(locale: translated_locale)
-      end
-    end
-
-    respond_to do |format|
-      format.js do
-        if @page.embeddable_class
-          render layout: false
-        else
-          head :not_found
-        end
-      end
-    end
-  end
-
   private
   def build_page_tree
     open_nodes = (cookies[:sitemap_state] || '').split
@@ -329,7 +235,12 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def new_page_params
-    params.require(:page).permit(:embeddable_type, :parent_id, :title, :parent_id)
+    page_params = params.require(:page)
+    embeddable_attributes_params = case page_params[:embeddable_type]
+    when 'Page::ContactForm' then { recipient_ids: [] }
+    end
+    page_params.permit :embeddable_type, :parent_id, :title, :parent_id,
+                       embeddable_attributes: embeddable_attributes_params || []
   end
 
   def page_params
@@ -342,6 +253,6 @@ class Admin::PagesController < Admin::ApplicationController
     when 'Page::Project' then [:id, :template_id, :client_name, :client_url, :released_on, { translations_attributes: [:_destroy, :id, :locale, :name, :description] }]
     when 'Page::Redirection' then [:id, :external, :destination_page_id, :destination_url, :permanent, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     end
-    page_params.permit(:title, :meta_keywords, :meta_description, :embeddable_id, :embeddable_type, :slug, :parent_id, :published, :menu_item, :indexable, embeddable_attributes: embeddable_attributes_params || {}) 
+    page_params.permit(:title, :meta_keywords, :meta_description, :embeddable_id, :embeddable_type, :slug, :parent_id, :published, :menu_item, :indexable, embeddable_attributes: embeddable_attributes_params || []) 
   end
 end

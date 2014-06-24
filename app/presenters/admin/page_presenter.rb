@@ -13,11 +13,29 @@ class Admin::PagePresenter < Admin::ApplicationPresenter
     h.yes_or_no(menu_item?)
   end
 
+  def path
+    h.content_tag :span, super, class: 'monospace'
+  end
+
   def published
     h.yes_or_no(published?)
   end
 
+  def template
+    h.link_to page.template.name, h.admin_template_path(page.template)
+  end
+
   def translated_locales
-    super.map { |locale| I18n.translate(locale, scope: :languages) }.sort.join(', ').html_safe
+    available_locales = super.sort_by { |locale| I18n.translate(locale, scope: :languages) }
+    h.capture do
+      h.content_tag :ul, class: 'inline-flag-icons' do
+        available_locales.each do |locale|
+          link = h.link_to h.page_path(page, locale: locale) do
+            h.prepend_flag_icon locale, I18n.translate(locale, scope: :languages), fixed_width: true, size: 16
+          end
+          h.concat h.content_tag(:li, link)
+        end
+      end
+    end
   end
 end

@@ -2,25 +2,25 @@
 
 .append-icon {
   .caption + i.fa {
-    margin-left: 6px;
+    margin-left: 4px;
   }
 }
 
 .append-flag-icon {
   .caption + i.flag {
-    margin-left: 6px;
+    margin-left: 4px;
   }
 }
 
 .prepend-icon {
   i.fa + .caption {
-    margin-left: 6px;
+    margin-left: 4px;
   }
 }
 
 .prepend-flag-icon {
   i.flag + .caption {
-    margin-left: 6px;
+    margin-left: 4px;
   }
 }
 
@@ -78,6 +78,19 @@
   .prepend-flag-icon {
     i.flag + .caption {
       margin-left: 6px;
+    }
+  }
+}
+
+ul.inline-flag-icons {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  li {
+    margin-right: 8px;
+    display: inline-block;
+    &:last-child {
+      margin-right: 0;
     }
   }
 }

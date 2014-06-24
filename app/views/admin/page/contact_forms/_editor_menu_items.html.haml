@@ -1,0 +1,3 @@
+%li.divider
+= active_link_to [:edit, :admin, @page, :contact_form], wrap_tag: :li do
+  = prepend_icon :paper_plane, Page::ContactForm.human_attribute_name(:recipients), fixed_width: true, size: :lg

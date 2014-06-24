@@ -11,7 +11,7 @@ GtGraphics::Application.routes.draw do
       # end
 
       namespace :admin do
-        scope constraints: { translations: /[a-z]{2}/ } do
+        scope '(:translations)', constraints: { translations: /[a-z]{2}/ } do
           scope constraints: Routing::LocaleConstraint.new(:translations) do
 
             scope controller: :sessions do
@@ -81,17 +81,12 @@ GtGraphics::Application.routes.draw do
               resources :children, controller: :pages, only: :new do
                 get ':page_type', on: :new, action: :new, as: :typed
               end
-
               resources :regions, controller: :'page/regions' do
-                collection do
-                  patch :update_multiple
-                end
+                patch :update_multiple, on: :collection
               end
+              resource :contact_form, controller: :'page/contact_forms', only: [:edit, :update]
               collection do
-                get :embeddable_fields
-                get :embeddable_translation_fields
                 get :preview_path
-                get :translation_fields
                 get :tree
               end
               member do

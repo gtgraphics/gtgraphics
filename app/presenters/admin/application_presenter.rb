@@ -66,6 +66,13 @@ class Admin::ApplicationPresenter < Presenter
     show_path
   end
 
+  def list_item(attribute)
+    h.capture do
+      h.concat h.content_tag(:dt, object.class.human_attribute_name(attribute))
+      h.concat h.content_tag(:dd, self.public_send(attribute))
+    end
+  end
+
   protected
   def button_caption(caption_key, *args)
     icon_options = args.extract_options!.reverse_merge(fixed_width: true)

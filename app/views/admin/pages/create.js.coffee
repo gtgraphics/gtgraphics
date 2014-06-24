@@ -1,6 +1,14 @@
+$modal = $('#modal')
+
 <% if @page.errors.empty? %>
-$('#modal').modal('hide')
+
+$modal.modal('hide')
 Turbolinks.visit('<%= edit_admin_page_path(@page) %>')
+
 <% else %>
-$('#modal form').replaceWith("<%= escape_javascript render('new_form') %>").prepare()
+
+html = "<%= escape_javascript render('new_form') %>"
+$('form', $modal).replaceWith(html)
+$('form', $modal).prepare()
+
 <% end %>
