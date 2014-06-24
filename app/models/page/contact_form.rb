@@ -13,8 +13,10 @@ class Page < ActiveRecord::Base
     acts_as_page_embeddable template_class: 'Template::ContactForm'
 
     has_many :messages, foreign_key: 'contact_form_id', dependent: :nullify
-    has_and_belongs_to_many :recipients, class_name: 'User', join_table: 'contact_form_recipients', foreign_key: :contact_form_page_id, association_foreign_key: :recipient_id
+    has_and_belongs_to_many :recipients, class_name: 'User', join_table: 'contact_form_recipients',
+                                                             foreign_key: :contact_form_page_id,
+                                                             association_foreign_key: :recipient_id
 
-    # validates :recipients, presence: true
+    validates :recipients, presence: true
   end
 end

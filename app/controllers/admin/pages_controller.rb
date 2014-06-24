@@ -74,7 +74,7 @@ class Admin::PagesController < Admin::ApplicationController
         @page.template = @page.embeddable_class.template_class.default
       end
     end
-    @page.save
+    flash_for @page if @page.save
     respond_to do |format|
       format.js
     end

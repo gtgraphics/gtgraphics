@@ -1,9 +1,0 @@
-/= render 'translation_tabs', object: fields.object, url: translation_fields_admin_pages_path(embeddable_type: fields.object.class.name)
-
-/= loader size: :large
-
-/.tab-content#translations
-= fields.simple_fields_for :translations do |translation_fields|
-  = render 'admin/projects/translation_fields', fields: translation_fields
-
-= fields.input :released_on, discard_day: true, discard_month: true, start_year: 2000, end_year: Date.today.year, include_blank: true, container_html: { class: 'col-lg-3' }, label_html: { class: 'col-lg-2' }

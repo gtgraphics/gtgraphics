@@ -1,8 +1,9 @@
+
 = simple_form_for [:admin, @image], url: [:crop, :admin, @image], html: { class: 'form-horizontal' } do |form|
 
-  = toolbar do
-    .btn-group
-      = form.button :button, type: 'submit', class: 'btn-primary' do
-        = prepend_icon(:save, translate(form.object.new_record? ? :create : :update, scope: 'helpers.submit', model: form.object.class.model_name.human))
+  = page_header do
+    = form.button :button, type: 'submit', class: 'btn-primary' do
+      = prepend_icon(:save, translate(form.object.new_record? ? :create : :update, scope: 'helpers.submit', model: form.object.class.model_name.human))
+
 
   = render 'manipulator_fields', fields: form

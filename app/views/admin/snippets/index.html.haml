@@ -1,10 +1,11 @@
 = form_tag :destroy_multiple_admin_snippets, method: :delete do
 
-  = toolbar do
-    .btn-group.batch-control
-      = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Snippet.model_name.human(count: 2)) }
-    .btn-group
-      = create_button_link_for Snippet, namespace: :admin
+  = page_header do
+    .btn-toolbar
+      .btn-group.batch-control
+        = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Snippet.model_name.human(count: 2)) }
+      .btn-group
+        = create_button_link_for Snippet, namespace: :admin
 
   - if @snippets.any?
     = render 'table', checkboxes: true

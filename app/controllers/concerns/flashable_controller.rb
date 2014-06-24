@@ -2,7 +2,7 @@ module FlashableController
   extend ActiveSupport::Concern
  
   def flash_for(object, *args)
-    return unless request.format.html?
+    # return unless request.format.html?
     
     options = args.extract_options!.reverse_merge(multiple: false, successful: true)
     action = args.first

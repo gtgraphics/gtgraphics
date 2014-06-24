@@ -1,10 +1,9 @@
-= toolbar do
-  .btn-group.batch-control
-    = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) }
-  .btn-group
-    = update_button_link_for @template.becomes(::Template), namespace: :admin
-  .btn-group
-    = destroy_button_link_for @template.becomes(::Template), namespace: :admin
+= page_header do
+  .btn-toolbar
+    .btn-group
+      = update_button_link_for @template.becomes(::Template), namespace: :admin
+    .btn-group
+      = destroy_button_link_for @template.becomes(::Template), namespace: :admin
 
 .row
   .col-lg-8

@@ -12,6 +12,7 @@ module Authenticatable
     end
 
     alias_method :current_user?, :current?
+    alias_method :me?, :current?
   end
 
   module ClassMethods

@@ -29,9 +29,11 @@
               = link_to message.subject.presence || translate('helpers.prompts.no_subject'), message.show_path
           %td.text-center.visible-lg.visible.md
             - if recipience.read? 
-              = link_to icon(:circle, outline: true), [:toggle, :admin, message], method: :patch, class: 'message-read', title: translate('views.admin.messages.mark_unread'), data: { toggle: 'tooltip' }
+              = link_to [:toggle, :admin, message], method: :patch, class: 'message-read', title: translate('views.admin.messages.mark_unread'), data: { toggle: 'tooltip' } do
+                = prepend_icon :circle, translate('views.admin.messages.mark_unread'), outline: true, caption_html: { class: 'sr-only' }
             - else
-              = link_to icon(:circle, outline: false), [:toggle, :admin, message], method: :patch, class: 'message-unread', title: translate('views.admin.messages.mark_read'), data: { toggle: 'tooltip' }
+              = link_to [:toggle, :admin, message], method: :patch, class: 'message-unread', title: translate('views.admin.messages.mark_read'), data: { toggle: 'tooltip' } do
+                = prepend_icon :circle, translate('views.admin.messages.mark_read'), outline: false, caption_html: { class: 'sr-only' }
           %td= mail_to message.sender_email, message.sender_name
           %td= message.created_at
           - if actions

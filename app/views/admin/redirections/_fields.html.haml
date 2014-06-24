@@ -1,8 +1,0 @@
-.tab-content#translations{data: { contains: 'translatedContent' }}
-  = fields.simple_fields_for :translations do |translation_fields|
-    = render 'admin/redirections/translation_fields', fields: translation_fields
-
-= fields.input :external, collection: [[Redirection.human_attribute_name(:internal), false], [Redirection.human_attribute_name(:external), true]], as: :radio_buttons
-= fields.association :destination_page, required: true, collection: page_sitemap_collection_for_select(Page.without(@page))
-= fields.input :destination_url, required: true
-= fields.input :permanent, inline_label: translate('simple_form.inline_labels.redirection.permanent'), wrapper: :horizontal_boolean

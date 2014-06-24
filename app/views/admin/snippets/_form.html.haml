@@ -1,7 +1,7 @@
 = simple_form_for [:admin, @snippet], html: { class: 'form-horizontal' } do |form|
-
-  = toolbar do
-    .btn-group
-      = form.button :submit, class: 'btn-primary'
  
   = translation_manager_for form, url: translation_fields_admin_snippets_path
+
+  = form_actions do
+    = form.button :button, type: 'submit', class: 'btn-primary' do
+      = prepend_icon(:save, translate(@snippet.new_record? ? :create : :update, scope: 'helpers.submit', model: Snippet.model_name.human))

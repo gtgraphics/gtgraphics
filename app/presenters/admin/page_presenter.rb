@@ -30,7 +30,7 @@ class Admin::PagePresenter < Admin::ApplicationPresenter
     h.capture do
       h.content_tag :ul, class: 'inline-flag-icons' do
         available_locales.each do |locale|
-          link = h.link_to h.page_path(page, locale: locale) do
+          link = h.link_to h.page_path(page, locale: locale), hreflang: locale do
             h.prepend_flag_icon locale, I18n.translate(locale, scope: :languages), fixed_width: true, size: 16
           end
           h.concat h.content_tag(:li, link)

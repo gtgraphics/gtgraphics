@@ -10,6 +10,6 @@ refreshGeneratePasswordCheckState = ->
 $(document).ready ->
   # Generate Password Radio Buttons Behavior
   refreshGeneratePasswordCheckState()
-  $(document).on 'ifChanged', '#user_generate_password_true, #user_generate_password_false', ->
+  $(document).on 'change ifChanged', '#user_generate_password_true, #user_generate_password_false', ->
     $radioButton = $(@)
     refreshGeneratePasswordCheckState()

@@ -1,35 +1,26 @@
 - present @message, with: Admin::MessagePresenter do |message|
-  = toolbar do
-    .btn-group
-      = button_mail_to message.sender, prepend_icon(:mail_reply, translate('helpers.links.reply')), subject: translate('views.admin.messages.replied_subject', subject: message.subject)
-    .btn-group
-      = message.destroy_button
+
+  = page_header do
+    .btn-toolbar
+      .btn-group
+        = button_mail_to @message.sender, prepend_icon(:mail_reply, translate('helpers.links.reply')), subject: translate('views.admin.messages.replied_subject', subject: @message.subject)
+      .btn-group
+        = message.destroy_button
 
   .row
 
-    .col-lg-2.col-lg-offset-1.col-md-3.col-sm-3.col-xs-3
-      .text-center
-        = gravatar_image_tag message.sender_email, alt: message.sender_name, size: 220, default: :mm, class: 'img-circle img-responsive'
-        %h3= message.sender_name
-        %p= mail_to(message.sender_email, message.sender_email)
-
-
-    .col-lg-8.col-lg-offset-1.col-md-9.col-sm-9.col-xs-9
-
+    .col-sm-offset-2.col-sm-8
       %dl.dl-horizontal
-        %dt= Message.human_attribute_name :sender_name
-        %dd
-          - sender = mail_to(message.sender_email, message.sender_name)
-          - if message.contact_form
-            = translate('views.admin.messages.sender_html', sender: sender, contact_form: link_to(message.contact_form.page.title, [:admin, message.contact_form.page]))
-          - else
-            = sender
-        %dt= Message.human_attribute_name :recipient_names
-        %dd= message.recipients
-        %dt= Message.human_attribute_name :subject
-        %dd= message.subject
-        %dt= Message.human_attribute_name :created_at
-        %dd= message.created_at
+        .row
+          .col-sm-2
+            = mail_to @message.sender do
+              = gravatar_image_tag message.sender_email, alt: message.sender_name, size: 200, default: :mm, class: 'img-circle img-responsive'
+          .col-sm-10
+            = message.list_item :sender
+            = message.list_item :recipients
+            = message.list_item :subject
+            = message.list_item :created_at
+            = message.list_item :contact_form
 
       %hr
 

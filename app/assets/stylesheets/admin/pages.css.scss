@@ -1,4 +1,5 @@
 .path-preview {
+  @extend .monospace;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

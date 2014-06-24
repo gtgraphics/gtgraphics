@@ -1,10 +1,5 @@
 = simple_form_for [:admin, @template], url: [:admin, @template.becomes(::Template)], as: :template, html: { class: 'form-horizontal' } do |form|
 
-  = toolbar do
-    .btn-group
-      = form.button :button, type: 'submit', class: 'btn-primary' do
-        = prepend_icon(:save, translate(@template.new_record? ? :create : :update, scope: 'helpers.submit', model: ::Template.model_name.human))
-
   = translation_manager_for form, url: translation_fields_admin_templates_path
 
   %fieldset
@@ -15,3 +10,7 @@
         = render 'files_fields', fields: form if @template.type.present?
 
       = form.input :region_labels, input_html: { class: 'space-tokenizer' }, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
+
+  = form_actions do
+    = form.button :button, type: 'submit', class: 'btn-primary' do
+      = prepend_icon(:save, translate(@template.new_record? ? :create : :update, scope: 'helpers.submit', model: ::Template.model_name.human))

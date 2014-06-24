@@ -3,6 +3,7 @@ module Job
 
   included do
     class_attribute :callbacks, instance_accessor: false
+    self.callbacks = {}
 
     %w(before success error after failure).each do |method|
       instance_eval %{

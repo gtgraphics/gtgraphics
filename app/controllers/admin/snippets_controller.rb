@@ -4,7 +4,6 @@ class Admin::SnippetsController < Admin::ApplicationController
   before_action :load_snippet, only: %i(show edit update destroy)
 
   breadcrumbs do |b|
-    b.append Page.model_name.human(count: 2), :admin_pages
     b.append Snippet.model_name.human(count: 2), :admin_snippets
     if action_name.in? %w(new create)
       b.append translate('breadcrumbs.new', model: Snippet.model_name.human), :new_admin_snippet

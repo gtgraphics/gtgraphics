@@ -1,25 +1,23 @@
 - present @image, with: Admin::ImagePresenter do |image|
-  .gtg-admin-toolbar
-    #toolbar.container
-      = render 'breadcrumbs', toolbar: true
-      .btn-toolbar.pull-right
-        .btn-group.pull-right
-          = button_link_to '#', data: { toggle: 'dropdown' }, class: 'dropdown-toggle' do
-            = icon(:cog, fixed_width: true)
-            .sr-only= translate('helpers.links.settings')
-          %ul.dropdown-menu{role: 'menu', aria_labelledby: 'dLabel'}
-            %li= link_to prepend_icon(:pencil, translate('helpers.links.edit'), fixed_width: true), [:edit, :admin, image]
-            %li= link_to prepend_icon(:crop, translate('helpers.links.crop'), fixed_width: true), [:crop, :admin, image]
-            - if image.cropped?
-              %li= link_to prepend_icon(:undo, translate('helpers.links.uncrop'), fixed_width: true), [:uncrop, :admin, image], method: :patch
-            %li.divider
-            %li= link_to prepend_icon(:picture, translate('helpers.links.new', model: Image::Style::Variant.model_name.human), outline: true, fixed_width: true), [:new, :admin, image, :style]
-            %li= link_to prepend_icon(:upload, translate('helpers.links.upload', model: Image::Style::Attachment.model_name.human), fixed_width: true), new_admin_image_style_path(image, source: 'attachment')
-            %li.divider
-            %li= link_to prepend_icon(:download, translate('helpers.links.download'), fixed_width: true), [:download, :admin, image]
-            %li= link_to prepend_icon(:folder_open, translate('helpers.links.move_to', model: Attachment.model_name.human(count: 2)), outline: true, fixed_width: true), [:move_to_attachments, :admin, image], method: :patch, data: { confirm: translate('helpers.confirmations.move', model: Image.model_name.human, other_model: Attachment.model_name.human(count: 2)) }
-            %li.divider
-            %li= link_to prepend_icon(:trash, translate('helpers.links.destroy'), outline: true, fixed_width: true), [:admin, image], method: :delete, data: { confirm: translate('helpers.confirmations.destroy', model: Image.model_name.human) }
+  = page_header do
+    .btn-toolbar
+      .btn-group.pull-right
+        = button_link_to '#', data: { toggle: 'dropdown' }, class: 'dropdown-toggle' do
+          = icon(:cog, fixed_width: true)
+          .sr-only= translate('helpers.links.settings')
+        %ul.dropdown-menu{role: 'menu', aria_labelledby: 'dLabel'}
+          %li= link_to prepend_icon(:pencil, translate('helpers.links.edit'), fixed_width: true), [:edit, :admin, image]
+          %li= link_to prepend_icon(:crop, translate('helpers.links.crop'), fixed_width: true), [:crop, :admin, image]
+          - if image.cropped?
+            %li= link_to prepend_icon(:undo, translate('helpers.links.uncrop'), fixed_width: true), [:uncrop, :admin, image], method: :patch
+          %li.divider
+          %li= link_to prepend_icon(:picture, translate('helpers.links.new', model: Image::Style::Variant.model_name.human), outline: true, fixed_width: true), [:new, :admin, image, :style]
+          %li= link_to prepend_icon(:upload, translate('helpers.links.upload', model: Image::Style::Attachment.model_name.human), fixed_width: true), new_admin_image_style_path(image, source: 'attachment')
+          %li.divider
+          %li= link_to prepend_icon(:download, translate('helpers.links.download'), fixed_width: true), [:download, :admin, image]
+          %li= link_to prepend_icon(:folder_open, translate('helpers.links.move_to', model: Attachment.model_name.human(count: 2)), outline: true, fixed_width: true), [:move_to_attachments, :admin, image], method: :patch, data: { confirm: translate('helpers.confirmations.move', model: Image.model_name.human, other_model: Attachment.model_name.human(count: 2)) }
+          %li.divider
+          %li= link_to prepend_icon(:trash, translate('helpers.links.destroy'), outline: true, fixed_width: true), [:admin, image], method: :delete, data: { confirm: translate('helpers.confirmations.destroy', model: Image.model_name.human) }
 
   .row
     .col-lg-8
