@@ -69,17 +69,17 @@
             .panel-body
               = render 'admin/image_styles/table'
 
-        - if @tags.any?
-          / Tags
-          .panel.panel-default
-            .panel-heading
-              %h3.panel-title
-                = prepend_icon(:tags, Tag.model_name.human(count: 2), fixed_width: true)
-                %span.text-muted
-                  (#{@tags.size})
-            .panel-collapsible
-              .panel-body
-                %ul.tags
-                  - @tags.each do |tag|
-                    %li
-                      = tagged_link_to tag.label, admin_images_path(query: tag.label), class: 'tag'
+        / - if @tags.any?
+        /   / Tags
+        /   .panel.panel-default
+        /     .panel-heading
+        /       %h3.panel-title
+        /         = prepend_icon(:tags, Tag.model_name.human(count: 2), fixed_width: true)
+        /         %span.text-muted
+        /           (#{@tags.size})
+        /     .panel-collapsible
+        /       .panel-body
+        /         %ul.tags
+        /           - @tags.each do |tag|
+        /             %li
+        /               = tagged_link_to tag.label, admin_images_path(query: tag.label), class: 'tag'

@@ -11,16 +11,14 @@
 
 class Page < ActiveRecord::Base
   class Region < ActiveRecord::Base
-    include BatchTranslatable
-    
+    belongs_to :page, inverse_of: :regions
     belongs_to :definition, class_name: 'Template::RegionDefinition', inverse_of: :regions
     has_one :template, through: :definition
 
     translates :body, fallbacks_for_empty_translations: true
 
-    acts_as_batch_translatable
-
-    validates :definition_id, presence: true
+    validates :page_id, presence: true, strict: true
+    validates :definition_id, presence: true, strict: true
 
     delegate :label, to: :definition, prefix: true
 

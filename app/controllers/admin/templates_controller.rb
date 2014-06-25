@@ -11,7 +11,8 @@ class Admin::TemplatesController < Admin::ApplicationController
   end
 
   def index
-    @templates = Template.with_translations.sort(params[:sort], params[:direction]).page(params[:page])
+    @templates = Template.includes(:translations).with_locales(Globalize.fallbacks) \
+                         .sort(params[:sort], params[:direction]).page(params[:page])
     respond_with :admin, @templates
   end
 

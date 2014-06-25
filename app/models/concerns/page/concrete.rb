@@ -40,6 +40,8 @@ class Page < ActiveRecord::Base
           has_many :regions, through: :page
 
           validates :template_id, presence: true
+
+          after_update :migrate_regions, if: :template_id_changed?
         end
       end
 
@@ -51,6 +53,11 @@ class Page < ActiveRecord::Base
         def template_class
           template_class_name.try(:constantize)
         end
+      end
+
+      private
+      def migrate_regions
+        
       end
     end
   end

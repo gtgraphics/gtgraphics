@@ -9,7 +9,9 @@ class Admin::PagesController < Admin::ApplicationController
 
   breadcrumbs do |b|
     if @parent_page 
-      @parent_page.self_and_ancestors.where.not(parent_id: nil).with_translations.each do |page|
+      pages = @parent_page.self_and_ancestors.where.not(parent_id: nil) \
+                          .includes(:translations).with_locales(Globalize.fallbacks)
+      pages.each do |page|
         b.append page.title, [:admin, page]
       end
     end
@@ -37,7 +39,7 @@ class Admin::PagesController < Admin::ApplicationController
         else
           @pages = Page.search(params[:query])
         end
-        @pages = @pages.with_translations(I18n.locale).page(params[:page])
+        @pages = @pages.includes(:translations).with_locales(Globalize.fallbacks).page(params[:page])
         if assignable_id = params[:parent_assignable_id] and assignable_id.present?
           @pages = @pages.assignable_as_parent_of(assignable_id)
         end
@@ -46,7 +48,6 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def show
-    @pages = @page.self_and_ancestors_and_siblings.with_translations(I18n.locale)
     respond_to do |format|
       format.html { render layout: !request.xhr? }
       format.json
@@ -69,10 +70,8 @@ class Admin::PagesController < Admin::ApplicationController
     @page.published = false
     @page.next_available_slug(@page.title.parameterize) if @page.title.present?
     @page.build_embeddable if @page.embeddable.nil?
-    if @page.embeddable_type.in?(Page.embeddable_types)
-      if @page.embeddable_class.supports_template?
-        @page.template = @page.embeddable_class.template_class.default
-      end
+    if @page.embeddable_type.in?(Page.embeddable_types) and @page.support_templates?
+      @page.template = @page.template_class.default
     end
     flash_for @page if @page.save
     respond_to do |format|
@@ -186,7 +185,8 @@ class Admin::PagesController < Admin::ApplicationController
     else
       pages = Page.where(depth: 0..1)
     end
-    @page_tree = PageTree.new(pages.with_translations)
+    pages = pages.includes(:translations).with_locales(Globalize.fallbacks)
+    @page_tree = PageTree.new(pages)
     respond_to do |format|
       format.json { render json: @page_tree }
     end
@@ -196,7 +196,7 @@ class Admin::PagesController < Admin::ApplicationController
     @page = Page.new(params.symbolize_keys.slice(:slug, :parent_id))
     @page.valid?
     respond_to do |format|
-      format.html { render text: @page.slug.present? ? File.join(request.host, @page.path) : '' }
+      format.html { render text: @page.slug.present? ? File.join(request.host_with_port, @page.path) : '' }
     end
   end
 
@@ -208,8 +208,10 @@ class Admin::PagesController < Admin::ApplicationController
       conditions << Page.arel_table[:id].in(open_nodes)
       conditions << Page.arel_table[:parent_id].in(open_nodes)
     end
-    pages = Page.where(conditions.reduce(:or))
-    @page_tree = PageTree.new(pages.with_translations, selected: @page)
+    pages = Page.where(conditions.reduce(:or)) \
+                .includes(:translations).with_locales(Globalize.fallbacks) \
+                .references(:translations)
+    @page_tree = PageTree.new(pages, selected: @page)
   end
 
   def determine_layout

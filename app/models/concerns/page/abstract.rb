@@ -12,7 +12,7 @@ class Page < ActiveRecord::Base
     ).freeze
 
     included do
-      attr_readonly :embeddable_type
+      attr_readonly :embeddable_type, :embeddable_id
 
       belongs_to :embeddable, polymorphic: true, autosave: true
 
@@ -22,7 +22,7 @@ class Page < ActiveRecord::Base
       # Destruction must be done through a callback, because "dependent: :destroy" leads to an infinite loop
       after_destroy :destroy_embeddable
 
-      delegate :template, :template=, :template_id, :template_id=, to: :embeddable, allow_nil: true
+      accepts_nested_attributes_for :embeddable
 
       EMBEDDABLE_TYPES.each do |embeddable_type|
         sanitized_type = embeddable_type.demodulize.underscore
@@ -66,48 +66,8 @@ class Page < ActiveRecord::Base
       children.embedding(*types).includes(:embeddable)
     end
 
-    def embeddable_attributes=(attributes)
-      raise 'invalid embeddable type' unless embeddable_class
-      if attributes['id'].present?
-        embeddable_id = attributes['id'].to_i
-        self.embeddable = embeddable_class.find_by(id: embeddable_id) if self.embeddable_id != embeddable_id
-      end
-      build_embeddable if embeddable.nil?
-      self.embeddable.attributes = attributes
-    end
-
     def embeddable_class
       embeddable_type.in?(EMBEDDABLE_TYPES) ? embeddable_type.constantize : nil
-    end
-
-    def embeddable_class_was
-      embeddable_type_was.try(:constantize)
-    end
-
-    def embeddable_changed?
-      embeddable_type_changed? or embeddable_id_changed?
-    end
-
-    # Templates
-
-    def available_templates
-      template_class.try(:all) || Template.none
-    end
-
-    def check_template_support!
-      raise Template::NotSupported.new(self) unless support_templates?
-    end
-
-    def support_templates?
-      embeddable_class.try(:support_templates?) || false
-    end
-
-    def template_class
-      embeddable.class.template_class if support_templates?
-    end
-
-    def template_path
-      template.try(:view_path)
     end
 
     private

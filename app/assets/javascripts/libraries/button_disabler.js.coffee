@@ -1,3 +1,6 @@
+AJAX_LINK_SELECTOR = 'a[data-remote=true]'
+AJAX_BUTTON_SELECTOR = 'button[data-remote=true][type=button]'
+
 createArbitraryField = ($button) ->
   $form = $button.closest('form')
   buttonName = $button.attr('name')
@@ -25,3 +28,15 @@ $(document)
     $button = $(@).find(':submit')
     $button.prop('disabled', false)
     destroyArbitraryField($button)
+
+  .on 'ajax:beforeSend', AJAX_LINK_SELECTOR, ->
+    $(@).addClass('disabled')
+
+  .on 'ajax:complete', AJAX_LINK_SELECTOR, ->
+    $(@).removeClass('disabled')
+
+  .on 'ajax:beforeSend', AJAX_BUTTON_SELECTOR, ->
+    $(@).prop('disabled', true)
+
+  .on 'ajax:complete', AJAX_BUTTON_SELECTOR, ->
+    $(@).prop('disabled', false)

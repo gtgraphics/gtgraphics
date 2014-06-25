@@ -10,7 +10,8 @@ class Admin::AttachmentsController < Admin::ApplicationController
   end
 
   def index
-    @attachments = Attachment.with_translations.sort(params[:sort], params[:direction]).page(params[:page])
+    @attachments = Attachment.includes(:translations).with_locales(Globalize.fallbacks) \
+                             .sort(params[:sort], params[:direction]).page(params[:page])
     respond_with :admin, @attachments
   end
 

@@ -54,7 +54,6 @@
 - present @page, with: Admin::PagePresenter do |page|
   %dl.dl-horizontal
     = page.list_item :embeddable_type
-    = page.list_item :path unless page.root?
     = page.list_item :template if page.template.present?
     = page.list_item :published
     = page.list_item :translated_locales

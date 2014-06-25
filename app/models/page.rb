@@ -27,7 +27,7 @@ class Page < ActiveRecord::Base
   include Ownable
   include Page::Abstract
   include Page::MenuContainable
-  include Page::Regionable
+  include Page::Templatable
   include Page::UrlAccessible
   include PersistenceContextTrackable
   include Publishable
@@ -50,6 +50,15 @@ class Page < ActiveRecord::Base
   delegate :name, to: :template, prefix: true, allow_nil: true
   delegate :meta_keywords, :meta_keywords=, to: :translation
 
+  def self.search(query)
+    if query.present?
+      terms = query.to_s.split.uniq.map { |term| "%#{term}%" }
+      ransack(translations_title_or_path_matches_any: terms).result
+    else
+      all
+    end
+  end
+
   def destroyable?
     !root?
   end
@@ -58,8 +67,7 @@ class Page < ActiveRecord::Base
     attributes.slice(*%w(title slug path updated_at)).merge(
       'type' => embeddable_class.model_name.human,
       'author' => author,
-      'template' => template_name,
-      'children' => children.with_translations.to_a
+      'template' => template_name
     ).reverse_merge(embeddable.try(:to_liquid) || {})
   end
 

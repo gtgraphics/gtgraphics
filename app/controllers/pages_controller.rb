@@ -1,18 +1,17 @@
 class PagesController < ApplicationController
   respond_to :html
 
-  # before_action :set_translation_locale
   before_action :load_page
   before_action :load_template
-
-  authorize_resource class: 'Page', parent: false, only: :edit
 
   attr_reader :page
   protected :page
   helper_method :page
 
   breadcrumbs do |b|
-    @page.self_and_ancestors.accessible_by(current_ability).with_translations.each do |page|
+    pages = @page.self_and_ancestors.accessible_by(current_ability) \
+                 .includes(:translations).with_locales(Globalize.fallbacks)
+    pages.each do |page|
       b.append page.title, page
     end
   end
@@ -59,7 +58,7 @@ class PagesController < ApplicationController
   def load_template
     if @page.support_templates?
       @template = @page.template 
-      @region_definitions = @template.try(:region_definitions)
+      @region_definitions = @template.region_definitions
     end
   end
 end

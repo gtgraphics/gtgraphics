@@ -25,8 +25,10 @@ class Admin::ImagesController < Admin::ApplicationController
       @images = Image.search(params[:query])
     end
   
-    @images = @images.with_translations(I18n.locale).includes(:author) \
-      .sort(params[:sort], params[:direction]).page(params[:page]).per(16)
+    @images = @images.includes(:translations).with_locales(Globalize.fallbacks) \
+                     .includes(:author) \
+                     .sort(params[:sort], params[:direction])
+                     .page(params[:page]).per(16)
     @images = @images.includes(:custom_styles) if params[:include_styles].to_b
   
     respond_with :admin, @images do |format|

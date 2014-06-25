@@ -36,7 +36,7 @@
 
       .navbar-collapse.collapse
         %ul.nav.navbar-nav
-          - Page.primary.published.menu_items.accessible_by(current_ability).with_translations.each do |page|
+          - Page.primary.published.menu_items.accessible_by(current_ability).includes(:translations).with_locales(Globalize.fallbacks).each do |page|
             = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page)
 
         %ul.nav.navbar-nav.navbar-right

@@ -6,7 +6,9 @@ class Admin::Page::ApplicationController < Admin::ApplicationController
   before_action :load_page
 
   breadcrumbs do |b|
-    @page.self_and_ancestors.where.not(parent_id: nil).with_translations.each do |page|
+    pages = @page.self_and_ancestors.where.not(parent_id: nil) \
+                 .includes(:translations).with_locales(Globalize.fallbacks)
+    pages.each do |page|
       b.append page.title, [:admin, page]
     end
     b.append translate('breadcrumbs.edit', model: Page.model_name.human), [:edit, :admin, @page]

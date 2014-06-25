@@ -4,9 +4,10 @@ module PagesHelper
   end
 
   def render_page_content(content, options = {})
+    locale = options[:locale]
     liquify(content, with: @page.to_liquid.merge(
-      'language' => translate(options[:locale], scope: :languages),
-      'native_language' => translate(options[:locale], scope: :languages, locale: options[:locale])
+      'language' => translate(locale, scope: :languages),
+      'native_language' => translate(locale, scope: :languages, locale: locale)
     ))
   end
 end
