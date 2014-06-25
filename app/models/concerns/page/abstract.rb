@@ -18,11 +18,8 @@ class Page < ActiveRecord::Base
 
       validates :embeddable, presence: true
       validates :embeddable_type, inclusion: { in: EMBEDDABLE_TYPES }, allow_blank: true
-      # validate :verify_embeddable_type_changeability, on: :update, if: :embeddable_type_changed?
 
-      # around_update :destroy_replaced_embeddable
-
-      # Destruction must be done via callback, because "dependent: :destroy" leads to an infinite loop
+      # Destruction must be done through a callback, because "dependent: :destroy" leads to an infinite loop
       after_destroy :destroy_embeddable
 
       delegate :template, :template=, :template_id, :template_id=, to: :embeddable, allow_nil: true
@@ -49,10 +46,6 @@ class Page < ActiveRecord::Base
       def embedding(*types)
         types = Array(types).flatten.map { |type| "Page::#{type.to_s.classify}" }
         where(embeddable_type: types.many? ? types : types.first)
-      end
-
-      def embeddable_types
-        EMBEDDABLE_TYPES
       end
 
       def embeddable_classes
@@ -95,16 +88,22 @@ class Page < ActiveRecord::Base
       embeddable_type_changed? or embeddable_id_changed?
     end
 
-    def supports_template?
-      embeddable_class.try(:supports_template?) || false
-    end
+    # Templates
 
     def available_templates
-      template_class.all
+      template_class.try(:all) || Template.none
+    end
+
+    def check_template_support!
+      raise Template::NotSupported.new(self) unless support_templates?
+    end
+
+    def support_templates?
+      embeddable_class.try(:support_templates?) || false
     end
 
     def template_class
-      embeddable.class.template_class
+      embeddable.class.template_class if support_templates?
     end
 
     def template_path
@@ -115,15 +114,5 @@ class Page < ActiveRecord::Base
     def destroy_embeddable
       embeddable.destroy
     end
-
-    # def destroy_replaced_embeddable
-    #   embeddable_type_changed = self.embeddable_type_changed?
-    #   yield
-    #   embeddable_class_was.destroy(embeddable_id_was) if embeddable_type_changed
-    # end
-
-    # def verify_embeddable_type_changeability
-    #   errors.add(:embeddable_type, :unchangeable) unless embeddable_class_was.convertible?
-    # end
   end
 end

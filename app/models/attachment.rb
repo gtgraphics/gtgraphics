@@ -14,7 +14,7 @@
 
 class Attachment < ActiveRecord::Base
   include AssetContainable
-  include Authorable
+  include Ownable
   # include AttachmentPreservable
   include BatchTranslatable
   include PersistenceContextTrackable
@@ -23,7 +23,7 @@ class Attachment < ActiveRecord::Base
   translates :title, :description, fallbacks_for_empty_translations: true
 
   acts_as_asset_containable url: '/system/:class/:id_partition/:filename'
-  acts_as_authorable default_to_current_user: false
+  acts_as_ownable :author, default_owner_to_current_user: false
   acts_as_batch_translatable
 
   do_not_validate_attachment_file_type :asset

@@ -8,9 +8,9 @@
 
 class Page < ActiveRecord::Base
   class ContactForm < ActiveRecord::Base
-    include Page::Embeddable
+    include Page::Concrete
     
-    acts_as_page_embeddable template_class: 'Template::ContactForm'
+    acts_as_concrete_page
 
     has_many :messages, foreign_key: 'contact_form_id', dependent: :nullify
     has_and_belongs_to_many :recipients, class_name: 'User', join_table: 'contact_form_recipients',

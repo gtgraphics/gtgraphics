@@ -21,7 +21,7 @@
             %li.divider
             = active_link_to [:edit, :admin, @page], wrap_tag: :li, active: controller_name == 'pages' do
               = prepend_icon :wrench, 'Allgemein', fixed_width: true, size: :lg
-            - if @page.supports_regions?
+            - if @page.support_templates?
               = active_link_to [:admin, @page, :regions], wrap_tag: :li, active: controller_name == 'regions' do
                 = prepend_icon :edit, 'Inhalte', fixed_width: true, size: :lg
             = try_render("admin/#{@page.embeddable_type.underscore.pluralize}/editor_menu_items")

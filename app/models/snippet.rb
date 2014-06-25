@@ -9,14 +9,14 @@
 #
 
 class Snippet < ActiveRecord::Base
-  include Authorable
+  include Ownable
   include BatchTranslatable
   include PersistenceContextTrackable
   include Sortable
 
   translates :name, :body, fallbacks_for_empty_translations: true
 
-  acts_as_authorable
+  acts_as_ownable :author
   acts_as_batch_translatable
   acts_as_sortable do |by|
     by.name(default: true) { |column, dir| Snippet::Translation.arel_table[column].send(dir.to_sym) }

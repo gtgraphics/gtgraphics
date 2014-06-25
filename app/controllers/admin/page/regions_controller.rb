@@ -7,7 +7,7 @@ class Admin::Page::RegionsController < Admin::Page::ApplicationController
   end
 
   def index
-    raise Template::NotSupported.new(@page) unless @page.supports_template?
+    @page.check_template_support!
     @regions = @page.regions
     respond_with :admin, @page, @regions
   end

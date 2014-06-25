@@ -11,10 +11,11 @@
 
 class Page < ActiveRecord::Base
   class Redirection < ActiveRecord::Base
-    include BatchTranslatable
-    include Page::Embeddable
+    include Page::Concrete
 
-    acts_as_page_embeddable
+    acts_as_concrete_page do |config|
+      config.template_class_name = false
+    end
 
     belongs_to :destination_page, class_name: 'Page'
 

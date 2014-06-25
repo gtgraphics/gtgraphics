@@ -1,4 +1,13 @@
 class Routing::Page
+  ACTION_DEFAULTS = { via: :get }
+
+  attr_reader :page_type
+
+  def initialize(page_type)
+    @page_type = page_type
+    declare
+  end
+
   def self.draw(routes)
     ::Page::EMBEDDABLE_TYPES.each do |embeddable_type|
       begin
@@ -7,15 +16,6 @@ class Routing::Page
         Rails.logger.warn "Routing::#{embeddable_type} could not be found. Please create a routing declaration for the resource."
       end
     end
-  end
-
-  ACTION_DEFAULTS = { via: :get }
-
-  attr_reader :page_type
-
-  def initialize(page_type)
-    @page_type = page_type
-    declare
   end
 
   def controller_name
@@ -56,7 +56,7 @@ class Routing::Page
   end
 
   def resource_name
-    resource_class.resource_name
+    resource_class.config.routing_resource_name
   end
 
   protected

@@ -20,11 +20,11 @@
 #
 
 class Image < ActiveRecord::Base
-  include Authorable
   # include AttachmentPreservable
   include BatchTranslatable
   include ImageContainable
   include ImageCroppable
+  include Ownable
   include PersistenceContextTrackable
   include Sortable
   include Taggable
@@ -54,7 +54,7 @@ class Image < ActiveRecord::Base
   store :customization_options
   store :predefined_style_dimensions
 
-  acts_as_authorable default_to_current_user: false
+  acts_as_ownable :author, default_owner_to_current_user: false
   acts_as_batch_translatable
   acts_as_image_containable styles: ->(attachment) { attachment.instance.convert_styles },
                             url: '/system/images/:id/:style.:extension'

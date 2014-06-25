@@ -8,8 +8,10 @@
 
 class Page < ActiveRecord::Base
   class Homepage < ActiveRecord::Base
-    include Page::Embeddable
+    include Page::Concrete
     
-    acts_as_page_embeddable creatable: false, template_class: 'Template::Homepage'
+    acts_as_concrete_page do |config|
+      config.creatable = false
+    end
   end
 end

@@ -1,24 +1,4 @@
 GIT
-  remote: git://github.com/activerecord-hackery/ransack.git
-  revision: 8009ae93e3e00325e41edd231b4b917c45a2c6c2
-  branch: rails-4
-  specs:
-    ransack (1.1.0)
-      actionpack (>= 4.0)
-      activerecord (>= 4.0)
-      activesupport (>= 4.0)
-      i18n
-      polyamorous (~> 0.6.0)
-
-GIT
-  remote: git://github.com/globalize/globalize.git
-  revision: 15b3364559378471089663d2953d74e673206ae0
-  specs:
-    globalize (4.0.0)
-      activemodel (>= 4.0.0, < 5)
-      activerecord (>= 4.0.0, < 5)
-
-GIT
   remote: git://github.com/rweng/underscore-rails.git
   revision: 16450d645d1bd0f86be4ffeea2abfd59bdc33624
   tag: v1.6.0
@@ -148,6 +128,9 @@ GEM
     execjs (2.0.2)
     exifr (1.1.3)
     fssm (0.2.10)
+    globalize (4.0.1)
+      activemodel (>= 4.0.0, < 5)
+      activerecord (>= 4.0.0, < 5)
     haml (4.0.5)
       tilt
     haml-rails (0.5.3)
@@ -197,7 +180,7 @@ GEM
       cocaine (~> 0.5.3)
       mime-types
     pg (0.17.1)
-    polyamorous (0.6.4)
+    polyamorous (1.0.0)
       activerecord (>= 3.0)
     polyglot (0.3.4)
     pry (0.9.12.6)
@@ -233,6 +216,12 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (10.1.1)
+    ransack (1.2.3)
+      actionpack (>= 3.0)
+      activerecord (>= 3.0)
+      activesupport (>= 3.0)
+      i18n
+      polyamorous (~> 1.0.0)
     rdoc (4.1.1)
       json (~> 1.4)
     ref (1.0.5)
@@ -275,7 +264,7 @@ GEM
       eventmachine (>= 1.0.0)
       rack (>= 1.0.0)
     thor (0.18.1)
-    thread_safe (0.3.3)
+    thread_safe (0.3.4)
     tilt (1.4.1)
     tins (1.0.0)
     treetop (1.4.15)
@@ -324,7 +313,7 @@ DEPENDENCIES
   exception_notification
   execjs
   exifr
-  globalize!
+  globalize
   haml-rails
   http_accept_language
   jbuilder (~> 1.2)
@@ -341,7 +330,7 @@ DEPENDENCIES
   quiet_assets
   rails (= 4.0.3)
   rails-erd
-  ransack!
+  ransack
   request_store
   sass-rails
   sdoc

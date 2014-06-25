@@ -21,10 +21,10 @@
 #
 
 class Page < ActiveRecord::Base
-  include Authorable
   # include BatchTranslatable
   include Excludable
   include NestedSetRepresentable
+  include Ownable
   include Page::Abstract
   include Page::MenuContainable
   include Page::Regionable
@@ -35,8 +35,7 @@ class Page < ActiveRecord::Base
   translates :title, :meta_description, :meta_keywords, fallbacks_for_empty_translations: true
   sanitizes :title, with: :squish
 
-  acts_as_authorable
-  # acts_as_batch_translatable
+  acts_as_ownable :author
 
   validates :title, presence: true
   validate :verify_root_uniqueness, if: :root?
@@ -50,15 +49,6 @@ class Page < ActiveRecord::Base
   delegate :name, to: :author, prefix: true, allow_nil: true
   delegate :name, to: :template, prefix: true, allow_nil: true
   delegate :meta_keywords, :meta_keywords=, to: :translation
-
-  def self.search(query)
-    if query.present?
-      terms = query.to_s.split.uniq.map { |term| "%#{term}%" }
-      ransack(translations_title_or_path_matches_any: terms).result
-    else
-      all
-    end
-  end
 
   def destroyable?
     !root?

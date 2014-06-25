@@ -8,8 +8,8 @@
 
 class Page < ActiveRecord::Base
   class Content < ActiveRecord::Base
-    include Page::Embeddable
-    
-    acts_as_page_embeddable template_class: 'Template::Content'
+    include Page::Concrete
+
+    acts_as_concrete_page
   end
 end

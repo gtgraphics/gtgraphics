@@ -1,6 +1,6 @@
 module RegionsHelper
   def render_region(label, options = {})
-    raise Template::RegionDefinition::NotSupported.new(@page.template) unless @page.supports_regions?
+    raise Template::NotSupported.new(@page) unless @page.support_templates?
     options.reverse_merge!(locale: @page_locale || I18n.locale, editing: try(:editing?) || false)
     if region_definition = @region_definitions.find { |definition| definition.label == label.to_s }
       if region = @page.regions.find_by(definition: region_definition)

@@ -23,9 +23,9 @@ gem 'annotate'
 gem 'bcrypt-ruby'
 gem 'paperclip'
 gem 'email_validator'
-gem 'globalize', github: 'globalize/globalize' #, branch: 'rails4'
+gem 'globalize'
 gem 'state_machine'
-gem 'ransack', github: 'activerecord-hackery/ransack', branch: 'rails-4'
+gem 'ransack'
 gem 'virtus'
 
 # Views

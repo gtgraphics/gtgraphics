@@ -10,7 +10,6 @@ class PagesController < ApplicationController
   attr_reader :page
   protected :page
   helper_method :page
-  helper_method :editable?, :editing?
 
   breadcrumbs do |b|
     @page.self_and_ancestors.accessible_by(current_ability).with_translations.each do |page|
@@ -37,20 +36,12 @@ class PagesController < ApplicationController
   end
 
   protected
-  def editable?
-    can?(:update, @page || Page)
-  end
-
-  def editing?
-    editable? and params[:editing].to_b
-  end
-
   def render_page(options = {})
     render @page.template_path, options
   end
 
   def respond_with_page(options = {})
-    unless @page.embeddable_class.supports_template?
+    unless @page.embeddable_class.support_templates?
       raise ActionView::MissingTemplate, "#{@page.embeddable_class} does not support templates"
     end
     respond_with @page, options.merge(template: @page.template_path)
@@ -66,13 +57,9 @@ class PagesController < ApplicationController
   end
 
   def load_template
-    if @page.supports_template?
+    if @page.support_templates?
       @template = @page.template 
-      @region_definitions = @template.try(:region_definitions) if @page.supports_regions?
+      @region_definitions = @template.try(:region_definitions)
     end
   end
-
-  # def set_translation_locale
-  #   Globalize.locale = I18n.locale
-  # end
 end

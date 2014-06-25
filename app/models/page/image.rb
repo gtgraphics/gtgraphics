@@ -9,9 +9,9 @@
 
 class Page < ActiveRecord::Base
   class Image < ActiveRecord::Base
-    include Page::Embeddable
+    include Page::Concrete
 
-    acts_as_page_embeddable template_class: 'Template::Image'
+    acts_as_concrete_page
 
     belongs_to :image, class_name: '::Image'
 

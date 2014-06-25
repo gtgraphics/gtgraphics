@@ -75,14 +75,10 @@ class Page < ActiveRecord::Base
       end
     end
 
-    def supports_regions?
-      embeddable_class.try(:supports_regions?) || false
-    end
-
     private
     def migrate_regions
       # If changing the embeddable type, migrates the regions to the defined regions on the new template
-      if supports_regions?
+      if support_templates?
         # TODO
         # self.regions = regions.slice(available_regions)
       else

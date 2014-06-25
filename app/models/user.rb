@@ -24,6 +24,8 @@
 #
 
 class User < ActiveRecord::Base
+  require 'user/messaging'
+
   include Authenticatable
   include Authenticatable::Lockable
   include Authenticatable::Trackable
@@ -31,6 +33,7 @@ class User < ActiveRecord::Base
   include Excludable
   include PersistenceContextTrackable
   include Sortable
+  include User::Messaging
 
   store :preferences
 
@@ -40,13 +43,11 @@ class User < ActiveRecord::Base
     author.has_many :pages
     author.has_many :snippets
   end
-  has_many :message_recipiences, class_name: 'Message::Recipience', foreign_key: :recipient_id, dependent: :destroy
-  has_many :messages, -> { readonly }, through: :message_recipiences
-  has_and_belongs_to_many :addressed_contact_forms, class_name: 'Page::ContactForm', join_table: 'contact_form_recipients', foreign_key: :recipient_id, association_foreign_key: :contact_form_page_id
 
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :email, presence: true, email: true
+  validates :preferred_locale, inclusion: { in: -> { I18n.available_locales.map(&:to_s) } }, allow_blank: true
 
   before_validation :sanitize_preferred_locale
   before_validation :set_generated_password, if: :generate_password?
@@ -57,18 +58,16 @@ class User < ActiveRecord::Base
     by.full_name(default: true) { |dir| [arel_table[:first_name].send(dir.to_sym), arel_table[:last_name].send(dir.to_sym)] }
   end
 
-  class << self
-    def search(query)
-      if query.present?
-        terms = query.split
-        columns = [:first_name, :last_name]
-        conditions = terms.collect do |term|
-          columns.collect { |column_name| arel_table[column_name].matches("%#{term}%") }.reduce(:or)
-        end
-        where(conditions.reduce(:and))
-      else
-        all
+  def self.search(query)
+    if query.present?
+      terms = query.split
+      columns = [:first_name, :last_name]
+      conditions = terms.collect do |term|
+        columns.collect { |column_name| arel_table[column_name].matches("%#{term}%") }.reduce(:or)
       end
+      where(conditions.reduce(:and))
+    else
+      all
     end
   end
 
