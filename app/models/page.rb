@@ -35,7 +35,7 @@ class Page < ActiveRecord::Base
   translates :title, :meta_description, :meta_keywords, fallbacks_for_empty_translations: true
   sanitizes :title, with: :squish
 
-  acts_as_ownable :author
+  has_owner :author
 
   validates :title, presence: true
   validate :verify_root_uniqueness, if: :root?

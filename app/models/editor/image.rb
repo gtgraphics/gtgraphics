@@ -7,15 +7,15 @@
 #  asset_content_type          :string(255)
 #  asset_file_size             :integer
 #  asset_updated_at            :datetime
-#  width                       :integer
-#  height                      :integer
+#  original_width              :integer
+#  original_height             :integer
 #  exif_data                   :text
 #  created_at                  :datetime
 #  updated_at                  :datetime
 #  author_id                   :integer
 #  customization_options       :text
-#  transformed_width           :integer
-#  transformed_height          :integer
+#  width                       :integer
+#  height                      :integer
 #  predefined_style_dimensions :text
 #
 

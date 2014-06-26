@@ -14,9 +14,8 @@
 
 class Attachment < ActiveRecord::Base
   include AssetContainable
-  include Ownable
   # include AttachmentPreservable
-  include BatchTranslatable
+  include Ownable
   include PersistenceContextTrackable
   include Sortable
 
@@ -24,7 +23,6 @@ class Attachment < ActiveRecord::Base
 
   acts_as_asset_containable url: '/system/:class/:id_partition/:filename'
   acts_as_ownable :author, default_owner_to_current_user: false
-  acts_as_batch_translatable
 
   do_not_validate_attachment_file_type :asset
 
@@ -32,7 +30,7 @@ class Attachment < ActiveRecord::Base
 
   validates_attachment :asset, presence: true
 
-  before_validation :set_default_title
+  before_validation :set_default_title, if: :file_name?, unless: :title?
 
   acts_as_sortable do |by|
     by.file_size { |dir| arel_table[:asset_file_size].send(dir.to_sym) }
@@ -41,13 +39,11 @@ class Attachment < ActiveRecord::Base
   end
 
   def image?
-    content_type.in?(Image::CONTENT_TYPES)
+    content_type.in?(Image.permitted_content_types)
   end
 
   private
   def set_default_title
-    if asset_file_name.present? and translation.title.blank?
-      translation.title = File.basename(asset_file_name, '.*').humanize
-    end
+    self.title = File.basename(file_name, '.*').humanize
   end
 end

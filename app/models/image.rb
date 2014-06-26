@@ -7,35 +7,29 @@
 #  asset_content_type          :string(255)
 #  asset_file_size             :integer
 #  asset_updated_at            :datetime
-#  width                       :integer
-#  height                      :integer
+#  original_width              :integer
+#  original_height             :integer
 #  exif_data                   :text
 #  created_at                  :datetime
 #  updated_at                  :datetime
 #  author_id                   :integer
 #  customization_options       :text
-#  transformed_width           :integer
-#  transformed_height          :integer
+#  width                       :integer
+#  height                      :integer
 #  predefined_style_dimensions :text
 #
 
 class Image < ActiveRecord::Base
-  # include AttachmentPreservable
-  include BatchTranslatable
-  include ImageContainable
-  include ImageCroppable
+  include Image::AssetContainable
+  include Image::Croppable
+  include Image::ExifStorable
   include Ownable
   include PersistenceContextTrackable
   include Sortable
   include Taggable
 
-  include Image::ExifStorable
-
-  CONTENT_TYPES = [Mime::JPEG, Mime::GIF, Mime::PNG].freeze
-  EXIF_CAPABLE_CONTENT_TYPES = [Mime::JPEG].freeze
-
   STYLES = {
-    transformed: { geometry: '100%x100%', processors: [:manual_cropper] },
+    custom: { geometry: '100%x100%', processors: [:manual_cropper] },
     thumbnail: { geometry: '75x75#', format: :png, processors: [:manual_cropper] },
     large_thumbnail: { geometry: '253x190#', format: :png, processors: [:manual_cropper] },
     preview: { geometry: '1170x>', processors: [:manual_cropper] },
@@ -45,20 +39,20 @@ class Image < ActiveRecord::Base
     page_preview: { geometry: '780x150#', format: :jpg, processors: [:manual_cropper] }
   }.freeze
 
-  # TODO Set default style to :transformed
   has_many :custom_styles, class_name: 'Image::Style', inverse_of: :image, dependent: :destroy
   has_many :image_pages, class_name: 'Page::Image', dependent: :destroy
   has_many :pages, through: :image_pages
 
+  has_image styles: ->(attachment) { attachment.instance.convert_styles },
+            default_style: :custom,
+            url: '/system/images/:id/:style.:extension'
+  
+  has_owner :author, default_owner_to_current_user: false
+
   translates :title, :description, fallbacks_for_empty_translations: true
-  store :customization_options
+
   store :predefined_style_dimensions
 
-  acts_as_ownable :author, default_owner_to_current_user: false
-  acts_as_batch_translatable
-  acts_as_image_containable styles: ->(attachment) { attachment.instance.convert_styles },
-                            url: '/system/images/:id/:style.:extension'
-  acts_as_image_croppable
   acts_as_sortable do |by|
     by.author { |dir| [User.arel_table[:first_name].send(dir.to_sym), User.arel_table[:last_name].send(dir.to_sym)] }
     by.title(default: true) { |column, dir| Image::Translation.arel_table[column].send(dir.to_sym) }
@@ -66,8 +60,6 @@ class Image < ActiveRecord::Base
   end
 
   # preserve_attachment_between_requests_for :asset
-
-  validates_attachment :asset, presence: true, content_type: { content_type: CONTENT_TYPES }
 
   after_initialize :set_transformation_defaults, if: :new_record?
   before_validation :set_default_title, on: :create
@@ -79,13 +71,7 @@ class Image < ActiveRecord::Base
     image.before_update :destroy_custom_styles
   end
 
-  has_dimensions :transformed_dimensions, from: [:transformed_width, :transformed_height]
-
   class << self
-    def content_types
-      CONTENT_TYPES
-    end
-
     def predefined_style_names
       STYLES.keys.inject({}) do |style_names, style_name|
         style_names.merge!(style_name.to_s => I18n.translate(style_name, scope: 'image.predefined_styles'))
@@ -101,14 +87,6 @@ class Image < ActiveRecord::Base
         all
       end
     end
-  end
-  
-  def asset_path(style = :transformed)
-    asset.path(style)
-  end
-
-  def asset_url(style = :transformed)
-    asset.url(style)
   end
 
   def convert_styles
@@ -136,11 +114,6 @@ class Image < ActiveRecord::Base
 
   def to_s
     title
-  end
-
-  def uncrop!
-    update(cropped: false)
-    asset.reprocess!
   end
 
   private

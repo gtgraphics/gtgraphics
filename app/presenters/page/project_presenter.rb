@@ -1,6 +1,4 @@
-class Page::ProjectPresenter < ApplicationPresenter
-  presents :project
-
+class Page::ProjectPresenter < PagePresenter
   def client
     if project.client_url.present?
       h.link_to project.client_name, project.client_url, target: '_blank'
@@ -11,5 +9,9 @@ class Page::ProjectPresenter < ApplicationPresenter
 
   def description
     super.try(:html_safe)
+  end
+
+  def project
+    page.embeddable
   end
 end

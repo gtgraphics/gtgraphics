@@ -4,8 +4,8 @@ class ImageDimensions
   attr_reader :width, :height
 
   def initialize(width, height)
-    @width = width || 0
-    @height = height || 0
+    @width = width.to_i
+    @height = height.to_i
   end
 
   def self.parse(*args)
@@ -15,7 +15,7 @@ class ImageDimensions
       if dimensions.nil?
         nil
       elsif dimensions.respond_to?(:width) and dimensions.respond_to?(:height)
-        new(dimensions.width.to_i, dimensions.height.to_i)
+        new(dimensions.width, dimensions.height)
       elsif dimensions.is_a?(String)
         new(*dimensions.split('x'))
       elsif dimensions.is_a?(Array)
@@ -33,7 +33,7 @@ class ImageDimensions
   end
 
   def <=>(other)
-    pixels <=> other.to_i
+    [width, height] <=> [other.width, other.height]
   end
 
   def aspect_ratio

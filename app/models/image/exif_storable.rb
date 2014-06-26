@@ -1,10 +1,18 @@
 module Image::ExifStorable
   extend ActiveSupport::Concern
 
+  EXIF_CAPABLE_CONTENT_TYPES = [Mime::JPEG].freeze
+
   included do
     serialize :exif_data, OpenStruct
 
     delegate :software, to: :exif_data, allow_nil: true
+  end
+
+  module ClassMethods
+    def exif_capable_content_types
+      EXIF_CAPABLE_CONTENT_TYPES
+    end
   end
 
   def camera

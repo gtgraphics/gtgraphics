@@ -11,11 +11,11 @@
 #  asset_content_type    :string(255)
 #  asset_file_size       :integer
 #  asset_updated_at      :datetime
+#  original_width        :integer
+#  original_height       :integer
+#  customization_options :text
 #  width                 :integer
 #  height                :integer
-#  customization_options :text
-#  transformed_width     :integer
-#  transformed_height    :integer
 #
 
 class Image < ActiveRecord::Base

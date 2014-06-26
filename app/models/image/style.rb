@@ -11,65 +11,39 @@
 #  asset_content_type    :string(255)
 #  asset_file_size       :integer
 #  asset_updated_at      :datetime
+#  original_width        :integer
+#  original_height       :integer
+#  customization_options :text
 #  width                 :integer
 #  height                :integer
-#  customization_options :text
-#  transformed_width     :integer
-#  transformed_height    :integer
 #
 
 class Image < ActiveRecord::Base
   class Style < ActiveRecord::Base
-    include Dimensionable
-    include ImageCroppable
-    include ImageResizable
+    include Image::AssetContainable
+    include Image::Croppable
+    include Image::Resizable
     include PersistenceContextTrackable
-
-    TYPES = %w(
-      Image::Style::Variant
-      Image::Style::Attachment
-    ).freeze
 
     belongs_to :image, inverse_of: :custom_styles
 
-    after_initialize :set_transformation_defaults, if: :new_record?
-    before_save :set_transformed_dimensions
+    before_save :set_customized_dimensions
 
     validates :image, presence: true
-
-    default_scope -> { order("#{table_name}.transformed_width * #{table_name}.transformed_height") }
-
-    store :customization_options
     
-    acts_as_image_croppable
-    acts_as_image_resizable
-
-    has_dimensions :dimensions, from: [:width, :height]
-    has_dimensions :transformed_dimensions, from: [:transformed_width, :transformed_height]
+    has_image url: '/system/images/:image_id/styles/:id/:style.:extension',
+              styles: { custom: { geometry: '100%x100%', processors: [:manual_cropper, :manual_resizer] },
+                        thumbnail: { geometry: '75x75#', format: :png, processors: [:manual_cropper, :manual_resizer] } },
+              default_style: :custom
 
     TYPES.each do |type|
       scope type.demodulize.underscore.pluralize, -> { where(type: type) }
 
-      class_eval %{
+      class_eval <<-RUBY
         def #{type.demodulize.underscore}?
           type == '#{type}'
         end
-      }
-    end
-
-    def caption
-      I18n.translate('image/style.custom_caption_format', dimensions: transformed_dimensions.to_s)
-    end
-
-    def label
-      "custom_#{id}"
-    end
-
-    def transformations
-      convert_options = String.new
-      convert_options << " -crop #{crop_geometry} +repage" if cropped?
-      convert_options << " -resize #{resize_geometry}" if resized?
-      { geometry: '100%x100%', convert_options: convert_options }
+      RUBY
     end
 
     def virtual_file_name
@@ -84,17 +58,21 @@ class Image < ActiveRecord::Base
     end
 
     private
-    def set_transformed_dimensions
+    def set_customized_dimensions
       if resized?
-        self.transformed_width = resize_width
-        self.transformed_height = resize_height
+        self.width = resize_width
+        self.height = resize_height
       elsif cropped?
-        self.transformed_width = crop_width
-        self.transformed_height = crop_height
+        self.width = crop_width
+        self.height = crop_height
       else
-        self.transformed_width = original_width
-        self.transformed_height = original_height
+        self.width = original_width
+        self.height = original_height
       end
+    end
+
+    Paperclip.interpolates :image_id do |attachment, style|
+      attachment.instance.image_id
     end
   end
 end

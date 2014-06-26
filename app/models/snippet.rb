@@ -16,7 +16,8 @@ class Snippet < ActiveRecord::Base
 
   translates :name, :body, fallbacks_for_empty_translations: true
 
-  acts_as_ownable :author
+  has_owner :author
+  
   acts_as_batch_translatable
   acts_as_sortable do |by|
     by.name(default: true) { |column, dir| Snippet::Translation.arel_table[column].send(dir.to_sym) }

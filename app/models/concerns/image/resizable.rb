@@ -1,40 +1,31 @@
-module ImageResizable
-  extend ActiveSupport::Concern
-
-  module ClassMethods
-    def acts_as_image_resizable
-      include Extensions
-    end
-  end
-
-  module Extensions
+class Image < ActiveRecord::Base
+  module Resizable
     extend ActiveSupport::Concern
 
     included do
+      include Image::AssetContainable
+
       with_options numericality: { only_integer: true, greater_than: 0 }, allow_blank: true, if: :resized? do |resizable|
         resizable.validates :resize_width
         resizable.validates :resize_height
       end
 
-      # before_validation :clear_resize_dimensions, if: :asset_changed?
-      before_save :clear_resize_dimensions, unless: :resized?
+      before_save :clear_resize_dimensions, if: -> { asset_changed? or !resized? }
 
       store_accessor :customization_options, :resized, :resize_width, :resize_height
       alias_method :resized?, :resized
 
       %w(resize_width resize_height).each do |method|
-        class_eval %{
+        class_eval <<-RUBY
           def #{method}=(value)
             super(value.try(:to_i))
           end
-        }
+        RUBY
       end
+    end
 
-      class_eval %{
-        def resized=(resized)
-          super(resized.to_b)
-        end
-      }
+    def resized=(resized)
+      super(resized.to_b)
     end
 
     def resize_dimensions

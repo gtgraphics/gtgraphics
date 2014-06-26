@@ -11,23 +11,22 @@
 #  asset_content_type    :string(255)
 #  asset_file_size       :integer
 #  asset_updated_at      :datetime
+#  original_width        :integer
+#  original_height       :integer
+#  customization_options :text
 #  width                 :integer
 #  height                :integer
-#  customization_options :text
-#  transformed_width     :integer
-#  transformed_height    :integer
 #
 
 class Image < ActiveRecord::Base
   class Style < ActiveRecord::Base
     class Attachment < Image::Style
-      include ImageContainable
+      include Image::AssetContainable
 
       acts_as_image_containable url: '/system/images/:image_id/:style_label.:extension',
                                 styles: { transformed: { geometry: '100%x100%', processors: [:manual_cropper, :manual_resizer] },
-                                          thumbnail: { geometry: '75x75#', format: :png, processors: [:manual_cropper, :manual_resizer] } }
-
-      validates_attachment :asset, presence: true, content_type: { content_type: ImageContainable::CONTENT_TYPES }
+                                          thumbnail: { geometry: '75x75#', format: :png, processors: [:manual_cropper, :manual_resizer] } },
+                                default_style: :transformed
 
       after_validation :set_transformation_defaults, if: :asset_changed?
       after_validation :reset_transformed_dimensions, if: :asset_changed?
@@ -35,14 +34,6 @@ class Image < ActiveRecord::Base
 
       delegate :path, :url, to: :asset, prefix: true
       alias_method :original_asset, :asset
-
-      def asset_path(style = :transformed)
-        asset.path(style)
-      end
-
-      def asset_url(style = :transformed)
-        asset.url(style)
-      end
 
       Paperclip.interpolates :image_id do |attachment, style|
         attachment.instance.image_id
