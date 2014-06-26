@@ -39,14 +39,14 @@ class Image < ActiveRecord::Base
     page_preview: { geometry: '780x150#', format: :jpg, processors: [:manual_cropper] }
   }.freeze
 
+  # Disallow changing the asset as all custom_styles depend on it
+  attr_readonly :asset_file_name, :asset_file_size, :asset_updated_at
+
   has_many :custom_styles, class_name: 'Image::Style', inverse_of: :image, dependent: :destroy
   has_many :image_pages, class_name: 'Page::Image', dependent: :destroy
   has_many :pages, through: :image_pages
 
-  has_image styles: ->(attachment) { attachment.instance.convert_styles },
-            default_style: :custom,
-            url: '/system/images/:id/:style.:extension'
-  
+  has_image styles: STYLES, default_style: :custom, url: '/system/images/:id/:style.:extension'
   has_owner :author, default_owner_to_current_user: false
 
   translates :title, :description, fallbacks_for_empty_translations: true
@@ -59,17 +59,8 @@ class Image < ActiveRecord::Base
     by.updated_at
   end
 
-  # preserve_attachment_between_requests_for :asset
-
-  after_initialize :set_transformation_defaults, if: :new_record?
-  before_validation :set_default_title, on: :create
   before_save :set_predefined_style_dimensions
-  with_options if: :asset_changed? do |image|
-    image.after_validation :set_transformation_defaults
-    image.before_save :set_transformed_dimensions
-    image.before_save :set_exif_data
-    image.before_update :destroy_custom_styles
-  end
+  before_update :destroy_custom_styles, if: :asset_changed?
 
   class << self
     def predefined_style_names
@@ -89,25 +80,6 @@ class Image < ActiveRecord::Base
     end
   end
 
-  def convert_styles
-    STYLES.reverse_merge(custom_convert_styles).deep_symbolize_keys
-  end
-
-  def custom_convert_styles
-    custom_styles.inject({}) do |custom_styles, style|
-      custom_styles.merge!(style.label => style.transformations) if style.variant? and style.persisted? and !style.marked_for_destruction?
-      custom_styles
-    end
-  end
-
-  def predefined_styles
-    STYLES.except(:transformed).keys.map { |style_name| Image::Style::Predefined.new(self, style_name) }
-  end
-
-  def styles
-    predefined_styles + custom_styles
-  end
-
   def to_param
     "#{id}-#{title.parameterize}"
   end
@@ -117,37 +89,22 @@ class Image < ActiveRecord::Base
   end
 
   private
+  # When changing the asset, all created custom styles will be removed as they
+  # depend semantically on the original image
   def destroy_custom_styles
-    # This actually destroys only the variants of the replaced image
-    self.custom_styles.variants.destroy_all
-  end
-
-  def set_default_title
-    if asset_file_name.present?
-      generated_title = File.basename(asset_file_name, '.*').humanize
-      translations.each do |translation|
-        translation.title = generated_title if translation.title.blank?
-      end
-    end
+    custom_styles.destroy_all
   end
 
   def set_predefined_style_dimensions
     predefined_style_dimensions_will_change! if asset.queued_for_write[:original]
     self.predefined_style_dimensions ||= {}
-    STYLES.except(:transformed).keys.each do |style_name|
-      if style_file = asset.queued_for_write[style_name]
+    STYLES.except(:custom).keys.each do |style_name|
+      style_file = asset.queued_for_write[style_name]
+      if style_file
         geometry = Paperclip::Geometry.from_file(style_file.path)
-        width, height = geometry.width.to_i, geometry.height.to_i
-        predefined_style_dimensions[style_name] = ImageDimensions.new(width, height)
+        dimensions = geometry.width.to_i, geometry.height.to_i
+        self.predefined_style_dimensions[style_name] = dimensions
       end
     end
-  end
-
-  def set_transformation_defaults
-    self.cropped = false if cropped.nil?
-  end
-
-  def set_transformed_dimensions
-    self.transformed_dimensions = cropped? ? [crop_width, crop_height] : dimensions
   end
 end

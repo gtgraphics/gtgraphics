@@ -1,3 +1,5 @@
+# TODO Replace with Carrierwave
+
 module AssetContainable
   extend ActiveSupport::Concern
 
@@ -16,9 +18,8 @@ module AssetContainable
       alias_attribute :content_type, :asset_content_type
       alias_attribute :file_size, :asset_file_size   
 
-      validates_attachment :asset, presence: true,
-                                   content_type: { content_type: ->(record) { record.class.permitted_content_types } }
-
+      validates_attachment :asset, presence: true
+      validate :verify_asset_content_type
     end
 
     module ClassMethods
@@ -42,6 +43,21 @@ module AssetContainable
     def virtual_file_name
       I18n.with_locale(I18n.default_locale) do
         title.parameterize.underscore + File.extname(file_name).downcase
+      end
+    end
+
+    private
+    def verify_asset_content_type
+      unless self.class.permitted_content_types.include?(asset_content_type)
+        types = self.class.permitted_content_types.join(', ')
+        errors.add :asset_content_type, :invalid, types: types
+        errors.add :asset, :invalid
+
+        if record.errors.include? attribute
+          record.errors[attribute].each do |error|
+            record.errors.add base_attribute, error
+          end
+        end
       end
     end
   end

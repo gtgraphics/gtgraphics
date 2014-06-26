@@ -2,7 +2,7 @@ module Ownable
   extend ActiveSupport::Concern
 
   module ClassMethods
-    def acts_as_ownable(*args, &block)
+    def has_owner(*args, &block)
       include ActiveSupport::Configurable
 
       options = args.extract_options!

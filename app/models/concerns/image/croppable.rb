@@ -3,8 +3,6 @@ class Image < ActiveRecord::Base
     extend ActiveSupport::Concern
 
     included do
-      include Image::AssetContainable
-
       with_options allow_blank: true, if: :cropped? do |croppable|
         croppable.validates :crop_x, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
         croppable.validates :crop_y, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
@@ -31,11 +29,7 @@ class Image < ActiveRecord::Base
     def cropped=(cropped)
       super(cropped.to_b)
     end
-
-    def crop_dimensions
-      ImageDimensions.new(crop_width, crop_height) if cropped?
-    end
-
+    
     def crop_geometry
       "#{crop_width}x#{crop_height}+#{crop_x}+#{crop_y}" if cropped?
     end
@@ -54,6 +48,10 @@ class Image < ActiveRecord::Base
     end
 
     private
+    def set_crop_defaults
+      self.cropped = false if cropped.nil?
+    end
+
     def verify_crop_dimensions_consistency
       if crop_x + crop_width > original_width
         errors.add(:crop_x, :invalid)

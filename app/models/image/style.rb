@@ -25,16 +25,22 @@ class Image < ActiveRecord::Base
     include Image::Resizable
     include PersistenceContextTrackable
 
+    STYLES = {
+      custom: { geometry: '100%x100%', processors: [:manual_cropper, :manual_resizer] },
+      thumbnail: { geometry: '75x75#', format: :png, processors: [:manual_cropper, :manual_resizer] }
+    }.freeze
+
     belongs_to :image, inverse_of: :custom_styles
 
-    before_save :set_customized_dimensions
+    translates :title, fallbacks_for_empty_translations: true
 
-    validates :image, presence: true
-    
     has_image url: '/system/images/:image_id/styles/:id/:style.:extension',
-              styles: { custom: { geometry: '100%x100%', processors: [:manual_cropper, :manual_resizer] },
-                        thumbnail: { geometry: '75x75#', format: :png, processors: [:manual_cropper, :manual_resizer] } },
+              styles: STYLES,
               default_style: :custom
+
+    validates :image_id, presence: true, strict: true
+
+    before_save :set_customized_dimensions
 
     TYPES.each do |type|
       scope type.demodulize.underscore.pluralize, -> { where(type: type) }
@@ -44,17 +50,6 @@ class Image < ActiveRecord::Base
           type == '#{type}'
         end
       RUBY
-    end
-
-    def virtual_file_name
-      I18n.with_locale(I18n.default_locale) do
-        "#{image.title.parameterize.underscore}_#{transformed_dimensions.to_a.join('x')}" + File.extname(file_name).downcase
-      end
-    end
-
-    protected
-    def set_transformation_defaults
-      # do nothing here, override in subclasses
     end
 
     private

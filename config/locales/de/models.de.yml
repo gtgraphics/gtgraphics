@@ -273,6 +273,18 @@ de:
 
   homepage: Startseite
 
+  image:
+    predefined_styles:
+      original: Original
+      custom: Angepasst
+      thumbnail: Thumbnail
+      large_thumbnail: Großer Thumbnail
+      medium: Mittlere Größe
+      large: Großformat
+      social: Soziale Netzwerke
+      preview: Vorschau
+      page_preview: Seitenvorschau      
+
   image/style:
     predefined_caption_format: '%{dimensions} (%{style_name})'
     predefined_names:

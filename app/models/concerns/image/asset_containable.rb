@@ -16,14 +16,9 @@ class Image < ActiveRecord::Base
       extend ActiveSupport::Concern
 
       included do
-        include Image::Dimensionable
-
         before_save :set_original_dimensions, if: :asset_changed?
 
         delegate :aspect_ratio, :pixels, to: :dimensions
-
-        has_image_dimensions
-        has_image_dimensions :original_dimensions, from: [:original_width, :original_height]
 
         store :customization_options
       end
@@ -44,7 +39,9 @@ class Image < ActiveRecord::Base
 
       private
       def set_original_dimensions
-        self.original_dimensions = Paperclip::Geometry.from_file(asset.queued_for_write[:original].path)
+        dimensions = Paperclip::Geometry.from_file(asset.queued_for_write[:original].path)
+        self.width = dimensions.width.to_i
+        self.height = dimensions.height.to_i
       end
     end
   end

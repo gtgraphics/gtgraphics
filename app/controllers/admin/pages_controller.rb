@@ -66,14 +66,16 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def create
-    @page = Page.new(new_page_params)
-    @page.published = false
-    @page.next_available_slug(@page.title.parameterize) if @page.title.present?
-    @page.build_embeddable if @page.embeddable.nil?
-    if @page.embeddable_type.in?(Page.embeddable_types) and @page.support_templates?
-      @page.template = @page.template_class.default
+    @page = Page.create(new_page_params) do |p|
+      p.author = current_user
+      p.published = false
+      p.next_available_slug(p.title.parameterize) if p.title.present?
+      p.build_embeddable if p.embeddable.nil?
+      if p.embeddable_type.in?(Page.embeddable_types) and p.support_templates?
+        p.template = p.template_class.default
+      end
     end
-    flash_for @page if @page.save
+    flash_for @page
     respond_to do |format|
       format.js
     end
@@ -88,7 +90,9 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def update
-    @page.update(page_params)
+    @page.update(page_params) do |p|
+      p.author = current_user
+    end
     flash_for @page
     respond_with :admin, @page, location: request.referer || edit_admin_page_path(@page)
   end

@@ -3,8 +3,6 @@ class Image < ActiveRecord::Base
     extend ActiveSupport::Concern
 
     included do
-      include Image::AssetContainable
-
       with_options numericality: { only_integer: true, greater_than: 0 }, allow_blank: true, if: :resized? do |resizable|
         resizable.validates :resize_width
         resizable.validates :resize_height
@@ -26,10 +24,6 @@ class Image < ActiveRecord::Base
 
     def resized=(resized)
       super(resized.to_b)
-    end
-
-    def resize_dimensions
-      ImageDimensions.new(resize_width, resize_height) if resized?
     end
 
     def resize_geometry

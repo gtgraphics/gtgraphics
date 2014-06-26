@@ -1,0 +1,42 @@
+class Image < ActiveRecord::Base
+  module ExifStorable
+    extend ActiveSupport::Concern
+
+    EXIF_CAPABLE_CONTENT_TYPES = [Mime::JPEG].freeze
+
+    included do
+      serialize :exif_data
+
+      delegate :software, to: :exif_data, allow_nil: true
+
+      before_save :set_exif_data, if: :exif_capable?
+    end
+
+    module ClassMethods
+      def exif_capable_content_types
+        exif_capable_content_types.map(&:to_s)
+      end
+
+      def exif_capable_mime_types
+        EXIF_CAPABLE_CONTENT_TYPES
+      end
+    end
+
+    def camera
+      exif_data[:model]
+    end
+
+    def exif_capable?
+      content_type.in?(self.class.exif_capable_content_types)
+    end
+
+    def taken_at
+      exif_data[:date_time_original].try(:to_datetime)
+    end
+    
+    private
+    def set_exif_data
+      self.exif_data = EXIFR::JPEG.new(asset.queued_for_write[:original].path).to_hash rescue nil
+    end
+  end
+end
