@@ -2,30 +2,38 @@ class Admin::TemplatesController < Admin::ApplicationController
   respond_to :html
 
   before_action :load_template, only: %i(show edit update destroy destroy_region)
+  before_action :set_template_type, only: %i(index new)
 
   breadcrumbs do |b|
     b.append Template.model_name.human(count: 2), :admin_templates
-    b.append translate('breadcrumbs.new', model: Template.model_name.human), :new_admin_template if action_name.in? %w(new create)
-    b.append @template.name, [:admin, @template.becomes(Template)] if action_name.in? %w(show edit update)
-    b.append translate('breadcrumbs.edit', model: Template.model_name.human), [:edit, :admin, @template.becomes(Template)] if action_name.in? %w(edit update)
+    if action_name.in? %w(new create)
+      b.append translate('breadcrumbs.new', model: Template.model_name.human), :new_admin_template
+    end
+    if action_name.in? %w(edit update)
+      b.append translate('breadcrumbs.edit', model: Template.model_name.human), [:edit, :admin, @template]
+    end
   end
 
   def index
-    @templates = Template.includes(:translations).with_locales(Globalize.fallbacks) \
-                         .sort(params[:sort], params[:direction]).page(params[:page])
+    if @template_type
+      @templates = Template.where(type: @template_type)
+    else
+      @templates = Template.all
+    end
+    @templates = @templates.sort(params[:sort], params[:direction]).page(params[:page])
     respond_with :admin, @templates
   end
 
   def new
-    @template = Template.new
-    @template.translations.build(locale: I18n.locale)
-    respond_with :admin, @template.becomes(Template)
+    @template = Template.new(type: @template_type).becomes(Template)
+    respond_with :admin, @template
   end
 
   def create
-    @template = Template.create(template_params)
+    @template = Template.new(template_params).becomes(Template)
+    @template.save
     flash_for @template
-    respond_with :admin, @template.becomes(Template)
+    respond_with :admin, @template
   end
 
   def show
@@ -98,7 +106,7 @@ class Admin::TemplatesController < Admin::ApplicationController
 
   private
   def load_template
-    @template = Template.find(params[:id])
+    @template = Template.find(params[:id]).becomes(Template)
   end
 
   def template_params
@@ -111,5 +119,10 @@ class Admin::TemplatesController < Admin::ApplicationController
     else
       raise 'template type not found'
     end
+  end
+
+  def set_template_type
+    @template_type = params[:template_type] ? "Template::#{params[:template_type].classify}" : nil
+    @template_type = nil unless @template_type.in?(Template.template_types)
   end
 end

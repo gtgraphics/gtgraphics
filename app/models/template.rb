@@ -2,19 +2,16 @@
 #
 # Table name: templates
 #
-#  id                      :integer          not null, primary key
-#  file_name               :string(255)
-#  type                    :string(255)
-#  screenshot_file_name    :string(255)
-#  screenshot_content_type :string(255)
-#  screenshot_file_size    :integer
-#  screenshot_updated_at   :datetime
-#  created_at              :datetime
-#  updated_at              :datetime
+#  id          :integer          not null, primary key
+#  file_name   :string(255)
+#  type        :string(255)
+#  created_at  :datetime
+#  updated_at  :datetime
+#  name        :string(255)
+#  description :text
 #
 
 class Template < ActiveRecord::Base
-  include BatchTranslatable
   include ConcreteTemplate
   include Excludable
   include PersistenceContextTrackable
@@ -30,19 +27,15 @@ class Template < ActiveRecord::Base
 
   VIEW_ROOT = "#{Rails.root}/app/views"
 
-  translates :name, :description, fallbacks_for_empty_translations: true
-
-  has_attached_file :screenshot, styles: { thumbnail: '75x75#', preview: '555x' }, url: '/system/templates/screenshots/:id/:style.:extension'
-
-  acts_as_batch_translatable
   acts_as_sortable do |by|
-    by.name(default: true) { |column, dir| Template::Translation.arel_table[column].send(dir.to_sym) }
+    by.name default: true
     by.updated_at
   end
 
   has_many :region_definitions, autosave: true, dependent: :destroy, inverse_of: :template
   has_many :regions, through: :region_definitions
 
+  validates :title, presence: true
   validates :type, presence: true, inclusion: { in: TEMPLATE_TYPES }, on: :create
   validates :file_name, presence: true, inclusion: { in: ->(template) { template.class.template_files }, if: :type? }
   validate :verify_region_labels_validity

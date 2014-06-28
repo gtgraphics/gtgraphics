@@ -1,10 +1,13 @@
 = simple_form_for [:admin, @image], html: { class: 'form-horizontal' } do |form|
-  = translation_manager_for form, url: translation_fields_admin_images_path
-
-  = form.input :asset, as: :image_preview, required: true, input_html: { preview_version: :thumbnail }, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
-  = form.association :author, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
-  = form.input :tag_tokens, input_html: { class: 'tokenizer' }, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
+  = form.input :title
+  - if @image.new_record?
+    = form.input :asset #, as: :image_preview, required: true, input_html: { preview_version: :thumbnail }
+  - else
+    = form.input :description, input_html: { class: 'simple-editor' }
+    = form.association :author, selected: current_user.id
+    /= form.input :tag_tokens, input_html: { class: 'tokenizer' }
 
   = form_actions do
     = form.button :button, name: 'save', type: 'submit', class: 'btn-primary' do
       = prepend_icon(:save, translate(@image.new_record? ? :create : :update, scope: 'helpers.submit', model: Image.model_name.human))
+    = button_link_to translate('helpers.links.cancel'), [:admin, @image]

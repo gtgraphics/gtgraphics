@@ -1,22 +1,39 @@
 class Admin::ImagePresenter < Admin::ApplicationPresenter
-  include AssetContainablePresenter
+  include FileAttachablePresenter
   
   presents :image
 
-  def author
+  def artist
+    exif_data[:artist]
+  end
+
+  def author(linked = true)
     if image.author
-      h.link_to author_name, [:admin, image.author]
+      h.link_to_if linked, author_name, [:admin, image.author]
     else
-      exif_data.artist
+      artist
     end
   end
 
   def dimensions
+    original_dimensions = I18n.translate(:dimensions, width: original_width, height: original_height)
     if image.cropped?
-      "#{image.crop_dimensions} (#{image.dimensions})"
+      crop_dimensions = I18n.translate(:dimensions, width: width, height: height)
+      "#{crop_dimensions} (#{original_dimensions})"
     else
-      image.dimensions.to_s
+      original_dimensions
     end
+  end
+
+  def preview_html
+    h.capture do
+      h.content_tag :div, class: 'dl-vertical' do
+        h.concat h.content_tag(:div, dimensions)
+        h.concat h.content_tag(:div, content_type)
+        h.concat h.content_tag(:div, file_size)
+        h.concat h.content_tag(:div, author(false))
+      end
+    end.to_str
   end
 
   def taken_at
@@ -24,10 +41,8 @@ class Admin::ImagePresenter < Admin::ApplicationPresenter
   end
 
   def to_liquid
-    attributes.slice(*%w(title width height updated_at)).merge(customization_options).merge(
+    attributes.slice(*%w(title width height updated_at file_size)).merge(customization_options).merge(
       'author' => author,
-      'file_name' => asset_file_name,
-      'file_size' => asset_file_size,
       'format' => content_type
     )
   end

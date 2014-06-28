@@ -3,8 +3,9 @@
     - if checkbox
       %td.checkbox-cell
         = check_box_tag 'template_ids[]', template.id, false, class: 'table-checkbox', id: nil
-    %td= link_to template.name, template.show_path
-    %td.hidden-xs= template.type
+    %td= link_to template.name, template.edit_path
+    - if @template_type.nil?
+      %td.hidden-xs= template.type
     - if actions
       %td.actions
         = template.action_buttons

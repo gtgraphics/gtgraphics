@@ -1,0 +1,48 @@
+.circular-thumbnail {
+  display: block;
+  overflow: hidden;
+  border-radius: 50%;
+  position: relative;
+  //-webkit-filter: blur(0px); // This is a WebKit fix
+
+  .caption {
+    display: none;
+  }
+
+  @include transition(all 0.2s);
+
+  &:hover, &:focus {
+    border-radius: 50%;
+    background-color: black;
+
+    border: 4px solid $link-color;
+    @include transition(all 0.2s);
+
+    .caption {
+      display: block;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(0, 0, 0, 0.6);
+      text-shadow: 0 1px 3px black;
+      text-decoration: none;
+      text-align: center;
+      h3 {
+        font-size: 18px;
+        color: $body-bg;
+      }
+
+      img {
+        opacity: 0.6;
+      }
+    }
+
+    img {
+      // @include filter(blur(3px));
+      overflow: hidden;
+    }
+  }
+
+}

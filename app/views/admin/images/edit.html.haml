@@ -1,1 +1,19 @@
-= render 'form'
+.row
+  .col-sm-offset-1.col-sm-8
+    = page_header
+
+.row
+  .col-sm-offset-1.col-sm-8
+    = render 'form'
+
+  .col-sm-offset-1.col-sm-2
+    = image_tag @image.asset.url(:thumbnail), alt: @image.title, class: 'img-responsive img-circle'
+    %br
+    .tabs-right
+      %ul.nav.nav-tabs
+        %li.divider
+        = active_link_to [:edit, :admin, @image], wrap_tag: :li do
+          = prepend_icon :wrench, 'Einstellungen', fixed_width: true, size: :lg
+        = active_link_to [:crop, :admin, @image], wrap_tag: :li do
+          = prepend_icon :crop, 'Bearbeiten', fixed_width: true, size: :lg
+        %li.divider

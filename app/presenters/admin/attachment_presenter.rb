@@ -1,5 +1,5 @@
 class Admin::AttachmentPresenter < Admin::ApplicationPresenter
-  include AssetContainablePresenter
+  include FileAttachablePresenter
 
   presents :attachment
 

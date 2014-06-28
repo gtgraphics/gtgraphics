@@ -9,21 +9,11 @@
 
   - images.each_slice(4) do |sliced_images|
     .row
-      - sliced_images.each do |image|
+      - sliced_images.each_with_index do |image, index|
         - present image, with: Admin::ImagePresenter do |image|
-          .col-lg-3.col-md-3.col-sm-3.col-xs-6
-            = thumbnail image.asset.url(:large_thumbnail), [:admin, image], alt: image.title do
-              .actions.top.right
-                = image.action_buttons
-              %h3
-                = image.title
-              %p
-                .badge.pull-right= image.format.upcase
-                = image.dimensions
-              - if image.tags.any?
-                %ul.tags.tags-inline.hidden-xs.hidden-sm
-                  - image.tags.each do |tag|
-                    %li= tagged_link_to(tag, admin_images_path(query: tag.label), size: :sm)
+          .col-sm-3
+            = link_to [:admin, image], class: 'thumbnail', data: { toggle: 'popover', trigger: 'hover', title: image.title, content: image.preview_html, html: true, container: 'body', placement: index == 3 ? 'left' : 'right' } do
+              = image_tag image.asset.url(:thumbnail), alt: image.title
 
 - else
 
@@ -38,7 +28,6 @@
         %th.hidden-xs= Image.human_attribute_name :content_type
         /%th= Image.human_attribute_name :dimensions
         %th.visible-lg= sort_link_for images, :author
-        %th.visible-lg= sort_link_for images, :updated_at
         - if actions
           %th.actions
     %tbody
@@ -50,12 +39,11 @@
                 = check_box_tag 'image_ids[]', image.id, false, class: 'table-checkbox', id: nil
             %td.thumbnail-cell
               = link_to [:admin, image] do
-                = image_tag image.asset.url(:thumbnail), class: 'img-circle', alt: image.title, style: 'width: 75px; height: 75px;'
+                = image_tag image.asset.url(:thumbnail), class: 'img-circle', alt: image.title, width: 45, height: 45
             %td= link_to image.title, [:admin, image]
             %td.hidden-xs= image.content_type
-            /%td.hidden-xs= image.dimensions
             %td.visible-lg= image.author
-            %td.visible-lg= image.updated_at
             - if actions
               %td.actions
-                = image.action_buttons
+                .btn-group.pull-right
+                  = image.edit_button size: :lg, icon: { caption_html: { class: 'sr-only' }}

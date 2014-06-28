@@ -58,7 +58,6 @@ GtGraphics::Application.routes.draw do
                 get :assign_to_gallery
               end
               member do
-                get :context_menu
                 get :crop
                 patch :crop, action: :apply_crop
                 patch :uncrop
@@ -116,8 +115,10 @@ GtGraphics::Application.routes.draw do
 
             resources :tags, only: :index
             
-            resources :templates do
+            resources :templates, except: :show do
+              get ':template_type', on: :new, action: :new, as: :typed
               collection do
+                get 'types/:template_type', action: :index, as: :typed
                 delete :destroy_multiple
                 get :translation_fields
                 get :files_fields

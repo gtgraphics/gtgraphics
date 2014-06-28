@@ -6,10 +6,24 @@
       .btn-group.batch-control
         = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: ::Template.model_name.human(count: 2)) }
       .btn-group
-        = create_button_link_for ::Template, namespace: :admin
+        = button_link_to @template_type ? typed_new_admin_template_path(template_type: params[:template_type]) : :new_admin_template, type: :success do
+          = prepend_icon :plus, translate('helpers.links.new', model: ::Template.model_name.human)
 
-  - if @templates.any? 
-    = render 'table', checkboxes: true
-  - else
-    .well.text-center
-      %h4= translate('views.hints.empty', model: (@template_class.present? ? @template_class : ::Template).model_name.human(count: 2))
+  .row
+    .col-sm-3
+      = panel body: false do
+        .list-group
+          = active_link_to admin_templates_path, class: 'list-group-item', active: @template_type.nil? do
+            Alle
+
+          - template_types.each do |template_class|
+            = active_link_to typed_admin_templates_path(template_type: template_class.model_name.element), class: 'list-group-item', active: template_class.name == @template_type do
+              %span.badge= template_class.count
+              = template_class.model_name.human(count: 2)
+
+    .col-sm-9
+      - if @templates.any? 
+        = render 'table', checkboxes: true
+      - else
+        .well.text-center
+          %h4= translate('views.hints.empty', model: (@template_class.present? ? @template_class : ::Template).model_name.human(count: 2))

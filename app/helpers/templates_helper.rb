@@ -1,7 +1,11 @@
 module TemplatesHelper
-  def template_types_for_select(representation = :singular)
-    ::Template.template_classes.collect do |template_class|
-      [template_class.model_name.human(count: representation == :plural ? 2 : 1), template_class.name]
-    end.sort_by(&:first)
+  def template_types_for_select
+    template_types.map do |template_class|
+      [template_class.model_name.human, template_class.name]
+    end
+  end
+
+  def template_types
+    ::Template.template_classes.sort_by { |template_class| template_class.model_name.human }
   end
 end

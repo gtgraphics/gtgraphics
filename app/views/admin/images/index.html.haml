@@ -4,17 +4,30 @@
     .btn-toolbar
       .btn-group.batch-control
         = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), name: 'destroy', class: 'btn btn-danger', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) }
-      .btn-group.batch-control
-        = button_tag prepend_icon(:hand, translate('helpers.links.assign_to_gallery'), direction: :right, outline: true), name: 'assign_to_gallery', class: 'btn btn-default', data: {  }
+      /.btn-group.batch-control
+      /  = button_tag prepend_icon(:hand, translate('helpers.links.assign_to_gallery'), direction: :right, outline: true), name: 'assign_to_gallery', class: 'btn btn-default', data: {  }
       .btn-group
-        = create_button_link_for Image, icon: :upload, namespace: :admin, caption: translate('helpers.links.upload', model: Image.model_name.human), url: :new_admin_image
+        /= create_button_link_for Image, icon: :upload, namespace: :admin, caption: translate('helpers.links.upload', model: Image.model_name.human), url: :new_admin_image
+        = button_link_to :new_admin_image, type: :success do
+          = prepend_icon :upload, translate('helpers.links.upload', model: Image.model_name.human)
       .btn-group
         = active_button_link_to icon(:th_list, fixed_width: true), update_preferences_admin_account_path(image_view_mode: 'table'), method: :patch, active: current_user.preferences[:image_view_mode] != 'tiles', title: translate('views.list_types.table'), data: { toggle: 'tooltip', placement: 'bottom', container: '#toolbar' }
         = active_button_link_to icon(:th_large, fixed_width: true), update_preferences_admin_account_path(image_view_mode: 'tiles'), method: :patch, active: current_user.preferences[:image_view_mode] == 'tiles', title: translate('views.list_types.tiles'), data: { toggle: 'tooltip', placement: 'bottom', container: '#toolbar' }
       = paginate @images
 
-  - if @images.any?
-    = render 'table', checkboxes: true
-  - else
-    .well.text-center
-      %h4= translate('views.hints.empty', model: Image.model_name.human(count: 2))
+  .row
+    .col-sm-3
+      = panel Image.human_attribute_name(:author_id), body: false do
+        .list-group
+          - @users.each do |user|
+            = active_link_to url_for(author_id: user.to_param), class: 'list-group-item', active: user.id == params[:author_id].to_i do
+              %span.badge= Image.owned_by(user).count
+              = user.name
+
+    .col-sm-9
+
+      - if @images.any?
+        = render 'table', checkboxes: true
+      - else
+        .well.text-center
+          %h4= translate('views.hints.empty', model: Image.model_name.human(count: 2))

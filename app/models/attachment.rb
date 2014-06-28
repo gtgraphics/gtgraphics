@@ -10,10 +10,11 @@
 #  created_at         :datetime
 #  updated_at         :datetime
 #  author_id          :integer
+#  original_filename  :string(255)
 #
 
 class Attachment < ActiveRecord::Base
-  include AssetContainable
+  include FileAttachable
   # include AttachmentPreservable
   include Ownable
   include PersistenceContextTrackable
@@ -21,14 +22,12 @@ class Attachment < ActiveRecord::Base
 
   translates :title, :description, fallbacks_for_empty_translations: true
 
-  acts_as_asset_containable url: '/system/:class/:id_partition/:filename'
-  acts_as_ownable :author, default_owner_to_current_user: false
-
-  do_not_validate_attachment_file_type :asset
+  has_attachment
+  has_owner :author, default_owner_to_current_user: false
 
   # preserve_attachment_between_requests_for :asset
 
-  validates_attachment :asset, presence: true
+  validates :asset, presence: true
 
   before_validation :set_default_title, if: :file_name?, unless: :title?
 

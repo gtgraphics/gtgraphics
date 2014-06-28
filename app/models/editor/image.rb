@@ -3,9 +3,9 @@
 # Table name: images
 #
 #  id                          :integer          not null, primary key
-#  asset_file_name             :string(255)
-#  asset_content_type          :string(255)
-#  asset_file_size             :integer
+#  asset                       :string(255)
+#  content_type                :string(255)
+#  file_size                   :integer
 #  asset_updated_at            :datetime
 #  original_width              :integer
 #  original_height             :integer
@@ -17,6 +17,8 @@
 #  width                       :integer
 #  height                      :integer
 #  predefined_style_dimensions :text
+#  original_filename           :string(255)
+#  asset_token                 :string(255)      not null
 #
 
 class Editor::Image < EditorActivity

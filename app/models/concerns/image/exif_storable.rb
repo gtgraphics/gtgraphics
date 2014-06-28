@@ -5,11 +5,9 @@ class Image < ActiveRecord::Base
     EXIF_CAPABLE_CONTENT_TYPES = [Mime::JPEG].freeze
 
     included do
-      serialize :exif_data
+      store :exif_data
 
-      delegate :software, to: :exif_data, allow_nil: true
-
-      before_save :set_exif_data, if: :exif_capable?
+      # before_save :set_exif_data, if: :exif_capable?
     end
 
     module ClassMethods
@@ -30,13 +28,18 @@ class Image < ActiveRecord::Base
       content_type.in?(self.class.exif_capable_content_types)
     end
 
+    def software
+      exif_data[:software]
+    end
+
     def taken_at
       exif_data[:date_time_original].try(:to_datetime)
     end
     
     private
     def set_exif_data
-      self.exif_data = EXIFR::JPEG.new(asset.queued_for_write[:original].path).to_hash rescue nil
+      # TODO
+      #self.exif_data = EXIFR::JPEG.new(asset.queued_for_write[:original].path).to_hash rescue nil
     end
   end
 end

@@ -1,5 +1,5 @@
 class ImagePreviewInput < SimpleForm::Inputs::FileInput
-  def input
+  def input(wrapper_options)
     version = input_html_options.delete(:preview_version) { :original }
     html = ''
     image_asset = object.send(attribute_name)

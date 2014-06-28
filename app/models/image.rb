@@ -3,9 +3,9 @@
 # Table name: images
 #
 #  id                          :integer          not null, primary key
-#  asset_file_name             :string(255)
-#  asset_content_type          :string(255)
-#  asset_file_size             :integer
+#  asset                       :string(255)
+#  content_type                :string(255)
+#  file_size                   :integer
 #  asset_updated_at            :datetime
 #  original_width              :integer
 #  original_height             :integer
@@ -17,10 +17,12 @@
 #  width                       :integer
 #  height                      :integer
 #  predefined_style_dimensions :text
+#  original_filename           :string(255)
+#  asset_token                 :string(255)      not null
 #
 
 class Image < ActiveRecord::Base
-  include Image::AssetContainable
+  include Image::Attachable
   include Image::Croppable
   include Image::ExifStorable
   include Ownable
@@ -28,39 +30,34 @@ class Image < ActiveRecord::Base
   include Sortable
   include Taggable
 
-  STYLES = {
-    custom: { geometry: '100%x100%', processors: [:manual_cropper] },
-    thumbnail: { geometry: '75x75#', format: :png, processors: [:manual_cropper] },
-    large_thumbnail: { geometry: '253x190#', format: :png, processors: [:manual_cropper] },
-    preview: { geometry: '1170x>', processors: [:manual_cropper] },
-    medium: { geometry: '1280x780', processors: [:manual_cropper] },
-    large: { geometry: '1920x1080', processors: [:manual_cropper] },
-    social: { geometry: '1500x1500#', format: :jpg, processors: [:manual_cropper] },
-    page_preview: { geometry: '780x150#', format: :jpg, processors: [:manual_cropper] }
-  }.freeze
-
   # Disallow changing the asset as all custom_styles depend on it
-  attr_readonly :asset_file_name, :asset_file_size, :asset_updated_at
+  attr_readonly :asset, :content_type, :file_size
 
   has_many :custom_styles, class_name: 'Image::Style', inverse_of: :image, dependent: :destroy
   has_many :image_pages, class_name: 'Page::Image', dependent: :destroy
   has_many :pages, through: :image_pages
 
-  has_image styles: STYLES, default_style: :custom, url: '/system/images/:id/:style.:extension'
+  has_image
   has_owner :author, default_owner_to_current_user: false
+  
+  store :predefined_style_dimensions
 
   translates :title, :description, fallbacks_for_empty_translations: true
+  
+  sanitizes :title, with: :squish
 
-  store :predefined_style_dimensions
+  validates :title, presence: true
+
+  # before_save :set_predefined_style_dimensions
+  after_initialize :generate_asset_token, unless: :asset_token?
+  before_validation :set_default_title, if: :asset_changed?
+  before_update :destroy_custom_styles, if: :asset_changed?
 
   acts_as_sortable do |by|
     by.author { |dir| [User.arel_table[:first_name].send(dir.to_sym), User.arel_table[:last_name].send(dir.to_sym)] }
     by.title(default: true) { |column, dir| Image::Translation.arel_table[column].send(dir.to_sym) }
     by.updated_at
   end
-
-  before_save :set_predefined_style_dimensions
-  before_update :destroy_custom_styles, if: :asset_changed?
 
   class << self
     def predefined_style_names
@@ -95,16 +92,26 @@ class Image < ActiveRecord::Base
     custom_styles.destroy_all
   end
 
-  def set_predefined_style_dimensions
-    predefined_style_dimensions_will_change! if asset.queued_for_write[:original]
-    self.predefined_style_dimensions ||= {}
-    STYLES.except(:custom).keys.each do |style_name|
-      style_file = asset.queued_for_write[style_name]
-      if style_file
-        geometry = Paperclip::Geometry.from_file(style_file.path)
-        dimensions = geometry.width.to_i, geometry.height.to_i
-        self.predefined_style_dimensions[style_name] = dimensions
-      end
+  def generate_asset_token
+    self.asset_token = SecureRandom.uuid
+  end
+
+  # def set_predefined_style_dimensions
+  #   predefined_style_dimensions_will_change! if asset.queued_for_write[:original]
+  #   self.predefined_style_dimensions ||= {}
+  #   STYLES.except(:custom).keys.each do |style_name|
+  #     style_file = asset.queued_for_write[style_name]
+  #     if style_file
+  #       geometry = Paperclip::Geometry.from_file(style_file.path)
+  #       dimensions = geometry.width.to_i, geometry.height.to_i
+  #       self.predefined_style_dimensions[style_name] = dimensions
+  #     end
+  #   end
+  # end
+
+  def set_default_title
+    if title.blank? and original_filename.present?
+      self.title = original_filename.gsub(/.([a-z0-9]+)\Z/i, '').humanize
     end
   end
 end

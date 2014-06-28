@@ -23,9 +23,6 @@ class @TextareaEditor
 
   prepareRegionFrame: ($regionFrame) ->
     @$regionFrame = $regionFrame
-
-    console.log 'loaded region frame'
-
     @$regionFrame.css(width: '100%')
     $base = $('<base />', target: '_parent')
     $stylesheet = $('<link />', href: @options.stylesheetFile, media: 'all', rel: 'stylesheet')

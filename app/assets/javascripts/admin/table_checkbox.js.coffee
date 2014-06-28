@@ -31,6 +31,12 @@ $(document).ready ->
 
   $tables = $(TABLE_SELECTOR)
   
+    .on 'click', 'tr', (event) ->
+      if $(event.target).is('td')
+        $row = $(@)
+        $checkbox = $(SINGLE_CHECKBOX_SELECTOR, $row)
+        $checkbox.click() if $checkbox.any()
+
     #.on 'ifChanged', GLOBAL_CHECKBOX_SELECTOR, ->
     .on 'change', GLOBAL_CHECKBOX_SELECTOR, ->
       $toggler = $(@)
@@ -43,6 +49,7 @@ $(document).ready ->
           $checkboxes.prop('checked', false)
         else
           $checkboxes.prop('checked', true)
+        $checkboxes.closest('tr').toggleClass('active')
       #$checkboxes.iCheck('update')
       #$toggler.iCheck('update')
       $table.trigger('toggled', [checkStatus($checkboxes)])
@@ -53,6 +60,8 @@ $(document).ready ->
       $table = $checkbox.closest(TABLE_SELECTOR)
       $toggler = $table.find(GLOBAL_CHECKBOX_SELECTOR)
       $checkboxes = $table.find(SINGLE_CHECKBOX_SELECTOR)
+
+      $checkbox.closest('tr').toggleClass('active')
 
       $checkbox.iCheck('update')
       
