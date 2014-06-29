@@ -7,16 +7,12 @@ humanizeKeypath = (keypath) ->
   _(keypath.split('.')).chain().last().humanize().value()
  
 sanitizeKeypath = (keypath) ->
-  str = ""
-  if keypath
-    if _(keypath).isArray()
-      str += _(keypath).chain().flatten().compact().value().join('.')
-    else
-      str += keypath
-  str
- 
-buildEvalString = (keypath, locale) ->
-  ['I18n.translations', locale, sanitizeKeypath(keypath)].join('.')
+  if _(keypath).isArray()
+    console.log keypath
+    keypath = _(keypath).chain().flatten().compact().collect((subpath) -> a).value()
+  else
+    keypath = keypath.split('.')
+  _(keypath).collect((subpath) -> "['#{subpath}']").join('')
  
 tryToInterpolate = (str, interpolations)  ->
   if _(str).isObject()
@@ -43,7 +39,7 @@ _(I18n).extend
     translations = _(fallbacks).collect (locale) =>
       if _(@translations).has(locale)
         try
-          eval(buildEvalString([options.scope, keypath], locale))
+          eval("I18n.translations.#{locale}#{sanitizeKeypath(keypath)}")
         catch
           null
  

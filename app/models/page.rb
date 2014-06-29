@@ -31,6 +31,7 @@ class Page < ActiveRecord::Base
   include Page::UrlAccessible
   include PersistenceContextTrackable
   include Publishable
+  include Translatable
 
   translates :title, :meta_description, :meta_keywords, fallbacks_for_empty_translations: true
   sanitizes :title, with: :squish
@@ -47,8 +48,6 @@ class Page < ActiveRecord::Base
   scope :primary, -> { where(depth: 1) }
 
   delegate :name, to: :author, prefix: true, allow_nil: true
-  delegate :name, to: :template, prefix: true, allow_nil: true
-  delegate :meta_keywords, :meta_keywords=, to: :translation
 
   def self.search(query)
     if query.present?

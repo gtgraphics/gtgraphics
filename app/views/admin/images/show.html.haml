@@ -26,6 +26,13 @@
           = image_tag(image.asset.url, class: 'img-responsive img-rounded center-block', alt: image.title)
 
     .col-lg-4
+      = panel do
+        .row
+          .col-sm-3
+            = gravatar_image_tag @image.author.email, default: :mm, class: 'img-responsive img-circle', size: 80, alt: @image.author.name
+          .col-sm-9
+            %h4= image.author
+
       - if image.description.present?
         = panel do
           = liquify image.description, with: image

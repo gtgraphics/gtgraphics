@@ -19,6 +19,7 @@ class Attachment < ActiveRecord::Base
   include Ownable
   include PersistenceContextTrackable
   include Sortable
+  include Translatable
 
   translates :title, :description, fallbacks_for_empty_translations: true
 
@@ -26,8 +27,6 @@ class Attachment < ActiveRecord::Base
   has_owner :author, default_owner_to_current_user: false
 
   # preserve_attachment_between_requests_for :asset
-
-  validates :asset, presence: true
 
   before_validation :set_default_title, if: :file_name?, unless: :title?
 
@@ -43,6 +42,6 @@ class Attachment < ActiveRecord::Base
 
   private
   def set_default_title
-    self.title = File.basename(file_name, '.*').humanize
+    self.title = File.basename(file_name, '.*').titleize
   end
 end

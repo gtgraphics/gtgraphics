@@ -9,8 +9,7 @@ class Admin::PagesController < Admin::ApplicationController
 
   breadcrumbs do |b|
     if @parent_page 
-      pages = @parent_page.self_and_ancestors.where.not(parent_id: nil) \
-                          .includes(:translations).with_locales(Globalize.fallbacks)
+      pages = @parent_page.self_and_ancestors.where.not(parent_id: nil).with_translations_for_current_locale
       pages.each do |page|
         b.append page.title, [:admin, page]
       end
@@ -39,7 +38,7 @@ class Admin::PagesController < Admin::ApplicationController
         else
           @pages = Page.search(params[:query])
         end
-        @pages = @pages.includes(:translations).with_locales(Globalize.fallbacks).page(params[:page])
+        @pages = @pages.with_translations_for_current_locale.page(params[:page])
         if assignable_id = params[:parent_assignable_id] and assignable_id.present?
           @pages = @pages.assignable_as_parent_of(assignable_id)
         end

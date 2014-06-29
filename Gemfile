@@ -48,6 +48,7 @@ gem 'coffee-rails' #, '~> 4.0.3'
 gem 'uglifier' #, '>= 1.3.0'
 gem 'jquery-rails' #, github: 'rails/jquery-rails', tag: 'v3.1.0'
 gem 'jquery-turbolinks'
+gem 'jquery-fileupload-rails'
 gem 'turbolinks'
 gem 'compass-rails' # github: 'Compass/compass-rails', branch: 'rails4-hack' # hack until compass has official Rails 4 support
 gem 'bootstrap-sass'

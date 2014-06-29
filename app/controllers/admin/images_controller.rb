@@ -43,15 +43,20 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def new
     @image = Image.new
-    respond_with :admin, @image
+    respond_to do |format|
+      format.js
+    end
   end
 
   def create
     @image = Image.create(image_params) do |image|
-      image.owner ||= current_user
+      image.author ||= current_user
     end
     flash_for @image, :created if @image.errors.empty?
-    respond_with :admin, @image, location: @image.errors.empty? ? [:crop, :admin, @image] : nil
+    #respond_with :admin, @image, location: @image.errors.empty? ? [:crop, :admin, @image] : nil
+    respond_to do |format|
+      format.js
+    end
   end
 
   def show
@@ -84,12 +89,9 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def apply_crop
-    Image.transaction do
-      @image.cropped = true
-      @image.attributes = image_crop_params
-      @image.save
-      @image.asset.reprocess!
-    end
+    @image.cropped = true
+    @image.attributes = image_crop_params
+    @image.save
     flash_for @image
     respond_with :admin, @image
   end

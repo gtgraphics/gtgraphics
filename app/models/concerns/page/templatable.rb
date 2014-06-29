@@ -5,7 +5,7 @@ class Page < ActiveRecord::Base
     included do
       has_many :regions, class_name: 'Page::Region', dependent: :destroy, inverse_of: :page
 
-      delegate :template, :template=, :template_id, :template_id=, to: :embeddable, allow_nil: true
+      delegate :name, to: :template, prefix: true, allow_nil: true
     end
 
     def available_templates
@@ -25,7 +25,27 @@ class Page < ActiveRecord::Base
     end
 
     def template_path
-      template.try(:view_path)
+      template.view_path
+    end
+
+    def template
+      check_template_support!
+      embeddable.try(:template)
+    end
+
+    def template=(template)
+      check_template_support!
+      embeddable.try(:template=, template)
+    end
+
+    def template_id
+      check_template_support!
+      embeddable.try(:template_id)
+    end
+
+    def template_id=(template_id)
+      check_template_support!
+      embeddable.try(:template_id=, template_id)
     end
   end
 end

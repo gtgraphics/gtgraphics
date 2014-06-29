@@ -17,7 +17,7 @@ Template.benchmark "Seeding Templates" do
     template_class = template_type.constantize
     template_class.template_files.each do |template_file|
       template = template_class.new(file_name: template_file)
-      template.translations.build(locale: :en, name: template_file.humanize)
+      template.translations.build(locale: :en, name: template_file.titleize)
       template.save!
     end
   end

@@ -29,6 +29,7 @@ class Image < ActiveRecord::Base
   include PersistenceContextTrackable
   include Sortable
   include Taggable
+  include Translatable
 
   # Disallow changing the asset as all custom_styles depend on it
   attr_readonly :asset, :content_type, :file_size
@@ -43,14 +44,14 @@ class Image < ActiveRecord::Base
   store :predefined_style_dimensions
 
   translates :title, :description, fallbacks_for_empty_translations: true
-  
   sanitizes :title, with: :squish
 
   validates :title, presence: true
 
   # before_save :set_predefined_style_dimensions
   after_initialize :generate_asset_token, unless: :asset_token?
-  before_validation :set_default_title, if: :asset_changed?
+  before_validation :set_default_title, on: :create
+  before_save :set_geometry, if: :asset_changed?
   before_update :destroy_custom_styles, if: :asset_changed?
 
   acts_as_sortable do |by|
@@ -111,7 +112,20 @@ class Image < ActiveRecord::Base
 
   def set_default_title
     if title.blank? and original_filename.present?
-      self.title = original_filename.gsub(/.([a-z0-9]+)\Z/i, '').humanize
+      self.title = File.basename(original_filename, '.*').titleize
     end
+  end
+
+  def set_geometry
+    original_path = asset.path
+    custom_path = asset.versions[:custom].path
+    
+    original_img = MiniMagick::Image.open(original_path)
+    self.original_width = original_img[:width]
+    self.original_height = original_img[:height]
+
+    custom_img = MiniMagick::Image.open(custom_path)
+    self.width = custom_img[:width]
+    self.height = custom_img[:height]
   end
 end

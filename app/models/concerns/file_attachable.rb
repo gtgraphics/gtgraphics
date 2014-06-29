@@ -14,6 +14,8 @@ module FileAttachable
     extend ActiveSupport::Concern
 
     included do
+      validates :asset, presence: true
+
       before_validation :set_original_filename_content_type_and_file_size, if: :asset_changed?
     end
 

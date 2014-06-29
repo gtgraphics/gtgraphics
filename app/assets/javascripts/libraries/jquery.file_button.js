@@ -23,34 +23,32 @@ $.fn.fileButton = function() {
     $fileInput.attr('tabindex', -1);
 
     // Set the word to be displayed on the button
-    var buttonWord = I18n.translate('javascript.helpers.links.browse');
-
-    if (typeof $fileInput.attr('title') != 'undefined') {
-      buttonWord = $fileInput.attr('title');
-    }
+    var buttonWord = $fileInput.data('caption') || I18n.translate('javascript.helpers.links.browse');
 
     // Start by getting the HTML of the input element.
     // Thanks for the tip http://stackoverflow.com/a/1299069
     var input = $('<div>').append( $(elem).eq(0).clone() ).html();
 
     var buttonType = $fileInput.data('type') || 'default';
-    if (buttonType) {
-      buttonType = " btn-" + buttonType;
-    }
 
     // Now we're going to replace that input field with a Bootstrap button.
     // The input will actually still be there, it will just be float above and transparent (done with the CSS).
-    var htmlString = '<button type="button" class="file-input-wrapper btn' + buttonType + '" tabindex="0">';
-    htmlString += '<span class="prepend-icon">'
-    htmlString += '<i class="icon-upload-alt"></i>';
-    htmlString += '<span class="caption">';
-    htmlString += buttonWord;
-    htmlString += '</span>';
-    htmlString += '</span>'
-    htmlString += input;
-    htmlString += '</button>';
 
-    $(elem).replaceWith(htmlString);
+    var $button = $('<button />', { type: 'button', class: 'file-input-wrapper btn btn-' + buttonType, tabindex: 0 })
+    var caption = $fileInput.data('caption')
+    if ($fileInput.data('html')) {
+      $button.html(caption)
+    } else {
+      $button.text(caption)
+    }
+    $button.append(input)
+
+    // var htmlString = '<button type="button" class="file-input-wrapper btn ' + buttonClasses + '" tabindex="0">';
+    // htmlString += input;
+    // htmlString += 
+    // htmlString += '</button>';
+
+    $(elem).replaceWith($button);
   })
   // After we have found all of the file inputs let's apply a listener for tracking the mouse movement.
   // This is important because the in order to give the illusion that this is a button in FF we actually need to move the button from the file input under the cursor. Ugh.

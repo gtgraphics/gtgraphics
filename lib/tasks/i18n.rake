@@ -18,7 +18,7 @@ namespace :i18n do
 
             begin
               model.column_names.each do |column_name|
-                file.puts "      #{column_name}: #{column_name.humanize}"
+                file.puts "      #{column_name}: #{column_name.titleize}"
               end
             rescue
             end
@@ -26,8 +26,8 @@ namespace :i18n do
             file.puts %{
   models:
     #{model.name.underscore}:
-      one: #{model.name.humanize}
-      other: #{model.name.humanize.pluralize}}
+      one: #{model.name.titleize}
+      other: #{model.name.titleize.pluralize}}
           end
           puts "#{path} created"
         end

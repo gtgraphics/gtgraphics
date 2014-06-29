@@ -8,4 +8,3 @@
 //= require bootstrap
 //= require_tree ./libraries
 //= require_tree ./shared
-//= require form_validation
