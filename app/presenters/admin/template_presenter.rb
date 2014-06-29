@@ -4,7 +4,7 @@ class Admin::TemplatePresenter < Admin::ApplicationPresenter
   self.action_buttons -= [:show]
 
   def type
-    template.class.model_name.human
+    template.type.constantize.model_name.human
   end
 
   def destroy_path

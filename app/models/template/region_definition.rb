@@ -23,6 +23,10 @@ class Template < ActiveRecord::Base
 
     default_scope -> { order(:label) }
 
+    def name
+      label.titleize
+    end
+
     def to_s
       label
     end

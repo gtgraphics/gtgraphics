@@ -8,7 +8,7 @@
       - unless @page.root?
         = form.input :slug, required: true, input_html: { class: 'monospace', autocomplete: 'off' }
       - if @page.embeddable_class.support_templates?
-        = form.input :template_id, required: true, collection: @page.available_templates, input_html: { autocomplete: 'off' }
+        = form.input :template_id, required: true, collection: available_templates, input_html: { autocomplete: 'off' }
 
   %fieldset
     %legend Sichtbarkeit

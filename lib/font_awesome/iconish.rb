@@ -12,6 +12,6 @@ class FontAwesome::Iconish
   end
 
   def set_size(css)
-    css << (@options[:size].in?(:large, :lg) ? 'fa-lg' : "fa-#{@options[:size]}x") if @options[:size]
+    css << (@options[:size].in?([:large, :lg]) ? 'fa-lg' : "fa-#{@options[:size]}x") if @options[:size]
   end
 end

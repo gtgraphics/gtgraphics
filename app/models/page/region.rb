@@ -21,12 +21,16 @@ class Page < ActiveRecord::Base
     validates :page_id, presence: true, strict: true
     validates :definition_id, presence: true, strict: true
 
-    delegate :label, to: :definition, prefix: true
+    delegate :label, :name, to: :definition
 
     class << self
       def labelled(label)
         joins(:definition).where(template_region_definitions: { label: label })
       end
+    end
+
+    def to_param
+      label
     end
   end
 end

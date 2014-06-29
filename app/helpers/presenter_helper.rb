@@ -4,7 +4,7 @@ module PresenterHelper
     object = args.first
     presenter_class = options.delete(:with) { "#{object.class.name}Presenter" }
     presenter_class = presenter_class.to_s.constantize unless presenter_class.is_a?(Class)
-    presenter = presenter_class.new(*[object, self].compact, options)
+    presenter = presenter_class.new(*[self, object].compact, options)
     yield(presenter) if block_given?
     presenter
   end

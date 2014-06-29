@@ -7,7 +7,7 @@ class Admin::Page::ApplicationController < Admin::ApplicationController
 
   breadcrumbs do |b|
     pages = @page.self_and_ancestors.where.not(parent_id: nil) \
-                 .includes(:translations).with_locales(Globalize.fallbacks)
+                 .with_translations_for_current_locale
     pages.each do |page|
       b.append page.title, [:admin, page]
     end

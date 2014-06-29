@@ -10,7 +10,7 @@ class Admin::TemplatesController < Admin::ApplicationController
       b.append translate('breadcrumbs.new', model: Template.model_name.human), :new_admin_template
     end
     if action_name.in? %w(edit update)
-      b.append translate('breadcrumbs.edit', model: Template.model_name.human), [:edit, :admin, @template]
+      b.append translate('breadcrumbs.edit', model: Template.model_name.human), [:edit, :admin, @template.becomes(Template)]
     end
   end
 
@@ -25,15 +25,14 @@ class Admin::TemplatesController < Admin::ApplicationController
   end
 
   def new
-    @template = Template.new(type: @template_type).becomes(Template)
+    @template = Template.new(type: @template_type)
     respond_with :admin, @template
   end
 
   def create
-    @template = Template.new(template_params).becomes(Template)
-    @template.save
+    @template = Template.create(template_params)
     flash_for @template
-    respond_with :admin, @template
+    respond_with :admin, @template.becomes(Template), location: :admin_templates
   end
 
   def show
@@ -48,7 +47,7 @@ class Admin::TemplatesController < Admin::ApplicationController
   def update
     @template.update(template_params)
     flash_for @template
-    respond_with :admin, @template.becomes(Template)
+    respond_with :admin, @template.becomes(Template), location: :admin_templates
   end
 
   def destroy
@@ -106,11 +105,15 @@ class Admin::TemplatesController < Admin::ApplicationController
 
   private
   def load_template
-    @template = Template.find(params[:id]).becomes(Template)
+    @template = Template.find(params[:id])
+  end
+
+  def new_template_params
+    template_params.permit(:type)
   end
 
   def template_params
-    params.require(:template).permit(:type, :file_name, :region_labels, :screenshot, translations_attributes: [:_destroy, :id, :locale, :name, :description])
+    params.require(:template).permit(:name, :description, :file_name, :region_labels, :screenshot)
   end
 
   def template_class

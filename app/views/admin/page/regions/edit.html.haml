@@ -1,0 +1,6 @@
+= simple_form_for @region, url: admin_page_region_path(@page, @region), wrapper: :vertical_form do |form|
+
+  = form.input :body, label: false, input_html: { class: 'editor' }
+
+  = form.button :button, type: 'submit', class: 'btn-primary' do
+    = prepend_icon(:save, translate(@region.new_record? ? :create : :update, scope: 'helpers.submit', model: Page::Region.model_name.human))

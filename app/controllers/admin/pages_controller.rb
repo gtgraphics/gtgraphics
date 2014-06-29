@@ -7,6 +7,8 @@ class Admin::PagesController < Admin::ApplicationController
   before_action :load_parent_page, only: %i(index new create show edit update)
   before_action :build_page_tree
 
+  helper_method :available_templates
+
   breadcrumbs do |b|
     if @parent_page 
       pages = @parent_page.self_and_ancestors.where.not(parent_id: nil).with_translations_for_current_locale
@@ -259,5 +261,9 @@ class Admin::PagesController < Admin::ApplicationController
     when 'Page::Redirection' then [:id, :external, :destination_page_id, :destination_url, :permanent, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
     end
     page_params.permit(:title, :meta_keywords, :meta_description, :embeddable_id, :embeddable_type, :slug, :parent_id, :published, :menu_item, :indexable, embeddable_attributes: embeddable_attributes_params || []) 
+  end
+
+  def available_templates
+    @page.available_templates.order(:name)
   end
 end

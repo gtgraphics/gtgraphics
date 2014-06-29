@@ -27,7 +27,7 @@ class Admin::PagePresenter < Admin::ApplicationPresenter
   end
 
   def template
-    h.link_to page.template.name, h.admin_template_path(page.template)
+    h.link_to page.template.name, h.edit_admin_template_path(page.template)
   end
 
   def translated_locales

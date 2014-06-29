@@ -33,8 +33,9 @@ class Admin::ApplicationPresenter < Presenter
   end
 
   def show_button(options = {})
+    icon_options = options.delete(:icon) { Hash.new }
     h.button_link_to_if readable?,
-                        button_caption(:view, :eye, options[:icon] || {}),
+                        button_caption(:view, :eye, icon_options),
                         show_path,
                         options
   end
@@ -44,8 +45,9 @@ class Admin::ApplicationPresenter < Presenter
   end
 
   def edit_button(options = {})
+    icon_options = options.delete(:icon) { Hash.new }
     h.button_link_to_if editable?,
-                        button_caption(:edit, :pencil, options[:icon] || {}),
+                        button_caption(:edit, :pencil, icon_options),
                         edit_path,
                         options
   end
@@ -55,9 +57,10 @@ class Admin::ApplicationPresenter < Presenter
   end
 
   def destroy_button(options = {})
+    icon_options = options.delete(:icon) { Hash.new }
     confirmation_hint = I18n.translate('helpers.confirmations.destroy', model: object.class.model_name.human)
     h.button_link_to_if destroyable?,
-                        button_caption(:destroy, :trash, (options[:icon] || {}).merge(outline: true)),
+                        button_caption(:destroy, :trash, icon_options.merge(outline: true)),
                         destroy_path,
                         options.deep_merge(type: :danger, data: { confirm: confirmation_hint })
   end

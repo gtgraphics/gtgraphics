@@ -27,20 +27,20 @@ class Template < ActiveRecord::Base
 
   VIEW_ROOT = "#{Rails.root}/app/views"
 
-  acts_as_sortable do |by|
-    by.name default: true
-    by.updated_at
-  end
+  attr_readonly :type
 
   has_many :region_definitions, autosave: true, dependent: :destroy, inverse_of: :template
   has_many :regions, through: :region_definitions
 
-  validates :title, presence: true
+  validates :name, presence: true
   validates :type, presence: true, inclusion: { in: TEMPLATE_TYPES }, on: :create
   validates :file_name, presence: true, inclusion: { in: ->(template) { template.class.template_files }, if: :type? }
   validate :verify_region_labels_validity
 
-  attr_readonly :type
+  acts_as_sortable do |by|
+    by.name default: true
+    by.updated_at
+  end
 
   class << self
     attr_accessor :template_lookup_path

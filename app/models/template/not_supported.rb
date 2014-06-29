@@ -4,7 +4,7 @@ class Template < ActiveRecord::Base
     
     def initialize(page)
       @page = page
-      super "Page does not support templates: #{@page.inspect}"
+      super "Templates are not supported for page type: #{@page.embeddable_type}"
     end
   end
 end

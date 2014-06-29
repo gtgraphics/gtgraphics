@@ -57,6 +57,7 @@ class Ability
         can [:read, :update], embeddable_class
         can :create, embeddable_class, &:creatable?
       end
+      can :manage, Page::Region
 
       can :manage, Snippet
       can :manage, Template
