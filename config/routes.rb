@@ -80,7 +80,7 @@ GtGraphics::Application.routes.draw do
               resources :children, controller: :pages, only: :new do
                 get ':page_type', on: :new, action: :new, as: :typed
               end
-              resources :regions, controller: :'page/regions' do
+              resources :regions, controller: :'page/regions', only: [:index, :edit, :update, :destroy] do
                 patch :update_multiple, on: :collection
               end
               resource :contact_form, controller: :'page/contact_forms', only: [:edit, :update]

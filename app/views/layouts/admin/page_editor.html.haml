@@ -1,30 +1,35 @@
 - content_for :admin_content do
-  - if content_for? :page_content
-    = yield :page_content
-  - else
-    .row
-      .col-sm-offset-0.col-sm-12
-        = render_flashes
-        = render 'breadcrumbs'
-    .row
+  .row
+    .col-sm-offset-0.col-sm-12
+      = render_flashes
+      = render 'breadcrumbs'
+
+  .row
+    - if content_for? :page_editor_title
+      = yield :page_editor_title
+    - else
       .col-sm-offset-1.col-sm-8
         .page-header
           %h1= @page.title
 
-    .row
+  .row
+    - if content_for? :page_editor_content
+      = yield :page_editor_content
+    - else
       .col-sm-8.col-sm-offset-1
         = yield
+      .col-sm-1
 
-      .col-sm-2.col-sm-offset-1
-        .tabs-right
-          %ul.nav.nav-tabs
-            %li.divider
-            = active_link_to [:edit, :admin, @page], wrap_tag: :li, active: controller_name == 'pages' do
-              = prepend_icon :wrench, 'Allgemein', fixed_width: true, size: :lg
-            - if @page.support_templates?
-              = active_link_to [:admin, @page, :regions], wrap_tag: :li, active: controller_name == 'regions' do
-                = prepend_icon :edit, 'Inhalte', fixed_width: true, size: :lg
-            = try_render("admin/#{@page.embeddable_type.underscore.pluralize}/editor_menu_items")
-            %li.divider
+    .col-sm-2
+      .tabs-right
+        %ul.nav.nav-tabs
+          %li.divider
+          = active_link_to [:edit, :admin, @page], wrap_tag: :li, active: controller_name == 'pages' do
+            = prepend_icon :wrench, 'Allgemein', fixed_width: true, size: :lg
+          - if @page.support_templates?
+            = active_link_to [:admin, @page, :regions], wrap_tag: :li, active: controller_name == 'regions' do
+              = prepend_icon :edit, 'Inhalte', fixed_width: true, size: :lg
+          = try_render("admin/#{@page.embeddable_type.underscore.pluralize}/editor_menu_items")
+          %li.divider
 
 = render template: 'layouts/admin/application'

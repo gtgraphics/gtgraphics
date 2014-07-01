@@ -7,7 +7,8 @@ class Admin::ApplicationPresenter < Presenter
   def action_buttons
     h.content_tag :div, class: 'btn-toolbar' do
       self.class.action_buttons.each do |action_button|
-        h.concat h.content_tag(:div, send("#{action_button}_button", size: :xs), class: 'btn-group')
+        button = send("#{action_button}_button", size: :xs)
+        h.concat h.content_tag(:div, button, class: 'btn-group')
       end
     end
   end

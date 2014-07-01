@@ -1,26 +1,4 @@
-- if @region_definitions.any?
-  %table.table
-    %thead
-      %tr
-        %th= ::Template::RegionDefinition.human_attribute_name :label
-        %th= Page::Region.human_attribute_name :updated_at
-        %th.actions
-    %tbody
-      - @region_definitions.each do |definition|
-        - region = @page_regions[definition]
-        = content_tag_for :tr, definition, class: region.nil? ? 'text-muted' : nil do
-          %td.monospace= definition.label
-          - if region
-            - present region, with: Admin::Page::RegionPresenter do |region|
-              %td= region.updated_at
-              %td.actions
-                = region.action_buttons
-          - else
-            %td
-            %td.actions
-
-
-- else
+- if @region_definitions.empty?
   .well.text-center
     %h4= translate('views.hints.empty', model: ::Template::RegionDefinition.model_name.human(count: 2))
     %p= link_to translate('helpers.titles.edit', model: ::Template.model_name.human), [:edit, :admin, @template.becomes(::Template)]

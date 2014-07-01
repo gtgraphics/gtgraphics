@@ -1,0 +1,15 @@
+- content_for :page_editor_title do
+  .col-sm-10
+    .page-header
+      %h1= @page.title
+
+- content_for :page_editor_content do
+  .col-sm-3
+    = panel Page::Region.model_name.human(count: 2), body: false do
+      .list-group
+        - @region_definitions.each do |definition|
+          = active_link_to definition.label, edit_admin_page_region_path(@page, definition.label), class: 'list-group-item'
+  .col-sm-7
+    = yield
+
+= render template: 'layouts/admin/page_editor'

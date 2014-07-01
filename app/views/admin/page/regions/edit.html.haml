@@ -1,4 +1,4 @@
-= simple_form_for @region, url: admin_page_region_path(@page, @region), wrapper: :vertical_form do |form|
+= simple_form_for @region, url: admin_page_region_path(@page, @region), method: :patch, wrapper: :vertical_form do |form|
 
   = form.input :body, label: false, input_html: { class: 'editor' }
 
