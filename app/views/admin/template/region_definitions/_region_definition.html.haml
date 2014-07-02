@@ -1,0 +1,5 @@
+- present region_definition, with: Admin::Template::RegionDefinitionPresenter do |region_definition|
+  %td= region_definition.name
+  %td= region_definition.label
+  %td.actions
+    = region_definition.action_buttons size: :xs

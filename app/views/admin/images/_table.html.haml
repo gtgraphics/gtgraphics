@@ -45,5 +45,4 @@
             %td.visible-lg= image.author
             - if actions
               %td.actions
-                .btn-group.pull-right
-                  = image.edit_button size: :lg, icon: { caption_html: { class: 'sr-only' }}, data: { toggle: 'tooltip', container: 'body', title: 'Bearbeiten' }
+                = image.action_buttons size: :xs, icon_only: true

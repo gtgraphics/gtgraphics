@@ -1,16 +1,13 @@
 class Presenter
   def initialize(template, *args)
-    @template = template
+    @_template = template
     @options = args.extract_options!
     @object = args.first
   end
 
-  attr_reader :object, :options, :template
-  alias_method :h, :template
-
+  attr_reader :object, :options
   delegate :present, to: :h
-
-  protected :h, :present, :object, :options, :template
+  protected :present, :object, :options
  
   class << self
     def presents(name)
@@ -42,4 +39,10 @@ class Presenter
   def respond_to_missing?(method_name, include_private = false)
     (object and object.respond_to?(method_name, include_private)) or super
   end
+
+  protected
+  def template
+    @_template
+  end
+  alias_method :h, :template
 end

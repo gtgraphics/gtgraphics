@@ -60,7 +60,7 @@ class Ability
       can :manage, Page::Region
 
       can :manage, Snippet
-      can :manage, Template
+      can :manage, [Template, Template::RegionDefinition]
       can :manage, User
     end
   end

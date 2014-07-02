@@ -155,6 +155,7 @@ de:
         type: Typ
         default: Standardvorlage?
         region_labels: Editierbare Regionen
+        usage: Verwendung
       user:
         first_name: Vorname
         last_name: Nachname

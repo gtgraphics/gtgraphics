@@ -1,43 +1,40 @@
-= page_header do
-  .btn-toolbar
-    .btn-group
-      = update_button_link_for @template.becomes(::Template), namespace: :admin
-    .btn-group
-      = destroy_button_link_for @template.becomes(::Template), namespace: :admin
+- present @template, with: Admin::TemplatePresenter do |template|  
+  .col-sm-offset-2.col-sm-8
 
-.row
-  .col-lg-8
-    %fieldset
-      %legend= prepend_icon(:info, translate('views.admin.templates.headlines.details'), fixed_width: true)
-      %dl.dl-horizontal
-        %dt= ::Template.human_attribute_name :type
-        %dd= @template.class.model_name.human
-        %dt= ::Template.human_attribute_name :file_name
-        %dd= @template.file_name
-        %dt= ::Template.human_attribute_name :updated_at
-        %dd= time_ago @template.updated_at
+    = page_header do
+      = template.action_buttons except: :show
 
-    - if @template.description.present?
+    - if template.description?
       %fieldset
-        %legend= ::Template.human_attribute_name :description
-        .content
-          = @template.description.html_safe
+        %legend= template.caption_for :description
+        .fields
+          = template.description
 
-  .col-lg-4
-    .panel.panel-default
-      .panel-heading
-        %h3.panel-title
-          = prepend_icon(:puzzle_piece, ::Template::RegionDefinition.model_name.human(count: 2), fixed_width: true)
-          %span.text-muted (#{@region_definitions.size})
-      .panel-body
+    %fieldset
+      %legend Informationen
+      %dl.dl-horizontal
+        = template.list_item :type
+        = template.list_item :file_name
+        = template.list_item :updated_at
+        = template.list_item :usage
+
+    %fieldset
+      %legend= ::Template::RegionDefinition.model_name.human(count: 2)
+      .fields
         - if @region_definitions.any?
-          %ul#region_definitions.gtg-admin-action-list
-            - @region_definitions.each do |region_definition|
-              = content_tag_for :li, region_definition, class: 'clearfix' do
-                .pull-left= region_definition.label
-                .actions.pull-right
-                  .btn-toolbar
-                    = destroy_button_link_for region_definition, url: destroy_region_admin_template_path(@template, label: region_definition.label), size: :mini, icon_only: true
+          %table.table.table-hover
+            %thead
+              %tr
+                %th= ::Template::RegionDefinition.human_attribute_name :name
+                %th= ::Template::RegionDefinition.human_attribute_name :label
+                %th.actions
+            %tbody#region_definitions
+              - @region_definitions.each do |region_definition|
+                = content_tag_for :tr, region_definition do
+                  = render region_definition
         - else
-          .text-center
-            = translate('views.hints.empty', model: ::Template::RegionDefinition.model_name.human(count: 2))
+          .well.text-center
+            %h4= translate('views.hints.empty', model: ::Template::RegionDefinition.model_name.human(count: 2))
+
+        .btn-toolbar
+          = button_link_to prepend_icon(:plus, translate('helpers.links.new', model: ::Template::RegionDefinition.model_name.human(count: 2))), [:new, :admin, @template.becomes(::Template), :region_definition], type: :success, remote: true

@@ -115,7 +115,13 @@ GtGraphics::Application.routes.draw do
 
             resources :tags, only: :index
             
-            resources :templates, except: :show do
+            resources :templates do
+              resources :region_definitions, controller: :'template/region_definitions' do
+                member do
+                  patch :move_up
+                  patch :move_down
+                end
+              end
               get ':template_type', on: :new, action: :new, as: :typed
               collection do
                 get 'types/:template_type', action: :index, as: :typed

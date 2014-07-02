@@ -100,4 +100,12 @@ module ActionButtonHelper
 
     button_link_to caption, url, options
   end
+
+  # Cancel Button
+
+  def cancel_button(fallback_url, options = {})
+    url = request.referer if request.get?
+    url ||= fallback_url
+    button_link_to translate('helpers.links.cancel'), fallback_url, options
+  end
 end

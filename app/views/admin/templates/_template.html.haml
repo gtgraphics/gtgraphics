@@ -3,10 +3,10 @@
     - if checkbox
       %td.checkbox-cell
         = check_box_tag 'template_ids[]', template.id, false, class: 'table-checkbox', id: nil
-    %td= link_to template.name, template.edit_path
+    %td= link_to template.name, template.show_path
     - if @template_type.nil?
-      %td.hidden-xs= template.type
+      %td.hidden-xs= template.type(false)
     - if actions
       %td.actions
-        = template.action_buttons
+        = template.action_buttons size: :xs, icon_only: true
         /= action_buttons_for template.becomes(::Template), size: :mini, icon_only: true

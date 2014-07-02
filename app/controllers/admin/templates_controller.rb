@@ -9,8 +9,11 @@ class Admin::TemplatesController < Admin::ApplicationController
     if action_name.in? %w(new create)
       b.append translate('breadcrumbs.new', model: Template.model_name.human), :new_admin_template
     end
-    if action_name.in? %w(edit update)
-      b.append translate('breadcrumbs.edit', model: Template.model_name.human), [:edit, :admin, @template.becomes(Template)]
+    if @template
+      b.append @template.name, [:admin, @template.becomes(Template)]
+      if action_name.in? %w(edit update)
+        b.append translate('breadcrumbs.edit', model: Template.model_name.human), [:edit, :admin, @template.becomes(Template)]
+      end
     end
   end
 
@@ -32,11 +35,11 @@ class Admin::TemplatesController < Admin::ApplicationController
   def create
     @template = Template.create(template_params)
     flash_for @template
-    respond_with :admin, @template.becomes(Template), location: :admin_templates
+    respond_with :admin, @template.becomes(Template)
   end
 
   def show
-    @region_definitions = @template.region_definitions.order(:label)
+    @region_definitions = @template.region_definitions
     respond_with :admin, @template.becomes(Template)
   end
 
@@ -47,7 +50,7 @@ class Admin::TemplatesController < Admin::ApplicationController
   def update
     @template.update(template_params)
     flash_for @template
-    respond_with :admin, @template.becomes(Template), location: :admin_templates
+    respond_with :admin, @template.becomes(Template)
   end
 
   def destroy
@@ -105,7 +108,7 @@ class Admin::TemplatesController < Admin::ApplicationController
 
   private
   def load_template
-    @template = Template.find(params[:id])
+    @template = ::Template.find(params[:id])
   end
 
   def new_template_params
@@ -126,6 +129,6 @@ class Admin::TemplatesController < Admin::ApplicationController
 
   def set_template_type
     @template_type = params[:template_type] ? "Template::#{params[:template_type].classify}" : nil
-    @template_type = nil unless @template_type.in?(Template.template_types)
+    @template_type = nil unless @template_type.in?(::Template.template_types)
   end
 end
