@@ -3,14 +3,14 @@ class PagesController < ApplicationController
 
   before_action :load_page
   before_action :load_template
+  before_action :load_menu_items
 
   attr_reader :page
   protected :page
   helper_method :page
 
   breadcrumbs do |b|
-    pages = @page.self_and_ancestors.accessible_by(current_ability) \
-                 .includes(:translations).with_locales(Globalize.fallbacks)
+    pages = @page.self_and_ancestors.accessible_by(current_ability).with_translations_for_current_locale
     pages.each do |page|
       b.append page.title, page
     end
@@ -48,10 +48,11 @@ class PagesController < ApplicationController
 
   private
   def load_page
+    pages = Page.accessible_by(current_ability).with_translations_for_current_locale
     if params[:path].blank?
-      @page = Page.accessible_by(current_ability).roots.first!
+      @page = pages.roots.first!
     else
-      @page = Page.accessible_by(current_ability).find_by!(path: params[:path])
+      @page = pages.find_by!(path: params[:path])
     end
   end
 
@@ -60,5 +61,9 @@ class PagesController < ApplicationController
       @template = @page.template 
       @region_definitions = @template.region_definitions
     end
+  end
+
+  def load_menu_items
+    @menu_items = Page.primary.published.menu_items.accessible_by(current_ability).with_translations_for_current_locale
   end
 end

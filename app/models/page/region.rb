@@ -12,6 +12,8 @@
 
 class Page < ActiveRecord::Base
   class Region < ActiveRecord::Base
+    include Translatable
+    
     belongs_to :page, inverse_of: :regions
     belongs_to :definition, class_name: 'Template::RegionDefinition', inverse_of: :regions
     has_one :template, through: :definition
