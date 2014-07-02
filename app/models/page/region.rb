@@ -24,8 +24,9 @@ class Page < ActiveRecord::Base
     delegate :label, :name, to: :definition
 
     class << self
-      def labelled(label)
-        joins(:definition).where(template_region_definitions: { label: label })
+      def labelled(*labels)
+        labels.flatten!
+        joins(:definition).where(template_region_definitions: { label: labels.one? ? labels.first : labels })
       end
     end
 

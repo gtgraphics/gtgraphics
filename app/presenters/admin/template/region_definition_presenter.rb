@@ -16,7 +16,11 @@ class Admin::Template::RegionDefinitionPresenter < Admin::ApplicationPresenter
   end
 
   def move_up_button(options = {})
-    button_options = { active: editable? && !region_definition.first?, icon: :chevron, icon_options: { direction: :up } }
+    button_options = {
+      active: editable? && !region_definition.first?,
+      method: :patch,
+      icon: :chevron, icon_options: { direction: :up }
+    }
     button :move_up, default_button_options(options).deep_merge(options.reverse_merge(button_options))
   end
 
@@ -25,7 +29,11 @@ class Admin::Template::RegionDefinitionPresenter < Admin::ApplicationPresenter
   end
 
   def move_down_button(options = {})
-    button_options = { active: editable? && !region_definition.last?, icon: :chevron, icon_options: { direction: :down } }
+    button_options = {
+      active: editable? && !region_definition.last?,
+      method: :patch,
+      icon: :chevron, icon_options: { direction: :down }
+    }
     button :move_down, default_button_options(options).deep_merge(options.reverse_merge(button_options))
   end
 

@@ -21,20 +21,7 @@
     %fieldset
       %legend= ::Template::RegionDefinition.model_name.human(count: 2)
       .fields
-        - if @region_definitions.any?
-          %table.table.table-hover
-            %thead
-              %tr
-                %th= ::Template::RegionDefinition.human_attribute_name :name
-                %th= ::Template::RegionDefinition.human_attribute_name :label
-                %th.actions
-            %tbody#region_definitions
-              - @region_definitions.each do |region_definition|
-                = content_tag_for :tr, region_definition do
-                  = render region_definition
-        - else
-          .well.text-center
-            %h4= translate('views.hints.empty', model: ::Template::RegionDefinition.model_name.human(count: 2))
+        = render 'admin/template/region_definitions/table'
 
         .btn-toolbar
           = button_link_to prepend_icon(:plus, translate('helpers.links.new', model: ::Template::RegionDefinition.model_name.human(count: 2))), [:new, :admin, @template.becomes(::Template), :region_definition], type: :success, remote: true

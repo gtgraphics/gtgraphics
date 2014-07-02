@@ -57,7 +57,22 @@ class Page < ActiveRecord::Base
 
       private
       def migrate_regions
-        
+        prev_template = Template.find(template_id_was)
+
+        labels = template.region_definitions.pluck(:label)
+        prev_labels = prev_template.region_definitions.pluck(:label) 
+
+        # Destroy regions that have no corresponding region label in the new template
+        destroyable_labels = labels - prev_labels
+        self.regions.labelled(destroyable_labels).destroy_all
+
+        # Update the regions to point to the new region definitions
+        retained_labels = labels & prev_labels
+        regions = self.regions.labelled(retained_labels)
+        template.region_definitions.where(label: retained_labels).each do |region_definition|
+          region = regions.find { |region| region.label == region_definition.label }
+          region.update_column(:definition_id, region_definition.id) if region
+        end
       end
     end
   end

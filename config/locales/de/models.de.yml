@@ -156,6 +156,8 @@ de:
         default: Standardvorlage?
         region_labels: Editierbare Regionen
         usage: Verwendung
+      template/region_definition:
+        label: Schlüssel
       user:
         first_name: Vorname
         last_name: Nachname
@@ -227,8 +229,8 @@ de:
         one: Umleitung
         other: Umleitungen
       page/region:
-        one: Region
-        other: Regionen
+        one: Bereich
+        other: Bereiche
       project:
         one: Projekt
         other: Projekte

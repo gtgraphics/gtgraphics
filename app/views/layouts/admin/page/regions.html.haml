@@ -8,7 +8,8 @@
     = panel Page::Region.model_name.human(count: 2), body: false do
       .list-group
         - @region_definitions.each do |definition|
-          = active_link_to definition.label, edit_admin_page_region_path(@page, definition.label), class: 'list-group-item'
+          = active_link_to edit_admin_page_region_path(@page, definition.label), class: 'list-group-item' do
+            = definition.name
   .col-sm-7
     = yield
 

@@ -27,7 +27,3 @@ $(document)
 
   .ajaxStop ->
     hideLoader()
-
-# Tooltips Fix
-$(document).on 'page:change', ->
-  $('.tooltip').remove()

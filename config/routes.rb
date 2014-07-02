@@ -115,8 +115,8 @@ GtGraphics::Application.routes.draw do
 
             resources :tags, only: :index
             
-            resources :templates do
-              resources :region_definitions, controller: :'template/region_definitions' do
+            resources :templates, except: :new do
+              resources :region_definitions, controller: :'template/region_definitions', except: [:index, :show] do
                 member do
                   patch :move_up
                   patch :move_down

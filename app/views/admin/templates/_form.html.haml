@@ -1,19 +1,20 @@
 = simple_form_for [:admin, @template.becomes(::Template)], html: { class: 'form-horizontal' } do |form|
 
   = form.input :name, input_html: { autofocus: true }
-  = form.input :description, input_html: { class: 'simple-editor' }
+  = form.input :description, input_html: { class: 'simple-editor', rows: 2 }
 
   %fieldset
     %legend= translate('views.forms.settings')
     .fields
-      - if @template.new_record?
-        = form.input :type, collection: template_types_for_select
-      #template_file_name_container
-        = render 'files_fields', fields: form if @template.type.present?
+      = form.input :type, as: :hidden
+      .form-group
+        %label.control-label.col-sm-3
+          = ::Template.human_attribute_name :type
+        .col-sm-9
+          .form-control-static
+            = @template.type.constantize.model_name.human
 
-  %fieldset
-    %legend= ::Template::RegionDefinition.model_name.human(count: 2)
-    .fields
+      = form.input :file_name, collection: @template.class.template_files
       = form.input :region_labels, input_html: { class: 'space-tokenizer' }
 
   = form_actions do

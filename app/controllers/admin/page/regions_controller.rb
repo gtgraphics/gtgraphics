@@ -9,14 +9,11 @@ class Admin::Page::RegionsController < Admin::Page::ApplicationController
   before_action :load_region_definition, only: %i(edit update destroy)
   before_action :load_region, only: %i(edit update destroy)
 
-  breadcrumbs do |b|
-    b.append Page::Region.model_name.human(count: 2), [:admin, @page, :regions]
-    if action_name.in? %(edit update)
-      b.append translate('breadcrumbs.edit', model: Page::Region.model_name.human), edit_admin_page_region_path(@page, @region)
-    end
+  breadcrumbs except: :index do |b|
+    b.append Page::Region.model_name.human(count: 2), edit_admin_page_region_path(@page, @region)
   end
 
-  rescue_from Template::NotSupported do |error|
+  rescue_from ::Template::NotSupported do |error|
     respond_to do |format|
       format.html { redirect_to [:admin, @page], alert: error.message }
       format.any { head :not_found }
@@ -24,9 +21,15 @@ class Admin::Page::RegionsController < Admin::Page::ApplicationController
   end
 
   def index
-    region_definition = @region_definitions.first!
+    region_definition = @region_definitions.first
     respond_to do |format|
-      format.html { redirect_to edit_admin_page_region_path(@page, region_definition.label) }
+      format.html do
+        if region_definition
+          redirect_to edit_admin_page_region_path(@page, region_definition.label)
+        else
+          redirect_to request.referer || edit_admin_page_path(@page), alert: I18n.translate('views.hints.empty', model: ::Template::RegionDefinition.model_name.human(count: 2))
+        end
+      end
     end
   end
 

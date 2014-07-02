@@ -13,6 +13,7 @@ class Admin::Editor::ApplicationController < Admin::ApplicationController
       def show
         editor_params = Hash(params[:editor]).slice(*#{permitted_params.inspect})
         @#{name} = #{class_name}.new(editor_params)
+        apply_defaults(@#{name}) unless @#{name}.persisted?
         respond_to do |format|
           format.html
         end
@@ -55,5 +56,9 @@ class Admin::Editor::ApplicationController < Admin::ApplicationController
       end
       protected :#{name}_params
     RUBY
+  end
+
+  protected
+  def apply_defaults(object)
   end
 end

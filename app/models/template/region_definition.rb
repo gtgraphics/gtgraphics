@@ -19,20 +19,17 @@ class Template < ActiveRecord::Base
 
     acts_as_list scope: :template
     
-    belongs_to :template, inverse_of: :region_definitions
+    belongs_to :template, inverse_of: :region_definitions, touch: true
     has_many :regions, class_name: 'Page::Region', dependent: :destroy, inverse_of: :definition, foreign_key: :definition_id
 
     validates :label, presence: true, exclusion: { in: RESERVED_LABELS }, uniqueness: { scope: :template_id }
     validates :template, presence: true
 
+    before_validation :set_label, if: :name?, unless: :label?
     before_validation :sanitize_label, if: :label?
-    before_validation :set_name, if: :label?
+    before_validation :set_name, if: :label?, unless: :name?
 
     default_scope -> { order(:position) }
-
-    def name
-      label.titleize
-    end
 
     def to_param
       label
@@ -47,6 +44,10 @@ class Template < ActiveRecord::Base
       I18n.with_locale(I18n.default_locale) do
         self.label = label.parameterize('_')
       end
+    end
+
+    def set_label
+      self.label = name.parameterize('_')
     end
 
     def set_name

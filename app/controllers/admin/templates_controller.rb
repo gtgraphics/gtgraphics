@@ -5,9 +5,9 @@ class Admin::TemplatesController < Admin::ApplicationController
   before_action :set_template_type, only: %i(index new)
 
   breadcrumbs do |b|
-    b.append Template.model_name.human(count: 2), :admin_templates
+    b.append ::Template.model_name.human(count: 2), :admin_templates
     if action_name.in? %w(new create)
-      b.append translate('breadcrumbs.new', model: Template.model_name.human), :new_admin_template
+      b.append translate('breadcrumbs.new', model: Template.model_name.human), nil
     end
     if @template
       b.append @template.name, [:admin, @template.becomes(Template)]
@@ -28,12 +28,12 @@ class Admin::TemplatesController < Admin::ApplicationController
   end
 
   def new
-    @template = Template.new(type: @template_type)
+    @template = @template_type.constantize.new
     respond_with :admin, @template
   end
 
   def create
-    @template = Template.create(template_params)
+    @template = Template.create(new_template_params)
     flash_for @template
     respond_with :admin, @template.becomes(Template)
   end
@@ -112,11 +112,11 @@ class Admin::TemplatesController < Admin::ApplicationController
   end
 
   def new_template_params
-    template_params.permit(:type)
+    params.require(:template).permit(:type, :name, :description, :file_name, :region_labels)
   end
 
   def template_params
-    params.require(:template).permit(:name, :description, :file_name, :region_labels, :screenshot)
+    params.require(:template).permit(:name, :description, :file_name, :region_labels)
   end
 
   def template_class

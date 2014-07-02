@@ -5,9 +5,10 @@
     .btn-toolbar.pull-right
       .btn-group.batch-control
         = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: ::Template.model_name.human(count: 2)) }
-      .btn-group
-        = button_link_to @template_type ? typed_new_admin_template_path(template_type: params[:template_type]) : :new_admin_template, type: :success do
-          = prepend_icon :plus, translate('helpers.links.new', model: ::Template.model_name.human)
+      - if @template_type
+        .btn-group
+          = button_link_to typed_new_admin_template_path(template_type: params[:template_type]), type: :success do
+            = prepend_icon :plus, translate('helpers.links.new', model: @template_type.constantize.model_name.human)
 
   .row
     .col-sm-3

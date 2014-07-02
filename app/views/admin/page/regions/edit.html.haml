@@ -2,5 +2,5 @@
 
   = form.input :body, label: false, input_html: { class: 'editor' }
 
-  = form.button :button, type: 'submit', class: 'btn-primary' do
-    = prepend_icon(:save, translate(@region.new_record? ? :create : :update, scope: 'helpers.submit', model: Page::Region.model_name.human))
+  = form.button :button, type: 'submit', class: 'btn-primary btn-block' do
+    = prepend_icon :save, translate('helpers.links.save')

@@ -71,7 +71,7 @@ class Admin::ApplicationPresenter < Presenter
 
   def destroy_button(options = {})
     button_options = {
-      active: destroyable?,
+      active: destroyable?, method: :delete,
       type: :danger, active: destroyable?, icon: :trash, icon_options: { outline: true },
       data: { confirm: I18n.translate('helpers.confirmations.destroy', model: object.class.model_name.human) }
     }

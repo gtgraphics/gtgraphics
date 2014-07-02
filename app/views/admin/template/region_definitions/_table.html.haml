@@ -1,0 +1,17 @@
+- region_definitions ||= @region_definitions
+
+- if region_definitions.any?
+
+  %table.table.table-hover#region_definitions
+    %thead
+      %tr
+        %th= ::Template::RegionDefinition.human_attribute_name :name
+        %th= ::Template::RegionDefinition.human_attribute_name :label
+        %th.actions
+    %tbody
+      - region_definitions.each do |region_definition|
+        = render 'admin/template/region_definitions/region_definition', region_definition: region_definition
+
+- else
+  .well.text-center#region_definitions
+    %h4= translate('views.hints.empty', model: ::Template::RegionDefinition.model_name.human(count: 2))

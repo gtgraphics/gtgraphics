@@ -10,13 +10,13 @@
           - if can? :read, @page
             %li
               = link_to page_path(@page, locale: Globalize.locale, translations: nil) do
-                = prepend_icon :picture, translate('helpers.links.view'), outline: true, fixed_width: true
+                = prepend_icon :file_picture, translate('helpers.links.view'), fixed_width: true, outline: true
 
           - if can? :edit, @page
             %li
               = link_to [:edit, :admin, @page] do
                 = prepend_icon :pencil, translate('helpers.links.edit'), fixed_width: true
-            %li
+            %li{class: @page.template.region_definitions.empty? ? 'disabled' : nil}
               = link_to [:admin, @page, :regions] do
                 = prepend_icon :edit, translate('helpers.links.edit_regions'), fixed_width: true
 
