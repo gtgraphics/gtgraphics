@@ -245,6 +245,7 @@ class Admin::PagesController < Admin::ApplicationController
     page_params = params.require(:page)
     embeddable_attributes_params = case page_params[:embeddable_type]
     when 'Page::ContactForm' then { recipient_ids: [] }
+    when 'Page::Redirection' then [:external, :destination_page_id, :destination_url, :permanent]
     end
     page_params.permit :embeddable_type, :parent_id, :title, :parent_id,
                        embeddable_attributes: embeddable_attributes_params || []

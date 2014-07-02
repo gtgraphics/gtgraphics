@@ -39,6 +39,7 @@ class Page < ActiveRecord::Base
   has_owner :author
 
   validates :title, presence: true
+  validates :meta_description, :meta_keywords, absence: true, unless: :support_templates?
   validate :verify_root_uniqueness, if: :root?
 
   before_destroy :destroyable?

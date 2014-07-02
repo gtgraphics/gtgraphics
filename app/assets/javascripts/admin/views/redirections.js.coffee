@@ -1,6 +1,6 @@
-updateContainerVisibility = ($radio) ->
-  $destinationPageContainer = $('.page_embeddable_destination_page')
-  $destinationUrlContainer = $('.page_embeddable_destination_url')
+updateContainerVisibility = ($radio, $scope) ->
+  $destinationPageContainer = $('.page_embeddable_destination_page', $scope)
+  $destinationUrlContainer = $('.page_embeddable_destination_url', $scope)
 
   checked = $radio.prop('checked')
   external = $radio.val() == 'true'
@@ -12,16 +12,13 @@ updateContainerVisibility = ($radio) ->
       $destinationPageContainer.show()
       $destinationUrlContainer.hide()
 
-initRadios = ->
-  $radios = $('#page_embeddable_attributes_external_true, #page_embeddable_attributes_external_false')
+initRadios = ($scope) ->
+  $radios = $('#page_embeddable_attributes_external_true, #page_embeddable_attributes_external_false', $scope)
   $radios.each ->
-    updateContainerVisibility($(@))
+    updateContainerVisibility($(@), $scope)
   $radios.click ->
-    updateContainerVisibility($(@))
+    updateContainerVisibility($(@), $scope)
 
-
-$(document).ready ->
-  initRadios()
-
-$(document).on 'changedEmbeddableType.pageEmbeddableManager', ->
-  initRadios()
+jQuery.prepare ->
+  console.log @
+  initRadios(@)

@@ -10,7 +10,7 @@ class TokenCollection
   include Enumerable
 
   attr_reader :tokens, :options
-  delegate :each, :[], to: :to_a
+  delegate :each, :empty?, :any?, :[], to: :to_a
 
   def initialize(tokens, options = {})
     @options = options.reverse_merge(DEFAULTS)

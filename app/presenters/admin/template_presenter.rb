@@ -2,7 +2,7 @@ class Admin::TemplatePresenter < Admin::ApplicationPresenter
   presents :template
 
   def description
-    super.html_safe
+    super.strip.html_safe
   end
 
   def file_name

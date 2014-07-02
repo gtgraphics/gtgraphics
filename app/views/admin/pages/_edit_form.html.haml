@@ -16,12 +16,13 @@
       = form.input :published, as: :radio_buttons, include_blank: false, wrapper: :horizontal_radio_and_checkboxes
       = form.input :menu_item, wrapper: :horizontal_boolean
 
-  %fieldset
-    %legend Suchmaschinenoptimierung
-    .fields
-      = form.input :indexable, wrapper: :horizontal_boolean
-      = form.input :meta_description
-      = form.input :meta_keywords, input_html: { data: { behavior: 'tokenizer' } }
+  - if @page.support_templates?
+    %fieldset
+      %legend Suchmaschinenoptimierung
+      .fields
+        = form.input :indexable, wrapper: :horizontal_boolean
+        = form.input :meta_description
+        = form.input :meta_keywords, input_html: { data: { behavior: 'tokenizer' } }
 
   = form_actions do
     = form.button :button, type: 'submit', class: 'btn-primary' do

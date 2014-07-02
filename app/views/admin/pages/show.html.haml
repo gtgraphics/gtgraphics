@@ -16,9 +16,10 @@
             %li
               = link_to [:edit, :admin, @page] do
                 = prepend_icon :pencil, translate('helpers.links.edit'), fixed_width: true
-            %li{class: @page.template.region_definitions.empty? ? 'disabled' : nil}
-              = link_to [:admin, @page, :regions] do
-                = prepend_icon :edit, translate('helpers.links.edit_regions'), fixed_width: true
+            - if @page.support_templates?
+              %li{class: @page.template.region_definitions.empty? ? 'disabled' : nil}
+                = link_to [:admin, @page, :regions] do
+                  = prepend_icon :edit, translate('helpers.links.edit_regions'), fixed_width: true
 
             %li.divider
             - if @page.published?
@@ -54,7 +55,7 @@
 - present @page, with: Admin::PagePresenter do |page|
   %dl.dl-horizontal
     = page.list_item :embeddable_type
-    = page.list_item :template if page.template.present?
+    = page.list_item :template if page.support_templates?
     = page.list_item :published
     = page.list_item :translated_locales
     = page.list_item :updated_at
