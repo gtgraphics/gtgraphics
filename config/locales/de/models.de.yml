@@ -129,12 +129,13 @@ de:
       page/contact_form:
         recipients: Empfänger
       page/image:
+        image: Bild
         image_id: Bild
       page/project:
         name: Projektname
         client_name: Auftraggeber
         client_url: Website
-        released_on: Release
+        released_on: Veröffentlichung
       page/project/translation:
         name: Projektname
       page/redirection:
@@ -171,6 +172,13 @@ de:
         password_confirmation: Passwort (Wdh.)
         preferred_locale: Standardsprache
         remember_me: Angemeldet bleiben
+
+    errors:
+      models:
+        page/redirection:
+          attributes:
+            destination_page_id:
+              self_reference: darf nicht auf sich selber weiterleiten
 
     models:
       attachment:

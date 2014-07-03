@@ -35,7 +35,7 @@ class Image < ActiveRecord::Base
   attr_readonly :asset, :content_type, :file_size
 
   has_many :custom_styles, class_name: 'Image::Style', inverse_of: :image, dependent: :destroy
-  has_many :image_pages, class_name: 'Page::Image', dependent: :destroy
+  has_many :image_pages, class_name: 'Page::Image', inverse_of: :image, dependent: :destroy
   has_many :pages, through: :image_pages
 
   has_image

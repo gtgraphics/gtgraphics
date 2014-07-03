@@ -17,10 +17,11 @@ class Page < ActiveRecord::Base
       config.template_class_name = false
     end
 
-    belongs_to :destination_page, class_name: 'Page'
+    belongs_to :destination_page, class_name: 'Page', inverse_of: :redirections
 
     validates :destination_page_id, presence: true, if: :internal?
     validates :destination_url, presence: true, url: true, if: :external?
+    validate :verify_destination_page_is_not_page, if: :internal?
 
     before_validation :clear_obsolete_destination_attribute
     before_validation :sanitize_destination_url
@@ -55,6 +56,10 @@ class Page < ActiveRecord::Base
       if destination_url.present? and destination_url !~ /\A(http|https):\/\//i
         self.destination_url = 'http://' + destination_url
       end
+    end
+
+    def verify_destination_page_is_not_page
+      errors.add :destination_page_id, :self_reference if page == destination_page
     end
   end
 end

@@ -1,16 +1,13 @@
-class PageSelectInput < SimpleForm::Inputs::StringInput
-  def input_html_options
-    opts = super
-    opts.deep_merge(data: {
-      resource: 'pages',
-      from: '/admin/pages.json',
-      formatter: 'PageComboboxFormatter',
-      paginated: false,
-      include_blank: opts.fetch(:include_blank, false)
-    })
+class PageSelectInput < ResourceSelectInput
+  def resource_name
+    'pages'
   end
 
-  def input_html_classes
-    super.push('resource-combobox')
+  def formatter
+    'PageComboboxFormatter'
+  end
+
+  def url
+    template.admin_pages_path(format: :json)
   end
 end

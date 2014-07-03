@@ -35,7 +35,8 @@ class Admin::PagesController < Admin::ApplicationController
           if page_id_or_ids.is_a?(Array)
             @pages = Page.where(id: page_id_or_ids)
           else
-            redirect_to params.merge(action: :show) and return
+            redirect_to params.merge(action: :show)
+            return
           end
         else
           @pages = Page.search(params[:query])
@@ -245,6 +246,7 @@ class Admin::PagesController < Admin::ApplicationController
     page_params = params.require(:page)
     embeddable_attributes_params = case page_params[:embeddable_type]
     when 'Page::ContactForm' then { recipient_ids: [] }
+    when 'Page::Image' then [:image_id]
     when 'Page::Project' then [:name, :client_name, :client_url]
     when 'Page::Redirection' then [:external, :destination_page_id, :destination_url, :permanent]
     end

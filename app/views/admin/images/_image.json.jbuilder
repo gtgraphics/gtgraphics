@@ -1,6 +1,13 @@
 json.extract! image, :id, :title, :asset_url
 json.thumbnail_asset_url image.asset_url(:thumbnail)
-json.dimensions image.transformed_dimensions
+json.dimensions do
+  json.width image.width
+  json.height image.height
+end
+json.original_dimensions do
+  json.width image.original_width
+  json.height image.original_height
+end
 
 if params.fetch(:include_styles, false).to_bool
   json.styles do

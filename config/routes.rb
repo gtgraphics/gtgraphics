@@ -84,6 +84,7 @@ GtGraphics::Application.routes.draw do
                 patch :update_multiple, on: :collection
               end
               resource :contact_form, controller: :'page/contact_forms', only: [:edit, :update]
+              resource :image, controller: :'page/images', only: [:edit, :update]
               resource :project, controller: :'page/projects', only: [:edit, :update]
               resource :redirection, controller: :'page/redirections', only: [:edit, :update]
               collection do

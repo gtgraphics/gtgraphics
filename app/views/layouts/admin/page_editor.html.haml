@@ -31,6 +31,7 @@
               = link_to [:admin, @page, :regions] do
                 = prepend_icon :edit, 'Inhalte', fixed_width: true, size: :lg
           = try_render("admin/#{@page.embeddable_type.underscore.pluralize}/editor_menu_items")
+          %li.divider
           %li
             = link_to page_path(@page, locale: Globalize.locale, translations: nil) do
               = prepend_icon :file_picture, translate('helpers.links.view'), fixed_width: true, size: :lg, outline: true

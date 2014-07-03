@@ -1,4 +1,4 @@
-= simple_form_for @redirection, url: admin_page_redirection_path(@page, @redirection), wrappers: :horizontal_form, html: { class: 'form-horizontal', multipart: true } do |form|
+= simple_form_for @redirection, url: :admin_page_redirection, html: { class: 'form-horizontal', multipart: true } do |form|
 
   %fieldset
     %legend= Page::Redirection.model_name.human

@@ -84,6 +84,10 @@ class Template < ActiveRecord::Base
     self.region_definitions.reject { |region_definition| region_definition.label.in?(tokens) }.each(&:mark_for_destruction)
   end
 
+  def to_param
+    "#{id}-#{name.parameterize}"
+  end
+
   def view_path
     raise 'no template file defined' if file_name.blank?
     File.join(self.class.template_lookup_path, file_name)

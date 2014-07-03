@@ -13,7 +13,7 @@ class Page < ActiveRecord::Base
 
     acts_as_concrete_page
 
-    belongs_to :image, class_name: '::Image'
+    belongs_to :image, class_name: '::Image', inverse_of: :image_pages
 
     validates :image, presence: true
 
@@ -25,7 +25,7 @@ class Page < ActiveRecord::Base
     end
 
     def to_title
-      image.title
+      image.try(:title)
     end
   end
 end

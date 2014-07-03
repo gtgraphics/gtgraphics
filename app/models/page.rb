@@ -37,6 +37,9 @@ class Page < ActiveRecord::Base
 
   has_owner :author
 
+  has_many :redirections, class_name: 'Page::Redirection', foreign_key: :destination_page_id, 
+                          inverse_of: :destination_page, dependent: :destroy
+
   validates :title, presence: true
   validates :meta_description, :meta_keywords, absence: true, unless: :support_templates?
   validate :verify_root_uniqueness, if: :root?
