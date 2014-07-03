@@ -39,7 +39,6 @@
             %li.divider
             %li= link_to prepend_icon(:trash, translate('helpers.links.destroy'), outline: true, fixed_width: true), [:admin, @page], method: :delete, data: { hotkey: 'del', confirm: translate('helpers.confirmations.destroy', model: Page.model_name.human) }
 
-
     .btn-group.pull-right
       = button_link_to typed_new_admin_page_child_path(@page, page_type: :content), type: :success, remote: true, accesskey: 'N' do
         = prepend_icon :plus, translate('helpers.links.new', model: Page.model_name.human), fixed_width: true
@@ -60,4 +59,4 @@
     = page.list_item :translated_locales
     = page.list_item :updated_at
 
-= try_render "admin/#{@page.embeddable_type.underscore.pluralize}/details"
+= try_render "admin/#{@page.embeddable_type.underscore.pluralize}/details", @page.embeddable_class.model_name.element.to_sym => @page.embeddable

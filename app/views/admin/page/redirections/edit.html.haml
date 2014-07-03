@@ -1,0 +1,13 @@
+= simple_form_for @redirection, url: admin_page_redirection_path(@page, @redirection), wrappers: :horizontal_form, html: { class: 'form-horizontal', multipart: true } do |form|
+
+  %fieldset
+    %legend= Page::Redirection.model_name.human
+    .fields
+      = form.input :external, collection: [[Page::Redirection.human_attribute_name(:internal), false], [Page::Redirection.human_attribute_name(:external), true]], as: :radio_buttons, required: true, label: Page::Redirection.human_attribute_name(:type), wrapper: :horizontal_radio_and_checkboxes
+      = form.association :destination_page, as: :page_select, required: true
+      = form.input :destination_url, required: true
+      = form.input :permanent, wrapper: :horizontal_boolean
+
+  = form_actions do
+    = form.button :button, type: 'submit', class: 'btn-primary' do
+      = prepend_icon(:save, translate(@page.new_record? ? :create : :update, scope: 'helpers.submit', model: Page.model_name.human))

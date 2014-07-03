@@ -1,0 +1,6 @@
+%fieldset
+  %legend= Page::Redirection.model_name.human
+  .content
+    - present redirection, with: Admin::Page::RedirectionPresenter do |redirection|
+      %dl.dl-horizontal
+        = redirection.list_item :destination

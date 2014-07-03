@@ -1,4 +1,4 @@
-= simple_form_for [:admin, @page, @contact_form], url: :admin_page_contact_form, wrappers: :horizontal_form, html: { class: 'form-horizontal', multipart: true } do |form|
+= simple_form_for @contact_form, url: :admin_page_contact_form, wrappers: :horizontal_form, html: { class: 'form-horizontal', multipart: true } do |form|
 
   %fieldset
     %legend= Page::ContactForm.human_attribute_name(:recipients)

@@ -110,6 +110,7 @@ de:
         read: Gelesen?
         created_at: Versendet
       page:
+        title: Seitentitel
         embeddable_type: Seitentyp
         embeddable_id: Seitenobjekt
         path: Pfad
@@ -226,17 +227,14 @@ de:
         one: Projektseite
         other: Projektseiten
       page/redirection:
-        one: Umleitung
-        other: Umleitungen
+        one: Weiterleitung
+        other: Weiterleitungen
       page/region:
         one: Bereich
         other: Bereiche
       project:
         one: Projekt
         other: Projekte
-      redirection:
-        one: Umleitung
-        other: Umleitungen
       shout:
         one: Stern
         other: Sterne

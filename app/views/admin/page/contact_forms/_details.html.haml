@@ -2,7 +2,7 @@
   %legend= Page::ContactForm.human_attribute_name :recipients
   .content
     %dl.dl-horizontal
-      - @page.embeddable.recipients.order(:first_name, :last_name).each do |recipient|
+      - contact_form.recipients.order(:first_name, :last_name).each do |recipient|
         %dd
           %span.gravatar
             = link_to gravatar_image_tag(recipient.email, default: :mm, class: 'img-circle', size: 28, alt: recipient.name), [:admin, recipient]
