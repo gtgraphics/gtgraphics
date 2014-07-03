@@ -3,7 +3,7 @@
   - if @image.new_record?
     = form.input :asset #, as: :image_preview, required: true, input_html: { preview_version: :thumbnail }
   - else
-    = form.input :description, input_html: { class: 'simple-editor' }
+    = form.input :description, input_html: { class: 'image-editor', rows: 6 }
     = form.association :author, selected: current_user.id
     /= form.input :tag_tokens, input_html: { class: 'tokenizer' }
 

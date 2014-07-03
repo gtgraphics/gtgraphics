@@ -1,6 +1,6 @@
 = simple_form_for @region, url: admin_page_region_path(@page, @region), method: :patch, wrapper: :vertical_form do |form|
 
-  = form.input :body, label: false, input_html: { class: 'editor' }
+  = form.input :body, label: false, input_html: { class: 'editor', rows: 22 }
 
   = form.button :button, type: 'submit', class: 'btn-primary btn-block' do
     = prepend_icon :save, translate('helpers.links.save')

@@ -18,8 +18,6 @@ class Page < ActiveRecord::Base
       include UniquelyTranslated
 
       acts_as_uniquely_translated :project_page_id
-
-      sanitizes :name, with: :squish
     end
   end
 end

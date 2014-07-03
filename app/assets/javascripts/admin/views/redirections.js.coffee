@@ -14,7 +14,6 @@ updateContainerVisibility = ($radio, $scope) ->
 
 initRadios = ($scope) ->
   $radios = $('#page_embeddable_attributes_external_true, #page_redirection_external_true, #page_embeddable_attributes_external_false, #page_redirection_external_false', $scope)
-  console.log $radios
   $radios.each ->
     updateContainerVisibility($(@), $scope)
   $radios.click ->

@@ -16,11 +16,16 @@ class Page < ActiveRecord::Base
     acts_as_concrete_page
 
     translates :name, :description, fallbacks_for_empty_translations: true
+    sanitizes :name, :client_name, with: :squish
 
-    validates :client_name, presence: true
+    validates :name, presence: true
     validates :client_url, url: true, allow_blank: true
 
     after_initialize :set_default_release_date, if: -> { new_record? and released_on.blank? }
+
+    def to_title
+      name
+    end
 
     private
     def set_default_release_date

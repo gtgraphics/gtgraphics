@@ -23,5 +23,9 @@ class Page < ActiveRecord::Base
     def to_liquid
       { 'image' => image }
     end
+
+    def to_title
+      image.title
+    end
   end
 end

@@ -2,7 +2,8 @@
   .modal-body
     = form.input :embeddable_type, as: :hidden
     = form.input :parent_id, as: :hidden
-    = form.input :title, input_html: { autofocus: true }
+    - unless @page.embeddable.respond_to? :to_title
+      = form.input :title, input_html: { autofocus: true }
     = form.simple_fields_for :embeddable do |fields|
       = try_render "admin/#{@page.embeddable_type.underscore.pluralize}/new_fields", fields: fields
 

@@ -21,7 +21,6 @@
 #
 
 class Page < ActiveRecord::Base
-  # include BatchTranslatable
   include Excludable
   include NestedSetRepresentable
   include Ownable
@@ -42,6 +41,7 @@ class Page < ActiveRecord::Base
   validates :meta_description, :meta_keywords, absence: true, unless: :support_templates?
   validate :verify_root_uniqueness, if: :root?
 
+  before_validation :set_title, prepend: true, if: -> { title.blank? }
   before_destroy :destroyable?
 
   default_scope -> { order(:lft) }
@@ -76,6 +76,12 @@ class Page < ActiveRecord::Base
   end
 
   private
+  def set_title
+    if embeddable and embeddable.respond_to?(:to_title)
+      self.title = embeddable.to_title
+    end
+  end
+
   def verify_root_uniqueness
     errors.add(:parent_id, :taken) if self.class.roots.without(self).exists?
   end

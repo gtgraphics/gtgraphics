@@ -50,6 +50,14 @@ class @TextareaEditor
     @refreshControlStates() 
     @updateViewModeState(@options.viewMode)
 
+    # This is a hotfix to determine the textarea height in hidden wrapper elements
+    interval = setInterval =>
+      if @$textarea.outerHeight() > 0
+        @refreshInputState()
+        @refreshControlStates() 
+        @updateViewModeState(@options.viewMode)
+    , 10
+
   render: ->
     if @isRendered()
 
@@ -239,18 +247,18 @@ class @TextareaEditor
     if @isRendered()
       switch viewMode
         when 'richText'
-          @$regionFrame.show().height(@$textarea.height())
+          @$regionFrame.show().outerHeight(@$textarea.outerHeight())
           @$textarea.hide()
           @$previewFrame.hide()
         when 'html'
           @$regionFrame.hide()
-          @$textarea.show().height(@$regionFrame.height())
+          @$textarea.show().outerHeight(@$regionFrame.outerHeight())
           @$previewFrame.hide()
         when 'preview'
           # TODO Load Preview with Interpolations (Liquid)
           @$regionFrame.hide()
           @$textarea.hide()
-          @$previewFrame.show().height(@$regionFrame.height())
+          @$previewFrame.show().outerHeight(@$regionFrame.outerHeight())
 
           # First load a preview captured from HTML content of the textarea,
           # then load a proper preview (with interpolations) from a specified URL

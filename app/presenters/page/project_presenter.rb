@@ -12,6 +12,6 @@ class Page::ProjectPresenter < PagePresenter
   end
 
   def project
-    page.embeddable
+    page
   end
 end

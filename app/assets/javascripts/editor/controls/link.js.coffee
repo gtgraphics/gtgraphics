@@ -65,7 +65,6 @@ class @Editor.Control.Link extends @Editor.Control.DialogButtonControl
 
   extractContextParams: (editor, link) ->
     editorParams = { content: @getSelectedHtml() }
-    console.log editorParams
     if link instanceof jQuery
       $link = link
       pageId = $link.data('pageId')

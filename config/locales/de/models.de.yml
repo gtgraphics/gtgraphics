@@ -131,6 +131,7 @@ de:
       page/image:
         image_id: Bild
       page/project:
+        name: Projektname
         client_name: Auftraggeber
         client_url: Website
         released_on: Release

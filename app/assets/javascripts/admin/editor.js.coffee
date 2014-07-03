@@ -15,3 +15,10 @@ jQuery.prepare ->
       ['bold', 'italic', 'underline', 'strikethrough'],
       ['orderedList', 'unorderedList']
     ]
+
+  $('.image-editor', @).editor(class: TextareaEditor, controls: [
+    ['bold', 'italic', 'underline', 'strikethrough'],
+    ['orderedList', 'unorderedList', 'indent', 'outdent'],
+    ['link', 'unlink'],
+    'viewMode'
+  ])
