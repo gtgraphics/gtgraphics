@@ -10,18 +10,19 @@ class Activity
 
   def initialize(*)
     run_callbacks :initialize do
-      super
+      activity = super
+      yield(activity) if block_given?
     end
   end
  
   class << self
-    def execute(attributes = {})
-      new(attributes).tap(&:execute)
+    def execute(attributes = {}, &block)
+      new(attributes, &block).tap(&:execute)
     end
     alias_method :create, :execute
  
-    def execute!(attributes = {})
-      new(attributes).tap(&:execute!)
+    def execute!(attributes = {}, &block)
+      new(attributes, &block).tap(&:execute!)
     end
     alias_method :create!, :execute!
   end

@@ -48,7 +48,7 @@
         - concrete_page_types.each do |embeddable_class|
           - if can? :create, embeddable_class
             %li
-              = link_to typed_new_admin_page_child_path(@page, page_type: embeddable_class.name.demodulize.underscore), remote: true do
+              = link_to typed_new_admin_page_path(@page, embeddable_class), remote: true do
                 = embeddable_class.model_name.human
 
 - present @page, with: Admin::PagePresenter do |page|

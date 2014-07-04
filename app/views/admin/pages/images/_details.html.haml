@@ -1,9 +1,0 @@
-- content_for :additional_page_details do
-  %dt= Image.model_name.human
-  %dd= link_to embeddable.image, [:admin, embeddable.image]
-
-.content
-  = link_to [:admin, embeddable.image] do
-    = image_tag(embeddable.image.asset.url(:page_preview), class: 'img-responsive img-rounded', alt: embeddable.image.title)
-.content
-  = render 'page_details', page: page

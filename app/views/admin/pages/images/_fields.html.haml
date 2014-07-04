@@ -1,5 +1,0 @@
-= fields.association :template
-
-%hr
-
-= fields.input :image_id, required: true, input_html: { class: 'resource-combobox', data: { resource: 'images', from: admin_images_path(include_styles: true, format: :json), formatter: 'ImageComboboxFormatter', paginated: true, include_blank: true } }

@@ -2,7 +2,7 @@ ruby '2.1.0'
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.3'
+gem 'rails', '4.0.5'
 
 # Database
 gem 'pg'
@@ -18,7 +18,7 @@ gem 'http_accept_language'
 gem 'acts_as_list'
 gem 'acts_as_sanitizable'
 gem 'acts_as_tree'
-gem 'awesome_nested_set', '3.0.0.rc.3'
+gem 'awesome_nested_set', '3.0.0.rc.5'
 gem 'annotate'
 gem 'bcrypt-ruby'
 gem 'email_validator'
@@ -41,6 +41,7 @@ gem 'builder'
 gem 'coffeebeans'
 
 # Assets
+gem 'sprockets', '2.11.0' # newer versions do not work properly
 gem 'execjs'
 gem 'therubyracer'
 gem 'sass-rails' #, '~> 4.0.3'

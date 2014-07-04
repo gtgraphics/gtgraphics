@@ -12,11 +12,11 @@ module Tokenizable
       options = methods.extract_options!.reverse_merge(token: DEFAULT_TOKEN)
       methods.each do |method|
         method = method.to_sym
-        if association = reflect_on_association(method)
+        if association = try(:reflect_on_association, method)
           # Are we working on an association?
           raise 'association must be a one-to-many association to be used by tokenizer' unless association.collection?
           singular_association_name = method.to_s.singularize
-          class_eval %{
+          class_eval <<-RUBY
             def #{singular_association_name}_tokens
               @#{singular_association_name}_tokens ||= #{singular_association_name}_ids.join('#{options[:token]}')
             end
@@ -26,20 +26,20 @@ module Tokenizable
               self.#{singular_association_name}_ids = ids
               @#{singular_association_name}_tokens = ids.join('#{options[:token]}')
             end
-          }
+          RUBY
         elsif method_defined?(method)
           # Are we working on a plain old Ruby method?
           singular_method_name = method.to_s.singularize
-          class_eval %{
+          class_eval <<-RUBY
             def #{singular_method_name}_tokens
               @#{singular_method_name}_tokens ||= #{method}.join('#{options[:token]}')
             end
 
-            def #{singular_method_name}_tokens(tokens)
+            def #{singular_method_name}_tokens=(tokens)
               self.#{method} = tokens.split('#{options[:token]}')
               @#{singular_method_name}_tokens = tokens
             end
-          }
+          RUBY
         else
           raise "Association or method #{self.name}##{method} is not defined"
         end

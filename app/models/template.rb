@@ -46,7 +46,7 @@ class Template < ActiveRecord::Base
     attr_accessor :template_lookup_path
 
     def default
-      first!
+      first
     end
 
     def template_files(full_paths = false)

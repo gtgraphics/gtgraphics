@@ -5,9 +5,11 @@ jQuery.prepare ->
   
   $('.resource-combobox').each ->
     $select = $(@)
+    resourceName = $select.data('resource')
     options = 
       allowClear: $select.data('includeBlank') || false
       placeholder: $select.data('placeholder') || ' '
+      multiple: $select.data('multiple') || false
       ajax:
         url: ->
           $select.data('from')
@@ -19,7 +21,6 @@ jQuery.prepare ->
           else
             { query: term }
         results: (data, page) ->
-          resourceName = $select.data('resource')
           paginated = $select.data('paginated')
           if paginated
             results = data[resourceName]
@@ -29,11 +30,17 @@ jQuery.prepare ->
             more = false
           { results: results, more: more }
       initSelection: (element, callback) ->
-        id = $(element).val()
-        unless id == ''
+        ids = $(element).val()
+        if ids != ''
           url = $select.data('from')
-          jQuery.get url, { id: id }, (record) ->
-            callback(record)
+          ids = ids.split(',')
+          multiple = ids.length > 1
+          ids = ids[0] unless multiple
+          jQuery.get url, { id: ids }, (record) ->
+            if multiple
+              callback(record[resourceName])
+            else
+              callback(record)
             $select.trigger('select2-init')
       escapeMarkup: (markup) ->
         markup

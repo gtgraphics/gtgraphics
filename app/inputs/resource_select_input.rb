@@ -11,7 +11,8 @@ class ResourceSelectInput < SimpleForm::Inputs::StringInput
         from: url,
         formatter: formatter,
         paginated: paginated?,
-        include_blank: opts.fetch(:include_blank, false)
+        include_blank: opts.fetch(:include_blank, false),
+        multiple: multiple?
       }
     }.deep_merge(opts)
   end
@@ -19,6 +20,10 @@ class ResourceSelectInput < SimpleForm::Inputs::StringInput
   protected
   def formatter
     raise NotImplementedError
+  end
+
+  def multiple?
+    options.fetch(:multiple, false)
   end
 
   def paginated?

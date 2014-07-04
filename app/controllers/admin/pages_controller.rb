@@ -57,11 +57,15 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def new
-    @page = Page.new
-    @page.title = I18n.translate('page.default_title')
-    @page.parent = @parent_page || Page.root
-    @page.embeddable_type = params[:page_type] ? "Page::#{params[:page_type].strip.classify}" : 'Page::Content'
-    @page.build_embeddable
+    @page = Page.new do |p|
+      p.title = I18n.translate('page.default_title')
+      p.parent = @parent_page || Page.root
+      p.embeddable_type = params[:page_type] ? "Page::#{params[:page_type].strip.classify}" : 'Page::Content'
+      p.build_embeddable
+      if p.support_templates? and p.embeddable_type.in?(Page.embeddable_types)
+        p.template = p.template_class.default
+      end
+    end
     respond_to do |format|
       format.js
     end
@@ -70,11 +74,17 @@ class Admin::PagesController < Admin::ApplicationController
   def create
     @page = Page.create(new_page_params) do |p|
       p.author = current_user
-      p.published = false
       p.next_available_slug(p.title.parameterize) if p.title.present?
       p.build_embeddable if p.embeddable.nil?
-      if p.embeddable_type.in?(Page.embeddable_types) and p.support_templates?
-        p.template = p.template_class.default
+      if !p.content? and p.support_templates? and p.embeddable_type.in?(Page.embeddable_types)
+        p.template ||= p.template_class.default
+      end
+    end
+    if @page.errors.empty?
+      if @page.image? or @page.redirection?
+        @location = admin_page_path(@page)
+      else
+        @location = edit_admin_page_path(@page)
       end
     end
     flash_for @page
@@ -246,6 +256,7 @@ class Admin::PagesController < Admin::ApplicationController
     page_params = params.require(:page)
     embeddable_attributes_params = case page_params[:embeddable_type]
     when 'Page::ContactForm' then { recipient_ids: [] }
+    when 'Page::Content' then [:template_id]
     when 'Page::Image' then [:image_id]
     when 'Page::Project' then [:name, :client_name, :client_url]
     when 'Page::Redirection' then [:external, :destination_page_id, :destination_url, :permanent]

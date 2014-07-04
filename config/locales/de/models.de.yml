@@ -7,6 +7,7 @@ de:
     description: Beschreibung
     file_size: Dateigröße
     name: Name
+    published: Öffentlich?
     slug: URL-Token
     tag_tokens: Tags
     template: Vorlage
@@ -54,6 +55,10 @@ de:
         email: E-Mail-Adresse
         password: Passwort
         permanent: Angemeldet bleiben
+      admin/image_page_creation_activity:
+        image_ids: Bilder
+        image_id_tokens: Bilder
+        template_id: Vorlage
     models:
       editor/link:
         one: Hyperlink
@@ -116,7 +121,6 @@ de:
         path: Pfad
         parent: Elternseite
         parent_id: Elternseite
-        published: Öffentlich?
         template: Vorlage
         template_id: Vorlage
         author: Autor
@@ -126,6 +130,8 @@ de:
         state: Status
         meta_description: Meta-Beschreibung
         meta_keywords: Meta-Schlüsselwörter
+      page/content:
+        template_id: Vorlage
       page/contact_form:
         recipients: Empfänger
       page/image:
