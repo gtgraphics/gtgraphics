@@ -74,7 +74,7 @@ class Admin::PagesController < Admin::ApplicationController
   def create
     @page = Page.create(new_page_params) do |p|
       p.author = current_user
-      p.next_available_slug(p.title.parameterize) if p.title.present?
+      p.set_next_available_slug(p.title.parameterize) if p.title.present?
       p.build_embeddable if p.embeddable.nil?
       if !p.content? and p.support_templates? and p.embeddable_type.in?(Page.embeddable_types)
         p.template ||= p.template_class.default

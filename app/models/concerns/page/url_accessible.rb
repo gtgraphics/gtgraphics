@@ -14,7 +14,8 @@ class Page < ActiveRecord::Base
       around_save :update_descendants_paths
     end
 
-    def next_available_slug(slug)
+    def set_next_available_slug(slug = self.generate_slug)
+      raise 'no initial slug defined' if slug.nil?
       self.slug = slug
       while self.class.where(parent_id: parent_id, slug: self.slug).exists?
         self.slug = self.slug.next

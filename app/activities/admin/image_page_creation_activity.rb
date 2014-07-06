@@ -21,11 +21,11 @@ class Admin::ImagePageCreationActivity < Activity
   def perform
     self.pages.clear
     Page.transaction do
-      images.each do |image|
-        self.pages << parent_page.children.images.new(published: published).tap do |p|
-          p.title = image.title
-          p.build_embeddable(image: image, template_id: template_id)
-          p.next_available_slug(p.title.parameterize) if p.title.present?
+      image_ids.each do |image_id|
+        self.pages << parent_page.children.images.new(published: published?).tap do |p|
+          p.build_embeddable(image_id: image_id, template_id: template_id)
+          p.title = p.embeddable.to_title
+          p.set_next_available_slug
           p.save!
         end
       end
