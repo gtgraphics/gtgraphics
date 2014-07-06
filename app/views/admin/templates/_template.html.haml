@@ -1,4 +1,4 @@
-- present template, with: Admin::TemplatePresenter do |template|
+- present template, with: Admin::TemplatePresenter, movable: !@template_type.nil? do |template|
   = content_tag_for :tr, template do
     - if checkbox
       %td.checkbox-cell

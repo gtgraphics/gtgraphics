@@ -9,6 +9,7 @@
 #  updated_at  :datetime
 #  name        :string(255)
 #  description :text
+#  position    :integer          not null
 #
 
 class Template < ActiveRecord::Base
@@ -44,10 +45,6 @@ class Template < ActiveRecord::Base
 
   class << self
     attr_accessor :template_lookup_path
-
-    def default
-      first
-    end
 
     def template_files(full_paths = false)
       raise 'method can only be called on subclasses of Template' if self.name == 'Template'

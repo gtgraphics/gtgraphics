@@ -15,6 +15,36 @@ module ConcreteTemplate
 
       has_many :"#{page_type}_pages", class_name: options[:class_name], foreign_key: :template_id, dependent: :restrict_with_error
       has_many :pages, through: :"#{page_type}_pages"
+
+      include Extensions
+    end
+  end
+
+  module Extensions
+    extend ActiveSupport::Concern
+
+    included do
+      acts_as_list
+
+      default_scope -> { order(:position) }
+    end
+
+    module ClassMethods
+      def default
+        first
+      end
+
+      def default!
+        first!
+      end
+    end
+
+    def default?
+      first?
+    end
+
+    def make_default
+      move_to_top
     end
   end
 end

@@ -2,7 +2,7 @@
   .col-sm-offset-2.col-sm-8
 
     = page_header do
-      = template.action_buttons except: :show
+      = template.action_buttons only: [:edit, :destroy]
 
     - if template.description?
       %fieldset
@@ -24,4 +24,5 @@
         = render 'admin/template/region_definitions/table'
 
         .btn-toolbar
-          = button_link_to prepend_icon(:plus, translate('helpers.links.new', model: ::Template::RegionDefinition.model_name.human(count: 2))), [:new, :admin, @template.becomes(::Template), :region_definition], type: :success, remote: true
+          = button_link_to [:new, :admin, @template.becomes(::Template), :region_definition], type: :success, remote: true do
+            = prepend_icon :plus, translate('helpers.links.new', model: ::Template::RegionDefinition.model_name.human(count: 2))

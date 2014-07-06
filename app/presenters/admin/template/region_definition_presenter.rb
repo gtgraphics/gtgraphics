@@ -1,4 +1,6 @@
 class Admin::Template::RegionDefinitionPresenter < Admin::ApplicationPresenter
+  include Admin::MovableResourcePresenter
+
   presents :region_definition
 
   self.action_buttons = [:edit, :move_up, :move_down, :destroy]
@@ -15,26 +17,8 @@ class Admin::Template::RegionDefinitionPresenter < Admin::ApplicationPresenter
     h.edit_admin_template_region_definition_path(template, region_definition)
   end
 
-  def move_up_button(options = {})
-    button_options = {
-      active: editable? && !region_definition.first?,
-      method: :patch,
-      icon: :chevron, icon_options: { direction: :up }
-    }
-    button :move_up, default_button_options(options).deep_merge(options.reverse_merge(button_options))
-  end
-
   def move_up_path
     h.move_up_admin_template_region_definition_path(template, region_definition)
-  end
-
-  def move_down_button(options = {})
-    button_options = {
-      active: editable? && !region_definition.last?,
-      method: :patch,
-      icon: :chevron, icon_options: { direction: :down }
-    }
-    button :move_down, default_button_options(options).deep_merge(options.reverse_merge(button_options))
   end
 
   def move_down_path

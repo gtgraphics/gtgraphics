@@ -134,6 +134,8 @@ GtGraphics::Application.routes.draw do
               end
               member do
                 delete 'destroy_region/:label', action: :destroy_region, as: :destroy_region
+                patch :move_up
+                patch :move_down
               end
             end
 

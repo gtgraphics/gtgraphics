@@ -1,7 +1,7 @@
 class Admin::TemplatesController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_template, only: %i(show edit update destroy destroy_region)
+  before_action :load_template, only: %i(show edit update destroy destroy_region move_up move_down)
   before_action :set_template_type, only: %i(index new)
 
   breadcrumbs do |b|
@@ -19,11 +19,11 @@ class Admin::TemplatesController < Admin::ApplicationController
 
   def index
     if @template_type
-      @templates = Template.where(type: @template_type)
+      @templates = @template_type.constantize.order(:position)
     else
-      @templates = Template.all
+      @templates = Template.order(:name)
     end
-    @templates = @templates.sort(params[:sort], params[:direction]).page(params[:page])
+    @templates = @templates.page(params[:page])
     respond_with :admin, @templates
   end
 
@@ -79,20 +79,6 @@ class Admin::TemplatesController < Admin::ApplicationController
     end
   end
 
-  def translation_fields
-    respond_to do |format|
-      format.html do
-        if translated_locale = params[:translated_locale] and translated_locale.in?(I18n.available_locales.map(&:to_s))
-          @template = Template.new
-          @template.translations.build(locale: translated_locale)
-          render layout: false
-        else
-          head :not_found
-        end
-      end
-    end
-  end
-
   def files_fields
     respond_to do |format|
       format.html do
@@ -104,6 +90,19 @@ class Admin::TemplatesController < Admin::ApplicationController
         end
       end
     end
+  end
+
+  def move_up
+    @template.move_higher
+    respond_with :admin, @template.becomes(::Template), location: typed_admin_templates_path(template_type: @template.type.demodulize.underscore)
+  end
+
+  def move_down
+    @template.move_lower
+    respond_to do |format|
+      format.html { }
+    end
+    respond_with :admin, @template.becomes(::Template), location: typed_admin_templates_path(template_type: @template.type.demodulize.underscore)
   end
 
   private

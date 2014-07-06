@@ -1,5 +1,9 @@
 class Admin::TemplatePresenter < Admin::ApplicationPresenter
+  include Admin::MovableResourcePresenter
+
   presents :template
+
+  self.action_buttons = [:show, :edit, :move_up, :move_down, :destroy]
 
   def description
     super.strip.html_safe
@@ -26,6 +30,26 @@ class Admin::TemplatePresenter < Admin::ApplicationPresenter
     pages_count = template.respond_to?(:pages) ? template.pages.count : 0
     suffix = Page.model_name.human(count: pages_count)
     "#{pages_count} #{suffix}"
+  end
+
+  def movable?
+    options[:movable].to_b
+  end
+
+  def move_down_button(options = {})
+    super if movable?
+  end
+
+  def move_down_path
+    h.move_down_admin_template_path(object)
+  end
+
+  def move_up_button(options = {})
+    super if movable?
+  end
+
+  def move_up_path
+    h.move_up_admin_template_path(object)
   end
 
   private

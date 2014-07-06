@@ -9,6 +9,7 @@
 #  updated_at  :datetime
 #  name        :string(255)
 #  description :text
+#  position    :integer          not null
 #
 
 class Template < ActiveRecord::Base
