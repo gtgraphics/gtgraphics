@@ -1,33 +1,68 @@
-/= file_field_tag :image_uploader, name: 'image[asset][]', multiple: true, data: { url: admin_images_path }
+#image_upload_dropzone
+  = form_tag :batch_process_admin_images, method: :patch do
 
-= form_tag :batch_process_admin_images, method: :patch do
+    = page_header
 
-  = page_header do
-    .btn-toolbar
-      .btn-group.batch-control
-        = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), name: 'destroy', class: 'btn btn-danger', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) }
-      .btn-group.only-js
-        = file_field_tag :image_uploader, name: 'image[asset][]', multiple: true, class: 'btn btn-success', data: { type: 'success', url: admin_images_path, caption: prepend_icon(:upload, translate('helpers.links.upload', model: Image.model_name.human)).to_str, html: true }
-        /= button_link_to :new_admin_image, type: :success, remote: true do
-        /  = prepend_icon :upload, translate('helpers.links.upload', model: Image.model_name.human)
-      .btn-group
-        = active_button_link_to icon(:th_list, fixed_width: true), update_preferences_admin_account_path(image_view_mode: 'table'), method: :patch, active: current_user.preferences[:image_view_mode] != 'tiles', title: translate('views.list_types.table'), data: { toggle: 'tooltip', placement: 'bottom', container: '#toolbar' }
-        = active_button_link_to icon(:th_large, fixed_width: true), update_preferences_admin_account_path(image_view_mode: 'tiles'), method: :patch, active: current_user.preferences[:image_view_mode] == 'tiles', title: translate('views.list_types.tiles'), data: { toggle: 'tooltip', placement: 'bottom', container: '#toolbar' }
-      = paginate @images
+    .row
+      .col-sm-3
+        = panel Image.human_attribute_name(:author_id), body: false do
+          .list-group
+            = active_link_to 'Jeder', params.except(:author_id), class: 'list-group-item', active: params[:author_id].nil?
+            - @users.each do |user|
+              = active_link_to params.merge(author_id: user.to_param), class: 'list-group-item', active: user.id == params[:author_id].to_i do
+                %span.avatar
+                  %span.icon= gravatar_image_tag user.email, default: :mm, size: 24, class: 'img-circle'
+                  %span.caption= user.name
 
-  .row
-    .col-sm-3
-      = panel Image.human_attribute_name(:author_id), body: false do
-        .list-group
-          = active_link_to 'Alle', admin_images_path, class: 'list-group-item', active: params[:author_id].nil?
-          - @users.each do |user|
-            = active_link_to admin_images_path(author_id: user.to_param), class: 'list-group-item', active: user.id == params[:author_id].to_i do
-              %span.badge= Image.owned_by(user).count
-              = user.name
+        = panel Image.human_attribute_name(:created_at), body: false do
+          .list-group
+            = active_link_to 'Egal', params.except(:period), class: 'list-group-item', active: params[:period].nil?
+            - {'Heute' => 'today', 'Gestern' => 'yesterday', 'In dieser Woche' => 'week', 'In diesem Monat' => 'month'}.each do |caption, period|
+              = active_link_to caption, params.merge(period: period), class: 'list-group-item', active: period == params[:period]
 
-    .col-sm-9
-      - if @images.any?
-        = render 'table', checkboxes: true
-      - else
-        .well.text-center
-          %h4= translate('views.hints.empty', model: Image.model_name.human(count: 2))
+      .col-sm-9
+        = progress_bar type: :success, show_percentage: true, striped: true, active: true, id: 'progress'
+
+        .row
+          .col-sm-8
+            .btn-toolbar
+              = paginate @images
+              .btn-group.only-js
+                = button_tag type: 'button', class: 'btn btn-success fileinput-button' do
+                  = prepend_icon :upload, translate('helpers.links.upload', model: Image.model_name.human)
+                  = file_field_tag :image_upload, name: 'image[asset]', multiple: true, data: { url: upload_admin_images_path }
+              .btn-group
+                = button_tag name: 'destroy', class: 'btn btn-danger deactivatable-batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) } do
+                  = prepend_icon :trash, translate('helpers.links.destroy_selected'), outline: true
+            %br
+
+          .col-sm-4
+            .btn-toolbar
+
+              .search-component
+                = text_field_tag :query, params[:query], class: 'search-input', placeholder: translate('helpers.prompts.search'), autofocus: true
+                .btn-toolbar
+                  = button_tag name: 'search', class: 'btn btn-search' do
+                    = prepend_icon :search, translate('helpers.links.search'), caption_html: { class: 'sr-only' }
+                  = button_link_to :admin_images, type: :search do
+                    = prepend_icon :times, translate('helpers.links.reset'), caption_html: { class: 'sr-only' }
+            %br
+
+        - if @images.any?
+          %table.table.table-hover
+            %thead
+              %tr
+                %th.checkbox-cell
+                  %input{type: 'checkbox', class: 'js-only table-checkbox-all', data: { toggle: 'tableCheckboxes' }}
+                %th.thumbnail-cell
+                %th= sort_link_for @images, :title
+                %th.visible-lg= sort_link_for @images, :author
+                %th= sort_link_for @images, :created_at
+                %th.actions
+            %tbody#images
+              - @images.each do |image|
+                = render image
+
+        - else
+          .well.text-center
+            %h4= translate('views.hints.empty', model: Image.model_name.human(count: 2))

@@ -25,6 +25,14 @@ class Admin::ImagePresenter < Admin::ApplicationPresenter
     end
   end
 
+  def dominant_colors
+    h.capture do
+      image.dominant_colors.to_hex.map do |color|
+        h.concat h.content_tag(:div, nil, class: 'img-circle', style: "background-color: #{color}; width: 24px; height: 24px;")
+      end
+    end
+  end
+
   def preview_html
     h.capture do
       h.content_tag :div, class: 'dl-vertical' do

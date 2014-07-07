@@ -56,8 +56,8 @@ class Image < ActiveRecord::Base
 
   acts_as_sortable do |by|
     by.author { |dir| [User.arel_table[:first_name].send(dir.to_sym), User.arel_table[:last_name].send(dir.to_sym)] }
-    by.title(default: true) { |column, dir| Image::Translation.arel_table[column].send(dir.to_sym) }
-    by.updated_at
+    by.title { |column, dir| Image::Translation.arel_table[column].send(dir.to_sym) }
+    by.created_at default: true
   end
 
   class << self
@@ -76,6 +76,10 @@ class Image < ActiveRecord::Base
         all
       end
     end
+  end
+
+  def dominant_colors
+    @dominant_colors ||= Miro::DominantColors.new(asset.path)
   end
 
   def to_param

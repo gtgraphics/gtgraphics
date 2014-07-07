@@ -91,16 +91,21 @@ $(document).ready ->
 # Batch Buttons
 
 BATCH_CONTROLS_SELECTOR = '.batch-control, .batch-controls'
+DEACTIVATABLE_BATCH_CONTROLS_SELECTOR = '.deactivatable-batch-control'
 DELAY = 100
 
 $(document).ready ->
   $(BATCH_CONTROLS_SELECTOR).hide()
+  $(DEACTIVATABLE_BATCH_CONTROLS_SELECTOR).prop('disabled', true)
  
 $(document).on 'toggled', '.table', (event, checkStatus) ->
   $batchBtn = $(@).closest('form').find(BATCH_CONTROLS_SELECTOR)
+  $deactivatableBatchBtn = $(@).closest('form').find(DEACTIVATABLE_BATCH_CONTROLS_SELECTOR)
+
   if checkStatus == 'none'
     $batchBtn.fadeOut DELAY
+    $deactivatableBatchBtn.prop('disabled', true)
   else
     $batchBtn.fadeIn DELAY
+    $deactivatableBatchBtn.prop('disabled', false)
 
-  #$(@).closest('form').find('.batch-btn').prop('disabled', checkStatus == 'none')

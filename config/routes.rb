@@ -52,6 +52,7 @@ GtGraphics::Application.routes.draw do
                 end
               end
               collection do
+                patch :upload
                 patch :batch, action: :batch_process, as: :batch_process
                 delete :destroy_multiple
                 get :translation_fields

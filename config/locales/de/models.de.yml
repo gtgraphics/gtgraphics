@@ -84,6 +84,7 @@ de:
         taken_at: Aufnahme
         software: Bearbeitungs-Software
         camera: Kamera
+        created_at: Hochgeladen am
       image/style:
         asset: Bilddatei
         crop_x: X-Position

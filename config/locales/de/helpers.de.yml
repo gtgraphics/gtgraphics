@@ -76,6 +76,7 @@ de:
       none: '– keine –'
       me: '– Ich –'
       no_subject: '– Kein Betreff –'
+      search: 'Suchen...'
     units:
       pixels: Pixel
       pixels_abbr: px

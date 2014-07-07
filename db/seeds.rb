@@ -16,9 +16,12 @@ Template.benchmark "Seeding Templates" do
   Template.template_types.each do |template_type|
     template_class = template_type.constantize
     template_class.template_files.each do |template_file|
-      template = template_class.new(file_name: template_file)
-      template.translations.build(locale: :en, name: template_file.titleize)
-      template.save!
+      if template_file == 'default'
+        template_name = template_class.model_name.human
+      else
+        template_name = template_file.titleize
+      end
+      template_class.create! name: template_name, file_name: template_file
     end
   end
 end
@@ -27,13 +30,7 @@ Page.benchmark "Seeding Homepage" do
   homepage = Page::Homepage.new
   homepage.template = Template::Homepage.first
 
-  page = Page.new
-  page.embeddable = homepage
-  I18n.available_locales.each do |locale|
-    I18n.with_locale(locale) do
-      page.translations.build(locale: locale, title: Page::Homepage.model_name.human)
-    end
-  end
+  page = Page.new title: 'Homepage', embeddable: homepage
   page.author = User.find_by!(email: 'webmaster@gtgraphics.de')
   page.save!
 end

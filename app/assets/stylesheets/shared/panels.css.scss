@@ -8,6 +8,13 @@
   }
 }
 
+.panel-invisible {
+  border: 0;
+  background-color: transparent;
+  @include box-shadow(none);
+  border-radius: none;
+}
+
 .panel-heading .dl-horizontal {
   margin: 0;
 }

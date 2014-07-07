@@ -73,6 +73,7 @@ gem 'request_store'
 gem 'exifr'
 gem 'nokogiri'
 gem 'exception_notification', group: [:staging, :production]
+gem 'miro' # dominant color detection
 
 # Deployment
 group :development do

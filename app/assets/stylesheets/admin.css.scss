@@ -21,9 +21,11 @@
 @import "shared";
 
 // Admin Assets
+@import "admin/avatar";
 @import "admin/controls";
 @import "admin/cropper";
 @import "admin/file_uploader";
+@import "admin/fileinput";
 @import "admin/fonts";
 @import "admin/headings";
 @import "admin/jquery.Jcrop";

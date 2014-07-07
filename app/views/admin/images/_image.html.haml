@@ -1,16 +1,14 @@
 - present image, with: Admin::ImagePresenter do |image|
-  = content_tag_for :tr, image, class: 'thumbnail' do
-    - if checkboxes
+  = content_tag_for :tr, image do
+    - if local_assigns.fetch(:checkboxes, true)
       %td.checkbox-cell
-        = check_box_tag 'image_ids[]', image.id, false, class: 'table-checkbox', id: nil
+        = check_box_tag 'image_ids[]', image.id, false, class: 'table-checkbox', id: nil, data: { behavior: 'tableCheckbox' }
     %td.thumbnail-cell
       = link_to [:admin, image] do
-        = image_tag image.asset.url(:thumbnail), class: 'thumbnail', alt: image.title
+        = image_tag image.asset.url(:thumbnail), class: 'img-circle', alt: image.title, width: 45, height: 45
     %td= link_to image.title, [:admin, image]
-    %td= image.human_content_type
-    %td= number_to_human_size image.file_size
-    %td= image.dimensions
-    %td= time_ago image.updated_at
-    - if actions
+    %td.visible-lg= image.author
+    %td= image.created_at
+    - if local_assigns.fetch(:actions, true)
       %td.actions
-        = action_buttons_for image, size: :mini, icon_only: true
+        = image.action_buttons size: :xs, icon_only: true

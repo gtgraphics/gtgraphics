@@ -1,7 +1,6 @@
 //= require ./shared
 //= require jquery-fileupload/basic
 //= require admin/image_manipulator
-//= require admin/image_uploader
 //= require admin/table_checkbox
 //= require admin/translation_manager
 //= require admin/page_editor

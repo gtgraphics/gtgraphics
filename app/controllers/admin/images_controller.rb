@@ -59,9 +59,22 @@ class Admin::ImagesController < Admin::ApplicationController
     end
   end
 
+  def upload
+    @image = Image.new
+    @image.asset = image_upload_params[:asset]
+    @image.author = current_user
+
+    sleep rand(1..4)
+
+    @image.save!
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def show
     @image_styles = @image.custom_styles
-    # @tags = @image.tags
     respond_with :admin, @image do |format|
       format.json
     end
@@ -111,6 +124,10 @@ class Admin::ImagesController < Admin::ApplicationController
   def batch_process
     if params.key?(:destroy)
       destroy_multiple
+    elsif params.key?(:search)
+      respond_to do |format|
+        format.html { redirect_to admin_images_path(query: params[:query]) }
+      end
     elsif params.key?(:assign_to_gallery)
       image_ids = Array(params[:image_ids]).reject(&:blank?)
       respond_to do |format|
@@ -216,5 +233,9 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def image_crop_params
     params.require(:image).permit(:crop_x, :crop_y, :crop_width, :crop_height)
+  end
+
+  def image_upload_params
+    params.require(:image).permit(:asset)
   end
 end
