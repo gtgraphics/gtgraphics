@@ -24,6 +24,7 @@ $(document).ready ->
   $input = $('#image_upload')
   $input.fileupload
     dataType: 'script'
+    dropZone: $('#image_upload_dropzone')
     add: (event, data) ->
       data.submit()
     done: (event, data) ->

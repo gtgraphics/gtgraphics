@@ -140,26 +140,6 @@ class Admin::ImagesController < Admin::ApplicationController
     end
   end
 
-  def assign_to_gallery
-    breadcrumbs.append translate('breadcrumbs.assign_to_gallery', model: Image.model_name.human(count: 2))
-    if request.post?
-      raise 'sent'
-    else
-      image_ids = Array(params[:image_ids])
-      images = Image.accessible_by(current_ability).find(image_ids)
-      if images.empty?
-        respond_to do |format|
-          format.html { head :bad_request }
-        end
-      else
-        @assignment_activity = ImageGalleryAssignmentActivity.new()
-        respond_to do |format|
-          format.html
-        end
-      end
-    end
-  end
-
   def dimensions
     if style = params[:style] and Image.attachment_definitions[:asset][:styles].keys.map(&:to_s).include?(style)
       geometry = Paperclip::Geometry.from_file(@image.asset.path(style))
@@ -215,7 +195,7 @@ class Admin::ImagesController < Admin::ApplicationController
     Image.accessible_by(current_ability).destroy_all(id: image_ids)
     flash_for Image, :destroyed, multiple: true
     respond_to do |format|
-      format.html { redirect_to :admin_images }
+      format.html { redirect_to request.referer || :admin_images }
     end
   end
 
