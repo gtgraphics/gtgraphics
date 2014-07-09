@@ -1,5 +1,5 @@
 class FontAwesome::Icon < FontAwesome::Iconish
-  VALID_OPTIONS = :shape, :direction, :outline, :spin, :size, :rotate, :flip, :inverse, :border, :fixed_width
+  VALID_OPTIONS = :shape, :direction, :style, :outline, :spin, :size, :rotate, :flip, :inverse, :border, :fixed_width
 
   attr_reader :name
 
@@ -35,6 +35,7 @@ class FontAwesome::Icon < FontAwesome::Iconish
     name_css << "-#{@options[:shape].to_s.dasherize}" if @options[:shape]
     name_css << '-o' if @options[:outline]
     name_css << "-#{@options[:direction].to_s.dasherize}" if @options[:direction]
+    name_css << "-#{@options[:style].to_s.dasherize}" if @options[:style]
     name_css
   end
 

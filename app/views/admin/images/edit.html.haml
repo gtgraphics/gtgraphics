@@ -7,8 +7,6 @@
     = render 'form'
 
   .col-sm-offset-1.col-sm-2
-    = image_tag @image.asset.url(:thumbnail), alt: @image.title, class: 'img-responsive img-circle'
-    %br
     .tabs-right
       %ul.nav.nav-tabs
         %li.divider
@@ -16,4 +14,6 @@
           = prepend_icon :wrench, 'Einstellungen', fixed_width: true, size: :lg
         = active_link_to [:crop, :admin, @image], wrap_tag: :li do
           = prepend_icon :crop, 'Bearbeiten', fixed_width: true, size: :lg
+        = active_link_to [:admin, @image, :styles], wrap_tag: :li do
+          = prepend_icon :picture, Image::Style.model_name.human(count: 2), outline: true, fixed_width: true, size: :lg
         %li.divider

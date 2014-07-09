@@ -4,25 +4,25 @@ class Admin::ImagesController < Admin::ApplicationController
   before_action :load_image, only: %i(show edit update crop apply_crop uncrop destroy download move_to_attachments dimensions preview)
 
   breadcrumbs do |b|
-    b.append Image.model_name.human(count: 2), :admin_images
+    b.append ::Image.model_name.human(count: 2), :admin_images
     if action_name.in? %w(new create)
-      b.append translate('breadcrumbs.new', model: Image.model_name.human), :new_admin_image
+      b.append translate('breadcrumbs.new', model: ::Image.model_name.human), :new_admin_image
     end
     b.append @image.title, [:admin, @image] if action_name.in? %w(show edit update crop apply_crop)
     if action_name.in? %w(edit update crop apply_crop)
-      b.append translate('breadcrumbs.edit', model: Image.model_name.human), [:edit, :admin, @image]
+      b.append translate('breadcrumbs.edit', model: ::Image.model_name.human), [:edit, :admin, @image]
     end
   end
 
   def index
     if image_id_or_ids = params[:id] and image_id_or_ids.present?
       if image_id_or_ids.is_a?(Array)
-        @images = Image.where(id: image_id_or_ids)
+        @images = ::Image.where(id: image_id_or_ids)
       else
         redirect_to params.merge(action: :show) and return
       end
     else
-      @images = Image.search(params[:query])
+      @images = ::Image.search(params[:query])
     end
 
     @users = User.order(:first_name, :last_name)
@@ -33,8 +33,9 @@ class Admin::ImagesController < Admin::ApplicationController
     @images = @images.includes(:translations).with_locales(Globalize.fallbacks) \
                      .includes(:author) \
                      .sort(params[:sort], params[:direction])
-                     .page(params[:page]).per(16)
+                     .page(params[:page]).per(25)
     @images = @images.includes(:custom_styles) if params[:include_styles].to_b
+    @images = @images.created(params[:period]) if params[:period]
   
     respond_with :admin, @images do |format|
       format.json
@@ -42,14 +43,14 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def new
-    @image = Image.new
+    @image = ::Image.new
     respond_to do |format|
       format.js
     end
   end
 
   def create
-    @image = Image.create(image_params) do |image|
+    @image = ::Image.create(image_params) do |image|
       image.author ||= current_user
     end
     flash_for @image, :created if @image.errors.empty?
@@ -60,14 +61,10 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def upload
-    @image = Image.new
+    @image = ::Image.new
     @image.asset = image_upload_params[:asset]
     @image.author = current_user
-
-    sleep rand(1..4)
-
     @image.save!
-
     respond_to do |format|
       format.js
     end
@@ -118,7 +115,7 @@ class Admin::ImagesController < Admin::ApplicationController
   def destroy
     @image.destroy
     flash_for @image
-    respond_with :admin, @image
+    respond_with :admin, @image, location: request.referer || :admin_images
   end
 
   def batch_process
@@ -141,7 +138,7 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def dimensions
-    if style = params[:style] and Image.attachment_definitions[:asset][:styles].keys.map(&:to_s).include?(style)
+    if style = params[:style] and ::Image.attachment_definitions[:asset][:styles].keys.map(&:to_s).include?(style)
       geometry = Paperclip::Geometry.from_file(@image.asset.path(style))
       width = geometry.width.to_i
       height = geometry.height.to_i
@@ -155,7 +152,10 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def download
-    send_file @image.asset.path, filename: @image.virtual_file_name, content_type: @image.content_type, disposition: :attachment, x_sendfile: true
+    send_file @image.asset.path, filename: @image.virtual_file_name,
+                                 content_type: @image.content_type,
+                                 disposition: :attachment,
+                                 x_sendfile: true
   end
 
   def move_to_attachments
@@ -173,7 +173,7 @@ class Admin::ImagesController < Admin::ApplicationController
         if valid
           redirect_to [:admin, @attachment]
         else
-          flash_for Image, :unmovable, alert: true
+          flash_for ::Image, :unmovable, alert: true
           redirect_to [:admin, @image]
         end
       end
@@ -182,7 +182,7 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def translation_fields
     translated_locale = params.fetch(:translated_locale)
-    @image = Image.new
+    @image = ::Image.new
     @image.translations.build(locale: translated_locale)
     respond_to do |format|
       format.html { render layout: false }
@@ -192,15 +192,15 @@ class Admin::ImagesController < Admin::ApplicationController
   private
   def destroy_multiple
     image_ids = Array(params[:image_ids])
-    Image.accessible_by(current_ability).destroy_all(id: image_ids)
-    flash_for Image, :destroyed, multiple: true
+    ::Image.accessible_by(current_ability).destroy_all(id: image_ids)
+    flash_for ::Image, :destroyed, multiple: true
     respond_to do |format|
       format.html { redirect_to request.referer || :admin_images }
     end
   end
 
   def load_image
-    @image = Image.find(params[:id])
+    @image = ::Image.find(params[:id])
   end
 
   def image_params

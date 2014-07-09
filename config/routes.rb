@@ -1,4 +1,11 @@
 GtGraphics::Application.routes.draw do
+  concern :movable do
+    member do
+      patch :move_up
+      patch :move_down
+    end
+  end
+
   get 'sitemap.:format', to: 'sitemaps#index', as: :sitemaps
   get 'sitemap.:page.:format', to: 'sitemaps#show', as: :sitemap
     
@@ -45,11 +52,8 @@ GtGraphics::Application.routes.draw do
             end
 
             resources :images do
-              resources :styles, controller: :image_styles, except: :index do
-                member do
-                  get :crop
-                  patch :apply_crop
-                end
+              resources :styles, controller: :'image/styles', concerns: :movable do
+                delete :destroy_multiple, on: :collection
               end
               collection do
                 patch :upload
@@ -77,7 +81,7 @@ GtGraphics::Application.routes.draw do
               end
             end
 
-            resources :pages, except: :new do
+            resources :pages, except: :new, concerns: :movable do
               resources :children, controller: :pages, only: :new do
                 get ':page_type', on: :new, action: :new, as: :typed
               end
@@ -94,8 +98,6 @@ GtGraphics::Application.routes.draw do
               end
               member do
                 patch :move
-                patch :move_up
-                patch :move_down
                 patch :publish
                 patch :hide
                 patch :enable_in_menu
@@ -112,20 +114,14 @@ GtGraphics::Application.routes.draw do
             resources :snippets, except: :show do
               collection do
                 delete :destroy_multiple
-                get :translation_fields
                 get :editor_preview
               end
             end
 
             resources :tags, only: :index
             
-            resources :templates, except: :new do
-              resources :region_definitions, controller: :'template/region_definitions', except: [:index, :show] do
-                member do
-                  patch :move_up
-                  patch :move_down
-                end
-              end
+            resources :templates, except: :new, concerns: :movable do
+              resources :region_definitions, controller: :'template/region_definitions', except: [:index, :show], concerns: :movable
               get ':template_type', on: :new, action: :new, as: :typed
               collection do
                 get 'types/:template_type', action: :index, as: :typed
@@ -135,8 +131,6 @@ GtGraphics::Application.routes.draw do
               end
               member do
                 delete 'destroy_region/:label', action: :destroy_region, as: :destroy_region
-                patch :move_up
-                patch :move_down
               end
             end
 

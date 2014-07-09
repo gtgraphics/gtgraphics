@@ -36,7 +36,25 @@
 
   .container {
     position: relative;
+
     .loader {
+      width: 16px;
+      height: 16px;
+      position: absolute;
+      left: -12px;
+      top: 15px;
+      color: lighten($gray-light, 10%);
+      display: none;
+      pointer-events: none;
+      .progress-percentage {
+        position: absolute;
+        top: 3px;
+        right: 20px;
+        font-size: 10px;
+      }
+    }
+
+    /*.loader {
       $size: 16px;
       position: absolute;
       background: {
@@ -51,7 +69,7 @@
       left: -12px;
       display: none;
       pointer-events: none;
-    }
+    }*/
   }
 
   .navbar-brand {

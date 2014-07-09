@@ -26,6 +26,7 @@ class Image < ActiveRecord::Base
   include Image::Croppable
   include Image::ExifStorable
   include Ownable
+  include PeriodFilterable
   include PersistenceContextTrackable
   include Sortable
   include Taggable
@@ -55,9 +56,9 @@ class Image < ActiveRecord::Base
   before_update :destroy_custom_styles, if: :asset_changed?
 
   acts_as_sortable do |by|
+    by.title(default: true) { |column, dir| Image::Translation.arel_table[column].send(dir.to_sym) }
     by.author { |dir| [User.arel_table[:first_name].send(dir.to_sym), User.arel_table[:last_name].send(dir.to_sym)] }
-    by.title { |column, dir| Image::Translation.arel_table[column].send(dir.to_sym) }
-    by.created_at default: true
+    by.created_at
   end
 
   class << self

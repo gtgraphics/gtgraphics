@@ -16,6 +16,7 @@
 #  customization_options :text
 #  width                 :integer
 #  height                :integer
+#  position              :integer          not null
 #
 
 class Image < ActiveRecord::Base
@@ -28,6 +29,8 @@ class Image < ActiveRecord::Base
     belongs_to :image, inverse_of: :custom_styles
 
     translates :title, fallbacks_for_empty_translations: true
+
+    acts_as_list scope: :image_id
 
     has_image
 

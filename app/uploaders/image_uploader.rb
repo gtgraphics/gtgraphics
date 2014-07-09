@@ -21,6 +21,14 @@ class ImageUploader < AttachmentUploader
     end
   end
 
+  version :social, from_version: :custom do
+    process resize_to_fill: [500, 500]
+
+    def full_filename(file)
+      "social/#{file}"
+    end
+  end
+
   def filename
     "#{model.asset_token}.#{file.extension}"
   end

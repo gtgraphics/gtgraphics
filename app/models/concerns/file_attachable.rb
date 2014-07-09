@@ -25,7 +25,7 @@ module FileAttachable
 
     def virtual_file_name
       I18n.with_locale(I18n.default_locale) do
-        title.parameterize.underscore + File.extname(file_name).downcase
+        title.parameterize.underscore + File.extname(original_filename).downcase
       end
     end
 

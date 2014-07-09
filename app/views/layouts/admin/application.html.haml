@@ -17,6 +17,8 @@
   %nav#admin_navigation.navbar.navbar-default.navbar-fixed-top{role: 'navigation'}
     .container
       #loader.loader
+        = icon :circle, outline: true, style: :notch, fixed_width: true, spin: true
+        .progress-percentage
 
       .navbar-header
         - if signed_in?

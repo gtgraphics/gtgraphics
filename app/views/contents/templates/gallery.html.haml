@@ -1,11 +1,11 @@
 .page-header
   %h1= page.title
 
-- page.children.images.includes(:translations).with_locales(Globalize.fallbacks).each_slice(4) do |child_pages|
+- page.children.images.preload(embeddable: :image).with_translations_for_current_locale.each_slice(4) do |child_pages|
   .row
     - child_pages.each do |child_page|
       .col-lg-3
         = link_to child_page, class: 'thumbnail' do
-          = image_tag child_page.embeddable.image.asset(:large_thumbnail), class: 'img-responsive'
+          = image_tag child_page.embeddable.image.asset.url(:thumbnail), class: 'img-responsive'
           .caption
             %h3= child_page.title

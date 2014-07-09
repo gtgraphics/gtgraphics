@@ -5,3 +5,15 @@ body.loading {
     cursor: $loader-cursor !important;
   }*/
 }
+
+body.busy {
+  cursor: wait;
+}
+
+.loader {
+
+}
+
+#loader_progress {
+  display: none;  
+}

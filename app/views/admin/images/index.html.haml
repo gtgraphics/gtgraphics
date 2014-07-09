@@ -9,7 +9,7 @@
           .list-group
             = active_link_to 'Jeder', params.except(:author_id), class: 'list-group-item', active: params[:author_id].nil?
             - @users.each do |user|
-              = active_link_to params.merge(author_id: user.to_param), class: 'list-group-item', active: user.id == params[:author_id].to_i do
+              = active_link_to params.except(:page).merge(author_id: user.to_param), class: 'list-group-item', active: user.id == params[:author_id].to_i do
                 %span.avatar
                   %span.icon= gravatar_image_tag user.email, default: :mm, size: 24, class: 'img-circle'
                   %span.caption= user.name
@@ -18,11 +18,9 @@
           .list-group
             = active_link_to 'Egal', params.except(:period), class: 'list-group-item', active: params[:period].nil?
             - {'Heute' => 'today', 'Gestern' => 'yesterday', 'In dieser Woche' => 'week', 'In diesem Monat' => 'month'}.each do |caption, period|
-              = active_link_to caption, params.merge(period: period), class: 'list-group-item', active: period == params[:period]
+              = active_link_to caption, params.except(:page).merge(period: period), class: 'list-group-item', active: period == params[:period]
 
       .col-sm-9
-        = progress_bar type: :success, show_percentage: true, striped: true, active: true, id: 'progress'
-
         .row
           .col-sm-8
             .btn-toolbar
@@ -42,27 +40,25 @@
               .search-component
                 = text_field_tag :query, params[:query], class: 'search-input', placeholder: translate('helpers.prompts.search'), autofocus: true
                 .btn-toolbar
-                  = button_tag name: 'search', class: 'btn btn-search' do
+                  = button_tag name: 'search', class: 'btn btn-search', title: translate('helpers.links.search'), data: { toggle: 'tooltip', placement: 'top', container: 'body' } do
                     = prepend_icon :search, translate('helpers.links.search'), caption_html: { class: 'sr-only' }
-                  = button_link_to :admin_images, type: :search do
+                  = button_link_to :admin_images, type: :search, title: translate('helpers.links.reset'), data: { toggle: 'tooltip', placement: 'top', container: 'body' } do
                     = prepend_icon :times, translate('helpers.links.reset'), caption_html: { class: 'sr-only' }
             %br
 
-        - if @images.any?
-          %table.table.table-hover
-            %thead
-              %tr
-                %th.checkbox-cell
-                  %input{type: 'checkbox', class: 'js-only table-checkbox-all', data: { toggle: 'tableCheckboxes' }}
-                %th.thumbnail-cell
-                %th= sort_link_for @images, :title
-                %th.visible-lg= sort_link_for @images, :author
-                %th= sort_link_for @images, :created_at
-                %th.actions
-            %tbody#images
-              - @images.each do |image|
-                = render image
+        #images_empty_hint.well.text-center{class: @images.any? ? 'hidden' : nil}
+          %h4= translate('views.hints.empty', model: Image.model_name.human(count: 2))
 
-        - else
-          .well.text-center
-            %h4= translate('views.hints.empty', model: Image.model_name.human(count: 2))
+        %table#images.table.table-hover{class: @images.empty? ? 'hidden' : nil}
+          %thead
+            %tr
+              %th.checkbox-cell
+                %input{type: 'checkbox', class: 'js-only table-checkbox-all', data: { toggle: 'tableCheckboxes' }}
+              %th.thumbnail-cell
+              %th= sort_link_for @images, :title
+              %th.visible-lg= sort_link_for @images, :author
+              %th= sort_link_for @images, :created_at
+              %th.actions
+          %tbody
+            - @images.each do |image|
+              = render image

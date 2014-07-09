@@ -1,4 +1,4 @@
-class Admin::ImageStylesController < Admin::ApplicationController
+class Admin::Image::StylesController < Admin::ApplicationController
   respond_to :html
 
   before_action :load_image
@@ -7,8 +7,15 @@ class Admin::ImageStylesController < Admin::ApplicationController
   breadcrumbs do |b|
     b.append Image.model_name.human(count: 2), :admin_images
     b.append @image.title, [:admin, @image]
+    b.append Image::Style.model_name.human(count: 2), [:admin, @image, :styles]
+
     b.append translate('breadcrumbs.new', model: Image::Style.model_name.human), [:new, :admin, @image, :style] if action_name.in? %w(new new_attachment create)
     b.append translate('breadcrumbs.edit', model: Image::Style.model_name.human), edit_admin_image_style_path(@image, @image_style) if action_name.in? %w(edit crop update)
+  end
+
+  def index
+    @image_styles = @image.custom_styles
+    respond_with :admin, @image, @image_styles
   end
 
   def show
@@ -91,7 +98,7 @@ class Admin::ImageStylesController < Admin::ApplicationController
 
   private
   def load_image
-    @image = Image.find(params[:image_id])
+    @image = ::Image.find(params[:image_id])
   end
 
   def load_image_style
