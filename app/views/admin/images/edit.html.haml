@@ -10,10 +10,10 @@
     .tabs-right
       %ul.nav.nav-tabs
         %li.divider
-        = active_link_to [:edit, :admin, @image], wrap_tag: :li do
-          = prepend_icon :wrench, 'Einstellungen', fixed_width: true, size: :lg
         = active_link_to [:crop, :admin, @image], wrap_tag: :li do
-          = prepend_icon :crop, 'Bearbeiten', fixed_width: true, size: :lg
+          = prepend_icon :crop, translate('helpers.links.edit'), fixed_width: true, size: :lg
         = active_link_to [:admin, @image, :styles], wrap_tag: :li do
           = prepend_icon :picture, Image::Style.model_name.human(count: 2), outline: true, fixed_width: true, size: :lg
+        = active_link_to [:edit, :admin, @image], wrap_tag: :li do
+          = prepend_icon :pencil, translate('helpers.links.edit_meta_data'), fixed_width: true, size: :lg
         %li.divider

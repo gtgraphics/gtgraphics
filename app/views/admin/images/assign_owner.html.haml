@@ -1,0 +1,4 @@
+- content_for :title, translate('helpers.links.assign_owner', model: Image.model_name.human)
+
+- content_for :content do
+  = render 'assign_owner_form'

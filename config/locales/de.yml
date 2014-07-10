@@ -5,6 +5,8 @@ de:
     en: Englisch
     de: Deutsch
 
+  pixels: Pixel
+
   dimensions: '%{width} × %{height} Pixel'
 
   resolution_presets:

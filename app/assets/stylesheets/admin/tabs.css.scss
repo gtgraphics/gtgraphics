@@ -76,4 +76,17 @@
       *border-left-color: $body-bg;
     }
   }
+
+  li {
+    .prepend-icon {
+      .fa {
+        position: absolute;
+        top: 13px; 
+      }
+      .caption {
+        display: block;
+        padding-left: 26px;
+      }
+    }
+  }
 }

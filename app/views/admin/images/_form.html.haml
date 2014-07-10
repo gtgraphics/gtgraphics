@@ -4,8 +4,7 @@
     = form.input :asset #, as: :image_preview, required: true, input_html: { preview_version: :thumbnail }
   - else
     = form.input :description, input_html: { class: 'image-editor', rows: 6 }
-    = form.association :author, selected: current_user.id
-    /= form.input :tag_tokens, input_html: { class: 'tokenizer' }
+    = form.association :author, as: :radio_buttons, wrapper: :horizontal_radio_and_checkboxes
 
   = form_actions do
     = form.button :button, name: 'save', type: 'submit', class: 'btn-primary' do

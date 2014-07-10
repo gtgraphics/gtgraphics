@@ -30,7 +30,7 @@ de:
     links:
       add: Hinzufügen
       apply: Anwenden
-      assign_to_gallery: Zu Galerie hinzufügen
+      assign_owner: Eigentümer zuweisen
       cancel: Abbrechen
       close: Schließen
       crop: Zuschneiden
@@ -40,6 +40,7 @@ de:
       disable_in_menu: In Menüs verstecken
       download: Herunterladen
       edit: Bearbeiten
+      edit_meta_data: Metadaten bearbeiten
       edit_regions: Inhalte bearbeiten
       enable_in_menu: In Menüs anzeigen
       hide: Verstecken

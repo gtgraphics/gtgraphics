@@ -47,11 +47,10 @@ $(document).ready ->
       else
         if allCheckboxesChecked($checkboxes)
           $checkboxes.prop('checked', false)
+          $checkboxes.closest('tr').removeClass('active')
         else
           $checkboxes.prop('checked', true)
-        $checkboxes.closest('tr').toggleClass('active')
-      #$checkboxes.iCheck('update')
-      #$toggler.iCheck('update')
+          $checkboxes.closest('tr').addClass('active')
       $table.trigger('toggled', [checkStatus($checkboxes)])
 
     #.on 'ifChanged', SINGLE_CHECKBOX_SELECTOR, ->
@@ -66,8 +65,6 @@ $(document).ready ->
       $checkbox.iCheck('update')
       
       checked = !allCheckboxesChecked($checkboxes)
-      #$toggler.prop('checked', checked).iCheck('update')
-      #$checkboxes.prop('checked', checked)
 
       cs = checkStatus($checkboxes)
       switch cs
@@ -77,10 +74,6 @@ $(document).ready ->
           $toggler.prop('indeterminate', true).prop('checked', false)
         else
           $toggler.prop('indeterminate', false).prop('checked', false)
-
-      #$toggler.iCheck('update')
-      #$checkboxes.iCheck('update')
-
       $table.trigger('toggled', [cs])
 
     .each ->

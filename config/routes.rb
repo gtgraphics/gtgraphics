@@ -58,9 +58,9 @@ GtGraphics::Application.routes.draw do
               collection do
                 patch :upload
                 patch :batch, action: :batch_process, as: :batch_process
+                patch :associate_owner, action: :associate_owner, as: :associate_owner_with
                 delete :destroy_multiple
                 get :translation_fields
-                get :assign_to_gallery
               end
               member do
                 get :crop

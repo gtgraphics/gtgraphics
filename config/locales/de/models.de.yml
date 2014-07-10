@@ -49,8 +49,6 @@ de:
         generate_password: Password generieren?
         password: Passwort
         password_confirmation: Password (Wdh.)
-      image_page_embedding_activity:
-        parent_page_id: Seite erzeugen in
       sign_in_activity:
         email: E-Mail-Adresse
         password: Passwort
@@ -59,6 +57,9 @@ de:
         image_ids: Bilder
         image_id_tokens: Bilder
         template_id: Vorlage
+      admin/image_owner_assignment_activity:
+        image_ids: Bilder
+        author_id: Urheber
     models:
       editor/link:
         one: Hyperlink
@@ -72,11 +73,15 @@ de:
       attachment:
         asset: Datei
         author: Urheber
+        author_name: Urheber
       image:
         author: Urheber
+        author_name: Urheber
         aspect_ratio: Seitenverhältnis
         asset: Bilddatei
         dimensions: Maße
+        pages_count: Seiten
+        pixels_count: Pixelzahl
         crop_x: X-Position
         crop_y: Y-Position
         crop_width: Breite

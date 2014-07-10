@@ -36,6 +36,7 @@ class Admin::ImagesController < Admin::ApplicationController
                      .page(params[:page]).per(25)
     @images = @images.includes(:custom_styles) if params[:include_styles].to_b
     @images = @images.created(params[:period]) if params[:period]
+    @images = @images.where(content_type: params[:content_type]) if params[:content_type]
   
     respond_with :admin, @images do |format|
       format.json
@@ -118,25 +119,6 @@ class Admin::ImagesController < Admin::ApplicationController
     respond_with :admin, @image, location: request.referer || :admin_images
   end
 
-  def batch_process
-    if params.key?(:destroy)
-      destroy_multiple
-    elsif params.key?(:search)
-      respond_to do |format|
-        format.html { redirect_to admin_images_path(query: params[:query]) }
-      end
-    elsif params.key?(:assign_to_gallery)
-      image_ids = Array(params[:image_ids]).reject(&:blank?)
-      respond_to do |format|
-        format.html { redirect_to assign_to_gallery_admin_images_path(image_ids: image_ids) }
-      end
-    else
-      respond_to do |format|
-        format.html { head :bad_request }
-      end
-    end
-  end
-
   def dimensions
     if style = params[:style] and ::Image.attachment_definitions[:asset][:styles].keys.map(&:to_s).include?(style)
       geometry = Paperclip::Geometry.from_file(@image.asset.path(style))
@@ -158,47 +140,61 @@ class Admin::ImagesController < Admin::ApplicationController
                                  x_sendfile: true
   end
 
-  def move_to_attachments
-    valid = false
-    @attachment = Attachment.new(@image.slice(:author_id, :created_at, :updated_at))
-    @attachment.asset = @image.asset
-    @image.translations.each do |image_translation|
-      @attachment.translations.build(image_translation.slice(:locale, :title, :description, :created_at, :updated_at))
-    end
-    Attachment.transaction do
-      valid = @attachment.save and @image.destroy
-    end
-    respond_to do |format|
-      format.html do
-        if valid
-          redirect_to [:admin, @attachment]
-        else
-          flash_for ::Image, :unmovable, alert: true
-          redirect_to [:admin, @image]
-        end
+  # Batch Processing
+
+  def batch_process
+    if params.key? :destroy
+      destroy_multiple
+    elsif params.key? :search
+      search
+    elsif params.key? :assign_owner
+      assign_owner
+    else
+      respond_to do |format|
+        format.html { head :bad_request }
       end
     end
   end
 
-  def translation_fields
-    translated_locale = params.fetch(:translated_locale)
-    @image = ::Image.new
-    @image.translations.build(locale: translated_locale)
+  def search
+    location = admin_images_path(query: params[:query])
     respond_to do |format|
-      format.html { render layout: false }
+      format.html { redirect_to location }
+      format.js { redirect_via_turbolinks_to location }
+    end
+  end
+  private :search
+
+  def destroy_multiple
+    image_ids = Array(params[:image_ids]).map(&:to_i).reject(&:zero?)
+    ::Image.accessible_by(current_ability).destroy_all(id: image_ids)
+    flash_for ::Image, :destroyed, multiple: true
+    location = request.referer || admin_images_path
+    respond_to do |format|
+      format.html { redirect_to location }
+      format.js { redirect_via_turbolinks_to location }
+    end
+  end
+  private :destroy_multiple
+
+  def assign_owner
+    @image_owner_assignment_activity = Admin::ImageOwnerAssignmentActivity.new
+    @image_owner_assignment_activity.image_ids = Array(params[:image_ids])
+    @image_owner_assignment_activity.author = current_user
+    respond_to do |format|
+      format.js { render 'assign_owner' }
+    end
+  end
+  private :assign_owner
+
+  def associate_owner
+    @image_owner_assignment_activity = Admin::ImageOwnerAssignmentActivity.execute(image_owner_assignment_params)
+    respond_to do |format|
+      format.js
     end
   end
 
   private
-  def destroy_multiple
-    image_ids = Array(params[:image_ids])
-    ::Image.accessible_by(current_ability).destroy_all(id: image_ids)
-    flash_for ::Image, :destroyed, multiple: true
-    respond_to do |format|
-      format.html { redirect_to request.referer || :admin_images }
-    end
-  end
-
   def load_image
     @image = ::Image.find(params[:id])
   end
@@ -217,5 +213,9 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def image_upload_params
     params.require(:image).permit(:asset)
+  end
+
+  def image_owner_assignment_params
+    params.require(:image_owner_assignment).permit(:author_id, image_ids: [])
   end
 end

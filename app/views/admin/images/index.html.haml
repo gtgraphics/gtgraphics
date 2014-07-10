@@ -1,24 +1,31 @@
 #image_upload_dropzone
-  = form_tag :batch_process_admin_images, method: :patch do
+  = form_tag :batch_process_admin_images, method: :patch, remote: true do
 
     = page_header
 
     .row
       .col-sm-3
-        = panel Image.human_attribute_name(:author_id), body: false do
-          .list-group
-            = active_link_to 'Jeder', params.except(:author_id), class: 'list-group-item', active: params[:author_id].nil?
-            - @users.each do |user|
-              = active_link_to params.except(:page).merge(author_id: user.to_param), class: 'list-group-item', active: user.id == params[:author_id].to_i do
-                %span.avatar
-                  %span.icon= gravatar_image_tag user.email, default: :mm, size: 24, class: 'img-circle'
-                  %span.caption= user.name
+        .panel-group#filters
+          = panel link_to(prepend_icon(:user, Image.human_attribute_name(:author_id), fixed_width: true), '#author', data: { toggle: 'collapse' }), body: false do
+            .list-group#author.panel-collapse.collapse.in
+              = active_link_to 'Egal', params.except(:author_id), class: 'list-group-item', active: params[:author_id].nil?
+              - @users.each do |user|
+                = active_link_to params.except(:page).merge(author_id: user.to_param), class: 'list-group-item', active: user.id == params[:author_id].to_i do
+                  %span.avatar
+                    %span.icon= gravatar_image_tag user.email, default: :mm, size: 24, class: 'img-circle'
+                    %span.caption= user.name
 
-        = panel Image.human_attribute_name(:created_at), body: false do
-          .list-group
-            = active_link_to 'Egal', params.except(:period), class: 'list-group-item', active: params[:period].nil?
-            - {'Heute' => 'today', 'Gestern' => 'yesterday', 'In dieser Woche' => 'week', 'In diesem Monat' => 'month'}.each do |caption, period|
-              = active_link_to caption, params.except(:page).merge(period: period), class: 'list-group-item', active: period == params[:period]
+          = panel link_to(prepend_icon(:calendar, Image.human_attribute_name(:created_at), fixed_width: true), '#period', data: { toggle: 'collapse' }), body: false do
+            .list-group#period.panel-collapse.collapse{class: params[:period].nil? ? nil : 'in'}
+              = active_link_to 'Egal', params.except(:period), class: 'list-group-item', active: params[:period].nil?
+              - {'Heute' => 'today', 'Gestern' => 'yesterday', 'In dieser Woche' => 'week', 'In diesem Monat' => 'month'}.each do |caption, period|
+                = active_link_to caption, params.except(:page).merge(period: period), class: 'list-group-item', active: period == params[:period]
+
+          = panel link_to(prepend_icon(:file_photo, Image.human_attribute_name(:content_type), outline: true, fixed_width: true), '#content_type', data: { toggle: 'collapse' }), body: false do
+            .list-group#content_type.panel-collapse.collapse{class: params[:content_type].nil? ? nil : 'in'}
+              = active_link_to 'Egal', params.except(:content_type), class: 'list-group-item', active: params[:content_type].nil?
+              - Image.permitted_content_types.each do |type|
+                = active_link_to content_type(type), params.except(:page).merge(content_type: type), class: 'list-group-item', active: type == params[:content_type]
 
       .col-sm-9
         .row
@@ -32,11 +39,13 @@
               .btn-group
                 = button_tag name: 'destroy', class: 'btn btn-danger deactivatable-batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) } do
                   = prepend_icon :trash, translate('helpers.links.destroy_selected'), outline: true
+              .btn-group.only-js
+                = button_tag name: 'assign_owner', class: 'btn btn-default deactivatable-batch-control', title: translate('helpers.links.assign_owner'), data: { toggle: 'tooltip', container: 'body' } do
+                  = prepend_icon :user, translate('helpers.links.assign_owner'), caption_html: { class: 'sr-only' }
             %br
 
           .col-sm-4
             .btn-toolbar
-
               .search-component
                 = text_field_tag :query, params[:query], class: 'search-input', placeholder: translate('helpers.prompts.search'), autofocus: true
                 .btn-toolbar
@@ -56,7 +65,7 @@
                 %input{type: 'checkbox', class: 'js-only table-checkbox-all', data: { toggle: 'tableCheckboxes' }}
               %th.thumbnail-cell
               %th= sort_link_for @images, :title
-              %th.visible-lg= sort_link_for @images, :author
+              / %th.visible-lg= sort_link_for @images, :author
               %th= sort_link_for @images, :created_at
               %th.actions
           %tbody

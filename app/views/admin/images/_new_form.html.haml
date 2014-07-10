@@ -6,4 +6,4 @@
   .modal-footer
     = form.button :button, name: 'save', type: 'submit', class: 'btn-primary' do
       = prepend_icon :save, translate('helpers.links.save'), scope: 'helpers.submit', model: Image.model_name.human
-    = button_link_to translate('helpers.links.cancel'), [:admin, @image]
+    = button_tag translate('helpers.links.close'), type: 'button', class: 'btn btn-default', data: { dismiss: 'modal' }

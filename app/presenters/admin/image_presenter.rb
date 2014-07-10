@@ -7,9 +7,13 @@ class Admin::ImagePresenter < Admin::ApplicationPresenter
     exif_data[:artist]
   end
 
-  def author(linked = true)
+  def author
+    present super, with: Admin::UserPresenter
+  end
+
+  def author_name(linked = true)
     if image.author
-      h.link_to_if linked, author_name, [:admin, image.author]
+      h.link_to_if linked, image.author.name, [:admin, image.author]
     else
       artist
     end
@@ -33,6 +37,10 @@ class Admin::ImagePresenter < Admin::ApplicationPresenter
     end
   end
 
+  def pixels_count
+    h.number_to_human(image.width * image.height) + " #{I18n.translate(:pixels)}"
+  end
+
   def preview_html
     h.capture do
       h.content_tag :div, class: 'dl-vertical' do
@@ -42,6 +50,20 @@ class Admin::ImagePresenter < Admin::ApplicationPresenter
         h.concat h.content_tag(:div, author(false))
       end
     end.to_str
+  end
+
+  def pages_count
+    count = image.pages.count
+    "#{count} #{Page.model_name.human(count: count)}"
+  end
+
+  def styles_count
+    count = image.custom_styles.count
+    "#{count} #{Image::Style.model_name.human(count: count)}"
+  end
+
+  def summary
+    content_type
   end
 
   def taken_at
