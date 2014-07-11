@@ -82,6 +82,10 @@ class Image < ActiveRecord::Base
     @dominant_colors ||= Miro::DominantColors.new(asset.path)
   end
 
+  def manipulated?
+    cropped? or resized?
+  end
+
   def to_s
     title
   end

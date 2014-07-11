@@ -79,11 +79,11 @@ class Admin::ImagesController < Admin::ApplicationController
       img.cropped = true if img.cropped.nil?
       img.crop_x ||= 0
       img.crop_y ||= 0
-      img.crop_width ||= img.width
-      img.crop_height ||= img.height
+      img.crop_width ||= img.original_width
+      img.crop_height ||= img.original_height
       img.resized = false if img.resized.nil?
-      img.resize_width ||= img.width
-      img.resize_height ||= img.height
+      img.resize_width ||= img.original_width
+      img.resize_height ||= img.original_height
     end
     respond_to do |format|
       format.js

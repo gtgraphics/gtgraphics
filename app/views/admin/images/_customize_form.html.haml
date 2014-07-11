@@ -39,6 +39,12 @@
                 = form.input_field :resize_width, as: :integer, placeholder: Image.human_attribute_name(:resize_width), class: 'form-control resize-width', min: 1, data: { control: 'resizeWidth' }
               .col-sm-6
                 = form.input_field :resize_height, as: :integer, placeholder: Image.human_attribute_name(:resize_height), class: 'form-control resize-height', min: 1, data: { control: 'resizeHeight' }
+            .row
+              .col-sm-12
+                .checkbox
+                  %label
+                    %input{type: 'checkbox', checked: true, class: 'resize-aspect-ratio', data: { control: 'preserveResizeAspectRatio' }}
+                    = Image::Style.human_attribute_name(:preserve_aspect_ratio)
 
 
   .modal-footer
