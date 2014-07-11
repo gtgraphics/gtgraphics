@@ -16,11 +16,22 @@ module FileAttachable
     included do
       validates :asset, presence: true
 
-      before_validation :set_original_filename_content_type_and_file_size, if: :asset_changed?
+      before_validation :set_original_filename, if: :asset_changed?
+      before_validation :set_content_type, if: :asset_changed?
+      before_validation :set_file_size, if: :asset_changed?
+      before_save :set_asset_updated_at, if: :asset_changed?
     end
 
     def mime_type
       Mime::Type.parse(content_type).first
+    end
+
+    def recreate_assets!
+      asset.recreate_versions!
+      set_content_type
+      set_file_size
+      set_asset_updated_at 
+      save!
     end
 
     def virtual_file_name
@@ -29,13 +40,24 @@ module FileAttachable
       end
     end
 
-    private
-    def set_original_filename_content_type_and_file_size
+    protected
+    def set_original_filename
       if asset.file.respond_to?(:original_filename)
         self.original_filename = asset.file.original_filename 
       end
+    end
+
+    def set_content_type
       self.content_type = asset.file.content_type
+    end
+
+    def set_file_size
       self.file_size = asset.file.size
+    end
+
+    private
+    def set_asset_updated_at
+      self.asset_updated_at = DateTime.now
     end
   end
 end

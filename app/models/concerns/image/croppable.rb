@@ -12,22 +12,30 @@ class Image < ActiveRecord::Base
 
       validate :verify_crop_dimensions_consistency, on: :update, if: :cropped?
 
-      before_save :clear_crop_area, if: -> { asset_changed? or !cropped? }
+      before_save :clear_crop_area, unless: :cropped?
 
       store_accessor :customization_options, :cropped, :crop_x, :crop_y, :crop_width, :crop_height
       alias_method :cropped?, :cropped
 
-      %w(crop_x crop_y crop_width crop_height).each do |method|
-        class_eval <<-RUBY
-          def #{method}=(value)
-            super(value.try(:to_i))
-          end
-        RUBY
-      end
+      include AccessorOverrides
     end
 
-    def cropped=(cropped)
-      super(cropped.to_b)
+    module AccessorOverrides
+      extend ActiveSupport::Concern
+
+      included do
+        %w(crop_x crop_y crop_width crop_height).each do |method|
+          class_eval <<-RUBY
+            def #{method}=(value)
+              super(value.try(:to_i))
+            end
+          RUBY
+        end
+      end
+
+      def cropped=(cropped)
+        super(cropped.to_b)
+      end
     end
     
     def crop_geometry

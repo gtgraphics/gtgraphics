@@ -1,10 +1,10 @@
 class ImageManipulator
   constructor: ($container) ->
-    @container = $container
+    @$container = $container
 
-    @image = $('.img-croppable', $container)
-    @originalWidth = @image.data('originalWidth')
-    @originalHeight = @image.data('originalHeight')
+    @$image = $('img[data-behavior="croppable"]', $container)
+    @originalWidth = @$image.data('originalWidth')
+    @originalHeight = @$image.data('originalHeight')
 
     @inputs = {}
     @panels = {
@@ -35,7 +35,8 @@ class ImageManipulator
 
   initCropper: ->
     return console.warn 'cropper has already been attached' if @cropper
-    @cropper = $.Jcrop(@image, {
+    @cropper = $.Jcrop(@$image, {
+      #bgColor: 'transparent'
       trueSize: [@originalWidth, @originalHeight]
       allowSelect: false
       onChange: (coordinates) =>
@@ -64,6 +65,8 @@ class ImageManipulator
         @setCropAreaExplicitly = false
     })
 
+    @$container.trigger('init.cropper')
+
   refreshCroppedState: (initial) ->
     enabled = @inputs.cropped.prop('checked')
     $panelCollapse = @panels.crop.find('.panel-collapse')
@@ -73,7 +76,8 @@ class ImageManipulator
     else
       $panelCollapse.collapse('hide') unless initial
       @cropper.disable()
-    $panelCollapse.find(':input').prop('disabled', !enabled)
+    # $panelCollapse.find(':input').prop('disabled', !enabled)
+    @panels.crop.find('.panel-body').find(':input').prop('disabled', !enabled)
     @refreshSubmitButtonState()
 
   refreshResizedState: (initial) ->
@@ -84,12 +88,13 @@ class ImageManipulator
         $panelCollapse.collapse('show')
       else
         $panelCollapse.collapse('hide')
-    $panelCollapse.find(':input').prop('disabled', !enabled)
+    # $panelCollapse.find(':input').prop('disabled', !enabled)
+    @panels.resize.find('.panel-body').find(':input').prop('disabled', !enabled)
     @refreshSubmitButtonState()
 
   refreshSubmitButtonState: ->
     enabled = @inputs.cropped.prop('checked') or @inputs.resized.prop('checked')
-    $(':submit', @container).prop('disabled', !enabled)
+    $(':submit', @$container).prop('disabled', !enabled)
 
   applyInputEvents: ->
     @applyCropEvents() if @croppable
@@ -154,7 +159,7 @@ class ImageManipulator
       _this.refreshCropAspectRatioState() if _this.croppable
       _this.refreshResizeAspectRatioState() if _this.resizeable
 
-    @container.on 'init.cropper crop.cropper resize.cropper', ->
+    @$container.on 'init.cropper crop.cropper resize.cropper', ->
       _this.inputs.scale.each ->
         $button = $(@)
         factor = $button.val()
@@ -168,11 +173,14 @@ class ImageManipulator
   applyImageEvents: ->
     @setCropAreaExplicitly = false
     @cropper = undefined
-    @image.load =>
-      @initCropper()
-      @applyInputEvents()
-      @updateCropArea()
-      @container.trigger('init.cropper')
+    @prepareImage()
+    @$image.load =>
+      @prepareImage()
+
+  prepareImage: ->
+    @initCropper()
+    @applyInputEvents()
+    @updateCropArea()
 
   convertToCropArea: (coordinates) ->
     {
@@ -323,6 +331,11 @@ class ImageManipulator
   refreshResizeCropRatio: ->
     @resizeCropRatio = @getResizeCropRatio() if @resizeable
 
-$(document).ready ->
+# $(document).ready ->
+#   $imageManipulator = $('#image_manipulator')
+#   new ImageManipulator($imageManipulator)
+
+
+$(document).on 'shown.bs.modal', ->
   $imageManipulator = $('#image_manipulator')
   new ImageManipulator($imageManipulator)

@@ -1,7 +1,9 @@
 class Admin::ImagesController < Admin::ApplicationController
+  layout :determine_layout
+
   respond_to :html
 
-  before_action :load_image, only: %i(show edit update crop apply_crop uncrop destroy download move_to_attachments dimensions preview)
+  before_action :load_image, only: %i(show edit update customize apply_customization destroy download move_to_attachments dimensions preview)
 
   breadcrumbs do |b|
     b.append ::Image.model_name.human(count: 2), :admin_images
@@ -43,21 +45,10 @@ class Admin::ImagesController < Admin::ApplicationController
     end
   end
 
-  def new
-    @image = ::Image.new
-    respond_to do |format|
-      format.js
-    end
-  end
-
-  def create
-    @image = ::Image.create(image_params) do |image|
-      image.author ||= current_user
-    end
-    flash_for @image, :created if @image.errors.empty?
-    #respond_with :admin, @image, location: @image.errors.empty? ? [:crop, :admin, @image] : nil
-    respond_to do |format|
-      format.js
+  def show
+    @image_styles = @image.custom_styles
+    respond_with :admin, @image do |format|
+      format.json
     end
   end
 
@@ -71,13 +62,6 @@ class Admin::ImagesController < Admin::ApplicationController
     end
   end
 
-  def show
-    @image_styles = @image.custom_styles
-    respond_with :admin, @image do |format|
-      format.json
-    end
-  end
-
   def edit
     respond_with :admin, @image
   end
@@ -85,32 +69,35 @@ class Admin::ImagesController < Admin::ApplicationController
   def update
     @image.update(image_params)
     flash_for @image
-    respond_with :admin, @image
-  end
-
-  def crop
-    @image.tap do |image|
-      image.cropped = true
-      image.crop_x ||= 0
-      image.crop_y ||= 0
-      image.crop_width ||= image.width
-      image.crop_height ||= image.height
+    respond_with :admin, @image do |format|
+      format.js
     end
-    respond_with :admin, @image
   end
 
-  def apply_crop
-    @image.cropped = true
-    @image.attributes = image_crop_params
-    @image.save
-    flash_for @image
-    respond_with :admin, @image
+  def customize
+    @image.tap do |img|
+      img.cropped = true if img.cropped.nil?
+      img.crop_x ||= 0
+      img.crop_y ||= 0
+      img.crop_width ||= img.width
+      img.crop_height ||= img.height
+      img.resized = false if img.resized.nil?
+      img.resize_width ||= img.width
+      img.resize_height ||= img.height
+    end
+    respond_to do |format|
+      format.js
+    end
   end
 
-  def uncrop
-    @image.uncrop!
-    flash_for @image
-    respond_with :admin, @image
+  def apply_customization
+    Image.transaction do
+      @image.update(image_customization_params)
+      @image.recreate_assets!
+    end
+    respond_to do |format|
+      format.js 
+    end
   end
 
   def destroy
@@ -134,10 +121,10 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def download
-    send_file @image.asset.path, filename: @image.virtual_file_name,
-                                 content_type: @image.content_type,
-                                 disposition: :attachment,
-                                 x_sendfile: true
+    send_file @image.asset.custom.path, filename: @image.virtual_file_name,
+                                        content_type: @image.content_type,
+                                        disposition: :attachment,
+                                        x_sendfile: true
   end
 
   # Batch Processing
@@ -151,7 +138,7 @@ class Admin::ImagesController < Admin::ApplicationController
       assign_owner
     else
       respond_to do |format|
-        format.html { head :bad_request }
+        format.any { head :bad_request }
       end
     end
   end
@@ -195,6 +182,14 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   private
+  def determine_layout
+    if action_name.in? %w(new create edit update)
+      'admin/image_editor'
+    else
+      'admin/images'
+    end
+  end
+
   def load_image
     @image = ::Image.find(params[:id])
   end
@@ -209,6 +204,10 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def image_crop_params
     params.require(:image).permit(:crop_x, :crop_y, :crop_width, :crop_height)
+  end
+
+  def image_customization_params
+    params.require(:image).permit(:cropped, :crop_x, :crop_y, :crop_width, :crop_height, :resized, :resize_width, :resize_height)
   end
 
   def image_upload_params

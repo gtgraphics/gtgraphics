@@ -6,6 +6,13 @@ GtGraphics::Application.routes.draw do
     end
   end
 
+  concern :customizable do
+    member do
+      get :customize
+      patch :customize, action: :apply_customization
+    end
+  end
+
   get 'sitemap.:format', to: 'sitemaps#index', as: :sitemaps
   get 'sitemap.:page.:format', to: 'sitemaps#show', as: :sitemap
     
@@ -51,21 +58,23 @@ GtGraphics::Application.routes.draw do
               end
             end
 
-            resources :images do
-              resources :styles, controller: :'image/styles', concerns: :movable do
-                delete :destroy_multiple, on: :collection
+            resources :images, except: [:new, :create], concerns: :customizable do
+              resources :styles, controller: :'image/styles', concerns: [:customizable, :movable] do
+                collection do
+                  patch :upload
+                  delete :destroy_multiple
+                end
               end
               collection do
                 patch :upload
                 patch :batch, action: :batch_process, as: :batch_process
                 patch :associate_owner, action: :associate_owner, as: :associate_owner_with
                 delete :destroy_multiple
-                get :translation_fields
               end
               member do
-                get :crop
-                patch :crop, action: :apply_crop
-                patch :uncrop
+                # get :crop
+                # patch :crop, action: :apply_crop
+                # patch :uncrop
                 get :download
                 get :dimensions
                 patch :move_to_attachments

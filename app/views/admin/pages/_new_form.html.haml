@@ -1,4 +1,4 @@
-= simple_form_for [:admin, @page], remote: true, wrappers: :horizontal_form, html: { class: 'form-horizontal' } do |form|
+= simple_form_for [:admin, @page], remote: true, html: { class: 'form-horizontal' } do |form|
   .modal-body
     = form.input :embeddable_type, as: :hidden
     = form.input :parent_id, as: :hidden

@@ -8,22 +8,30 @@ class Image < ActiveRecord::Base
         resizable.validates :resize_height
       end
 
-      before_save :clear_resize_dimensions, if: -> { asset_changed? or !resized? }
+      before_save :clear_resize_dimensions, unless: :resized?
 
       store_accessor :customization_options, :resized, :resize_width, :resize_height
       alias_method :resized?, :resized
 
-      %w(resize_width resize_height).each do |method|
-        class_eval <<-RUBY
-          def #{method}=(value)
-            super(value.try(:to_i))
-          end
-        RUBY
-      end
+      include AccessorOverrides
     end
 
-    def resized=(resized)
-      super(resized.to_b)
+    module AccessorOverrides
+      extend ActiveSupport::Concern
+
+      included do
+        %w(resize_width resize_height).each do |method|
+          class_eval <<-RUBY
+            def #{method}=(value)
+              super(value.try(:to_i))
+            end
+          RUBY
+        end
+      end
+
+      def resized=(resized)
+        super(resized.to_b)
+      end
     end
 
     def resize_geometry

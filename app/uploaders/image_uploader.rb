@@ -42,6 +42,8 @@ class ImageUploader < AttachmentUploader
     if cropped?
       manipulate! do |img|
         img.crop(model.crop_geometry)
+        img = yield(img) if block_given?
+        img
       end
     end
   end
@@ -54,6 +56,8 @@ class ImageUploader < AttachmentUploader
     if resized?
       manipulate! do |img|
         img.resize(model.resize_geometry)
+        img = yield(img) if block_given?
+        img
       end
     end
   end

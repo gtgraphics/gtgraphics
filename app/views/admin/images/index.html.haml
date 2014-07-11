@@ -56,7 +56,7 @@
             %br
 
         #images_empty_hint.well.text-center{class: @images.any? ? 'hidden' : nil}
-          %h4= translate('views.hints.empty', model: Image.model_name.human(count: 2))
+          = translate('views.hints.empty', model: Image.model_name.human(count: 2))
 
         %table#images.table.table-hover{class: @images.empty? ? 'hidden' : nil}
           %thead

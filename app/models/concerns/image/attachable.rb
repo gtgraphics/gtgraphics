@@ -16,12 +16,13 @@ class Image < ActiveRecord::Base
       extend ActiveSupport::Concern
 
       included do
-        # before_save :set_original_dimensions, if: :asset_changed?
-
         store :customization_options
 
         validates :content_type, presence: true,
                                  inclusion: { in: ->(attachable) { attachable.class.permitted_content_types }, allow_blank: true }
+
+        before_create :set_original_dimensions
+        before_save :set_geometry, if: :asset_changed?
       end
 
       module ClassMethods
@@ -34,6 +35,15 @@ class Image < ActiveRecord::Base
         end
       end
 
+      def recreate_assets!
+        asset.recreate_versions!
+        set_content_type
+        set_file_size
+        set_geometry
+        set_asset_updated_at
+        save!
+      end
+
       def format
         mime_type.to_sym
       end
@@ -44,11 +54,26 @@ class Image < ActiveRecord::Base
         end
       end
 
+      protected
+      def set_content_type
+        self.content_type = asset.custom.file.content_type
+      end
+
+      def set_file_size
+        self.file_size = asset.custom.file.size
+      end
+
+      def set_geometry
+        custom_img = MiniMagick::Image.open(asset.custom.path)
+        self.width = custom_img[:width]
+        self.height = custom_img[:height]
+      end
+
       private
       def set_original_dimensions
-        # dimensions = Paperclip::Geometry.from_file(asset.queued_for_write[:original].path)
-        # self.width = dimensions.width.to_i
-        # self.height = dimensions.height.to_i
+        original_img = MiniMagick::Image.open(asset.path)
+        self.original_width = original_img[:width]
+        self.original_height = original_img[:height]
       end
     end
   end

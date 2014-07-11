@@ -1,0 +1,4 @@
+- present image, with: Admin::Image::StylePresenter do |image_style|
+  = content_tag_for image_style, :tr do
+    %td= image_style.title
+    %td= image_style.dimensions

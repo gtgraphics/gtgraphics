@@ -1,1 +1,3 @@
-= render 'form'
+= simple_form_for [:admin, @image_style], html: { class: 'form-horizontal' } do |form|
+
+  = form.input :asset, as: :image_preview, required: true, input_html: { preview_version: :thumbnail }

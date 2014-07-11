@@ -13,6 +13,7 @@
                 = prepend_icon :file_picture, translate('helpers.links.view'), fixed_width: true, outline: true
 
           - if can? :edit, @page
+            %li.divider
             %li
               = link_to [:edit, :admin, @page] do
                 = prepend_icon :pencil, translate('helpers.links.edit'), fixed_width: true
@@ -42,8 +43,7 @@
     .btn-group.pull-right
       = button_link_to typed_new_admin_page_child_path(@page, page_type: :content), type: :success, remote: true, accesskey: 'N' do
         = prepend_icon :plus, translate('helpers.links.new', model: Page.model_name.human), fixed_width: true
-      = button_link_to '#', class: 'dropdown-toggle', type: :success, data: { toggle: 'dropdown' } do
-        = caret
+      = button_link_to caret, '#', class: 'dropdown-toggle', type: :success, data: { toggle: 'dropdown' }
       %ul.dropdown-menu
         - concrete_page_types.each do |embeddable_class|
           - if can? :create, embeddable_class

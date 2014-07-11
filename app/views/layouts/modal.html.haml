@@ -1,5 +1,5 @@
 .modal.fade{role: 'dialog', id: 'modal'}
-  .modal-dialog
+  .modal-dialog{class: content_for?(:modal_size) ? "modal-#{yield(:modal_size)}" : nil}
     .modal-content
   
       - if content_for? :title

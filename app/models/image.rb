@@ -24,6 +24,7 @@
 class Image < ActiveRecord::Base
   include Image::Attachable
   include Image::Croppable
+  include Image::Resizable
   include Image::ExifStorable
   include Ownable
   include PeriodFilterable
@@ -33,7 +34,7 @@ class Image < ActiveRecord::Base
   include Translatable
 
   # Disallow changing the asset as all custom_styles depend on it
-  attr_readonly :asset, :content_type, :file_size
+  attr_readonly :asset
 
   has_many :custom_styles, class_name: 'Image::Style', inverse_of: :image, dependent: :destroy
   has_many :image_pages, class_name: 'Page::Image', inverse_of: :image, dependent: :destroy
@@ -52,8 +53,6 @@ class Image < ActiveRecord::Base
   # before_save :set_predefined_style_dimensions
   after_initialize :generate_asset_token, unless: :asset_token?
   before_validation :set_default_title, on: :create
-  before_save :set_geometry, if: :asset_changed?
-  before_update :destroy_custom_styles, if: :asset_changed?
 
   acts_as_sortable do |by|
     by.title(default: true) { |column, dir| Image::Translation.arel_table[column].send(dir.to_sym) }
@@ -83,54 +82,18 @@ class Image < ActiveRecord::Base
     @dominant_colors ||= Miro::DominantColors.new(asset.path)
   end
 
-  def to_param
-    "#{id}-#{title.parameterize}"
-  end
-
   def to_s
     title
   end
 
   private
-  # When changing the asset, all created custom styles will be removed as they
-  # depend semantically on the original image
-  def destroy_custom_styles
-    custom_styles.destroy_all
-  end
-
   def generate_asset_token
     self.asset_token = SecureRandom.uuid
   end
-
-  # def set_predefined_style_dimensions
-  #   predefined_style_dimensions_will_change! if asset.queued_for_write[:original]
-  #   self.predefined_style_dimensions ||= {}
-  #   STYLES.except(:custom).keys.each do |style_name|
-  #     style_file = asset.queued_for_write[style_name]
-  #     if style_file
-  #       geometry = Paperclip::Geometry.from_file(style_file.path)
-  #       dimensions = geometry.width.to_i, geometry.height.to_i
-  #       self.predefined_style_dimensions[style_name] = dimensions
-  #     end
-  #   end
-  # end
 
   def set_default_title
     if title.blank? and original_filename.present?
       self.title = File.basename(original_filename, '.*').titleize
     end
-  end
-
-  def set_geometry
-    original_path = asset.path
-    custom_path = asset.versions[:custom].path
-    
-    original_img = MiniMagick::Image.open(original_path)
-    self.original_width = original_img[:width]
-    self.original_height = original_img[:height]
-
-    custom_img = MiniMagick::Image.open(custom_path)
-    self.width = custom_img[:width]
-    self.height = custom_img[:height]
   end
 end

@@ -1,44 +1,35 @@
 class Admin::Image::StylesController < Admin::ApplicationController
+  layout 'admin/image_editor'
+
   respond_to :html
 
   before_action :load_image
   before_action :load_image_style, only: %i(show edit update crop apply_crop destroy)
 
   breadcrumbs do |b|
-    b.append Image.model_name.human(count: 2), :admin_images
+    b.append ::Image.model_name.human(count: 2), :admin_images
     b.append @image.title, [:admin, @image]
-    b.append Image::Style.model_name.human(count: 2), [:admin, @image, :styles]
-
-    b.append translate('breadcrumbs.new', model: Image::Style.model_name.human), [:new, :admin, @image, :style] if action_name.in? %w(new new_attachment create)
-    b.append translate('breadcrumbs.edit', model: Image::Style.model_name.human), edit_admin_image_style_path(@image, @image_style) if action_name.in? %w(edit crop update)
+    b.append ::Image::Style.model_name.human(count: 2), [:admin, @image, :styles]
+    if action_name.in? %w(new new_attachment create)
+      b.append translate('breadcrumbs.new', model: ::Image::Style.model_name.human), [:new, :admin, @image, :style]
+    end
+    if action_name.in? %w(edit crop update)
+      b.append translate('breadcrumbs.edit', model: ::Image::Style.model_name.human), edit_admin_image_style_path(@image, @image_style)
+    end
   end
 
   def index
-    @image_styles = @image.custom_styles
+    @image_styles = @image.custom_styles.with_translations_for_current_locale.page(params[:page]).sort(params[:sort], params[:direction])
     respond_with :admin, @image, @image_styles
   end
 
   def show
-    respond_to do |format|
-      format.json
-    end
+    respond_with :admin, @image, @image_style
   end
 
   def new
-    if params[:source] == 'attachment'
-      @image_style = @image.custom_styles.new(type: 'Image::Style::Attachment')
-    else
-      @image_style = @image.custom_styles.new(type: 'Image::Style::Variant') do |style|
-        style.cropped = true
-        style.crop_x = 0
-        style.crop_y = 0
-        style.crop_width = @image.width
-        style.crop_height = @image.height
-        style.resize_width = @image.width
-        style.resize_height = @image.height
-      end
-    end
-    respond_with :admin, @image_style.becomes(Image::Style)
+    @image_style = @image.custom_styles.new
+    respond_with :admin, @image, @image_style
   end
 
   def create
@@ -51,50 +42,66 @@ class Admin::Image::StylesController < Admin::ApplicationController
         location = admin_image_path(@image)
       end
     end
-    respond_with :admin, @image_style.becomes(Image::Style), location: location
+    respond_with :admin, @image_style.becomes(::Image::Style), location: location
+  end
+
+  def upload
+    @image_style = ::Image::Style.new
+    @image_style.asset = image_style_upload_params[:asset]
+    @image_style.author = current_user
+    @image_style.save!
+    respond_to do |format|
+      format.js
+    end
   end
 
   def edit
     if @image_style.variant?
       redirect_to crop_admin_image_style_path(@image, @image_style)
     else
-      respond_with :admin, @image_style.becomes(Image::Style)
+      respond_with :admin, @image_style.becomes(::Image::Style)
     end
   end
 
   def update
-    raise CanCan::AccessDenied.new(translate('unauthorized.update.image/style/variant'), :update, Image::Style::Variant) if @image_style.variant?
+    raise CanCan::AccessDenied.new(translate('unauthorized.update.image/style/variant'), :update, ::Image::Style::Variant) if @image_style.variant?
     @image_style.attributes = image_style_params
     @image_style.cropped = false
     @image_style.resized = false
     @image_style.save
     flash_for @image_style
-    respond_with :admin, @image_style.becomes(Image::Style), location: [:admin, @image]
-  end
-
-  def crop
-    @image_style.tap do |style|
-      style.crop_x ||= 0
-      style.crop_y ||= 0
-      style.crop_width ||= style.width
-      style.crop_height ||= style.height
-      style.resize_width ||= style.width
-      style.resize_height ||= style.height
-    end
-    respond_with :admin, @image_style.becomes(Image::Style)
-  end
-
-  def apply_crop
-    @image_style.update(image_style_crop_params)
-    flash_for @image_style
-    respond_with :admin, @image_style.becomes(Image::Style), location: [:admin, @image]
+    respond_with :admin, @image_style.becomes(::Image::Style)
   end
 
   def destroy
     @image_style.destroy
     flash_for @image_style
-    respond_with :admin, @image_style.becomes(Image::Style), location: [:admin, @image]
+    respond_with :admin, @image_style.becomes(::Image::Style)
   end
+
+  # Batch Processing
+
+  def batch_process
+    if params.key? :destroy
+      destroy_multiple
+    else
+      respond_to do |format|
+        format.any { head :bad_request }
+      end
+    end
+  end
+
+  def destroy_multiple
+    image_style_ids = Array(params[:image_style_ids]).map(&:to_i).reject(&:zero?)
+    ::Image::Style.accessible_by(current_ability).destroy_all(id: image_style_ids)
+    flash_for ::Image, :destroyed, multiple: true
+    location = request.referer || admin_image_styles_path(@image)
+    respond_to do |format|
+      format.html { redirect_to location }
+      format.js { redirect_via_turbolinks_to location }
+    end
+  end
+  private :destroy_multiple
 
   private
   def load_image
@@ -113,10 +120,10 @@ class Admin::Image::StylesController < Admin::ApplicationController
     permitted_attributes = []
     permitted_attributes << :type unless @image_style.try(:persisted?)
     case type
-    when 'Image::Style::Variant'
+    when '::Image::Style::Variant'
       image_style_crop_params
       permitted_attributes += IMAGE_CROP_PARAMS
-    when 'Image::Style::Attachment'
+    when '::Image::Style::Attachment'
       permitted_attributes << :asset
     end
     image_style_params.permit(*permitted_attributes)
@@ -124,5 +131,9 @@ class Admin::Image::StylesController < Admin::ApplicationController
 
   def image_style_crop_params
     params.require(:image_style).permit(*IMAGE_CROP_PARAMS)
+  end
+
+  def image_style_upload_params
+    params.require(:image_style).permit(:asset)
   end
 end

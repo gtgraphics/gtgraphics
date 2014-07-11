@@ -25,12 +25,18 @@ class Image < ActiveRecord::Base
     include Image::Croppable
     include Image::Resizable
     include PersistenceContextTrackable
+    include Sortable
+    include Translatable
 
     belongs_to :image, inverse_of: :custom_styles
 
     translates :title, fallbacks_for_empty_translations: true
 
     acts_as_list scope: :image_id
+    acts_as_sortable do |by|
+      by.title(default: true) { |column, dir| Image::Style::Translation.arel_table[column].send(dir.to_sym) }
+      by.dimensions { |column, dir| "(#{table_name}.width * #{table_name}.height) #{dir}" }
+    end
 
     has_image
 

@@ -1,0 +1,47 @@
+= simple_form_for [:admin, @image], url: [:customize, :admin, @image], remote: true, html: { class: 'form-horizontal' } do |form|
+  #image_manipulator.modal-body
+    .row
+      .col-sm-12
+        .img-editable.img-rounded.text-center
+          = image_tag @image.asset.url, id: 'image_asset', class: 'img-croppable img-responsive', alt: @image.title, data: { behavior: 'croppable', original_width: @image.original_width, original_height: @image.original_height }, width: '867'
+
+    %br
+
+    .row
+      .col-sm-8
+        .panel.panel-default.crop-panel
+          .panel-heading
+            %span.panel-title
+              %label.checkbox
+                = form.check_box :cropped, class: 'js-only', data: { toggle: 'crop' }
+                = prepend_icon(:crop, translate('views.admin.images.headlines.crop'), fixed_width: true)
+          .panel-body
+            .row
+              .col-sm-3
+                = form.input_field :crop_x, as: :integer, placeholder: Image.human_attribute_name(:crop_x), class: 'form-control crop-x', min: 0, max: @image.width, data: { control: 'cropX' }
+              .col-sm-3
+                = form.input_field :crop_y, as: :integer, placeholder: Image.human_attribute_name(:crop_y), class: 'form-control crop-y', min: 0, max: @image.height, data: { control: 'cropY' }
+              .col-sm-3
+                = form.input_field :crop_width, as: :integer, placeholder: Image.human_attribute_name(:crop_width), class: 'form-control crop-width', min: 1, max: @image.width, data: { control: 'cropWidth' }
+              .col-sm-3
+                = form.input_field :crop_height, as: :integer, placeholder: Image.human_attribute_name(:crop_height), class: 'form-control crop-height', min: 1, max: @image.height, data: { control: 'cropHeight' }
+
+      .col-sm-4
+        .panel.panel-default.resize-panel
+          .panel-heading
+            %span.panel-title
+              %label.checkbox
+                = form.check_box :resized, class: 'js-only', data: { toggle: 'resize' }
+                = prepend_icon(:arrows, translate('views.admin.images.headlines.resize'), fixed_width: true)
+          .panel-body
+            .row
+              .col-sm-6
+                = form.input_field :resize_width, as: :integer, placeholder: Image.human_attribute_name(:resize_width), class: 'form-control resize-width', min: 1, data: { control: 'resizeWidth' }
+              .col-sm-6
+                = form.input_field :resize_height, as: :integer, placeholder: Image.human_attribute_name(:resize_height), class: 'form-control resize-height', min: 1, data: { control: 'resizeHeight' }
+
+
+  .modal-footer
+    = form.button :button, type: 'submit', class: 'btn-primary' do
+      = prepend_icon :save, translate('helpers.links.save')
+    = button_tag translate('helpers.links.close'), type: 'button', class: 'btn btn-default', data: { dismiss: 'modal' }

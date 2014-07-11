@@ -1,12 +1,10 @@
 = simple_form_for [:admin, @image], html: { class: 'form-horizontal' } do |form|
-  = form.input :title
-  - if @image.new_record?
-    = form.input :asset #, as: :image_preview, required: true, input_html: { preview_version: :thumbnail }
-  - else
+  .modal-body
+    = form.input :title
     = form.input :description, input_html: { class: 'image-editor', rows: 6 }
     = form.association :author, as: :radio_buttons, wrapper: :horizontal_radio_and_checkboxes
 
-  = form_actions do
-    = form.button :button, name: 'save', type: 'submit', class: 'btn-primary' do
-      = prepend_icon(:save, translate(@image.new_record? ? :create : :update, scope: 'helpers.submit', model: Image.model_name.human))
-    = button_link_to translate('helpers.links.cancel'), [:admin, @image]
+  .modal-footer
+    = form.button :button, type: 'submit', class: 'btn-primary' do
+      = prepend_icon :save, translate('helpers.links.save')
+    = button_tag translate('helpers.links.close'), type: 'button', class: 'btn btn-default', data: { dismiss: 'modal' }
