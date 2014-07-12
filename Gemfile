@@ -39,6 +39,7 @@ gem 'jbuilder', '~> 1.2'
 gem 'liquid'
 gem 'builder'
 gem 'coffeebeans'
+gem 'turbolinks'
 
 # Assets
 gem 'sprockets', '2.11.0' # newer versions do not work properly
@@ -50,7 +51,6 @@ gem 'uglifier' #, '>= 1.3.0'
 gem 'jquery-rails' #, github: 'rails/jquery-rails', tag: 'v3.1.0'
 gem 'jquery-turbolinks'
 gem 'jquery-fileupload-rails'
-gem 'turbolinks'
 gem 'compass-rails' # github: 'Compass/compass-rails', branch: 'rails4-hack' # hack until compass has official Rails 4 support
 gem 'bootstrap-sass'
 gem 'select2-bootstrap-css'
@@ -70,9 +70,12 @@ end
 gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'request_store'
-gem 'exifr'
 gem 'nokogiri'
 gem 'exception_notification', group: [:staging, :production]
+gem 'pry-rails'
+
+# Image Processing
+gem 'exifr'
 gem 'miro' # dominant color detection
 
 # Deployment
@@ -83,8 +86,7 @@ end
 
 # Testing and Debugging
 group :development, :test do
-  gem 'pry-debugger'
-  gem 'pry-rails'
+  gem 'pry-byebug'
 end
 
 group :doc do
