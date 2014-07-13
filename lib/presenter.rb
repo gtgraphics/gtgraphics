@@ -15,7 +15,6 @@ class Presenter
         def #{name}
           self.object
         end
-        protected :#{name}
       RUBY
     end
   end

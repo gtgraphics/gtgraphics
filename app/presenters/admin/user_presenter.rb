@@ -1,6 +1,8 @@
 class Admin::UserPresenter < Admin::ApplicationPresenter
+  presents :user
+  
   def gravatar(options = {})
-    options = options.reverse_merge(default: :mm, class: 'img-responsive img-circle', size: 80, alt: name)
+    options = options.reverse_merge(default: :mm, class: 'img-responsive img-circle', size: 80, alt: full_name)
     h.gravatar_image_tag email, options
   end
 

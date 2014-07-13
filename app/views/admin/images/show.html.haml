@@ -27,14 +27,15 @@
           %small (#{image.file_size})
 
       / Short Info
-      = panel do
-        .row
-          .col-sm-3
-            = link_to image.author.gravatar, [:admin, image.author]
-          .col-sm-9
-            = link_to image.author.name, [:admin, image.author]
-            .text-muted= image.updated_at
-            .text-muted= image.styles_count
+      - if image.author.present?
+        = panel do
+          .row
+            .col-sm-3
+              = link_to image.author.gravatar, [:admin, image.author]
+            .col-sm-9
+              = link_to image.author.name, [:admin, image.author]
+              .text-muted= image.updated_at
+              .text-muted= image.styles_count
 
       - if image.description.present?
         = panel do
@@ -51,7 +52,7 @@
               = image.list_item :file_size
               = image.list_item :dimensions
               = image.list_item :pixels_count
-              = image.list_item :author_name
+              = image.list_item :author_name if image.author.present?
               = image.list_item :artist if image.artist.present?
               = image.list_item :camera if image.camera.present?
               = image.list_item :software if image.software.present?

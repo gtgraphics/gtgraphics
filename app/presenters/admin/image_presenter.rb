@@ -8,7 +8,7 @@ class Admin::ImagePresenter < Admin::ApplicationPresenter
   end
 
   def author
-    present super, with: Admin::UserPresenter
+    present image.author, with: Admin::UserPresenter if image.author
   end
 
   def author_name(linked = true)
