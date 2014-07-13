@@ -67,6 +67,7 @@ de:
         tabs:
           all: Alle
       users:
+        active_since: 'aktiv'
         headlines:
           basics: Basisdaten
           edit_password: Passwort bearbeiten

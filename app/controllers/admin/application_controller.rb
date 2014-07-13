@@ -1,8 +1,7 @@
 class Admin::ApplicationController < ApplicationController
   skip_maintenance_check
 
-  authenticate
-
+  before_action :require_login
   before_action :set_translation_locale
 
   reset_breadcrumbs
@@ -13,6 +12,13 @@ class Admin::ApplicationController < ApplicationController
   protected
   def default_url_options(options = nil)
     super.merge(translations: Globalize.locale != I18n.locale ? Globalize.locale : nil)
+  end
+
+  def not_authenticated
+    respond_to do |format|
+      format.html { redirect_to :admin_login, alert: translate('helpers.flash.user.not_authenticated') }
+      format.any { head :unauthorized }
+    end
   end
 
   private

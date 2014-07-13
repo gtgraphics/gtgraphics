@@ -1,0 +1,36 @@
+!!!
+%html
+  %head
+    %title= translate('views.title')
+    = yield :head
+
+    :css
+      body {
+        font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.428571429;
+        color: #333333;
+        background-color: #fcfcfc;
+      }
+      a {
+        color: #428bca;
+        text-decoration: none;
+      }
+      a:hover, a:focus {
+        color: #2a6496;
+        text-decoration: underline;
+      }
+      hr {
+        margin-top: 19px;
+        margin-bottom: 19px;
+        border: 0;
+        border-top: 1px solid #eeeeee;
+      }
+
+    = yield :stylesheets
+
+  %body 
+    - if content_for? :content
+      = yield :content
+    - else 
+      = yield

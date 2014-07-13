@@ -7,13 +7,13 @@ class Presenter
 
   attr_reader :object, :options
   delegate :present, to: :h
-  protected :present, :object, :options
+  protected :present, :options
  
   class << self
     def presents(name)
       class_eval <<-RUBY
         def #{name}
-          @object
+          self.object
         end
         protected :#{name}
       RUBY
@@ -21,7 +21,7 @@ class Presenter
   end
 
   def inspect
-    if @object.nil?
+    if object.nil?
       "#<#{self.class.name}>"
     else
       "#<#{self.class.name} object: #{@object.inspect}>"

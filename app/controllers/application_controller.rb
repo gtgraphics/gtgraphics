@@ -6,14 +6,11 @@ class ApplicationController < ActionController::Base
   before_action :set_current_user
   before_action :set_locale
 
-  include AuthenticatableController
   include BreadcrumbController
   include ErrorHandlingController
   include FlashableController
   include MaintainableController
   include RouteHelper
-
-  rescue_from Authenticatable::AccessDenied, with: :force_authentication
 
   protected
   def default_url_options(options = nil)
@@ -21,16 +18,10 @@ class ApplicationController < ActionController::Base
   end
 
   private
-  def force_authentication
-    respond_to do |format|
-      format.html do
-        session[:after_sign_in_path] = request.path
-        redirect_to :admin_sign_in
-      end
-      format.all { head :unauthorized }
-    end
+  def set_current_user
+    User.current = current_user
   end
-  
+
   def set_locale
     available_locales = I18n.available_locales.map(&:to_s)
     if locale = params[:locale] and locale.in?(available_locales)

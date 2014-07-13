@@ -1,0 +1,38 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                              :integer          not null, primary key
+#  first_name                      :string(255)
+#  last_name                       :string(255)
+#  created_at                      :datetime
+#  updated_at                      :datetime
+#  preferences                     :text
+#  email                           :string(255)      not null
+#  crypted_password                :string(255)      not null
+#  salt                            :string(255)      not null
+#  remember_me_token               :string(255)
+#  remember_me_token_expires_at    :datetime
+#  reset_password_token            :string(255)
+#  reset_password_token_expires_at :datetime
+#  reset_password_email_sent_at    :datetime
+#  failed_logins_count             :integer          default(0)
+#  lock_expires_at                 :datetime
+#  unlock_token                    :string(255)
+#  last_login_at                   :datetime
+#  last_logout_at                  :datetime
+#  last_activity_at                :datetime
+#  last_login_from_ip_address      :string(255)
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# This model initially had no columns defined.  If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+one: {}
+# column: value
+#
+two: {}
+#  column: value

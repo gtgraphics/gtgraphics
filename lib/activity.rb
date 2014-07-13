@@ -16,15 +16,23 @@ class Activity
   end
  
   class << self
+    def handles(name, options = {})
+      class_name = options.fetch(:class_name) { name.to_s.classify }.to_s
+      class_eval <<-RUBY
+        def model_name
+          ActiveModel::Name.new(self, nil, '#{class_name}')
+        end
+      RUBY
+      embeds_one name, class_name: class_name
+    end
+
     def execute(attributes = {}, &block)
       new(attributes, &block).tap(&:execute)
     end
-    alias_method :create, :execute
  
     def execute!(attributes = {}, &block)
       new(attributes, &block).tap(&:execute!)
     end
-    alias_method :create!, :execute!
   end
  
   def execute
@@ -32,7 +40,6 @@ class Activity
   rescue ActivityInvalid
     false
   end
-  alias_method :save, :execute
  
   def execute!
     raise ActivityInvalid.new(self) unless valid?
@@ -41,7 +48,6 @@ class Activity
       true
     end
   end
-  alias_method :save!, :execute!
  
   def inspect
     if self.class.attribute_set.any?

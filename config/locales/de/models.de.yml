@@ -44,15 +44,34 @@ de:
         style_id: Stil
         source: Quelle
         original_style: Original verwenden
-      change_password_activity:
+      admin/user/change_password_activity:
         current_password: Aktuelles Passwort
         generate_password: Password generieren?
         password: Passwort
         password_confirmation: Password (Wdh.)
-      sign_in_activity:
+      admin/user/sign_in_activity:
         email: E-Mail-Adresse
         password: Passwort
         permanent: Angemeldet bleiben
+      admin/user/registration_activity:
+        first_name: Vorname
+        last_name: Nachname
+        email: E-Mail-Adresse
+        generate_password: Zufallspasswort generieren?
+        password: Passwort
+        password_confirmation: Passwort (Wdh.)
+        preferred_locale: Standardsprache
+      admin/user/update_activity:
+        first_name: Vorname
+        last_name: Nachname
+        email: E-Mail-Adresse
+        reset_password: Neues Passwort setzen
+        generate_password: Zufallspasswort generieren?
+        password: Passwort
+        password_confirmation: Passwort (Wdh.)
+        preferred_locale: Standardsprache
+      admin/user/account_update_activity:
+        current_password: Aktuelles Passwort
       admin/image_page_creation_activity:
         image_ids: Bilder
         image_id_tokens: Bilder
@@ -180,12 +199,9 @@ de:
         last_name: Nachname
         full_name: Name
         email: E-Mail-Adresse
-        current_password: Aktuelles Passwort
-        generate_password: Passwort generieren?
         password: Passwort
         password_confirmation: Passwort (Wdh.)
         preferred_locale: Standardsprache
-        remember_me: Angemeldet bleiben
 
     errors:
       models:

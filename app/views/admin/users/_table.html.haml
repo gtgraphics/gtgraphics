@@ -8,11 +8,4 @@
       %th.actions
   %tbody
     - users.each do |user|
-      %tr
-        %td.thumbnail-cell
-          = link_to [:edit, :admin, user] do
-            = gravatar_image_tag user.email, size: 75, default: :mm, alt: user.full_name, class: 'img-circle'
-        %td= link_to user.full_name, [:edit, :admin, user]
-        %td.actions
-          = action_buttons_for user, size: :mini, icon_only: true, except: :show
-        
+      = render user

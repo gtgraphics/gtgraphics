@@ -1,6 +1,4 @@
 class Admin::ImagesController < Admin::ApplicationController
-  layout :determine_layout
-
   respond_to :html
 
   before_action :load_image, only: %i(show edit update customize apply_customization destroy download move_to_attachments dimensions preview)
@@ -182,14 +180,6 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   private
-  def determine_layout
-    if action_name.in? %w(new create edit update)
-      'admin/image_editor'
-    else
-      'admin/images'
-    end
-  end
-
   def load_image
     @image = ::Image.find(params[:id])
   end

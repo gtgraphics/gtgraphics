@@ -25,15 +25,14 @@ GtGraphics::Application.routes.draw do
       # end
 
       namespace :admin do
+        scope controller: :sessions do
+          get :login, action: :new
+          post :login, action: :create
+          match :logout, action: :destroy, via: [:get, :delete]
+        end
+            
         scope '(:translations)', constraints: { translations: /[a-z]{2}/ } do
           scope constraints: Routing::LocaleConstraint.new(:translations) do
-
-            scope controller: :sessions do
-              get :sign_in, action: :new
-              post :sign_in, action: :create
-              match :sign_out, action: :destroy, via: [:get, :delete]
-            end
-
             resource :account, except: [:new, :create, :show] do
               get :edit_password
               patch :update_password

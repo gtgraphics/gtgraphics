@@ -1,45 +1,42 @@
 # TODO: Replace with Sorcery: https://github.com/NoamB/sorcery
 
 class Admin::SessionsController < Admin::ApplicationController
-  skip_authentication only: %i(new create)
-  before_action :redirect_to_dashboard, if: :signed_in?, only: %i(new create)
+  skip_before_action :require_login, only: %i(new create)
+  
+  before_action if: :logged_in?, only: %i(new create) do
+    redirect_to :admin_root
+  end
 
   def new
-    @sign_in_activity = SignInActivity.new
+    @sign_in_activity = Admin::User::LoginActivity.new
     respond_to do |format|
       format.html
     end
   end
 
   def create
-    @sign_in_activity = SignInActivity.new(sign_in_params)
-    respond_to do |format|
-      format.html do
-        if @sign_in_activity.valid?
-          user = @sign_in_activity.user
-          sign_in user, permanent: @sign_in_activity.permanent?
-          user.track_sign_in!(request.ip)
-          redirect_to session.delete(:after_sign_in_path) || :admin_root
-        else
-          render :new
-        end
+    @sign_in_activity = Admin::User::LoginActivity.new(login_params)
+    if @sign_in_activity.valid?
+      auto_login @sign_in_activity.user, @sign_in_activity.permanent?
+      respond_to do |format|
+        format.html { redirect_back_or_to :admin_root }
+      end
+    else
+      respond_to do |format|
+        format.html { render :new }
       end
     end
   end
 
   def destroy
-    sign_out
+    logout
     respond_to do |format|
-      format.html { redirect_to flash[:after_sign_out_path] || :admin_root }
+      format.html { redirect_to :admin_root }
     end
   end
 
   private
-  def redirect_to_dashboard
-    redirect_to :admin_root
-  end
-
-  def sign_in_params
+  def login_params
     params.require(:session).permit(:email, :password, :permanent)
   end
 end

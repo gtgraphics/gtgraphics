@@ -21,6 +21,8 @@ de:
         unmovable: >
           Die Seite konnte nicht verschoben werden, da auf dieser Ebene bereits eine Seite den Slug "%{slug}" belegt.
           Bitte benenne den Slug um und versuche es dann erneut.
+      user:
+        not_authenticated: 'Sie müssen sich anmelden, um fortzufahren.'
       template:
         not_destroyed: 'Es gibt noch Seiten, die diese Vorlage verwenden. Ändern Sie vor dem Entfernen die den Seiten zugeordneten Vorlagen oder entfernen Sie die betreffenden Seiten.'
     titles:

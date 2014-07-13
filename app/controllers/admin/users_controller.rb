@@ -2,33 +2,46 @@ class Admin::UsersController < Admin::ApplicationController
   respond_to :html
 
   before_action :load_user, only: %i(show edit update edit_password update_password destroy)
-  #before_action :redirect_if_current_user
+  before_action :redirect_to_account_page_if_current_user
 
   breadcrumbs do |b|
     b.append User.model_name.human(count: 2), :admin_users
-    b.append translate('breadcrumbs.new', model: User.model_name.human), :new_admin_user if action_name.in? %w(new create)
-    b.append translate('breadcrumbs.edit', model: User.model_name.human), [:edit, :admin, @user] if action_name.in? %w(edit update edit_password update_password)
-    b.append translate('breadcrumbs.edit', model: User.human_attribute_name(:password)), [:edit_password, :admin, @user] if action_name.in? %w(edit_password update_password)
+    if action_name.in? %w(new create)
+      b.append translate('breadcrumbs.new', model: User.model_name.human), :new_admin_user
+    end
+    if action_name.in? %w(edit update edit_password update_password)
+      b.append translate('breadcrumbs.edit', model: User.model_name.human), [:edit, :admin, @user]
+    end
+    if action_name.in? %w(edit_password update_password)
+      b.append translate('breadcrumbs.edit', model: User.human_attribute_name(:password)), [:edit_password, :admin, @user]
+    end
   end
 
   def index
+    @current_users = User.current_users
     @users = User.search(params[:search]).sort(params[:sort], params[:direction]).page(params[:page])
     respond_with :admin, @users
   end
 
   def new
-    @user = User.new
-    respond_with :admin, @user, template: 'admin/users/editor'
+    @user_registration_activity = Admin::User::RegistrationActivity.new
+    respond_to do |format|
+      format.html
+    end
   end
 
   def create
-    @user = User.new(user_params)
-    if @user.save
-      # Do not delay password notification mail because of its sensitive information
-      PasswordMailer.send_initial_password_email(@user, @user.password).deliver
-      flash_for @user
+    @user_registration_activity = Admin::User::RegistrationActivity.new(user_registration_params)
+    if @user_registration_activity.execute
+      flash_for @user_registration_activity.user, :created
+      respond_to do |format|
+        format.html { redirect_to :admin_users }
+      end
+    else
+      respond_to do |format|
+        format.html { render :new }
+      end
     end
-    respond_with :admin, @user, template: 'admin/users/editor'
   end
 
   def show
@@ -38,34 +51,25 @@ class Admin::UsersController < Admin::ApplicationController
   end
 
   def edit
-    respond_with :admin, @user, template: 'admin/users/editor'
+    @user_update_activity = Admin::User::UpdateActivity.new
+    @user_update_activity.user = @user
+    respond_to do |format|
+      format.html
+    end
   end
 
   def update
-    @user.update(user_params)
-    flash_for @user
-    respond_with :admin, @user, template: 'admin/users/editor'
-  end
-
-  def edit_password
-    @change_password_activity = ChangePasswordActivity.new(user: @user)
-    respond_with :admin, @user
-  end
-
-  def update_password
-    @change_password_activity = ChangePasswordActivity.new(user: @user)
-    @change_password_activity.attributes = user_password_params
-    if @change_password_activity.execute
-      sign_in @user, bypass: true if @user.current?
-      # Do not delay password notification mail because of its sensitive information
-      PasswordMailer.send_changed_password_email(@user, @user.password).deliver
-      flash_for @user
+    @user_update_activity = Admin::User::UpdateActivity.new
+    @user_update_activity.user = @user
+    @user_update_activity.attributes = user_update_params
+    if @user_update_activity.execute
+      flash_for @user_update_activity.user, :updated
       respond_to do |format|
-        format.html { redirect_to [:edit, :admin, @user] }
+        format.html { redirect_to :admin_users }
       end
     else
       respond_to do |format|
-        format.html { render :edit_password }
+        format.html { render :edit }
       end
     end
   end
@@ -80,17 +84,25 @@ class Admin::UsersController < Admin::ApplicationController
     @user = User.find(params[:id])
   end
 
-  def redirect_if_current_user
-    redirect_to params.slice(:action).merge(controller: 'accounts') if @user and @user.current?
+  def redirect_to_account_page_if_current_user
+    redirect_to params.slice(:action).merge(controller: 'accounts') if @user and @user == current_user
   end
 
   def user_params
     params.require(:user).permit(:first_name, :last_name, :email, :preferred_locale)
   end
 
-  def user_password_params
-    permitted_params = [:generate_password, :password, :password_confirmation]
-    permitted_params << :current_password if @user.current?
-    params.require(:user).permit(*permitted_params)
+  def user_registration_params
+    params.require(:user_registration).permit(
+      :first_name, :last_name, :email, :preferred_locale,
+      :generate_password, :password, :password_confirmation
+    )
+  end
+
+  def user_update_params
+    params.require(:user_update).permit(
+      :first_name, :last_name, :email, :preferred_locale,
+      :reset_password, :generate_password, :password, :password_confirmation
+    )
   end
 end

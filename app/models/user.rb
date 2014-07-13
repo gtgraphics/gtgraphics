@@ -2,40 +2,38 @@
 #
 # Table name: users
 #
-#  id                      :integer          not null, primary key
-#  first_name              :string(255)
-#  last_name               :string(255)
-#  preferred_locale        :string(255)
-#  email                   :string(255)      not null
-#  password_digest         :string(255)      not null
-#  created_at              :datetime
-#  updated_at              :datetime
-#  lock_state              :string(255)      not null
-#  locked_until            :datetime
-#  failed_sign_in_attempts :integer          default(0), not null
-#  last_activity_at        :datetime
-#  last_activity_ip        :string(255)
-#  sign_in_count           :integer          default(0), not null
-#  current_sign_in_at      :datetime
-#  current_sign_in_ip      :string(255)
-#  last_sign_in_at         :datetime
-#  last_sign_in_ip         :string(255)
-#  preferences             :text
+#  id                              :integer          not null, primary key
+#  first_name                      :string(255)
+#  last_name                       :string(255)
+#  created_at                      :datetime
+#  updated_at                      :datetime
+#  preferences                     :text
+#  email                           :string(255)      not null
+#  crypted_password                :string(255)      not null
+#  salt                            :string(255)      not null
+#  remember_me_token               :string(255)
+#  remember_me_token_expires_at    :datetime
+#  reset_password_token            :string(255)
+#  reset_password_token_expires_at :datetime
+#  reset_password_email_sent_at    :datetime
+#  failed_logins_count             :integer          default(0)
+#  lock_expires_at                 :datetime
+#  unlock_token                    :string(255)
+#  last_login_at                   :datetime
+#  last_logout_at                  :datetime
+#  last_activity_at                :datetime
+#  last_login_from_ip_address      :string(255)
 #
 
 class User < ActiveRecord::Base
-  require 'user/messaging'
-
   include Authenticatable
-  include Authenticatable::Lockable
-  include Authenticatable::Trackable
   include Authorizable
   include Excludable
   include PersistenceContextTrackable
   include Sortable
   include User::Messaging
 
-  store :preferences
+  store :preferences, accessors: [:preferred_locale]
 
   with_options foreign_key: :author_id, dependent: :nullify do |author|
     author.has_many :attachments
@@ -46,11 +44,11 @@ class User < ActiveRecord::Base
 
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :email, presence: true, email: true
+  validates :email, presence: true, email: true, uniqueness: { case_sensitive: false }
   validates :preferred_locale, inclusion: { in: -> { I18n.available_locales.map(&:to_s) } }, allow_blank: true
 
   before_validation :sanitize_preferred_locale
-  before_validation :set_generated_password, if: :generate_password?
+  before_save :sanitize_email_address, if: :email?
 
   default_scope -> { order(:first_name, :last_name) }
 
@@ -76,30 +74,12 @@ class User < ActiveRecord::Base
   end
   alias_method :name, :full_name
 
-  def generate_password?
-    @generate_password = false unless defined? @generate_password
-    @generate_password
-  end
-  alias_method :generate_password, :generate_password?
-
-  def generate_password=(generate_password)
-    @generate_password = generate_password.to_b
-  end
-
   def mail_formatted_name
     if full_name.present?
       %{"#{full_name}" <#{email}>}
     else
       email
     end
-  end
-
-  def password_changed?
-    new_record? or password.present?
-  end
-
-  def preferred_locale_name
-    I18n.translate(preferred_locale, scope: :languages) if preferred_locale.present?
   end
 
   def to_liquid
@@ -118,11 +98,11 @@ class User < ActiveRecord::Base
   end
 
   private
-  def sanitize_preferred_locale
-    self.preferred_locale = preferred_locale.to_s.downcase.presence
+  def sanitize_email_address
+    self.email = email.downcase
   end
 
-  def set_generated_password
-    self.password = self.password_confirmation = self.class.generate_password
+  def sanitize_preferred_locale
+    self.preferred_locale = preferred_locale.to_s.downcase.presence
   end
 end

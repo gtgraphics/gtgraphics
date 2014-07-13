@@ -1,4 +1,4 @@
-class Authenticatable::PasswordGenerator
+class PasswordGenerator
   CHARS = [
     ('A'..'Z').to_a,
     ('a'..'z').to_a,

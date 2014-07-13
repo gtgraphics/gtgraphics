@@ -1,0 +1,25 @@
+.col-sm-8.col-sm-offset-2
+  = page_header
+
+  = simple_form_for @user_registration_activity, as: :user_registration, url: :admin_users, method: :post, wrapper: :horizontal_form, html: { class: 'form-horizontal' } do |form|
+
+    %fieldset
+      %legend= translate('views.forms.basics')
+      .fields
+        = form.input :first_name
+        = form.input :last_name
+        = form.input :email
+        = form.input :preferred_locale, collection: available_locales_for_select, include_blank: translate('helpers.prompts.custom')
+
+    %fieldset
+      %legend= translate('views.forms.password')
+      .fields
+        = form.input :generate_password, as: :radio_buttons, wrapper: :horizontal_radio_and_checkboxes, collection: [[translate('helpers.boolean.yes'), true], [translate('helpers.boolean.no'), false]], input_html: { data: { toggle: 'generatePasswordFields' } }
+        #generate_password_fields
+          = form.input :password
+          = form.input :password_confirmation
+
+    = form_actions do
+      = form.button :button, type: 'submit', class: 'btn-primary' do
+        = prepend_icon :save, translate(:create, scope: 'helpers.submit', model: User.model_name.human)
+      = button_link_to translate('helpers.links.cancel'), :admin_users

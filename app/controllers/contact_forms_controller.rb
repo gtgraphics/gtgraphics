@@ -9,9 +9,10 @@ class ContactFormsController < PagesController
         notifier_job = MessageNotificationJob.new(@message.id)
         Delayed::Job.enqueue(notifier_job, queue: 'mailings')
         flash_for @message
-        return respond_to do |format|
-          format.html { redirect_to contact_form_path(@contact_form) }
+        respond_to do |format|
+          format.html { redirect_to @page }
         end
+        return
       end
     end
     render_page

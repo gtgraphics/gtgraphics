@@ -8,6 +8,7 @@ gem 'rails', '4.0.5'
 gem 'pg'
 
 # Authentication & Authorization
+gem 'sorcery'
 gem 'cancan'
 
 # Controller

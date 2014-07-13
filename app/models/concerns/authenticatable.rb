@@ -2,34 +2,35 @@ module Authenticatable
   extend ActiveSupport::Concern
 
   included do
-    has_secure_password
+    authenticates_with_sorcery!
 
-    delegate :checksum, :salt, to: :password_hash, prefix: :password
-
-    class << self
-      alias_method :signed_in?, :authenticated?
-      alias_method :signed_out?, :anonymous?
-    end
-
-    alias_method :current_user?, :current?
     alias_method :me?, :current?
   end
 
   module ClassMethods
-    def anonymous?
+    def logged_out?
       current.nil?
     end
 
-    def authenticated?
+    def logged_in?
       !current.nil?
     end
 
     def current
-      Thread.current[:"current_#{self.name.underscore}"]
+      Thread.current[thread_store_key]
+    end
+
+    def current=(user)
+      Thread.current[thread_store_key] = user
     end
 
     def generate_password
       PasswordGenerator.generate
+    end
+
+    private
+    def thread_store_key
+      "authentications.#{self.name.underscore.pluralize}.current"
     end
   end
 
@@ -37,12 +38,7 @@ module Authenticatable
     self == self.class.current
   end
 
-  private
-  def password_hash
-    BCrypt::Password.new(password_digest)
-  end
-  
-  def set_generated_password
-    self.password = self.password_confirmation = self.class.generate_password
+  def recently_active?
+    self.class.current_users.include?(self)
   end
 end

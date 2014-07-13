@@ -1,0 +1,15 @@
+- present user, with: Admin::UserPresenter do |user|
+  = content_tag_for :tr, user do
+    %td.thumbnail-cell
+      = link_to user.gravatar(size: 45), [:edit, :admin, user]
+    %td
+      = link_to user.full_name, [:edit, :admin, user]
+      %br
+      - if @current_users and user.object.in?(@current_users)
+        %span.text-success
+          = user.last_activity
+      - else
+        %span.text-muted
+          = user.last_activity
+    %td.actions
+      = user.action_buttons size: :xs, icon_only: true

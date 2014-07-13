@@ -7,9 +7,9 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 User.benchmark "Seeding Users" do
-  User.create! first_name: 'Tobias', last_name: 'Casper', email: 'webmaster@gtgraphics.de', password: 'Test1234', password_confirmation: 'Test1234'
-  User.create! first_name: 'Tobias', last_name: 'Roetsch', email: 't.roetsch@gtgraphics.de', password: 'Test1234', password_confirmation: 'Test1234'
-  User.create! first_name: 'Jeff', last_name: 'Michelmann', email: 'j.michelmann@gtgraphics.de', password: 'Test1234', password_confirmation: 'Test1234'
+  User.create! first_name: 'Tobias', last_name: 'Casper', email: 'webmaster@gtgraphics.de', password: 'Test1234'
+  User.create! first_name: 'Tobias', last_name: 'Roetsch', email: 't.roetsch@gtgraphics.de', password: 'Test1234'
+  User.create! first_name: 'Jeff', last_name: 'Michelmann', email: 'j.michelmann@gtgraphics.de', password: 'Test1234'
 end
 
 Template.benchmark "Seeding Templates" do
