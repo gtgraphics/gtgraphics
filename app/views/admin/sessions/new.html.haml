@@ -3,10 +3,12 @@
   .page-header
     %h1.text-center= translate('views.admin.users.headlines.sign_in')
 
-  = simple_form_for @sign_in_activity, as: :session, url: :admin_login, wrapper: :dialog_form do |form|
+  = simple_form_for @user_login_activity, as: :session, url: :admin_login, wrapper: :dialog_form do |form|
 
-    = form.input :email, autofocus: true, placeholder: Admin::User::SignInActivity.human_attribute_name(:email), input_html: { class: 'input-lg', autocomplete: 'off' }
-    = form.input :password, placeholder: Admin::User::SignInActivity.human_attribute_name(:password), input_html: { class: 'input-lg' }
+    = render_base_errors(form.object)
+
+    = form.input :email, autofocus: true, placeholder: Admin::User::LoginActivity.human_attribute_name(:email), input_html: { class: 'input-lg', autocomplete: 'off' }
+    = form.input :password, placeholder: Admin::User::LoginActivity.human_attribute_name(:password), input_html: { class: 'input-lg' }
     = form.input :permanent, as: :boolean, wrapper: :vertical_boolean
 
     .form-group

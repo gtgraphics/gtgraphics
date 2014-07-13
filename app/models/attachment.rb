@@ -26,6 +26,8 @@ class Attachment < ActiveRecord::Base
   has_attachment
   has_owner :author, default_owner_to_current_user: false
 
+  validates :asset, presence: true
+
   # preserve_attachment_between_requests_for :asset
 
   before_validation :set_default_title, if: :file_name?, unless: :title?

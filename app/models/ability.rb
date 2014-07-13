@@ -47,7 +47,7 @@ class Ability
       end
 
       can :manage, Attachment
-      can :manage, Image
+      can :manage, [Image, Image::Style]
 
       can [:read, :create, :update], Page
       can :destroy, Page, Page.where.not(parent_id: nil) do |page|

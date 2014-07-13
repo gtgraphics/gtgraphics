@@ -58,7 +58,7 @@ class Admin::ImagePresenter < Admin::ApplicationPresenter
   end
 
   def styles_count
-    count = image.custom_styles.count
+    count = image.styles.count
     "#{count} #{Image::Style.model_name.human(count: count)}"
   end
 

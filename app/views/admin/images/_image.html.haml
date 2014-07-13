@@ -5,12 +5,11 @@
         = check_box_tag 'image_ids[]', image.id, false, class: 'table-checkbox', id: nil, data: { behavior: 'tableCheckbox' }
     %td.thumbnail-cell
       = link_to [:admin, image] do
-        = image_tag image.asset.url(:thumbnail), class: 'img-circle', alt: image.title, width: 45, height: 45
+        = image_tag attachment_url(image, :thumbnail), class: 'img-circle', alt: image.title, width: 45, height: 45
     %td
       = link_to image.title, [:admin, image]
       %br
       %span.text-muted.ignored= image.summary
-    / %td.visible-lg= image.author_name
     %td= image.created_at
     - if local_assigns.fetch(:actions, true)
       %td.actions

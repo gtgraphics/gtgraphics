@@ -8,7 +8,10 @@ module FlashHelper
     end
   end
 
-  def render_flash(type, message, options = {})
+  def render_flash(type, *args, &block)
+    options = args.extract_options!
+    message = block_given? ? capture(&block) : args.first
+
     if message.present?
       dismissable = options.delete(:dismissable) { false }
       

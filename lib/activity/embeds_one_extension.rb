@@ -14,7 +14,7 @@ class Activity
           
           def #{association_name}=(object)
             @#{association_name} = object
-            @#{association_name}_id = object.send(#{klass}.primary_key)
+            @#{association_name}_id = object.try(#{klass}.primary_key)
           end
    
           attribute :#{association_name}_id, Integer

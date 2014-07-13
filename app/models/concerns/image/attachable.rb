@@ -8,6 +8,7 @@ class Image < ActiveRecord::Base
       def has_image(uploader_class = nil)
         include FileAttachable
         has_attachment(uploader_class)
+
         include Extensions
       end
     end
@@ -19,10 +20,10 @@ class Image < ActiveRecord::Base
         store :customization_options
 
         validates :content_type, presence: true,
-                                 inclusion: { in: ->(attachable) { attachable.class.permitted_content_types }, allow_blank: true }
+                                 inclusion: { in: ->(attachable) { attachable.class.permitted_content_types }, allow_blank: true }, if: :asset?
 
-        before_create :set_original_dimensions
-        before_save :set_geometry, if: :asset_changed?
+        before_create :set_original_dimensions, if: :asset?
+        before_save :set_geometry, if: [:asset?, :asset_changed?]
       end
 
       module ClassMethods

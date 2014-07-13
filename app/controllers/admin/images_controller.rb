@@ -44,7 +44,7 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def show
-    @image_styles = @image.custom_styles
+    @image_styles = @image.styles
     respond_with :admin, @image do |format|
       format.json
     end

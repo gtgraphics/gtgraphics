@@ -14,12 +14,11 @@ module FileAttachable
     extend ActiveSupport::Concern
 
     included do
-      validates :asset, presence: true
-
-      before_validation :set_original_filename, if: :asset_changed?
-      before_validation :set_content_type, if: :asset_changed?
-      before_validation :set_file_size, if: :asset_changed?
-      before_save :set_asset_updated_at, if: :asset_changed?
+      after_initialize :generate_asset_token, unless: :asset?
+      before_validation :set_original_filename, if: [:asset?, :asset_changed?]
+      before_validation :set_content_type, if: [:asset?, :asset_changed?]
+      before_validation :set_file_size, if: [:asset?, :asset_changed?]
+      before_save :set_asset_updated_at, if: [:asset?, :asset_changed?]
     end
 
     def mime_type
@@ -41,6 +40,10 @@ module FileAttachable
     end
 
     protected
+    def generate_asset_token
+      self.asset_token = SecureRandom.uuid
+    end
+
     def set_original_filename
       if asset.file.respond_to?(:original_filename)
         self.original_filename = asset.file.original_filename 

@@ -16,9 +16,15 @@
 
   .row
     .col-lg-8
-      .content
+      .panel.panel-invisible
         = link_to attachment_url(image, :custom), target: '_blank' do
           = image_tag attachment_url(image, :custom), class: 'img-responsive img-rounded center-block', alt: image.title
+
+      = panel prepend_icon(:picture, Image::Style.model_name.human(count: 2), outline: true, fixed_width: true), body: false do
+        %table.table
+          %tbody
+            - @image_styles.each do |image_style|
+              = render 'admin/image/styles/image_style', image_style: image_style
 
     .col-lg-4
       .panel.panel-invisible
@@ -42,34 +48,18 @@
           = liquify image.description, with: image
 
       / Details
-      .panel.panel-default
-        .panel-heading
-          %h3.panel-title= prepend_icon(:info, translate('views.admin.images.headlines.details'), fixed_width: true)
-        .panel-collapsible
-          .panel-body
-            %dl.dl-horizontal
-              = image.list_item :content_type
-              = image.list_item :file_size
-              = image.list_item :dimensions
-              = image.list_item :pixels_count
-              = image.list_item :author_name if image.author.present?
-              = image.list_item :artist if image.artist.present?
-              = image.list_item :camera if image.camera.present?
-              = image.list_item :software if image.software.present?
-              = image.list_item :taken_at if image.taken_at.present?
-              = image.list_item :pages_count
-              = image.list_item :updated_at
+      = panel prepend_icon(:info, translate('views.admin.images.headlines.details'), fixed_width: true) do
+        %dl.dl-horizontal
+          = image.list_item :content_type
+          = image.list_item :file_size
+          = image.list_item :dimensions
+          = image.list_item :pixels_count
+          = image.list_item :artist if image.artist.present?
+          = image.list_item :camera if image.camera.present?
+          = image.list_item :software if image.software.present?
+          = image.list_item :taken_at if image.taken_at.present?
+          = image.list_item :pages_count
 
-      - if @image_styles.any?
-        / Image Styles
-        .panel.panel-default
-          .panel-heading
-            %h3.panel-title
-              = prepend_icon(:picture, Image::Style.model_name.human(count: 2), outline: true, fixed_width: true)
-              %span.text-muted
-                (#{@image_styles.size})
-          .panel-body
-            = render 'admin/image_styles/table'
 
       / - if @tags.any?
       /   / Tags

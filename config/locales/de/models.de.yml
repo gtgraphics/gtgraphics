@@ -49,7 +49,7 @@ de:
         generate_password: Password generieren?
         password: Passwort
         password_confirmation: Password (Wdh.)
-      admin/user/sign_in_activity:
+      admin/user/login_activity:
         email: E-Mail-Adresse
         password: Passwort
         permanent: Angemeldet bleiben
@@ -79,6 +79,12 @@ de:
       admin/image_owner_assignment_activity:
         image_ids: Bilder
         author_id: Urheber
+    errors:
+      models:
+        admin/user/login_activity:
+          attributes:
+            base:
+              invalid: Die Anmeldedaten sind ungültig.
     models:
       editor/link:
         one: Hyperlink

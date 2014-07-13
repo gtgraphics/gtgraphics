@@ -6,7 +6,6 @@
 #  image_id              :integer
 #  created_at            :datetime
 #  updated_at            :datetime
-#  type                  :string(255)      not null
 #  asset                 :string(255)
 #  content_type          :string(255)
 #  file_size             :integer
@@ -17,6 +16,8 @@
 #  width                 :integer
 #  height                :integer
 #  position              :integer          not null
+#  original_filename     :string(255)
+#  asset_token           :string(255)
 #
 
 class Image < ActiveRecord::Base
@@ -28,11 +29,12 @@ class Image < ActiveRecord::Base
     include Sortable
     include Translatable
 
-    belongs_to :image, inverse_of: :custom_styles
+    belongs_to :image, inverse_of: :styles
 
     translates :title, fallbacks_for_empty_translations: true
 
     acts_as_list scope: :image_id
+
     acts_as_sortable do |by|
       by.title(default: true) { |column, dir| Image::Style::Translation.arel_table[column].send(dir.to_sym) }
       by.dimensions { |column, dir| "(#{table_name}.width * #{table_name}.height) #{dir}" }
@@ -40,11 +42,14 @@ class Image < ActiveRecord::Base
 
     has_image
 
+    validates :title, presence: true
     validates :image_id, presence: true, strict: true
 
-    before_save :set_customized_dimensions
+    default_scope -> { order(:position) }
 
-    delegate :asset_token, to: :image
+    # before_save :set_customized_dimensions
+
+    # delegate :asset_token, to: :image
 
     private
     def set_customized_dimensions

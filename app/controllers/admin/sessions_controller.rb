@@ -8,16 +8,16 @@ class Admin::SessionsController < Admin::ApplicationController
   end
 
   def new
-    @sign_in_activity = Admin::User::LoginActivity.new
+    @user_login_activity = Admin::User::LoginActivity.new
     respond_to do |format|
       format.html
     end
   end
 
   def create
-    @sign_in_activity = Admin::User::LoginActivity.new(login_params)
-    if @sign_in_activity.valid?
-      auto_login @sign_in_activity.user, @sign_in_activity.permanent?
+    @user_login_activity = Admin::User::LoginActivity.new(login_params)
+    if @user_login_activity.valid?
+      auto_login @user_login_activity.user, @user_login_activity.permanent?
       respond_to do |format|
         format.html { redirect_back_or_to :admin_root }
       end

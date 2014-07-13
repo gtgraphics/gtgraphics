@@ -1,4 +1,12 @@
-- present image, with: Admin::Image::StylePresenter do |image_style|
-  = content_tag_for image_style, :tr do
-    %td= image_style.title
-    %td= image_style.dimensions
+- present image_style, with: Admin::Image::StylePresenter do |image_style|
+  = content_tag_for :tr, image_style do
+    %td.thumbnail-cell
+      = link_to attachment_url(image_style) do
+        = image_tag attachment_url(image_style, :thumbnail), class: 'img-circle', alt: image_style.title, width: 45, height: 45
+    %td
+      = link_to image_style.title, attachment_url(image_style), target: '_blank'
+      %br
+      %span.text-muted.ignored
+        = image_style.dimensions
+    %td.actions
+      = image_style.action_buttons size: :xs, icon_only: true

@@ -2,23 +2,22 @@
 #
 # Table name: images
 #
-#  id                          :integer          not null, primary key
-#  asset                       :string(255)
-#  content_type                :string(255)
-#  file_size                   :integer
-#  asset_updated_at            :datetime
-#  original_width              :integer
-#  original_height             :integer
-#  exif_data                   :text
-#  created_at                  :datetime
-#  updated_at                  :datetime
-#  author_id                   :integer
-#  customization_options       :text
-#  width                       :integer
-#  height                      :integer
-#  predefined_style_dimensions :text
-#  original_filename           :string(255)
-#  asset_token                 :string(255)      not null
+#  id                    :integer          not null, primary key
+#  asset                 :string(255)
+#  content_type          :string(255)
+#  file_size             :integer
+#  asset_updated_at      :datetime
+#  original_width        :integer
+#  original_height       :integer
+#  exif_data             :text
+#  created_at            :datetime
+#  updated_at            :datetime
+#  author_id             :integer
+#  customization_options :text
+#  width                 :integer
+#  height                :integer
+#  original_filename     :string(255)
+#  asset_token           :string(255)      not null
 #
 
 class Editor::Image < EditorActivity

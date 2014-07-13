@@ -1,6 +1,4 @@
 class Admin::Image::StylesController < Admin::ApplicationController
-  layout 'admin/image_editor'
-
   respond_to :html
 
   before_action :load_image
@@ -19,7 +17,8 @@ class Admin::Image::StylesController < Admin::ApplicationController
   end
 
   def index
-    @image_styles = @image.custom_styles.with_translations_for_current_locale.page(params[:page]).sort(params[:sort], params[:direction])
+    @image_styles = @image.styles.with_translations_for_current_locale \
+                                 .page(params[:page]).sort(params[:sort], params[:direction])
     respond_with :admin, @image, @image_styles
   end
 
@@ -28,12 +27,20 @@ class Admin::Image::StylesController < Admin::ApplicationController
   end
 
   def new
-    @image_style = @image.custom_styles.new
+    @image_style = @image.styles.new
+    @image_style.asset = @image.asset
+    @image_style.title = "Bla #{rand(8)}"
+    @image_style.save!
+    respond_with :admin, @image, @image_style
+  end
+
+  def upload
+    @image_style = @image.styles.new
     respond_with :admin, @image, @image_style
   end
 
   def create
-    @image_style = @image.custom_styles.create(image_style_params)
+    @image_style = @image.styles.create(image_style_params)
     flash_for @image_style
     if @image_style.errors.empty?
       if @image_style.attachment?
