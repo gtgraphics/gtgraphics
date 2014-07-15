@@ -1,14 +1,14 @@
 class Admin::Image::StylesController < Admin::ApplicationController
-  respond_to :html
+  respond_to :html, :js
 
   before_action :load_image
-  before_action :load_image_style, only: %i(show edit update crop apply_crop destroy)
+  before_action :load_image_style, only: %i(show edit update customize apply_customization move_up move_down destroy)
 
   breadcrumbs do |b|
     b.append ::Image.model_name.human(count: 2), :admin_images
     b.append @image.title, [:admin, @image]
     b.append ::Image::Style.model_name.human(count: 2), [:admin, @image, :styles]
-    if action_name.in? %w(new new_attachment create)
+    if action_name.in? %w(new upload)
       b.append translate('breadcrumbs.new', model: ::Image::Style.model_name.human), [:new, :admin, @image, :style]
     end
     if action_name.in? %w(edit crop update)
@@ -16,40 +16,21 @@ class Admin::Image::StylesController < Admin::ApplicationController
     end
   end
 
-  def index
-    @image_styles = @image.styles.with_translations_for_current_locale \
-                                 .page(params[:page]).sort(params[:sort], params[:direction])
-    respond_with :admin, @image, @image_styles
-  end
-
-  def show
-    respond_with :admin, @image, @image_style
-  end
-
   def new
     @image_style = @image.styles.new
     @image_style.asset = @image.asset
     @image_style.title = "Bla #{rand(8)}"
     @image_style.save!
+    respond_with :admin, @image, @image_style, location: [:admin, @image]
+  end
+
+  def edit
     respond_with :admin, @image, @image_style
   end
 
-  def upload
-    @image_style = @image.styles.new
-    respond_with :admin, @image, @image_style
-  end
-
-  def create
-    @image_style = @image.styles.create(image_style_params)
-    flash_for @image_style
-    if @image_style.errors.empty?
-      if @image_style.attachment?
-        location = crop_admin_image_style_path(@image, @image_style)
-      else
-        location = admin_image_path(@image)
-      end
-    end
-    respond_with :admin, @image_style.becomes(::Image::Style), location: location
+  def update
+    @image_style.update(image_style_params)
+    respond_with :admin, @image, @image_style, location: [:admin, @image]
   end
 
   def upload
@@ -57,33 +38,45 @@ class Admin::Image::StylesController < Admin::ApplicationController
     @image_style.asset = image_style_upload_params[:asset]
     @image_style.author = current_user
     @image_style.save!
-    respond_to do |format|
-      format.js
-    end
+    respond_with :admin, @image, @image_style, location: [:admin, @image]
   end
 
-  def edit
-    if @image_style.variant?
-      redirect_to crop_admin_image_style_path(@image, @image_style)
-    else
-      respond_with :admin, @image_style.becomes(::Image::Style)
+  def customize
+    @image_style.tap do |img|
+      img.cropped = true if img.cropped.nil?
+      img.crop_x ||= 0
+      img.crop_y ||= 0
+      img.crop_width ||= img.original_width
+      img.crop_height ||= img.original_height
+      img.resized = false if img.resized.nil?
+      img.resize_width ||= img.original_width
+      img.resize_height ||= img.original_height
     end
+    respond_with :admin, @image, @image_style
   end
 
-  def update
-    raise CanCan::AccessDenied.new(translate('unauthorized.update.image/style/variant'), :update, ::Image::Style::Variant) if @image_style.variant?
-    @image_style.attributes = image_style_params
-    @image_style.cropped = false
-    @image_style.resized = false
-    @image_style.save
-    flash_for @image_style
-    respond_with :admin, @image_style.becomes(::Image::Style)
+  def apply_customization
+    Image::Style.transaction do
+      @image_style.update(image_style_customization_params)
+      @image_style.recreate_assets!
+    end
+    respond_with :admin, @image, @image_style, location: [:admin, @image]
+  end
+
+  def move_up
+    @image_style.move_higher
+    respond_with :admin, @image, @image_style
+  end
+
+  def move_down
+    @image_style.move_lower
+    respond_with :admin, @image, @image_style
   end
 
   def destroy
     @image_style.destroy
     flash_for @image_style
-    respond_with :admin, @image_style.becomes(::Image::Style)
+    respond_with :admin, @image, @image_style, location: [:admin, @image]
   end
 
   # Batch Processing
@@ -116,31 +109,14 @@ class Admin::Image::StylesController < Admin::ApplicationController
   end
 
   def load_image_style
-    @image_style = @image.custom_styles.find(params[:id])
+    @image_style = @image.styles.find(params[:id])
   end
-
-  IMAGE_CROP_PARAMS = [:cropped, :crop_x, :crop_y, :crop_width, :crop_height, :resized, :resize_width, :resize_height]
 
   def image_style_params
-    image_style_params = params.require(:image_style)
-    type = @image_style.try(:type) || image_style_params.fetch(:type)
-    permitted_attributes = []
-    permitted_attributes << :type unless @image_style.try(:persisted?)
-    case type
-    when '::Image::Style::Variant'
-      image_style_crop_params
-      permitted_attributes += IMAGE_CROP_PARAMS
-    when '::Image::Style::Attachment'
-      permitted_attributes << :asset
-    end
-    image_style_params.permit(*permitted_attributes)
+    params.require(:image_style).permit(:title)
   end
 
-  def image_style_crop_params
-    params.require(:image_style).permit(*IMAGE_CROP_PARAMS)
-  end
-
-  def image_style_upload_params
-    params.require(:image_style).permit(:asset)
+  def image_style_customization_params
+    params.require(:image_style).permit(:cropped, :crop_x, :crop_y, :crop_width, :crop_height, :resized, :resize_width, :resize_height)
   end
 end

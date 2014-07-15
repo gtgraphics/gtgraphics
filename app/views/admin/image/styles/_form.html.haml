@@ -1,12 +1,9 @@
-= simple_form_for [:admin, @image_style], as: :image_style, url: action_name.in?(%w(crop apply_crop)) ? apply_crop_admin_image_style_path(@image, @image_style) : (@image_style.new_record? ? admin_image_styles_path(@image) : admin_image_style_path(@image, @image_style)), html: { class: 'form-horizontal' } do |form|
+= simple_form_for @image_style, url: @image_style.new_record? ? admin_image_styles_path(@image) : admin_image_style_path(@image, @image_style), remote: true, html: { class: 'form-horizontal' } do |form|
 
-  = page_header do
-    = form.button :button, name: 'save', type: 'submit', class: 'btn-primary' do
-      = prepend_icon(:save, translate(@image_style.new_record? ? :create : :update, scope: 'helpers.submit', model: Image::Style.model_name.human))
-
-  = form.input :type, as: :hidden if @image_style.new_record?
-
-  - if @image_style.attachment? and not action_name.in? %w(crop apply_crop)
-    = form.input :asset, as: :image_preview, required: true, input_html: { preview_version: :thumbnail }, label_html: { class: 'col-lg-2' }, container_html: { class: 'col-lg-8' }
-  - else
-    = render 'admin/images/manipulator_fields', fields: form
+  .modal-body
+    = form.input :title, input_html: { autofocus: true }
+  
+  .modal-footer
+    = form.button :button, type: 'submit', class: 'btn-primary' do
+      = prepend_icon :save, translate('helpers.links.save')
+    = button_tag translate('helpers.links.close'), type: 'button', class: 'btn btn-default', data: { dismiss: 'modal' }

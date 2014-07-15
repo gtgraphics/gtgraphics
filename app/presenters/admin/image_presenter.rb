@@ -1,5 +1,6 @@
 class Admin::ImagePresenter < Admin::ApplicationPresenter
   include FileAttachablePresenter
+  include Admin::Image::CustomizablePresenter
   
   presents :image
 

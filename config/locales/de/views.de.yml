@@ -41,6 +41,7 @@ de:
       loader:
         loading: Inhalt wird geladen…
       images:
+        original: Original
         headlines:
           crop: Zuschnitt
           scale: Skalierung

@@ -58,7 +58,7 @@ GtGraphics::Application.routes.draw do
             end
 
             resources :images, except: [:new, :create], concerns: :customizable do
-              resources :styles, controller: :'image/styles', concerns: [:customizable, :movable] do
+              resources :styles, controller: :'image/styles', except: :index, concerns: [:customizable, :movable] do
                 collection do
                   patch :upload
                   delete :destroy_multiple

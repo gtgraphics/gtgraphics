@@ -1,10 +1,12 @@
 class Admin::Image::StylePresenter < Admin::ApplicationPresenter
   include FileAttachablePresenter
+  include Admin::MovableResourcePresenter
+  include Admin::Image::CustomizablePresenter
 
   presents :image_style
   delegate :image, to: :image_style
 
-  self.action_buttons = [:edit, :move_up, :move_down, :destroy]
+  self.action_buttons = [:edit, :customize, :move_up, :move_down, :destroy]
 
   def dimensions
      I18n.translate(:dimensions, width: width, height: height)
@@ -24,20 +26,15 @@ class Admin::Image::StylePresenter < Admin::ApplicationPresenter
     h.edit_admin_image_style_path(image, image_style)
   end
 
-
-  def move_down_button(options = {})
-    
+  def customize_path
+    h.customize_admin_image_style_path(image, image_style)
   end
 
   def move_down_path
-    h.move_down_admin_template_path(object)
-  end
-
-  def move_up_button(options = {})
-    
+    h.move_down_admin_image_style_path(image, image_style)
   end
 
   def move_up_path
-    h.move_up_admin_template_path(object)
+    h.move_up_admin_image_style_path(image, image_style)
   end
 end

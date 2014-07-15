@@ -21,10 +21,7 @@
           = image_tag attachment_url(image, :custom), class: 'img-responsive img-rounded center-block', alt: image.title
 
       = panel prepend_icon(:picture, Image::Style.model_name.human(count: 2), outline: true, fixed_width: true), body: false do
-        %table.table
-          %tbody
-            - @image_styles.each do |image_style|
-              = render 'admin/image/styles/image_style', image_style: image_style
+        = render 'admin/image/styles/table'
 
     .col-lg-4
       .panel.panel-invisible

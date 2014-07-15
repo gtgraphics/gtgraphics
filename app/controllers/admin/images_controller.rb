@@ -44,7 +44,6 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def show
-    @image_styles = @image.styles
     respond_with :admin, @image do |format|
       format.json
     end
@@ -148,7 +147,7 @@ class Admin::ImagesController < Admin::ApplicationController
       format.js { redirect_via_turbolinks_to location }
     end
   end
-  private :search
+  private :search # invoked through :batch_process
 
   def destroy_multiple
     image_ids = Array(params[:image_ids]).map(&:to_i).reject(&:zero?)
@@ -160,7 +159,7 @@ class Admin::ImagesController < Admin::ApplicationController
       format.js { redirect_via_turbolinks_to location }
     end
   end
-  private :destroy_multiple
+  private :destroy_multiple # invoked through :batch_process
 
   def assign_owner
     @image_owner_assignment_activity = Admin::ImageOwnerAssignmentActivity.new
@@ -170,7 +169,7 @@ class Admin::ImagesController < Admin::ApplicationController
       format.js { render 'assign_owner' }
     end
   end
-  private :assign_owner
+  private :assign_owner # invoked through :batch_processger
 
   def associate_owner
     @image_owner_assignment_activity = Admin::ImageOwnerAssignmentActivity.execute(image_owner_assignment_params)
@@ -186,14 +185,6 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def image_params
     params.require(:image).permit(:asset, :title, :description, :author_id, :tag_tokens)
-  end
-
-  def image_page_embedding_activity_params
-    params.require(:image_page_embedding_activity).permit(:parent_page_id)
-  end
-
-  def image_crop_params
-    params.require(:image).permit(:crop_x, :crop_y, :crop_width, :crop_height)
   end
 
   def image_customization_params

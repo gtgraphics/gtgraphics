@@ -1,12 +1,17 @@
-- if @image_styles.any?
-  %ul#image_styles.gtg-admin-action-list
-    - @image_styles.each do |image_style|
-      = content_tag_for :li, image_style.becomes(Image::Style), class: 'clearfix' do
-        .pull-left
-          = link_to image_style.transformed_dimensions, image_style.asset_url, target: '_blank'
-        .actions.pull-right
-          .btn-toolbar
-            - if image_style.attachment?
-              .btn-group= button_link_to icon(:upload, fixed_width: true), edit_admin_image_style_path(@image, image_style), size: :mini, title: translate('helpers.links.edit'), data: { toggle: 'tooltip', container: 'body' }
-            .btn-group= button_link_to icon(:crop, fixed_width: true), crop_admin_image_style_path(@image, image_style), size: :mini, title: translate('helpers.links.crop_and_scale'), data: { toggle: 'tooltip', container: 'body' }
-            .btn-group= destroy_button_link_for image_style.becomes(Image::Style), url: admin_image_style_path(@image, image_style), size: :mini, icon_only: true
+- present @image, with: Admin::ImagePresenter do |image|
+  %table.table#image_styles
+    %tbody
+      %tr
+        %td.thumbnail-cell
+          = link_to attachment_url(image) do
+            = image_tag attachment_url(image, :thumbnail), class: 'img-circle', alt: translate('views.admin.images.original'), width: 45, height: 45
+        %td
+          = link_to translate('views.admin.images.original'), attachment_url(image), target: '_blank'
+          %br
+          %span.text-muted.ignored
+            = image.dimensions
+        %td.actions
+          = image.action_buttons only: [:edit, :customize], size: :xs, icon_only: true
+
+      - image.styles.each do |image_style|
+        = render 'admin/image/styles/image_style', image_style: image_style

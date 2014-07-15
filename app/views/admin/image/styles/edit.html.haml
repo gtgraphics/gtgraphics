@@ -1,1 +1,4 @@
-= render 'form'
+- content_for :title, translate('breadcrumbs.edit', model: Image::Style.model_name.human)
+
+- content_for :content do
+  = render 'form'
