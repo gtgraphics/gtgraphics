@@ -5,12 +5,17 @@
   = image_tag attachment_url(image_page.image, :custom), class: 'img-responsive img-rounded'
 
 %br
-= raw image.description
 
-- if image.styles.any?
-  %ul
-    %li= link_to 'Original', download_image_path(page.path, format: image.format)
-    - image.styles.each do |style|
-      %li
-        = link_to style.title, download_image_path(page.path, format: style.format, style_id: style.position)
-        (#{style.width} &times; #{style.height})
+.row
+  .col-sm-8
+    %h4 Description
+    = raw image.description
+
+  .col-sm-4
+    %h4 Downloads
+    %ul
+      %li= link_to 'Original', download_image_path(page.path, format: image.format)
+      - image.styles.each do |style|
+        %li
+          = link_to style.title, download_image_path(page.path, format: style.format, style_id: style.position)
+          (#{style.width} &times; #{style.height})

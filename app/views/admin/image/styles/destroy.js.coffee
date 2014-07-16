@@ -1,3 +1,1 @@
-tableContent = "<%= j render('admin/image/styles/table') %>"
-$('#image_styles').replaceWith(tableContent)
-$('#image_styles').prepare()
+Turbolinks.visit('<%= admin_image_path(@image) %>')

@@ -77,6 +77,7 @@ class Admin::Image::StylesController < Admin::ApplicationController
 
   def destroy
     @image_style.destroy
+    flash_for @image_style
     respond_with :admin, @image, @image_style, location: [:admin, @image]
   end
 
