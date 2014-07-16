@@ -45,11 +45,11 @@ namespace :gtg do
             image_description = image_doc.css('.image-box-content p').first.inner_html.squish
             if index.zero?
               remote_asset_url = image_doc.css('.gtg-img').attr('src')
-              virtual_file_name = image_title.parameterize('_') + File.extname(remote_asset_url).downcase
+              virtual_filename = image_title.parameterize('_') + File.extname(remote_asset_url).downcase
             end
 
             # Create Image and Translations
-            @image ||= Image.find_or_initialize_by(asset_file_name: virtual_file_name).tap do |image|
+            @image ||= Image.find_or_initialize_by(asset_file_name: virtual_filename).tap do |image|
               image.author = User.find_by(first_name: image_author.first, last_name: image_author.last) if image_author
             end
             @image.translations.find_or_initialize_by(locale: locale).tap do |translation|
@@ -72,7 +72,7 @@ namespace :gtg do
               # Original Asset
               puts "Fetching: #{remote_asset_url}"
               @image.asset = open(remote_asset_url)
-              @image.asset_file_name = virtual_file_name
+              @image.asset_file_name = virtual_filename
 
               # Style Assets
               image_style_urls = image_doc.css('.home-num-sign').collect { |style_element| style_element.attr('href') }

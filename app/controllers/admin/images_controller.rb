@@ -117,7 +117,7 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def download
-    send_file @image.asset.custom.path, filename: @image.virtual_file_name,
+    send_file @image.asset.custom.path, filename: @image.virtual_filename,
                                         content_type: @image.content_type,
                                         disposition: :attachment,
                                         x_sendfile: true

@@ -9,7 +9,7 @@ class ImagesController < PagesController
     respond_to do |format|
       format.html { render_page }
       format.send(@image.format) do
-        send_file @image.asset.custom.path, filename: @image.virtual_file_name,
+        send_file @image.asset.custom.path, filename: @image.virtual_filename,
                                             content_type: @image.content_type,
                                             disposition: :inline,
                                             x_sendfile: true
@@ -27,7 +27,7 @@ class ImagesController < PagesController
 
     respond_to do |format|
       format.send(image.format) do
-        send_file image.asset.custom.path, filename: image.virtual_file_name,
+        send_file image.asset.custom.path, filename: image.virtual_filename,
                                            content_type: image.content_type,
                                            disposition: :attachment,
                                            x_sendfile: true

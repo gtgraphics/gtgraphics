@@ -48,9 +48,15 @@ class Image < ActiveRecord::Base
 
     default_scope -> { order(:position) }
 
-    # before_save :set_customized_dimensions
-
-    # delegate :asset_token, to: :image
+    def virtual_filename
+      I18n.with_locale(I18n.default_locale) do
+        if title.present?
+          super
+        else
+          image.title.parameterize('_') + File.extname(original_filename).downcase
+        end
+      end
+    end
 
     private
     def set_default_title

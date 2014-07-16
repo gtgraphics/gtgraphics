@@ -33,9 +33,13 @@ module FileAttachable
       save!
     end
 
-    def virtual_file_name
+    def virtual_filename
       I18n.with_locale(I18n.default_locale) do
-        title.parameterize.underscore + File.extname(original_filename).downcase
+        if title.present?
+          title.parameterize('_') + File.extname(original_filename).downcase
+        else
+          original_filename
+        end
       end
     end
 

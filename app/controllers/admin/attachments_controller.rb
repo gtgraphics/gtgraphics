@@ -53,7 +53,7 @@ class Admin::AttachmentsController < Admin::ApplicationController
   end
 
   def download
-    send_file @attachment.asset.path, filename: @attachment.virtual_file_name, content_type: @attachment.content_type, disposition: :attachment, x_sendfile: true
+    send_file @attachment.asset.path, filename: @attachment.virtual_filename, content_type: @attachment.content_type, disposition: :attachment, x_sendfile: true
   end
 
   def move_to_images
