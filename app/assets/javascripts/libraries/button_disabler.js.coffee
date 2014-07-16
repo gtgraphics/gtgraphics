@@ -22,12 +22,15 @@ $(document)
     $(@).find(':submit').prop('disabled', true)
 
   .on 'ajax:beforeSend', "form[data-remote=true]", ->
-    $(@).find(':submit').prop('disabled', true)
+    $submit = $(@).find(':submit')
+    $submit.data('prevState', $submit.prop('disabled'))
+    $submit.prop('disabled', true)
 
   .on 'ajax:complete', "form[data-remote=true]", ->
-    $button = $(@).find(':submit')
-    $button.prop('disabled', false)
-    destroyArbitraryField($button)
+    $submit = $(@).find(':submit')
+    $submit.prop('disabled', $submit.data('prevState') || false)
+    $submit.removeData('prevState')
+    destroyArbitraryField($submit)
 
   .on 'ajax:beforeSend', AJAX_LINK_SELECTOR, ->
     $(@).addClass('disabled')

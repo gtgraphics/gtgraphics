@@ -7,7 +7,6 @@ class Admin::Image::StylesController < Admin::ApplicationController
   breadcrumbs do |b|
     b.append ::Image.model_name.human(count: 2), :admin_images
     b.append @image.title, [:admin, @image]
-    b.append ::Image::Style.model_name.human(count: 2), [:admin, @image, :styles]
     if action_name.in? %w(new upload)
       b.append translate('breadcrumbs.new', model: ::Image::Style.model_name.human), [:new, :admin, @image, :style]
     end
@@ -18,9 +17,14 @@ class Admin::Image::StylesController < Admin::ApplicationController
 
   def new
     @image_style = @image.styles.new
+    respond_with :admin, @image, @image_style
+  end
+
+  def create
+    @image_style = @image.styles.new(image_style_params)
     @image_style.asset = @image.asset
-    @image_style.title = "Bla #{rand(8)}"
-    @image_style.save!
+    @image_style.original_filename = @image.original_filename
+    @image_style.save
     respond_with :admin, @image, @image_style, location: [:admin, @image]
   end
 
@@ -34,9 +38,7 @@ class Admin::Image::StylesController < Admin::ApplicationController
   end
 
   def upload
-    @image_style = ::Image::Style.new
-    @image_style.asset = image_style_upload_params[:asset]
-    @image_style.author = current_user
+    @image_style = @image.styles.new(image_style_upload_params)
     @image_style.save!
     respond_with :admin, @image, @image_style, location: [:admin, @image]
   end
@@ -75,7 +77,6 @@ class Admin::Image::StylesController < Admin::ApplicationController
 
   def destroy
     @image_style.destroy
-    flash_for @image_style
     respond_with :admin, @image, @image_style, location: [:admin, @image]
   end
 
@@ -114,6 +115,10 @@ class Admin::Image::StylesController < Admin::ApplicationController
 
   def image_style_params
     params.require(:image_style).permit(:title)
+  end
+
+  def image_style_upload_params
+    params.require(:image_style).permit(:asset)
   end
 
   def image_style_customization_params

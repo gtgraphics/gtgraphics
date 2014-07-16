@@ -20,11 +20,15 @@ class Admin::ImagePresenter < Admin::ApplicationPresenter
     end
   end
 
-  def dimensions
+  def dimensions(include_originals = false)
     original_dimensions = I18n.translate(:dimensions, width: original_width, height: original_height)
     if image.cropped?
       crop_dimensions = I18n.translate(:dimensions, width: width, height: height)
-      "#{crop_dimensions} (#{original_dimensions})"
+      if include_originals
+        "#{crop_dimensions} (#{original_dimensions})"
+      else
+        crop_dimensions
+      end
     else
       original_dimensions
     end

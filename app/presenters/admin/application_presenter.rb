@@ -88,10 +88,10 @@ class Admin::ApplicationPresenter < Presenter
     object.class.human_attribute_name(attribute)
   end
 
-  def list_item(attribute)
+  def list_item(attribute, *args)
     h.capture do
       h.concat h.content_tag(:dt, caption_for(attribute))
-      h.concat h.content_tag(:dd, self.public_send(attribute))
+      h.concat h.content_tag(:dd, self.public_send(attribute, *args))
     end
   end
 

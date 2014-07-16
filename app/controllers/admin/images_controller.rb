@@ -50,8 +50,7 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def upload
-    @image = ::Image.new
-    @image.asset = image_upload_params[:asset]
+    @image = ::Image.new(image_upload_params)
     @image.author = current_user
     @image.save!
     respond_to do |format|

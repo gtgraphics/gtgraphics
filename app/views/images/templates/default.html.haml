@@ -7,7 +7,10 @@
 %br
 = raw image.description
 
-- if image.custom_styles.any?
+- if image.styles.any?
   %ul
-  - image.custom_styles.each do |style|
-    %li= link_to style.transformed_dimensions, download_image_path(page.path, format: style.format, style_id: style.id, dimensions: style.transformed_dimensions.to_a.join('x'))
+    %li= link_to 'Original', download_image_path(page.path, format: image.format)
+    - image.styles.each do |style|
+      %li
+        = link_to style.title, download_image_path(page.path, format: style.format, style_id: style.position)
+        (#{style.width} &times; #{style.height})

@@ -1,7 +1,15 @@
 - present @image, with: Admin::ImagePresenter do |image|
   %table.table#image_styles
+    %thead
+      %tr
+        %th.checkbox-cell
+          %input{type: 'checkbox', class: 'js-only table-checkbox-all'}
+        %th.thumbnail-cell
+        %th= Image::Style.human_attribute_name :title
+        %th.actions
     %tbody
       %tr
+        %td.checkbox-cell
         %td.thumbnail-cell
           = link_to attachment_url(image) do
             = image_tag attachment_url(image, :thumbnail), class: 'img-circle', alt: translate('views.admin.images.original'), width: 45, height: 45

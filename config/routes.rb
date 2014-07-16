@@ -60,7 +60,8 @@ GtGraphics::Application.routes.draw do
             resources :images, except: [:new, :create], concerns: :customizable do
               resources :styles, controller: :'image/styles', except: :index, concerns: [:customizable, :movable] do
                 collection do
-                  patch :upload
+                  match :upload, via: [:post, :patch]
+                  patch :batch, action: :batch_process, as: :batch_process
                   delete :destroy_multiple
                 end
               end
@@ -71,9 +72,6 @@ GtGraphics::Application.routes.draw do
                 delete :destroy_multiple
               end
               member do
-                # get :crop
-                # patch :crop, action: :apply_crop
-                # patch :uncrop
                 get :download
                 get :dimensions
                 patch :move_to_attachments

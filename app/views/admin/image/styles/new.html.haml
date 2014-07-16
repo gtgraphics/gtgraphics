@@ -1,5 +1,4 @@
-%p= @image.inspect
-%p= @image.asset.inspect
+- content_for :title, translate('breadcrumbs.new', model: Image::Style.model_name.human)
 
-%p= @image_style.inspect
-%p= @image_style.asset.inspect
+- content_for :content do
+  = render 'form'

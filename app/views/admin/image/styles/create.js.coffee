@@ -4,9 +4,9 @@ $modal = $('#modal')
 
 $modal.modal('hide')
 
-tableContent = "<%= j render('admin/image/styles/table') %>"
-$('#image_styles').replaceWith(tableContent)
-$('#image_styles').prepare()
+Turbolinks.visit('<%= admin_image_path(@image) %>')
+
+jQuery.getScript("<%= customize_admin_image_style_path(@image, @image_style) %>")
 
 <% else %>
 

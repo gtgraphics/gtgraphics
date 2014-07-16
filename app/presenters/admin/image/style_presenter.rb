@@ -8,6 +8,11 @@ class Admin::Image::StylePresenter < Admin::ApplicationPresenter
 
   self.action_buttons = [:edit, :customize, :move_up, :move_down, :destroy]
 
+
+  def title
+    super.presence || dimensions
+  end
+
   def dimensions
      I18n.translate(:dimensions, width: width, height: height)
   end

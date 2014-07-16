@@ -19,23 +19,18 @@ class ImagesController < PagesController
   
   def download
     if style_id = params[:style_id]
-      @image_style = @image.custom_styles.find(style_id)
-      asset_path = @image_style.asset_path
-      virtual_file_name = @image_style.virtual_file_name
-      content_type = @image_style.content_type
-      image_format = @image_style.format
+      @image_style = @image.styles.find_by(position: style_id)
+      image = @image_style
     else
-      asset_path = @image.asset.custom.path
-      virtual_file_name = @image.virtual_file_name
-      content_type = @image.content_type
-      image_format = @image.format
+      image = @image
     end
+
     respond_to do |format|
-      format.send(image_format) do
-        send_file asset_path, filename: virtual_file_name,
-                              content_type: content_type,
-                              disposition: :attachment,
-                              x_sendfile: true
+      format.send(image.format) do
+        send_file image.asset.custom.path, filename: image.virtual_file_name,
+                                           content_type: image.content_type,
+                                           disposition: :attachment,
+                                           x_sendfile: true
       end
     end
   end

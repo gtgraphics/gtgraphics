@@ -1,6 +1,7 @@
-= simple_form_for @image, url: [:customize, :admin, @image], remote: true, html: { class: 'form-horizontal' } do |form|
+= simple_form_for @image_style, url: customize_admin_image_style_path(@image, @image_style), remote: true, html: { class: 'form-horizontal' } do |form|
+  
   .modal-body
-    = render 'manipulator', fields: form
+    = render 'admin/images/manipulator', fields: form
 
   .modal-footer
     = form.button :button, type: 'submit', class: 'btn-primary' do

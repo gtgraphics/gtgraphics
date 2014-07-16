@@ -14,7 +14,7 @@ module FileAttachable
     extend ActiveSupport::Concern
 
     included do
-      after_initialize :generate_asset_token, unless: :asset?
+      after_initialize :generate_asset_token, unless: :asset_token?
       before_validation :set_original_filename, if: [:asset?, :asset_changed?]
       before_validation :set_content_type, if: [:asset?, :asset_changed?]
       before_validation :set_file_size, if: [:asset?, :asset_changed?]
@@ -45,7 +45,7 @@ module FileAttachable
     end
 
     def set_original_filename
-      if asset.file.respond_to?(:original_filename)
+      if asset.file.respond_to?(:original_filename) and original_filename.blank?
         self.original_filename = asset.file.original_filename 
       end
     end

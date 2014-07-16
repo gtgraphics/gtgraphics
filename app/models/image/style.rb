@@ -42,8 +42,9 @@ class Image < ActiveRecord::Base
 
     has_image
 
-    validates :title, presence: true
     validates :image_id, presence: true, strict: true
+
+    before_validation :set_default_title, on: :create
 
     default_scope -> { order(:position) }
 
@@ -52,16 +53,9 @@ class Image < ActiveRecord::Base
     # delegate :asset_token, to: :image
 
     private
-    def set_customized_dimensions
-      if resized?
-        self.width = resize_width
-        self.height = resize_height
-      elsif cropped?
-        self.width = crop_width
-        self.height = crop_height
-      else
-        self.width = original_width
-        self.height = original_height
+    def set_default_title
+      if title.blank? and original_filename.present?
+        self.title = File.basename(original_filename, '.*').titleize
       end
     end
   end

@@ -1,10 +1,13 @@
 - present image_style, with: Admin::Image::StylePresenter do |image_style|
   = content_tag_for :tr, image_style do
+    - if local_assigns.fetch(:checkboxes, true)
+      %td.checkbox-cell
+        = check_box_tag 'image_style_ids[]', image_style.id, false, class: 'table-checkbox', id: nil, data: { behavior: 'tableCheckbox' }
     %td.thumbnail-cell
-      = link_to attachment_url(image_style) do
+      = link_to attachment_url(image_style, :custom), target: '_blank' do
         = image_tag attachment_url(image_style, :thumbnail), class: 'img-circle', alt: image_style.title, width: 45, height: 45
     %td
-      = link_to image_style.title, attachment_url(image_style), target: '_blank'
+      = link_to image_style.title, attachment_url(image_style, :custom), target: '_blank'
       %br
       %span.text-muted.ignored
         = image_style.dimensions

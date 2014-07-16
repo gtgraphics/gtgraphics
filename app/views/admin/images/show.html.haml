@@ -1,4 +1,5 @@
 - present @image, with: Admin::ImagePresenter do |image|
+
   = page_header do
     .btn-toolbar
       .btn-group.pull-right
@@ -8,7 +9,6 @@
         %ul.dropdown-menu{role: 'menu', aria_labelledby: 'dLabel'}
           %li= link_to prepend_icon(:pencil, translate('helpers.links.edit'), fixed_width: true), [:edit, :admin, image]
           %li= link_to prepend_icon(:crop, translate('helpers.links.edit_image'), fixed_width: true), [:customize, :admin, image], remote: true
-          %li= link_to prepend_icon(:picture, translate('helpers.links.new', model: Image::Style.model_name.human), outline: true, fixed_width: true), [:new, :admin, image, :style]
           %li.divider
           %li= link_to prepend_icon(:folder_open, translate('helpers.links.move_to', model: Attachment.model_name.human(count: 2)), outline: true, fixed_width: true), [:move_to_attachments, :admin, image], method: :patch, data: { confirm: translate('helpers.confirmations.move', model: Image.model_name.human, other_model: Attachment.model_name.human(count: 2)) }
           %li.divider
@@ -20,12 +20,34 @@
         = link_to attachment_url(image, :custom), target: '_blank' do
           = image_tag attachment_url(image, :custom), class: 'img-responsive img-rounded center-block', alt: image.title
 
-      = panel prepend_icon(:picture, Image::Style.model_name.human(count: 2), outline: true, fixed_width: true), body: false do
-        = render 'admin/image/styles/table'
+      #image_style_upload_dropzone
+        = form_tag batch_process_admin_image_styles_path(@image), method: :patch, remote: true do
+          .panel.panel-default
+            .panel-heading.clearfix
+              .panel-title.pull-left
+                = prepend_icon :picture, Image::Style.model_name.human(count: 2), outline: true, fixed_width: true
+
+            = render 'admin/image/styles/table'
+
+            .panel-footer.clearfix
+              .btn-toolbar.pull-left
+                .btn-group
+                  = button_tag name: 'destroy', class: 'btn btn-danger deactivatable-batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image::Style.model_name.human(count: 2)) } do
+                    = prepend_icon :trash, translate('helpers.links.destroy_selected'), outline: true
+              .btn-toolbar.pull-right
+                .btn-group.only-js
+                  = button_tag type: 'button', class: 'btn btn-success fileinput-button' do
+                    = prepend_icon :upload, translate('helpers.links.upload', model: Image::Style.model_name.human)
+                    = file_field_tag :image_style_upload, name: 'image_style[asset]', multiple: true, data: { url: upload_admin_image_styles_path(@image) }
+                .btn-group
+                  = button_link_to new_admin_image_style_path(@image), remote: true do
+                    = prepend_icon :plus, translate('helpers.links.new', model: Image::Style.model_name.human)
+
+
 
     .col-lg-4
       .panel.panel-invisible
-        = button_link_to [:download, :admin, image], type: :success, size: :lg, block: true, data: { no_turbolink: true } do
+        = button_link_to [:download, :admin, image], type: :primary, size: :lg, block: true, data: { no_turbolink: true } do
           = prepend_icon :download, translate('helpers.links.download'), fixed_width: true
           %small (#{image.file_size})
 
@@ -49,7 +71,7 @@
         %dl.dl-horizontal
           = image.list_item :content_type
           = image.list_item :file_size
-          = image.list_item :dimensions
+          = image.list_item :dimensions, true
           = image.list_item :pixels_count
           = image.list_item :artist if image.artist.present?
           = image.list_item :camera if image.camera.present?

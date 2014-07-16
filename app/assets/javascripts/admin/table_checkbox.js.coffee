@@ -27,10 +27,10 @@ checkStatus = ($checkboxes) ->
     'some'
 
 
-$(document).ready ->
+jQuery.prepare ->
 
-  $tables = $(TABLE_SELECTOR)
-  
+  $tables = $(TABLE_SELECTOR, @).add(@filter(TABLE_SELECTOR))
+
     .on 'click', 'tr', (event) ->
       if $(event.target).is('td')
         $row = $(@)
@@ -87,9 +87,9 @@ BATCH_CONTROLS_SELECTOR = '.batch-control, .batch-controls'
 DEACTIVATABLE_BATCH_CONTROLS_SELECTOR = '.deactivatable-batch-control'
 DELAY = 100
 
-$(document).ready ->
-  $(BATCH_CONTROLS_SELECTOR).hide()
-  $(DEACTIVATABLE_BATCH_CONTROLS_SELECTOR).prop('disabled', true)
+jQuery.prepare ->
+  $(BATCH_CONTROLS_SELECTOR, @).hide()
+  $(DEACTIVATABLE_BATCH_CONTROLS_SELECTOR, @).prop('disabled', true)
  
 $(document).on 'toggled', '.table', (event, checkStatus) ->
   $batchBtn = $(@).closest('form').find(BATCH_CONTROLS_SELECTOR)
