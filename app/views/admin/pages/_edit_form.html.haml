@@ -26,4 +26,4 @@
 
   = form_actions do
     = form.button :button, type: 'submit', class: 'btn-primary' do
-      = prepend_icon(:save, translate(@page.new_record? ? :create : :update, scope: 'helpers.submit', model: Page.model_name.human))
+      = prepend_icon :save, translate(@page.new_record? ? :create : :update, scope: 'helpers.submit', model: Page.model_name.human)

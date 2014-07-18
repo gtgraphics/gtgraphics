@@ -50,7 +50,7 @@ de:
       hide: Verstecken
       make_default: Als Standard festlegen
       move: Verschieben
-      move_to: 'Verschieben zu %{model}'
+      convert_to: 'Umwandeln zu %{model}'
       move_up: Nach oben
       move_down: Nach unten
       new: '%{model} erstellen'

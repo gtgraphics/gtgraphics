@@ -16,7 +16,7 @@ jQuery.prepare ->
       ['orderedList', 'unorderedList']
     ]
 
-  $('.image-editor', @).editor(class: TextareaEditor, controls: [
+  $('.image-editor, .attachment-editor', @).editor(class: TextareaEditor, controls: [
     ['bold', 'italic', 'underline', 'strikethrough'],
     ['orderedList', 'unorderedList', 'indent', 'outdent'],
     ['link', 'unlink'],

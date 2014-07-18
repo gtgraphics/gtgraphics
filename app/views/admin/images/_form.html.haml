@@ -6,3 +6,4 @@
   = form_actions do
     = form.button :button, type: 'submit', class: 'btn-primary' do
       = prepend_icon :save, translate(@image.new_record? ? :create : :update, scope: 'helpers.submit', model: Page.model_name.human)
+    = button_link_to translate('helpers.links.cancel'), [:admin, @image]

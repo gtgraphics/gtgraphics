@@ -1,7 +1,7 @@
 class Admin::ImagesController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_image, only: %i(show edit update customize apply_customization destroy download move_to_attachments dimensions preview)
+  before_action :load_image, only: %i(show edit update customize apply_customization destroy download convert_to_attachment dimensions preview)
 
   breadcrumbs do |b|
     b.append ::Image.model_name.human(count: 2), :admin_images
@@ -30,7 +30,7 @@ class Admin::ImagesController < Admin::ApplicationController
       @images = @images.where(author_id: params[:author_id])
     end
   
-    @images = @images.includes(:translations).with_locales(Globalize.fallbacks) \
+    @images = @images.with_translations_for_current_locale \
                      .includes(:author) \
                      .sort(params[:sort], params[:direction])
                      .page(params[:page]).per(25)
@@ -132,6 +132,8 @@ class Admin::ImagesController < Admin::ApplicationController
       search
     elsif params.key? :assign_owner
       assign_owner
+    elsif params.key? :convert_to_attachment
+      convert_to_attachment
     else
       respond_to do |format|
         format.any { head :bad_request }
@@ -165,7 +167,7 @@ class Admin::ImagesController < Admin::ApplicationController
     @image_owner_assignment_activity.image_ids = Array(params[:image_ids])
     @image_owner_assignment_activity.author = current_user
     respond_to do |format|
-      format.js { render 'assign_owner' }
+      format.js { render :assign_owner }
     end
   end
   private :assign_owner # invoked through :batch_processger
@@ -174,6 +176,17 @@ class Admin::ImagesController < Admin::ApplicationController
     @image_owner_assignment_activity = Admin::ImageOwnerAssignmentActivity.execute(image_owner_assignment_params)
     respond_to do |format|
       format.js
+    end
+  end
+
+  def convert_to_attachment
+    Image.transaction do
+      @attachment = @image.to_attachment
+      @attachment.save!
+      @image.destroy!
+    end
+    respond_to do |format|
+      format.html { redirect_to :admin_attachments }
     end
   end
 

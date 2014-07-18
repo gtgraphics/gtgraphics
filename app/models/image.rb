@@ -70,11 +70,30 @@ class Image < ActiveRecord::Base
   end
 
   def dominant_colors
-    @dominant_colors ||= Miro::DominantColors.new(asset.path)
+    @dominant_colors ||= Miro::DominantColors.new(asset.custom.path)
   end
 
   def manipulated?
     cropped? or resized?
+  end
+
+  def to_attachment(version = :custom)
+    Attachment.new do |attachment|
+      attachment.asset = asset.versions.fetch(version.to_sym) do 
+        raise ArgumentError, "unknown version: #{version}"
+      end.file
+      attachment.original_filename = original_filename
+      attachment.content_type = content_type
+      attachment.file_size = file_size
+      attachment.asset_updated_at = asset_updated_at
+      attachment.author_id = author_id
+      translated_locales.each do |translated_locale|
+        Globalize.with_locale(translated_locale) do
+          attachment.title = title
+          attachment.description = description
+        end
+      end
+    end
   end
 
   def to_s

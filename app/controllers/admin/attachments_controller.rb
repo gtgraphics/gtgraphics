@@ -1,7 +1,7 @@
 class Admin::AttachmentsController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_attachment, only: %i(show edit update destroy download move_to_images)
+  before_action :load_attachment, only: %i(show edit update destroy download convert_to_image)
 
   breadcrumbs do |b|
     b.append Attachment.model_name.human(count: 2), :admin_attachments
@@ -10,7 +10,7 @@ class Admin::AttachmentsController < Admin::ApplicationController
   end
 
   def index
-    @attachments = Attachment.includes(:translations).with_locales(Globalize.fallbacks) \
+    @attachments = Attachment.with_translations_for_current_locale \
                              .sort(params[:sort], params[:direction]).page(params[:page])
     respond_with :admin, @attachments
   end
@@ -56,27 +56,14 @@ class Admin::AttachmentsController < Admin::ApplicationController
     send_file @attachment.asset.path, filename: @attachment.virtual_filename, content_type: @attachment.content_type, disposition: :attachment, x_sendfile: true
   end
 
-  def move_to_images
-    valid = false
-    if @attachment.image?
-      @image = Image.new(@attachment.slice(:author_id, :created_at, :updated_at))
-      @image.asset = @attachment.asset
-      @attachment.translations.each do |attachment_translation|
-        @image.translations.build(attachment_translation.slice(:locale, :title, :description, :created_at, :updated_at))
-      end
-      Image.transaction do
-        valid = @image.save and @attachment.destroy
-      end
+  def convert_to_image
+    Attachment.transaction do
+      @image = @attachment.to_image
+      @image.save!
+      @attachment.destroy!
     end
     respond_to do |format|
-      format.html do
-        if valid
-          redirect_to [:admin, @image]
-        else
-          flash_for Attachment, :unmovable, alert: true
-          redirect_to [:admin, @attachment]
-        end
-      end
+      format.html { redirect_to [:admin, @image] }
     end
   end
 

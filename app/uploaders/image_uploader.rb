@@ -34,7 +34,11 @@ class ImageUploader < AttachmentUploader
   end
 
   def store_dir
-    "system/images"
+    'system/images'
+  end
+
+  def cache_dir
+    'tmp/uploads/images'
   end
 
   private

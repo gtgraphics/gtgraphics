@@ -17,7 +17,7 @@
 #  height                :integer
 #  position              :integer          not null
 #  original_filename     :string(255)
-#  asset_token           :string(255)
+#  asset_token           :string(255)      not null
 #
 
 class Image < ActiveRecord::Base

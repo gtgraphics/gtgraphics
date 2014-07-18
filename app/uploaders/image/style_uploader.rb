@@ -29,6 +29,10 @@ class Image::StyleUploader < AttachmentUploader
     "system/images/styles/#{model.image.asset_token}"
   end
 
+  def cache_dir
+    'tmp/uploads/images/styles'
+  end
+
   private
   def crop
     if cropped?

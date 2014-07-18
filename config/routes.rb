@@ -46,7 +46,7 @@ GtGraphics::Application.routes.draw do
               end
               member do
                 get :download
-                patch :move_to_images
+                patch :convert_to_image
               end
             end
 
@@ -74,7 +74,7 @@ GtGraphics::Application.routes.draw do
               member do
                 get :download
                 get :dimensions
-                patch :move_to_attachments
+                patch :convert_to_attachment
               end
             end
 

@@ -99,6 +99,7 @@ de:
         asset: Datei
         author: Urheber
         author_name: Urheber
+        original_filename: Dateiname
       image:
         author: Urheber
         author_name: Urheber
