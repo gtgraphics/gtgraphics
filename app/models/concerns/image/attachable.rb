@@ -20,7 +20,7 @@ class Image < ActiveRecord::Base
         store :customization_options
 
         validates :content_type, presence: true,
-                                 inclusion: { in: ->(attachable) { attachable.class.permitted_content_types }, allow_blank: true }, if: :asset?
+                                 inclusion: { in: ->(attachable) { attachable.class.permitted_content_types }, allow_blank: true }
 
         before_create :set_original_geometry, if: :asset?
         before_save :set_geometry, if: [:asset?, :asset_changed?]
