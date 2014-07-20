@@ -118,6 +118,7 @@ de:
         software: Bearbeitungs-Software
         camera: Kamera
         created_at: Hochgeladen am
+        preserve_aspect_ratio: Seitenverhältnis beibehalten
       image/style:
         asset: Bilddatei
         crop_x: X-Position

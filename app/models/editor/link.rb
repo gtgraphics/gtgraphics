@@ -16,26 +16,19 @@ class Editor::Link < EditorActivity
   validates :url, presence: true, if: :external?
   validates :page_id, presence: true, if: :internal?
 
-  class << self
-    def targets
-      TARGETS.inject({ '' => I18n.translate('editor/link.targets.self') }) do |targets, target|
-        targets.merge!(target => I18n.translate(target, scope: 'editor/link.targets'))
-      end
+  def self.targets
+    TARGETS.inject({ '' => I18n.translate('editor/link.targets.self') }) do |targets, target|
+      targets.merge!(target => I18n.translate(target, scope: 'editor/link.targets'))
     end
   end
 
   def internal?
     !external?
   end
-
   alias_method :internal, :internal?
 
-  def internal=(internal)
-    self.external = !internal
-  end
-
   def persisted?
-    page_id.present? or url.present?
+    external? ? url.present? : page_id.present?
   end
 
   def to_html
@@ -53,6 +46,7 @@ class Editor::Link < EditorActivity
     else
       content = url
     end
-    content_tag(:a, (self.content.presence || content).html_safe, options).html_safe
+    content = self.content.presence || content
+    content_tag(:a, content.html_safe, options).html_safe
   end
 end

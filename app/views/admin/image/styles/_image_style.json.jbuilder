@@ -1,6 +1,9 @@
-json.type image_style.type.demodulize.camelize(:lower)
-json.id image_style.id if image_style.respond_to?(:id)
-json.style_name image_style.style_name if image_style.respond_to?(:style_name)
-json.caption image_style.caption
-json.dimensions image_style.transformed_dimensions
-json.asset_url image_style.asset_url
+json.extract! image_style, :id, :title
+
+json.asset_url image_style.asset.custom.url
+json.thumbnail_asset_url image_style.asset.thumbnail.url
+
+json.dimensions do
+  json.width image_style.width
+  json.height image_style.height
+end

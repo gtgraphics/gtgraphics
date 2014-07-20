@@ -48,13 +48,13 @@ refreshOriginalStyleCheckboxState = ($scope) ->
   if $image.any() and $style.any()
     $checkbox = $(STYLE_CHECKBOX_SELECTOR)
     if $image.val() == ''
-      $checkbox.iCheck('disable')
+      $checkbox.prop('disabled', true)
     else
       if $style.find('option').any()
-        $checkbox.iCheck('enable')
+        $checkbox.prop('disabled', false)
       else
-        $checkbox.iCheck('disable')
-        $checkbox.iCheck('check') if $checkbox.prop('checked')
+        $checkbox.prop('disabled', true)
+        $checkbox.prop('checked', true)
 
 refreshSourceContainerStates = ($scope) ->
   $radios = $(SOURCE_RADIO_SELECTOR, $scope)

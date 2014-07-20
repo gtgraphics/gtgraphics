@@ -23,11 +23,10 @@
 class Editor::Image < EditorActivity
   ALIGNMENTS = %w(left right top middle bottom).freeze
 
-  embeds_one :image, class_name: '::Image'
+  embeds_one :image
+  embeds_one :style, class_name: 'Image::Style'
 
   attribute :external, Boolean, default: false
-  attribute :original_style, Boolean
-  attribute :style, String
   attribute :url, String
   attribute :alternative_text, String
   attribute :width, Integer
@@ -36,24 +35,16 @@ class Editor::Image < EditorActivity
 
   validates :url, presence: true, if: :external?
   validates :image_id, presence: true, if: :internal?
-  validates :style, presence: true, if: -> { !original_style? }
   validates :width, numericality: { only_integer: true, greater_than: 0 }, allow_blank: true
   validates :height, numericality: { only_integer: true, greater_than: 0 }, allow_blank: true
   validates :alignment, inclusion: { in: ALIGNMENTS }, allow_blank: true
 
-  after_initialize :set_defaults
-  before_validation :sanitize_image_id_and_url
+  before_validation :sanitize_url_or_image
 
-  class << self
-    def alignments
-      ALIGNMENTS.inject({}) do |alignments_hash, alignment|
-        alignments_hash.merge!(alignment => I18n.translate(alignment, scope: 'editor/image.alignments'))
-      end
+  def self.alignments
+    ALIGNMENTS.inject({}) do |alignments_hash, alignment|
+      alignments_hash.merge!(alignment => I18n.translate(alignment, scope: 'editor/image.alignments'))
     end
-  end
-
-  def custom_style?
-    !predefined_style?
   end
 
   def internal?
@@ -61,30 +52,25 @@ class Editor::Image < EditorActivity
   end
   alias_method :internal, :internal?
 
-  def internal=(internal)
-    self.external = !internal
-  end
-
   def image_src
     if external?
       url
     else
       if original_style?
-        image.asset_url
+        model = self.image
       else
-        image.styles.find do |style|
-          if style.respond_to?(:style_name)
-            style.style_name.to_s == self.style.to_s
-          else
-            style.id == self.style.to_i
-          end
-        end.asset_url
+        model = self.style
       end
+      model.asset.custom.url
     end
   end
 
-  def predefined_style?
-    Image::STYLES.keys.map(&:to_s).include?(style)
+  def original_style?
+    style.blank?
+  end
+
+  def persisted?
+    external? ? url.present? : image_id.present?
   end
 
   def to_html
@@ -99,19 +85,12 @@ class Editor::Image < EditorActivity
   end
 
   private
-  def sanitize_image_id_and_url
+  def sanitize_url_or_image
     if external?
       self.image_id = nil
+      self.style_id = nil
     else
       self.url = nil
-    end
-  end
-
-  def set_defaults
-    if persisted?
-      self.original_style = style.blank?
-    else
-      self.original_style = true
     end
   end
 end

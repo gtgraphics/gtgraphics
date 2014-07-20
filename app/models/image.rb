@@ -74,7 +74,7 @@ class Image < ActiveRecord::Base
   end
 
   def manipulated?
-    cropped? or resized?
+    cropped? or resized? or false
   end
 
   def to_attachment(version = :custom)

@@ -4,12 +4,10 @@
 = simple_form_for [:admin, @image], url: :admin_editor_image, wrappers: :horizontal_form, html: { class: 'form-horizontal editor-form' } do |form|
 
   .modal-body
-    = form.input :external, collection: [[Editor::Image.human_attribute_name(:internal), false], [Editor::Image.human_attribute_name(:external), true]], as: :radio_buttons, label: Editor::Image.human_attribute_name(:source), required: true, wrapper: :horizontal_radio_and_checkboxes
+    = form.input :external, collection: { Editor::Image.human_attribute_name(:internal) => false, Editor::Image.human_attribute_name(:external) => true }, as: :radio_buttons, label: Editor::Image.human_attribute_name(:source), required: true, wrapper: :horizontal_radio_and_checkboxes
     .editor-internal-image-fields
       = form.input :image_id, required: true, as: :image_select, input_html: { data: { from: admin_images_path(include_styles: true, format: :json) } }
-      = form.input :original_style, as: :boolean, wrapper: :horizontal_boolean
-      .editor-internal-image-styles-fields
-        = form.input :style, as: :select, collection: @image.image ? @image.image.styles.map { |style| [style.caption, style.to_param, { data: { dimensions: style.transformed_dimensions } }] } : [], label: false, container_html: { class: 'col-lg-9 col-lg-offset-3' }
+      = form.input :style_id, as: :select, collection: [], include_blank: translate('views.admin.images.original')
     .editor-external-image-fields
       = form.input :url, required: true
     = form.input :width, as: :integer, input_html: { min: 1 }

@@ -338,4 +338,5 @@ class ImageManipulator
 
 $(document).on 'shown.bs.modal', ->
   $imageManipulator = $('#image_manipulator')
-  new ImageManipulator($imageManipulator)
+  if $imageManipulator.any()
+    new ImageManipulator($imageManipulator)

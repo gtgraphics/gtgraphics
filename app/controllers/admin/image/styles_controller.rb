@@ -15,6 +15,13 @@ class Admin::Image::StylesController < Admin::ApplicationController
     end
   end
 
+  def index
+    @image_styles = @image.styles.page(params[:page])
+    respond_to do |format|
+      format.json
+    end
+  end
+
   def new
     @image_style = @image.styles.new
     respond_with :admin, @image, @image_style

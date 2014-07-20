@@ -34,7 +34,7 @@ class Admin::ImagesController < Admin::ApplicationController
                      .includes(:author) \
                      .sort(params[:sort], params[:direction])
                      .page(params[:page]).per(25)
-    @images = @images.includes(:custom_styles) if params[:include_styles].to_b
+    @images = @images.includes(:styles) if params[:include_styles].to_b
     @images = @images.created(params[:period]) if params[:period]
     @images = @images.where(content_type: params[:content_type]) if params[:content_type]
   
