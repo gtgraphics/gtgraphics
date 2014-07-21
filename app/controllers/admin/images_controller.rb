@@ -1,7 +1,7 @@
 class Admin::ImagesController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_image, only: %i(show edit update customize apply_customization destroy download convert_to_attachment dimensions preview)
+  before_action :load_image, only: %i(show edit update customize apply_customization destroy download convert_to_attachment dimensions preview pages)
 
   breadcrumbs do |b|
     b.append ::Image.model_name.human(count: 2), :admin_images
@@ -121,6 +121,13 @@ class Admin::ImagesController < Admin::ApplicationController
                                         content_type: @image.content_type,
                                         disposition: :attachment,
                                         x_sendfile: true
+  end
+
+  def pages
+    @pages = @image.pages.with_translations_for_current_locale
+    respond_to do |format|
+      format.js
+    end
   end
 
   # Batch Processing

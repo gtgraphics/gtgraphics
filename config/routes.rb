@@ -72,6 +72,7 @@ GtGraphics::Application.routes.draw do
                 delete :destroy_multiple
               end
               member do
+                get :pages
                 get :download
                 get :dimensions
                 patch :convert_to_attachment

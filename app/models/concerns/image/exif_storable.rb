@@ -7,12 +7,12 @@ class Image < ActiveRecord::Base
     included do
       store :exif_data
 
-      # before_save :set_exif_data, if: :exif_capable?
+      before_save :set_exif_data, if: [:asset_changed?, :exif_capable?]
     end
 
     module ClassMethods
       def exif_capable_content_types
-        exif_capable_content_types.map(&:to_s)
+        exif_capable_mime_types.map(&:to_s)
       end
 
       def exif_capable_mime_types
@@ -38,8 +38,7 @@ class Image < ActiveRecord::Base
     
     private
     def set_exif_data
-      # TODO
-      #self.exif_data = EXIFR::JPEG.new(asset.queued_for_write[:original].path).to_hash rescue nil
+      self.exif_data = EXIFR::JPEG.new(asset.path).to_hash rescue nil
     end
   end
 end

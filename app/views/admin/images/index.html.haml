@@ -35,7 +35,7 @@
               .btn-group.only-js
                 = button_tag type: 'button', class: 'btn btn-success fileinput-button' do
                   = prepend_icon :upload, translate('helpers.links.upload', model: Image.model_name.human)
-                  = file_field_tag :image_upload, name: 'image[asset]', multiple: true, data: { url: upload_admin_images_path }
+                  = file_field_tag :image_upload, name: 'image[asset]', multiple: true, accept: 'image/gif|image/png|image/jpeg|image/jpg', data: { url: upload_admin_images_path }
               .btn-group
                 = button_tag name: 'destroy', class: 'btn btn-danger deactivatable-batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) } do
                   = prepend_icon :trash, translate('helpers.links.destroy_selected'), outline: true

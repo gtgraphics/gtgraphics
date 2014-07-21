@@ -59,7 +59,7 @@ class Admin::ImagePresenter < Admin::ApplicationPresenter
 
   def pages_count
     count = image.pages.count
-    "#{count} #{Page.model_name.human(count: count)}"
+    h.link_to "#{count} #{Page.model_name.human(count: count)}", [:pages, :admin, image], remote: true
   end
 
   def styles_count

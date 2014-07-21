@@ -1,0 +1,15 @@
+- content_for :title do
+  = Image::Page.model_name.human(count: 2)
+  .badge= @pages.count
+
+- content_for :content do
+  .modal-body
+    - if @pages.any?
+      %ul
+        - @pages.each do |page|
+          = content_tag_for :li, page do
+            = link_to page.title, [:admin, page]
+            .text-muted
+              = page.path
+    - else
+      = translate 'views.hints.empty', model: Image::Page.model_name.human(count: 2)
