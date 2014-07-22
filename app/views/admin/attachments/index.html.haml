@@ -8,8 +8,19 @@
         = create_button_link_for Attachment, namespace: :admin, icon: :upload, caption: translate('helpers.links.upload', model: Attachment.model_name.human)
       = paginate @attachments
 
-  - if @attachments.any?
-    = render 'table', checkboxes: true
-  - else
-    .well.text-center
-      = translate('views.hints.empty', model: Attachment.model_name.human(count: 2))
+  #attachments_empty_hint.well.text-center{class: @attachments.any? ? 'hidden' : nil}
+    = translate('views.hints.empty', model: Image.model_name.human(count: 2))
+
+  %table#attachments.table.table-hover{class: @attachments.empty? ? 'hidden' : nil}
+    %thead
+      %tr
+        %th.checkbox-cell
+          %input{type: 'checkbox', class: 'js-only table-checkbox-all', data: { toggle: 'tableCheckboxes' }}
+        %th= sort_link_for @attachments, :title
+        %th= sort_link_for @attachments, :content_type
+        %th= sort_link_for @attachments, :file_size
+        %th= sort_link_for @attachments, :created_at
+        %th.actions
+    %tbody
+      - @attachments.each do |attachment|
+        = render 'attachment', attachment: attachment, checkbox: true

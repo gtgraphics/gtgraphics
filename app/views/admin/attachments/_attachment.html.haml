@@ -1,12 +1,12 @@
 - present attachment, with: Admin::AttachmentPresenter do |attachment|
   = content_tag_for :tr, attachment do
-    - if checkbox
+    - if local_assigns.fetch(:checkbox, false)
       %td.checkbox-cell
         = check_box_tag 'attachment_ids[]', attachment.id, false, class: 'table-checkbox', id: nil
     %td= link_to attachment.title, attachment.download_path
     %td= attachment.content_type
     %td= attachment.file_size
     %td= attachment.updated_at
-    - if actions
+    - if local_assigns.fetch(:actions, true)
       %td.actions
         = attachment.action_buttons icon_only: true
