@@ -37,7 +37,7 @@
                   = prepend_icon :upload, translate('helpers.links.upload', model: Image.model_name.human)
                   = file_field_tag :image_upload, name: 'image[asset]', multiple: true, accept: 'image/gif|image/png|image/jpeg|image/jpg', data: { url: upload_admin_images_path }
               .btn-group
-                = button_tag name: 'destroy', class: 'btn btn-danger deactivatable-batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) } do
+                = button_tag name: 'destroy', class: 'btn btn-danger deactivatable-batch-control', data: { hotkey: 'del', confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) } do
                   = prepend_icon :trash, translate('helpers.links.destroy_selected'), outline: true
               .btn-group.only-js
                 = button_tag name: 'assign_owner', class: 'btn btn-default deactivatable-batch-control', title: translate('helpers.links.assign_owner'), data: { toggle: 'tooltip', container: 'body' } do

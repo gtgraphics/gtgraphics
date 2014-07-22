@@ -64,7 +64,10 @@ textarea {
       @include box-shadow(none);
       color: $gray-light;
       &:hover, &:focus {
-        color: $link-color;
+        color: $gray;
+      }
+      &:active, &.active {
+        color: $gray-dark;
       }
     }
   }

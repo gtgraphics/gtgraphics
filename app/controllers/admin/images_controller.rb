@@ -99,7 +99,7 @@ class Admin::ImagesController < Admin::ApplicationController
   def destroy
     @image.destroy
     flash_for @image
-    respond_with :admin, @image, location: request.referer || :admin_images
+    respond_with :admin, @image, location: :admin_images
   end
 
   def dimensions

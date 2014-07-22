@@ -7,3 +7,4 @@ json.dimensions do
   json.width image_style.width
   json.height image_style.height
 end
+json.human_dimensions translate(:dimensions, width: image_style.width, height: image_style.height)

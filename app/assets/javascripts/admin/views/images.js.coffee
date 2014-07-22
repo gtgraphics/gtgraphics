@@ -1,16 +1,18 @@
 $(document).ready ->
   $input = $('#image_upload')
+  
   $input.fileupload
     dataType: 'script'
     dropZone: $('#image_upload_dropzone')
+
     add: (event, data) ->
       acceptFileTypes = /^image\/(gif|jpe?g|png)$/i
-      errors = []
       file = data.originalFiles[0]
       if file.type.length and !acceptFileTypes.test(file.type)
-        alert errors.join('\n')
+        alert I18n.translate('activerecord.errors.models.image.attributes.base.invalidFileType', filename: file.name)
       else
         data.submit()
+
     done: (event, data) ->
 
     progressall: (event, data) ->

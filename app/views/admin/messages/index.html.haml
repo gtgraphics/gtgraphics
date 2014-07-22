@@ -2,7 +2,8 @@
 
   = page_header do
     .btn-group.batch-control
-      = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Message.model_name.human(count: 2)) }
+      = button_tag class: 'btn btn-danger batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Message.model_name.human(count: 2)) } do
+        = prepend_icon :trash, translate('helpers.links.destroy_selected'), outline: true
 
   - if @message_recipiences.any?
     = render 'table', checkboxes: true

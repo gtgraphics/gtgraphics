@@ -214,6 +214,10 @@ de:
 
     errors:
       models:
+        image:
+          attributes:
+            base:
+              invalid_file_type: 'Ungültiger Dateityp: %{filename}'
         page/redirection:
           attributes:
             destination_page_id:

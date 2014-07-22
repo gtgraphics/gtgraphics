@@ -32,7 +32,7 @@
             .panel-footer.clearfix
               .btn-toolbar.pull-left
                 .btn-group
-                  = button_tag name: 'destroy', class: 'btn btn-danger deactivatable-batch-control', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image::Style.model_name.human(count: 2)) } do
+                  = button_tag name: 'destroy', class: 'btn btn-danger deactivatable-batch-control', data: { hotkey: 'del', confirm: translate('helpers.confirmations.destroy_selected', model: Image::Style.model_name.human(count: 2)) } do
                     = prepend_icon :trash, translate('helpers.links.destroy_selected'), outline: true
               .btn-toolbar.pull-right
                 .btn-group.only-js
@@ -42,8 +42,6 @@
                 .btn-group
                   = button_link_to new_admin_image_style_path(@image), remote: true do
                     = prepend_icon :plus, translate('helpers.links.new', model: Image::Style.model_name.human)
-
-
 
     .col-lg-4
       .panel.panel-invisible
@@ -78,19 +76,3 @@
           = image.list_item :software if image.software.present?
           = image.list_item :taken_at if image.taken_at.present?
           = image.list_item :pages_count
-
-
-      / - if @tags.any?
-      /   / Tags
-      /   .panel.panel-default
-      /     .panel-heading
-      /       %h3.panel-title
-      /         = prepend_icon(:tags, Tag.model_name.human(count: 2), fixed_width: true)
-      /         %span.text-muted
-      /           (#{@tags.size})
-      /     .panel-collapsible
-      /       .panel-body
-      /         %ul.tags
-      /           - @tags.each do |tag|
-      /             %li
-      /               = tagged_link_to tag.label, admin_images_path(query: tag.label), class: 'tag'

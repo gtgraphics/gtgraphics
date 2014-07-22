@@ -16,6 +16,8 @@ class Editor::Link < EditorActivity
   validates :url, presence: true, if: :external?
   validates :page_id, presence: true, if: :internal?
 
+  after_initialize :check_page_existence, if: :internal?
+
   def self.targets
     TARGETS.inject({ '' => I18n.translate('editor/link.targets.self') }) do |targets, target|
       targets.merge!(target => I18n.translate(target, scope: 'editor/link.targets'))
@@ -48,5 +50,13 @@ class Editor::Link < EditorActivity
     end
     content = self.content.presence || content
     content_tag(:a, content.html_safe, options).html_safe
+  end
+
+  private
+  def check_page_existence
+    if page.nil?
+      self.page_id = nil
+      self.external = true
+    end
   end
 end

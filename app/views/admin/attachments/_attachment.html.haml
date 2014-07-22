@@ -5,8 +5,8 @@
         = check_box_tag 'attachment_ids[]', attachment.id, false, class: 'table-checkbox', id: nil
     %td= link_to attachment.title, attachment.download_path
     %td= attachment.content_type
-    %td.hidden-xs= attachment.file_size
-    %td.visible-lg= attachment.updated_at
+    %td= attachment.file_size
+    %td= attachment.updated_at
     - if actions
       %td.actions
-        = attachment.action_buttons size: :xs, icon_only: true
+        = attachment.action_buttons icon_only: true

@@ -6,6 +6,8 @@ module I18nHelper
   def i18n_javascript
     fallbacks = I18n.try(:fallbacks)
     locales = Array(fallbacks ? fallbacks[I18n.locale] : I18n.locale).sort
+    path = "static/locales/#{locales.join('+')}.js"
+    timestamp = File.mtime(File.join("#{Rails.root}/public/#{path}")).to_i
 
     capture do
       concat javascript_tag <<-JAVASCRIPT.strip_heredoc
@@ -15,7 +17,7 @@ module I18nHelper
         I18n.locale = #{I18n.locale.to_json};
       JAVASCRIPT
       concat "\n"
-      concat javascript_include_tag("/static/locales/#{locales.join('+')}.js")
+      concat javascript_include_tag("/#{path}?#{timestamp}")
     end
   end
 end

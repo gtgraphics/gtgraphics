@@ -6,8 +6,10 @@
   .modal-body
     = form.input :external, collection: { Editor::Image.human_attribute_name(:internal) => false, Editor::Image.human_attribute_name(:external) => true }, as: :radio_buttons, label: Editor::Image.human_attribute_name(:source), required: true, wrapper: :horizontal_radio_and_checkboxes
     .editor-internal-image-fields
-      = form.input :image_id, required: true, as: :image_select, input_html: { data: { from: admin_images_path(include_styles: true, format: :json) } }
-      = form.input :style_id, as: :select, collection: [], include_blank: translate('views.admin.images.original')
+      = form.input :image_id, as: :image_select, required: true
+      = form.input :original_style, as: :boolean, wrapper: :horizontal_boolean
+      .editor-image-style-fields
+        = form.input :style_id, as: :image_style_select, required: true data: { from: @image.image.nil? ? nil : admin_image_styles_path(@image.image) }
     .editor-external-image-fields
       = form.input :url, required: true
     = form.input :width, as: :integer, input_html: { min: 1 }

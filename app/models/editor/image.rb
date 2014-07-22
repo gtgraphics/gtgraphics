@@ -29,6 +29,7 @@ class Editor::Image < EditorActivity
   attribute :external, Boolean, default: false
   attribute :url, String
   attribute :alternative_text, String
+  attribute :original_style, Boolean, default: true
   attribute :width, Integer
   attribute :height, Integer
   attribute :alignment, String
@@ -39,6 +40,7 @@ class Editor::Image < EditorActivity
   validates :height, numericality: { only_integer: true, greater_than: 0 }, allow_blank: true
   validates :alignment, inclusion: { in: ALIGNMENTS }, allow_blank: true
 
+  after_initialize :check_image_existence, if: :internal?
   before_validation :sanitize_url_or_image
 
   def self.alignments
@@ -65,10 +67,6 @@ class Editor::Image < EditorActivity
     end
   end
 
-  def original_style?
-    style.blank?
-  end
-
   def persisted?
     external? ? url.present? : image_id.present?
   end
@@ -85,6 +83,13 @@ class Editor::Image < EditorActivity
   end
 
   private
+  def check_image_existence
+    if image.nil?
+      self.image_id = nil
+      self.external = true
+    end
+  end
+
   def sanitize_url_or_image
     if external?
       self.image_id = nil

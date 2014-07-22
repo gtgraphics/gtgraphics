@@ -18,8 +18,7 @@ class Admin::ApplicationPresenter < Presenter
 
     h.content_tag :div, class: 'btn-toolbar' do
       allowed_actions.each do |action_button|
-        button = send("#{action_button}_button", options)
-        h.concat h.content_tag(:div, button, class: 'btn-group')
+        h.concat send("#{action_button}_button", options.merge(type: :action))
       end
     end
   end
@@ -70,7 +69,8 @@ class Admin::ApplicationPresenter < Presenter
   end
 
   def edit_button(options = {})
-    button :edit, default_button_options(options).deep_merge(options.reverse_merge(active: editable?))
+    button_options = { active: editable?, icon: :pencil }
+    button :edit, default_button_options(options).deep_merge(options.reverse_merge(button_options))
   end
 
   def destroy_button(options = {})

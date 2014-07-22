@@ -1,6 +1,8 @@
 class Admin::ImagePresenter < Admin::ApplicationPresenter
   include FileAttachablePresenter
   include Admin::Image::CustomizablePresenter
+
+  self.action_buttons -= [:show]
   
   presents :image
 

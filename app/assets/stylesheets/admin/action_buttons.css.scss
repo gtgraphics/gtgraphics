@@ -1,0 +1,40 @@
+@import 'compass';
+
+table.table tr {
+  td.actions .btn-toolbar {
+    opacity: 0;
+    @include transition(opacity 200ms ease-in-out);
+    margin-top: -8px;
+    .btn-action {
+      padding-left: 5px;
+      padding-right: 5px;
+      margin: 0;
+      background-color: transparent;
+      color: $gray-light;
+      @include box-shadow(none);
+      &:hover, &:focus {
+        color: $gray;
+      }
+      &:active, &.active {
+        color: $gray-dark;
+      }
+      &:disabled, &.disabled {
+        color: lighten($gray-light, 20%);
+      }
+      &.btn-danger {
+        &:hover, &:focus {
+          color: $btn-danger-bg;
+        }
+        &:active, &.active {
+          color: $btn-danger-border;
+        }
+      }
+    }
+  }
+
+  &:hover {
+    td.actions .btn-toolbar {
+      opacity: 1;
+    }
+  }
+}
