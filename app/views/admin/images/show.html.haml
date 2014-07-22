@@ -3,9 +3,8 @@
   = page_header do
     .btn-toolbar
       .btn-group.pull-right
-        = button_link_to '#', data: { toggle: 'dropdown' }, class: 'dropdown-toggle' do
-          = icon :cog, fixed_width: true
-          .sr-only= translate('helpers.links.settings')
+        = button_link_to [:edit, :admin, image], data: { toggle: 'dropdown' }, class: 'dropdown-toggle' do
+          = prepend_icon :cog, translate('helpers.links.settings'), fixed_width: true, caption_html: { class: 'sr-only' }
         %ul.dropdown-menu{role: 'menu', aria_labelledby: 'dLabel'}
           %li= link_to prepend_icon(:pencil, translate('helpers.links.edit'), fixed_width: true), [:edit, :admin, image]
           %li= link_to prepend_icon(:crop, translate('helpers.links.edit_image'), fixed_width: true), [:customize, :admin, image], remote: true

@@ -3,7 +3,11 @@ class Admin::TemplatePresenter < Admin::ApplicationPresenter
 
   presents :template
 
-  self.action_buttons = [:show, :edit, :move_up, :move_down, :destroy]
+  self.action_buttons = [:edit, :move_up, :move_down, :destroy]
+
+  def abstract_template
+    template.becomes(Template)
+  end
 
   def description
     super.strip.html_safe
@@ -37,7 +41,7 @@ class Admin::TemplatePresenter < Admin::ApplicationPresenter
   end
 
   def move_down_button(options = {})
-    super if movable?
+    super(options.merge(remote: true)) if movable?
   end
 
   def move_down_path
@@ -45,15 +49,10 @@ class Admin::TemplatePresenter < Admin::ApplicationPresenter
   end
 
   def move_up_button(options = {})
-    super if movable?
+    super(options.merge(remote: true)) if movable?
   end
 
   def move_up_path
     h.move_up_admin_template_path(object)
-  end
-
-  private
-  def abstract_template
-    template.becomes(Template)
   end
 end

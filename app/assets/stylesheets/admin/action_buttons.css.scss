@@ -3,7 +3,7 @@
 table.table tr {
   td.actions .btn-toolbar {
     opacity: 0;
-    @include transition(opacity 200ms ease-in-out);
+    @include transition(opacity 150ms ease-in-out);
     margin: {
       top: -7px;
       bottom: -7px;

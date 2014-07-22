@@ -15,7 +15,6 @@
             = @template.type.constantize.model_name.human
 
       = form.input :file_name, collection: @template.class.template_files
-      = form.input :region_labels, input_html: { class: 'space-tokenizer' }
 
   = form_actions do
     = form.button :button, type: 'submit', class: 'btn-primary' do

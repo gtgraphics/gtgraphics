@@ -1,23 +1,21 @@
+- template_type ||= @template_type
 - templates ||= @templates
 - actions = true if actions.nil?
 - checkboxes = false if checkboxes.nil?
 
-- if checkboxes
-  = hidden_field_tag 'template_ids[]', '', id: nil
-
-%table.table.table-hover
+%table.table.table-hover#templates
   %thead
     %tr
       - if checkboxes
         %th.checkbox-cell
           %input{type: 'checkbox', class: 'js-only table-checkbox-all'}
       %th= ::Template.human_attribute_name :name
-      - if @template_type.nil?
+      - if template_type.nil?
         %th.hidden-xs= ::Template.human_attribute_name :type
+      - else
+        %th
       - if actions
         %th.actions
   %tbody
     - templates.each do |template|
-      = render 'template', template: template, checkbox: checkboxes, actions: actions
-
-= paginate templates
+      = render 'template', template: template, template_type: template_type, checkbox: checkboxes, actions: actions

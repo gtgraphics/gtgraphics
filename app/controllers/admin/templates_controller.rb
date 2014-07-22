@@ -23,7 +23,6 @@ class Admin::TemplatesController < Admin::ApplicationController
     else
       @templates = Template.order(:name)
     end
-    @templates = @templates.page(params[:page])
     respond_with :admin, @templates
   end
 
@@ -94,15 +93,17 @@ class Admin::TemplatesController < Admin::ApplicationController
 
   def move_up
     @template.move_higher
-    respond_with :admin, @template.becomes(::Template), location: typed_admin_templates_path(template_type: @template.type.demodulize.underscore)
+    respond_with :admin, @template.becomes(::Template), location: typed_admin_templates_path(template_type: @template.type.demodulize.underscore) do |format|
+      format.js { @templates = @template.class.order(:position) }
+    end
   end
 
   def move_down
     @template.move_lower
-    respond_to do |format|
-      format.html { }
+    @templates = @template.class.order(:position)
+    respond_with :admin, @template.becomes(::Template), location: typed_admin_templates_path(template_type: @template.type.demodulize.underscore) do |format|
+      format.js { @templates = @template.class.order(:position) }
     end
-    respond_with :admin, @template.becomes(::Template), location: typed_admin_templates_path(template_type: @template.type.demodulize.underscore)
   end
 
   private
@@ -111,11 +112,11 @@ class Admin::TemplatesController < Admin::ApplicationController
   end
 
   def new_template_params
-    params.require(:template).permit(:type, :name, :description, :file_name, :region_labels)
+    params.require(:template).permit(:type, :name, :description, :file_name)
   end
 
   def template_params
-    params.require(:template).permit(:name, :description, :file_name, :region_labels)
+    params.require(:template).permit(:name, :description, :file_name)
   end
 
   def template_class

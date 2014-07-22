@@ -1,7 +1,7 @@
 = simple_form_for @region_definition, url: @region_definition.new_record? ? admin_template_region_definitions_path(@template) : admin_template_region_definition_path(@template, @region_definition), remote: true, wrappers: :horizontal_form, html: { class: 'form-horizontal' } do |form|
   .modal-body
-    = form.input :name, input_html: { autofocus: true }
-    = form.input :label, input_html: { class: 'monospace' }
+    = form.input :name, input_html: { autofocus: @region_definition.persisted? }
+    = form.input :label, input_html: { autofocus: @region_definition.new_record?, class: 'monospace' }
 
   .modal-footer
     = form.button :button, type: 'submit', class: 'btn-primary' do

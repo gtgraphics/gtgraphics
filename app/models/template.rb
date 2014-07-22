@@ -30,13 +30,12 @@ class Template < ActiveRecord::Base
 
   attr_readonly :type
 
-  has_many :region_definitions, autosave: true, dependent: :destroy, inverse_of: :template
+  has_many :region_definitions, dependent: :destroy, inverse_of: :template
   has_many :regions, through: :region_definitions
 
   validates :name, presence: true
-  validates :type, presence: true, inclusion: { in: TEMPLATE_TYPES }, on: :create
-  validates :file_name, presence: true, inclusion: { in: ->(template) { template.class.template_files }, if: :type? }
-  validate :verify_region_labels_validity
+  validates :type, presence: true, inclusion: { in: TEMPLATE_TYPES, allow_blank: true }, on: :create
+  validates :file_name, presence: true, inclusion: { in: ->(template) { template.class.template_files }, if: :type?, allow_blank: true }
 
   acts_as_sortable do |by|
     by.name default: true
@@ -64,21 +63,6 @@ class Template < ActiveRecord::Base
     def template_types
       TEMPLATE_TYPES
     end
-  end
-
-  def region_labels
-    @region_labels ||= TokenCollection.new(self.region_definitions.pluck(:label), unique: true)
-  end
-  
-  def region_labels=(labels)
-    @region_labels = TokenCollection.new(labels, unique: true)
-    tokens = @region_labels.to_a
-    tokens.each do |label|
-      if self.region_definitions.none? { |region_definition| region_definition.label == label }
-        self.region_definitions.build(label: label)
-      end
-    end
-    self.region_definitions.reject { |region_definition| region_definition.label.in?(tokens) }.each(&:mark_for_destruction)
   end
 
   def to_param

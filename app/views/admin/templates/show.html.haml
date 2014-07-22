@@ -2,7 +2,16 @@
   .col-sm-offset-2.col-sm-8
 
     = page_header do
-      = template.action_buttons only: [:edit, :destroy]
+      .btn-toolbar
+        .btn-group
+          = button_link_to [:new, :admin, @template.becomes(::Template), :region_definition], type: :success, remote: true do
+            = prepend_icon :plus, translate('helpers.links.new', model: ::Template::RegionDefinition.model_name.human(count: 2))
+        .btn-group.pull-right
+          = button_link_to [:edit, :admin, template.abstract_template], data: { toggle: 'dropdown' }, class: 'dropdown-toggle' do
+            = prepend_icon :cog, translate('helpers.links.settings'), fixed_width: true, caption_html: { class: 'sr-only' }
+          %ul.dropdown-menu{role: 'menu', aria_labelledby: 'dLabel'}
+            %li= link_to prepend_icon(:pencil, translate('helpers.links.edit'), fixed_width: true), [:edit, :admin, template.abstract_template]
+            %li= link_to prepend_icon(:trash, translate('helpers.links.destroy'), outline: true, fixed_width: true), [:admin, template.abstract_template], method: :delete, data: { confirm: translate('helpers.confirmations.destroy', model: @template.class.model_name.human) }
 
     - if template.description?
       %fieldset
@@ -22,7 +31,3 @@
       %legend= ::Template::RegionDefinition.model_name.human(count: 2)
       .fields
         = render 'admin/template/region_definitions/table'
-
-        .btn-toolbar
-          = button_link_to [:new, :admin, @template.becomes(::Template), :region_definition], type: :success, remote: true do
-            = prepend_icon :plus, translate('helpers.links.new', model: ::Template::RegionDefinition.model_name.human(count: 2))
