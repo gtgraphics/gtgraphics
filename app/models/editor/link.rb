@@ -16,7 +16,7 @@ class Editor::Link < EditorActivity
   validates :url, presence: true, if: :external?
   validates :page_id, presence: true, if: :internal?
 
-  after_initialize :check_page_existence, if: :internal?
+  after_initialize :set_defaults
 
   def self.targets
     TARGETS.inject({ '' => I18n.translate('editor/link.targets.self') }) do |targets, target|
@@ -53,10 +53,14 @@ class Editor::Link < EditorActivity
   end
 
   private
-  def check_page_existence
-    if page.nil?
-      self.page_id = nil
-      self.external = true
+  def set_defaults
+    if persisted?
+      if internal? and page.nil?
+        self.page_id = nil
+        self.external = true
+      end
+    else
+      self.locale = Globalize.locale if locale.nil?
     end
   end
 end

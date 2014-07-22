@@ -62,6 +62,7 @@ $(document).on 'change', ORIGINAL_STYLE_SELECTOR, ->
   refreshStyleContainerState()
   $originalStyle = $(@)
   image = $(IMAGE_ID_SELECTOR).select2('data')
+  $styleId = $(STYLE_ID_SELECTOR)
   if $originalStyle.prop('checked')
     setAlternativeText(image.title)
 

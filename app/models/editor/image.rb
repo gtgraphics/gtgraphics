@@ -40,7 +40,7 @@ class Editor::Image < EditorActivity
   validates :height, numericality: { only_integer: true, greater_than: 0 }, allow_blank: true
   validates :alignment, inclusion: { in: ALIGNMENTS }, allow_blank: true
 
-  after_initialize :check_image_existence, if: :internal?
+  after_initialize :set_defaults
   before_validation :sanitize_url_or_image
 
   def self.alignments
@@ -83,10 +83,12 @@ class Editor::Image < EditorActivity
   end
 
   private
-  def check_image_existence
-    if image.nil?
-      self.image_id = nil
-      self.external = true
+  def set_defaults
+    if persisted?
+      if internal? and image.nil?
+        self.image_id = nil
+        self.external = true
+      end
     end
   end
 
@@ -94,6 +96,7 @@ class Editor::Image < EditorActivity
     if external?
       self.image_id = nil
       self.style_id = nil
+      self.original_style = true
     else
       self.url = nil
     end

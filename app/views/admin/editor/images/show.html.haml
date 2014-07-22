@@ -9,7 +9,7 @@
       = form.input :image_id, as: :image_select, required: true
       = form.input :original_style, as: :boolean, wrapper: :horizontal_boolean
       .editor-image-style-fields
-        = form.input :style_id, as: :image_style_select, required: true data: { from: @image.image.nil? ? nil : admin_image_styles_path(@image.image) }
+        = form.input :style_id, as: :image_style_select, required: true, input_html: { data: { from: form.object.image.nil? ? nil : admin_image_styles_path(form.object.image, format: :json) } }
     .editor-external-image-fields
       = form.input :url, required: true
     = form.input :width, as: :integer, input_html: { min: 1 }
