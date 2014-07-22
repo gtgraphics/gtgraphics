@@ -18,6 +18,7 @@
 #  indexable       :boolean          default(TRUE), not null
 #  children_count  :integer          default(0), not null
 #  published       :boolean          default(TRUE), not null
+#  hits_count      :integer          default(0), not null
 #
 
 class Page < ActiveRecord::Base

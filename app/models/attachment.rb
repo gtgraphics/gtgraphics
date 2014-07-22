@@ -12,6 +12,7 @@
 #  author_id         :integer
 #  original_filename :string(255)
 #  asset_token       :string(255)      not null
+#  hits_count        :integer          default(0), not null
 #
 
 class Attachment < ActiveRecord::Base
