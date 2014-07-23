@@ -28,9 +28,9 @@ end
 
 Page.benchmark "Seeding Homepage" do
   homepage = Page::Homepage.new
-  homepage.template = Template::Homepage.first
+  homepage.template = Template::Homepage.default
 
   page = Page.new title: 'Homepage', embeddable: homepage
-  page.author = User.find_by!(email: 'webmaster@gtgraphics.de')
+  page.author = User.reorder(:id).first
   page.save!
 end
