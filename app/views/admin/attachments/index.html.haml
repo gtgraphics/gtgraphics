@@ -1,26 +1,64 @@
-= form_tag :destroy_multiple_admin_attachments, method: :delete do
+#attachment_upload_dropzone
+  = form_tag :batch_process_admin_attachments, method: :patch, remote: true do
 
-  = page_header do
-    .btn-toolbar
-      .btn-group.batch-control
-        = button_tag prepend_icon(:trash, translate('helpers.links.destroy_selected'), outline: true), class: 'btn btn-danger', data: { confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) }
-      .btn-group
-        = create_button_link_for Attachment, namespace: :admin, icon: :upload, caption: translate('helpers.links.upload', model: Attachment.model_name.human)
-      = paginate @attachments
+    = page_header
 
-  #attachments_empty_hint.well.text-center{class: @attachments.any? ? 'hidden' : nil}
-    = translate('views.hints.empty', model: Image.model_name.human(count: 2))
+    .row
+      .col-sm-3
+        .panel-group#filters
+          = panel link_to(prepend_icon(:user, Attachment.human_attribute_name(:author_id), fixed_width: true), '#author', data: { toggle: 'collapse' }), body: false do
+            .list-group#author.panel-collapse.collapse.in
+              = active_link_to 'Egal', params.except(:author_id), class: 'list-group-item', active: params[:author_id].nil?
+              - @users.each do |user|
+                = active_link_to params.except(:page).merge(author_id: user.to_param), class: 'list-group-item', active: user.id == params[:author_id].to_i do
+                  %span.avatar
+                    %span.icon= gravatar_image_tag user.email, default: :mm, size: 24, class: 'img-circle'
+                    %span.caption= user.name
 
-  %table#attachments.table.table-hover{class: @attachments.empty? ? 'hidden' : nil}
-    %thead
-      %tr
-        %th.checkbox-cell
-          %input{type: 'checkbox', class: 'js-only table-checkbox-all', data: { toggle: 'tableCheckboxes' }}
-        %th= sort_link_for @attachments, :title
-        %th= sort_link_for @attachments, :content_type
-        %th= sort_link_for @attachments, :file_size
-        %th= sort_link_for @attachments, :created_at
-        %th.actions
-    %tbody
-      - @attachments.each do |attachment|
-        = render 'attachment', attachment: attachment, checkbox: true
+          = panel link_to(prepend_icon(:calendar, Attachment.human_attribute_name(:created_at), fixed_width: true), '#period', data: { toggle: 'collapse' }), body: false do
+            .list-group#period.panel-collapse.collapse{class: params[:period].nil? ? nil : 'in'}
+              = active_link_to 'Egal', params.except(:period), class: 'list-group-item', active: params[:period].nil?
+              - {'Heute' => 'today', 'Gestern' => 'yesterday', 'In dieser Woche' => 'week', 'In diesem Monat' => 'month'}.each do |caption, period|
+                = active_link_to caption, params.except(:page).merge(period: period), class: 'list-group-item', active: period == params[:period]
+
+      .col-sm-9
+        .row
+          .col-sm-8
+            .btn-toolbar
+              = paginate @attachments
+              .btn-group.only-js
+                = button_tag type: 'button', class: 'btn btn-success fileinput-button' do
+                  = prepend_icon :upload, translate('helpers.links.upload', model: Attachment.model_name.human)
+                  = file_field_tag :attachment_upload, name: 'attachment[asset]', multiple: true, data: { url: upload_admin_attachments_path }
+              .btn-group
+                = button_tag name: 'destroy', class: 'btn btn-danger deactivatable-batch-control', data: { hotkey: 'del', confirm: translate('helpers.confirmations.destroy_selected', model: Attachment.model_name.human(count: 2)) } do
+                  = prepend_icon :trash, translate('helpers.links.destroy_selected'), outline: true
+            %br
+
+          .col-sm-4
+            .btn-toolbar
+              .search-component
+                = text_field_tag :query, params[:query], class: 'search-input', placeholder: translate('helpers.prompts.search'), autofocus: true
+                .btn-toolbar
+                  = button_tag name: 'search', class: 'btn btn-search', title: translate('helpers.links.search'), data: { toggle: 'tooltip', placement: 'top', container: 'body' } do
+                    = prepend_icon :search, translate('helpers.links.search'), caption_html: { class: 'sr-only' }
+                  = button_link_to :admin_attachments, type: :search, title: translate('helpers.links.reset'), data: { toggle: 'tooltip', placement: 'top', container: 'body' } do
+                    = prepend_icon :times, translate('helpers.links.reset'), caption_html: { class: 'sr-only' }
+            %br
+
+        #attachments_empty_hint.well.text-center{class: @attachments.any? ? 'hidden' : nil}
+          = translate('views.hints.empty', model: Attachment.model_name.human(count: 2))
+
+        %table#attachments.table.table-hover{class: @attachments.empty? ? 'hidden' : nil}
+          %thead
+            %tr
+              %th.checkbox-cell
+                %input{type: 'checkbox', class: 'js-only table-checkbox-all', data: { toggle: 'tableCheckboxes' }}
+              %th= sort_link_for @attachments, :title
+              %th= sort_link_for @attachments, :file_size
+              %th= sort_link_for @attachments, :hits_count
+              %th= sort_link_for @attachments, :created_at
+              %th.actions
+          %tbody
+            - @attachments.each do |attachment|
+              = render 'attachment', attachment: attachment, checkbox: true

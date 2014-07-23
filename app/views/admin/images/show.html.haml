@@ -9,7 +9,7 @@
           %li= link_to prepend_icon(:pencil, translate('helpers.links.edit'), fixed_width: true), [:edit, :admin, image]
           %li= link_to prepend_icon(:crop, translate('helpers.links.edit_image'), fixed_width: true), [:customize, :admin, image], remote: true
           %li.divider
-          %li= link_to prepend_icon(:folder_open, translate('helpers.links.convert_to', model: Attachment.model_name.human), outline: true, fixed_width: true), [:convert_to_attachment, :admin, image], method: :patch, data: { confirm: translate('helpers.confirmations.move', model: Image.model_name.human, other_model: Attachment.model_name.human(count: 2)) }
+          %li= link_to prepend_icon(:folder_open, translate('helpers.links.convert_to', model: Attachment.model_name.human), outline: true, fixed_width: true), [:convert_to_attachment, :admin, image], method: :patch, data: { confirm: translate('helpers.confirmations.convert', model: Image.model_name.human, other_model: Attachment.model_name.human(count: 2)) }
           %li.divider
           %li= link_to prepend_icon(:trash, translate('helpers.links.destroy'), outline: true, fixed_width: true), [:admin, image], method: :delete, data: { confirm: translate('helpers.confirmations.destroy', model: Image.model_name.human) }
 

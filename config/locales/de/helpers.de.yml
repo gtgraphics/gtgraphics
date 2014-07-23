@@ -36,6 +36,7 @@ de:
       cancel: Abbrechen
       customize: Anpassen
       close: Schließen
+      convert_to: 'Umwandeln zu %{model}'
       crop: Zuschneiden
       crop_and_scale: 'Zuschneiden/Skalieren'
       destroy: Löschen
@@ -50,7 +51,6 @@ de:
       hide: Verstecken
       make_default: Als Standard festlegen
       move: Verschieben
-      convert_to: 'Umwandeln zu %{model}'
       move_up: Nach oben
       move_down: Nach unten
       new: '%{model} erstellen'
@@ -73,7 +73,7 @@ de:
       destroy: '%{model} wirklich entfernen?'
       destroy_selected: 'Möchten Sie die ausgewählten %{model} wirklich entfernen?'
       make_default: '%{model} wirklich als Standard festlegen?'
-      move: '%{model} wirklich zu %{other_model} verschieben?'
+      convert: '%{model} wirklich zu %{other_model} verschieben?'
       sign_out: 'Möchten Sie sich wirklich abmelden?'
     prompts:
       create: '– Neu erstellen –'

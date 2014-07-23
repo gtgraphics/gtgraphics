@@ -57,6 +57,7 @@
     = page.list_item :template if page.support_templates?
     = page.list_item :published
     = page.list_item :translated_locales
+    = page.list_item :hits_count
     = page.list_item :updated_at
 
 = try_render "admin/#{@page.embeddable_type.underscore.pluralize}/details", @page.embeddable_class.model_name.element.to_sym => @page.embeddable

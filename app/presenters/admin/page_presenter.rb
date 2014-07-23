@@ -1,8 +1,17 @@
 class Admin::PagePresenter < Admin::ApplicationPresenter
   presents :page
 
+  def created_on
+    I18n.localize(page.created_at.to_date)
+  end
+
   def embeddable_type
     super.constantize.model_name.human
+  end
+
+  def hits_count
+    hits_count = h.number_to_human(super)
+    I18n.translate('views.admin.pages.hits_since', count: hits_count, date: created_on)
   end
 
   def indexable

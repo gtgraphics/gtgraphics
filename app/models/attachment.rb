@@ -18,6 +18,7 @@
 class Attachment < ActiveRecord::Base
   include FileAttachable
   include Ownable
+  include PeriodFilterable
   include PersistenceContextTrackable
   include Sortable
   include Translatable
@@ -34,7 +35,17 @@ class Attachment < ActiveRecord::Base
   acts_as_sortable do |by|
     by.title(default: true) { |dir| Attachment::Translation.arel_table[:title].send(dir.to_sym) }
     by.file_size { |dir| arel_table[:file_size].send(dir.to_sym) }
+    by.hits_count { |dir| arel_table[:hits_count].send(dir.to_sym) }
     by.updated_at { |dir| arel_table[:updated_at].send(dir.to_sym) }
+  end
+
+  def self.search(query)
+    if query.present?
+      terms = query.to_s.split.uniq.map { |term| "%#{term}%" }
+      ransack(asset_or_translations_title_matches_any: terms).result
+    else
+      all
+    end
   end
 
   def image?

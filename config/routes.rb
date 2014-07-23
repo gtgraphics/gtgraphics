@@ -15,7 +15,12 @@ GtGraphics::Application.routes.draw do
 
   get 'sitemap.:format', to: 'sitemaps#index', as: :sitemaps
   get 'sitemap.:page.:format', to: 'sitemaps#show', as: :sitemap
-    
+  
+  scope 'files', constraints: { filename: /.*/ } do
+    get 'download/:filename' => 'attachments#download', as: :download_attachment
+    get ':filename' => 'attachments#show', as: :attachment
+  end
+
   scope '(:locale)', constraints: { locale: /[a-z]{2}/ } do
     scope constraints: Routing::LocaleConstraint.new do
       # scope 'admin' do
@@ -33,28 +38,25 @@ GtGraphics::Application.routes.draw do
             
         scope '(:translations)', constraints: { translations: /[a-z]{2}/ } do
           scope constraints: Routing::LocaleConstraint.new(:translations) do
+            namespace :editor do
+              with_options only: [:show, :create, :update] do |r|
+                r.resource :link
+                r.resource :image
+              end
+            end
+
             resource :account, except: [:new, :create, :show] do
               get :edit_password
               patch :update_password
               patch :update_preferences
             end
 
-            resources :attachments do
+            resources :attachments, except: :show do
               collection do
-                delete :destroy_multiple
-                get :translation_fields
+                patch :upload
+                patch :batch, action: :batch_process, as: :batch_process
               end
-              member do
-                get :download
-                patch :convert_to_image
-              end
-            end
-
-            namespace :editor do
-              with_options only: [:show, :create, :update] do |r|
-                r.resource :link
-                r.resource :image
-              end
+              patch :convert_to_image, on: :member
             end
 
             resources :images, except: [:new, :create], concerns: :customizable do
@@ -69,7 +71,6 @@ GtGraphics::Application.routes.draw do
                 patch :upload
                 patch :batch, action: :batch_process, as: :batch_process
                 patch :associate_owner, action: :associate_owner, as: :associate_owner_with
-                delete :destroy_multiple
               end
               member do
                 get :pages

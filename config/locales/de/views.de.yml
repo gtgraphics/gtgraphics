@@ -40,6 +40,8 @@ de:
           top: Oberstes Fenster
       loader:
         loading: Inhalt wird geladen…
+      attachments:
+        hits_since: '%{count} Aufrufe seit %{date}'
       images:
         original: Original
         headlines:
@@ -57,6 +59,7 @@ de:
         mark_unread: Als ungelesen markieren
         sender_html: '%{sender} (via %{contact_form})'
       pages:
+        hits_since: '%{count} Aufrufe seit %{date}'
         empty_type: Bitte wählen Sie einen Seitentyp.
         root: Wurzel
         sitemap: Sitemap

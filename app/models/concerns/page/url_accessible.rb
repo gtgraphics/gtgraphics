@@ -2,12 +2,14 @@ class Page < ActiveRecord::Base
   module UrlAccessible
     extend ActiveSupport::Concern
 
+    RESERVED_SLUGS = %w(system public assets files static)
+
     included do
       include Sluggable
 
       has_slug :slug, param: false, from: -> { root? ? '' : title(I18n.default_locale) }, if: :generate_slug?
 
-      validates :slug, presence: { unless: :root? }, uniqueness: { scope: :parent_id, if: :slug_changed? }
+      validates :slug, presence: { unless: :root? }, exclusion: { in: RESERVED_SLUGS }, uniqueness: { scope: :parent, if: :slug_changed? }
       validates :path, presence: { unless: :root? }, uniqueness: { if: :path_changed? }
    
       before_validation :set_path, if: :generate_path?
