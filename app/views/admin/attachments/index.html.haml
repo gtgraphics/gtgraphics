@@ -27,7 +27,7 @@
             .btn-toolbar
               = paginate @attachments
               .btn-group.only-js
-                = button_tag type: 'button', class: 'btn btn-success fileinput-button' do
+                %span.btn.btn-success.fileinput-button
                   = prepend_icon :upload, translate('helpers.links.upload', model: Attachment.model_name.human)
                   = file_field_tag :attachment_upload, name: 'attachment[asset]', multiple: true, data: { url: upload_admin_attachments_path }
               .btn-group
@@ -38,7 +38,7 @@
           .col-sm-4
             .btn-toolbar
               .search-component
-                = text_field_tag :query, params[:query], class: 'search-input', placeholder: translate('helpers.prompts.search'), autofocus: true
+                = text_field_tag :query, params[:query], class: 'search-input form-control input-rounded', placeholder: translate('helpers.prompts.search'), autofocus: true
                 .btn-toolbar
                   = button_tag name: 'search', class: 'btn btn-search', title: translate('helpers.links.search'), data: { toggle: 'tooltip', placement: 'top', container: 'body' } do
                     = prepend_icon :search, translate('helpers.links.search'), caption_html: { class: 'sr-only' }

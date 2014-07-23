@@ -2,27 +2,11 @@
   outline: none;
 }
 
-/*.btn-mini {
-  padding: 3px 10px;
-  font-size: 12px;
-  line-height: 1.5;
-  border-radius: 3px;
-}*/
-
 .actions {
   white-space: nowrap;
   position: relative;
   .btn-toolbar {
     top: 7px;
     right: 8px;
-    /*
-    margin: {
-      top: -2px;
-      bottom: -2px;
-    }
-    */
-    .btn.icon-only {
-      // width: 24px;
-    }
   }
 }

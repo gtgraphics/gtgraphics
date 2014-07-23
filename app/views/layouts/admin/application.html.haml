@@ -11,6 +11,7 @@
 
 - content_for :content do 
   :coffee
+    Editor.defaults.stylesheetFile = '#{asset_path("editor.css")}'
     Editor.Control.Image.dialogUrl = '#{admin_editor_image_path}'
     Editor.Control.Link.dialogUrl = '#{admin_editor_link_path}'
 

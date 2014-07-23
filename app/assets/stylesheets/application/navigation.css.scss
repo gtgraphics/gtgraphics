@@ -1,3 +1,7 @@
+@import '_bootstrap_config';
+@import 'compass';
+@import 'shared/mixins';
+
 .navbar {
   @media (min-width: $screen-sm-min) {
     .navbar-nav:not(.navbar-right):first-child {

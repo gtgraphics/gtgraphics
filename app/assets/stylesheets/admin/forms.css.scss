@@ -1,3 +1,6 @@
+@import '_bootstrap_config';
+@import 'compass';
+
 fieldset {
   legend {
     padding-bottom: 4px;
@@ -45,8 +48,6 @@ textarea {
   position: relative;
 
   .search-input {
-    @extend .form-control;
-    @extend .input-rounded;
     padding-right: 34px;
   }
 

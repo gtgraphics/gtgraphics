@@ -1,8 +1,4 @@
-@import "admin/fonts";
-@import "admin/bootstrap_overrides";
-@import "bootstrap";
-@import "compass";
-@import "shared/regions";
+@import 'admin/_bootstrap_init';
 
 body {
   margin: 0;

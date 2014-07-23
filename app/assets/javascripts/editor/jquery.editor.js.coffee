@@ -5,7 +5,7 @@
       $textarea = $(@)
       editor = $textarea.data('editor')
       unless editor
-        editor = new TextareaEditor($textarea, options)
+        editor = new Editor($textarea, options)
         editor.render()
 
 ) jQuery

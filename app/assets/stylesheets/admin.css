@@ -9,13 +9,6 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
+ *= require_tree ./shared
+ *= require_tree ./admin
  */
-
-// Bootstrap
-@import "application/bootstrap_overrides";
-@import "bootstrap";
-
-// Shared
-@import "shared";
-
-@import "application/navigation";

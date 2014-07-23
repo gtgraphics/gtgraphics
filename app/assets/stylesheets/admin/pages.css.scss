@@ -1,5 +1,7 @@
+@import '_bootstrap_config';
+
 .path-preview {
-  @extend .monospace;
+  font-family: $font-family-monospace;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

@@ -1,24 +1,22 @@
 jQuery.prepare ->
-  $('.editor, [data-behavior="editor"]', @).editor(class: TextareaEditor)
+  $('.editor, [data-behavior="editor"]', @).editor()
 
-  $('.pictureless-editor', @).editor(class: TextareaEditor, controls: [
+  $('.pictureless-editor', @).editor controls: [
     ['bold', 'italic', 'underline', 'strikethrough'],
     ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify'],
     ['orderedList', 'unorderedList', 'indent', 'outdent'],
     ['link', 'unlink'],
     'viewMode'
-  ])
+  ]
 
-  $('.simple-editor', @).editor
-    class: TextareaEditor
-    controls: [
-      ['bold', 'italic', 'underline', 'strikethrough'],
-      ['orderedList', 'unorderedList']
-    ]
+  $('.simple-editor', @).editor controls: [
+    ['bold', 'italic', 'underline', 'strikethrough'],
+    ['orderedList', 'unorderedList']
+  ]
 
-  $('.image-editor, .attachment-editor', @).editor(class: TextareaEditor, controls: [
+  $('.image-editor, .attachment-editor', @).editor controls: [
     ['bold', 'italic', 'underline', 'strikethrough'],
     ['orderedList', 'unorderedList', 'indent', 'outdent'],
     ['link', 'unlink'],
     'viewMode'
-  ])
+  ]

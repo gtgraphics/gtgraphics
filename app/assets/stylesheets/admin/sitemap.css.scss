@@ -1,3 +1,5 @@
+@import '_bootstrap_config';
+
 #sitemap_toolbar {
   @media (min-width: $screen-md) {
     .container {
@@ -28,44 +30,6 @@
   position: fixed;
   bottom: 0;
   top: $navbar-height + 1px;
-
-  /*&:before {
-    $shadow-height: 15px;
-    position: absolute;
-    top: 0;
-    right: $grid-gutter-width;
-    left: 0;
-    //background-color: red;
-    pointer-events: none;
-    content: " ";
-    z-index: 500;
-    //bottom: -$shadow-height;
-    height: $shadow-height;
-    background: {
-      image: asset-url('admin/shadow_bottom.png');
-      repeat: no-repeat;
-      size: 100% $shadow-height;
-    }
-  }
-
-  &:after {
-    $shadow-height: 15px;
-    position: absolute;
-    bottom: 0;
-    right: $grid-gutter-width;
-    left: 0;
-    //background-color: red;
-    pointer-events: none;
-    content: " ";
-    z-index: 500;
-    //bottom: -$shadow-height;
-    height: $shadow-height;
-    background: {
-      image: asset-url('admin/shadow_top.png');
-      repeat: no-repeat;
-      size: 100% $shadow-height;
-    }
-  }*/
 }
 
 #sitemap {
