@@ -22,6 +22,6 @@ module MaintainableController
 
   private
   def check_for_maintenance
-    raise Maintained if signed_out? and File.exists?(MAINTENANCE_FILE)
+    raise Maintained if !logged_in? and File.exists?(MAINTENANCE_FILE)
   end
 end

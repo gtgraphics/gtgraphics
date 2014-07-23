@@ -1,5 +1,3 @@
-# TODO: Replace with Sorcery: https://github.com/NoamB/sorcery
-
 class Admin::SessionsController < Admin::ApplicationController
   skip_before_action :require_login, only: %i(new create)
   
