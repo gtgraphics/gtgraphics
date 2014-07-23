@@ -43,7 +43,8 @@ gem 'coffeebeans'
 gem 'turbolinks'
 
 # Assets
-gem 'sprockets', '2.11.0' # newer versions do not work properly
+# gem 'sprockets', '2.11.0' # newer versions do not work properly
+gem 'sprockets-rails'
 gem 'execjs'
 gem 'therubyracer'
 gem 'sass-rails' #, '~> 4.0.3'

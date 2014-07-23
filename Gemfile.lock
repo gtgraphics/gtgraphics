@@ -270,7 +270,7 @@ GEM
       bcrypt-ruby (>= 3.0)
       oauth (~> 0.4.4)
       oauth2 (>= 0.8.0, < 1.0.0)
-    sprockets (2.11.0)
+    sprockets (2.12.1)
       hike (~> 1.2)
       multi_json (~> 1.0)
       rack (~> 1.0)
@@ -369,7 +369,7 @@ DEPENDENCIES
   select2-bootstrap-css
   simple_form (= 3.1.0.rc1)
   sorcery
-  sprockets (= 2.11.0)
+  sprockets-rails
   state_machine
   therubyracer
   thin
