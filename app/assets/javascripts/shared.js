@@ -2,9 +2,9 @@
 //= require underscore.string
 //= require jquery
 //= require jquery_ujs
-//= require_tree ./libraries
 //= require_tree ./core_ext
 //= require turbolinks
 //= require jquery.turbolinks
+//= require_tree ./libraries
 //= require bootstrap
 //= require_tree ./shared
