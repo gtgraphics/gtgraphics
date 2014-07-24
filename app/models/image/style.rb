@@ -44,8 +44,6 @@ class Image < ActiveRecord::Base
 
     validates :image_id, presence: true, strict: true
 
-    before_validation :set_default_title, on: :create
-
     default_scope -> { order(:position) }
 
     def self.search(query)
@@ -62,15 +60,8 @@ class Image < ActiveRecord::Base
         if title.present?
           super
         else
-          image.title.parameterize('_') + File.extname(original_filename).downcase
+          image.title.parameterize.underscore + File.extname(original_filename).downcase
         end
-      end
-    end
-
-    private
-    def set_default_title
-      if title.blank? and original_filename.present?
-        self.title = File.basename(original_filename, '.*').titleize
       end
     end
   end

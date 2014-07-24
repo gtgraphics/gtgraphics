@@ -61,15 +61,15 @@ class Admin::Image::StylesController < Admin::ApplicationController
   end
 
   def customize
-    @image_style.tap do |img|
-      img.cropped = true if img.cropped.nil?
-      img.crop_x ||= 0
-      img.crop_y ||= 0
-      img.crop_width ||= img.original_width
-      img.crop_height ||= img.original_height
-      img.resized = false if img.resized.nil?
-      img.resize_width ||= img.original_width
-      img.resize_height ||= img.original_height
+    @image_style.tap do |style|
+      style.cropped = true if style.cropped.nil?
+      style.crop_x ||= @image.crop_x || 0
+      style.crop_y ||= @image.crop_y || 0
+      style.crop_width ||= @image.crop_width || style.original_width
+      style.crop_height ||= @image.crop_height || style.original_height
+      style.resized = false if style.resized.nil?
+      style.resize_width ||= @image.resize_width || @image.width || style.original_width
+      style.resize_height ||= @image.resize_height || @image.height || style.original_height
     end
     respond_with :admin, @image, @image_style
   end
