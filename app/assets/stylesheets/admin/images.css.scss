@@ -1,60 +1,29 @@
-.thumbnail {
-  position: relative;
-  
-  &:hover {
-    .actions .btn {
-      display: inline-block;
-    }
-  }
-
-  .actions {
-    position: absolute;
-    &.bottom {
-      bottom: 12px;
-    }
-    &.top {
-      top: 12px;
-    }
-    &.left {
-      left: 12px;
-    }
-    &.right {
-      right: 12px;
-    }
-    .btn {
-      background: rgba(0, 0, 0, 0.7);
-      border: none;
-      display: none;
-      color: rgba(255, 255, 255, 0.7);
-      .caption {
-        color: rgba(255, 255, 255, 0.7);
-      }
-      &:hover, &:focus {
-        opacity: 1;
-        color: white;
-        .caption {
-          color: white;
-        }
-      }
-    }
-  }
-
-  .caption {
-    h3 {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      line-height: 1.3em;
-      margin-top: 5px;
-    }
-  }
-}
-
-table .thumbnail {
-  margin-bottom: 0;
-}
+@import '_bootstrap_config';
+@import 'compass';
 
 .img-editable {
   background-color: white;
   background-image: asset-url('admin/transparent.png');
+}
+
+.image {
+  @include clearfix;
+
+  .preview {
+    $size: 45px;    
+    margin-right: 8px;
+    float: left;
+    width: $size;
+    img {
+      width: $size;
+      height: $size;
+    }
+  }
+  .title {
+    margin-top: 2px;
+  }
+  .detail {
+    color: $gray-light;
+    margin-bottom: 2px;
+  }
 }

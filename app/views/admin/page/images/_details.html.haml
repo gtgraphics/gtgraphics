@@ -1,0 +1,11 @@
+%fieldset
+  %legend= Image.model_name.human
+  .content.content-horizontal
+    - present image.image, with: Admin::ImagePresenter do |image|
+      .image
+        .preview
+          = link_to image.thumbnail(size: 45), [:admin, image]
+        .title
+          = link_to image.title, [:admin, image]
+        .detail
+          = image.dimensions

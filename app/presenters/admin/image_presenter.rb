@@ -77,6 +77,12 @@ class Admin::ImagePresenter < Admin::ApplicationPresenter
     h.time_ago(image.taken_at) if image.taken_at
   end
 
+  def thumbnail(options = {})
+    width = height = options.delete(:size) { 300 }
+    options = options.reverse_merge(class: 'img-circle', alt: image.title, width: width, height: height)
+    h.image_tag image.asset.url(:thumbnail), options
+  end
+
   def to_liquid
     attributes.slice(*%w(title width height updated_at file_size)).merge(customization_options).merge(
       'author' => author,

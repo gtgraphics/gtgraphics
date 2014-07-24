@@ -1,0 +1,16 @@
+@import 'compass';
+
+.user {
+  @include clearfix;
+
+  .avatar {
+    display: block;
+    float: left;
+    margin-right: 6px;
+  }
+
+  .name {
+    display: block;
+    margin-top: 3px;
+  }
+}

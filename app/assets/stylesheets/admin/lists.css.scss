@@ -1,27 +1,16 @@
+@import '_bootstrap_config';
+
 .ul-horizontal {
   padding: 0;
   list-style-type: none;
-  margin-left: 180px;
-}
+  margin-left: $component-offset-horizontal;
 
-.gtg-admin-action-list {
-  padding: 0;
-  margin: 0;
-  list-style-type: none;
-
-  li + li {
-    padding-top: 8px;
-  }
-}
-
-.gtg-admin-user-list {
-  @extend .ul-horizontal;
-  li {
-    .gravatar {
-      margin-right: 2px;
-    }
-    + li {
-      margin-top: 4px;
+  &.ul-horizontal-wide {
+    li {
+      margin-bottom: 5px;
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 }

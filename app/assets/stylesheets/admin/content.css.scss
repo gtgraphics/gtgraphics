@@ -1,0 +1,9 @@
+@import '_bootstrap_config';
+
+.content + .content {
+  margin-top: 20px;
+}
+
+.content-horizontal {
+  margin-left: $component-offset-horizontal;
+}

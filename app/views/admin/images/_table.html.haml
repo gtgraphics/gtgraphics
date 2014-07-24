@@ -38,8 +38,7 @@
               %td.checkbox-cell
                 = check_box_tag 'image_ids[]', image.id, false, class: 'table-checkbox', id: nil
             %td.thumbnail-cell
-              = link_to [:admin, image] do
-                = image_tag image.asset.url(:thumbnail), class: 'img-circle', alt: image.title, width: 45, height: 45
+              = link_to image.thumbnail(size: 45), [:admin, image]
             %td= link_to image.title, [:admin, image]
             %td.hidden-xs= image.content_type
             %td.visible-lg= image.author
