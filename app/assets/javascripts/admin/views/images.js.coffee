@@ -13,8 +13,6 @@ $(document).ready ->
       else
         data.submit()
 
-    done: (event, data) ->
-
     progressall: (event, data) ->
       progress = Math.round(data.loaded / data.total * 100)
       if progress == 100

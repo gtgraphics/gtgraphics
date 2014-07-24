@@ -77,7 +77,9 @@ class Editor::Image < EditorActivity
     html_options[:align] = alignment.presence
     if internal?
       html_options[:data] = { image_id: image_id }
-      html_options[:data][:style] = style unless original_style? and style.blank?
+      if style_id.present?
+        html_options[:data][:style_id] = style_id
+      end
     end
     tag(:img, html_options).html_safe
   end
@@ -99,6 +101,7 @@ class Editor::Image < EditorActivity
       self.original_style = true
     else
       self.url = nil
+      self.style_id = nil if original_style?
     end
   end
 end

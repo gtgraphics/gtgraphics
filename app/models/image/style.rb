@@ -48,6 +48,15 @@ class Image < ActiveRecord::Base
 
     default_scope -> { order(:position) }
 
+    def self.search(query)
+      if query.present?
+        terms = query.to_s.split.uniq.map { |term| "%#{term}%" }
+        ransack(translations_title_matches_any: terms).result
+      else
+        all
+      end
+    end
+
     def virtual_filename
       I18n.with_locale(I18n.default_locale) do
         if title.present?

@@ -51,6 +51,7 @@ class @Editor.Control.Image extends @Editor.Control.DialogButtonControl
         alternative_text: $image.attr('alt')
         alignment: $image.attr('align')
         external: !$image.data('imageId')
+        original_style: !$image.data('styleId')
       _($image.data()).each (value, key) ->
         editorParams[_(key).underscored()] = value
     { editor: editorParams }
