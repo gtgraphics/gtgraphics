@@ -342,6 +342,7 @@ de:
       page_preview: Seitenvorschau      
 
   image/style:
+    placeholder_title: Unbenannter Bildstil
     predefined_caption_format: '%{dimensions} (%{style_name})'
     predefined_names:
       original: Original
