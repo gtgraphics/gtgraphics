@@ -3,11 +3,19 @@ module PeriodFilterable
 
   module ClassMethods
     def created(date)
-      where(created_at: _parse_period(date))
+      if date.present?
+        where(created_at: _parse_period(date))
+      else
+        all
+      end
     end
 
     def updated(date)
-      where(updated_at: _parse_period(date))
+      if date.present?
+        where(updated_at: _parse_period(date))
+      else
+        all
+      end
     end
 
     private
