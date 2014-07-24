@@ -5,7 +5,7 @@ class PagesController < ApplicationController
   before_action :load_template
   before_action :load_menu_items
 
-  before_action :increment_hits_counter
+  before_action :increment_hits
 
   attr_reader :page
   protected :page
@@ -67,7 +67,7 @@ class PagesController < ApplicationController
     @menu_items = Page.primary.published.menu_items.accessible_by(current_ability).with_translations_for_current_locale
   end
 
-  def increment_hits_counter
-    @page.increment! :hits_count
+  def increment_hits
+    @page.increment_hits!
   end
 end

@@ -10,7 +10,7 @@ class Admin::PagePresenter < Admin::ApplicationPresenter
   end
 
   def hits_count
-    hits_count = h.number_to_human(super)
+    hits_count = h.number_with_delimiter(super)
     I18n.translate('views.admin.pages.hits_since', count: hits_count, date: created_on)
   end
 

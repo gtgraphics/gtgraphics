@@ -6,7 +6,7 @@ class Admin::AttachmentPresenter < Admin::ApplicationPresenter
   self.action_buttons = [:show, :download, :convert_to_image, :edit, :destroy]
 
   def hits_count
-    h.number_to_human super
+    h.number_with_delimiter super
   end
 
   # Buttons
