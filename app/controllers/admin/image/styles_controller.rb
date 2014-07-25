@@ -41,6 +41,16 @@ class Admin::Image::StylesController < Admin::ApplicationController
     @image_style = @image.styles.new(image_style_params)
     @image_style.asset = @image.asset
     @image_style.original_filename = @image.original_filename
+    @image_style.tap do |style|
+      style.cropped = @image.cropped?
+      style.crop_x ||= @image.crop_x || 0
+      style.crop_y ||= @image.crop_y || 0
+      style.crop_width ||= @image.crop_width || style.original_width
+      style.crop_height ||= @image.crop_height || style.original_height
+      style.resized = @image.resized?
+      style.resize_width ||= @image.resize_width || @image.width || style.original_width
+      style.resize_height ||= @image.resize_height || @image.height || style.original_height
+    end
     @image_style.save
     respond_with :admin, @image, @image_style, location: [:admin, @image]
   end
@@ -63,13 +73,13 @@ class Admin::Image::StylesController < Admin::ApplicationController
   def customize
     @image_style.tap do |style|
       style.cropped = true if style.cropped.nil?
-      style.crop_x ||= @image.crop_x || 0
-      style.crop_y ||= @image.crop_y || 0
-      style.crop_width ||= @image.crop_width || style.original_width
-      style.crop_height ||= @image.crop_height || style.original_height
+      style.crop_x ||= 0
+      style.crop_y ||= 0
+      style.crop_width ||= style.original_width
+      style.crop_height ||= style.original_height
       style.resized = false if style.resized.nil?
-      style.resize_width ||= @image.resize_width || @image.width || style.original_width
-      style.resize_height ||= @image.resize_height || @image.height || style.original_height
+      style.resize_width ||= style.crop_width
+      style.resize_height ||= style.crop_height
     end
     respond_with :admin, @image, @image_style
   end

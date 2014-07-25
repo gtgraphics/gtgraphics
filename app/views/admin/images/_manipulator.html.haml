@@ -9,41 +9,50 @@
   %br
 
   .row
-    .col-sm-8
+    .col-sm-6
       .panel.panel-default.crop-panel
         .panel-heading
           %span.panel-title
             %label.checkbox
               = fields.check_box :cropped, class: 'js-only', data: { toggle: 'crop' }
-              = prepend_icon(:crop, translate('views.admin.images.headlines.crop'), fixed_width: true)
+              = prepend_icon :crop, translate('views.admin.images.headlines.crop'), fixed_width: true
         .panel-body
-          .row
-            .col-sm-3
+          .form-group
+            .col-sm-4
+              = fields.label :crop_x, class: 'control-label' do
+                = image.class.human_attribute_name :crop_position
+            .col-sm-4
               = fields.input_field :crop_x, as: :integer, placeholder: image.class.human_attribute_name(:crop_x), class: 'form-control crop-x', min: 0, max: image.width, data: { control: 'cropX' }
-            .col-sm-3
+            .col-sm-4
               = fields.input_field :crop_y, as: :integer, placeholder: image.class.human_attribute_name(:crop_y), class: 'form-control crop-y', min: 0, max: image.height, data: { control: 'cropY' }
-            .col-sm-3
+          .form-group
+            .col-sm-4
+              = fields.label :crop_width, class: 'control-label' do
+                = image.class.human_attribute_name :crop_dimensions
+            .col-sm-4
               = fields.input_field :crop_width, as: :integer, placeholder: image.class.human_attribute_name(:crop_width), class: 'form-control crop-width', min: 1, max: image.width, data: { control: 'cropWidth' }
-            .col-sm-3
+            .col-sm-4
               = fields.input_field :crop_height, as: :integer, placeholder: image.class.human_attribute_name(:crop_height), class: 'form-control crop-height', min: 1, max: image.height, data: { control: 'cropHeight' }
 
-    .col-sm-4
+    .col-sm-6
       .panel.panel-default.resize-panel
         .panel-heading
           %span.panel-title
             %label.checkbox
               = fields.check_box :resized, class: 'js-only', data: { toggle: 'resize' }
-              = prepend_icon(:arrows, translate('views.admin.images.headlines.resize'), fixed_width: true)
+              = prepend_icon :arrows, translate('views.admin.images.headlines.resize'), fixed_width: true
         .panel-body
-          .row
-            .col-sm-6
+          .form-group
+            .col-sm-4
+              = fields.label :resize_width, class: 'control-label' do
+                = image.class.human_attribute_name :resize_dimensions
+            .col-sm-4
               = fields.input_field :resize_width, as: :integer, placeholder: image.class.human_attribute_name(:resize_width), class: 'form-control resize-width', min: 1, data: { control: 'resizeWidth' }
-            .col-sm-6
+            .col-sm-4
               = fields.input_field :resize_height, as: :integer, placeholder: image.class.human_attribute_name(:resize_height), class: 'form-control resize-height', min: 1, data: { control: 'resizeHeight' }
-          .row
-            .col-sm-12
-              .checkbox
-                %label
-                  %input{type: 'checkbox', checked: true, class: 'resize-aspect-ratio', data: { control: 'preserveResizeAspectRatio' }}
-                  = image.class.human_attribute_name(:preserve_aspect_ratio)
+          .form-group
+            .col-sm-8.col-sm-offset-4
+              %label.checkbox
+                %input{type: 'checkbox', checked: true, class: 'resize-aspect-ratio', data: { control: 'preserveResizeAspectRatio' }}
+                = image.class.human_attribute_name(:preserve_aspect_ratio)
 

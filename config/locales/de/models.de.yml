@@ -115,6 +115,9 @@ de:
         crop_y: Y-Position
         crop_width: Breite
         crop_height: Höhe
+        crop_position: Position
+        crop_dimensions: Maße
+        resize_dimensions: Maße
         resize_width: Breite
         resize_height: Höhe
         taken_at: Aufnahme
@@ -128,9 +131,12 @@ de:
         crop_y: Y-Position
         crop_width: Breite
         crop_height: Höhe
+        crop_position: Position
+        crop_dimensions: Maße
         dimensions: Größe
         resize_width: Breite
         resize_height: Höhe
+        resize_dimensions: Maße
         preserve_aspect_ratio: Seitenverhältnis beibehalten
       image/translation:
         title: Bildtitel

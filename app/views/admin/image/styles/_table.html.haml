@@ -11,10 +11,10 @@
       %tr
         %td.checkbox-cell
         %td.thumbnail-cell
-          = link_to attachment_url(image) do
+          = link_to attachment_url(image, :custom) do
             = image_tag attachment_url(image, :thumbnail), class: 'img-circle', alt: translate('views.admin.images.original'), width: 45, height: 45
         %td
-          = link_to translate('views.admin.images.original'), attachment_url(image), target: '_blank'
+          = link_to translate('views.admin.images.original'), attachment_url(image, :custom), target: '_blank'
           %br
           %span.text-muted.ignored
             = image.dimensions
