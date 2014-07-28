@@ -143,7 +143,7 @@ class ImageManipulator
         @setResizeWidth(@resizeAspectRatio.width * @getResizeHeight())
     
     @refreshResizeAspectRatioState()
-    @inputs.resizeAspectRatio.on 'ifChanged', =>
+    @inputs.resizeAspectRatio.on 'change', =>
       @refreshResizeAspectRatioState()
 
     @applyScaleEvents()
