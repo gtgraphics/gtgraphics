@@ -41,6 +41,9 @@ namespace :i18n do
     dirname = ENV.fetch('DIRNAME') { "#{Rails.root}/public/static/locales" }
     FileUtils.mkdir_p(dirname)
 
+    # Remove all files from directory
+    Dir.glob("#{dirname}/*.js").each { |file| File.delete(file) }
+
     # Get contents of all translation files and merge them in a single Hash
     locale_files = Dir.glob("#{Rails.root}/config/locales/**/*.yml")
     translations = locale_files.inject({}) do |translations, file|
