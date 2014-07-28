@@ -15,14 +15,14 @@ namespace :gtg do
 
       desc 'Import wallpapers from the remote GT Graphics gallery'
       task :wallpapers => :environment do
-        path = ENV.fetch(:path) { 'work/wallpapers' }
+        path = ENV.fetch('path') { 'work/wallpapers' }
         gallery_page = Page.find_by! path: path
         import_gallery 'wallpapers', gallery_page
       end
 
       desc 'Import artworks from the remote GT Graphics gallery'
       task :artworks => :environment do
-        path = ENV.fetch(:path) { 'work/artworks' }
+        path = ENV.fetch('path') { 'work/artworks' }
         gallery_page = Page.find_by! path: path
         import_gallery 'artworks', gallery_page
       end
