@@ -25,10 +25,6 @@ module ImageUploadable
     end
   end
 
-  def filename
-    "#{model.asset_token}.#{file.extension}"
-  end
-
   private
   def crop
     if cropped?

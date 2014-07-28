@@ -40,7 +40,7 @@ class Admin::PagePresenter < Admin::ApplicationPresenter
   end
 
   def translated_locales
-    available_locales = super.sort_by { |locale| I18n.translate(locale, scope: :languages) }
+    available_locales = I18n.available_locales.sort_by { |locale| I18n.translate(locale, scope: :languages) }
     h.capture do
       h.content_tag :ul, class: 'inline-flag-icons' do
         available_locales.each do |locale|

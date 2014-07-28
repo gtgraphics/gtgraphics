@@ -44,6 +44,18 @@ class Admin::ImagePresenter < Admin::ApplicationPresenter
     end
   end
 
+  def file_size
+    total_size = image.file_size + image.styles.sum(:file_size)
+    h.capture do
+      h.concat h.number_to_human_size(image.file_size)
+      if image.styles.any?
+        h.concat ' ('
+        h.concat h.number_to_human_size(total_size)
+        h.concat ')'
+      end
+    end
+  end
+
   def pixels_count
     h.number_to_human(image.width * image.height) + " #{I18n.translate(:pixels)}"
   end
