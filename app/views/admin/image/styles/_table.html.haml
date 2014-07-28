@@ -3,7 +3,8 @@
     %thead
       %tr
         %th.checkbox-cell
-          %input{type: 'checkbox', class: 'js-only table-checkbox-all'}
+          - if image.styles.any?
+            %input{type: 'checkbox', class: 'js-only table-checkbox-all'}
         %th.thumbnail-cell
         %th= Image::Style.human_attribute_name :title
         %th.actions

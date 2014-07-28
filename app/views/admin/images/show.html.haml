@@ -67,7 +67,7 @@
       = panel prepend_icon(:info, translate('views.admin.images.headlines.details'), fixed_width: true) do
         %dl.dl-horizontal
           = image.list_item :content_type
-          = image.list_item :file_size
+          = image.list_item :file_size, true
           = image.list_item :dimensions, true
           = image.list_item :pixels_count
           = image.list_item :artist if image.artist.present?
