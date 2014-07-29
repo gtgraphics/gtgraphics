@@ -12,12 +12,25 @@
     .row
       .col-sm-8
         - if image.description.present?
-          %h4 Description
-          = raw image.description
+          %fieldset
+            %legend Description
+            .fields
+              = raw image.description
 
-        %h4 Share
-        .form-group
-          = link_to page.permalink, page.permalink       
+        %fieldset
+          %legend Artist
+          .fields
+            .clearfix
+              .pull-left
+                = image.author.gravatar size: 45
+              = image.author.name
+              %br
+              %span.text-muted= image.taken_at
+
+        %fieldset
+          %legend Share
+          .fields
+            = link_to page.permalink, page.permalink       
 
       .col-sm-4
         %h4 Buy

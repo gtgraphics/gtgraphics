@@ -33,7 +33,7 @@ class Image < ActiveRecord::Base
     end
 
     def taken_at
-      exif_data[:date_time_original].try(:to_datetime)
+      (exif_data[:date_time_original] || exif_data[:date_time]).try(:to_datetime)
     end
     
     private
