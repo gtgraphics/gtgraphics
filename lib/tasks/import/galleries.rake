@@ -34,12 +34,12 @@ namespace :gtg do
 
         %w(nature architecture people misc).each do |name|
           subgallery_page = Page.find_by! path: "#{path}/#{name}"
-          import_gallery name, subgallery_page
+          import_gallery name, subgallery_page, ['Photography', 'Photo']
         end
       end
 
-      def import_gallery(name, gallery_page)
-        puts "Importing Gallery: #{name.titleize}..."
+      def import_gallery(name, gallery_page, additional_tags = [])
+        puts "Importing Gallery: #{name.titleize}"
 
         # Determine Pages Count
         gallery_urls = remote_gallery_urls(name)
@@ -47,12 +47,13 @@ namespace :gtg do
           gallery_doc = Nokogiri::HTML(open(gallery_url))
           gallery_doc.css('.content-top-pic').each do |element|
             image_page_url = element.css('a').attr('href')
-            import_image(image_page_url, gallery_page)
+            image = import_image(image_page_url, gallery_page)
+            image.tag!(additional_tags)
           end
         end
       end
 
-      def import_image(image_url, gallery_page)
+      def import_image(image_url, gallery_page, additional_tags = [])
         # The image we want to create
         image = Image.new
 
@@ -88,7 +89,7 @@ namespace :gtg do
             Globalize.with_locale(locale) do
               image.title = document.css('.img-title').inner_text.squish
               image.description = document.css('.image-box-content p').first.inner_html.squish
-              image.tag gallery_page.title(locale)
+              image.tag image.title, gallery_page.title(locale)
             end
           end
 
@@ -109,6 +110,8 @@ namespace :gtg do
 
         # Page
         create_page(documents, gallery_page, image)
+
+        image
       end
 
       def create_page(documents, gallery_page, image)
@@ -127,11 +130,14 @@ namespace :gtg do
         # Set Meta Description
         I18n.available_locales.each do |locale|
           Globalize.with_locale(locale) do
-            page.meta_description = image.description # TODO Strip Tags
+            page.title = image.title
+            page.meta_description = HTML::FullSanitizer.new.sanitize(image.description)
           end
         end
-
+        
+        page.set_next_available_slug
         page.save!
+
         page
       end
 

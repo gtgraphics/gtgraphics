@@ -24,11 +24,11 @@ class TokenCollection
   end
 
   def +(other)
-    new(@tokens + other.to_a, @options)
+    self.class.new(@tokens + other.to_a, @options)
   end
 
   def -(other)
-    new(@tokens - other.to_a, @options)
+    self.class.new(@tokens - other.to_a, @options)
   end
 
   def inspect

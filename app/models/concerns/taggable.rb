@@ -2,7 +2,7 @@ module Taggable
   extend ActiveSupport::Concern
 
   included do
-    has_many :taggings, as: :taggable, dependent: :delete_all, autosave: true
+    has_many :taggings, as: :taggable, dependent: :destroy, autosave: true
     has_many :tags, through: :taggings
 
     validate :verify_tag_tokens_validity
