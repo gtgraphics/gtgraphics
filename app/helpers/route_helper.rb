@@ -27,8 +27,6 @@ module RouteHelper
   def _page_url(suffix, *args)
     options = args.extract_options!
     page = args.first
-    format = options[:format].try(:to_s)
-    options = options.reverse_merge(editing: try(:editing?).presence) if format.nil? or format == 'html'
     if page and page.path.present?
       send("#{page.embeddable_class.model_name.element}_#{suffix}", options.merge(path: page.path))
     else

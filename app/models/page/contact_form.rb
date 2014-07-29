@@ -12,7 +12,7 @@ class Page < ActiveRecord::Base
     
     acts_as_concrete_page
 
-    has_many :messages, foreign_key: 'contact_form_id', dependent: :nullify
+    has_many :messages, class_name: 'Message::Contact', foreign_key: :subject_id, dependent: :nullify
     has_and_belongs_to_many :recipients, class_name: 'User', join_table: 'contact_form_recipients',
                                                              foreign_key: :contact_form_page_id,
                                                              association_foreign_key: :recipient_id

@@ -23,12 +23,6 @@ GtGraphics::Application.routes.draw do
 
   scope '(:locale)', constraints: { locale: /[a-z]{2}/ } do
     scope constraints: Routing::LocaleConstraint.new do
-      # scope 'admin' do
-      #   get 'pages/:page_type/new' => 'admin/pages#new', as: :new_admin_page
-      #   get 'pages/:page_id/children/:page_type/new' => 'admin/pages#new', as: :new_admin_page_child
-      #   #get 'pages/:id/edit(/:editor_locale)' => 'admin/pages#edit', as: :edit_admin_page
-      # end
-
       namespace :admin do
         scope controller: :sessions do
           get :login, action: :new
@@ -158,6 +152,9 @@ GtGraphics::Application.routes.draw do
       Routing::Page.draw(self)
 
       root to: 'homepages#show'
+
+      # Permalinks
+      get ':id' => 'page/permalinks#show', as: :page_permalink
 
       # Legacy URLs that have changed permanently (HTTP 301)
       get 'image/:slug', constraints: Routing::Legacy::ImageConstraint.new, to: redirect { |params, request|

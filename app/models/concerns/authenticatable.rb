@@ -1,6 +1,8 @@
 module Authenticatable
   extend ActiveSupport::Concern
 
+  GENERATED_PASSWORD_LENGTH = 10..12
+
   included do
     authenticates_with_sorcery!
 
@@ -25,7 +27,7 @@ module Authenticatable
     end
 
     def generate_password
-      PasswordGenerator.generate
+      RandomString.generate(GENERATED_PASSWORD_LENGTH)
     end
 
     private

@@ -18,7 +18,7 @@ class Message < ActiveRecord::Base
 
     validates :recipient_id, presence: true
 
-    after_destroy :destroy_message
+    after_destroy :destroy_message_if_unreferenced
 
     scope :read, -> { where(read: true) }
     scope :unread, -> { where(read: false) }
@@ -47,7 +47,7 @@ class Message < ActiveRecord::Base
     end
 
     private
-    def destroy_message
+    def destroy_message_if_unreferenced
       message.destroy if message.recipiences.empty?
     end
   end

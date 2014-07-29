@@ -3,8 +3,12 @@ class Admin::MessagePresenter < Admin::ApplicationPresenter
 
   self.action_buttons -= [:edit]
 
-  def contact_form
-    h.link_to super.page.title, [:admin, super.page]
+  def delegator
+    if message.is_a?(Message::Contact)
+      h.link_to contact_form.page.title, [:admin, contact_form.page]
+    else
+      h.link_to image.title, [:admin, image]
+    end
   end
 
   def sender
@@ -22,6 +26,25 @@ class Admin::MessagePresenter < Admin::ApplicationPresenter
   end
 
   def subject
-    super.presence || I18n.translate('helpers.prompts.no_subject')
+    if message.is_a?(Message::BuyRequest)
+      default_subject = I18n.translate('views.admin.messages.buy_request_subject', image: message.image)
+    else
+      default_subject = I18n.translate('helpers.prompts.no_subject')
+    end
+    super.presence || default_subject
+  end
+
+  # Paths
+
+  def abstract_message
+    message.becomes(Message)
+  end
+
+  def show_path
+    h.admin_message_path(abstract_message, locale: I18n.locale)
+  end
+
+  def edit_path
+    h.edit_admin_message_path(abstract_message, locale: I18n.locale)
   end
 end

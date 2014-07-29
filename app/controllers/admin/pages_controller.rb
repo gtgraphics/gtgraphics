@@ -80,13 +80,6 @@ class Admin::PagesController < Admin::ApplicationController
         p.template ||= p.template_class.default
       end
     end
-    if @page.errors.empty?
-      if @page.image? or @page.redirection?
-        @location = admin_page_path(@page)
-      else
-        @location = edit_admin_page_path(@page)
-      end
-    end
     flash_for @page
     respond_to do |format|
       format.js

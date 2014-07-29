@@ -5,7 +5,7 @@ class Admin::MessagesController < Admin::ApplicationController
 
   breadcrumbs do |b|
     b.append Message.model_name.human(count: 2), :admin_messages
-    b.append Message.model_name.human, [:admin, @message] if action_name == 'show'
+    b.append Message.model_name.human, [:admin, @message.becomes(Message)] if action_name == 'show'
   end
 
   def index

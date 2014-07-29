@@ -29,22 +29,26 @@ class Routing::Page
   def draw(routes)
     routes.instance_exec(self) do |router|
       scope constraints: Routing::PageConstraint.new(router.page_type) do
-        router.action_definitions.each do |action_name, options|
-          options = options.reverse_merge(controller: router.controller_name, action: action_name, via: :get)
-          if action_name == :show
-            match '*path(.:format)', options.reverse_merge(as: router.resource_name)
-          else
-            match "*path/#{action_name}(.:format)", options.reverse_merge(as: "#{action_name}_#{router.resource_name}")
+        router.action_definitions.each do |action_name, options_collection|
+          options_collection.each do |options|
+            options = options.reverse_merge(controller: router.controller_name, action: action_name, via: :get)
+            if action_name == :show
+              match '*path(.:format)', options.reverse_merge(as: router.resource_name)
+            else
+              match "*path/#{action_name}(.:format)", options.reverse_merge(as: "#{action_name}_#{router.resource_name}")
+            end
           end
         end
       end
       scope constraints: Routing::RootPageConstraint.new(router.page_type) do
-        router.action_definitions.each do |action_name, options|
-          options = options.reverse_merge(controller: router.controller_name, action: action_name, via: :get).merge(as: nil)
-          if action_name == :show
-            root options.reverse_merge(as: "#{router.resource_name}_root")
-          else
-            match "#{action_name}(.:format)", options.reverse_merge(as: "#{action_name}_#{router.resource_name}_root")
+        router.action_definitions.each do |action_name, options_collection|
+          options_collection.each do |option|
+            options = options.reverse_merge(controller: router.controller_name, action: action_name, via: :get).merge(as: nil)
+            if action_name == :show
+              root options.reverse_merge(as: "#{router.resource_name}_root")
+            else
+              match "#{action_name}(.:format)", options.reverse_merge(as: "#{action_name}_#{router.resource_name}_root")
+            end
           end
         end
       end
@@ -61,7 +65,8 @@ class Routing::Page
 
   protected
   def action(name, options = {})
-    action_definitions[name] = options.reverse_merge(ACTION_DEFAULTS)
+    action_definitions[name] ||= []
+    action_definitions[name] << options.reverse_merge(ACTION_DEFAULTS)
   end
 
   def declare

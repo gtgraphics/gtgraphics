@@ -9,24 +9,23 @@
 #  subject           :string(255)
 #  body              :text
 #  created_at        :datetime
-#  contact_form_id   :integer
+#  delegator_id      :integer
+#  type              :string(255)      not null
 #
 
 class Message < ActiveRecord::Base
   include Excludable
   include PersistenceContextTrackable
   
-  belongs_to :contact_form, class_name: 'Page::ContactForm'
-  has_many :recipiences, class_name: 'Message::Recipience', dependent: :destroy, inverse_of: :message
-  has_many :recipients, through: :recipiences, source: :recipient
+  # belongs_to :contact_form, class_name: 'Page::ContactForm'
+  has_many :recipiences, class_name: 'Message::Recipience', autosave: true, dependent: :destroy, inverse_of: :message
+  has_many :recipients, through: :recipiences
 
-  validates :contact_form_id, presence: true, on: :create
   validates :first_sender_name, presence: true
   validates :last_sender_name, presence: true
   validates :sender_email, presence: true, email: true
-  validates :body, presence: true
 
-  after_create :create_recipiences
+  before_create :build_recipiences
 
   def sender
     %{"#{sender_name}" <#{sender_email}>}
@@ -36,10 +35,8 @@ class Message < ActiveRecord::Base
     "#{first_sender_name} #{last_sender_name}".strip
   end
 
-  private
-  def create_recipiences
-    contact_form.recipients.each do |recipient|
-      recipiences.create(recipient: recipient)
-    end
+  protected
+  def build_recipiences
+    # overridden in subclasses
   end
 end

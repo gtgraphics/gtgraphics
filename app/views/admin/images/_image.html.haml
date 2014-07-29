@@ -5,7 +5,7 @@
         = check_box_tag 'image_ids[]', image.id, false, class: 'table-checkbox', id: nil, data: { behavior: 'tableCheckbox' }
     %td.thumbnail-cell
       = link_to [:admin, image] do
-        = image_tag attachment_url(image, :thumbnail), class: 'img-circle', alt: image.title, width: 45, height: 45
+        = image_tag attached_asset_path(image, :thumbnail), class: 'img-circle', alt: image.title, width: 45, height: 45
     %td
       = link_to image.title, [:admin, image]
       %br

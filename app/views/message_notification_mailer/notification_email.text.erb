@@ -1,5 +1,16 @@
+<% if @message.is_a? Message::BuyRequest %>
+<%= translate('mailers.message_notification_mailer.send_notification_email.buy_request_caption', name: @message.sender_name) %>
+
+<%= @message.image.title %>
+<%= admin_image_url(id: @message.image) %>
+
+---------------------------------------------------------
+
+<% end %>
+<% if @message.body.present? %>
 <%= @message.body %>
 
 ---------------------------------------------------------
+<% end %>
 
 <%= translate('mailers.message_notification_mailer.send_notification_email.signature') %>

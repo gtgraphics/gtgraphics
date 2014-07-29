@@ -27,6 +27,17 @@ namespace :gtg do
         import_gallery 'artworks', gallery_page
       end
 
+      desc 'Import photos from the remote GT Graphics gallery'
+      task :photos => :environment do
+        path = ENV.fetch('path') { 'work/photography' }
+        gallery_page = Page.find_by! path: path
+
+        %w(nature architecture people misc).each do |name|
+          subgallery_page = Page.find_by! path: "#{path}/#{name}"
+          import_gallery name, subgallery_page
+        end
+      end
+
       def import_gallery(name, gallery_page)
         puts "Importing Gallery: #{name.titleize}..."
 
@@ -77,6 +88,7 @@ namespace :gtg do
             Globalize.with_locale(locale) do
               image.title = document.css('.img-title').inner_text.squish
               image.description = document.css('.image-box-content p').first.inner_html.squish
+              image.tag gallery_page.title(locale)
             end
           end
 
@@ -97,8 +109,6 @@ namespace :gtg do
 
         # Page
         create_page(documents, gallery_page, image)
-
-        image
       end
 
       def create_page(documents, gallery_page, image)
@@ -113,6 +123,14 @@ namespace :gtg do
         page = gallery_page.children.images.new
         page.build_embeddable(image: image, template: "Template::Image".constantize.default)
         page.hits_count = hits_count
+
+        # Set Meta Description
+        I18n.available_locales.each do |locale|
+          Globalize.with_locale(locale) do
+            page.meta_description = image.description # TODO Strip Tags
+          end
+        end
+
         page.save!
         page
       end

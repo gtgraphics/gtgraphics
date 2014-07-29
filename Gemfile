@@ -76,7 +76,6 @@ gem 'request_store'
 gem 'nokogiri'
 gem 'exception_notification', group: [:staging, :production]
 gem 'pry-rails'
-gem 'rake-benchmark', require: false
 
 # Image Processing
 gem 'exifr'

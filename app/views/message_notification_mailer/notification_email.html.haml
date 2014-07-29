@@ -1,5 +1,17 @@
-= simple_format @message.body
+- if @message.is_a? Message::BuyRequest
 
-%hr
+  = translate('mailers.message_notification_mailer.send_notification_email.buy_request_caption_html', name: mail_to(@message.sender_email, @message.sender_name))
 
-= translate('mailers.message_notification_mailer.send_notification_email.signature')
+  %blockquote
+    = link_to image_tag(attached_asset_url(@message.image, :thumbnail), class: 'img-circle', width: 45, height: 45, alt: @message.image.title), admin_image_url(id: @message.image)
+    %br
+    = link_to @message.image.title, admin_image_url(id: @message.image)
+
+  %hr
+
+- if @message.body.present?
+  = simple_format @message.body
+  %hr
+
+%small
+  = translate('mailers.message_notification_mailer.send_notification_email.signature')

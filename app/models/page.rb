@@ -19,6 +19,7 @@
 #  children_count  :integer          default(0), not null
 #  published       :boolean          default(TRUE), not null
 #  hits_count      :integer          default(0), not null
+#  permalink       :string(6)        not null
 #
 
 class Page < ActiveRecord::Base

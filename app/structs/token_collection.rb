@@ -23,6 +23,14 @@ class TokenCollection
     @tokens = @tokens.to_set if @options[:unique]
   end
 
+  def +(other)
+    new(@tokens + other.to_a, @options)
+  end
+
+  def -(other)
+    new(@tokens - other.to_a, @options)
+  end
+
   def inspect
     "#<#{self.class.name} tokens: #{tokens.inspect}, options: #{options.inspect}>"
   end

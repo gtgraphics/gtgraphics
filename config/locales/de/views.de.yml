@@ -58,6 +58,7 @@ de:
         mark_read: Als gelesen markieren
         mark_unread: Als ungelesen markieren
         sender_html: '%{sender} (via %{contact_form})'
+        buy_request_subject: "Kaufanfrage: %{image}"
       pages:
         hits_since: '%{count} Aufrufe seit %{date}'
         empty_type: Bitte wählen Sie einen Seitentyp.

@@ -28,6 +28,10 @@ module Taggable
   end
 
   def tag(*labels)
+    self.tag_tokens += labels
+  end
+
+  def tag!(*labels)
     transaction do
       labels.flatten.uniq.each do |label|
         tag = Tag.find_or_create_by(label: label)
@@ -39,9 +43,9 @@ module Taggable
   def tagged?(*labels)
     labels.flatten.all? { |label| label.to_s.in?(tag_tokens.to_a) }
   end
-  alias_method :tagged_all?, :tagged?
+  alias_method :all_tagged?, :tagged?
 
-  def tagged_any?(*labels)
+  def any_tagged?(*labels)
     labels.flatten.any? { |label| label.to_s.in?(tag_tokens.to_a) }
   end
 
@@ -62,6 +66,10 @@ module Taggable
   end
 
   def untag(*labels)
+    self.tag_tokens -= labels
+  end
+
+  def untag!(*labels)
     self.taggings.joins(:tag).where(tags: { label: labels.to_a.flatten.uniq }).readonly(false).destroy_all
   end
 

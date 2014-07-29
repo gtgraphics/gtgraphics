@@ -2,7 +2,10 @@ class Page < ActiveRecord::Base
   module UrlAccessible
     extend ActiveSupport::Concern
 
-    RESERVED_SLUGS = %w(system public assets files static)
+    RESERVED_SLUGS = %w(system public assets files static).freeze
+
+    PERMALINK_CHARS = [('A'..'Z'), ('a'..'z'), ('0'..'9')].freeze
+    PERMALINK_LENGTH = 6
 
     included do
       include Sluggable
@@ -11,9 +14,17 @@ class Page < ActiveRecord::Base
 
       validates :slug, presence: { unless: :root? }, exclusion: { in: RESERVED_SLUGS }, uniqueness: { scope: :parent, if: :slug_changed? }
       validates :path, presence: { unless: :root? }, uniqueness: { if: :path_changed? }
+      validates :permalink, presence: true, length: { is: PERMALINK_LENGTH, allow_blank: true }, strict: true
    
       before_validation :set_path, if: :generate_path?
+      before_validation :set_permalink, unless: :permalink?, on: :create
       around_save :update_descendants_paths
+    end
+
+    module ClassMethods
+      def generate_permalink
+        RandomString.generate(PERMALINK_LENGTH, chars: PERMALINK_CHARS)
+      end
     end
 
     def set_next_available_slug(slug = self.generate_slug)
@@ -53,6 +64,10 @@ class Page < ActiveRecord::Base
 
     def set_path
       self.path = generate_path
+    end
+
+    def set_permalink
+      self.permalink = self.class.generate_permalink
     end
 
     def update_descendants_paths
