@@ -1,4 +1,4 @@
-class AddTypeAndMetaDataToMessages < ActiveRecord::Migration
+class AddTypeAndDelegatorIdToMessages < ActiveRecord::Migration
   def up
     rename_column :messages, :contact_form_id, :delegator_id
     add_column :messages, :type, :string
