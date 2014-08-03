@@ -36,7 +36,7 @@
 
       .navbar-collapse.collapse
         %ul.nav.navbar-nav
-          - @menu_items.each do |page|
+          - menu_items.each do |page|
             = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page)
 
         %ul.nav.navbar-nav.navbar-right

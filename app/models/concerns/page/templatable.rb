@@ -24,10 +24,6 @@ class Page < ActiveRecord::Base
       embeddable.class.template_class if support_templates?
     end
 
-    def template_path
-      template.view_path
-    end
-
     def template
       check_template_support!
       embeddable.try(:template)

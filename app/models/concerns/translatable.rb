@@ -8,7 +8,7 @@ module Translatable
     end
 
     def with_translations_for_current_locale
-      includes(:translations).with_locales(Globalize.fallbacks).references(:translations)
+      includes(:translations).where(translation_class.table_name => { locale: [*Globalize.fallbacks, nil] })
     end
   end
 end

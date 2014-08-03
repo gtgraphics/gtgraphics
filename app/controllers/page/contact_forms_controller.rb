@@ -1,6 +1,4 @@
-class ContactFormsController < PagesController 
-  embeds :contact_form
-
+class Page::ContactFormsController < Page::ApplicationController
   def show
     @message = contact_form.messages.new
     @message.recipients = @contact_form.recipients

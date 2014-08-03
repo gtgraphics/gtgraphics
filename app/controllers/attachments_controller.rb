@@ -2,11 +2,11 @@ class AttachmentsController < ApplicationController
   skip_before_action :set_locale
 
   def show
-    send_attachment(:inline)
+    send_attachment :inline
   end
 
   def download
-    send_attachment(:attachment)
+    send_attachment :attachment
   end
 
   private

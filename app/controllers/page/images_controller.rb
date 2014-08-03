@@ -1,15 +1,12 @@
-class ImagesController < PagesController
-  embeds :image_page
-
+class Page::ImagesController < Page::ApplicationController
   before_action :load_image
-  attr_reader :image
-  helper_method :image
+  before_action :load_image_styles, only: :show
 
   breadcrumbs do |b|
     b.append 'Buy', '#' if action_name.in? %w(buy contact)
   end
 
-  def show
+  def default
     respond_to do |format|
       format.html { render_page }
       format.send(@image.format) do
@@ -23,7 +20,7 @@ class ImagesController < PagesController
   
   def download
     if style_id = params[:style_id]
-      @image_style = @image.styles.find_by(position: style_id)
+      @image_style = @image.styles.find_by!(position: style_id)
       image = @image_style
     else
       image = @image
@@ -66,7 +63,11 @@ class ImagesController < PagesController
 
   private
   def load_image
-    @image = image_page.image
+    @image = @page.embeddable.image
+  end
+
+  def load_image_styles
+    @image_styles = @image.styles.with_translations_for_current_locale
   end
 
   def message_params

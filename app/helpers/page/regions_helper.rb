@@ -1,4 +1,4 @@
-module RegionsHelper
+module Page::RegionsHelper
   def render_region(label)
     raise Template::NotSupported.new(@page) unless @page.support_templates?
     region_definition = @region_definitions.find { |definition| definition.label == label.to_s }

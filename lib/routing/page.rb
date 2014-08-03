@@ -8,10 +8,10 @@ class Routing::Page
     declare
   end
 
-  def self.draw(routes)
+  def self.insert(mapper)
     ::Page::EMBEDDABLE_TYPES.each do |embeddable_type|
       begin
-        "Routing::#{embeddable_type}".constantize.new(embeddable_type).draw(routes)
+        "Routing::#{embeddable_type}".constantize.new(embeddable_type).insert(mapper)
       rescue NameError
         Rails.logger.warn "Routing::#{embeddable_type} could not be found. Please create a routing declaration for the resource."
       end
@@ -26,9 +26,9 @@ class Routing::Page
     @action_definitions ||= {}
   end
 
-  def draw(routes)
-    routes.instance_exec(self) do |router|
-      scope constraints: Routing::PageConstraint.new(router.page_type) do
+  def insert(mapper)
+    mapper.instance_exec(self) do |router|
+      constraints Routing::PageConstraint.new(router.page_type) do
         router.action_definitions.each do |action_name, options_collection|
           options_collection.each do |options|
             options = options.reverse_merge(controller: router.controller_name, action: action_name, via: :get)
@@ -40,7 +40,7 @@ class Routing::Page
           end
         end
       end
-      scope constraints: Routing::RootPageConstraint.new(router.page_type) do
+      constraints Routing::RootPageConstraint.new(router.page_type) do
         router.action_definitions.each do |action_name, options_collection|
           options_collection.each do |option|
             options = options.reverse_merge(controller: router.controller_name, action: action_name, via: :get).merge(as: nil)
@@ -64,12 +64,25 @@ class Routing::Page
   end
 
   protected
-  def action(name, options = {})
-    action_definitions[name] ||= []
-    action_definitions[name] << options.reverse_merge(ACTION_DEFAULTS)
+  def root(options = {})
+    match :show, options.reverse_merge(via: :get)
+  end
+  
+  %w(get post put patch delete).each do |verb|
+    class_eval <<-RUBY
+      def #{verb}(action_name, options = {})
+        options = options.merge(via: :#{verb})
+        match(action_name, options)
+      end
+    RUBY
+  end
+
+  def match(action_name, options = {})
+    action_definitions[action_name] ||= []
+    action_definitions[action_name] << options
   end
 
   def declare
-    raise NotImplemented, "#{self.class.name}#declare must be overridden in subclasses"
+    root
   end
 end

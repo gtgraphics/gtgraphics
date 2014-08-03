@@ -128,7 +128,6 @@ GtGraphics::Application.routes.draw do
               collection do
                 get 'types/:template_type', action: :index, as: :typed
                 delete :destroy_multiple
-                get :translation_fields
                 get :files_fields
               end
               member do
@@ -149,8 +148,7 @@ GtGraphics::Application.routes.draw do
         end
       end
 
-      Routing::Page.draw(self)
-
+      Routing::Cms::PageRouter.insert(self)
       root to: 'homepages#show'
 
       # Permalinks
@@ -171,7 +169,7 @@ GtGraphics::Application.routes.draw do
       }
 
       # This route is a workaround for Error Pages by throwing a routing error that can be caught by a controller
-      get '*path' => 'errors#unmatched_route'
+      get '(*path)' => 'errors#unmatched_route'
     end
   end
 end

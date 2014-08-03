@@ -1,6 +1,6 @@
-class RedirectionsController < PagesController
-  embeds :redirection
-
+class Page::RedirectionsController < Page::ApplicationController
+  before_action :load_redirection
+  
   def show
     if @redirection.external?
       destination_uri = URI.parse(@redirection.destination_url)
@@ -18,5 +18,10 @@ class RedirectionsController < PagesController
         redirect_to destination_url, status: status
       end
     end
+  end
+
+  private
+  def load_redirection
+    @redirection = @page.embeddable
   end
 end

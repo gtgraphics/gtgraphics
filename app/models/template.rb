@@ -47,7 +47,8 @@ class Template < ActiveRecord::Base
 
     def template_files(full_paths = false)
       raise 'method can only be called on subclasses of Template' if self.name == 'Template'
-      Dir[File.join([VIEW_ROOT, template_lookup_path, '*'].compact)].map do |template_file|
+      lookup_path = File.join([VIEW_ROOT, template_lookup_path, '*'].compact)
+      Dir.glob(lookup_path).map do |template_file|
         if full_paths
           template_file
         else
@@ -65,13 +66,10 @@ class Template < ActiveRecord::Base
     end
   end
 
+  alias_attribute :filename, :file_name
+
   def to_param
     "#{id}-#{name.parameterize}"
-  end
-
-  def view_path
-    raise 'no template file defined' if file_name.blank?
-    File.join(self.class.template_lookup_path, file_name)
   end
 
   private
