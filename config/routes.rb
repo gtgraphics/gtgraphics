@@ -151,9 +151,6 @@ GtGraphics::Application.routes.draw do
       Routing::Cms::PageRouter.insert(self)
       root to: 'page/homepages#show'
 
-      # Permalinks
-      get ':id' => 'page/permalinks#show', as: :page_permalink, id: /[A-Z0-9]{6}/i
-
       # Legacy URLs that have changed permanently (HTTP 301)
       get 'image/:slug', constraints: Routing::Legacy::ImageConstraint.new, to: redirect { |params, request|
         page = Page.images.find_by!(slug: params[:slug])
@@ -167,6 +164,9 @@ GtGraphics::Application.routes.draw do
         url << "?page=#{page_index}" if page_index > 1
         url
       }
+
+      # Permalinks
+      get ':id' => 'page/permalinks#show', as: :page_permalink, id: /[A-Z0-9]{6}/i
 
       # This route is a workaround for Error Pages by throwing a routing error that can be caught by a controller
       unless Rails.application.config.consider_all_requests_local
