@@ -16,7 +16,7 @@ class Page::ApplicationController < ApplicationController
       b.append page.title, page
     end
   end
-
+ 
   def show
     if self.respond_to?(@template.filename)
       self.send(@template.filename)

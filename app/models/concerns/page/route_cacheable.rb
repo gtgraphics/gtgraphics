@@ -3,7 +3,7 @@ class Page < ActiveRecord::Base
     extend ActiveSupport::Concern
     
     included do
-      after_save :reset_route_cache, if: :path_changed?
+      before_save :reset_route_cache, if: :path_changed?
       after_destroy :reset_route_cache
     end
 
