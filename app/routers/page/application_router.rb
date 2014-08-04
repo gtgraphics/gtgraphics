@@ -19,7 +19,7 @@ class Page::ApplicationRouter
             if action_name == :show
               match '(*path)(.:format)', options.reverse_merge(as: router.resource_name)
             else
-              match "(*path/)#{action_name}(.:format)", options.reverse_merge(as: "#{action_name}_#{router.resource_name}")
+              match "(*path)/#{action_name}(.:format)", options.reverse_merge(as: "#{action_name}_#{router.resource_name}")
             end
           end
         end

@@ -41,7 +41,7 @@ class Admin::PagesController < Admin::ApplicationController
         else
           @pages = Page.search(params[:query])
         end
-        @pages = @pages.with_translations_for_current_locale.uniq.page(params[:page])
+        @pages = @pages.with_translations_for_current_locale.page(params[:page])
         if assignable_id = params[:parent_assignable_id] and assignable_id.present?
           @pages = @pages.assignable_as_parent_of(assignable_id)
         end

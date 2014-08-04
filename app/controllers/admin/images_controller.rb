@@ -30,7 +30,7 @@ class Admin::ImagesController < Admin::ApplicationController
       @images = @images.where(author_id: params[:author_id])
     end
   
-    @images = @images.with_translations_for_current_locale.uniq \
+    @images = @images.with_translations_for_current_locale \
                      .includes(:author) \
                      .sort(params[:sort], params[:direction])
                      .page(params[:page]).per(25)

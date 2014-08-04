@@ -1,0 +1,83 @@
+@import url("//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css");
+
+.append-icon {
+  .caption + i.fa {
+    margin-left: 4px;
+  }
+}
+
+.append-flag-icon {
+  .caption + i.flag {
+    margin-left: 4px;
+  }
+}
+
+.prepend-icon {
+  i.fa + .caption {
+    margin-left: 4px;
+  }
+}
+
+.prepend-flag-icon {
+  i.flag + .caption {
+    margin-left: 4px;
+  }
+}
+
+.append-icon, .prepend-icon, .prepend-flag-icon, .append-flag-icon {
+  .caption {
+    vertical-align: bottom;
+  }
+}
+
+.btn-xs {
+  .append-icon {
+    .caption + i.fa {
+      margin-left: 3px;
+    }
+  }
+
+  .append-flag-icon {
+    .caption + i.flag {
+      margin-left: 3px;
+    }
+  }
+
+  .prepend-icon {
+    i.fa + .caption {
+      margin-left: 3px;
+    }
+  }
+
+  .prepend-flag-icon {
+    i.flag + .caption {
+      margin-left: 3px;
+    }
+  }
+}
+
+.btn-lg {
+  .append-icon {
+    .caption + i.fa {
+      margin-left: 6px;
+    }
+  }
+
+  .append-flag-icon {
+    .caption + i.flag {
+      margin-left: 6px;
+    }
+  }
+
+  .prepend-icon {
+    i.fa + .caption {
+      margin-left: 6px;
+    }
+  }
+
+  .prepend-flag-icon {
+    i.flag + .caption {
+      margin-left: 6px;
+    }
+  }
+}

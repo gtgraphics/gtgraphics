@@ -1,11 +1,23 @@
 .page-header
-  %h1= page.title
+  .pull-right
+    = form_tag search_page_path(@page.path), class: 'form-inline' do
+      = text_field_tag :query, @query, class: 'form-control', placeholder: translate('helpers.prompts.search')
+      = button_tag prepend_icon(:search, translate('helpers.links.search')), class: 'btn btn-default'
+      = button_link_to prepend_icon(:times, translate('helpers.links.reset')), @page
+  %h1
+    = page.title
 
-- @child_pages.each_slice(4) do |child_pages|
-  .row
-    - child_pages.each do |child_page|
-      .col-lg-3
-        = link_to child_page, class: 'thumbnail' do
-          = image_tag attached_asset_path(child_page.embeddable.image, :thumbnail), class: 'img-responsive'
-          .caption
-            %h3= child_page.title
+- if @image_pages.any?
+  - @image_pages.each_slice(4) do |image_pages|
+    .row
+      - image_pages.each do |image_page|
+        .col-lg-3
+          = link_to image_page, class: 'thumbnail' do
+            = image_tag attached_asset_path(image_page.embeddable.image, :thumbnail), class: 'img-responsive'
+            .caption
+              %h3= image_page.title
+
+- else
+  .well.text-center
+    %h4
+      = translate 'views.hints.not_found', model: Image.model_name.human(count: 2)
