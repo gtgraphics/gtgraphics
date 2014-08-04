@@ -4,28 +4,28 @@ module ErrorHandlingController
   included do
     unless Rails.application.config.consider_all_requests_local
       rescue_from ActionController::InvalidAuthenticityToken do
-        render_error :bad_request
+        respond_with_error :bad_request
       end
 
-      rescue_from ActiveRecord::RecordNotFound do
-        render_error :not_found
+      rescue_from ActiveRecord::RecordNotFound, ActionController::RoutingError do
+        respond_with_error :not_found
       end
       
       rescue_from ActionController::UnknownFormat do
-        render_error :not_found
+        respond_with_error :not_found
       end
       
       rescue_from CanCan::AccessDenied do |exception|
         @error_message = exception.message
         @attempted_action = exception.action
         @subject = exception.subject
-        render_error :unauthorized
+        respond_with_error :unauthorized
       end
     end
   end
 
   protected
-  def render_error(status)
+  def respond_with_error(status)
     respond_to do |format|
       format.html { render "errors/#{status}", layout: 'errors', status: status }
       format.all { head status }
