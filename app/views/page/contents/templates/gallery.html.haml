@@ -13,7 +13,7 @@
       - image_pages.each do |image_page|
         .col-lg-3
           = link_to image_page, class: 'thumbnail' do
-            = image_tag attached_asset_path(image_page.embeddable.image, :thumbnail), class: 'img-responsive'
+            = image_tag attached_asset_path(image_page.embeddable.image, :thumbnail), class: 'img-responsive', title: image_page.title
             .caption
               %h3= image_page.title
 

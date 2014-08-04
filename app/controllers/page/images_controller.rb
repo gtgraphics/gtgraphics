@@ -3,7 +3,7 @@ class Page::ImagesController < Page::ApplicationController
   before_action :load_image_styles, only: :show
 
   breadcrumbs do |b|
-    b.append 'Buy', '#' if action_name.in? %w(buy contact)
+    b.append 'Buy', '#' if action_name.in? %w(buy request_purchase)
   end
 
   def default
@@ -48,8 +48,7 @@ class Page::ImagesController < Page::ApplicationController
     @message = Message::BuyRequest.new(message_params)
     @message.image = @image
     if @message.save
-      notifier_job = MessageNotificationJob.new(@message.id)
-      Delayed::Job.enqueue(notifier_job, queue: 'mailings')
+      @message.notify!
       flash_for @message
       respond_to do |format|
         format.html { redirect_to @page }
