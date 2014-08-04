@@ -35,6 +35,12 @@ class Message < ActiveRecord::Base
     "#{first_sender_name} #{last_sender_name}".strip
   end
 
+  def notify!
+    raise "Message#notify! requires the message to be persisted" unless persisted?
+    notifier_job = MessageNotificationJob.new(self.id)
+    Delayed::Job.enqueue(notifier_job, queue: 'mailings')
+  end
+
   protected
   def build_recipiences
     # overridden in subclasses

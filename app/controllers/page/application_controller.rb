@@ -47,7 +47,7 @@ class Page::ApplicationController < ApplicationController
 
   private
   def load_page
-    @page = Page.accessible_by(current_ability).find_by!(path: params[:path])
+    @page = Page.accessible_by(current_ability).find_by!(path: params[:path] || '')
   end
 
   def load_template

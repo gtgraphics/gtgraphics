@@ -15,10 +15,6 @@ module ErrorHandlingController
         render_error :not_found
       end
       
-      rescue_from ActionController::RoutingError do
-        render_error :not_found
-      end
-      
       rescue_from CanCan::AccessDenied do |exception|
         @error_message = exception.message
         @attempted_action = exception.action

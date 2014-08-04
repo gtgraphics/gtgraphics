@@ -1,14 +1,10 @@
 class Routing::Cms::PageConstraint
-  def initialize(type)
-    @type = type
+  def initialize(page_type)
+    @page_type = page_type
   end
   
   def matches?(request)
     path = request.params[:path] || ''
-    if @type
-      Page.exists?(path: path, embeddable_type: @type)
-    else
-      Page.exists?(path: path)
-    end
+    Routing::Cms::RouteCache.matches?(@page_type, path)
   end
 end

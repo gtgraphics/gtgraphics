@@ -149,10 +149,10 @@ GtGraphics::Application.routes.draw do
       end
 
       Routing::Cms::PageRouter.insert(self)
-      root to: 'homepages#show'
+      root to: 'page/homepages#show'
 
       # Permalinks
-      get ':id' => 'page/permalinks#show', as: :page_permalink
+      get ':id' => 'page/permalinks#show', as: :page_permalink, id: /[A-Z0-9]{6}/i
 
       # Legacy URLs that have changed permanently (HTTP 301)
       get 'image/:slug', constraints: Routing::Legacy::ImageConstraint.new, to: redirect { |params, request|
@@ -169,7 +169,9 @@ GtGraphics::Application.routes.draw do
       }
 
       # This route is a workaround for Error Pages by throwing a routing error that can be caught by a controller
-      get '(*path)' => 'errors#unmatched_route'
+      unless Rails.application.config.consider_all_requests_local
+        match '(*path)' => 'errors#unmatched_route', via: %i(get post patch put delete)
+      end
     end
   end
 end
