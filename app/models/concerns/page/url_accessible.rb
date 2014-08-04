@@ -40,7 +40,7 @@ class Page < ActiveRecord::Base
       if include_descendants
         transaction { self_and_descendants.each(&:refresh_path!) }
       else
-        update_column(:path, generate_path)
+        update_attribute(:path, generate_path)
       end
     end
 

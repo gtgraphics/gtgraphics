@@ -7,7 +7,7 @@ class Page::ApplicationController < ApplicationController
   before_action :increment_hits
 
   attr_reader :page
-  protected :page
+  protected :page 
   helper_method :page, :template_file
 
   breadcrumbs do |b|
