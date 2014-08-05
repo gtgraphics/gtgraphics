@@ -15,27 +15,8 @@ module FacebookHelper
     end
   end
 
-  def include_facebook_javascript_sdk
-    if I18n.locale == :de
-      locale = 'de_DE'
-    else
-      locale = 'en_US'
-    end
-    capture do
-      concat content_tag(:div, nil, id: 'fb-root')
-      js = javascript_tag <<-JAVASCRIPT.strip_heredoc
-        jQuery(document).ready(function() {
-          (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = "//connect.facebook.net/#{locale}/sdk.js#xfbml=1&appId=#{facebook_app_id}&version=v2.0";
-            fjs.parentNode.insertBefore(js, fjs);
-          }(document, 'script', 'facebook-jssdk'));
-        });
-      JAVASCRIPT
-      concat js
-    end
+  def facebook_sdk_anchor
+    content_tag :div, nil, id: 'fb-root'
   end
 
   def facebook_comments(url, options = {})
