@@ -32,6 +32,11 @@
           .fields
             = link_to page.permalink, page.permalink       
 
+        %fieldset
+          %legend Comments
+          .fields
+            = page.embeddable.facebook_comments
+
       .col-sm-4
         %h4 Buy
         %p
