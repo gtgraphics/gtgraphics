@@ -2,10 +2,10 @@
 #
 # Table name: image_pages
 #
-#  id                    :integer          not null, primary key
-#  template_id           :integer
-#  image_id              :integer
-#  facebook_comments_uri :string(255)
+#  id           :integer          not null, primary key
+#  template_id  :integer
+#  image_id     :integer
+#  facebook_uri :string(255)
 #
 
 class Page < ActiveRecord::Base

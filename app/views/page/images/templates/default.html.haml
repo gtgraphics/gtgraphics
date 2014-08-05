@@ -28,16 +28,18 @@
               %span.text-muted= image.taken_at
 
         %fieldset
-          %legend Share
-          .fields
-            = link_to page.permalink, page.permalink       
-
-        %fieldset
           %legend Comments
           .fields
             = page.embeddable.facebook_comments
 
       .col-sm-4
+        %fieldset
+          %legend Share
+          .fields
+            %ul
+              %li= page.embeddable.facebook_like_button style: :button_count
+              %li= link_to page.permalink, page.permalink
+
         %h4 Buy
         %p
           = link_to 'Contact to buy', buy_image_path(page.path)

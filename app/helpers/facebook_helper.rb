@@ -20,13 +20,26 @@ module FacebookHelper
   end
 
   def facebook_comments(url, options = {})
-    options = options.reverse_merge(count: 5, colorscheme: :light, width: '100%', order_by: :reverse_time)
+    options = options.reverse_merge(width: '100%', count: 5, colorscheme: :light, order_by: :reverse_time)
     content_tag :div, nil, class: 'fb-comments', data: {
       href: url,
+      width: options[:width],
       numposts: options[:count],
       colorscheme: options[:colorscheme],
-      order_by: options[:order_by],
-      width: options[:width]
+      order_by: options[:order_by]
+    }
+  end
+
+  def facebook_like_button(url, options = {})
+    options = options.reverse_merge(width: '100%', style: :standard, label: :like, 
+                                    show_faces: true, share_button: false)
+    content_tag :div, nil, class: 'fb-like', data: {
+      href: url,
+      width: options[:width],
+      layout: options[:style],
+      action: options[:label],
+      show_faces: options[:show_faces],
+      share: options[:share_button]
     }
   end
 end

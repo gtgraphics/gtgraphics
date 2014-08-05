@@ -3,8 +3,15 @@ class Page::ImagePresenter < ApplicationPresenter
 
   delegate :page, to: :image_page
 
+  def facebook_uri
+    super.presence || h.page_permalink_url(page.permalink)
+  end
+
+  def facebook_like_button(options = {})
+    h.facebook_like_button(self.facebook_uri, options)
+  end
+
   def facebook_comments(options = {})
-    uri = facebook_comments_uri.presence || h.page_permalink_url(page.permalink)
-    h.facebook_comments(uri, options)
+    h.facebook_comments(self.facebook_uri, options)
   end
 end
