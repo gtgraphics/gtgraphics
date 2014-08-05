@@ -37,11 +37,13 @@ module FacebookHelper
   end
 
   def facebook_comments(url, options = {})
-    count = options.fetch(:count) { 5 }
-    colorscheme = options.fetch(:colorscheme) { :light }
-    width = options.fetch(:width) { '100%' }
+    options = options.reverse_merge(count: 5, colorscheme: :light, width: '100%', order_by: :reverse_time)
     content_tag :div, nil, class: 'fb-comments', data: {
-      href: url, numposts: count, colorscheme: colorscheme, width: width
+      href: url,
+      numposts: options[:count],
+      colorscheme: options[:colorscheme],
+      order_by: options[:order_by],
+      width: options[:width]
     }
   end
 end
