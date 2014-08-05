@@ -23,8 +23,6 @@
     %link{rel: 'alternate', hreflang: translated_locale, href: page_url(@page, locale: translated_locale)}
     
 - content_for :content do
-  = include_facebook_javascript_sdk
-
   %nav.navbar.navbar-default.navbar-fixed-top.navbar-inverse{role: 'navigation'}
     .container
 
@@ -62,5 +60,7 @@
         = yield
 
   = render 'footer'
+
+  = include_facebook_javascript_sdk
 
 = render template: 'layouts/application'
