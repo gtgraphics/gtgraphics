@@ -24,13 +24,15 @@ module FacebookHelper
     capture do
       concat content_tag(:div, nil, id: 'fb-root')
       js = javascript_tag <<-JAVASCRIPT.strip_heredoc
-        (function(d, s, id) {
-          var js, fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) return;
-          js = d.createElement(s); js.id = id;
-          js.src = "//connect.facebook.net/#{locale}/sdk.js#xfbml=1&appId=#{facebook_app_id}&version=v2.0";
-          fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
+        jQuery(document).ready(function() {
+          (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/#{locale}/sdk.js#xfbml=1&appId=#{facebook_app_id}&version=v2.0";
+            fjs.parentNode.insertBefore(js, fjs);
+          }(document, 'script', 'facebook-jssdk'));
+        });
       JAVASCRIPT
       concat js
     end
