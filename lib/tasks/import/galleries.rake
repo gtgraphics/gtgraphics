@@ -46,20 +46,20 @@ namespace :gtg do
         gallery_urls.each do |gallery_url|
           gallery_doc = Nokogiri::HTML(open(gallery_url))
           gallery_doc.css('.content-top-pic').each do |element|
-            image_page_url = element.css('a').attr('href')
+            image_page_url = element.css('a').first[:href]
             image = import_image(image_page_url, gallery_page)
             image.tag!(additional_tags)
           end
         end
       end
 
-      def import_image(image_url, gallery_page, additional_tags = [])
+      def import_image(image_page_url, gallery_page, additional_tags = [])
         # The image we want to create
         image = Image.new
 
         # Get documents in all available locales
         documents = I18n.available_locales.inject({}) do |document_hash, locale|
-          document_hash.merge! locale => Nokogiri::HTML(open("#{image_url}?setlang=#{locale}"))
+          document_hash.merge! locale => Nokogiri::HTML(open("#{image_page_url}?setlang=#{locale}"))
         end
 
         Image.transaction do
@@ -109,12 +109,12 @@ namespace :gtg do
         end
 
         # Page
-        create_page(documents, gallery_page, image)
+        create_page(documents, gallery_page, image_page_url, image)
 
         image
       end
 
-      def create_page(documents, gallery_page, image)
+      def create_page(documents, gallery_page, image_page_url, image)
         document = documents.fetch(I18n.default_locale)
         hits_text = document.css('.image-box-content .grid_3 .zoom-ct').inner_text.squish
         if hits_text =~ /\AViews\: (.*)\z/
@@ -134,11 +134,28 @@ namespace :gtg do
             page.meta_description = HTML::FullSanitizer.new.sanitize(image.description)
           end
         end
-        
+       
         page.set_next_available_slug
+
+        # Metadata
+        page.metadata[:facebook_uri] = image_page_url
+        extract_print_url(page, :deviantart_url, document, 'da')
+        extract_print_url(page, :fineartprint_url, document, 'fineart')
+        extract_print_url(page, :mygall_url, document, 'mygall')
+        extract_print_url(page, :redbubble_url, document, 'redbubble')
+        extract_print_url(page, :artflakes_url, document, 'artflakes')
+
         page.save!
 
         page
+      end
+
+      def extract_print_url(page, key, document, selector)
+        element = document.css(".print-#{selector}").first
+        if element
+          url = element['href']
+          page.metadata[key] = url if url.present?
+        end
       end
 
       def remote_gallery_urls(name)

@@ -20,6 +20,7 @@
 #  published       :boolean          default(TRUE), not null
 #  hits_count      :integer          default(0), not null
 #  permalink       :string(6)        not null
+#  metadata        :text
 #
 
 class Page < ActiveRecord::Base
@@ -56,6 +57,8 @@ class Page < ActiveRecord::Base
   scope :primary, -> { where(depth: 1) }
 
   delegate :name, to: :author, prefix: true, allow_nil: true
+
+  store :metadata
 
   def self.search(query)
     if query.present?
