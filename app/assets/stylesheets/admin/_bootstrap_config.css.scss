@@ -205,7 +205,7 @@ $legend-color:                   $gray-dark;
 $legend-border-color:            #e5e5e5;
 
 //** Background color for textual input addons
-$input-group-addon-bg:           $gray-lighter;
+$input-group-addon-bg:           $input-bg; // $gray-lighter;
 //** Border color for textual input addons
 $input-group-addon-border-color: $input-border;
 

@@ -1,0 +1,6 @@
+- content_for :modal_size, :lg
+
+- content_for :title, translate('breadcrumbs.edit_metadata', model: @page.embeddable_class.model_name.human)
+
+- content_for :content do
+  = render 'edit_metadata_form'

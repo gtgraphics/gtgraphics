@@ -1,6 +1,4 @@
 class Admin::Page::RegionsController < Admin::Page::ApplicationController
-  layout 'admin/page/regions'
-  
   before_action do
     @page.check_template_support!
   end
@@ -27,13 +25,15 @@ class Admin::Page::RegionsController < Admin::Page::ApplicationController
         if region_definition
           redirect_to edit_admin_page_region_path(@page, region_definition.label)
         else
-          redirect_to request.referer || edit_admin_page_path(@page), alert: I18n.translate('views.hints.empty', model: ::Template::RegionDefinition.model_name.human(count: 2))
+          redirect_to request.referer || edit_admin_page_path(@page),
+                      alert: I18n.translate('views.hints.empty', model: ::Template::RegionDefinition.model_name.human(count: 2))
         end
       end
     end
   end
 
   def edit
+    @templates = @page.available_templates.joins(:region_definitions).uniq
     respond_with :admin, @page, @region
   end
 

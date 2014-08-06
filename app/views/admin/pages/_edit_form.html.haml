@@ -1,29 +1,42 @@
-= simple_form_for [:admin, @page], html: { class: 'form-horizontal' } do |form|
+= simple_form_for [:admin, @page], remote: true, html: { class: 'form-horizontal' } do |form|
 
-  %fieldset
-    %legend Einstellungen
-    .fields
+  .modal-body
+
+    %fieldset
       = form.input :title, autofocus: true
-      = form.input :parent_id, input_html: { class: 'resource-combobox', data: { resource: 'pages', from: admin_pages_path(parent_assignable_id: @page.persisted? ? @page.id : nil, format: :json), formatter: 'PageComboboxFormatter', include_blank: false } }
+
       - unless @page.root?
-        = form.input :slug, required: true, input_html: { class: 'monospace', autocomplete: 'off' }
+        = form.input :parent_id, input_html: { class: 'resource-combobox', data: { resource: 'pages', from: admin_pages_path(parent_assignable_id: @page.persisted? ? @page.id : nil, format: :json), formatter: 'PageComboboxFormatter', include_blank: false } }
+        .form-group
+          = form.label :slug, Page.human_attribute_name(:path), class: 'control-label col-sm-3'
+          .col-sm-9
+            .form-control.form-control-affixed
+              %span.form-control-affix#parent_path
+                - if @page.parent.path.present?
+                  #{@page.parent.path}/
+              = form.input_field :slug, class: 'form-control-input'
+
       - if @page.embeddable_class.support_templates?
         = form.input :template_id, required: true, collection: available_templates, input_html: { autocomplete: 'off' }
 
-  %fieldset
-    %legend Sichtbarkeit
-    .fields
-      = form.input :published, as: :radio_buttons, include_blank: false, wrapper: :horizontal_radio_and_checkboxes
-      = form.input :menu_item, wrapper: :horizontal_boolean
+    = form.simple_fields_for :embeddable do |fields|
+      = try_render "admin/#{@page.embeddable_type.underscore.pluralize}/edit_fields", fields: fields
 
-  - if @page.support_templates?
     %fieldset
-      %legend Suchmaschinenoptimierung
+      %legend Sichtbarkeit
       .fields
-        = form.input :indexable, wrapper: :horizontal_boolean
-        = form.input :meta_description
-        = form.input :meta_keywords, input_html: { data: { behavior: 'tokenizer' } }
+        = form.input :published, as: :radio_buttons, include_blank: false, wrapper: :horizontal_radio_and_checkboxes
+        = form.input :menu_item, wrapper: :horizontal_boolean
 
-  = form_actions do
+    - if @page.support_templates?
+      %fieldset
+        %legend Suchmaschinenoptimierung
+        .fields
+          = form.input :indexable, wrapper: :horizontal_boolean
+          = form.input :meta_description
+          = form.input :meta_keywords, input_html: { data: { behavior: 'tokenizer' } }
+
+  .modal-footer
     = form.button :button, type: 'submit', class: 'btn-primary' do
-      = prepend_icon :save, translate(@page.new_record? ? :create : :update, scope: 'helpers.submit', model: Page.model_name.human)
+      = prepend_icon :save, translate('helpers.links.save')
+    = button_tag translate('helpers.links.close'), type: 'button', class: 'btn btn-default', data: { dismiss: 'modal' }

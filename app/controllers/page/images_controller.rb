@@ -1,5 +1,5 @@
 class Page::ImagesController < Page::ApplicationController
-  before_action :load_image
+  before_action :load_image 
   before_action :load_image_styles, only: :show
 
   breadcrumbs do |b|

@@ -1,6 +1,66 @@
-= simple_form_for @region, url: admin_page_region_path(@page, @region), method: :patch, wrapper: :vertical_form do |form|
+/ .row
+
+/   .col-sm-3
+/     = panel Page::Region.model_name.human(count: 2), body: false do
+/       .list-group
+/         - @region_definitions.each do |definition|
+/           = active_link_to edit_admin_page_region_path(@page, definition.label), class: 'list-group-item' do
+/             = definition.name
+/   .col-sm-9
+= simple_form_for @region, url: admin_page_region_path(@page, @region), method: :patch, remote: true, wrapper: :vertical_form do |form|
+
+  .btn-toolbar
+    .btn-group
+      = button_link_to [:admin, @page], accesskey: 'X', title: translate('helpers.links.close'), data: { toggle: 'tooltip', container: 'body' } do
+        = prepend_icon :chevron, translate('helpers.links.close'), direction: :left, caption_html: { class: 'sr-only' }
+
+    .btn-group
+      = form.button :button, type: 'submit', accesskey: 'S', class: 'btn-primary' do
+        = prepend_icon :save, translate('helpers.links.save')
+
+    .btn-group
+      = button_tag type: 'button', class: 'btn btn-default dropdown-toggle', accesskey: 'R', data: { toggle: 'dropdown' } do
+        %span.text-muted #{Page::Region.model_name.human}:
+        = @region.name
+        = caret
+      %ul.dropdown-menu{role: 'menu'}
+        - @region_definitions.each do |definition|
+          = active_link_to edit_admin_page_region_path(@page, definition.label), wrap_tag: :li do
+            = definition.name
+
+    .btn-group
+      = button_tag type: 'button', class: 'btn btn-default dropdown-toggle', accesskey: 'T', data: { toggle: 'dropdown' } do
+        %span.text-muted #{::Template.model_name.human}:
+        = @page.template.name
+        = caret
+      %ul.dropdown-menu{role: 'menu'}
+        - @templates.each do |template|
+          = active_link_to change_template_admin_page_path(@page, template_id: template), wrap_tag: :li, active: @page.template == template, method: :patch, remote: true, data: { confirm: 'Vorlage wirklich ändern? Möglicherweise werden einige Inhalte gelöscht.' } do
+            = template.name
+
+    .btn-group
+      = button_tag type: 'button', class: 'btn btn-default dropdown-toggle', accesskey: 'L', data: { toggle: 'dropdown' } do
+        %span.text-muted Sprache:
+        = translate Globalize.locale, scope: :languages
+        = caret
+      %ul.dropdown-menu{role: 'menu'}
+        - I18n.available_locales.sort_by { |locale| translate(locale, scope: :languages, locale: locale) }.each do |locale|
+          = active_link_to url_for(translations: locale != I18n.locale ? locale : nil), wrap_tag: :li, hreflang: locale, lang: locale, active: locale == Globalize.locale do
+            = prepend_flag_icon locale, translate(locale, scope: :languages)
+
+    .btn-group.pull-right
+      = button_link_to page_path(locale: Globalize.locale, translations: nil), type: :success, accesskey: 'P' do
+        = prepend_icon :eye, translate('helpers.links.preview')
+
+  %br
+
+  / = text_field_tag :title, @page.title, class: 'form-control input-lg', placeholder: Page.human_attribute_name(:title)
+  / %br
 
   = form.input :body, label: false, input_html: { class: 'editor', rows: 22 }
 
-  = form.button :button, type: 'submit', class: 'btn-primary btn-block' do
-    = prepend_icon :save, translate('helpers.links.save')
+  / .clearfix.text-muted
+  /   .pull-left
+  /     = @region.definition
+  /   .pull-right
+  /     = time_ago @region.updated_at

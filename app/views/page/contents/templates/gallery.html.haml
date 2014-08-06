@@ -7,6 +7,10 @@
   %h1
     = page.title
 
+- if region_content_for? :main
+  = yield_region :main
+  %br
+
 - if @image_pages.any?
   - @image_pages.each_slice(4) do |image_pages|
     .row
@@ -21,3 +25,6 @@
   .well.text-center
     %h4
       = translate 'views.hints.not_found', model: Image.model_name.human(count: 2)
+
+- if region_content_for? :footer
+  = yield_region :footer

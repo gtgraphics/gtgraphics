@@ -1,1 +1,4 @@
-= render 'edit_form'
+- content_for :title, translate('breadcrumbs.edit', model: @page.embeddable_class.model_name.human)
+
+- content_for :content do
+  = render 'edit_form'

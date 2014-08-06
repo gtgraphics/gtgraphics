@@ -1,6 +1,17 @@
 module Page::RegionsHelper
-  def render_region(label)
-    raise Template::NotSupported.new(@page) unless @page.support_templates?
+  def region_content_for?(label)
+    @page.check_template_support!
+    region_definition = @region_definitions.find { |definition| definition.label == label.to_s }
+    if region_definition
+      region = @page.regions.detect { |region| region.definition_id == region_definition.id }
+      region && region.body.present?
+    else
+      false
+    end
+  end
+
+  def yield_region(label)
+    @page.check_template_support!
     region_definition = @region_definitions.find { |definition| definition.label == label.to_s }
     if region_definition
       region = @page.regions.find { |region| region.definition_id == region_definition.id }
@@ -9,4 +20,5 @@ module Page::RegionsHelper
       raise Template::RegionDefinition::NotFound.new(label, @page.template) if Rails.env.development?
     end
   end
+  alias_method :render_region, :yield_region
 end

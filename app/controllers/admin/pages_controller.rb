@@ -1,9 +1,8 @@
 class Admin::PagesController < Admin::ApplicationController
-  layout :determine_layout
-
   respond_to :html
 
-  before_action :load_page, only: %i(show edit update destroy move publish hide enable_in_menu disable_in_menu toggle_menu_item)
+  before_action :load_page, only: %i(show edit edit_metadata update destroy move publish hide
+                                     enable_in_menu disable_in_menu toggle_menu_item change_template)
   before_action :load_parent_page, only: %i(index new create show edit update)
   before_action :build_page_tree
 
@@ -87,11 +86,15 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def edit
-    respond_with :admin, @page
+    respond_to do |format|
+      format.js
+    end
   end
 
-  def meta
-    respond_with :admin, @page
+  def edit_metadata
+    respond_to do |format|
+      format.js
+    end
   end
 
   def update
@@ -99,7 +102,9 @@ class Admin::PagesController < Admin::ApplicationController
       p.author = current_user
     end
     flash_for @page
-    respond_with :admin, @page, location: request.referer || edit_admin_page_path(@page)
+    respond_to do |format|
+      format.js
+    end
   end
 
   def destroy
@@ -201,11 +206,15 @@ class Admin::PagesController < Admin::ApplicationController
     end
   end
 
-  def preview_path
-    @page = Page.new(params.symbolize_keys.slice(:slug, :parent_id))
-    @page.valid?
+  def change_template
+    @page.check_template_support!
+    template = Template.find(params[:template_id])
+    @page.template = template
+    @page.save!
+    location = [:admin, @page, :regions]
     respond_to do |format|
-      format.html { render text: @page.slug.present? ? File.join(request.host_with_port, @page.path) : '' }
+      format.html { redirect_to location }
+      format.js { redirect_via_turbolinks_to location }
     end
   end
 
@@ -221,14 +230,6 @@ class Admin::PagesController < Admin::ApplicationController
                 .includes(:translations).with_locales(Globalize.fallbacks) \
                 .references(:translations)
     @page_tree = PageTree.new(pages, selected: @page)
-  end
-
-  def determine_layout
-    if action_name.in? %w(new create edit update)
-      'admin/page_editor'
-    else
-      'admin/pages'
-    end
   end
 
   def load_page
@@ -260,15 +261,18 @@ class Admin::PagesController < Admin::ApplicationController
 
   def page_params
     page_params = params.require(:page)
-    embeddable_attributes_params = case page_params[:embeddable_type]
-    when 'Page::ContactForm' then [:id, :template_id, { recipient_ids: [], translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
-    when 'Page::Content' then [:id, :template_id, { translations_attributes: [:_destroy, :id, :locale, :title, :body] }]
+    embeddable_type = @page ? @page.embeddable_type : page_params[:embeddable_type]
+    embeddable_attributes_params = case embeddable_type
+    when 'Page::ContactForm' then [:id, :template_id, { recipient_ids: [] }]
+    when 'Page::Content' then [:id, :template_id]
     when 'Page::Homepage' then [:id, :template_id]
-    when 'Page::Image' then [:id, :template_id, :asset, :image_id, :author_id, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
-    when 'Page::Project' then [:id, :template_id, :client_name, :client_url, :released_on, { translations_attributes: [:_destroy, :id, :locale, :name, :description] }]
-    when 'Page::Redirection' then [:id, :external, :destination_page_id, :destination_url, :permanent, { translations_attributes: [:_destroy, :id, :locale, :title, :description] }]
+    when 'Page::Image' then [:id, :image_id]
+    when 'Page::Project' then [:id, :template_id, :client_name, :client_url, :released_on]
+    when 'Page::Redirection' then [:id, :external, :destination_page_id, :destination_url, :permanent]
     end
-    page_params.permit(:title, :template_id, :meta_keywords, :meta_description, :embeddable_id, :embeddable_type, :slug, :parent_id, :published, :menu_item, :indexable, embeddable_attributes: embeddable_attributes_params || []) 
+    page_params.permit :title, :template_id, :meta_keywords, :meta_description, :embeddable_id, :embeddable_type,
+                       :slug, :parent_id, :published, :menu_item, :indexable,
+                       embeddable_attributes: embeddable_attributes_params || []
   end
 
   def available_templates

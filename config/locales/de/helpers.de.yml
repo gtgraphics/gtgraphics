@@ -45,7 +45,7 @@ de:
       download: Herunterladen
       edit: Bearbeiten
       edit_image: Bild anpassen
-      edit_meta_data: Metadaten bearbeiten
+      edit_metadata: Metadaten bearbeiten
       edit_regions: Inhalte bearbeiten
       enable_in_menu: In Menüs anzeigen
       hide: Verstecken
@@ -54,6 +54,8 @@ de:
       move_up: Nach oben
       move_down: Nach unten
       new: '%{model} erstellen'
+      open: Öffnen
+      options: Optionen
       page_settings: Seiteneinstellungen
       preview: Vorschau
       publish: Veröffentlichen

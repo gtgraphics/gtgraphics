@@ -13,7 +13,7 @@ class Page < ActiveRecord::Base
   class Region < ActiveRecord::Base
     include Translatable
     
-    belongs_to :page, inverse_of: :regions
+    belongs_to :page, inverse_of: :regions, touch: true
     belongs_to :definition, class_name: 'Template::RegionDefinition', inverse_of: :regions
     has_one :template, through: :definition
 
@@ -27,7 +27,9 @@ class Page < ActiveRecord::Base
     class << self
       def labelled(*labels)
         labels.flatten!
-        joins(:definition).where(template_region_definitions: { label: labels.one? ? labels.first : labels })
+        joins(:definition).
+        where(template_region_definitions: { label: labels.one? ? labels.first : labels }).
+        readonly(false)
       end
     end
 

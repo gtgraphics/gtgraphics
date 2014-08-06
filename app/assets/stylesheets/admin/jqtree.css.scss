@@ -114,6 +114,10 @@
 
       .jqtree-toggler {
         cursor: pointer;
+        color: $gray-light;
+        &:hover, &:focus {
+          color: $gray;
+        }
       }
     }
   } 

@@ -99,11 +99,13 @@ GtGraphics::Application.routes.draw do
                 get :tree
               end
               member do
+                get :edit_metadata
                 patch :move
                 patch :publish
                 patch :hide
                 patch :enable_in_menu
                 patch :disable_in_menu
+                patch 'change_template/:template_id', action: :change_template, as: :change_template
               end
             end
 
@@ -149,7 +151,7 @@ GtGraphics::Application.routes.draw do
       end
 
       Routing::Cms::PageRouter.insert(self)
-      root to: 'page/homepages#show'
+      root to: 'errors#unmatched_route'
 
       # Legacy URLs that have changed permanently (HTTP 301)
       get 'image/:slug', constraints: Routing::Legacy::ImageConstraint.new, to: redirect { |params, request|

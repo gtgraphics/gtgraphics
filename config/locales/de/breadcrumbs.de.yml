@@ -1,6 +1,7 @@
 de:
   breadcrumbs:
     edit: '%{model} bearbeiten'
+    edit_metadata: 'Metadaten bearbeiten'
     home: Startseite
     new: '%{model} erstellen'
     upload: '%{model} hochladen'

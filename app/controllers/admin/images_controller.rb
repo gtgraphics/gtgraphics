@@ -32,6 +32,7 @@ class Admin::ImagesController < Admin::ApplicationController
   
     @images = @images.with_translations_for_current_locale \
                      .includes(:author) \
+                     .select(Image.arel_table[Arel.star], Image::Translation.arel_table[:title])
                      .sort(params[:sort], params[:direction])
                      .page(params[:page]).per(25)
     @images = @images.includes(:styles) if params[:include_styles].to_b

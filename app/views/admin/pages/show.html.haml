@@ -7,20 +7,17 @@
         = button_link_to [:edit, :admin, @page], data: { toggle: 'dropdown' }, class: 'dropdown-toggle' do
           = prepend_icon :cog, translate('helpers.links.settings'), fixed_width: true, caption_html: { class: 'sr-only' }
         %ul.dropdown-menu{role: 'menu', aria_labelledby: 'dLabel'}
-          - if can? :read, @page
-            %li
-              = link_to page_path(@page, locale: Globalize.locale, translations: nil) do
-                = prepend_icon :file_picture, translate('helpers.links.view'), fixed_width: true, outline: true
-
           - if can? :edit, @page
-            %li.divider
             %li
-              = link_to [:edit, :admin, @page] do
-                = prepend_icon :pencil, translate('helpers.links.edit'), fixed_width: true
+              = link_to [:edit, :admin, @page], remote: true do
+                = prepend_icon :wrench, translate('helpers.links.options'), fixed_width: true
             - if @page.support_templates?
               %li{class: @page.template.region_definitions.empty? ? 'disabled' : nil}
                 = link_to [:admin, @page, :regions] do
                   = prepend_icon :edit, translate('helpers.links.edit_regions'), fixed_width: true
+            %li
+              = link_to [:edit_metadata, :admin, @page], remote: true do
+                = prepend_icon :th_list, translate('helpers.links.edit_metadata'), fixed_width: true
 
             %li.divider
             - if @page.published?
@@ -36,6 +33,12 @@
             - else
               %li= link_to prepend_icon(:check_square, translate('helpers.links.enable_in_menu'), outline: true, fixed_width: true), [:enable_in_menu, :admin, @page], method: :patch
             
+          - if can? :read, @page
+            %li.divider
+            %li
+              = link_to page_path(@page, locale: Globalize.locale, translations: nil) do
+                = prepend_icon :file_picture, translate('helpers.links.view'), fixed_width: true, outline: true
+
           - if can? :destroy, @page
             %li.divider
             %li= link_to prepend_icon(:trash, translate('helpers.links.destroy'), outline: true, fixed_width: true), [:admin, @page], method: :delete, data: { hotkey: 'del', confirm: translate('helpers.confirmations.destroy', model: Page.model_name.human) }
