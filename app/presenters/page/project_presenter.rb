@@ -1,17 +1,15 @@
-class Page::ProjectPresenter < PagePresenter
+class Page::ProjectPresenter < Page::ApplicationPresenter
+  presents :project_page
+
   def client
-    if project.client_url.present?
-      h.link_to project.client_name, project.client_url, target: '_blank'
-    else
-      project.client_name
-    end
+    h.link_to_if client_url.present?, client_name, client_url, target: '_blank'
   end
 
   def description
     super.try(:html_safe)
   end
 
-  def project
-    page
+  def release
+    released_on.year
   end
 end

@@ -6,6 +6,10 @@ class Admin::UserPresenter < Admin::ApplicationPresenter
     h.gravatar_image_tag email, options
   end
 
+  def name(linked = false)
+    h.link_to_if linked, user.name, [:admin, user]
+  end
+
   def last_activity
     if last_activity_at.present?
       h.capture do

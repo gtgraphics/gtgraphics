@@ -8,15 +8,11 @@ class ImagePresenter < ApplicationPresenter
   end
 
   def author
-    present image.author, with: Admin::UserPresenter if image.author
+    present super, with: Admin::UserPresenter if image.author
   end
 
   def author_name(linked = true)
-    if image.author
-      h.link_to_if linked, image.author.name, [:admin, image.author]
-    else
-      artist
-    end
+    author ? author.name : artist
   end
 
   def dimensions(include_originals = false)

@@ -1,7 +1,5 @@
-class Page::ImagePresenter < ApplicationPresenter
+class Page::ImagePresenter < Page::ApplicationPresenter
   presents :image_page
-
-  delegate :page, to: :image_page
 
   def facebook_uri
     page.metadata.fetch(:facebook_uri) { h.page_permalink_url(page.permalink, locale: nil) }
