@@ -2,10 +2,21 @@ class AddShopUrlsToImagePages < ActiveRecord::Migration
   def up
     add_column :image_pages, :shop_urls, :text
 
-    pages = select_all "SELECT id, metadata FROM pages"
+    pages = select_all <<-SQL
+      SELECT id, embeddable_id AS image_page_id, metadata
+      FROM pages
+      WHERE embeddable_type = 'Page::Image'
+    SQL
+
     pages.each do |page|
       page_id = page['id']
-      metadata = YAML.load(page['metadata'])
+      image_page_id = page['image_page_id']
+      metadata = page['metadata']
+      if metadata.present?
+        metadata = YAML.load(metadata)
+      else
+        metadata = {}
+      end
 
       new_metadata = {}
       shop_urls = {}
@@ -20,7 +31,7 @@ class AddShopUrlsToImagePages < ActiveRecord::Migration
       new_metadata = quote(new_metadata.to_yaml)
 
       update "UPDATE pages SET metadata = #{new_metadata} WHERE id = #{page_id}"
-      update "UPDATE image_pages SET shop_urls = #{shop_urls} WHERE page_id = #{page_id}"
+      update "UPDATE image_pages SET shop_urls = #{shop_urls} WHERE id = #{image_page_id}"
     end
   end
 

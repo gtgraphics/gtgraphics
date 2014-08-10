@@ -5,6 +5,7 @@
 #  id          :integer          not null, primary key
 #  template_id :integer
 #  image_id    :integer
+#  shop_urls   :text
 #
 
 class Page < ActiveRecord::Base
