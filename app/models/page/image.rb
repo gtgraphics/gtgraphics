@@ -11,6 +11,14 @@ class Page < ActiveRecord::Base
   class Image < ActiveRecord::Base
     include Page::Concrete
 
+    SHOP_PROVIDERS = %w(
+      deviantart
+      fineartprint
+      mygall
+      redbubble
+      artflakes
+    ).freeze
+
     acts_as_concrete_page
 
     belongs_to :image, class_name: '::Image', inverse_of: :image_pages
@@ -21,6 +29,10 @@ class Page < ActiveRecord::Base
 
     delegate :title, to: :image, allow_nil: true
     delegate :format, to: :image
+
+    def self.available_shop_providers
+      SHOP_PROVIDERS
+    end
 
     def to_liquid
       { 'image' => image }

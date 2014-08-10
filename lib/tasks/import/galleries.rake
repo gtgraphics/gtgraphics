@@ -139,22 +139,21 @@ namespace :gtg do
 
         # Metadata
         page.metadata[:facebook_uri] = image_page_url
-        extract_print_url(page, :deviantart_url, document, 'da')
-        extract_print_url(page, :fineartprint_url, document, 'fineart')
-        extract_print_url(page, :mygall_url, document, 'mygall')
-        extract_print_url(page, :redbubble_url, document, 'redbubble')
-        extract_print_url(page, :artflakes_url, document, 'artflakes')
+        extract_shop_url(document, page, :deviantart, 'da')
+        extract_shop_url(document, page, :fineartprint)
+        extract_shop_url(document, page, :mygall)
+        extract_shop_url(document, page, :redbubble)
+        extract_shop_url(document, page, :artflakes)
 
-        page.save!
-
-        page
+        page.tap(&:save!)
       end
 
-      def extract_print_url(page, key, document, selector)
+      def extract_shop_url(document, page, key, selector = nil)
+        selector ||= key.to_s
         element = document.css(".print-#{selector}").first
         if element
           url = element['href']
-          page.metadata[key] = url if url.present?
+          page.embeddable.shop_providers[key] = url if url.present?
         end
       end
 

@@ -21,9 +21,11 @@ class Page::ImagePresenter < Page::ApplicationPresenter
 
   def shop_provider_links
     h.content_tag :ul, class: 'shop-providers' do
-      image_page.shop_providers.each_key do |name|
-        link = self.shop_provider_link(name)
-        h.concat h.content_tag(:li, link, class: ['shop-provider', name.to_s.dasherize])
+      Page::Image.available_shop_providers.each do |name|
+        if image_page.shop_providers[name].present?
+          link = self.shop_provider_link(name)
+          h.concat h.content_tag(:li, link, class: ['shop-provider', name.to_s.dasherize])
+        end
       end
     end
   end
@@ -34,7 +36,7 @@ class Page::ImagePresenter < Page::ApplicationPresenter
     h.link_to_if url.present?, human_name, url, target: '_blank'
   end
 
-  %w(deviantart fineartprint mygall redbubble artflakes).each do |name|
+  Page::Image::SHOP_PROVIDERS.each do |name|
     class_eval <<-RUBY
       def #{name}_link
         shop_provider_link :#{name}
