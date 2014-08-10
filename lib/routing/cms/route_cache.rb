@@ -4,16 +4,19 @@ class Routing::Cms::RouteCache
   CACHE_KEY = 'cms.routes'
 
   class << self
-    delegate :matches?, :rebuild, :clear, to: :instance
+    delegate :entries, :matches?, :rebuild, :clear, to: :instance
   end
 
   def initialize
     @cache = Rails.cache
   end
 
+  def entries
+    @cache.fetch(CACHE_KEY) { collect_paths }
+  end
+
   def matches?(page_type, path)
-    entry = @cache.fetch(CACHE_KEY) { collect_paths }
-    paths = entry[page_type]
+    paths = self.entries[page_type]
     paths && paths.include?(path)
   end
 
