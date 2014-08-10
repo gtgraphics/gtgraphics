@@ -1,5 +1,5 @@
 class Page::ImagesRouter < Page::ApplicationRouter
-  def declare
+  def initialize
     super
     get :buy, as: :buy_image
     post :buy, action: :request_purchase, as: :request_image_purchase

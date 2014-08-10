@@ -5,6 +5,7 @@ class Routing::Cms::RouteCache
 
   class << self
     delegate :entries, :matches?, :rebuild, :clear, to: :instance
+    delegate :page_type_for_path, :root_page_type, to: :instance
   end
 
   def initialize
@@ -26,6 +27,19 @@ class Routing::Cms::RouteCache
 
   def clear
     @cache.delete(CACHE_KEY)
+  end
+
+  # Helpers
+  
+  def page_type_for_path(path)
+    self.entries.keys.detect do |page_type|
+      paths = self.entries.fetch(page_type)
+      paths.include?(path)
+    end
+  end
+
+  def root_page_type
+    page_type_for_path('')
   end
 
   private

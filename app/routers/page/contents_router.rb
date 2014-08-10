@@ -1,5 +1,5 @@
 class Page::ContentsRouter < Page::ApplicationRouter
-  def declare
+  def initialize
     super
     post :search, as: :search_page
   end

@@ -1,9 +1,10 @@
 class Page::ApplicationRouter
   attr_reader :page_type
 
-  def initialize(page_type)
-    @page_type = page_type
-    declare
+  class_attribute :page_type, instance_accessor: false
+
+  def initialize
+    root
   end
 
   def action_definitions
@@ -24,6 +25,12 @@ class Page::ApplicationRouter
           end
         end
       end
+
+      # check if route cache for the page type includes root
+      root_page_type = Routing::Cms::RouteCache.root_page_type
+      if router.page_type == root_page_type
+        root controller: router.controller_name, action: :show
+      end
     end
   end
 
@@ -33,6 +40,14 @@ class Page::ApplicationRouter
 
   def resource_name
     page_type.demodulize.underscore
+  end
+
+  def page_type
+    if self.class.page_type
+      self.class.page_type
+    else
+      $1.singularize if self.class.name =~ /\A(.*)Router\z/
+    end
   end
 
   protected
@@ -52,9 +67,5 @@ class Page::ApplicationRouter
   def match(action_name, options = {})
     action_definitions[action_name] ||= []
     action_definitions[action_name] << options
-  end
-
-  def declare
-    root
   end
 end

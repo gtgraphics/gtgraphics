@@ -151,7 +151,6 @@ GtGraphics::Application.routes.draw do
       end
 
       Routing::Cms::PageRouter.insert(self)
-      root to: 'errors#unmatched_route'
 
       # Legacy URLs that have changed permanently (HTTP 301)
       get 'image/:slug', constraints: Routing::Legacy::ImageConstraint.new, to: redirect { |params, request|
