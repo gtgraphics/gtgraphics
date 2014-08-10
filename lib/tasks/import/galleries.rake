@@ -116,15 +116,17 @@ namespace :gtg do
 
       def create_page(documents, gallery_page, image_page_url, image)
         document = documents.fetch(I18n.default_locale)
+
+        page = gallery_page.children.images.new
+        page.build_embeddable(image: image, template: "Template::Image".constantize.default)
+
+        # Hits Count
         hits_text = document.css('.image-box-content .grid_3 .zoom-ct').inner_text.squish
         if hits_text =~ /\AViews\: (.*)\z/
           hits_count = $1.to_i
         else
           hits_count = 0
         end
-
-        page = gallery_page.children.images.new
-        page.build_embeddable(image: image, template: "Template::Image".constantize.default)
         page.hits_count = hits_count
 
         # Set Meta Description
@@ -135,6 +137,7 @@ namespace :gtg do
           end
         end
        
+        # Avoid path collisions by determining the next available slug
         page.set_next_available_slug
 
         # Metadata
@@ -145,6 +148,7 @@ namespace :gtg do
         extract_shop_url(document, page, :redbubble)
         extract_shop_url(document, page, :artflakes)
 
+        # Persist and return Page
         page.tap(&:save!)
       end
 
@@ -153,7 +157,7 @@ namespace :gtg do
         element = document.css(".print-#{selector}").first
         if element
           url = element['href']
-          page.embeddable.shop_providers[key] = url if url.present?
+          page.embeddable.shop_urls[key] = url if url.present?
         end
       end
 

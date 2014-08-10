@@ -25,13 +25,27 @@ class Page < ActiveRecord::Base
 
     validates :image, presence: true
 
-    store :shop_providers
+    store :shop_urls
 
     delegate :title, to: :image, allow_nil: true
     delegate :format, to: :image
 
     def self.available_shop_providers
       SHOP_PROVIDERS
+    end
+
+    SHOP_PROVIDERS.each do |shop_provider|
+      class_eval <<-RUBY
+        def #{shop_provider}_url
+          self.store_urls[:#{shop_provider}]
+        end
+
+        def #{shop_provider}_url=(url)
+          self.store_urls[:#{shop_provider}] = url
+        end
+      RUBY
+
+      validates :"#{shop_provider}_url", url: true, allow_blank: true
     end
 
     def to_liquid
