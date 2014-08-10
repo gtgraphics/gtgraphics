@@ -24,10 +24,13 @@ class RenameFacebookUriToSocialUri < ActiveRecord::Migration
 
       raise "destination key is already set" if metadata[destination_key]
 
-      metadata[destination_key] = metadata.delete(source_key)
-      metadata = quote(metadata.to_yaml)
+      value = metadata.delete(source_key)
 
-      update "UPDATE pages SET metadata = #{metadata} WHERE id = #{page_id}"
+      if value.present?
+        metadata[destination_key] = value
+        metadata = quote(metadata.to_yaml)
+        update "UPDATE pages SET metadata = #{metadata} WHERE id = #{page_id}"
+      end
     end
   end
 end
