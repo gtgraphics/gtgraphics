@@ -17,6 +17,8 @@ class Page < ActiveRecord::Base
 
     validates :image, presence: true
 
+    store :shop_providers
+
     delegate :title, to: :image, allow_nil: true
     delegate :format, to: :image
 

@@ -21,4 +21,15 @@ module Page::RegionsHelper
     end
   end
   alias_method :render_region, :yield_region
+
+  private
+  def region_for_label(label, whiny = false)
+    @page.check_template_support!
+    region_definition = @region_definitions.find { |definition| definition.label == label.to_s }
+    if region_definition
+      region = @page.regions.find { |region| region.definition_id == region_definition.id }
+    else
+      raise Template::RegionDefinition::NotFound.new(label, @page.template) if whiny and Rails.env.development?
+    end
+  end
 end
