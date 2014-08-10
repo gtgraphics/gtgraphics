@@ -16,9 +16,18 @@ class Routing::Cms::RouteCache
     @cache.fetch(CACHE_KEY) { collect_paths }
   end
 
-  def matches?(page_type, path)
+  def matches?(page_type, path = nil, &block)
+    path = block || path || raise(ArgumentError, 'no path given')
     paths = self.entries[page_type]
-    paths && paths.include?(path)
+    if paths
+      case path
+      when Proc then paths.any?(&path)
+      when Regexp then paths.any? { |item| item =~ path }
+      else paths.include?(path)
+      end
+    else
+      false
+    end
   end
 
   def rebuild

@@ -1,5 +1,5 @@
-class Routing::Legacy::ImageConstraint
+class Routing::Legacy::ImageConstraint < Routing::LegacyConstraint
   def matches?(request)
-    Page.images.exists?(slug: request.params[:slug])
+    Routing::Cms::RouteCache.matches? 'Page::Image', path_matcher(request)
   end
 end

@@ -1,6 +1,5 @@
-class Routing::Legacy::CategoryConstraint
+class Routing::Legacy::CategoryConstraint < Routing::LegacyConstraint
   def matches?(request)
-    slug = request.params[:slug].split(',').first
-    Page.contents.exists?(slug: slug)
+    Routing::Cms::RouteCache.matches? 'Page::Content', path_matcher(request)
   end
 end
