@@ -141,7 +141,7 @@ namespace :gtg do
         page.set_next_available_slug
 
         # Metadata
-        page.metadata[:facebook_uri] = image_page_url
+        page.metadata[:social_uri] = image_page_url
         extract_shop_url(document, page, :deviantart, 'da')
         extract_shop_url(document, page, :fineartprint)
         extract_shop_url(document, page, :mygall)
