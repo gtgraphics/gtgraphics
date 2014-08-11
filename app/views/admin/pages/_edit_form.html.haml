@@ -7,14 +7,7 @@
 
       - unless @page.root?
         = form.input :parent_id, input_html: { class: 'resource-combobox', data: { resource: 'pages', from: admin_pages_path(parent_assignable_id: @page.persisted? ? @page.id : nil, format: :json), formatter: 'PageComboboxFormatter', include_blank: false } }
-        .form-group
-          = form.label :slug, Page.human_attribute_name(:path), class: 'control-label col-sm-3'
-          .col-sm-9
-            .form-control.form-control-affixed
-              %span.form-control-affix#parent_path
-                - if @page.parent.path.present?
-                  #{@page.parent.path}/
-              = form.input_field :slug, class: 'form-control-input'
+        = form.input :slug, label: Page.human_attribute_name(:path), required: true, as: :affixed_string, input_html: { prefix: [@page.parent.path.present? ? "#{@page.parent.path}/" : nil, { id: 'parent_path' }] }
 
       - if @page.embeddable_class.support_templates?
         = form.input :template_id, required: true, collection: available_templates, input_html: { autocomplete: 'off' }

@@ -182,6 +182,11 @@ de:
       page/image:
         image: Bild
         image_id: Bild
+        deviantart_url: Deviantart-URL
+        fineartprint_url: Fineartprint-URL
+        mygall_url: MyGall-URL
+        redbubble_url: RedBubble-URL
+        artflakes_url: Artflakes-URL
       page/project:
         name: Projektname
         client_name: Auftraggeber
