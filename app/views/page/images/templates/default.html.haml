@@ -5,50 +5,39 @@
       %h1= image.title
 
     = link_to page_path(page, format: @image.format) do
-      = image_tag attached_asset_path(@image, :custom), class: 'img-responsive img-rounded'
+      = image_tag attached_asset_path(@image, :custom), alt: @image.title, class: 'img-responsive img-rounded'
 
     %br
 
     .row
       .col-sm-8
         - if image.description.present?
-          %fieldset
-            %legend Description
-            .fields
-              = raw image.description
+          = fieldset 'Description' do
+            = raw image.description
 
-        %fieldset
-          %legend Artist
-          .fields
-            .clearfix
-              .pull-left
-                = image.author.gravatar size: 45
-              = image.author.name
-              %br
-              %span.text-muted= image.taken_at
+        = fieldset 'Artist' do
+          .clearfix
+            .pull-left
+              = image.author.gravatar size: 45
+            = image.author.name
+            %br
+            %span.text-muted= image.taken_at
 
-        %fieldset
-          %legend Comments
-          .fields
-            = page.embeddable.facebook_comments
+        = fieldset 'Comments' do
+          = page.embeddable.facebook_comments
 
       .col-sm-4
-        %fieldset
-          %legend Share
-          .fields
-            %ul
-              %li= page.embeddable.facebook_like_button style: :button_count
-              %li= link_to page.permalink, page.permalink
+        = fieldset 'Share' do
+          %ul
+            %li= page.embeddable.facebook_like_button style: :button_count
+            %li= link_to page.permalink, page.permalink
 
-        %fieldset
-          %legend Buy
-          .fields
-            = button_link_to buy_image_path(page.path), block: true do
-              = prepend_icon :dollar, "Contact #{image.author.first_name}", fixed_width: true
-            = page.embeddable.shop_links
+        = fieldset 'Buy' do
+          = button_link_to buy_image_path(page.path), type: :primary, block: true do
+            = prepend_icon :dollar, "Contact #{image.author.first_name}", fixed_width: true
+          = page.embeddable.shop_links
 
-        %fieldset
-          %legend Downloads
+        = fieldset 'Downloads' do
           %ul
             %li= link_to 'Original', download_image_path(page.path, format: image.format)
             - @image_styles.each do |style|

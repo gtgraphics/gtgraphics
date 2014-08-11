@@ -38,11 +38,11 @@ class Page < ActiveRecord::Base
     SHOP_PROVIDERS.each do |shop_provider|
       class_eval <<-RUBY
         def #{shop_provider}_url
-          self.shop_urls[:#{shop_provider}]
+          read_store_attribute(:shop_urls, :#{shop_provider})
         end
 
         def #{shop_provider}_url=(url)
-          self.shop_urls[:#{shop_provider}] = url
+          write_store_attribute(:shop_urls, :#{shop_provider}, url)
         end
       RUBY
 

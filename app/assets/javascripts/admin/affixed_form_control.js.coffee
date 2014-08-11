@@ -5,7 +5,7 @@ jQuery.prepare ->
   $(INPUT_SELECTOR, @).filter(':focus').addClass('focus')
 
 $(document).on 'click', CONTAINER_SELECTOR, ->
-  $(':input', CONTAINER_SELECTOR).focus()
+  $(':input', @).focus()
 
 $(document).on 'focus', INPUT_SELECTOR, ->
   $(@).closest(CONTAINER_SELECTOR).addClass('focus')
