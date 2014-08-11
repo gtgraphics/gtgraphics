@@ -11,11 +11,9 @@ class Presenter
  
   class << self
     def presents(name)
-      class_eval <<-RUBY
-        def #{name}
-          self.object
-        end
-      RUBY
+      define_method name do
+        self.object
+      end
     end
   end
 
@@ -28,7 +26,7 @@ class Presenter
   end
 
   def method_missing(method_name, *args, &block)
-    if object.respond_to?(method_name)
+    if object.respond_to?(method_name, false)
       object.send(method_name, *args, &block)
     else
       super
@@ -36,7 +34,7 @@ class Presenter
   end
 
   def respond_to_missing?(method_name, include_private = false)
-    (object and object.respond_to?(method_name, include_private)) or super
+    (object && object.respond_to?(method_name, include_private)) || super
   end
 
   protected

@@ -42,18 +42,10 @@
 
         %fieldset
           %legend Buy
-          %ul
-            %li= link_to "Contact #{image.author.first_name}", buy_image_path(page.path)
-            - if page.embeddable.deviantart_link.present?
-              %li= page.embeddable.deviantart_link
-            - if page.embeddable.fineartprint_link.present?
-              %li= page.embeddable.fineartprint_link
-            - if page.embeddable.mygall_link.present?
-              %li= page.embeddable.mygall_link
-            - if page.embeddable.redbubble_url.present?
-              %li= page.embeddable.redbubble_url
-            - if page.embeddable.artflakes_link.present?
-              %li= page.embeddable.artflakes_link
+          .fields
+            = button_link_to buy_image_path(page.path), block: true do
+              = prepend_icon :dollar, "Contact #{image.author.first_name}", fixed_width: true
+            = page.embeddable.shop_links
 
         %fieldset
           %legend Downloads

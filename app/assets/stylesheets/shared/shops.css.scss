@@ -1,0 +1,26 @@
+@import "compass";
+@import "shops/shop-16/*.png";
+
+@include all-shop-16-sprites;
+
+.shop {
+  display: inline-block;
+  border-radius: 50%;
+  font-size: 1.33333333em;
+  line-height: 0.75em;
+  vertical-align: -15%;
+
+  &.shop-fw {
+    margin: 0 1px;
+  }
+
+  &.shop-16 {
+    width: 16px;
+    height: 16px;
+  }
+
+  &.shop-24 {
+    width: 24px;
+    height: 24px;
+  }
+}

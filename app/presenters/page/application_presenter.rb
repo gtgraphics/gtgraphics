@@ -1,3 +1,5 @@
-class Page::ApplicationPresenter < ApplicationPresenter
-  delegate :page, to: :object
+class Page::ApplicationPresenter < ::ApplicationPresenter
+  def page
+    present object.page
+  end
 end
