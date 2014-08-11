@@ -5,6 +5,8 @@ class Page < ActiveRecord::Base
     included do
       has_many :regions, class_name: 'Page::Region', dependent: :destroy, inverse_of: :page
 
+      validates :template_id, presence: true, if: :support_templates?
+
       delegate :name, to: :template, prefix: true, allow_nil: true
     end
 
