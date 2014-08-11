@@ -99,7 +99,6 @@ GtGraphics::Application.routes.draw do
                 get :tree
               end
               member do
-                get :edit_metadata
                 patch :move
                 patch :publish
                 patch :hide

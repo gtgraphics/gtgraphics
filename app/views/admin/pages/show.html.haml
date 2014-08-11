@@ -15,9 +15,6 @@
               %li{class: @page.template.region_definitions.empty? ? 'disabled' : nil}
                 = link_to [:admin, @page, :regions] do
                   = prepend_icon :edit, translate('helpers.links.edit_regions'), fixed_width: true
-            %li
-              = link_to [:edit_metadata, :admin, @page], remote: true do
-                = prepend_icon :th_list, translate('helpers.links.edit_metadata'), fixed_width: true
 
             %li.divider
             - if @page.published?
