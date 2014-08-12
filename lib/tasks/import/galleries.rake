@@ -8,37 +8,26 @@ namespace :gtg do
 
       desc 'Import wallpapers from the remote GT Graphics gallery'
       task :wallpapers => :environment do
-        path = ENV.fetch('path') { 'work/wallpapers' }
+        path = ENV.fetch('IMPORT_TO') { 'work/wallpapers' }
         gallery_page = Page.find_by! path: path
         import_gallery 'wallpapers', gallery_page
       end
 
       desc 'Import artworks from the remote GT Graphics gallery'
       task :artworks => :environment do
-        path = ENV.fetch('path') { 'work/artworks' }
+        path = ENV.fetch('IMPORT_TO') { 'work/artworks' }
         gallery_page = Page.find_by! path: path
         import_gallery 'artworks', gallery_page
       end
 
       desc 'Import photos from the remote GT Graphics gallery'
       task :photos => :environment do
-        path = ENV.fetch('path') { 'work/photography' }
+        path = ENV.fetch('IMPORT_TO') { 'work/photography' }
         gallery_page = Page.find_by! path: path
 
         %w(nature architecture people misc).each do |subgallery_name|
           subgallery_page = Page.find_by! path: "#{path}/#{subgallery_name}"
           import_gallery subgallery_name, subgallery_page
-        end
-      end
-
-      def import_gallery(name, gallery_page)
-        puts "Importing Gallery: #{name.titleize}"
-
-        # Determine Pages Count
-        parser = GalleryPageParser.new(name)
-        parser.image_page_urls.each do |image_page_url|
-          image = import_image(image_page_url)
-          create_image_page(image_page_url, gallery_page, image)
         end
       end
 
@@ -158,6 +147,17 @@ namespace :gtg do
           self.page = new_page
           yield
           self.page = previous_page
+        end
+      end
+
+      def import_gallery(name, gallery_page)
+        puts "Importing Gallery: #{name.titleize}"
+
+        # Determine Pages Count
+        parser = GalleryPageParser.new(name)
+        parser.image_page_urls.each do |image_page_url|
+          image = import_image(image_page_url)
+          create_image_page(image_page_url, gallery_page, image)
         end
       end
 
