@@ -1,5 +1,5 @@
 class Image::StylePresenter < ApplicationPresenter
-  presents :image
+  presents :style
   
   def title
     super.presence || dimensions
