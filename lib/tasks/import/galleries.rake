@@ -1,5 +1,3 @@
-require 'benchmark'
-
 namespace :gtg do
   namespace :import do
     namespace :galleries do
@@ -8,23 +6,20 @@ namespace :gtg do
 
       desc 'Import wallpapers from the remote GT Graphics gallery'
       task :wallpapers => :environment do
-        path = ENV.fetch('IMPORT_TO') { 'work/wallpapers' }
-        gallery_page = Page.find_by! path: path
+        gallery_page = Page.find_by! path: 'work/wallpapers'
         import_gallery 'wallpapers', gallery_page
       end
 
       desc 'Import artworks from the remote GT Graphics gallery'
       task :artworks => :environment do
-        path = ENV.fetch('IMPORT_TO') { 'work/artworks' }
-        gallery_page = Page.find_by! path: path
+        gallery_page = Page.find_by! path: 'work/artworks'
         import_gallery 'artworks', gallery_page
       end
 
       desc 'Import photos from the remote GT Graphics gallery'
       task :photos => :environment do
-        path = ENV.fetch('IMPORT_TO') { 'work/photography' }
+        path = 'work/photography'
         gallery_page = Page.find_by! path: path
-
         %w(nature architecture people misc).each do |subgallery_name|
           subgallery_page = Page.find_by! path: "#{path}/#{subgallery_name}"
           import_gallery subgallery_name, subgallery_page
@@ -54,7 +49,7 @@ namespace :gtg do
         attr_writer :locale
 
         def current_document
-          @document.fetch(self.locale)
+          documents.fetch(self.locale)
         end
 
         def with_locale(new_locale)
@@ -75,9 +70,9 @@ namespace :gtg do
         def author
           author_str = default_document.css('.title-ct span:last').text.squish
           if author_str =~ /\A\(by (.*)\)\z/
-            image.author = User.find_by!(email: AUTHORS.fetch($1))
+            User.find_by!(email: AUTHORS.fetch($1))
           else
-            raise "Author not found: #{author_str}"
+            raise "Author could not be extracted from document"
           end
         end
 
@@ -90,7 +85,7 @@ namespace :gtg do
         end
 
         def hits_count
-          hits_text = document.css('.image-box-content .grid_3 .zoom-ct').inner_text.squish
+          hits_text = default_document.css('.image-box-content .grid_3 .zoom-ct').inner_text.squish
           if hits_text =~ /\AViews\: (.*)\z/
             $1.to_i
           else
@@ -99,7 +94,7 @@ namespace :gtg do
         end
 
         def shop_url(key)
-          element = document.css(".print-#{key}").first
+          element = default_document.css(".print-#{key}").first
           element['href'].presence if element
         end
       end
@@ -111,7 +106,7 @@ namespace :gtg do
 
         def initialize(name)
           @name = name
-          @default_document = Nokogiri::HTML(open(self.url, 1))
+          @default_document = Nokogiri::HTML(open(self.url))
           @documents = 2.upto(self.pages_count).inject({}) do |documents_hash, page|
             documents_hash[page] = Nokogiri::HTML(open(self.url(page)))
             documents_hash
@@ -128,12 +123,14 @@ namespace :gtg do
         end
 
         def current_document
-          @documents[self.page]
+          documents[self.page]
         end
 
         def image_page_urls
-          current_document.css('.content-top-pic').collect do |element|
-            element.css('a').first[:href]
+          1.upto(pages_count).collect_concat do |page|
+            documents.fetch(page).css('.content-top-pic').collect do |element|
+              element.css('a').first[:href]
+            end
           end
         end
 
@@ -151,10 +148,10 @@ namespace :gtg do
       end
 
       def import_gallery(name, gallery_page)
-        puts "Importing Gallery: #{name.titleize}"
-
-        # Determine Pages Count
         parser = GalleryPageParser.new(name)
+
+        puts "Importing Gallery: #{name.titleize} (#{parser.pages_count} Pages)"
+
         parser.image_page_urls.each do |image_page_url|
           image = import_image(image_page_url)
           create_image_page(image_page_url, gallery_page, image)
@@ -227,7 +224,7 @@ namespace :gtg do
         page.metadata[:social_uri] = image_page_url
 
         # Shop Links
-        page.shop_links = {
+        page.embeddable.shop_urls = {
           deviantart:   parser.shop_url('da'),
           fineartprint: parser.shop_url('fineartprint'),
           mygall:       parser.shop_url('mygall'),
