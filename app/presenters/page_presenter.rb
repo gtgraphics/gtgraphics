@@ -2,7 +2,7 @@ class PagePresenter < ApplicationPresenter
   presents :page
 
   def embeddable
-    present super, with: "#{embeddable_type}Presenter".constantize
+    present super
   end
 
   def permalink
