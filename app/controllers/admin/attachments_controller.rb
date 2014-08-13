@@ -102,7 +102,7 @@ class Admin::AttachmentsController < Admin::ApplicationController
   end
 
   def search
-    location = admin_attachments_path(query: params[:query])
+    location = admin_attachments_path(query: params[:query].presence)
     respond_to do |format|
       format.html { redirect_to location }
       format.js { redirect_via_turbolinks_to location }

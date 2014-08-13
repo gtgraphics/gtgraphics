@@ -49,7 +49,7 @@
               .search-component
                 = text_field_tag :query, params[:query], class: 'search-input form-control input-rounded', placeholder: translate('helpers.prompts.search'), autofocus: true
                 .btn-toolbar
-                  = button_tag name: 'search', class: 'btn btn-search', title: translate('helpers.links.search'), data: { toggle: 'tooltip', placement: 'top', container: 'body' } do
+                  = button_tag type: 'submit', name: 'search', class: 'btn btn-search', title: translate('helpers.links.search'), data: { toggle: 'tooltip', placement: 'top', container: 'body' } do
                     = prepend_icon :search, translate('helpers.links.search'), caption_html: { class: 'sr-only' }
                   = button_link_to :admin_images, type: :search, title: translate('helpers.links.reset'), data: { toggle: 'tooltip', placement: 'top', container: 'body' } do
                     = prepend_icon :times, translate('helpers.links.reset'), caption_html: { class: 'sr-only' }
