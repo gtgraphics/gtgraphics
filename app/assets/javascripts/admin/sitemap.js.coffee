@@ -86,18 +86,34 @@ $(document).on 'page:change', ->
 
 cachedScrollTop = null
 
+
 # Fix for Turbolinks: Destroy all events before page is loaded with new content
 # Save scroll position to restore on page:load
 
-$(document).on 'page:receive', ->
-  $sitemap = $(SITEMAP_SELECTOR)
-  if $sitemap.exists()
-    cachedScrollTop = $sitemap.scrollTop()
-    $sitemap.slimScroll(destroy: true)
-    _.each ['load_data', 'click', 'select', 'open', 'opening', 'move'], (eventName) ->
-      $sitemap.off("tree.#{eventName}")
-    $sitemap.tree('destroy')
+$(document)
 
-$(document).on 'page:load', ->
-  $sitemap = $(SITEMAP_SELECTOR)
-  $sitemap.slimScroll(scrollTo: cachedScrollTop) if $sitemap.exists() and cachedScrollTop 
+  .on 'page:receive', ->
+    $sitemap = $(SITEMAP_SELECTOR)
+    if $sitemap.exists()
+      cachedScrollTop = $sitemap.scrollTop()
+      $sitemap.slimScroll(destroy: true)
+      _.each ['load_data', 'click', 'select', 'open', 'opening', 'move'], (eventName) ->
+        $sitemap.off("tree.#{eventName}")
+      $sitemap.tree('destroy')
+
+  .on 'page:load', ->
+    $sitemap = $(SITEMAP_SELECTOR)
+    $sitemap.slimScroll(scrollTo: cachedScrollTop) if $sitemap.exists() and cachedScrollTop 
+
+
+# Disable keyboard navigation in sitemap if a modal is active
+
+$(document)
+
+  .on 'show.bs.modal', ->
+    $(SITEMAP_SELECTOR).tree 'setOption', 'keyboardSupport', false
+    true
+
+  .on 'hidden.bs.modal', ->
+    $(SITEMAP_SELECTOR).tree 'setOption', 'keyboardSupport', true
+    true
