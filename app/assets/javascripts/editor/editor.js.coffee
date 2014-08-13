@@ -28,7 +28,8 @@ class @Editor
     $stylesheet = $('<link />', href: @options.stylesheetFile, media: 'all', rel: 'stylesheet')
     @$regionFrame.contents().find('head').append($base).append($stylesheet)
     @$region = @$regionFrame.contents().find('body').attr('contenteditable', true)
-
+    @$region.click ->
+      $(document).click()
 
   preparePreviewFrame: ($previewFrame) ->
     @$previewFrame = $previewFrame
@@ -38,6 +39,8 @@ class @Editor
     $stylesheet = $('<link />', href: @options.stylesheetFile, media: 'all', rel: 'stylesheet')
     @$previewFrame.contents().find('head').append($base).append($stylesheet)
     @$preview = @$previewFrame.contents().find('body')
+    @$preview.click ->
+      $(document).click()
 
   prepareFrames: ->
     # Copy HTML from textarea to region and preview containers

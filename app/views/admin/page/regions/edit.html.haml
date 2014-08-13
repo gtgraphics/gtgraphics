@@ -49,7 +49,7 @@
             = prepend_flag_icon locale, translate(locale, scope: :languages)
 
     .btn-group.pull-right
-      = button_link_to page_path(locale: Globalize.locale, translations: nil), type: :success, accesskey: 'P' do
+      = button_link_to page_path(@page, locale: Globalize.locale, translations: nil), type: :success, accesskey: 'P' do
         = prepend_icon :eye, translate('helpers.links.preview')
 
   %br
