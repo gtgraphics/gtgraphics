@@ -26,7 +26,7 @@ class Presenter
   end
 
   def method_missing(method_name, *args, &block)
-    if object.respond_to?(method_name, false)
+    if object and object.respond_to?(method_name, false)
       object.send(method_name, *args, &block)
     else
       super
