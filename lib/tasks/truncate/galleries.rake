@@ -1,7 +1,6 @@
 namespace :gtg do
   namespace :truncate do
     namespace :galleries do
-
       desc 'Truncate all GT Graphics galleries'
       task :all => [:wallpapers, :artworks, :photos]
 

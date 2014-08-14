@@ -26,129 +26,8 @@ namespace :gtg do
         end
       end
 
-      class ImagePageParser
-        AUTHORS = {
-          'Taenaron' => 't.roetsch@gtgraphics.de',
-          'gucken' => 'j.michelmann@gtgraphics.de'
-        }.freeze
-
-        attr_reader :url, :documents, :default_document
-
-        def initialize(url, locales = I18n.available_locales)
-          @url = url
-          @documents = locales.inject({}) do |documents_hash, locale|
-            documents_hash[locale] = Nokogiri::HTML(open("#{@url}?setlang=#{locale}"))
-            documents_hash
-          end
-          @default_document = @documents.fetch(I18n.default_locale)
-        end
-
-        def locale
-          @locale ||= I18n.default_locale
-        end
-        attr_writer :locale
-
-        def current_document
-          documents.fetch(self.locale)
-        end
-
-        def with_locale(new_locale)
-          previous_locale = self.locale
-          self.locale = new_locale
-          yield
-          self.locale = previous_locale
-        end
-
-        def title
-          current_document.css('.img-title').inner_text.squish
-        end
-
-        def description
-          current_document.css('.image-box-content p').first.inner_html.squish
-        end
-
-        def author
-          author_str = default_document.css('.title-ct span:last').text.squish
-          if author_str =~ /\A\(by (.*)\)\z/
-            User.find_by!(email: AUTHORS.fetch($1))
-          else
-            raise "Author could not be extracted from document"
-          end
-        end
-
-        def asset_url
-          default_document.css('.img-container img').first[:src]
-        end
-
-        def variant_asset_urls
-          default_document.css('.image-box-content .grid_3 p .home-num-sign').collect { |anchor| anchor[:href] }
-        end
-
-        def hits_count
-          hits_text = default_document.css('.image-box-content .grid_3 .zoom-ct').inner_text.squish
-          if hits_text =~ /\AViews\: (.*)\z/
-            $1.to_i
-          else
-            0
-          end
-        end
-
-        def shop_url(key)
-          element = default_document.css(".print-#{key}").first
-          element['href'].presence if element
-        end
-      end
-
-      class GalleryPageParser
-        URL_PATTERN = "http://www.gtgraphics.de/category/%{name}/%{page}"
-
-        attr_reader :name, :documents, :default_document
-
-        def initialize(name)
-          @name = name
-          @default_document = Nokogiri::HTML(open(self.url))
-          @documents = 2.upto(self.pages_count).inject({}) do |documents_hash, page|
-            documents_hash[page] = Nokogiri::HTML(open(self.url(page)))
-            documents_hash
-          end
-          @documents[1] = @default_document
-        end
-
-        def url(page = 1)
-          URL_PATTERN % { name: @name, page: page }
-        end
-
-        def pages_count
-          default_document.css('#gtg-page-content .container_12:last a')[-2].text.to_i
-        end
-
-        def current_document
-          documents[self.page]
-        end
-
-        def image_page_urls
-          1.upto(pages_count).collect_concat do |page|
-            documents.fetch(page).css('.content-top-pic').collect do |element|
-              element.css('a').first[:href]
-            end
-          end
-        end
-
-        def page
-          @page ||= 1
-        end
-        attr_writer :page
-
-        def with_page(new_page)
-          previous_page = self.page
-          self.page = new_page
-          yield
-          self.page = previous_page
-        end
-      end
-
       def import_gallery(name, gallery_page)
-        parser = GalleryPageParser.new(name)
+        parser = Import::GalleryPageParser.new(name)
 
         puts "Importing Gallery: #{name.titleize} (#{parser.pages_count} Pages)"
 
@@ -160,7 +39,7 @@ namespace :gtg do
 
       def import_image(image_page_url)
         # Parser for the page we're about to process
-        parser = ImagePageParser.new(image_page_url)
+        parser = Import::ImagePageParser.new(image_page_url)
 
         # The image we want to create
         image = Image.new
@@ -201,7 +80,7 @@ namespace :gtg do
       end
 
       def create_image_page(image_page_url, gallery_page, image)
-        parser = ImagePageParser.new(image_page_url)
+        parser = Import::ImagePageParser.new(image_page_url)
 
         page = gallery_page.children.images.new
         page.build_embeddable(image: image, template: "Template::Image".constantize.default)
