@@ -49,8 +49,8 @@
             = prepend_flag_icon locale, translate(locale, scope: :languages)
 
     .btn-group.pull-right
-      = button_link_to page_path(@page, locale: Globalize.locale, translations: nil), type: :success, accesskey: 'P' do
-        = prepend_icon :eye, translate('helpers.links.preview')
+      = button_link_to page_path(@page, locale: Globalize.locale, translations: nil), type: :success, accesskey: 'V' do
+        = prepend_icon :file_picture, translate('helpers.links.view'), outline: true
 
   %br
 
