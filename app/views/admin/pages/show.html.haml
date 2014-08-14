@@ -9,11 +9,11 @@
         %ul.dropdown-menu{role: 'menu', aria_labelledby: 'dLabel'}
           - if can? :edit, @page
             %li
-              = link_to [:edit, :admin, @page], remote: true do
+              = link_to [:edit, :admin, @page], remote: true, accesskey: 'O' do
                 = prepend_icon :wrench, translate('helpers.links.options'), fixed_width: true
             - if @page.support_templates?
               %li{class: @page.template.region_definitions.empty? ? 'disabled' : nil}
-                = link_to [:admin, @page, :regions] do
+                = link_to [:admin, @page, :regions], accesskey: 'E' do
                   = prepend_icon :edit, translate('helpers.links.edit_regions'), fixed_width: true
 
             %li.divider
@@ -33,7 +33,7 @@
           - if can? :read, @page
             %li.divider
             %li
-              = link_to page_path(@page, locale: Globalize.locale, translations: nil) do
+              = link_to page_path(@page, locale: Globalize.locale, translations: nil), accesskey: 'V' do
                 = prepend_icon :file_picture, translate('helpers.links.view'), fixed_width: true, outline: true
 
           - if can? :destroy, @page
@@ -43,7 +43,7 @@
     .btn-group.pull-right
       = button_link_to typed_new_admin_page_child_path(@page, page_type: :content), type: :success, remote: true, accesskey: 'N' do
         = prepend_icon :plus, translate('helpers.links.new', model: Page.model_name.human), fixed_width: true
-      = button_link_to caret, '#', class: 'dropdown-toggle', type: :success, data: { toggle: 'dropdown' }
+      = button_link_to caret, typed_new_admin_page_child_path(@page, page_type: :content), class: 'dropdown-toggle js-only', type: :success, data: { toggle: 'dropdown' }
       %ul.dropdown-menu
         - concrete_page_types.each do |embeddable_class|
           - if can? :create, embeddable_class
