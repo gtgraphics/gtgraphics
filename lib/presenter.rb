@@ -21,7 +21,7 @@ class Presenter
     if object.nil?
       "#<#{self.class.name}>"
     else
-      "#<#{self.class.name} object: #{@object.inspect}>"
+      "#<#{self.class.name} object: #{object.inspect}>"
     end
   end
 
