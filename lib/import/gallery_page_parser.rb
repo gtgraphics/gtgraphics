@@ -25,7 +25,7 @@ class Import::GalleryPageParser
     documents[self.page]
   end
 
-  def image_page_urls
+  def page_urls
     1.upto(pages_count).collect_concat do |page|
       documents.fetch(page).css('.content-top-pic').collect do |element|
         element.css('a').first[:href]

@@ -31,7 +31,7 @@ namespace :gtg do
 
         puts "Importing Gallery: #{name.titleize} (#{parser.pages_count} Pages)"
 
-        parser.image_page_urls.each do |image_page_url|
+        parser.page_urls.each do |image_page_url|
           image = import_image(image_page_url)
           create_image_page(image_page_url, gallery_page, image)
         end

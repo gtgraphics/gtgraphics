@@ -1,12 +1,4 @@
 class Import::ImagePageParser < Import::LocalizedPageParser
-  def title
-    current_document.css('.img-title').inner_text.squish
-  end
-
-  def description
-    current_document.css('.image-box-content p').first.inner_html.squish
-  end
-
   def asset_url
     default_document.css('.img-container img').first[:src]
   end

@@ -39,4 +39,12 @@ class Import::LocalizedPageParser
       raise "Author could not be extracted from document"
     end
   end
+
+  def title
+    current_document.css('.img-title').inner_text.squish
+  end
+
+  def description
+    current_document.css('.image-box-content p').first.inner_html.squish
+  end
 end
