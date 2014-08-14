@@ -18,12 +18,12 @@ class Admin::Image::StylesController < Admin::ApplicationController
   def index
     if image_style_id_or_ids = params[:id] and image_style_id_or_ids.present?
       if image_style_id_or_ids.is_a?(Array)
-        @image_styles = ::Image::Style.where(id: image_style_id_or_ids)
+        @image_styles = @image.styles.where(id: image_style_id_or_ids)
       else
         redirect_to params.merge(action: :show) and return
       end
     else
-      @image_styles = ::Image::Style.search(params[:query])
+      @image_styles = @image.styles.search(params[:query])
     end
     @image_styles = @image_styles.order(:position).page(params[:page])
 
