@@ -22,7 +22,7 @@ class Admin::ProjectsController < Admin::ApplicationController
                         select(::Project.arel_table[Arel.star], Client.arel_table[:name]).
                         uniq.page(params[:page])
     @projects.where!(client_id: params[:client_id]) if params[:client_id].present?
-    @project_search = @projects.search(params[:search])
+    @project_search = @projects.ransack(params[:search])
     @project_search.sorts = 'translations_title asc' if @project_search.sorts.empty?
     @projects = @project_search.result
     respond_with :admin, @projects

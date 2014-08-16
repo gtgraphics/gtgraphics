@@ -13,8 +13,8 @@
 
 class Project < ActiveRecord::Base
   include Ownable
-  include Sortable
   include Taggable
+  include TitleSearchable
   include Translatable
 
   translates :title, :description, fallbacks_for_empty_translations: true
