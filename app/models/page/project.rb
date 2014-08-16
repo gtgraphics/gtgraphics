@@ -4,9 +4,7 @@
 #
 #  id          :integer          not null, primary key
 #  template_id :integer
-#  client_name :string(255)
-#  client_url  :string(255)
-#  released_on :date
+#  project_id  :integer          not null
 #
 
 class Page < ActiveRecord::Base
@@ -15,21 +13,16 @@ class Page < ActiveRecord::Base
 
     acts_as_concrete_page
 
-    translates :name, :description, fallbacks_for_empty_translations: true
-    sanitizes :name, :client_name, with: :squish
+    belongs_to :project, class_name: '::Project', inverse_of: :project_pages
 
-    validates :name, presence: true
-    validates :client_url, url: true, allow_blank: true
+    validates :image, presence: true
 
-    after_initialize :set_default_release_date, if: -> { new_record? and released_on.blank? }
-
-    def to_title
-      name
+    def to_liquid
+      { 'project' => project }
     end
 
-    private
-    def set_default_release_date
-      self.released_on = Date.today
+    def to_title
+      project.try(:title)
     end
   end
 end

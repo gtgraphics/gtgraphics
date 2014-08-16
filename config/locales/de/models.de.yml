@@ -201,6 +201,10 @@ de:
         internal: Interne Umleitung
         permanent: Permanent?
         destination: Ziel
+      project:
+        client: Auftraggeber
+        client_name: Auftraggeber
+        released_in: Jahr
       shout:
         nickname: Verfasser
         message: Nachricht
@@ -241,6 +245,9 @@ de:
       attachment:
         one: Datei
         other: Dateien
+      client:
+        one: Auftraggeber
+        other: Auftraggeber
       contact_form:
         one: Kontaktformular
         other: Kontaktformulare

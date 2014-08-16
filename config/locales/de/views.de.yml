@@ -80,6 +80,7 @@ de:
           sign_in: Anmelden
         edit_password: Passwort bearbeiten
         sign_in: Anmelden
+        unknown: Unbekannter Benutzer
 
     page/image:
       shops:

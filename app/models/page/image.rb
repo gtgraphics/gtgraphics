@@ -4,7 +4,7 @@
 #
 #  id          :integer          not null, primary key
 #  template_id :integer
-#  image_id    :integer
+#  image_id    :integer          not null
 #  shop_urls   :text
 #
 
@@ -38,11 +38,11 @@ class Page < ActiveRecord::Base
     SHOP_PROVIDERS.each do |shop_provider|
       class_eval <<-RUBY
         def #{shop_provider}_url
-          read_store_attribute(:shop_urls, :#{shop_provider})
+          read_store_attribute :shop_urls, :#{shop_provider}
         end
 
         def #{shop_provider}_url=(url)
-          write_store_attribute(:shop_urls, :#{shop_provider}, url)
+          write_store_attribute :shop_urls, :#{shop_provider}, url
         end
       RUBY
 

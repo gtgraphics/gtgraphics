@@ -1,0 +1,12 @@
+- present project, with: Admin::ProjectPresenter do |project|
+  = content_tag_for :tr, project do
+    - if local_assigns.fetch(:checkbox, true)
+      %td.checkbox-cell
+        = check_box_tag 'project_ids[]', project.id, false, class: 'table-checkbox', id: nil, data: { behavior: 'tableCheckbox' }
+    %td
+      = link_to project.title, [:admin, project]
+    %td= project.client_name
+    %td= project.released_in
+    - if local_assigns.fetch(:actions, true)
+      %td.actions
+        = project.action_buttons icon_only: true

@@ -1,0 +1,40 @@
+= page_header do
+  = render 'search_component', search: @project_search, url: :admin_projects
+
+.row
+
+  .col-sm-3
+    #filters.panel-group
+      = panel link_to(prepend_icon(:users, Project.human_attribute_name(:client), fixed_width: true), '#client', data: { toggle: 'collapse' }), body: false do
+        #client.list-group.panel-collapse.collapse.in
+          = active_link_to 'Egal', params.except(:client_id), class: 'list-group-item', active: params[:client_id].nil?
+          - @clients.each do |client|
+            = active_link_to client.name, params.except(:page).merge(client_id: client.to_param), class: 'list-group-item', active: client.id == params[:client_id].to_i
+
+  .col-sm-9
+    = form_tag :batch_process_admin_projects, method: :patch, remote: true do
+
+      #toolbar.btn-toolbar
+        .btn-group.only-js
+          = create_button_link_for Project, namespace: :admin, icon: :plus, caption: translate('helpers.links.new', model: Project.model_name.human), remote: true
+        .btn-group
+          = button_tag name: 'destroy', class: 'btn btn-danger deactivatable-batch-control', data: { hotkey: 'del', confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) } do
+            = prepend_icon :trash, translate('helpers.links.destroy_selected'), outline: true
+        .pull-right
+          = paginate @projects
+
+      #projects_empty_hint.well.text-center{class: @projects.any? ? 'hidden' : nil}
+        = translate('views.hints.empty', model: Project.model_name.human(count: 2))
+
+      %table#projects.table.table-hover{class: @projects.empty? ? 'hidden' : nil}
+        %thead
+          %tr
+            %th.checkbox-cell
+              %input{type: 'checkbox', class: 'js-only table-checkbox-all', data: { toggle: 'tableCheckboxes' }}
+            %th= sort_link @project_search, :translations_title
+            %th= sort_link @project_search, :client_name, Project.human_attribute_name(:client_name)
+            %th= sort_link @project_search, :released_in, Project.human_attribute_name(:released_in), default_order: :desc
+            %th.actions
+        %tbody
+          - @projects.each do |project|
+            = render project

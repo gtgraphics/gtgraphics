@@ -13,6 +13,12 @@ GtGraphics::Application.routes.draw do
     end
   end
 
+  concern :batch_processable do
+    collection do
+      patch :batch, action: :batch_process, as: :batch_process
+    end
+  end
+
   get 'sitemap.:format', to: 'sitemaps#index', as: :sitemaps
   get 'sitemap.:page.:format', to: 'sitemaps#show', as: :sitemap
   
@@ -39,31 +45,31 @@ GtGraphics::Application.routes.draw do
               end
             end
 
-            resource :account, except: [:new, :create, :show] do
+            resource :account, except: [:new, :create] do
               get :edit_password
               patch :update_password
               patch :update_preferences
             end
 
-            resources :attachments, except: :show do
+            resources :attachments, except: :show, concerns: :batch_processable do
               collection do
                 patch :upload
-                patch :batch, action: :batch_process, as: :batch_process
+              end
+              member do
+                get :download
               end
               patch :convert_to_image, on: :member
             end
 
-            resources :images, except: [:new, :create], concerns: :customizable do
-              resources :styles, controller: :'image/styles', concerns: [:customizable, :movable] do
+            resources :images, except: [:new, :create], concerns: [:customizable, :batch_processable] do
+              resources :styles, controller: :'image/styles', concerns: [:customizable, :movable, :batch_processable] do
                 collection do
                   match :upload, via: [:post, :patch]
-                  patch :batch, action: :batch_process, as: :batch_process
                   delete :destroy_multiple
                 end
               end
               collection do
                 patch :upload
-                patch :batch, action: :batch_process, as: :batch_process
                 patch :associate_owner, action: :associate_owner, as: :associate_owner_with
               end
               member do
@@ -73,6 +79,12 @@ GtGraphics::Application.routes.draw do
                 patch :convert_to_attachment
               end
             end
+
+            resources :projects, concerns: :batch_processable do
+              resources :images, controller: :'project/images', concerns: :movable, only: :destroy
+            end
+
+            resources :clients
 
             resources :messages, only: [:index, :show, :destroy] do
               collection do

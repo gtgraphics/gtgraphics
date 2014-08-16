@@ -15,30 +15,32 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def index
-    if image_id_or_ids = params[:id] and image_id_or_ids.present?
-      if image_id_or_ids.is_a?(Array)
-        @images = ::Image.where(id: image_id_or_ids)
+    @images = Image.with_translations_for_current_locale.
+                    select(Image.arel_table[Arel.star], Image::Translation.arel_table[:title]).
+                    uniq.includes(:author)
+
+    image_ids = Array(params[:id])
+    if image_ids.any?
+      if image_ids.one?
+        redirect_to params.merge(action: :show) and return        
       else
-        redirect_to params.merge(action: :show) and return
+        @images = @images.where(id: image_ids)
       end
     else
-      @images = ::Image.search(params[:query])
+      @images = @images.search(params[:query])
+      @image_search = @images.ransack(params[:search])
+      @image_search.sorts = 'translations_title asc' if @image_search.sorts.empty?
+      @images = @image_search.result
     end
 
     @users = User.order(:first_name, :last_name)
-    if params[:author_id]
-      @images = @images.where(author_id: params[:author_id])
-    end
   
-    @images = @images.with_translations_for_current_locale \
-                     .includes(:author) \
-                     .select(Image.arel_table[Arel.star], Image::Translation.arel_table[:title])
-                     .sort(params[:sort], params[:direction])
-                     .page(params[:page]).per(25)
-    @images = @images.includes(:styles) if params[:include_styles].to_b
-    @images = @images.created(params[:period]) if params[:period]
-    @images = @images.where(content_type: params[:content_type]) if params[:content_type]
-  
+    @images.includes!(:styles) if params[:include_styles].to_b
+    @images.where!(author_id: params[:author_id]) if params[:author_id].present?
+    @images = @images.created(params[:period]) if params[:period].present?
+    @images.where!(content_type: params[:content_type]) if params[:content_type].present?
+    @images = @images.page(params[:page])
+
     respond_with :admin, @images do |format|
       format.json
     end
@@ -136,8 +138,6 @@ class Admin::ImagesController < Admin::ApplicationController
   def batch_process
     if params.key? :destroy
       destroy_multiple
-    elsif params.key? :search
-      search
     elsif params.key? :assign_owner
       assign_owner
     elsif params.key? :convert_to_attachment
@@ -148,15 +148,6 @@ class Admin::ImagesController < Admin::ApplicationController
       end
     end
   end
-
-  def search
-    location = admin_images_path(query: params[:query].presence)
-    respond_to do |format|
-      format.html { redirect_to location }
-      format.js { redirect_via_turbolinks_to location }
-    end
-  end
-  private :search # invoked through :batch_process
 
   def destroy_multiple
     image_ids = Array(params[:image_ids]).map(&:to_i).reject(&:zero?)

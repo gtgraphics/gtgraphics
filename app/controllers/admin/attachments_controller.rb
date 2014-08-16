@@ -10,33 +10,34 @@ class Admin::AttachmentsController < Admin::ApplicationController
   end
 
   def index
-    if attachment_id_or_ids = params[:id] and attachment_id_or_ids.present?
-      if attachment_id_or_ids.is_a?(Array)
-        @attachments = Attachment.where(id: attachment_id_or_ids)
-      else
+    @attachments = Attachment.with_translations_for_current_locale.
+                              select(Attachment.arel_table[Arel.star], Attachment::Translation.arel_table[:title]).
+                              uniq.includes(:author)
+
+    attachment_ids = Array(params[:id])
+    if attachment_ids.any?
+      if attachment_ids.one?
         redirect_to params.merge(action: :show) and return
+      else
+        @attachments = @attachments.where(id: attachment_id_or_ids)
       end
     else
-      @attachments = Attachment.search(params[:query])
+      @attachments = @attachments.search(params[:query])
+      @attachment_search = @attachments.ransack(params[:search])
+      @attachment_search.sorts = 'translations_title asc' if @attachment_search.sorts.empty?
+      @attachments = @attachment_search.result
     end
 
     @users = User.order(:first_name, :last_name)
-    if params[:author_id]
-      @attachments = @attachments.where(author_id: params[:author_id])
-    end
-  
-    @attachments = @attachments.with_translations_for_current_locale \
-                               .includes(:author) \
-                               .sort(params[:sort], params[:direction])
-                               .page(params[:page]).per(25)
-    @attachments = @attachments.includes(:styles) if params[:include_styles].to_b
-    @attachments = @attachments.created(params[:period]) if params[:period]
-    @attachments = @attachments.where(content_type: params[:content_type]) if params[:content_type]
+    
+    @attachments.where!(author_id: params[:author_id]) if params[:author_id].present?
+    @attachments = @attachments.created(params[:period]) if params[:period].present?
+    @attachments.where!(content_type: params[:content_type]) if params[:content_type].present?
+    @attachments = @attachments.page(params[:page])
   
     respond_with :admin, @attachments do |format|
       format.json
     end
-
   end
 
   def new
@@ -70,6 +71,13 @@ class Admin::AttachmentsController < Admin::ApplicationController
     respond_with :admin, @attachment, location: :admin_attachments
   end
 
+  def download
+    send_file @attachment.asset.path, filename: @attachment.virtual_filename,
+                                      content_type: @attachment.content_type,
+                                      disposition: :attachment,
+                                      x_sendfile: true
+  end
+
   def destroy
     @attachment.destroy
     flash_for @attachment
@@ -92,23 +100,12 @@ class Admin::AttachmentsController < Admin::ApplicationController
   def batch_process
     if params.key? :destroy
       destroy_multiple
-    elsif params.key? :search
-      search
     else
       respond_to do |format|
         format.any { head :bad_request }
       end
     end
   end
-
-  def search
-    location = admin_attachments_path(query: params[:query].presence)
-    respond_to do |format|
-      format.html { redirect_to location }
-      format.js { redirect_via_turbolinks_to location }
-    end
-  end
-  private :search # invoked through :batch_process
 
   def destroy_multiple
     attachment_ids = Array(params[:attachment_ids]).map(&:to_i).reject(&:zero?)

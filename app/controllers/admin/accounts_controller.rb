@@ -12,6 +12,12 @@ class Admin::AccountsController < Admin::ApplicationController
     end
   end
 
+  def show
+    respond_to do |format|
+      format.html { redirect_to action: :edit }
+    end
+  end
+
   def edit
     @user_update_activity = Admin::User::AccountUpdateActivity.new
     @user_update_activity.user = @user

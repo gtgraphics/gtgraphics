@@ -26,7 +26,7 @@ class Image < ActiveRecord::Base
     include Image::Croppable
     include Image::Resizable
     include PersistenceContextTrackable
-    include Sortable
+    include TitleSearchable
     include Translatable
 
     belongs_to :image, inverse_of: :styles
@@ -35,25 +35,11 @@ class Image < ActiveRecord::Base
 
     acts_as_list scope: :image_id
 
-    acts_as_sortable do |by|
-      by.title(default: true) { |column, dir| Image::Style::Translation.arel_table[column].send(dir.to_sym) }
-      by.dimensions { |column, dir| "(#{table_name}.width * #{table_name}.height) #{dir}" }
-    end
-
     has_image
 
     validates :image_id, presence: true, strict: true
 
     default_scope -> { order(:position) }
-
-    def self.search(query)
-      if query.present?
-        terms = query.to_s.split.uniq.map { |term| "%#{term}%" }
-        ransack(translations_title_matches_any: terms).result
-      else
-        all
-      end
-    end
 
     def virtual_filename
       I18n.with_locale(I18n.default_locale) do

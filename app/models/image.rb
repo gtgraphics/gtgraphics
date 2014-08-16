@@ -28,8 +28,8 @@ class Image < ActiveRecord::Base
   include Ownable
   include PeriodFilterable
   include PersistenceContextTrackable
-  include Sortable
   include Taggable
+  include TitleSearchable
   include Translatable
 
   # Disallow changing the asset as all custom_styles depend on it
@@ -38,6 +38,7 @@ class Image < ActiveRecord::Base
   has_many :styles, class_name: 'Image::Style', inverse_of: :image, dependent: :destroy
   has_many :image_pages, class_name: 'Page::Image', inverse_of: :image, dependent: :destroy
   has_many :pages, through: :image_pages
+  has_many :project_images, class_name: 'Project::Image', inverse_of: :image, dependent: :destroy
 
   has_image
   has_owner :author, default_owner_to_current_user: false
@@ -50,21 +51,6 @@ class Image < ActiveRecord::Base
 
   # before_save :set_predefined_style_dimensions
   before_validation :set_default_title, on: :create
-
-  acts_as_sortable do |by|
-    by.title(default: true) { |column, dir| Image::Translation.arel_table[column].send(dir.to_sym) }
-    by.author { |dir| [User.arel_table[:first_name].send(dir.to_sym), User.arel_table[:last_name].send(dir.to_sym)] }
-    by.created_at
-  end
-
-  def self.search(query)
-    if query.present?
-      terms = query.to_s.split.uniq.map { |term| "%#{term}%" }
-      ransack(translations_title_matches_any: terms).result.uniq
-    else
-      all
-    end
-  end
 
   def dominant_colors
     @dominant_colors ||= Miro::DominantColors.new(asset.custom.path)

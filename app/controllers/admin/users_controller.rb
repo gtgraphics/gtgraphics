@@ -19,7 +19,10 @@ class Admin::UsersController < Admin::ApplicationController
 
   def index
     @current_users = User.current_users
-    @users = User.search(params[:search]).sort(params[:sort], params[:direction]).page(params[:page])
+    @users = User.all.uniq
+    @user_search = @users.search(params[:search])
+    @user_search.sorts = ['first_name asc', 'last_name asc'] if @user_search.sorts.empty?
+    @users = @user_search.result.page(params[:page])
     respond_with :admin, @users
   end
 

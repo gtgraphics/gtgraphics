@@ -48,6 +48,7 @@ class Ability
 
       can :manage, Attachment
       can :manage, [Image, Image::Style]
+      can :manage, Project
 
       can [:read, :create, :update], Page
       can :destroy, Page, Page.where.not(parent_id: nil) do |page|

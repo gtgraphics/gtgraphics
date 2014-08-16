@@ -9,8 +9,11 @@ class Admin::MessagesController < Admin::ApplicationController
   end
 
   def index
-    @message_recipiences = current_user.message_recipiences.includes(message: :recipients).references(:messages) \
-                                       .sort(params[:sort], params[:direction]).page(params[:page])
+    @message_recipiences = current_user.message_recipiences.
+                                        includes(message: :recipients).uniq
+    @message_recipience_search = @message_recipiences.ransack(params[:search])
+    @message_recipience_search.sorts = '' if @message_recipience_search.sorts.empty?
+    @message_recipiences = @message_recipience_search.result.page(params[:page])
     respond_with :admin, @message_recipiences
   end
 

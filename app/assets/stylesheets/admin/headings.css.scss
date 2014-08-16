@@ -5,9 +5,13 @@
     margin: 0;
   }
   .btn-toolbar {
-    margin-top: 2px;
+    //margin-top: 2px;
   }
   &.page-header-no-rule {
     border-bottom: none;
+  }
+
+  .search-component {
+    margin: 2px 0;
   }
 }

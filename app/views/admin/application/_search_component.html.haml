@@ -1,0 +1,9 @@
+= search_form_for search, as: :search, url: url do |form|
+  = hidden_field_tag 'search[s]', search.sorts.flat_map { |sort| [sort.name, sort.dir] }.join(' '), id: nil
+  .search-component
+    = form.search_field :translations_title_cont, class: 'search-input form-control input-rounded', placeholder: translate('helpers.prompts.search'), autofocus: true
+    .btn-toolbar
+      = button_tag type: 'submit', class: 'btn btn-search', title: translate('helpers.links.search'), data: { toggle: 'tooltip', placement: 'top', container: 'body' } do
+        = prepend_icon :search, translate('helpers.links.search'), caption_html: { class: 'sr-only' }
+      = button_link_to url, type: :search, title: translate('helpers.links.reset'), data: { toggle: 'tooltip', placement: 'top', container: 'body' } do
+        = prepend_icon :times, translate('helpers.links.reset'), caption_html: { class: 'sr-only' }

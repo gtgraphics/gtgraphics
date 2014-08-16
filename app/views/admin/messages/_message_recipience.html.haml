@@ -1,8 +1,8 @@
 - present recipience.message, with: Admin::MessagePresenter do |message|
   = content_tag_for :tr, message do
-    - if checkboxes
+    - if local_assigns.fetch(:checkbox, true)
       %td.checkbox-cell
-        = check_box_tag 'message_ids[]', message.id, false, class: 'table-checkbox', id: nil
+        = check_box_tag 'message_ids[]', message.id, false, class: 'table-checkbox', id: nil, data: { behavior: 'tableCheckbox' }
     %td
       = content_tag recipience.unread? ? :strong : :span do
         = link_to message.subject.presence || translate('helpers.prompts.no_subject'), message.show_path
@@ -15,6 +15,6 @@
           = prepend_icon :circle, translate('views.admin.messages.mark_read'), outline: false, caption_html: { class: 'sr-only' }
     %td= mail_to message.sender_email, message.sender_name
     %td= message.created_at
-    - if actions
+    - if local_assigns.fetch(:actions, true)
       %td.actions
         = message.action_buttons icon_only: true

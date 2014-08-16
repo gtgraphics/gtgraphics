@@ -1,0 +1,34 @@
+- present @project, with: Admin::ProjectPresenter do |project|
+
+  = page_header do
+    .btn-toolbar
+      .btn-group.pull-right
+        = button_link_to [:edit, :admin, project], data: { toggle: 'dropdown' }, class: 'dropdown-toggle' do
+          = prepend_icon :cog, translate('helpers.links.settings'), fixed_width: true, caption_html: { class: 'sr-only' }
+        %ul.dropdown-menu{role: 'menu', aria_labelledby: 'dLabel'}
+          %li= link_to prepend_icon(:pencil, translate('helpers.links.edit'), fixed_width: true), [:edit, :admin, project]
+          %li= link_to prepend_icon(:trash, translate('helpers.links.destroy'), outline: true, fixed_width: true), [:admin, project], method: :delete, data: { confirm: translate('helpers.confirmations.destroy', model: Project.model_name.human) }
+
+  .row
+    .col-lg-8
+
+
+    .col-lg-4
+
+      - if project.author.present?
+        = panel do
+          .row
+            .col-sm-3
+              = project.author.gravatar(true)
+            .col-sm-9
+              = project.author.name(true)
+              .text-muted= project.updated_at
+
+      - if project.description.present?
+        = panel do
+          = liquify project.description, with: project
+
+      = panel prepend_icon(:info, translate('views.admin.projects.headlines.details'), fixed_width: true) do
+        %dl.dl-horizontal
+          = project.list_item :client
+          = project.list_item :released_in

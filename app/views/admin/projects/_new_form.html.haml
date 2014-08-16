@@ -1,7 +1,9 @@
-= simple_form_for [:admin, @image], remote: true, wrappers: :horizontal_form, html: { class: 'form-horizontal' } do |form|
+= simple_form_for [:admin, @project], remote: true, html: { class: 'form-horizontal' } do |form|
+
   .modal-body
-    = form.input :asset
-    = form.input :title, required: false
+    = form.input :title, input_html: { autofocus: true }
+    = form.input :client_name # TODO Autocomplete
+    = form.input :released_in, collection: Date.today.year.downto(2005)
 
   .modal-footer
     = form.button :button, name: 'save', type: 'submit', class: 'btn-primary' do

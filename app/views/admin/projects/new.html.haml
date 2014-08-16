@@ -1,0 +1,4 @@
+- content_for :title, translate('breadcrumbs.new', model: Project.model_name.human)
+
+- content_for :content do
+  = render 'new_form'
