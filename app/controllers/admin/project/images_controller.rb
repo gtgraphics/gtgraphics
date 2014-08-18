@@ -50,9 +50,8 @@ class Admin::Project::ImagesController < Admin::ApplicationController
   def destroy_multiple
     project_image_ids = Array(params[:project_image_ids]).map(&:to_i).reject(&:zero?)
     Project::Image.accessible_by(current_ability).destroy_all(id: project_image_ids)
-    location = request.referer || [:admin, @project]
     respond_to do |format|
-      format.html { redirect_to location }
+      format.html { redirect_to [:admin, @project] }
       format.js { render :refresh_table }
     end
   end
