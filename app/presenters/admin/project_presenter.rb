@@ -12,4 +12,9 @@ class Admin::ProjectPresenter < Admin::ApplicationPresenter
   def client
     client_name.presence || placeholder
   end
+
+  def summary
+    human_name = Image.model_name.human(count: project.images_count)
+    "#{project.images_count} #{human_name}"
+  end
 end

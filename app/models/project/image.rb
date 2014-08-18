@@ -12,7 +12,7 @@ class Project < ActiveRecord::Base
   class Image < ActiveRecord::Base
     acts_as_list scope: :project
 
-    belongs_to :project, inverse_of: :project_images
+    belongs_to :project, inverse_of: :project_images, counter_cache: :images_count
     belongs_to :image, class_name: '::Image', inverse_of: :project_images
 
     default_scope -> { order(:position) }
