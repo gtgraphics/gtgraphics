@@ -308,6 +308,9 @@ de:
       project:
         one: Projekt
         other: Projekte
+      project/image:
+        one: Projektbild
+        other: Projektbilder
       shout:
         one: Stern
         other: Sterne

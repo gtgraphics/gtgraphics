@@ -37,6 +37,10 @@ class Presenter
     (object && object.respond_to?(method_name, include_private)) || super
   end
 
+  def to_model
+    object
+  end
+
   protected
   def template
     @_template

@@ -1,5 +1,6 @@
 module AttachedAssetHelper
   def attached_asset_path(object, version = nil)
+    object = object.to_model if object.respond_to?(:to_model)
     if version.nil?
       url = object.asset.url
     else

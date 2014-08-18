@@ -3,5 +3,13 @@ class Admin::ProjectPresenter < Admin::ApplicationPresenter
   
   def author
     present project.author, with: Admin::UserPresenter 
-  end  
+  end
+
+  def released_in
+    super.presence || placeholder
+  end
+
+  def client
+    client_name.presence || placeholder
+  end
 end

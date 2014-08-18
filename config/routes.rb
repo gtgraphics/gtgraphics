@@ -81,7 +81,15 @@ GtGraphics::Application.routes.draw do
             end
 
             resources :projects, concerns: :batch_processable do
-              resources :images, controller: :'project/images', concerns: :movable, only: :destroy
+              member do
+                get :assign_image
+                patch :assign_image
+              end
+              resources :images, controller: :'project/images', only: :destroy, concerns: [:movable, :batch_processable] do
+                collection do
+                  patch :upload
+                end
+              end
             end
 
             resources :clients
@@ -91,7 +99,8 @@ GtGraphics::Application.routes.draw do
                 delete :destroy_multiple
               end
               member do
-                patch :toggle
+                patch :mark_read
+                patch :mark_unread
               end
             end
 
@@ -124,15 +133,6 @@ GtGraphics::Application.routes.draw do
               get :translation_fields, on: :collection
             end
 
-            resources :shouts
-
-            resources :snippets, except: :show do
-              collection do
-                delete :destroy_multiple
-                get :editor_preview
-              end
-            end
-
             resources :tags, only: :index
             
             resources :templates, except: :new, concerns: :movable do
@@ -141,7 +141,6 @@ GtGraphics::Application.routes.draw do
               collection do
                 get 'types/:template_type', action: :index, as: :typed
                 delete :destroy_multiple
-                get :files_fields
               end
               member do
                 delete 'destroy_region/:label', action: :destroy_region, as: :destroy_region

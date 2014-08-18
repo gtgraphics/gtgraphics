@@ -22,12 +22,9 @@
       #image_style_upload_dropzone
         = form_tag batch_process_admin_image_styles_path(@image), method: :patch, remote: true do
           .panel.panel-default
-            .panel-heading.clearfix
-              .panel-title.pull-left
-                = prepend_icon :picture, Image::Style.model_name.human(count: 2), outline: true, fixed_width: true
-
+            .panel-heading
+              %h4.panel-title= prepend_icon :picture, Image::Style.model_name.human(count: 2), outline: true, fixed_width: true
             = render 'admin/image/styles/table'
-
             .panel-footer.clearfix
               .btn-toolbar.pull-left
                 .btn-group
@@ -53,9 +50,9 @@
         = panel do
           .row
             .col-sm-3
-              = link_to image.author.gravatar, [:admin, image.author]
+              = image.author.gravatar(true)
             .col-sm-9
-              = link_to image.author.name, [:admin, image.author]
+              = image.author.name(true)
               .text-muted= image.updated_at
               .text-muted= image.styles_count
 

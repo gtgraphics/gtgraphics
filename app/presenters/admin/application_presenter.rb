@@ -122,4 +122,8 @@ class Admin::ApplicationPresenter < Presenter
   def default_button_options(options = {})
     {}
   end
+
+  def placeholder
+    '&ndash;'.html_safe
+  end
 end

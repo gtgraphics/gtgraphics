@@ -1,1 +1,0 @@
-Turbolinks.visit('<%= admin_image_path(@image) %>')

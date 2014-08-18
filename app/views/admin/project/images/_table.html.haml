@@ -1,0 +1,16 @@
+- if @project.project_images.any?
+  %table.table#project_images
+    %thead
+      %tr
+        %th.checkbox-cell
+          %input{type: 'checkbox', class: 'js-only table-checkbox-all'}
+        %th.thumbnail-cell
+        %th= Image.human_attribute_name :title
+        %th.actions
+    %tbody
+      - @project.project_images.each do |project_image|
+        = render 'admin/project/images/project_image', project_image: project_image
+
+- else
+  #project_images.panel-body.text-center
+    = translate('views.hints.empty', model: Project::Image.model_name.human(count: 2))

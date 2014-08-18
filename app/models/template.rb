@@ -16,7 +16,6 @@ class Template < ActiveRecord::Base
   include ConcreteTemplate
   include Excludable
   include PersistenceContextTrackable
-  include Sortable
 
   TEMPLATE_TYPES = %w(
     Template::ContactForm
@@ -37,14 +36,9 @@ class Template < ActiveRecord::Base
   validates :type, presence: true, inclusion: { in: TEMPLATE_TYPES, allow_blank: true }, on: :create
   validates :file_name, presence: true, inclusion: { in: ->(template) { template.class.template_files }, if: :type?, allow_blank: true }
 
-  acts_as_sortable do |by|
-    by.name default: true
-    by.updated_at
-  end
+  class_attribute :template_lookup_path, instance_accessor: false
 
   class << self
-    attr_accessor :template_lookup_path
-
     def template_files(full_paths = false)
       raise 'method can only be called on subclasses of Template' if self.name == 'Template'
       lookup_path = File.join([VIEW_ROOT, template_lookup_path, '*'].compact)

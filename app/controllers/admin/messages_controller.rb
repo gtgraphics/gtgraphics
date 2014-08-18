@@ -1,7 +1,7 @@
 class Admin::MessagesController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_message, only: %i(show destroy toggle)
+  before_action :load_message, only: %i(show destroy mark_read mark_unread)
 
   breadcrumbs do |b|
     b.append Message.model_name.human(count: 2), :admin_messages
@@ -12,7 +12,7 @@ class Admin::MessagesController < Admin::ApplicationController
     @message_recipiences = current_user.message_recipiences.
                                         includes(message: :recipients).uniq
     @message_recipience_search = @message_recipiences.ransack(params[:search])
-    @message_recipience_search.sorts = '' if @message_recipience_search.sorts.empty?
+    @message_recipience_search.sorts = 'created_at desc' if @message_recipience_search.sorts.empty?
     @message_recipiences = @message_recipience_search.result.page(params[:page])
     respond_with :admin, @message_recipiences
   end
@@ -28,13 +28,17 @@ class Admin::MessagesController < Admin::ApplicationController
     respond_with :admin, @message_recipience, location: :admin_messages
   end
 
-  def toggle
-    @message_recipience.toggle!(:read)
-    if @message_recipience.read?
-      flash_for :message, :marked_read
-    else
-      flash_for :message, :marked_unread
+  def mark_read
+    @message_recipience.mark_read!
+    flash_for :message, :marked_read
+    respond_to do |format|
+      format.html { redirect_to request.referer || :admin_messages }
     end
+  end
+
+  def mark_unread
+    @message_recipience.mark_unread!
+    flash_for :message, :marked_unread
     respond_to do |format|
       format.html { redirect_to request.referer || :admin_messages }
     end

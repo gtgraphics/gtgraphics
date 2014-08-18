@@ -46,7 +46,7 @@ class Admin::ProjectsController < Admin::ApplicationController
   end
 
   def show
-    @project_images = 
+    @project_images = @project.project_images.includes(:image)
     respond_with :admin, @project
   end
 
@@ -55,6 +55,7 @@ class Admin::ProjectsController < Admin::ApplicationController
   end
 
   def update
+    @project.update(project_params)
     respond_with :admin, @project, location: [:edit, :admin, @project]
   end
 
@@ -97,6 +98,6 @@ class Admin::ProjectsController < Admin::ApplicationController
   end
 
   def project_params
-    params.require(:project).permit! # TODO
+    params.require(:project).permit(:title, :client_name, :released_in, :description)
   end
 end

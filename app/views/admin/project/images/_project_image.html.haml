@@ -1,0 +1,16 @@
+- present project_image, with: Admin::Project::ImagePresenter do |project_image|
+  - present project_image.image, with: Admin::ImagePresenter do |image|
+    = content_tag_for :tr, project_image do
+      - if local_assigns.fetch(:checkboxes, true)
+        %td.checkbox-cell
+          = check_box_tag 'project_image_ids[]', project_image.id, false, class: 'table-checkbox', id: nil, data: { behavior: 'tableCheckbox' }
+      %td.thumbnail-cell
+        = link_to attached_asset_path(image, :custom), target: '_blank' do
+          = image_tag attached_asset_path(image, :thumbnail), class: 'img-circle', alt: image.title, width: 45, height: 45
+      %td
+        = link_to image.title, attached_asset_path(image, :custom), target: '_blank'
+        %br
+        %span.text-muted.ignored
+          = image.dimensions
+      %td.actions
+        = project_image.action_buttons remote: true, icon_only: true

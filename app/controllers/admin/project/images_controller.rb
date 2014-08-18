@@ -1,21 +1,51 @@
 class Admin::Project::ImagesController < Admin::ApplicationController
+  respond_to :html, :js
+
   before_action :load_project
   before_action :load_project_image, only: %i(move_up move_down destroy)
 
+  def upload
+    raise NotImplementedError
+  end
+
   def move_up
     @project_image.move_higher
-    respond_with :admin, @project, @project_image
+    respond_with :admin, @project, @project_image, location: [:admin, @project]
   end
 
   def move_down
     @project_image.move_lower
-    respond_with :admin, @project, @project_image
+    respond_with :admin, @project, @project_image, location: [:admin, @project]
   end
 
   def destroy
     @project_image.destroy
-    respond_with :admin, @project, @project_image, location: [:admin, @project]
+    respond_with :admin, @project, @project_image, location: [:admin, @project] do |format|
+      format.js { redirect_via_turbolinks_to [:admin, @project] }
+    end
   end
+
+  def batch_process
+    if params.key? :destroy
+      destroy_multiple
+    else
+      respond_to do |format|
+        format.any { head :bad_request }
+      end
+    end
+  end
+
+  def destroy_multiple
+    project_image_ids = Array(params[:project_image_ids]).map(&:to_i).reject(&:zero?)
+    Project::Image.accessible_by(current_ability).destroy_all(id: project_image_ids)
+    flash_for Project::Image, :destroyed, multiple: true
+    location = request.referer || [:admin, @project]
+    respond_to do |format|
+      format.html { redirect_to location }
+      format.js { redirect_via_turbolinks_to location }
+    end
+  end
+  private :destroy_multiple
 
   private
   def load_project
@@ -23,5 +53,6 @@ class Admin::Project::ImagesController < Admin::ApplicationController
   end
 
   def load_project_image
+    @project_image = @project.project_images.find_by!(image_id: params[:id])
   end
 end

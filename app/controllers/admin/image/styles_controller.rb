@@ -106,7 +106,9 @@ class Admin::Image::StylesController < Admin::ApplicationController
   def destroy
     @image_style.destroy
     flash_for @image_style
-    respond_with :admin, @image, @image_style, location: [:admin, @image]
+    respond_with :admin, @image, @image_style, location: [:admin, @image] do |format|
+      format.js { redirect_via_turbolinks_to [:admin, @image] }
+    end
   end
 
   # Batch Processing
@@ -125,7 +127,7 @@ class Admin::Image::StylesController < Admin::ApplicationController
     image_style_ids = Array(params[:image_style_ids]).map(&:to_i).reject(&:zero?)
     ::Image::Style.accessible_by(current_ability).destroy_all(id: image_style_ids)
     flash_for ::Image, :destroyed, multiple: true
-    location = request.referer || admin_image_styles_path(@image)
+    location = request.referer || [:admin, @image]
     respond_to do |format|
       format.html { redirect_to location }
       format.js { redirect_via_turbolinks_to location }

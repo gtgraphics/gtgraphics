@@ -31,6 +31,7 @@ de:
       insert: '%{model} einfügen'
     links:
       add: Hinzufügen
+      assign: '%{model} zuordnen'
       apply: Anwenden
       assign_owner: Eigentümer zuweisen
       cancel: Abbrechen

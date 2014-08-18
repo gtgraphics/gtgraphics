@@ -12,6 +12,29 @@
   .row
     .col-lg-8
 
+      #project_image_upload_dropzone
+        = form_tag batch_process_admin_project_images_path(@project), method: :patch, remote: true do
+
+          .panel.panel-default
+            .panel-heading
+              %h4.panel-title= prepend_icon :picture, Image.model_name.human(count: 2), outline: true, fixed_width: true
+        
+            = render 'admin/project/images/table'
+
+            .panel-footer.clearfix
+              - if @project.project_images.any?
+                .btn-toolbar.pull-left
+                  .btn-group
+                    = button_tag name: 'destroy', class: 'btn btn-danger deactivatable-batch-control', data: { hotkey: 'del', confirm: translate('helpers.confirmations.destroy_selected', model: Image::Style.model_name.human(count: 2)) } do
+                      = prepend_icon :trash, translate('helpers.links.destroy_selected'), outline: true
+              .btn-toolbar.pull-right
+                .btn-group.only-js
+                  %span.btn.btn-success.fileinput-button
+                    = prepend_icon :upload, translate('helpers.links.upload', model: Image.model_name.human(count: 2))
+                    = file_field_tag :image_upload, name: 'image[asset]', multiple: true, data: { url: upload_admin_project_images_path(@project) }
+                .btn-group
+                  = button_link_to [:assign_image, :admin, @project], remote: true do
+                    = prepend_icon :mail_forward, translate('helpers.links.assign', model: Image.model_name.human(count: 2))
 
     .col-lg-4
 
@@ -28,7 +51,8 @@
         = panel do
           = liquify project.description, with: project
 
-      = panel prepend_icon(:info, translate('views.admin.projects.headlines.details'), fixed_width: true) do
-        %dl.dl-horizontal
-          = project.list_item :client
-          = project.list_item :released_in
+      - if project.client_id? or project.released_in?
+        = panel prepend_icon(:info, translate('views.admin.projects.headlines.details'), fixed_width: true) do
+          %dl.dl-horizontal
+            = project.list_item :client
+            = project.list_item :released_in
