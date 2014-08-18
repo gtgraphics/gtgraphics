@@ -5,23 +5,35 @@ class Admin::Project::ImagesController < Admin::ApplicationController
   before_action :load_project_image, only: %i(move_up move_down destroy)
 
   def upload
-    raise NotImplementedError
+    Project::Image.transaction do
+      image = ::Image.new(image_upload_params)
+      image.author = current_user
+      image.save!
+      @project_image = @project.project_images.create!(image: image)
+    end
+    respond_to do |format|
+      format.js { render :refresh_table }
+    end
   end
 
   def move_up
     @project_image.move_higher
-    respond_with :admin, @project, @project_image, location: [:admin, @project]
+    respond_with :admin, @project, @project_image, location: [:admin, @project] do |format|
+      format.js { render :refresh_table }
+    end
   end
 
   def move_down
     @project_image.move_lower
-    respond_with :admin, @project, @project_image, location: [:admin, @project]
+    respond_with :admin, @project, @project_image, location: [:admin, @project] do |format|
+      format.js { render :refresh_table }
+    end
   end
 
   def destroy
     @project_image.destroy
     respond_with :admin, @project, @project_image, location: [:admin, @project] do |format|
-      format.js { redirect_via_turbolinks_to [:admin, @project] }
+      format.js { render :refresh_table }
     end
   end
 
@@ -42,7 +54,7 @@ class Admin::Project::ImagesController < Admin::ApplicationController
     location = request.referer || [:admin, @project]
     respond_to do |format|
       format.html { redirect_to location }
-      format.js { redirect_via_turbolinks_to location }
+      format.js { render :refresh_table }
     end
   end
   private :destroy_multiple
@@ -54,5 +66,9 @@ class Admin::Project::ImagesController < Admin::ApplicationController
 
   def load_project_image
     @project_image = @project.project_images.find_by!(image_id: params[:id])
+  end
+
+  def image_upload_params
+    params.require(:image).permit(:asset)
   end
 end
