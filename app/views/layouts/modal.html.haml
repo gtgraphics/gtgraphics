@@ -1,4 +1,5 @@
-.modal.fade{role: 'dialog', id: 'modal'}
+#modal.modal.fade{role: 'dialog'}
+
   .modal-dialog{class: content_for?(:modal_size) ? "modal-#{yield(:modal_size)}" : nil}
     .modal-content
   
@@ -10,10 +11,7 @@
 
       - if content_for? :body
         .modal-body
-          - if content_for? :body
-            = yield :body
-          - else
-            = yield
+          = yield :body
 
         - if content_for? :footer
           .modal-footer
