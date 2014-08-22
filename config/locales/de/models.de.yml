@@ -82,6 +82,10 @@ de:
         author_id: Urheber
       admin/project_image_assignment_activity:
         image_id_tokens: Bilder
+      admin/project_page_creation_activity:
+        project_ids: Projekt
+        project_id_tokens: Projekt
+        template_id: Vorlage
     errors:
       models:
         admin/user/login_activity:
