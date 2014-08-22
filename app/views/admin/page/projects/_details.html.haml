@@ -1,0 +1,17 @@
+%fieldset
+  %legend= Project.model_name.human
+  .content.content-horizontal
+    - present project.project, with: Admin::ProjectPresenter do |project|
+      .project
+        - if project.image.present?
+          .preview
+            = link_to project.thumbnail(size: 45), [:admin, project]
+        .title
+          = link_to project.title, [:admin, project]
+        .detail.text-muted
+          - if project.object.client.present?
+            .client
+              = project.client
+          - if project.object.released_in.present?
+            .release-date.text-muted
+              = project.released_in

@@ -14,13 +14,7 @@ class Admin::Page::ImagesController < Admin::Page::ApplicationController
       a.parent_page = @page
     end
     if @image_page_creation_activity.errors.empty?
-      if @image_page_creation_activity.pages.many?
-        # if many pages have been created, redirect to parent
-        page = @image_page_creation_activity.parent_page
-      else
-        page = @image_page_creation_activity.pages.first
-      end
-      @location = admin_page_path(page)
+      @location = admin_page_path(@image_page_creation_activity.pages.first)
     end
     respond_to do |format|
       format.js

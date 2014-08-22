@@ -3,7 +3,7 @@ $modal = $('#modal')
 <% if @page.errors.empty? %>
 
 $modal.modal('hide')
-Turbolinks.visit('<%= admin_page_path(@page) %>')
+Turbolinks.visit('<%= admin_page_path(@page.parent) %>')
 
 <% else %>
 

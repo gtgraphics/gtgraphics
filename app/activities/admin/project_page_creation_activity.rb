@@ -21,9 +21,9 @@ class Admin::ProjectPageCreationActivity < Activity
   def perform
     self.pages.clear
     Page.transaction do
-      project_ids.each do |image_id|
+      project_ids.each do |project_id|
         self.pages << parent_page.children.projects.new(published: published?).tap do |p|
-          p.build_embeddable(image_id: image_id, template_id: template_id)
+          p.build_embeddable(project_id: project_id, template_id: template_id)
           p.title = p.embeddable.to_title
           p.set_next_available_slug
           p.save!

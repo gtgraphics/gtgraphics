@@ -93,7 +93,7 @@ GtGraphics::Application.routes.draw do
               end
             end
 
-            resources :clients
+            resources :clients, except: :show
 
             resources :messages, only: [:index, :show, :destroy] do
               collection do
@@ -114,7 +114,7 @@ GtGraphics::Application.routes.draw do
               end
               resource :image, controller: :'page/images', only: [:new, :create]
               resource :contact_form, controller: :'page/contact_forms', only: [:edit, :update]
-              resource :project, controller: :'page/projects', only: [:new, :create, :edit, :update]
+              resource :project, controller: :'page/projects', only: [:new, :create]
               resource :redirection, controller: :'page/redirections', only: [:edit, :update]
               collection do
                 get :preview_path

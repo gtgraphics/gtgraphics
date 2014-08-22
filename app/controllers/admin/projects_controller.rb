@@ -18,14 +18,32 @@ class Admin::ProjectsController < Admin::ApplicationController
 
   def index
     @clients = Client.order(:name)
-    @projects = ::Project.with_translations_for_current_locale.includes(:client, :author).
-                        select(::Project.arel_table[Arel.star], Client.arel_table[:name]).
-                        uniq.page(params[:page])
+
+    @projects = Project.with_translations_for_current_locale.
+                      includes(:client, :author).
+                      select(Project.arel_table[Arel.star], Project::Translation.arel_table[:title]).
+                      uniq.includes(:author)
+
+    project_ids = Array(params[:id])
+    if project_ids.any?
+      if project_ids.one?
+        redirect_to params.merge(action: :show) and return        
+      else
+        @projects = @projects.where(id: project_ids)
+      end
+    else
+      @projects = @projects.search(params[:query])
+      @project_search = @projects.ransack(params[:search])
+      @project_search.sorts = 'translations_title asc' if @project_search.sorts.empty?
+      @projects = @project_search.result
+    end
+
     @projects.where!(client_id: params[:client_id]) if params[:client_id].present?
-    @project_search = @projects.ransack(params[:search])
-    @project_search.sorts = 'translations_title asc' if @project_search.sorts.empty?
-    @projects = @project_search.result
-    respond_with :admin, @projects
+    @projects = @projects.page(params[:page])
+
+    respond_with :admin, @projects do |format|
+      format.json
+    end
   end
 
   def new

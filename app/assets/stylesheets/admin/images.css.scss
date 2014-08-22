@@ -6,7 +6,7 @@
   background-image: asset-url('admin/transparent.png');
 }
 
-.image {
+.image, .project {
   @include clearfix;
 
   .preview {

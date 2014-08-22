@@ -18,39 +18,23 @@ class Admin::Page::ProjectsController < Admin::Page::ApplicationController
       a.execute
     end
     if @project_page_creation_activity.errors.empty?
-      if @project_page_creation_activity.pages.many?
-        # if many pages have been created, redirect to parent
-        page = @project_page_creation_activity.parent_page
-      else
-        page = @project_page_creation_activity.pages.first
-      end
-      @location = admin_page_path(page)
+      @location = admin_page_path(@project_page_creation_activity.parent_page)
     end
     respond_to do |format|
       format.js
     end
   end
 
-  def edit
-    respond_with :admin, @page, @project
-  end
-
-  def update
-    @project.attributes = project_params
-    flash_for @page, :updated if @project.save
-    respond_with :admin, @page, @project, location: :edit_admin_page_project
-  end
-
   private
+  def load_project
+    @project = @page.embeddable
+  end
+
   def project_params
     params.require(:page_project).permit(:name, :description, :released_on, :client_name, :client_url)
   end
 
   def project_page_creation_activity_params
     params.require(:project_page_creation_activity).permit(:project_id_tokens, :template_id, :published)
-  end
-
-  def load_project
-    @project = @page.embeddable
   end
 end

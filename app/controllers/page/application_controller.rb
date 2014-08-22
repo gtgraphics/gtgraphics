@@ -15,7 +15,7 @@ class Page::ApplicationController < ApplicationController
     pages.each do |page|
       b.append page.title, page
     end
-  end
+  end 
  
   def show
     if self.respond_to?(@template.filename)

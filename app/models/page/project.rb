@@ -15,7 +15,7 @@ class Page < ActiveRecord::Base
 
     belongs_to :project, class_name: '::Project', inverse_of: :project_pages
 
-    validates :image, presence: true
+    validates :project, presence: true
 
     def to_liquid
       { 'project' => project }
