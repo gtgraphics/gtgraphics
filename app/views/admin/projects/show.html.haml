@@ -32,7 +32,7 @@
                     = prepend_icon :upload, translate('helpers.links.upload', model: Image.model_name.human(count: 2))
                     = file_field_tag :image_upload, name: 'image[asset]', multiple: true, data: { url: upload_admin_project_images_path(@project) }
                 .btn-group
-                  = button_link_to [:assign_image, :admin, @project], remote: true do
+                  = button_link_to [:assign_images_to, :admin, @project], remote: true do
                     = prepend_icon :mail_forward, translate('helpers.links.assign', model: Image.model_name.human(count: 2))
 
     .col-lg-4
@@ -50,8 +50,8 @@
         = panel do
           = liquify project.description, with: project
 
-      - if project.client_id? or project.released_in?
-        = panel prepend_icon(:info, translate('views.admin.projects.headlines.details'), fixed_width: true) do
-          %dl.dl-horizontal
-            = project.list_item :client
-            = project.list_item :released_in
+      = panel prepend_icon(:info, translate('views.admin.projects.headlines.details'), fixed_width: true) do
+        %dl.dl-horizontal
+          = project.list_item :client
+          = project.list_item :released_in
+          = project.list_item :pages_count

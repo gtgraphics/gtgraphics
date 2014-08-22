@@ -5,4 +5,5 @@ de:
     home: Startseite
     new: '%{model} erstellen'
     upload: '%{model} hochladen'
+    assign: '%{model} zuordnen'
     assign_to_gallery: '%{model} zu Galerie hinzufügen'

@@ -9,8 +9,12 @@
 #
 
 class Client < ActiveRecord::Base
+  include Searchable
+
   sanitizes :name, with: :squish
   sanitizes :country, with: :upcase
+
+  acts_as_searchable_on :name
 
   has_many :projects, dependent: :nullify
 

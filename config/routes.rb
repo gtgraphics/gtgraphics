@@ -81,14 +81,15 @@ GtGraphics::Application.routes.draw do
             end
 
             resources :projects, concerns: :batch_processable do
-              member do
-                get :assign_image
-                patch :assign_image
-              end
               resources :images, controller: :'project/images', only: :destroy, concerns: [:movable, :batch_processable] do
                 collection do
                   patch :upload
                 end
+              end
+              member do
+                get :pages
+                get :assign_images, as: :assign_images_to
+                post :assign_images, action: :attach_images, as: :attach_images_to
               end
             end
 

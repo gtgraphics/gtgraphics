@@ -1,5 +1,5 @@
 - content_for :title do
-  = Page::Image.model_name.human(count: 2)
+  = Page::Project.model_name.human(count: 2)
   .badge= @pages.count
 
 - content_for :content do
@@ -12,4 +12,4 @@
             .text-muted
               = page.path
     - else
-      = translate 'views.hints.empty', model: Page::Image.model_name.human(count: 2)
+      = translate 'views.hints.empty', model: Page::Project.model_name.human(count: 2)

@@ -1,7 +1,7 @@
 class Admin::ProjectsController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_project, only: %i(show edit update destroy)
+  before_action :load_project, only: %i(show edit update destroy assign_images attach_images pages)
 
   breadcrumbs do |b|
     b.append ::Project.model_name.human(count: 2), :admin_projects
@@ -40,6 +40,7 @@ class Admin::ProjectsController < Admin::ApplicationController
     @project = ::Project.new(new_project_params)
     @project.author = current_user
     @project.save
+    flash_for @project
     respond_to do |format|
       format.js
     end
@@ -56,12 +57,38 @@ class Admin::ProjectsController < Admin::ApplicationController
 
   def update
     @project.update(project_params)
-    respond_with :admin, @project, location: [:edit, :admin, @project]
+    flash_for @project
+    respond_with :admin, @project
   end
 
   def destroy
     @project.destroy
+    flash_for @project
     respond_with :admin, @project
+  end
+
+  def assign_images
+    @project_image_assignment_activity = Admin::ProjectImageAssignmentActivity.new
+    @project_image_assignment_activity.project = @project
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def attach_images
+    @project_image_assignment_activity = Admin::ProjectImageAssignmentActivity.new(project_image_assignment_params)
+    @project_image_assignment_activity.project = @project
+    @project_image_assignment_activity.execute
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def pages
+    @pages = @project.pages.with_translations_for_current_locale
+    respond_to do |format|
+      format.js
+    end
   end
 
   # Batch Processing
@@ -98,6 +125,10 @@ class Admin::ProjectsController < Admin::ApplicationController
   end
 
   def project_params
-    params.require(:project).permit(:title, :client_name, :released_in, :description)
+    params.require(:project).permit(:title, :client_name, :released_in, :description, :author_id)
+  end
+
+  def project_image_assignment_params
+    params.require(:project_image_assignment_activity).permit(:image_id_tokens)
   end
 end

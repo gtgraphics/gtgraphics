@@ -42,6 +42,8 @@ de:
         loading: Inhalt wird geladen…
       attachments:
         hits_since: '%{count} Aufrufe seit %{date}'
+      clients:
+        create_unknown: '(neu erstellen)'
       images:
         original: Original
         headlines:

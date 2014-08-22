@@ -1,0 +1,4 @@
+- content_for :title, translate('breadcrumbs.assign', model: Project::Image.model_name.human(count: 2))
+
+- content_for :content do
+  = render 'assign_images_form'

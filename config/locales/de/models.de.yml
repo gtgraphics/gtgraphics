@@ -80,6 +80,8 @@ de:
       admin/image_owner_assignment_activity:
         image_ids: Bilder
         author_id: Urheber
+      admin/project_image_assignment_activity:
+        image_id_tokens: Bilder
     errors:
       models:
         admin/user/login_activity:
@@ -205,6 +207,9 @@ de:
         client: Auftraggeber
         client_name: Auftraggeber
         released_in: Jahr
+        pages_count: Seiten
+        author: Betreuer
+        author_id: Betreuer
       shout:
         nickname: Verfasser
         message: Nachricht

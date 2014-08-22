@@ -13,6 +13,7 @@
 #
 
 class Project < ActiveRecord::Base
+  include PersistenceContextTrackable
   include Ownable
   include Taggable
   include TitleSearchable
@@ -23,12 +24,14 @@ class Project < ActiveRecord::Base
 
   belongs_to :client
   has_many :project_images, class_name: 'Project::Image', inverse_of: :project, dependent: :destroy
-  has_many :project_pages, class_name: 'Page::Project', inverse_of: :project, dependent: :destroy
   has_many :images, through: :project_images
+  has_many :project_pages, class_name: 'Page::Project', inverse_of: :project, dependent: :destroy
+  has_many :pages, through: :project_pages
 
   validates :title, presence: true, uniqueness: true
 
   before_validation :set_client, if: :client_name?
+  after_destroy :destroy_client_if_unreferenced
 
   has_owner :author, default_owner_to_current_user: false
 
@@ -53,5 +56,9 @@ class Project < ActiveRecord::Base
     else
       self.client = Client.find_or_initialize_by(name: client_name)
     end
+  end
+
+  def destroy_client_if_unreferenced
+
   end
 end
