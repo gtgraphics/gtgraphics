@@ -18,7 +18,7 @@ class Project < ActiveRecord::Base
   include TitleSearchable
   include Translatable
 
-  translates :title, :description, :url, fallbacks_for_empty_translations: true
+  translates :title, :project_type, :description, :url, fallbacks_for_empty_translations: true
   sanitizes :title, with: :squish
 
   belongs_to :client

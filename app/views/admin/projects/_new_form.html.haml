@@ -2,6 +2,7 @@
 
   .modal-body
     = form.input :title, input_html: { autofocus: true }
+    = form.input :project_type
     = form.input :url
     = form.input :client_name, as: :client_select
     = form.input :released_in, collection: Date.today.year.downto(2005)

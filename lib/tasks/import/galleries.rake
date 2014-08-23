@@ -83,7 +83,10 @@ namespace :gtg do
         parser = Import::ImagePageParser.new(image_page_url)
 
         page = gallery_page.children.images.new
-        page.build_embeddable(image: image, template: "Template::Image".constantize.default)
+        page.build_embeddable.tap do |image_page|
+          image_page.image = image
+          image_page.template = "Template::Image".constantize.default
+        end
 
         # Title and Meta Description
         I18n.available_locales.each do |locale|

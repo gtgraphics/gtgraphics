@@ -8,7 +8,7 @@
         = link_to [:admin, image] do
           = image_tag attached_asset_path(image, :thumbnail), class: 'img-circle', alt: image.title, width: 45, height: 45
       %td
-        = link_to image.title, [:admin, image], target: '_blank'
+        = link_to image.title, [:admin, image]
         %br
         %span.text-muted.ignored
           = image.dimensions

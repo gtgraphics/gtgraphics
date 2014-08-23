@@ -3,7 +3,7 @@ $modal = $('#modal')
 <% if @project.errors.empty? %>
 
 $modal.modal('hide')
-Turbolinks.visit('<%= edit_admin_project_path(@project) %>')
+Turbolinks.visit('<%= admin_project_path(@project) %>')
 
 <% else %>
 

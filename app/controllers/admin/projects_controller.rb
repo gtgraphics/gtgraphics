@@ -86,7 +86,7 @@ class Admin::ProjectsController < Admin::ApplicationController
   def update
     @project.update(project_params)
     flash_for @project
-    respond_with :admin, @project
+    respond_with :admin, @project, location: [:edit, :admin, @project]
   end
 
   def destroy
@@ -149,11 +149,11 @@ class Admin::ProjectsController < Admin::ApplicationController
   end
 
   def new_project_params
-    params.require(:project).permit(:title, :url, :client_name, :released_in)
+    params.require(:project).permit(:title, :project_type, :url, :client_name, :released_in)
   end
 
   def project_params
-    params.require(:project).permit(:title, :url, :client_name, :released_in, :description, :author_id)
+    params.require(:project).permit(:title, :project_type, :url, :client_name, :released_in, :description, :author_id)
   end
 
   def project_image_assignment_params
