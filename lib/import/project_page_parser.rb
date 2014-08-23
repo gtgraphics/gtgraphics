@@ -1,7 +1,7 @@
 class Import::ProjectPageParser < Import::LocalizedPageParser
-
   def url
-    description_fragment
+    anchor = description_fragment.css('a[href]').first
+    anchor[:href] if anchor
   end
 
   # TODO

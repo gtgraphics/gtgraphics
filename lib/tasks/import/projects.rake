@@ -17,12 +17,24 @@ namespace :gtg do
         # Project
         project = Project.new
 
+        I18n.available_locales.each do |locale|
+          Globalize.with_locale(locale) do
+            project_parser.with_locale(locale) do
+              project.title = project_parser.title
+              project.description = project_parser.description
+              project.url = project_parser.url
+            end
+          end
+        end
+
         binding.pry
+
+        raise 'bla'
 
         # project.client_name = 
 
         # Images and Image Pages nested in Project Page
-        images = import_images(project_parser.asset_urls)
+        images = import_images(project_parser)
 
 
 
@@ -34,8 +46,8 @@ namespace :gtg do
       end
     end
 
-    def import_images(urls)
-      urls.collect.with_index do |asset_url, index|
+    def import_images(project_parser)
+      project_parser.asset_urls.collect.with_index do |asset_url, index|
         puts "-- #{asset_url}"
 
         image_page = project_page.children.images.new

@@ -48,7 +48,6 @@ class Import::LocalizedPageParser
     description_fragment.first.inner_html.squish
   end
 
-  protected
   def description_fragment
     current_document.css('.image-box-content p')
   end
