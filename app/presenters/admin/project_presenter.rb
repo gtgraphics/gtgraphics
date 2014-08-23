@@ -23,13 +23,20 @@ class Admin::ProjectPresenter < Admin::ApplicationPresenter
     h.link_to "#{count} #{Page.model_name.human(count: count)}", [:pages, :admin, project], remote: true
   end
 
+  def project_type
+    super.presence || placeholder
+  end
+
   def released_in
     super.presence || placeholder
   end
 
   def summary
     human_name = Image.model_name.human(count: project.images_count)
-    "#{project.images_count} #{human_name}"
+    [
+      project.project_type.presence,
+      "#{project.images_count} #{human_name}"
+    ].compact.join(' &middot; ').html_safe
   end
 
   def thumbnail(options = {})

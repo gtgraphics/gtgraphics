@@ -23,12 +23,13 @@ namespace :gtg do
         # Project
         Project.transaction do
           project = Project.new
+          project.project_type = project_parser.project_type
           project.author = project_parser.author
 
           I18n.available_locales.each do |locale|
             Globalize.with_locale(locale) do
               project_parser.with_locale(locale) do
-                project.title = project_parser.title
+                project.title = project_parser.project_title
                 project.description = project_parser.description
                 project.url = project_parser.url
               end
@@ -74,15 +75,15 @@ namespace :gtg do
         image.remote_asset_url = asset_url
         image.original_filename = File.basename(image.remote_asset_url)
         image.author = project_parser.author
-        image.tag 'Projekt', 'Project'
+        image.tag 'Projekt', 'Project', project_parser.project_type
 
         I18n.available_locales.each do |locale|
           I18n.with_locale(locale) do
             project_parser.with_locale(locale) do
               if append_index_to_title
-                image.title = "#{project_parser.title} (#{index.next})"
+                image.title = "#{project_parser.project_title} (#{index.next})"
               else
-                image.title = project_parser.title
+                image.title = project_parser.project_title
               end
             end
           end

@@ -19,6 +19,7 @@ class TokenCollection
     else
       @tokens = tokens.to_a
     end
+    @tokens.delete_if(&:blank?)
     @tokens.sort! if @options[:sort]
     @tokens = @tokens.to_set if @options[:unique]
   end

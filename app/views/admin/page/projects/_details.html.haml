@@ -9,9 +9,8 @@
         .title
           = link_to project.title, [:admin, project]
         .detail.text-muted
+          .summary
+            = project.summary
           - if project.object.client.present?
             .client
               = project.client
-          - if project.object.released_in.present?
-            .release-date.text-muted
-              = project.released_in

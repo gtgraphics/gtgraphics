@@ -193,10 +193,6 @@ de:
         redbubble_url: RedBubble-URL
         artflakes_url: Artflakes-URL
       page/project:
-        name: Projektname
-        client_name: Auftraggeber
-        client_url: Website
-        released_on: Veröffentlichung
         project: Projekt
         project_id: Projekt
       page/project/translation:
@@ -209,6 +205,7 @@ de:
         permanent: Permanent?
         destination: Ziel
       project:
+        project_type: Projekttyp
         client: Auftraggeber
         client_name: Auftraggeber
         released_in: Jahr
