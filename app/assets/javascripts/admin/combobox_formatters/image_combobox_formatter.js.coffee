@@ -2,7 +2,7 @@ class @ImageComboboxFormatter extends @ComboboxFormatter
   formatResult: (image, container, query, escapeMarkup) ->
     $container = $('<div />', class: 'image')
     $thumbnail = $('<div />', class: 'preview', alt: image.title).appendTo($container)
-    $('<img />', src: image.thumbnailAssetUrl, class: 'img-circle', width: 45, height: 45).appendTo($thumbnail)
+    $('<img />', src: image.thumbnailAssetUrl, class: 'img-circle', width: 45, height: 45, alt: image.title).appendTo($thumbnail)
 
     $title = $('<div />', class: 'title').appendTo($container)
     title = @markMatch(image.title, query.term, escapeMarkup)

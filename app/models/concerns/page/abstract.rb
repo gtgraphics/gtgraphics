@@ -72,7 +72,7 @@ class Page < ActiveRecord::Base
 
     private
     def destroy_embeddable
-      embeddable.destroy
+      embeddable.try :destroy
     end
   end
 end

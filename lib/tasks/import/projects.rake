@@ -10,58 +10,51 @@ namespace :gtg do
 
         project_parser = Import::ProjectPageParser.new(project_page_url)
 
-        path = "about/#{project_parser.author.first_name.parameterize}/projects"
-        gallery_page = Page.find_by! path: path
+        path = "about/#{project_parser.author.first_name.parameterize}/showcase"
+        showcase_page = Page.find_by(path: path)
+        raise "no showcase page found on #{path}" if showcase_page.nil?
 
-        # Project Page
-        project_page = gallery_page.children.projects.new
-        project_page.build_embeddable(template: "Template::Project".constantize.default)
+        # Project
+        project = Project.new
 
-        I18n.available_locales.each do |locale|
-          Globalize.with_locale(locale) do
-            project_parser.with_locale(locale) do
-              project_page.title = project_parser.title
-              project_page.meta_description = HTML::FullSanitizer.new.sanitize(project_parser.description)
+        binding.pry
 
-              project_page.embeddable.name = project_parser.title
-              project_page.embeddable.description = project_parser.description
-            end
-          end
-        end
-
-        project_page.save!
+        # project.client_name = 
 
         # Images and Image Pages nested in Project Page
-        project_parser.asset_urls.each_with_index do |asset_url, index|
-          puts "-- #{asset_url}"
+        images = import_images(project_parser.asset_urls)
 
-          image_page = project_page.children.images.new
 
-          image = Image.new
-          image.remote_asset_url = asset_url
-          image.original_filename = File.basename(image.remote_asset_url)
 
-          I18n.available_locales.each do |locale|
-            Globalize.with_locale(locale) do
-              project_parser.with_locale(locale) do
-                image_page.title = "#{project_parser.title} (#{index.next})"
-                image.title = "#{project_parser.title} (#{index.next})"
-              end
-            end
-          end
+        # Project Page
+        project_page = showcase_page.children.projects.new
+        project_page.build_embeddable(template: "Template::Project".constantize.default)
 
-          image.save!
-
-          image_page.build_embeddable(image: image, template: "Template::Image".constantize.default)
-          image_page.set_next_available_slug
-          image_page.save!
-        end
-
-        # TODO Redirections in work/projects
 
       end
     end
 
+    def import_images(urls)
+      urls.collect.with_index do |asset_url, index|
+        puts "-- #{asset_url}"
 
+        image_page = project_page.children.images.new
+
+        image = Image.new
+        image.remote_asset_url = asset_url
+        image.original_filename = File.basename(image.remote_asset_url)
+
+        I18n.available_locales.each do |locale|
+          Globalize.with_locale(locale) do
+            project_parser.with_locale(locale) do
+              image_page.title = "#{project_parser.title} (#{index.next})"
+              image.title = "#{project_parser.title} (#{index.next})"
+            end
+          end
+        end
+
+        image.tap(&:save!)
+      end
+    end
   end
 end

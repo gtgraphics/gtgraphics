@@ -32,9 +32,16 @@ class Admin::ProjectsController < Admin::ApplicationController
         @projects = @projects.where(id: project_ids)
       end
     else
-      @projects = @projects.search(params[:query])
+      query = params[:query]
+      @projects = @projects.search(query)
       @project_search = @projects.ransack(params[:search])
-      @project_search.sorts = 'translations_title asc' if @project_search.sorts.empty?
+      if @project_search.sorts.empty?
+        if query.blank? and request.format.json?
+          @project_search.sorts = 'created_at desc'
+        else
+          @project_search.sorts = 'translations_title asc'
+        end
+      end
       @projects = @project_search.result
     end
 
@@ -49,6 +56,7 @@ class Admin::ProjectsController < Admin::ApplicationController
   def new
     @project = ::Project.new
     @project.author = current_user
+    @project.released_in = Date.today.year
     respond_to do |format|
       format.js
     end
@@ -66,7 +74,9 @@ class Admin::ProjectsController < Admin::ApplicationController
 
   def show
     @project_images = @project.project_images.includes(:image)
-    respond_with :admin, @project
+    respond_with :admin, @project do |format|
+      format.json
+    end
   end
 
   def edit
@@ -139,11 +149,11 @@ class Admin::ProjectsController < Admin::ApplicationController
   end
 
   def new_project_params
-    params.require(:project).permit(:title, :client_name, :released_in)
+    params.require(:project).permit(:title, :url, :client_name, :released_in)
   end
 
   def project_params
-    params.require(:project).permit(:title, :client_name, :released_in, :description, :author_id)
+    params.require(:project).permit(:title, :url, :client_name, :released_in, :description, :author_id)
   end
 
   def project_image_assignment_params

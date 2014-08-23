@@ -17,7 +17,7 @@
 
           .panel.panel-default
             .panel-heading
-              %h4.panel-title= prepend_icon :picture, Image.model_name.human(count: 2), outline: true, fixed_width: true
+              %h4.panel-title= prepend_icon :picture, Project::Image.model_name.human(count: 2), outline: true, fixed_width: true
         
             = render 'admin/project/images/table'
 
@@ -36,6 +36,10 @@
                     = prepend_icon :mail_forward, translate('helpers.links.assign', model: Image.model_name.human(count: 2))
 
     .col-lg-4
+      - if project.url.present?
+        .panel.panel-invisible
+          = button_link_to project.url, type: :primary, size: :lg, block: true, data: { no_turbolink: true } do
+            = prepend_icon :external_link, translate('helpers.model_links.view', model: Project.model_name.human), fixed_width: true
 
       - if project.author.present?
         = panel do

@@ -1,6 +1,7 @@
 = simple_form_for [:admin, @project], html: { class: 'form-horizontal' } do |form|
 
   = form.input :title, input_html: { autofocus: true }
+  = form.input :url
   = form.input :client_name, as: :client_select
   = form.input :released_in, collection: Date.today.year.downto(2005)
   = form.input :description, input_html: { class: 'editor', rows: 10 }

@@ -6,7 +6,6 @@
 #  client_id    :integer
 #  author_id    :integer
 #  released_in  :integer
-#  url          :string(255)
 #  created_at   :datetime
 #  updated_at   :datetime
 #  images_count :integer          default(0), not null
@@ -19,7 +18,7 @@ class Project < ActiveRecord::Base
   include TitleSearchable
   include Translatable
 
-  translates :title, :description, fallbacks_for_empty_translations: true
+  translates :title, :description, :url, fallbacks_for_empty_translations: true
   sanitizes :title, with: :squish
 
   belongs_to :client

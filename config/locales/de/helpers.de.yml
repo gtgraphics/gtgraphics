@@ -29,6 +29,8 @@ de:
       new: '%{model} erstellen'
       edit: '%{model} bearbeiten'
       insert: '%{model} einfügen'
+    model_links:
+      view: '%{model} betrachten'
     links:
       add: Hinzufügen
       assign: '%{model} zuordnen'
@@ -49,6 +51,7 @@ de:
       edit_metadata: Metadaten bearbeiten
       edit_regions: Inhalte bearbeiten
       enable_in_menu: In Menüs anzeigen
+      enlarge: Vergrößern
       hide: Verstecken
       make_default: Als Standard festlegen
       move: Verschieben

@@ -16,12 +16,12 @@ de:
     translated_locales: Übersetzungen
     type: Typ
     updated_at: Aktualisierung
+    url: URL
 
   activemodel:
     attributes:
       editor/link:
         caption: Beschriftung
-        url: URL
         page_id: Seite
         locale: Sprache
         target: Ziel
@@ -29,7 +29,6 @@ de:
         internal: Interner Link
         link_type: Typ
       editor/image:
-        url: URL
         image_id: Bild
         image_style: Stil
         alternative_text: Alternativtext
@@ -198,6 +197,8 @@ de:
         client_name: Auftraggeber
         client_url: Website
         released_on: Veröffentlichung
+        project: Projekt
+        project_id: Projekt
       page/project/translation:
         name: Projektname
       page/redirection:
@@ -318,8 +319,8 @@ de:
         one: Projekt
         other: Projekte
       project/image:
-        one: Projektbild
-        other: Projektbilder
+        one: Arbeitsbeispiel
+        other: Arbeitsbeispiele
       shout:
         one: Stern
         other: Sterne

@@ -1,0 +1,4 @@
+%fieldset
+  %legend= Page::Project.model_name.human
+  .fields
+    = fields.input :project_id, required: true, as: :project_select

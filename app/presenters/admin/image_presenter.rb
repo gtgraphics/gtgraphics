@@ -2,7 +2,7 @@ class Admin::ImagePresenter < Admin::ApplicationPresenter
   include FileAttachablePresenter
   include Admin::Image::CustomizablePresenter
 
-  self.action_buttons -= [:show]
+  self.action_buttons = [:show, :enlarge, :edit, :destroy]
   
   presents :image
 
@@ -104,5 +104,19 @@ class Admin::ImagePresenter < Admin::ApplicationPresenter
       'author' => author,
       'format' => content_type
     )
+  end
+
+  # Paths
+
+  def enlarge_path
+    h.attached_asset_path(image, :custom)
+  end
+
+  # Buttons
+
+  def enlarge_button(options = {})
+    h.button_link_to_if readable?, enlarge_path, target: '_blank', type: :action, title: I18n.translate('helpers.links.enlarge'), data: { toggle: 'tooltip', container: 'body' } do
+      h.prepend_icon :expand, I18n.translate('helpers.links.enlarge'), fixed_width: true, caption_html: { class: 'sr-only' }
+    end
   end
 end

@@ -9,12 +9,15 @@ class Admin::ApplicationPresenter < Presenter
     blacklist = options.delete(:except)
 
     if whitelist or blacklist
-      allowed_actions = []
-      allowed_actions += Array(whitelist) if whitelist
-      allowed_actions -= Array(blacklist) if blacklist
+      if blacklist
+        allowed_actions = self.class.action_buttons - Array(blacklist)
+      else
+        allowed_actions = Array(whitelist)
+      end
     else
       allowed_actions = self.class.action_buttons
     end
+
 
     h.content_tag :div, class: 'btn-toolbar' do
       allowed_actions.each do |action_button|

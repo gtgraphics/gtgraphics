@@ -1,4 +1,9 @@
 class Import::ProjectPageParser < Import::LocalizedPageParser
+
+  def url
+    description_fragment
+  end
+
   # TODO
   def asset_urls
     urls = default_document.css('.showcase-image-side img').collect do |element|

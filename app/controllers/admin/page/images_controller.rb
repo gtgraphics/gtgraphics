@@ -14,7 +14,7 @@ class Admin::Page::ImagesController < Admin::Page::ApplicationController
       a.parent_page = @page
     end
     if @image_page_creation_activity.errors.empty?
-      @location = admin_page_path(@image_page_creation_activity.pages.first)
+      @location = admin_page_path(@image_page_creation_activity.parent_page)
     end
     respond_to do |format|
       format.js

@@ -251,8 +251,6 @@ class Admin::PagesController < Admin::ApplicationController
     embeddable_attributes_params = case page_params[:embeddable_type]
     when 'Page::ContactForm' then { recipient_ids: [] }
     when 'Page::Content' then [:template_id]
-    when 'Page::Image' then [:image_id]
-    when 'Page::Project' then [:name, :client_name, :client_url]
     when 'Page::Redirection' then [:external, :destination_page_id, :destination_url, :permanent]
     end
     page_params.permit :embeddable_type, :parent_id, :title, :parent_id,
@@ -267,7 +265,7 @@ class Admin::PagesController < Admin::ApplicationController
     when 'Page::Content' then [:id, :template_id]
     when 'Page::Homepage' then [:id, :template_id]
     when 'Page::Image' then [:id, :image_id, Page::Image.available_shop_providers.map { |shop_provider| :"#{shop_provider}_url" }]
-    when 'Page::Project' then [:id, :template_id, :client_name, :client_url, :released_on]
+    when 'Page::Project' then [:id, :project_id]
     when 'Page::Redirection' then [:id, :external, :destination_page_id, :destination_url, :permanent]
     end
     page_params.permit :title, :template_id, :meta_keywords, :meta_description, :embeddable_id, :embeddable_type,
