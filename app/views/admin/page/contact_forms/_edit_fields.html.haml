@@ -1,0 +1,4 @@
+%fieldset
+  %legend= Page::ContactForm.model_name.human
+  .fields
+    = fields.association :recipients, as: :check_boxes, wrapper: :horizontal_radio_and_checkboxes
