@@ -38,6 +38,13 @@
     bottom: 20px;
     right: $grid-gutter-width;
   }
+
+  .page-type-indicator {
+    position: absolute;
+    right: 42px;
+    top: 6px;
+    color: $gray-light;
+  }
 }
 
 #page_content {

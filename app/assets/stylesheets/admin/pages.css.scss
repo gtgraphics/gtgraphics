@@ -1,8 +1,18 @@
 @import '_bootstrap_config';
 
-.path-preview {
-  font-family: $font-family-monospace;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+.page-info {
+  .embeddable-type {
+    color: $gray-light;
+  }
+  .page-path {
+    .path-segment {
+      color: $gray-light;
+      a {
+        color: $gray-light;
+        &:hover, &:focus {
+          color: darken($gray-light, 15%);
+        }
+      }
+    }
+  }
 }

@@ -32,10 +32,6 @@ module NestedSetRepresentable
     self_and_descendants.pluck(:children_count).sum
   end
 
-  def has_children?
-    children_count > 0
-  end
-
   def self_and_ancestors_and_siblings
     self.class.where(parent_id: self.self_and_ancestors.ids << nil)
   end

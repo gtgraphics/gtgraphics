@@ -33,4 +33,8 @@ class Admin::UserPresenter < Admin::ApplicationPresenter
       end
     end
   end
+
+  def to_s
+    name(false)
+  end
 end

@@ -199,8 +199,7 @@ class Admin::PagesController < Admin::ApplicationController
     else
       pages = Page.where(depth: 0..1)
     end
-    pages = pages.includes(:translations).with_locales(Globalize.fallbacks)
-    @page_tree = PageTree.new(pages)
+    @page_tree = Admin::PageTree.new(pages.with_translations_for_current_locale)
     respond_to do |format|
       format.json { render json: @page_tree }
     end
@@ -229,7 +228,7 @@ class Admin::PagesController < Admin::ApplicationController
     pages = Page.where(conditions.reduce(:or)) \
                 .includes(:translations).with_locales(Globalize.fallbacks) \
                 .references(:translations)
-    @page_tree = PageTree.new(pages, selected: @page)
+    @page_tree = Admin::PageTree.new(pages, selected: @page)
   end
 
   def load_page

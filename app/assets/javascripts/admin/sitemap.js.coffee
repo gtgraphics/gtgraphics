@@ -20,10 +20,21 @@ $(document).on 'page:change', ->
     closedIcon: '<b class="caret-right"></b>'
     openedIcon: '<b class="caret"></b>'
     onCreateLi: (node, $listItem) ->
+      $listItem.addClass(_(node.type).dasherize() + "-page")
+      $listItem.addClass('movable') unless node.root
+      $title = $listItem.find('.jqtree-title')
+
+      switch node.type
+        when 'redirection'
+          $typeIndicator = $('<div />', class: 'page-type-indicator', title: node.human_type)
+          $typeIndicator.tooltip(container: 'body')
+          $typeIndicator.html('<i class="fa fa-share fa-fw"></i>')
+          $title.after($typeIndicator)
+
       unless node.root
         $dragHandle = $('<div />', class: 'jqtree-handle')
-        $dragHandle.html('<i class="fa fa-bars"></i>')
-        $listItem.find('.jqtree-title').after($dragHandle)
+        $dragHandle.html('<i class="fa fa-bars fa-fw"></i>')
+        $title.after($dragHandle)
         $listItem.addClass('page-draft') unless node.published
     onIsMoveHandle: ($element) ->
       $element.is('.jqtree-handle')

@@ -41,9 +41,9 @@
             %li= link_to prepend_icon(:trash, translate('helpers.links.destroy'), outline: true, fixed_width: true), [:admin, @page], method: :delete, data: { hotkey: 'del', confirm: translate('helpers.confirmations.destroy', model: Page.model_name.human) }
 
     .btn-group.pull-right
-      = button_link_to typed_new_admin_page_child_path(@page, page_type: :content), type: :success, remote: true, accesskey: 'N' do
+      = button_link_to typed_new_admin_page_child_path(@page, page_type: :content), type: :primary, remote: true, accesskey: 'N' do
         = prepend_icon :plus, translate('helpers.links.new', model: Page.model_name.human), fixed_width: true
-      = button_link_to caret, typed_new_admin_page_child_path(@page, page_type: :content), class: 'dropdown-toggle js-only', type: :success, data: { toggle: 'dropdown' }
+      = button_link_to caret, typed_new_admin_page_child_path(@page, page_type: :content), class: 'dropdown-toggle js-only', type: :primary, data: { toggle: 'dropdown' }
       %ul.dropdown-menu
         - concrete_page_types.each do |embeddable_class|
           - if can? :create, embeddable_class
@@ -52,12 +52,27 @@
                 = embeddable_class.model_name.human
 
 - present @page, with: Admin::PagePresenter do |page|
+  .page-info
+    .pull-right= page.translations
+    %ul.list-inline
+      %li= page.status
+      - unless page.root?
+        %li= page.breadcrumbs
+
+  %hr
+
   %dl.dl-horizontal
     = page.list_item :embeddable_type
     = page.list_item :template if page.support_templates?
-    = page.list_item :published
-    = page.list_item :translated_locales
     = page.list_item :hits_count
+    = page.list_item :author_name, true
     = page.list_item :updated_at
 
-= try_render "admin/#{@page.embeddable_type.underscore.pluralize}/details", @page.embeddable_class.model_name.element.to_sym => @page.embeddable
+  = try_render "admin/#{@page.embeddable_type.underscore.pluralize}/details", @page.embeddable_class.model_name.element.to_sym => @page.embeddable
+
+  - if page.aliases.any?
+    %fieldset
+      %legend= Page.human_attribute_name :aliases
+      .content
+        - page.aliases.each do |redirection|
+          = redirection.inspect

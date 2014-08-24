@@ -97,7 +97,12 @@
         top: 0;
         bottom: 0;
         right: 0;
-        padding: 6px 15px;
+        padding: {
+          top: 6px;
+          bottom: 6px;
+          right: 15px;
+          left: 10px;
+        }
         cursor: move;
         color: $gray-light;
         position: absolute;

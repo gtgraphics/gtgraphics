@@ -44,6 +44,7 @@ class Page < ActiveRecord::Base
 
   has_many :redirections, class_name: 'Page::Redirection', foreign_key: :destination_page_id, 
                           inverse_of: :destination_page, dependent: :destroy
+  has_many :aliases, through: :redirections, source: :page
 
   validates :title, presence: true
   validates :meta_description, :meta_keywords, absence: true, unless: :support_templates?
