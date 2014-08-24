@@ -45,39 +45,18 @@ class Admin::ImagePresenter < Admin::ApplicationPresenter
   end
 
   def file_size(include_styles = false)
-    if include_styles
-      total_size = image.file_size + image.styles.sum(:file_size)
-      h.capture do
-        h.concat h.number_to_human_size(image.file_size)
-        if image.styles.any?
-          h.concat ' ('
-          h.concat h.number_to_human_size(total_size)
-          h.concat ')'
-        end
+    h.capture do
+      h.concat h.number_to_human_size(image.file_size)
+      if include_styles and image.styles.any?
+        total_size = image.file_size + image.styles.sum(:file_size)
+        human_size = h.number_to_human_size(total_size)
+        h.concat " (#{human_size})"
       end
-    else
-      super()
     end
   end
 
   def pixels_count
     h.number_to_human(image.width * image.height) + " #{I18n.translate(:pixels)}"
-  end
-
-  def preview_html
-    h.capture do
-      h.content_tag :div, class: 'dl-vertical' do
-        h.concat h.content_tag(:div, dimensions)
-        h.concat h.content_tag(:div, content_type)
-        h.concat h.content_tag(:div, file_size)
-        h.concat h.content_tag(:div, author(false))
-      end
-    end.to_str
-  end
-
-  def pages_count
-    count = image.pages.count
-    h.link_to "#{count} #{Page.model_name.human(count: count)}", [:pages, :admin, image], remote: true
   end
 
   def styles_count
