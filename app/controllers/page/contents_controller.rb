@@ -25,5 +25,5 @@ class Page::ContentsController < Page::ApplicationController
 
   def load_query
     @query = params[:query].presence
-  end
+  end 
 end

@@ -1,4 +1,6 @@
 class Admin::ProjectPresenter < Admin::ApplicationPresenter
+  include Admin::PageEmbeddablePresenter
+
   presents :project
   
   def author
@@ -16,11 +18,6 @@ class Admin::ProjectPresenter < Admin::ApplicationPresenter
   def image
     @image = project.images.first unless defined? @image
     @image
-  end
-
-  def pages_count
-    count = project.pages.count
-    h.link_to "#{count} #{Page.model_name.human(count: count)}", [:pages, :admin, project], remote: true
   end
 
   def project_type

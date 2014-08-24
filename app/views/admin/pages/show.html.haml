@@ -73,6 +73,7 @@
   - if page.aliases.any?
     %fieldset
       %legend= Page.human_attribute_name :aliases
-      .content
-        - page.aliases.each do |redirection|
-          = redirection.inspect
+      .content.content-horizontal
+        %ul
+          - page.aliases.each do |redirection|
+            %li= redirection.inspect

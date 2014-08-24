@@ -5,9 +5,9 @@ class Admin::ApplicationController < ApplicationController
   before_action :set_translation_locale
 
   reset_breadcrumbs
-  breadcrumbs do |b|
-    b.append I18n.translate('breadcrumbs.home'), :admin_root
-  end
+  # breadcrumbs do |b|
+  #   b.append I18n.translate('breadcrumbs.home'), :admin_root
+  # end
 
   protected
   def default_url_options(options = nil)

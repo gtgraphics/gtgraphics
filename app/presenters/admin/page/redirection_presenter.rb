@@ -6,7 +6,7 @@ class Admin::Page::RedirectionPresenter < Admin::ApplicationPresenter
         h.append_icon :external_link, hostname, fixed_width: true
       end
     else
-      h.link_to destination_page, h.page_path(destination_page)
+      h.link_to destination_page, [:admin, destination_page]
     end
   end
 end
