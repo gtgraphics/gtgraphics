@@ -13,7 +13,7 @@
                 = prepend_icon :wrench, translate('helpers.links.options'), fixed_width: true
             - if @page.support_templates?
               %li{class: @page.template.region_definitions.empty? ? 'disabled' : nil}
-                = link_to [:admin, @page, :regions], accesskey: 'E' do
+                = link_to [:admin, @page, :regions], accesskey: 'C' do
                   = prepend_icon :edit, translate('helpers.links.edit_regions'), fixed_width: true
 
             %li.divider

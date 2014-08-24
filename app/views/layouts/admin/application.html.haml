@@ -44,7 +44,7 @@
           %ul.nav.navbar-nav.navbar-right#nav_secondary
             / Language Menu
             %li.dropdown
-              = link_to '#', id: 'nav_language', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+              = link_to '#', id: 'nav_language', class: 'dropdown-toggle', accesskey: 'L', data: { toggle: 'dropdown' } do
                 %span.icon= flag_icon Globalize.locale, size: 24
                 %span.caption= translate(Globalize.locale, scope: :languages)
                 = caret

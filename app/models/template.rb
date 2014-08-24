@@ -62,10 +62,6 @@ class Template < ActiveRecord::Base
 
   alias_attribute :filename, :file_name
 
-  def to_param
-    "#{id}-#{name.parameterize}"
-  end
-
   private
   def verify_region_labels_validity
     if region_definitions.any? { |region_definition| region_definition.errors.any? }
