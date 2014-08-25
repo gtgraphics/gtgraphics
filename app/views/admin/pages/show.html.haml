@@ -74,7 +74,7 @@
   - if page.aliases.any?
     %fieldset
       %legend= Page.human_attribute_name :aliases
-      %ul.ul-horizontal.ul-horizontal-wide
+      %ul.list-horizontal.list-wide
         - page.aliases.each do |alias_page|
           - present alias_page, with: Admin::PagePresenter do |alias_page|
             %li

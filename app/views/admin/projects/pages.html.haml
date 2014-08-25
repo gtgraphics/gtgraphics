@@ -5,7 +5,7 @@
 - content_for :content do
   .modal-body
     - if @pages.any?
-      %ul
+      %ul.list-unstyled.list-wide
         - @pages.each do |page|
           = content_tag_for :li, page do
             = link_to page.title, [:admin, page]

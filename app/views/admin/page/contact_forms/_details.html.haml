@@ -1,7 +1,7 @@
 %fieldset
   %legend= Page::ContactForm.human_attribute_name :recipients
   .content
-    %ul.ul-horizontal.ul-horizontal-wide
+    %ul.list-horizontal.list-wide
       - contact_form.recipients.order(:first_name, :last_name).each do |recipient|
         %li.user
           .avatar

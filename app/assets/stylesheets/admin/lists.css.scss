@@ -1,16 +1,16 @@
 @import '_bootstrap_config';
 
-.ul-horizontal {
+.list-horizontal {
   padding: 0;
   list-style-type: none;
   margin-left: $component-offset-horizontal;
+}
 
-  &.ul-horizontal-wide {
-    li {
-      margin-bottom: 5px;
-      &:last-child {
-        margin-bottom: 0;
-      }
+.list-wide {
+  li {
+    margin-bottom: 5px;
+    &:last-child {
+      margin-bottom: 0;
     }
   }
 }
