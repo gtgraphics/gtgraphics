@@ -9,10 +9,9 @@ class Admin::MessagesController < Admin::ApplicationController
   end
 
   def index
-    @message_recipiences = current_user.message_recipiences.
-                                        includes(message: :recipients).uniq
+    @message_recipiences = current_user.message_recipiences.eager_load(message: :recipients).uniq
     @message_recipience_search = @message_recipiences.ransack(params[:search])
-    @message_recipience_search.sorts = 'created_at desc' if @message_recipience_search.sorts.empty?
+    @message_recipience_search.sorts = 'message_created_at desc' if @message_recipience_search.sorts.empty?
     @message_recipiences = @message_recipience_search.result.page(params[:page])
     respond_with :admin, @message_recipiences
   end

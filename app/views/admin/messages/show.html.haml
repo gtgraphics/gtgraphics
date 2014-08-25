@@ -1,15 +1,15 @@
 - present @message, with: Admin::MessagePresenter do |message|
 
-  = page_header do
-    .btn-toolbar
-      .btn-group
-        = button_mail_to @message.sender, prepend_icon(:mail_reply, translate('helpers.links.reply')), subject: translate('views.admin.messages.replied_subject', subject: @message.subject)
-      .btn-group
-        = message.destroy_button
-
   .row
 
     .col-sm-offset-2.col-sm-8
+      = page_header do
+        .btn-toolbar
+          .btn-group
+            = button_mail_to @message.sender, prepend_icon(:mail_reply, translate('helpers.links.reply')), subject: translate('views.admin.messages.replied_subject', subject: @message.subject)
+          .btn-group
+            = message.destroy_button
+
       %dl.dl-horizontal
         .row
           .col-sm-2

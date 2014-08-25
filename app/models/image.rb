@@ -39,6 +39,7 @@ class Image < ActiveRecord::Base
   has_many :image_pages, class_name: 'Page::Image', inverse_of: :image, dependent: :destroy
   has_many :pages, through: :image_pages
   has_many :project_images, class_name: 'Project::Image', inverse_of: :image, dependent: :destroy
+  has_many :buy_requests, class_name: 'Message::BuyRequest', foreign_key: :delegator_id, dependent: :destroy
 
   has_image
   has_owner :author, default_owner_to_current_user: false

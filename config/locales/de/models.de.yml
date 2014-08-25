@@ -160,6 +160,7 @@ de:
         subject: Betreff
         body: Nachricht
         created_at: Versendet
+        delegator: Referenzobjekt
       message/recipience:
         sender_name: Absender
         subject: Betreff

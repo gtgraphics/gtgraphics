@@ -14,10 +14,10 @@
         %tr
           %th.checkbox-cell
             %input{type: 'checkbox', class: 'js-only table-checkbox-all', data: { toggle: 'tableCheckboxes' }}
-          %th= sort_link @message_recipience_search, :subject
+          %th= sort_link @message_recipience_search, :message_subject
           %th.text-center.visible-lg.visible.md= sort_link @message_recipience_search, :read
-          %th= sort_link @message_recipience_search, :sender_name
-          %th= sort_link @message_recipience_search, :created_at
+          %th= sort_link @message_recipience_search, :message_last_sender_name
+          %th= sort_link @message_recipience_search, :message_created_at
           %th.actions
       %tbody
         - @message_recipiences.each do |recipience|
