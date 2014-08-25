@@ -31,6 +31,7 @@ class Project < ActiveRecord::Base
   validates :title, presence: true, uniqueness: true
 
   before_validation :set_client, if: :client_name?
+  after_update :destroy_client_if_unreferenced
   after_destroy :destroy_client_if_unreferenced
 
   has_owner :author, default_owner_to_current_user: false
