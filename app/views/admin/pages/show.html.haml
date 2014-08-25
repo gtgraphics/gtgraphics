@@ -53,7 +53,8 @@
 
 - present @page, with: Admin::PagePresenter do |page|
   .page-info
-    .pull-right= page.translations
+    .pull-right
+      = page.translations
     %ul.list-inline
       %li= page.status
       - unless page.root?
@@ -73,7 +74,9 @@
   - if page.aliases.any?
     %fieldset
       %legend= Page.human_attribute_name :aliases
-      .content.content-horizontal
-        %ul
-          - page.aliases.each do |redirection|
-            %li= redirection.inspect
+      %ul.ul-horizontal.ul-horizontal-wide
+        - page.aliases.each do |alias_page|
+          - present alias_page, with: Admin::PagePresenter do |alias_page|
+            %li
+              = link_to alias_page.title, [:admin, alias_page]
+              .text-muted= alias_page.path
