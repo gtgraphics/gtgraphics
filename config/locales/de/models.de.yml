@@ -107,6 +107,9 @@ de:
         author_name: Urheber
         original_filename: Dateiname
         hits_count: Dateiaufrufe
+      client:
+        country: Land
+        website_url: Website
       image:
         author: Urheber
         author_name: Urheber

@@ -7,7 +7,7 @@
       = link_to project.title, [:admin, project]
       %br
       %span.text-muted.ignored= project.summary
-    %td= project.client
+    %td= project.client(true)
     %td= project.released_in
     - if local_assigns.fetch(:actions, true)
       %td.actions

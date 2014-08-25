@@ -1,0 +1,11 @@
+= simple_form_for [:admin, @client], remote: true, html: { class: 'form-horizontal' } do |form|
+
+  .modal-body
+    = form.input :name, input_html: { autofocus: true }
+    = form.input :country
+    = form.input :website_url
+
+  .modal-footer
+    = form.button :button, type: 'submit', class: 'btn-primary' do
+      = prepend_icon :save, translate('helpers.links.save')
+    = button_tag translate('helpers.links.close'), type: 'button', class: 'btn btn-default', data: { dismiss: 'modal' }

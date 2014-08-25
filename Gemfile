@@ -41,6 +41,7 @@ gem 'liquid'
 gem 'builder'
 gem 'coffeebeans'
 gem 'turbolinks'
+gem 'country_select'
 
 # Assets
 # gem 'sprockets', '2.11.0' # newer versions do not work properly
@@ -76,6 +77,7 @@ gem 'request_store'
 gem 'nokogiri'
 gem 'exception_notification', group: [:staging, :production]
 gem 'pry-rails'
+gem 'countries'
 
 # Image Processing
 gem 'exifr'

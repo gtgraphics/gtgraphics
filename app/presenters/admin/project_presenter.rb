@@ -9,7 +9,7 @@ class Admin::ProjectPresenter < Admin::ApplicationPresenter
 
   def client(linked = false)
     if client_name.present?
-      h.link_to_if linked, client_name, [:admin, project.client]
+      h.link_to_if linked, client_name, [:edit, :admin, project.client], remote: true
     else
       placeholder
     end

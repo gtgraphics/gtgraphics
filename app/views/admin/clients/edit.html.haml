@@ -1,0 +1,4 @@
+- content_for :title, translate('breadcrumbs.edit', model: Client.model_name.human)
+
+- content_for :content do
+  = render 'edit_form'

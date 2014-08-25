@@ -57,6 +57,6 @@
       = panel prepend_icon(:info, translate('views.admin.projects.headlines.details'), fixed_width: true) do
         %dl.dl-horizontal
           = project.list_item :project_type
-          = project.list_item :client
+          = project.list_item :client, true
           = project.list_item :released_in
           = project.list_item :pages_count, true

@@ -12,6 +12,7 @@
 #
 
 class Project < ActiveRecord::Base
+  include Excludable
   include PersistenceContextTrackable
   include Ownable
   include Taggable
@@ -58,6 +59,6 @@ class Project < ActiveRecord::Base
   end
 
   def destroy_client_if_unreferenced
-
+    client.destroy if client.projects.without(self).empty?
   end
 end

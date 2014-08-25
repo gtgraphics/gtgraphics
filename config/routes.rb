@@ -93,7 +93,7 @@ GtGraphics::Application.routes.draw do
               end
             end
 
-            resources :clients, except: :show
+            resources :clients, only: [:index, :edit, :update]
 
             resources :messages, only: [:index, :show, :destroy] do
               collection do

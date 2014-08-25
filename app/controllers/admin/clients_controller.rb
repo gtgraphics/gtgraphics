@@ -1,6 +1,8 @@
 class Admin::ClientsController < Admin::ApplicationController
   respond_to :html
 
+  layout false, only: %i(edit update)
+
   before_action :load_client, only: %i(edit update)
 
   def index
@@ -24,10 +26,24 @@ class Admin::ClientsController < Admin::ApplicationController
   end
 
   def edit
-    respond_with :admin, @client
+    respond_to do |format|
+      format.js
+    end
   end
 
   def update
-    respond_with :admin, @client
+    @client.update(client_params)
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  private
+  def load_client
+    @client = Client.find(params[:id])
+  end
+
+  def client_params
+    params.require(:client).permit(:name, :country, :website_url)
   end
 end
