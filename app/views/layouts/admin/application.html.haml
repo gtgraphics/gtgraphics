@@ -32,6 +32,13 @@
 
       - if logged_in?
         .navbar-collapse.collapse
+          / Search
+          #search_form.navbar-form.navbar-left.only-js
+            .search-component.form-group
+              = search_field_tag '', nil, id: 'search', class: 'form-control', data: { from: admin_search_path(format: :json) }
+              .search-indicator
+                = prepend_icon :search, translate('helpers.links.search'), caption_html: { class: 'sr-only' }
+
           / Main Menu
           %ul.nav.navbar-nav#nav_primary
             = active_link_to Page.model_name.human(count: 2), :admin_pages, wrap_tag: :li, accesskey: 'P'
@@ -46,7 +53,7 @@
             %li.dropdown
               = link_to '#', id: 'nav_language', class: 'dropdown-toggle', accesskey: 'L', data: { toggle: 'dropdown' } do
                 %span.icon= flag_icon Globalize.locale, size: 24
-                %span.caption= translate(Globalize.locale, scope: :languages)
+                %span.caption.sr-only= translate(Globalize.locale, scope: :languages)
                 = caret
               %ul.dropdown-menu
                 - available_locales.each do |locale|
@@ -58,7 +65,7 @@
               = active_link_to :admin_account, id: 'nav_account', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
                 %span.avatar
                   %span.icon= gravatar_image_tag current_user.email, default: :mm, alt: current_user.name, size: 24, class: 'img-circle'
-                  %span.caption= current_user.name
+                  %span.caption.sr-only= current_user.name
                 = caret
                 - unless current_user.message_recipiences.unread.size.zero?
                   .badge= current_user.message_recipiences.unread.size

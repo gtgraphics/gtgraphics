@@ -6,7 +6,10 @@ class Admin::Page::RedirectionPresenter < Admin::ApplicationPresenter
         h.append_icon :external_link, hostname, fixed_width: true
       end
     else
-      h.link_to destination_page, [:admin, destination_page]
+      h.capture do
+        h.concat h.link_to(destination_page, [:admin, destination_page])
+        h.concat h.content_tag(:div, destination_page.path, class: 'text-muted')
+      end
     end
   end
 end

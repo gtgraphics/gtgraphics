@@ -38,6 +38,8 @@ GtGraphics::Application.routes.draw do
             
         scope '(:translations)', constraints: { translations: /[a-z]{2}/ } do
           scope constraints: Routing::LocaleConstraint.new(:translations) do
+            get :search, controller: :search, action: :show
+
             namespace :editor do
               with_options only: [:show, :create, :update] do |r|
                 r.resource :link

@@ -1,0 +1,22 @@
+@import '_bootstrap_config';
+
+#search_form .form-group {
+  width: 246px;
+  margin-right: 6px;
+
+  .select2-container .select2-arrow {
+    display: none;
+  }
+
+  .search-indicator {
+    right: 0;
+    top: 0;
+    position: absolute;
+    padding: 6px 12px;
+    background-color: transparent;
+    @include box-shadow(none);
+    color: $gray-light;
+    pointer-events: none;
+  }
+
+}

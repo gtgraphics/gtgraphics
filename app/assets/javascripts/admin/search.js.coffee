@@ -5,3 +5,4 @@ $(document).on 'keydown', '.search-component .search-input', (event) ->
     $input = $(@)
     $button = $input.closest('.search-component').find(':submit')
     $button.click()
+
