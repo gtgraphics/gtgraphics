@@ -17,7 +17,7 @@
     .col-lg-8
       .panel.panel-invisible
         = link_to attached_asset_path(image, :custom), target: '_blank' do
-          = image_tag attached_asset_path(image, :custom), class: 'img-responsive img-rounded center-block', alt: image.title
+          = image_tag attached_asset_path(image, :custom), class: 'img-responsive img-editable img-rounded center-block', alt: image.title
 
       #image_style_upload_dropzone
         = form_tag batch_process_admin_image_styles_path(@image), method: :patch, remote: true do
