@@ -23,6 +23,11 @@ $(document).ready ->
       source: bloodhounds.pages.ttAdapter()
       templates: {
         header: '<h3 class="nav-header">Pages</h3>'
+        suggestion: (context) ->
+          Mustache.render('
+            <div class="title">{{title}}</div>
+            <div class="path text-muted">{{path}}</div>
+          ', context)
       }
     },
     {
@@ -34,6 +39,14 @@ $(document).ready ->
           <div class="divider"></div>
           <h3 class="nav-header">Images</h3>
         '
+        suggestion: (context) ->
+          Mustache.render('
+            <div class="clearfix">
+              <div class="pull-left"><img src="{{thumbnailAssetUrl}}" alt="{{title}}" class="img-circle" width="45" height="45"></div>
+              <div class="title">{{title}}</div>
+              <div class="format text-muted">{{humanDimensions}}</div>
+            </div>
+          ', context)
       }
     }
   )

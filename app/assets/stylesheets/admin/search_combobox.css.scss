@@ -1,8 +1,10 @@
 @import '_bootstrap_config';
 
 #search_form .form-group {
+  $width: 225px;
+
   #search {
-    width: 225px;
+    width: $width;
     padding-right: 45px;
   }
 
@@ -23,7 +25,9 @@
   }
 
   .tt-dropdown-menu {
-    min-width: 200px;
+    min-width: $width;
+    max-height: 300px;
+    overflow: auto;
     margin-top: 5px;
     margin-bottom: 5px;
     .nav-header {
@@ -43,6 +47,12 @@
 
     .divider {
       @include nav-divider($dropdown-divider-bg);
+    }
+
+    .path, .format {
+      white-space: nowrap !important;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
   }
 }
