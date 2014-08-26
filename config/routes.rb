@@ -1,4 +1,10 @@
 GtGraphics::Application.routes.draw do
+  concern :autocompletable do
+    collection do
+      get :autocomplete
+    end
+  end
+
   concern :movable do
     member do
       patch :move_up
@@ -63,7 +69,9 @@ GtGraphics::Application.routes.draw do
               patch :convert_to_image, on: :member
             end
 
-            resources :images, except: [:new, :create], concerns: [:customizable, :batch_processable] do
+            resources :clients, only: [:index, :edit, :update]
+
+            resources :images, except: [:new, :create], concerns: [:autocompletable,:customizable, :batch_processable] do
               resources :styles, controller: :'image/styles', concerns: [:customizable, :movable, :batch_processable] do
                 collection do
                   match :upload, via: [:post, :patch]
@@ -95,8 +103,6 @@ GtGraphics::Application.routes.draw do
               end
             end
 
-            resources :clients, only: [:index, :edit, :update]
-
             resources :messages, only: [:index, :show, :destroy] do
               collection do
                 delete :destroy_multiple
@@ -107,7 +113,7 @@ GtGraphics::Application.routes.draw do
               end
             end
 
-            resources :pages, except: :new, concerns: :movable do
+            resources :pages, except: :new, concerns: [:autocompletable, :movable] do
               resources :children, controller: :pages, only: :new do
                 get ':page_type', on: :new, action: :new, as: :typed
               end
@@ -119,7 +125,6 @@ GtGraphics::Application.routes.draw do
               resource :project, controller: :'page/projects', only: [:new, :create]
               resource :redirection, controller: :'page/redirections', only: [:edit, :update]
               collection do
-                get :preview_path
                 get :tree
               end
               member do

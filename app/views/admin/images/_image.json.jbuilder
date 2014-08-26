@@ -9,6 +9,8 @@ json.dimensions do
 end
 json.human_dimensions translate(:dimensions, width: image.width, height: image.height)
 
+json.url admin_image_path(image)
+
 if params.fetch(:include_styles, false).to_bool
   json.styles do
     json.array! image.styles, partial: 'admin/image/styles/image_style', as: :image_style

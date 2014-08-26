@@ -53,6 +53,14 @@ class Admin::ImagesController < Admin::ApplicationController
     end
   end
 
+  def autocomplete
+    @images = Image.search(params[:query]).limit(5).
+                    with_translations_for_current_locale
+    respond_to do |format|
+      format.json
+    end
+  end
+
   def show
     respond_with :admin, @image do |format|
       format.json

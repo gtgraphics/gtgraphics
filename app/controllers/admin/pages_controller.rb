@@ -48,6 +48,26 @@ class Admin::PagesController < Admin::ApplicationController
     end
   end
 
+  def tree
+    if page_id = params[:node]
+      pages = Page.find(page_id).children
+    else
+      pages = Page.where(depth: 0..1)
+    end
+    @page_tree = Admin::PageTree.new(pages.with_translations_for_current_locale)
+    respond_to do |format|
+      format.json { render json: @page_tree }
+    end
+  end
+
+  def autocomplete
+    @pages = Page.search(params[:query]).limit(5).
+                  with_translations_for_current_locale
+    respond_to do |format|
+      format.json { render :index }
+    end
+  end
+
   def show
     respond_to do |format|
       format.html { render layout: !request.xhr? }
@@ -190,18 +210,6 @@ class Admin::PagesController < Admin::ApplicationController
           head :unprocessable_entity
         end
       end
-    end
-  end
-
-  def tree
-    if page_id = params[:node]
-      pages = Page.find(page_id).children
-    else
-      pages = Page.where(depth: 0..1)
-    end
-    @page_tree = Admin::PageTree.new(pages.with_translations_for_current_locale)
-    respond_to do |format|
-      format.json { render json: @page_tree }
     end
   end
 

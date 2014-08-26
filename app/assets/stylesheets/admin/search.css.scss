@@ -1,0 +1,44 @@
+@import 'compass';
+@import '_bootstrap_config';
+
+.search-component {
+  display: block;
+  position: relative;
+
+  .search-input {
+    padding: {
+      left: 20px;
+      right: 82px;
+    }
+    &::-ms-clear {
+      display: none;
+    }
+  }
+
+  .btn-toolbar {
+    float: right;
+    right: 0;
+    top: 0;
+    position: absolute;
+    margin: {
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 20px;
+    }
+    .btn-search {
+      padding-left: 5px;
+      padding-right: 5px;
+      margin: 0;
+      background-color: transparent;
+      @include box-shadow(none);
+      color: $gray-light;
+      &:hover, &:focus {
+        color: $gray;
+      }
+      &:active, &.active {
+        color: $gray-dark;
+      }
+    }
+  }
+}
