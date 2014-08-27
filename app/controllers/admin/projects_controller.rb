@@ -54,8 +54,9 @@ class Admin::ProjectsController < Admin::ApplicationController
   end
 
   def autocomplete
-    @projects = Project.search(params[:query]).includes(:client, :images).limit(3).uniq.
-                        with_translations_for_current_locale
+    @projects = Project.search(params[:query]).includes(:client, :images).
+                        order(Project::Translation.arel_table[:title]).
+                        with_translations_for_current_locale.uniq.limit(3)
     respond_to do |format|
       format.json
     end
