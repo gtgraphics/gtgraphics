@@ -54,9 +54,16 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def autocomplete
-    @images = Image.search(params[:query]).
-                    order(Image::Translation.arel_table[:title]).
-                    with_translations_for_current_locale.uniq.limit(3)
+    query = params[:query]
+    if query.present?
+      translated_title = Image::Translation.arel_table[:title]
+      @images = Image.search(query).
+                      select(Image.arel_table[Arel.star], translated_title).
+                      order(translated_title.asc).
+                      with_translations_for_current_locale.uniq.limit(3)
+    else
+      @images = Image.none
+    end
     respond_to do |format|
       format.json
     end

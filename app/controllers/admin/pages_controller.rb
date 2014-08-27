@@ -61,8 +61,12 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def autocomplete
-    @pages = Page.search(params[:query]).limit(3).
-                  with_translations_for_current_locale
+    query = params[:query]
+    if query.present?
+      @pages = Page.search(query).with_translations_for_current_locale.uniq.limit(3)
+    else
+      @pages = Page.none
+    end
     respond_to do |format|
       format.json { render :index }
     end
