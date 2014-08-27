@@ -90,7 +90,7 @@ GtGraphics::Application.routes.draw do
               end
             end
 
-            resources :projects, concerns: :batch_processable do
+            resources :projects, concerns: [:autocompletable, :batch_processable] do
               resources :images, controller: :'project/images', only: :destroy, concerns: [:movable, :batch_processable] do
                 collection do
                   patch :upload

@@ -53,6 +53,14 @@ class Admin::ProjectsController < Admin::ApplicationController
     end
   end
 
+  def autocomplete
+    @projects = Project.search(params[:query]).includes(:client, :images).limit(3).uniq.
+                        with_translations_for_current_locale
+    respond_to do |format|
+      format.json
+    end
+  end
+
   def new
     @project = ::Project.new
     @project.author = current_user

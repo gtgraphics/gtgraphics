@@ -22,7 +22,8 @@ $(document).ready ->
       displayKey: 'title'
       source: bloodhounds.pages.ttAdapter()
       templates: {
-        header: '<h3 class="nav-header">Pages</h3>'
+        header: (context) ->
+          "<h3 class='nav-header'>#{I18n.translate('activerecord.models.page.other')}</h3>" unless context.isEmpty
         suggestion: (context) ->
           Mustache.render('
             <div class="title">{{title}}</div>
@@ -35,18 +36,35 @@ $(document).ready ->
       displayKey: 'title'
       source: bloodhounds.images.ttAdapter()
       templates: {
-        header: '
-          <div class="divider"></div>
-          <h3 class="nav-header">Images</h3>
-        '
+        header: (context) ->
+          "<h3 class='nav-header'>#{I18n.translate('activerecord.models.image.other')}</h3>" unless context.isEmpty
         suggestion: (context) ->
-          Mustache.render('
-            <div class="clearfix">
-              <div class="pull-left"><img src="{{thumbnailAssetUrl}}" alt="{{title}}" class="img-circle" width="45" height="45"></div>
-              <div class="title">{{title}}</div>
-              <div class="format text-muted">{{humanDimensions}}</div>
+          Mustache.render("
+            <div class='image'>
+              <div class='preview'><img src='{{thumbnailAssetUrl}}' alt='{{title}}' class='img-circle' width='45' height='45'></div>
+              <div class='title'>{{title}}</div>
+              <div class='detail text-muted'>{{humanDimensions}}</div>
             </div>
-          ', context)
+          ", context)
+      }
+    },
+    {
+      name: 'projects'
+      displayKey: 'title'
+      source: bloodhounds.projects.ttAdapter()
+      templates: {
+        header: (context) ->
+          "<h3 class='nav-header'>#{I18n.translate('activerecord.models.project.other')}</h3>" unless context.isEmpty
+        suggestion: (context) ->
+          Mustache.render("
+            <div class='project'>
+              {{#thumbnailAssetUrl}}
+              <div class='preview'><img src='{{thumbnailAssetUrl}}' alt='{{title}}' class='img-circle' width='45' height='45'></div>
+              {{/thumbnailAssetUrl}}
+              <div class='title'>{{title}}</div>
+              <div class='detail text-muted'>{{clientName}}</div>
+            </div>
+          ", context)
       }
     }
   )

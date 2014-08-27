@@ -36,7 +36,7 @@
           #search_form.navbar-form.navbar-left.only-js
             .form-group
               #search_component.search-component
-                = search_field_tag 'search', nil, id: 'search', placeholder: translate('helpers.prompts.search'), accesskey: 'S', class: 'search-input form-control input-rounded', data: { from: { pages: autocomplete_admin_pages_path(format: :json), images: autocomplete_admin_images_path(format: :json) } }
+                = search_field_tag 'search', nil, id: 'search', placeholder: translate('helpers.prompts.search'), accesskey: 'S', class: 'search-input form-control input-rounded', data: { from: { pages: autocomplete_admin_pages_path(format: :json), images: autocomplete_admin_images_path(format: :json), projects: autocomplete_admin_projects_path(format: :json) } }
                 .search-indicator
                   = prepend_icon :search, translate('helpers.links.search'), caption_html: { class: 'sr-only' }
 
