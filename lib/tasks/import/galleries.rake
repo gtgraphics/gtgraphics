@@ -102,8 +102,8 @@ namespace :gtg do
         # Avoid path collisions by determining the next available slug
         page.set_next_available_slug
 
-        # Metadata
-        page.metadata[:social_uri] = image_page_url
+        # Metadata (strip concluding path separator)
+        page.metadata[:social_uri] = image_page_url.gsub(/\/\z/, '')
 
         # Shop Links
         page.embeddable.shop_urls = {
