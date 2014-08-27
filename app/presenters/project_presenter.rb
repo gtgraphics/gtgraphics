@@ -2,7 +2,11 @@ class ProjectPresenter < ApplicationPresenter
   presents :project
 
   def client
-    h.link_to_if client_url.present?, client_name, client_url, target: '_blank'
+    if client = project.client
+      h.link_to_if client.website_url.present?, client_name, client.website_url, target: '_blank'
+    else
+      placeholder
+    end
   end
 
   def description

@@ -1,6 +1,6 @@
 class Page::ProjectsController < Page::ApplicationController
   before_action :load_project, only: :show
-  
+   
   def default
     @images = @project.images
     respond_to do |format|
