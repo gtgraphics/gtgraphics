@@ -31,7 +31,7 @@ class Project < ActiveRecord::Base
   validates :title, presence: true, uniqueness: true
 
   before_validation :set_client, if: :client_name?
-  after_update :destroy_client_if_unreferenced
+  after_update :destroy_replaced_client_if_unreferenced, if: :client_id_changed?
   after_destroy :destroy_client_if_unreferenced
 
   has_owner :author, default_owner_to_current_user: false
@@ -61,5 +61,12 @@ class Project < ActiveRecord::Base
 
   def destroy_client_if_unreferenced
     client.destroy if client.projects.without(self).empty?
+  end
+
+  def destroy_replaced_client_if_unreferenced
+    client = Client.find_by(id: client_id_was)
+    if client and client.projects.empty?
+      client.destroy
+    end
   end
 end
