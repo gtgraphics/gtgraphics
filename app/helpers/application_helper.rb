@@ -29,11 +29,6 @@ module ApplicationHelper
     controller.class.name.deconstantize.underscore.presence
   end
 
-  def try_render(*args)
-    render(*args)
-  rescue ActionView::MissingTemplate
-  end
-
   def page_header(title = nil, &block)
     content_tag :div, class: 'page-header clearfix' do
       concat content_tag(:h1, title || breadcrumbs.last.to_s, class: 'pull-left')
