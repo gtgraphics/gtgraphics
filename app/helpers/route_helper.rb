@@ -23,6 +23,15 @@ module RouteHelper
     page_url(options)
   end
 
+  def static_page_path(path, options = {})
+    path = "/#{path}" unless path.start_with?('/')
+    locale = options.delete(:locale) { I18n.locale }
+    uri = URI.parse(path)
+    uri.path = "/#{locale}#{uri.path}"
+    uri.query = options.to_query.presence
+    uri.to_s
+  end
+
   private
   def _page_url(suffix, *args)
     options = args.extract_options!

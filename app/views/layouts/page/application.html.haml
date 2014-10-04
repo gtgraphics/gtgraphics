@@ -25,22 +25,24 @@
 - content_for :content do
   = facebook_sdk_anchor
 
-  %nav.navbar.navbar-default.navbar-fixed-top.navbar-inverse{role: 'navigation'}
+  %nav.navbar.navbar-header.navbar-fixed-top{role: 'navigation'}
     .container
 
       .navbar-header
-        %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
-          = icon(:bars, fixed_width: true)
-          %span.sr-only= translate('helpers.links.toggle_navigation')
 
         = link_to :root_page, class: 'navbar-brand' do
+          = image_tag 'brand.png', alt: 'GT Graphics'
           %span.sr-only GT Graphics
 
-      .navbar-collapse.collapse
         %ul.nav.navbar-nav
           - menu_items.each do |page|
             = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page)
 
+        %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
+          = icon(:bars, fixed_width: true)
+          %span.sr-only= translate('helpers.links.toggle_navigation')
+
+      .navbar-collapse.collapse
         %ul.nav.navbar-nav.navbar-right
           %li.dropdown
             = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
@@ -60,6 +62,49 @@
         = yield :page_content
       - else
         = yield
+
+  %nav.navbar.navbar-footer.navbar-fixed-bottom{role: 'navigation'}
+    .container
+      %p.navbar-text.copyright 
+        &copy; 2006-#{Date.today.year} GT Graphics
+      %ul.nav.navbar-nav
+        - (Page.primary - menu_items).each do |page|
+          %li= link_to page, page
+      .navbar-text.social-buttons
+        = facebook_site_like_button
+      .pull-right
+        / Tobias Roetsch
+        %ul.nav.navbar-nav.author-social-buttons
+          %li= link_to 'Tobias Roetsch', static_page_path('about/tobias')
+          %li
+            = link_to 'http://facebook.com/roetsch', class: 'icon-link', title: 'Facebook', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
+              = prepend_icon :facebook, 'Facebook', fixed_width: true, size: :lg, caption_html: { class: 'sr-only' }
+          %li
+            = link_to 'http://plus.google.com/100168788162708178507', class: 'icon-link', title: 'Google Plus', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
+              = prepend_icon :google_plus, 'Google Plus', fixed_width: true, size: :lg, caption_html: { class: 'sr-only' }
+          %li
+            = link_to 'http://twitter.com/taenaron', class: 'icon-link', title: 'Twitter', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
+              = prepend_icon :twitter, 'Twitter', fixed_width: true, size: :lg, caption_html: { class: 'sr-only' }
+          %li
+            = link_to 'http://taenaron.deviantart.com', class: 'icon-link', title: 'DeviantArt', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
+              = prepend_icon :deviantart, 'DeviantArt', fixed_width: true, size: :lg, caption_html: { class: 'sr-only' }
+          %li
+            = link_to '#', class: 'icon-link', title: 'Behance', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
+              = prepend_icon :behance, 'Behance', fixed_width: true, size: :lg, caption_html: { class: 'sr-only' }
+
+        / Jeff Michelmann
+        %ul.nav.navbar-nav.author-social-buttons
+          %li= link_to 'Jeff Michelmann', static_page_path('about/jeff')
+          %li
+            = link_to 'http://facebook.com/jeff.gucken', class: 'icon-link', title: 'Facebook', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
+              = prepend_icon :facebook, 'Facebook', fixed_width: true, size: :lg, caption_html: { class: 'sr-only' }
+          %li
+            = link_to 'http://twitter.com/jmichelmann', class: 'icon-link', title: 'Twitter', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
+              = prepend_icon :twitter, 'Twitter', fixed_width: true, size: :lg, caption_html: { class: 'sr-only' }
+          %li
+            = link_to 'http://gucken.deviantart.com', class: 'icon-link', title: 'DeviantArt', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
+              = prepend_icon :deviantart, 'DeviantArt', fixed_width: true, size: :lg, caption_html: { class: 'sr-only' }
+
 
   = render 'footer'
 

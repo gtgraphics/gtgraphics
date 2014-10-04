@@ -42,4 +42,8 @@ module FacebookHelper
       share: options[:share_button]
     }
   end
+
+  def facebook_site_like_button(options = {})
+    facebook_like_button("http://www.facebook.com/gtgraphics.de", style: :button_count, show_faces: false)
+  end
 end

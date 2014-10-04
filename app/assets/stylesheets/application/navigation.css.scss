@@ -9,58 +9,6 @@
     }
   }
 
-  .navbar-brand {
-    $width: 200px;
-    position: absolute;
-    width: $width;
-    left: 50%;
-    margin-left: -$width / 2 !important;
-    background: {
-      color: $navbar-inverse-bg;
-      image: asset-url('brand.png');
-      repeat: no-repeat;
-      position: center;
-      size: 166px 18px;
-    }
-
-    @include retina-background-image('brand@2x.png');
-
-    text: {
-      align: center;
-      transform: uppercase;    
-    }
-    font: {
-      size: 16px;
-      weight: 700;
-    }
-    z-index: 1000;
-
-    &:hover, &:focus {
-      background-color: $navbar-inverse-bg;
-    }
-    
-    $ellipsis-width: 50px;
-
-    &:before, &:after {
-      content: " ";
-      position: absolute;
-      display: block;
-      top: 0;
-      width: $ellipsis-width;
-      height: $navbar-height;
-      pointer-events: none;
-    }
-
-    &:before {
-      left: -$ellipsis-width;
-      @include background(linear-gradient(left, rgba($navbar-inverse-bg, 0), $navbar-inverse-bg));
-    }
-    &:after {
-      right: -$ellipsis-width;
-      @include background(linear-gradient(right, rgba($navbar-inverse-bg, 0), $navbar-inverse-bg));
-    }
-  }
-
   .navbar-toggle {
     line-height: 15px;
     float: left;
@@ -70,18 +18,57 @@
     z-index: 2000;
   }
 
-  #nav_account {
-    .avatar {
-      display: block;
-      float: left;
-      margin-top: -2px;
-      margin-right: 6px;
-    }
+  &.navbar-header, &.navbar-footer {
+    background-color: rgba(40,40,40,.95)
   }
 
-  #nav_messages {
-    .badge {
-      margin-left: 4px;
+  &.navbar-header {
+    border-bottom: none;
+  }
+
+  &.navbar-footer {
+    $vertical-padding: 12px;
+
+    color: #666;
+    font-size: 12px;
+    min-height: 40px;
+    height: auto;
+    border-top: none;
+
+    .author-social-buttons + .author-social-buttons {
+      margin-left: 5px;
+    }
+
+    .navbar-text, .navbar-nav a {
+      margin: 0;
+      padding: $vertical-padding 14px;
+      line-height: normal;
+    }
+
+    .navbar-nav {
+      a { 
+        color: #666;
+        &:hover, &:focus {
+          color: lighten(#666, 25%);
+          background-color: rgba(20,20,20,.4);
+        }
+        &.icon-link {
+          padding: {
+            left: 9px;
+            right: 9px;
+          }
+        }
+      }
+    }
+
+    .navbar-text {
+      &.copyright {
+        padding-left: 0;
+      }
+      &.social-buttons {
+        padding-top: $vertical-padding - 2px;
+        padding-bottom: $vertical-padding - 2px;
+      }
     }
   }
 }
