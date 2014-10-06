@@ -27,10 +27,14 @@ module RouteHelper
   def _page_url(suffix, *args)
     options = args.extract_options!
     page = args.first
-    if page and page.path.present?
-      send("#{page.embeddable_class.model_name.element}_#{suffix}", options.merge(path: page.path))
+    if page.nil? or page.try(:root?)
+      self.public_send("root_#{suffix}", options)
+    elsif page.is_a?(Page)
+      self.public_send("#{page.embeddable_class.model_name.element}_#{suffix}", options.merge(path: page.path))
     else
-      send("root_#{suffix}", options)
+      root_path = self.public_send("root_#{suffix}", locale: options.fetch(:locale, I18n.locale))
+      path = page.gsub(/\A\//, '')
+      "#{root_path}/#{path}"
     end
   end
 end

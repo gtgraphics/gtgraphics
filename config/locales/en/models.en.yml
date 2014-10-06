@@ -94,6 +94,21 @@ en:
       template:
         one: Template
         other: Templates
+      template/contact_form:
+        one: Contact Form Template
+        other: Contact Form Templates
+      template/content:
+        one: Content Template
+        other: Content Templates
+      template/homepage:
+        one: Homepage Template
+        other: Homepage Template
+      template/image:
+        one: Image Page Template
+        other: Image Page Templates
+      template/project:
+        one: Project Template
+        other: Project Templates
       user:
         one: User
         other: Users
