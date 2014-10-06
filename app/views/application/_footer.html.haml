@@ -1,16 +1,29 @@
 %nav.navbar.navbar-footer.navbar-fixed-bottom{role: 'navigation'}
   .container
-    %p.navbar-text.copyright 
-      &copy; 2006-#{Date.today.year} GT Graphics
+    %ul.nav.navbar-nav
+      %li.dropdown
+        = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+          = prepend_icon :globe, 'Language', caption_html: { lang: 'en' }
+          %b.caret
+        %ul.dropdown-menu
+          - I18n.available_locales.sort_by { |locale| translate(locale, scope: :languages, locale: locale) }.each do |locale|
+            = active_link_to page_path(@page, locale: locale), wrap_tag: :li, hreflang: locale, lang: locale, active: locale == I18n.locale, data: { no_turbolink: true } do
+              = prepend_flag_icon(locale, translate(locale, scope: :languages, locale: locale))
+
+    / %p.navbar-text.copyright 
+    /   &copy; 2006-#{Date.today.year} GT Graphics
+
     %ul.nav.navbar-nav
       - (Page.primary - menu_items).each do |page|
         %li= link_to page, page
+
     .navbar-text.social-buttons
       = facebook_site_like_button
+
     .pull-right
       / Tobias Roetsch
       %ul.nav.navbar-nav.author-social-buttons
-        %li= link_to 'Tobias Roetsch', static_page_path('about/tobias')
+        %li= link_to 'Tobias Roetsch', page_path('about/tobias')
         %li
           = link_to 'http://facebook.com/roetsch', class: 'icon-link', title: 'Facebook', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
             = prepend_icon :facebook, 'Facebook', fixed_width: true, size: :lg, caption_html: { class: 'sr-only' }
@@ -29,7 +42,7 @@
 
       / Jeff Michelmann
       %ul.nav.navbar-nav.author-social-buttons
-        %li= link_to 'Jeff Michelmann', static_page_path('about/jeff')
+        %li= link_to 'Jeff Michelmann', page_path('about/jeff')
         %li
           = link_to 'http://facebook.com/jeff.gucken', class: 'icon-link', title: 'Facebook', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
             = prepend_icon :facebook, 'Facebook', fixed_width: true, size: :lg, caption_html: { class: 'sr-only' }

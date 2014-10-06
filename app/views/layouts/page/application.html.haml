@@ -28,41 +28,37 @@
   = facebook_sdk_anchor
 
   .container
-    %nav.navbar.navbar-header{role: 'navigation'}
 
-      .navbar-header
+    #content_wrapper.row
+      .col-sm-12.col-md-10
 
-        = link_to :root_page, class: 'navbar-brand' do
-          = image_tag 'brand.png', alt: 'GT Graphics'
-          %span.sr-only GT Graphics
+        #logo
+          = image_tag 'logo.png'
+          %h1.sr-only GT Graphics
 
-        %ul.nav.navbar-nav
-          - menu_items.each do |page|
-            = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page)
+        %nav.navbar.navbar-top{role: 'navigation'}
+          .navbar-header
+            / = link_to :root_page, class: 'navbar-brand' do
+            /   = image_tag 'brand.png', alt: 'GT Graphics'
+            /   %span.sr-only GT Graphics
 
-        %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
-          = icon(:bars, fixed_width: true)
-          %span.sr-only= translate('helpers.links.toggle_navigation')
+            %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
+              = icon(:bars, fixed_width: true)
+              %span.sr-only= translate('helpers.links.toggle_navigation')
 
-      .navbar-collapse.collapse
-        %ul.nav.navbar-nav.navbar-right
-          %li.dropdown
-            = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
-              = flag_icon(locale)
-              %b.caret
-            %ul.dropdown-menu
-              - I18n.available_locales.sort_by { |locale| translate(locale, scope: :languages, locale: locale) }.each do |locale|
-                = active_link_to page_path(@page, locale: locale), wrap_tag: :li, hreflang: locale, lang: locale, active: locale == I18n.locale, data: { no_turbolink: true } do
-                  = prepend_flag_icon(locale, translate(locale, scope: :languages, locale: locale))
+          .navbar-collapse.collapse
+            %ul.nav.navbar-nav
+              - menu_items.each do |page|
+                = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page)
 
-    = render_flashes    
-    = render 'breadcrumbs'
+        #page_content
+          = render_flashes
+          = render 'breadcrumbs'
 
-    #page_content
-      - if content_for? :page_content
-        = yield :page_content
-      - else
-        = yield
+          - if content_for? :page_content
+            = yield :page_content
+          - else
+            = yield
 
   = render 'footer'
 

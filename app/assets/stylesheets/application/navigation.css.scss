@@ -1,4 +1,4 @@
-@import '_bootstrap_config';
+@import 'bootstrap_config';
 @import 'compass';
 @import 'shared/mixins';
 
@@ -18,18 +18,36 @@
     z-index: 2000;
   }
 
-  &.navbar-header, &.navbar-footer {
-    background-color: rgba(40,40,40,.92);
+  .navbar-brand {
+    margin-left: -15px;
   }
 
-  &.navbar-header {
-    border-bottom: none;
+  &.navbar-top {
+    margin-bottom: 0;
+    border: none;
+    background-color: rgba($brand-primary, 0.25);
+    // margin-bottom: 5px;
+    border-radius: 0;
+
+    .navbar-nav {
+      @for $i from 1 through 6 {
+        > li:nth-child(#{$i}) {
+          > a {
+            background-color: rgba($brand-primary, (1 - ($i - 1)/6) * 0.75);
+            color: white;
+            min-width: 120px;
+            font-weight: bold;
+          }
+        }
+      }
+    }
   }
 
   &.navbar-footer {
     $vertical-padding: 12px;
 
     color: #666;
+    background-color: rgba(40,40,40,.92);
     font-size: 12px;
     min-height: 40px;
     height: auto;
@@ -40,14 +58,14 @@
       margin-left: 10px;
     }
 
-    .navbar-text, .navbar-nav a {
+    .navbar-text, .navbar-nav > li > a {
       margin: 0;
       padding: $vertical-padding 14px;
       line-height: normal;
     }
 
     .navbar-nav {
-      a { 
+      > li > a { 
         color: #666;
         &:hover, &:focus {
           color: lighten(#666, 25%);
