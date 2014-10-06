@@ -14,7 +14,7 @@ PAGES = {
   'about' => { de: 'Über uns', en: 'About Us' },
   'about/tobias' => { de: 'Tobias Roetsch', en: 'Tobias Roetsch' },
   'about/jeff' => { de: 'Jeff Michelmann', en: 'Jeff Michelmann' },
-  'contact' => { de: 'Kontakt', en: 'Contact', menu: false },
+  'contact' => { type: :contact_form, de: 'Kontakt', en: 'Contact', menu: false },
   'imprint' => { de: 'Impressum', en: 'Imprint', menu: false }
 }.freeze
 
@@ -74,9 +74,12 @@ Page.transaction do
       page = Page.find_by(path: path)
       page ||= parent ? parent.children.new : Page.roots.new
       page.slug = slug if page.new_record?
-      if page.embeddable.nil?
-        page.embeddable_type = "Page::#{page_type}"
-        page.build_embeddable
+      embeddable_type = "Page::#{page_type}"
+      type_changed = page.persisted? and embeddable_type != page.embeddable_type
+      if page.embeddable.nil? or type_changed
+        page.embeddable.destroy if type_changed
+        page.embeddable_type = embeddable_type
+        embeddable = page.build_embeddable        
       end
       page.template = template if page.support_templates?
 
@@ -88,6 +91,10 @@ Page.transaction do
 
       page.published = config.fetch(:published, true)
       page.menu_item = config.fetch(:menu, true)
+
+      if page.contact_form?
+        embeddable.recipients = User.all
+      end
 
       page.save!
     end

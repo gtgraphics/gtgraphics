@@ -1,4 +1,15 @@
 module TranslationHelper
+  def available_locales_for_select
+    I18n.available_locales.map do |locale|
+      language_name = translate(locale, scope: :languages)
+      unless locale == I18n.locale
+        translated_language_name = translate(locale, scope: :languages, locale: locale)
+        language_name = "#{language_name} (#{translated_language_name})"
+      end
+      [language_name, locale]
+    end.sort_by(&:first)
+  end
+
   def translation_pane_for(locale, &block)
     content_tag :div, class: 'tab-pane', data: { locale: locale }, &block
   end
