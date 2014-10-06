@@ -27,8 +27,8 @@
 - content_for :content do
   = facebook_sdk_anchor
 
-  %nav.navbar.navbar-header.navbar-fixed-top{role: 'navigation'}
-    .container
+  .container
+    %nav.navbar.navbar-header{role: 'navigation'}
 
       .navbar-header
 
@@ -55,7 +55,6 @@
                 = active_link_to page_path(@page, locale: locale), wrap_tag: :li, hreflang: locale, lang: locale, active: locale == I18n.locale, data: { no_turbolink: true } do
                   = prepend_flag_icon(locale, translate(locale, scope: :languages, locale: locale))
 
-  .container
     = render_flashes    
     = render 'breadcrumbs'
 
