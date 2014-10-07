@@ -38,11 +38,11 @@ module RouteHelper
     page = args.first
     if page.nil? or page.try(:root?)
       self.public_send("root_#{suffix}", options)
-    elsif page.is_a?(Page)
+    elsif page.respond_to?(:path)
       self.public_send("#{page.embeddable_class.model_name.element}_#{suffix}", options.merge(path: page.path))
     else
       root_path = self.public_send("root_#{suffix}", locale: options.fetch(:locale, I18n.locale))
-      path = page.gsub(/\A\//, '')
+      path = page.to_s.gsub(/\A\//, '')
       "#{root_path}/#{path}"
     end
   end
