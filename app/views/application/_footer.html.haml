@@ -3,7 +3,7 @@
     %ul.nav.navbar-nav
       %li.dropdown
         = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
-          = prepend_icon :globe, 'Language', caption_html: { lang: 'en' }
+          = prepend_icon :globe, 'Language', size: :lg, caption_html: { lang: 'en' }
           %b.caret
         %ul.dropdown-menu
           - I18n.available_locales.sort_by { |locale| translate(locale, scope: :languages, locale: locale) }.each do |locale|
