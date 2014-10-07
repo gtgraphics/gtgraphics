@@ -38,10 +38,6 @@
 
         %nav.navbar.navbar-top{role: 'navigation'}
           .navbar-header
-            / = link_to :root_page, class: 'navbar-brand' do
-            /   = image_tag 'brand.png', alt: 'GT Graphics'
-            /   %span.sr-only GT Graphics
-
             %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
               = icon(:bars, fixed_width: true)
               %span.sr-only= translate('helpers.links.toggle_navigation')
