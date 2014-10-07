@@ -32,9 +32,9 @@
     #content_wrapper.row
       .col-sm-12.col-md-10
 
-        #logo
-          = image_tag 'logo.png'
-          %h1.sr-only GT Graphics
+        = link_to :root, id: 'brand' do
+          = image_tag 'logo.svg', width: 300, alt: 'GT Graphics'
+          .sr-only GT Graphics
 
         %nav.navbar.navbar-top{role: 'navigation'}
           .navbar-header

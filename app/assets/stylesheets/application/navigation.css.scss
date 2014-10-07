@@ -2,6 +2,11 @@
 @import 'compass';
 @import 'shared/mixins';
 
+#brand {
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
 .navbar {
   @media (min-width: $screen-sm-min) {
     .navbar-nav:not(.navbar-right):first-child {
@@ -37,6 +42,7 @@
             color: white;
             min-width: 120px;
             font-weight: bold;
+            // padding: 10px 15px;
           }
         }
       }
