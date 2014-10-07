@@ -47,14 +47,15 @@
               - menu_items.each do |page|
                 = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page)
 
-        #page_content
-          = render_flashes
-          = render 'breadcrumbs'
+        - unless @page.homepage?
+          #page_content
+            = render_flashes
+            = render 'breadcrumbs'
 
-          - if content_for? :page_content
-            = yield :page_content
-          - else
-            = yield
+            - if content_for? :page_content
+              = yield :page_content
+            - else
+              = yield
 
   = render 'footer'
 
