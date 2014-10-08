@@ -727,7 +727,7 @@ $panel-danger-heading-bg:     $state-danger-bg;
 //** Padding around the thumbnail image
 $thumbnail-padding:           4px;
 //** Thumbnail background color
-$thumbnail-bg:                $body-bg;
+$thumbnail-bg:                transparent;
 //** Thumbnail border color
 $thumbnail-border:            #ddd;
 //** Thumbnail border radius
@@ -743,8 +743,8 @@ $thumbnail-caption-padding:   9px;
 //
 //##
 
-$well-bg:                     #f5f5f5;
-$well-border:                 darken($well-bg, 7%);
+$well-bg:                     rgba(20, 20, 20, 0.5);
+$well-border:                 transparent; // darken($well-bg, 7%);
 
 
 //== Badges
@@ -775,9 +775,9 @@ $breadcrumb-padding-horizontal: 15px;
 //** Breadcrumb background color
 $breadcrumb-bg:                 transparent;
 //** Breadcrumb text color
-$breadcrumb-color:              #ccc;
+$breadcrumb-color:              $gray;
 //** Text color of current page in the breadcrumb
-$breadcrumb-active-color:       $gray-light;
+$breadcrumb-active-color:       #666; // $gray-light;
 //** Textual separator for between breadcrumb elements
 $breadcrumb-separator:          "/";
 
@@ -841,7 +841,7 @@ $blockquote-font-size:        ($font-size-base * 1.25);
 //** Blockquote border color
 $blockquote-border-color:     $gray-lighter;
 //** Page header border color
-$page-header-border-color:    $gray-lighter;
+$page-header-border-color:    $gray-dark; // $gray-lighter;
 
 
 //== Miscellaneous
@@ -854,3 +854,11 @@ $hr-border:                   $gray-lighter;
 //** Horizontal offset for forms and lists.
 $component-offset-horizontal: 180px;
 
+
+
+//== Custom GT Graphics Styles
+
+$content-bg: rgba(40,40,40,.92);
+$content-padding: 15px;
+$content-padding-lg: 25px;
+$footer-bg: $content-bg;

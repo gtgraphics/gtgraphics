@@ -1,0 +1,49 @@
+@import 'bootstrap_config';
+
+.navbar-footer {
+  $vertical-padding: 12px;
+
+  color: #666;
+  background-color: $footer-bg;
+  font-size: 12px;
+  min-height: 40px;
+  height: auto;
+  border-top: none;
+  box-shadow: 0 -1px 5px rgba(0, 0, 0, .4);
+
+  .author-social-buttons + .author-social-buttons {
+    margin-left: 10px;
+  }
+
+  .navbar-text, .navbar-nav > li > a {
+    margin: 0;
+    padding: $vertical-padding 14px;
+    line-height: normal;
+  }
+
+  .navbar-nav {
+    > li > a { 
+      color: #666;
+      &:hover, &:focus {
+        color: lighten(#666, 20%);
+        background-color: rgba(20,20,20,.8);
+      }
+      &.icon-link {
+        padding: {
+          left: 9px;
+          right: 9px;
+        }
+      }
+    }
+  }
+
+  .navbar-text {
+    &.copyright {
+      padding-left: 0;
+    }
+    &.social-buttons {
+      padding-top: $vertical-padding - 2px;
+      padding-bottom: $vertical-padding - 2px;
+    }
+  }
+}

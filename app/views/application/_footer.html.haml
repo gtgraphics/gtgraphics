@@ -1,13 +1,13 @@
-%nav.navbar.navbar-footer.navbar-fixed-bottom{role: 'navigation'}
+%nav.navbar.navbar-footer.navbar-fixed-bottom.hidden-xs{role: 'navigation'}
   .container
     %ul.nav.navbar-nav
       %li.dropdown
         = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
-          = prepend_icon :globe, 'Language', size: :lg, caption_html: { lang: 'en' }
+          = prepend_icon :globe, translate(locale, scope: :languages), size: :lg, caption_html: { lang: 'en' }
           %b.caret
         %ul.dropdown-menu
           - I18n.available_locales.sort_by { |locale| translate(locale, scope: :languages, locale: locale) }.each do |locale|
-            = active_link_to page_path(@page, locale: locale), wrap_tag: :li, hreflang: locale, lang: locale, active: locale == I18n.locale, data: { no_turbolink: true } do
+            = active_link_to page_path(@page, locale: locale), wrap_tag: :li, hreflang: locale, lang: locale, active: locale == I18n.locale do
               = prepend_flag_icon(locale, translate(locale, scope: :languages, locale: locale))
 
     / %p.navbar-text.copyright 
@@ -20,7 +20,7 @@
     .navbar-text.social-buttons
       = facebook_site_like_button
 
-    .pull-right
+    .pull-right.visible-lg
       / Tobias Roetsch
       %ul.nav.navbar-nav.author-social-buttons
         %li= link_to 'Tobias Roetsch', page_path('about/tobias')

@@ -33,14 +33,13 @@
       .col-sm-12.col-md-10
 
         = link_to :root, id: 'brand' do
-          = image_tag 'logo.svg', width: 300, alt: 'GT Graphics'
+          = image_tag 'logo.svg', id: 'logo', alt: 'GT Graphics'
           .sr-only GT Graphics
 
         %nav.navbar.navbar-top{role: 'navigation'}
           .navbar-header
             %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
-              = icon(:bars, fixed_width: true)
-              %span.sr-only= translate('helpers.links.toggle_navigation')
+              = prepend_icon :bars, translate('helpers.links.menu'), fixed_width: true, size: :lg
 
           .navbar-collapse.collapse
             %ul.nav.navbar-nav

@@ -1,0 +1,11 @@
+@import 'bootstrap_config';
+
+::selection {
+  background: $brand-primary;
+  color: white;
+}
+
+::-moz-selection {
+  background: $brand-primary;
+  color: white;
+}

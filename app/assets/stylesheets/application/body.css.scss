@@ -1,9 +1,14 @@
+@import 'bootstrap_config';
+
 body {
   padding-top: 50px;
   padding-bottom: 80px;
 }
 
 #page_content {
-  background-color: rgba(40,40,40,.92);
-  padding: 15px;
+  background-color: $content-bg;
+  padding: $content-padding;
+  @media (min-width: $screen-lg-min) {
+    padding: $content-padding-lg;
+  }
 }
