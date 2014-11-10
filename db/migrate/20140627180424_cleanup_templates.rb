@@ -1,9 +1,9 @@
 class CleanupTemplates < ActiveRecord::Migration
   def up
-    remove_column :templates, :screenshot_file_name
-    remove_column :templates, :screenshot_content_type
-    remove_column :templates, :screenshot_file_size
-    remove_column :templates, :screenshot_updated_at
+    remove_column :templates, :screenshot_file_name if column_exists? :templates, :screenshot_file_name
+    remove_column :templates, :screenshot_content_type if column_exists? :templates, :screenshot_content_type
+    remove_column :templates, :screenshot_file_size if column_exists? :templates, :screenshot_file_size
+    remove_column :templates, :screenshot_updated_at if column_exists? :templates, :screenshot_updated_at
     add_column :templates, :name, :string
     add_column :templates, :description, :text
 

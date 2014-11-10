@@ -6,9 +6,12 @@ class CreateProjectPages < ActiveRecord::Migration
       t.string :client_url
       t.date :released_on
     end
-    reversible do |dir|
-      dir.up { Page::Project.create_translation_table! name: :string, description: :text }
-      dir.down { Page::Project.drop_translation_table! }
+
+    create_table :project_page_translations do |t|
+      t.belongs_to :project_page, index: true
+      t.string :locale, limit: 2
+      t.string :name
+      t.text :description
     end
   end
 end
