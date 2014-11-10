@@ -2,7 +2,7 @@ module GravatarHelper
   def gravatar_image_tag(email, options = {})
     html_options = options.except(*Gravatar::VALID_OPTIONS).deep_dup
     html_options[:alt] ||= email
-    html_options[:class] = (html_options[:class].to_s.split << 'gravatar').uniq.join(' ')
+    html_options[:class] = ['gravatar', *html_options[:class]].compact
 
     url_options = options.slice(*Gravatar::VALID_OPTIONS).reverse_merge(secure: request.ssl?)
     url_options.reverse_merge!(Gravatar::DEFAULTS)
