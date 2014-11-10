@@ -36,15 +36,31 @@ Template.benchmark "Seeding Templates" do
   Template.transaction do
     Template.template_types.each do |template_type|
       template_class = template_type.constantize
-      template_class.template_files.each do |template_file|
-        template = template_class.find_or_initialize_by(file_name: template_file)
+      template_class.template_files(true).each do |template_file|
+        filename = File.basename(template_file).gsub(/\.(.*)\z/, '')
+
+        template = template_class.find_or_initialize_by(file_name: filename)
         I18n.with_locale :de do
-          if template_file == 'default'
+          if filename == 'default'
             template.name = template_class.model_name.human
           else
-            template.name = template_file.titleize
+            template.name = filename.titleize
           end
         end
+
+        # Scan the document for defined regions
+        template_doc = IO.read(template_file)
+        region_names = template_doc.scan(/render_region :([a-z_]+)/).flatten
+
+        template.region_definitions.reject { |definition|
+          definition.label.in?(region_names) }.each(&:mark_for_destruction)
+
+        region_names.each do |region_name|
+          template.region_definitions.find_or_initialize_by(label: region_name) do |definition|
+            definition.name = region_name.titleize
+          end
+        end
+
         template.save!
       end
     end

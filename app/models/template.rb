@@ -46,7 +46,7 @@ class Template < ActiveRecord::Base
         if full_paths
           template_file
         else
-          File.basename(template_file).split('.').first
+          File.basename(template_file).gsub(/\.(.*)\z/, '')
         end
       end.sort.freeze
     end
