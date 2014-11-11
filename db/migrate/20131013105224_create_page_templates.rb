@@ -4,7 +4,6 @@ class CreatePageTemplates < ActiveRecord::Migration
       t.string :file_name, null: false, index: { unique: true }
       t.string :name
       t.text :description
-      t.attachment :screenshot
       t.boolean :default, null: false, default: false
       t.boolean :active, null: false, default: true
     end

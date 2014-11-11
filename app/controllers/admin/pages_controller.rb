@@ -134,7 +134,7 @@ class Admin::PagesController < Admin::ApplicationController
   def destroy
     @page.destroy
     flash_for @page
-    respond_with :admin, @page, location: [:admin, @page.parent || Page.root]
+    respond_with :admin, @page, location: [:admin, @page.right_sibling || @page.left_sibling || @page.parent || Page.root]
   end
 
   def publish
