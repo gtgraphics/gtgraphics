@@ -7,7 +7,7 @@ module Taggable
     has_many :taggings, as: :taggable, dependent: :destroy, autosave: true
     has_many :tags, through: :taggings
 
-    validate :verify_tag_tokens_validity
+    validate :verify_tag_list_validity
   end
 
   module ClassMethods
@@ -100,9 +100,9 @@ module Taggable
   end
 
   private
-  def verify_tag_tokens_validity
+  def verify_tag_list_validity
     if taggings.any? { |tagging| tagging.errors.any? }
-      errors.add(:tag_tokens, :contains_invalid)
+      errors.add(:tag_list, :contains_invalid)
     end
   end
 end

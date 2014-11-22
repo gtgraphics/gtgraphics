@@ -16,6 +16,11 @@ class TagCollection
   end
 
   delegate :to_a, :each, :count, :length, :any?, :empty?, to: :list
+  delegate :[], to: :to_a
+
+  def to_s
+    to_a.join(separator)
+  end
 
   def inspect
     "#<#{self.class.name} list: #{list.inspect}, options: #{@options.inspect}>"
