@@ -43,7 +43,7 @@ class Tag < ActiveRecord::Base
       taggings = Tagging.arel_table
       select_expression = arel_table.project(*columns, taggings[:id].count.as('taggings_count')).projections
       join_expression = arel_table.join(taggings, Arel::Nodes::OuterJoin).on(taggings[:tag_id].eq(arel_table[:id])).join_sources
-      joins(join_expression).select(select_expression).group(arel_table[:id]).reorder('taggings_count DESC')
+      joins(join_expression).select(select_expression).group(arel_table[:id]).reorder('taggings_count').reverse_order
     end
   end
 

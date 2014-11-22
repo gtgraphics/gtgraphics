@@ -24,13 +24,11 @@ class Page < ActiveRecord::Base
 
     delegate :label, :name, to: :definition
 
-    class << self
-      def labelled(*labels)
-        labels.flatten!
-        joins(:definition).
-        where(template_region_definitions: { label: labels.one? ? labels.first : labels }).
-        readonly(false)
-      end
+    def self.labelled(*labels)
+      labels.flatten!
+      joins(:definition).
+      where(template_region_definitions: { label: labels.one? ? labels.first : labels }).
+      readonly(false)
     end
 
     def to_param
