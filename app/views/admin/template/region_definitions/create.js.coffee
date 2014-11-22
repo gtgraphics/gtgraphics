@@ -1,8 +1,6 @@
-$modal = $('#modal')
-
 <% if @region_definition.errors.empty? %>
 
-$modal.modal('hide')
+$.hideModal()
 
 tableContent = "<%= j render('admin/template/region_definitions/table', region_definitions: @template.region_definitions) %>"
 $('#region_definitions').replaceWith(tableContent)
@@ -10,8 +8,6 @@ $('#region_definitions').prepare()
 
 <% else %>
 
-html = "<%= escape_javascript render('form') %>"
-$('form', $modal).replaceWith(html)
-$('form', $modal).prepare()
+$.updateModalForm("<%= escape_javascript render('form') %>")
 
 <% end %>

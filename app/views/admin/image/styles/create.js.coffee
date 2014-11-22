@@ -1,8 +1,7 @@
-$modal = $('#modal')
-
 <% if @image_style.errors.empty? %>
 
-$modal.on 'hidden.bs.modal', ->
+$modal = $('#modal')
+$modal.one 'hidden.bs.modal', ->
 
   tableContent = "<%= j render('admin/image/styles/table') %>"
   $('#image_styles').replaceWith(tableContent)
@@ -14,8 +13,6 @@ $modal.modal('hide')
 
 <% else %>
 
-html = "<%= escape_javascript render('form') %>"
-$('form', $modal).replaceWith(html)
-$('form', $modal).prepare()
+$.updateModalForm("<%= escape_javascript render('form') %>")
 
 <% end %>

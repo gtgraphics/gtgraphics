@@ -5,6 +5,6 @@ Turbolinks.visit('<%= admin_image_path(@image) %>')
 
 <% else %>
 
-alert 'There has been an error!'
+alert 'Unexpected error! Please try again.'
 
 <% end %>

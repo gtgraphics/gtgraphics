@@ -1,14 +1,10 @@
-$modal = $('#modal')
-
 <% if @image.errors.empty? %>
 
-$modal.modal('hide')
+$.hideModal()
 Turbolinks.visit('<%= edit_admin_image_path(@image) %>')
 
 <% else %>
 
-html = "<%= escape_javascript render('new_form') %>"
-$('form', $modal).replaceWith(html)
-$('form', $modal).prepare()
+$.updateModalForm("<%= escape_javascript render('new_form') %>")
 
 <% end %>
