@@ -5,9 +5,9 @@ class TagCollection
 
   include Enumerable
 
-  attr_reader :taggable, :list
+  attr_reader :taggable, :list, :options
   delegate :taggings, to: :taggable
-  private :taggable, :taggings
+  private :taggable, :taggings, :options
 
   def initialize(taggable, options = {})
     @taggable = taggable
@@ -33,8 +33,20 @@ class TagCollection
 
   # Manipulation
 
+  def +(other)
+    tags = self.class.new(taggable, options)
+    tags.add(other)
+    tags
+  end
+
+  def -(other)
+    tags = self.class.new(taggable, options)
+    tags.remove(other)
+    tags
+  end
+
   def add(*args)
-    added_tags = extract_tokens(*args)
+    added_tags = extract_tags(*args)
     @list += added_tags
 
     added_tags.each do |token|
@@ -44,17 +56,17 @@ class TagCollection
     end
   end
 
+  alias_method :<<, :add
+
   def add!(*args)
-    added_tags = extract_tokens(*args)
+    added_tags = extract_tags(*args)
     @list += added_tags
 
     add_raw!(added_tags)
   end
 
-  alias_method :<<, :add!
-
   def set(*args)
-    defined_tags = extract_tokens(*args)
+    defined_tags = extract_tags(*args)
     @list = SortedSet.new(defined_tags)
 
     # Build all tags that are in the list
@@ -67,7 +79,7 @@ class TagCollection
   end
 
   def set!(*args)
-    defined_tags = extract_tokens(*args)
+    defined_tags = extract_tags(*args)
     @list = SortedSet.new(defined_tags)
 
     Tag.transaction do
@@ -80,7 +92,7 @@ class TagCollection
   end
 
   def remove(*args)
-    removed_tags = extract_tokens(*args)
+    removed_tags = extract_tags(*args)
     @list -= removed_tags
 
     taggings.select do |tagging|
@@ -89,7 +101,7 @@ class TagCollection
   end
 
   def remove!(*args)
-    removed_tags = extract_tokens(*args)
+    removed_tags = extract_tags(*args)
     @list -= removed_tags
 
     taggings.joins(:tag).where(tags: { label: removed_tags }).readonly(false).destroy_all
@@ -106,7 +118,7 @@ class TagCollection
   end
 
   private
-  def extract_tokens(*args)
+  def extract_tags(*args)
     args.flat_map do |arg|
       if arg.respond_to?(:to_a)
         arg.to_a.map(&:to_s)
