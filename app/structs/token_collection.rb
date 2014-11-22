@@ -4,43 +4,64 @@ class TokenCollection
   DEFAULTS = {
     separator: ',',
     sort: false,
-    unique: false
-  }
+    unique: false,
+    allow_blank: false
+  }.freeze
 
   include Enumerable
 
-  attr_reader :tokens, :options
-  delegate :each, :empty?, :any?, :[], to: :to_a
+  attr_reader :tokens
 
   def initialize(tokens, options = {})
     @options = options.reverse_merge(DEFAULTS)
-    if tokens.is_a?(String)
-      @tokens = tokens.split(@options[:separator])
-    else
+    if tokens.respond_to?(:to_a)
       @tokens = tokens.to_a
+    else
+      @tokens = tokens.to_s.split(separator)
     end
-    @tokens.delete_if(&:blank?)
-    @tokens.sort! if @options[:sort]
-    @tokens = @tokens.to_set if @options[:unique]
+    @tokens.delete_if(&:blank?) unless allow_blank?
+    @tokens.sort! if sorted?
+    @tokens = @tokens.to_set if unique?
   end
 
   def +(other)
-    self.class.new(@tokens + other.to_a, @options)
+    self.class.new(self.to_a + other.to_a, @options)
   end
 
   def -(other)
-    self.class.new(@tokens - other.to_a, @options)
+    self.class.new(self.to_a - other.to_a, @options)
   end
 
   def inspect
-    "#<#{self.class.name} tokens: #{tokens.inspect}, options: #{options.inspect}>"
+    "#<#{self.class.name} tokens: #{tokens.inspect}, options: #{@options.inspect}>"
   end
 
-  def to_a
-    @tokens.to_a
-  end
+
+  # Conversion
+
+  delegate :to_a, :count, :each, :empty?, :any?, to: :tokens
+  delegate :[], to: :to_a
 
   def to_s
-    to_a.join(options[:separator])
+    to_a.join(separator)
+  end
+
+
+  # Inquiry Methods
+
+  def separator
+    @options[:separator]
+  end
+
+  def sorted?
+    @options[:sort]
+  end
+
+  def unique?
+    @options[:unique]
+  end
+
+  def allow_blank?
+    @options[:allow_blank]
   end
 end

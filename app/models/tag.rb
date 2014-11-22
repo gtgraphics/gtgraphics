@@ -11,16 +11,19 @@ class Tag < ActiveRecord::Base
 
   validates :label, presence: true, uniqueness: true
 
-  default_scope -> { order(:label) }
-
   class << self
+    def [](label)
+      find_or_initialize_by(label: label)
+    end
+
     def applied_to(*records)
-      taggings = Tagging.arel_table
-      conditions = records.flatten.collect do |record|
-        taggings[:taggable_id].eq(record.id).
-        and(taggings[:taggable_type].eq(record.class.name))
-      end.reduce(:or)
-      Tag.joins(:taggings).where(conditions)
+      applied_to_linked_with :or, *records
+    end
+    alias_method :applied_to_all, :applied_to
+    alias_method :common, :applied_to
+
+    def applied_to_any(*records)
+      applied_to_linked_with :and, *records
     end
     
     def popular
@@ -35,24 +38,48 @@ class Tag < ActiveRecord::Base
       end
     end
 
-    def usage
-      usage_by(:id)
+    def distribution
+      distribution_by { |tag| tag }
     end
 
-    def usage_by(column_name)
-      taggings_counts(column_name).inject({}) do |result, tag|
-        result.merge!(tag.attributes[column_name.to_s] => tag.taggings_count)
+    def distribution_by(column_name = nil)
+      taggings_counts.inject({}) do |result, tag|
+        if column_name
+          key = tag[column_name]
+        elsif block_given?
+          key = yield(tag)
+        else
+          raise ArgumentError, 'no column name or block given'
+        end
+        result.merge!(key => tag.taggings_count)
       end
     end
 
     private
-    def taggings_counts(*columns)
-      columns = columns.map { |column| arel_table[column] }
-      columns << arel_table[Arel.star] if columns.empty?
+    def applied_to_linked_with(linking, *records)
       taggings = Tagging.arel_table
-      select_expression = arel_table.project(*columns, taggings[:id].count.as('taggings_count')).projections
-      join_expression = arel_table.join(taggings, Arel::Nodes::OuterJoin).on(taggings[:tag_id].eq(arel_table[:id])).join_sources
-      joins(join_expression).select(select_expression).group(arel_table[:id]).reorder('taggings_count').reverse_order
+      conditions = records.flatten.map do |record|
+        taggings[:taggable_id].eq(record.id).
+        and(taggings[:taggable_type].eq(record.class.name))
+      end.reduce(linking)
+      Tag.joins(:taggings).where(conditions).uniq
+    end
+
+    def taggings_counts
+      taggings = Tagging.arel_table
+
+      taggings_count = taggings[:id].count.as('taggings_count')
+      taggings_count.distinct = true
+      select_expression = arel_table.project(
+        arel_table[Arel.star], taggings_count
+      ).projections
+
+      join_expression = arel_table.join(taggings, Arel::Nodes::OuterJoin).
+        on(taggings[:tag_id].eq(arel_table[:id])).join_sources
+      
+      joins(join_expression).select(select_expression).
+      group(arel_table[:id]).
+      reorder('taggings_count').reverse_order
     end
   end
 
