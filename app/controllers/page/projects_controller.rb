@@ -8,6 +8,7 @@ class Page::ProjectsController < Page::ApplicationController
     end
   end
 
+  private
   def load_project
     @project = @page.embeddable.project
   end 

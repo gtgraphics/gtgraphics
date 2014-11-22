@@ -26,24 +26,18 @@ class Page < ActiveRecord::Base
       embeddable.class.template_class if support_templates?
     end
 
-    def template
-      check_template_support!
-      embeddable.try(:template)
-    end
+    %w(template template_id).each do |method_name|
+      class_eval <<-RUBY
+        def #{method_name}
+          check_template_support!
+          embeddable.try(:#{method_name})
+        end
 
-    def template=(template)
-      check_template_support!
-      embeddable.try(:template=, template)
-    end
-
-    def template_id
-      check_template_support!
-      embeddable.try(:template_id)
-    end
-
-    def template_id=(template_id)
-      check_template_support!
-      embeddable.try(:template_id=, template_id)
+        def #{method_name}=(value)
+          check_template_support!
+          embeddable.public_send(:#{method_name}=, value)
+        end
+      RUBY
     end
   end
 end

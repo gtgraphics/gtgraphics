@@ -1,22 +1,20 @@
 AJAX_LINK_SELECTOR = 'a[data-remote=true]'
 AJAX_BUTTON_SELECTOR = 'button[data-remote=true][type=button]'
 
-createArbitraryField = ($button) ->
-  $form = $button.closest('form')
-  buttonName = $button.attr('name')
-  buttonValue = $button.val()
-  $('<input />', type: 'hidden', name: buttonName, value: buttonValue).appendTo($form)
+createArbitraryField = ($submit) ->
+  $form = $submit.closest('form')
+  $('<input />', type: 'hidden', name: $submit.attr('name'), value: $submit.val()).appendTo($form)
 
-destroyArbitraryField = ($button) ->
-  $form = $button.closest('form')
-  buttonName = $button.attr('name')
-  $form.find("input[type='hidden'][name='#{buttonName}']").remove()
+destroyArbitraryField = ($submit) ->
+  $form = $submit.closest('form')
+  buttonName = $submit.attr('name')
+  $("input[type='hidden'][name='#{buttonName}']", $form).remove()
 
 $(document)
 
   .on 'click', ':submit', ->
-    $button = $(@)
-    createArbitraryField($button)
+    $submit = $(@)
+    createArbitraryField($submit)
 
   .on 'submit', "form:not([data-remote=true])", ->
     $(@).find(':submit').prop('disabled', true)
@@ -30,7 +28,7 @@ $(document)
     $submit = $(@).find(':submit')
     $submit.prop('disabled', $submit.data('prevState') || false)
     $submit.removeData('prevState')
-    destroyArbitraryField($submit)
+    $submit.each -> destroyArbitraryField($(@))
 
   .on 'ajax:beforeSend', AJAX_LINK_SELECTOR, ->
     $(@).addClass('disabled')
