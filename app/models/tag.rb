@@ -26,6 +26,15 @@ class Tag < ActiveRecord::Base
       end
     end
 
+    def tagging(*records)
+      taggings = Tagging.arel_table
+      conditions = records.flatten.collect do |record|
+        taggings[:taggable_id].eq(record.id).
+        and(taggings[:taggable_type].eq(record.class.name))
+      end.reduce(:or)
+      Tag.joins(:taggings).where(conditions)
+    end
+
     def usage
       usage_by(:id)
     end
