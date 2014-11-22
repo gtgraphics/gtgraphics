@@ -1,1 +1,1 @@
-$.showModal("<%= modal('admin/template/region_definitions/new') 
+$.showModal("<%= modal('admin/template/region_definitions/new') %>")
