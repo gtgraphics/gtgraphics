@@ -10,18 +10,18 @@ class TokenCollection
 
   include Enumerable
 
-  attr_reader :tokens
+  attr_reader :list
 
-  def initialize(tokens, options = {})
+  def initialize(list, options = {})
     @options = options.reverse_merge(DEFAULTS)
-    if tokens.respond_to?(:to_a)
-      @tokens = tokens.to_a
+    if list.respond_to?(:to_a)
+      @list = list.to_a
     else
-      @tokens = tokens.to_s.split(separator)
+      @list = list.to_s.split(separator)
     end
-    @tokens.delete_if(&:blank?) unless allow_blank?
-    @tokens.sort! if sorted?
-    @tokens = @tokens.to_set if unique?
+    @list.delete_if(&:blank?) unless allow_blank?
+    @list.sort! if sorted?
+    @list = @list.to_set if unique?
   end
 
   def +(other)
@@ -33,13 +33,13 @@ class TokenCollection
   end
 
   def inspect
-    "#<#{self.class.name} tokens: #{tokens.inspect}, options: #{@options.inspect}>"
+    "#<#{self.class.name} list: #{list.inspect}, options: #{@options.inspect}>"
   end
 
 
   # Conversion
 
-  delegate :to_a, :count, :each, :empty?, :any?, to: :tokens
+  delegate :to_a, :count, :each, :empty?, :any?, to: :list
   delegate :[], to: :to_a
 
   def to_s

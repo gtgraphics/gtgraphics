@@ -1,11 +1,6 @@
 module Taggable
   extend ActiveSupport::Concern
 
-  TOKEN_OPTIONS = {
-    sort: true,
-    unique: true
-  }.freeze
-
   included do
     include Excludable
 
@@ -16,79 +11,73 @@ module Taggable
   end
 
   module ClassMethods
-    def tagged(*labels)
-      scope = joins(:tags).readonly(false).uniq
-      labels = labels.flatten.uniq
-      if labels.one?
-        scope.where(tags: { label: labels.first })
+    def tagged(*tokens)
+      options = labels.extract_options!.reverse_merge(any: false)
+      if options[:any]
+        tagged_any(*tokens)
       else
-        conditions = labels.map do |label|
+        tagged_all(*tokens)
+      end
+    end
+
+    private
+    def tagged_all(*tokens)
+      scope = joins(:tags).readonly(false).uniq
+      tokens = tokens.flatten.uniq
+      if tokens.one?
+        scope.where(tags: { label: tokens.first })
+      else
+        conditions = tokens.map do |token|
           arel_table[:id].in(
-            Tagging.joins(:tag).where(tags: { label: label }).
+            Tagging.joins(:tag).where(tags: { label: token }).
             select(Tagging.arel_table[:taggable_id]).ast
           )
         end.reduce(:and)
         scope.where(conditions)
       end
     end
-    alias_method :tagged_all, :tagged
 
-    def tagged_any(*labels)
-      labels = labels.flatten.uniq
-      joins(:tags).where(tags: { label: labels.one? ? labels.first : labels }).readonly(false).uniq
+    def tagged_any(*tokens)
+      tokens = tokens.flatten.uniq
+      joins(:tags).where(tags: { label: tokens.one? ? tokens.first : tokens }).readonly(false).uniq
     end
   end
 
-  def tag_tokens
-    @tag_tokens ||= TokenCollection.new(self.tags.pluck(:label), TOKEN_OPTIONS)
+  def tag_list
+    @tag_list ||= TagCollection.new(self)
   end
   
-  def tag_tokens=(labels)
-    @tag_tokens = TokenCollection.new(labels, TOKEN_OPTIONS)
-    labels = @tag_tokens.to_a
-    labels.each do |label|
-      if self.taggings.none? { |tagging| tagging.label == label.to_s }
-        tag = Tag.find_or_initialize_by(label: label)
-        self.taggings.build(tag: tag)
-      end
-    end
-    self.taggings.reject { |tagging| tagging.label.in?(labels) }.each(&:mark_for_destruction)
+  def tag_list=(tokens)
+    tag_list.set(tokens)
   end
 
 
   # Inquiries
 
-  def tagged?(*labels)
-    labels.flatten.all? { |label| label.to_s.in?(tag_tokens.to_a) }
-  end
-  alias_method :all_tagged?, :tagged?
-
-  def any_tagged?(*labels)
-    labels.flatten.any? { |label| label.to_s.in?(tag_tokens.to_a) }
+  def tagged?(*tokens)
+    options = labels.extract_options!.reverse_merge(any: false)
+    tokens.flatten.public_send(options[:any] ? 'any?' : 'all?') do |token|
+      token.to_s.in?(tag_list.to_a)
+    end
   end
 
 
   # Tag / Untag
 
   def tag(*labels)
-    self.tag_tokens += labels
+    tag_list.add(labels)
   end
 
   def tag!(*labels)
-    transaction do
-      labels.flatten.uniq.each do |label|
-        tag = Tag.find_or_create_by!(label: label)
-        self.taggings.find_or_create_by!(tag: tag)
-      end
-    end
+    tag_list.add!(labels)
   end
 
   def untag(*labels)
-    self.tag_tokens -= labels
+    tag_list.remove(labels)
   end
 
   def untag!(*labels)
-    self.taggings.joins(:tag).where(tags: { label: labels.flatten.uniq }).readonly(false).destroy_all
+    tag_list.remove!(labels)
   end
 
 
