@@ -56,7 +56,9 @@ class TagCollection
   def add!(*args)
     added_tags = extract_tags(*args)
     @list += added_tags
-    add_raw!(added_tags)
+    Tag.transaction do  
+      add_raw!(added_tags)
+    end
   end
 
   def set(*args)
@@ -129,11 +131,9 @@ class TagCollection
   end
 
   def add_raw!(added_tags)
-    Tag.transaction do
-      added_tags.each do |label|
-        tag = Tag.find_or_create_by!(label: label)
-        taggings.find_or_create_by!(tag: tag)
-      end
+    added_tags.each do |label|
+      tag = Tag.find_or_create_by!(label: label)
+      taggings.find_or_create_by!(tag: tag)
     end
   end
 end
