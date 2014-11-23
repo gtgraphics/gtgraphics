@@ -48,12 +48,7 @@ class TagCollection
   def add(*args)
     added_tags = extract_tags(*args)
     @list += added_tags
-
-    added_tags.each do |token|
-      if taggings.reject(&:marked_for_destruction?).none? { |tagging| tagging.label == token.to_s }
-        taggings.build(tag: Tag[token])
-      end
-    end
+    add_raw(added_tags)
   end
 
   alias_method :<<, :add
@@ -61,7 +56,6 @@ class TagCollection
   def add!(*args)
     added_tags = extract_tags(*args)
     @list += added_tags
-
     add_raw!(added_tags)
   end
 
@@ -94,7 +88,6 @@ class TagCollection
   def remove(*args)
     removed_tags = extract_tags(*args)
     @list -= removed_tags
-
     taggings.select do |tagging|
       tagging.label.to_s.in?(removed_tags)
     end.each(&:mark_for_destruction)
@@ -103,7 +96,6 @@ class TagCollection
   def remove!(*args)
     removed_tags = extract_tags(*args)
     @list -= removed_tags
-
     taggings.joins(:tag).where(tags: { label: removed_tags }).readonly(false).destroy_all
   end
 
