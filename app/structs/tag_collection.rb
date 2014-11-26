@@ -15,6 +15,17 @@ class TagCollection
     @list = SortedSet.new(@taggable.tags.pluck(:label))
   end
 
+  def self.extract_tags(*args)
+    options = args.extract_options!.reverse_merge(separator: self.separator)
+    args.flat_map do |arg|
+      if arg.respond_to?(:to_a)
+        arg.to_a.map(&:to_s)
+      else
+        arg.to_s.split(separator)
+      end
+    end.uniq
+  end
+
   def self.separator
     DEFAULTS[:separator]
   end
@@ -117,13 +128,7 @@ class TagCollection
 
   private
   def extract_tags(*args)
-    args.flat_map do |arg|
-      if arg.respond_to?(:to_a)
-        arg.to_a.map(&:to_s)
-      else
-        arg.to_s.split(separator)
-      end
-    end
+    self.class.extract_tags(*args, separator: separator)
   end
 
   def add_raw(added_tags)

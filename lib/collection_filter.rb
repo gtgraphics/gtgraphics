@@ -31,21 +31,24 @@ class CollectionFilter
   end
 
   def attributes
-    super.select do |name, value|
-      eval_conditions(name, value)
-    end
+    super.select { |name, value| value_present?(name, value) }
   end
 
   def result
     attributes.inject(@relation) do |relation, (name, value)|
       options = self.class.filter_attribute_set[name]
       return relation if options.nil?
-      try_call(options[:with], relation, name, value)
+      filter_proc = options[:with]
+      if filter_proc.arity == 3
+        try_call(filter_proc, relation, name, value)
+      else
+        try_call(filter_proc, relation, value)
+      end
     end
   end
 
   private
-  def eval_conditions(name, value)
+  def value_present?(name, value)
     options = self.class.filter_attribute_set[name]
     return false if options.nil?
     try_call(options.fetch(:if, true), value) &&

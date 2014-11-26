@@ -12,11 +12,11 @@ module Taggable
 
   module ClassMethods
     def tagged(*tokens)
-      options = tokens.extract_options!.reverse_merge(any: false, fuzzy: false)
+      options = tokens.extract_options!.reverse_merge(any: false, case_sensitive: true)
       if options[:any]
-        tagged_any(*tokens)
+        tagged_any(*tokens, options)
       else
-        tagged_all(*tokens)
+        tagged_all(*tokens, options)
       end
     end
 
@@ -25,15 +25,14 @@ module Taggable
       options = tokens.extract_options!
       scope = joins(:tags).readonly(false).uniq
       tokens = tokens.flatten.uniq
-      label = Tag.arel_table[:label]
       conditions = tokens.map do |token|
-        if options[:fuzzy]
-          match = label.matches(token)
-        else
-          match = label.eq(token)
+        label = Tag.arel_table[:label]
+        unless options[:case_sensitive]
+          label = label.lower
+          token = token.downcase
         end
         arel_table[:id].in(
-          Tagging.joins(:tag).where(match).
+          Tagging.joins(:tag).where(label.eq(token).to_sql).
           select(Tagging.arel_table[:taggable_id]).ast
         )
       end.reduce(:and)
@@ -43,14 +42,12 @@ module Taggable
     def tagged_any(*tokens)
       options = tokens.extract_options!
       tokens = tokens.flatten.uniq
-      value = tokens.one? ? tokens.first : tokens
       label = Tag.arel_table[:label]
-      if options[:fuzzy]
-        match = label.matches(value)
-      else
-        match = label.eq(value)
+      unless options[:case_sensitive]
+        label = label.lower
+        tokens = tokens.map(&:downcase)
       end
-      joins(:tags).where(match).readonly(false).uniq
+      joins(:tags).where(label.in(tokens)).readonly(false).uniq
     end
   end
 
