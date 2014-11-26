@@ -25,6 +25,8 @@ class Image < ActiveRecord::Base
   include Image::Croppable
   include Image::Resizable
   include Image::ExifStorable
+
+  include Filterable
   include Ownable
   include PeriodFilterable
   include PersistenceContextTrackable

@@ -15,6 +15,10 @@ class TagCollection
     @list = SortedSet.new(@taggable.tags.pluck(:label))
   end
 
+  def self.separator
+    DEFAULTS[:separator]
+  end
+
   delegate :to_a, :each, :count, :length, :any?, :empty?, to: :list
   delegate :[], to: :to_a
 

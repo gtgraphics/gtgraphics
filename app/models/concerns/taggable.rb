@@ -12,7 +12,7 @@ module Taggable
 
   module ClassMethods
     def tagged(*tokens)
-      options = labels.extract_options!.reverse_merge(any: false)
+      options = tokens.extract_options!.reverse_merge(any: false, fuzzy: false)
       if options[:any]
         tagged_any(*tokens)
       else
@@ -22,24 +22,35 @@ module Taggable
 
     private
     def tagged_all(*tokens)
+      options = tokens.extract_options!
       scope = joins(:tags).readonly(false).uniq
       tokens = tokens.flatten.uniq
-      if tokens.one?
-        scope.where(tags: { label: tokens.first })
-      else
-        conditions = tokens.map do |token|
-          arel_table[:id].in(
-            Tagging.joins(:tag).where(tags: { label: token }).
-            select(Tagging.arel_table[:taggable_id]).ast
-          )
-        end.reduce(:and)
-        scope.where(conditions)
-      end
+      label = Tag.arel_table[:label]
+      conditions = tokens.map do |token|
+        if options[:fuzzy]
+          match = label.matches(token)
+        else
+          match = label.eq(token)
+        end
+        arel_table[:id].in(
+          Tagging.joins(:tag).where(match).
+          select(Tagging.arel_table[:taggable_id]).ast
+        )
+      end.reduce(:and)
+      scope.where(conditions)
     end
 
     def tagged_any(*tokens)
+      options = tokens.extract_options!
       tokens = tokens.flatten.uniq
-      joins(:tags).where(tags: { label: tokens.one? ? tokens.first : tokens }).readonly(false).uniq
+      value = tokens.one? ? tokens.first : tokens
+      label = Tag.arel_table[:label]
+      if options[:fuzzy]
+        match = label.matches(value)
+      else
+        match = label.eq(value)
+      end
+      joins(:tags).where(match).readonly(false).uniq
     end
   end
 
