@@ -31,7 +31,11 @@ module Sluggable
 
     def generate_slug
       if source_attribute = self.class.slug_options[:from]
-        source_proc = source_attribute.to_proc
+        source_proc = case source_attribute
+        when Proc then source_attribute
+        when Symbol then lambda { |object| object.public_send(source_attribute) }
+        else raise ArgumentError, "cannot infer slug from #{source_attribute.class.inspect}"
+        end
         proc_args = [self].slice(0...source_proc.arity)
         self.instance_exec(*proc_args, &source_proc)
       end
