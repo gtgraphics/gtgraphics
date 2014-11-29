@@ -5,6 +5,8 @@ module Job
     class_attribute :callbacks, instance_accessor: false
     self.callbacks = {}
 
+    class_attribute :queue_name, :max_attempts, :max_run_time
+
     %w(before success error after failure).each do |method|
       instance_eval %{
         def #{method}(method_name = nil, &block)
