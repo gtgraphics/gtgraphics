@@ -3,11 +3,11 @@
 class Slug < String
   DEFAULT_SEPARATOR = '-'
 
-  attr_reader :options
+  attr_reader :separator
 
   def initialize(str, options = {})
-    @options = options.reverse_merge(separator: DEFAULT_SEPARATOR)
-    super(str.parameterize(@options[:separator]))
+    @separator = options.fetch(:separator, DEFAULT_SEPARATOR)
+    super(str.parameterize(@separator))
   end
 
   def inspect
@@ -15,12 +15,12 @@ class Slug < String
   end
 
   def succ
-    if self =~ Regexp.new(Regexp.escape(@options[:separator]) + '[0-9]+\z')
+    if self =~ Regexp.new(Regexp.escape(@separator) + '[0-9]+\z')
       str = super
     else
-      str = "#{self}#{@options[:separator]}2"
+      str = "#{self}#{@separator}2"
     end
-    self.class.new(str, @options)
+    self.class.new(str, separator: @separator)
   end
 
   alias_method :next, :succ
