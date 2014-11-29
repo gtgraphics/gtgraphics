@@ -13,6 +13,17 @@
           %li.divider
           %li= link_to prepend_icon(:trash, translate('helpers.links.destroy'), outline: true, fixed_width: true), [:admin, image], method: :delete, data: { confirm: translate('helpers.confirmations.destroy', model: Image.model_name.human) }
 
+  - if @taggings.any?
+    #tags.panel.panel-invisible
+      %ul.tags
+        - @taggings.each do |tagging|
+          %li
+            .tag.tag-interactive
+              = link_to admin_images_path(tags: tagging.tag.label) do
+                = tagging.tag.label
+              = link_to untag_admin_image_path(@image, tags: tagging.tag.label), class: 'pull-right btn-tag', method: :patch, remote: true, data: { confirm: translate('helpers.confirmations.destroy', model: Tag.model_name.human) } do
+                = prepend_icon :times, translate('helpers.links.remove'), caption_html: { class: 'sr-only' }
+
   .row
     .col-lg-8
       .panel.panel-invisible
@@ -72,3 +83,4 @@
           = image.list_item :software if image.software.present?
           = image.list_item :taken_at if image.taken_at.present?
           = image.list_item :pages_count, true
+

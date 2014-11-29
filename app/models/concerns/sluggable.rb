@@ -12,6 +12,10 @@ module Sluggable
 
       include Extensions
     end
+
+    def with_slug(*slugs)
+      where(arel_table[slug_attribute].in(slugs.flatten))
+    end
   end
 
   module Extensions

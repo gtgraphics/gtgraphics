@@ -13,14 +13,19 @@ class ResourceSelectInput < SimpleForm::Inputs::StringInput
         formatter: formatter,
         paginated: paginated?,
         include_blank: include_blank,
-        multiple: multiple?
+        multiple: multiple?,
+        allow_non_existing: allow_non_existing?
       }
     }.deep_merge(opts)
   end
 
   protected
   def formatter
-    raise NotImplementedError
+    # raise NotImplementedError
+  end
+
+  def allow_non_existing?
+    false
   end
 
   def multiple?

@@ -11,43 +11,50 @@ module Taggable
   end
 
   module ClassMethods
+    def available_tags
+      Tag.joins(:taggings).where(taggings: { taggable_type: self.name }).uniq
+    end
+
     def tagged(*tokens)
-      options = tokens.extract_options!.reverse_merge(any: false, case_sensitive: true)
-      if options[:any]
-        tagged_any(*tokens, options)
+      options = tokens.extract_options!
+      tokens = tokens.flatten.reject(&:blank?)
+      return all if tokens.empty?
+      if options.fetch(:any, false)
+        tagged_any(tokens)
       else
-        tagged_all(*tokens, options)
+        tagged_all(tokens)
       end
+    end
+
+    def tag!(*tokens)
+      tokens = TagCollection.parse(*tokens).to_a
+      transaction do
+        find_each { |record| record.tag!(tokens) }
+      end
+      tokens
+    end
+
+    def untag!(*tokens)
+      tokens = TagCollection.parse(*tokens).to_a
+      transaction do
+        find_each { |record| record.untag!(tokens) }
+      end
+      tokens
     end
 
     private
-    def tagged_all(*tokens)
-      options = tokens.extract_options!
-      scope = joins(:tags).readonly(false).uniq
-      tokens = tokens.flatten.uniq
+    def tagged_all(tokens)
       conditions = tokens.map do |token|
-        label = Tag.arel_table[:label]
-        unless options[:case_sensitive]
-          label = label.lower
-          token = token.downcase
-        end
         arel_table[:id].in(
-          Tagging.joins(:tag).where(label.eq(token).to_sql).
+          Tagging.joins(:tag).where(tags: { label: token }).
           select(Tagging.arel_table[:taggable_id]).ast
         )
       end.reduce(:and)
-      scope.where(conditions)
+      joins(:tags).readonly(false).uniq.where(conditions)
     end
 
-    def tagged_any(*tokens)
-      options = tokens.extract_options!
-      tokens = tokens.flatten.uniq
-      label = Tag.arel_table[:label]
-      unless options[:case_sensitive]
-        label = label.lower
-        tokens = tokens.map(&:downcase)
-      end
-      joins(:tags).where(label.in(tokens)).readonly(false).uniq
+    def tagged_any(tokens)
+      joins(:tags).where(tags: { label: tokens }).readonly(false).uniq
     end
   end
 
@@ -63,7 +70,7 @@ module Taggable
   # Inquiries
 
   def tagged?(*tokens)
-    options = labels.extract_options!.reverse_merge(any: false)
+    options = tokens.extract_options!.reverse_merge(any: false)
     tokens.flatten.public_send(options[:any] ? 'any?' : 'all?') do |token|
       token.to_s.in?(tag_list.to_a)
     end

@@ -5,6 +5,7 @@
 #  id            :integer          not null, primary key
 #  definition_id :integer
 #  page_id       :integer
+#  body          :text
 #  created_at    :datetime
 #  updated_at    :datetime
 #

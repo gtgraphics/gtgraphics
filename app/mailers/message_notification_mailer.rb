@@ -13,6 +13,6 @@ class MessageNotificationMailer < ActionMailer::Base
       subject = @message.subject
     end
 
-    mail to: @recipient.mail_formatted_name, from: @message.sender, subject: subject
+    mail to: @recipient.rfc5322, from: @message.sender, subject: subject
   end
 end

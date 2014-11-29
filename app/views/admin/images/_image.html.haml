@@ -1,5 +1,5 @@
 - present image, with: Admin::ImagePresenter do |image|
-  = content_tag_for :tr, image do
+  = content_tag_for :tr, image, data: { drag: 'assign', id: image.id, title: image.title } do
     - if local_assigns.fetch(:checkbox, true)
       %td.checkbox-cell
         = check_box_tag 'image_ids[]', image.id, false, class: 'table-checkbox', id: nil, data: { behavior: 'tableCheckbox' }

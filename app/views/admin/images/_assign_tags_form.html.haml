@@ -1,0 +1,13 @@
+= simple_form_for @tag_assignment_activity, as: :tag_assignment, url: :associate_tags_with_admin_images, remote: true, method: :patch, html: { class: 'form-horizontal' } do |form|
+
+  .modal-body
+    = form.input_field :record_type, as: :hidden
+    - form.object.record_ids.each do |record_id|
+      = form.input_field :record_ids, value: record_id, as: :hidden, multiple: true
+
+    = form.input :tag_list, as: :tags
+
+  .modal-footer
+    = form.button :button, name: 'save', type: 'submit', class: 'btn-primary' do
+      = prepend_icon :save, translate('helpers.links.save'), scope: 'helpers.submit'
+    = button_tag translate('helpers.links.close'), type: 'button', class: 'btn btn-default', data: { dismiss: 'modal' }

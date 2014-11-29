@@ -30,12 +30,14 @@ de:
       edit: '%{model} bearbeiten'
       insert: '%{model} einfügen'
     model_links:
+      add: '%{model} hinzufügen'
       view: '%{model} betrachten'
     links:
       add: Hinzufügen
       assign: '%{model} zuordnen'
       apply: Anwenden
       assign_owner: Eigentümer zuweisen
+      assign_tags: Tags zuweisen
       cancel: Abbrechen
       customize: Anpassen
       close: Schließen

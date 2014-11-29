@@ -7,41 +7,49 @@
   
     .col-sm-3
       #filters.panel-group
-        = panel link_to(prepend_icon(:user, Image.human_attribute_name(:author_id), fixed_width: true), '#author', data: { toggle: 'collapse' }), body: false do
-          .list-group#author.panel-collapse.collapse.in
-            = active_link_to 'Egal', params.except(:author_id), class: 'list-group-item', active: params[:author_id].nil?
+        - if @tags.any?
+          = panel prepend_icon(:tags, Tag.model_name.human(count: 2), fixed_width: true), body: false do
+            .list-group#tags
+              - @tags.each do |tag, taggings_count|
+                - selected_tags = Array(params[:tag])
+                - if selected_tags.include?(tag.label)
+                  = link_to params.except(:page).merge(tag: (selected_tags - [tag.label]).presence), class: 'list-group-item active', data: { drop: 'assign', url: 'blabla' } do
+                    = tag.label
+                    .pull-right
+                      = prepend_icon :times, translate('helpers.links.remove'), caption_html: { class: 'sr-only' }
+                - else
+                  = link_to tag.label, params.except(:page).merge(tag: (selected_tags + [tag.label]).presence), class: 'list-group-item'
+
+        = panel prepend_icon(:user, Image.human_attribute_name(:author_id), fixed_width: true), body: false do
+          .list-group#author
             - @users.each do |user|
-              = active_link_to params.except(:page).merge(author_id: user.to_param), class: 'list-group-item', active: user.id == params[:author_id].to_i do
+              - active = user.id == params[:author_id].to_i
+              = active_link_to active ? params.except(:page, :author_id) : params.except(:page).merge(author_id: user.to_param), class: 'list-group-item', active: active, data: { drop: 'assign' } do
                 %span.avatar
                   %span.icon= gravatar_image_tag user.email, default: :mm, size: 24, class: 'img-circle'
                   %span.caption= user.name
-
-        = panel link_to(prepend_icon(:calendar, Image.human_attribute_name(:created_at), fixed_width: true), '#period', data: { toggle: 'collapse' }), body: false do
-          .list-group#period.panel-collapse.collapse{class: params[:period].nil? ? nil : 'in'}
-            = active_link_to 'Egal', params.except(:period), class: 'list-group-item', active: params[:period].nil?
-            - {'Heute' => 'today', 'Gestern' => 'yesterday', 'In dieser Woche' => 'week', 'In diesem Monat' => 'month'}.each do |caption, period|
-              = active_link_to caption, params.except(:page).merge(period: period), class: 'list-group-item', active: period == params[:period]
-
-        = panel link_to(prepend_icon(:file_photo, Image.human_attribute_name(:content_type), outline: true, fixed_width: true), '#content_type', data: { toggle: 'collapse' }), body: false do
-          .list-group#content_type.panel-collapse.collapse{class: params[:content_type].nil? ? nil : 'in'}
-            = active_link_to 'Egal', params.except(:content_type), class: 'list-group-item', active: params[:content_type].nil?
-            - Image.permitted_content_types.each do |type|
-              = active_link_to content_type(type), params.except(:page).merge(content_type: type), class: 'list-group-item', active: type == params[:content_type]
+                - if active
+                  .pull-right
+                    = prepend_icon :times, translate('helpers.links.remove'), caption_html: { class: 'sr-only' }
 
     .col-sm-9
       = form_tag :batch_process_admin_images, method: :patch, remote: true do
 
         #toolbar.btn-toolbar
-          .btn-group.only-js
-            %span.btn.btn-success.fileinput-button
-              = prepend_icon :upload, translate('helpers.links.upload', model: Image.model_name.human)
-              = file_field_tag :image_upload, name: 'image[asset]', multiple: true, accept: 'image/gif|image/png|image/jpeg|image/jpg', data: { url: upload_admin_images_path }
           .btn-group
-            = button_tag name: 'destroy', class: 'btn btn-danger deactivatable-batch-control', data: { hotkey: 'del', confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) } do
-              = prepend_icon :trash, translate('helpers.links.destroy_selected'), outline: true
+            = button_tag name: 'destroy', class: 'btn btn-danger deactivatable-batch-control', title: translate('helpers.links.destroy_selected'), data: { hotkey: 'del', toggle: 'tooltip', container: 'body', confirm: translate('helpers.confirmations.destroy_selected', model: Image.model_name.human(count: 2)) } do
+              = prepend_icon :trash, translate('helpers.links.destroy_selected'), outline: true, caption_html: { class: 'sr-only' }
           .btn-group.only-js
             = button_tag name: 'assign_owner', class: 'btn btn-default deactivatable-batch-control', title: translate('helpers.links.assign_owner'), data: { toggle: 'tooltip', container: 'body' } do
               = prepend_icon :user, translate('helpers.links.assign_owner'), caption_html: { class: 'sr-only' }
+            = button_tag name: 'assign_tags', class: 'btn btn-default deactivatable-batch-control', title: translate('helpers.links.assign_tags'), data: { toggle: 'tooltip', container: 'body' } do
+              = prepend_icon :tag, translate('helpers.links.assign_tags'), caption_html: { class: 'sr-only' }
+
+          .btn-group.only-js.pull-right
+            %span.btn.btn-success.fileinput-button
+              = prepend_icon :upload, translate('helpers.links.upload', model: Image.model_name.human)
+              = file_field_tag :image_upload, name: 'image[asset]', multiple: true, accept: 'image/gif|image/png|image/jpeg|image/jpg', data: { url: upload_admin_images_path(tag: params[:tag]) }
+
           .pull-right
             = paginate @images
 

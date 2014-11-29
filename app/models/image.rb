@@ -23,6 +23,7 @@
 class Image < ActiveRecord::Base
   include Image::Attachable
   include Image::Croppable
+  include Image::ProjectAssignable
   include Image::Resizable
   include Image::ExifStorable
 
@@ -40,7 +41,6 @@ class Image < ActiveRecord::Base
   has_many :styles, class_name: 'Image::Style', inverse_of: :image, dependent: :destroy
   has_many :image_pages, class_name: 'Page::Image', inverse_of: :image, dependent: :destroy
   has_many :pages, through: :image_pages
-  has_many :project_images, class_name: 'Project::Image', inverse_of: :image, dependent: :destroy
   has_many :buy_requests, class_name: 'Message::BuyRequest', foreign_key: :delegator_id, dependent: :destroy
 
   has_image

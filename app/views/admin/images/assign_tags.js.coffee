@@ -1,0 +1,1 @@
+$.showModal("<%= modal('admin/images/assign_tags') %>")

@@ -85,6 +85,8 @@ de:
         project_ids: Projekt
         project_id_tokens: Projekt
         template_id: Vorlage
+      admin/tag_assignment_activity:
+        tag_list: Tags
     errors:
       models:
         admin/user/login_activity:

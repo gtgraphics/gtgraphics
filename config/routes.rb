@@ -19,6 +19,13 @@ GtGraphics::Application.routes.draw do
     end
   end
 
+  concern :taggable do
+    member do
+      patch :tag
+      patch :untag
+    end
+  end
+
   concern :batch_processable do
     collection do
       patch :batch, action: :batch_process, as: :batch_process
@@ -71,7 +78,7 @@ GtGraphics::Application.routes.draw do
 
             resources :clients, only: [:index, :edit, :update]
 
-            resources :images, except: [:new, :create], concerns: [:autocompletable,:customizable, :batch_processable] do
+            resources :images, except: [:new, :create], concerns: [:autocompletable,:customizable, :batch_processable, :taggable] do
               resources :styles, controller: :'image/styles', concerns: [:customizable, :movable, :batch_processable] do
                 collection do
                   match :upload, via: [:post, :patch]
@@ -81,6 +88,7 @@ GtGraphics::Application.routes.draw do
               collection do
                 patch :upload
                 patch :associate_owner, action: :associate_owner, as: :associate_owner_with
+                patch :associate_tags, action: :associate_tags, as: :associate_tags_with
               end
               member do
                 get :pages
@@ -90,7 +98,7 @@ GtGraphics::Application.routes.draw do
               end
             end
 
-            resources :projects, concerns: [:autocompletable, :batch_processable] do
+            resources :projects, concerns: [:autocompletable, :batch_processable, :taggable] do
               resources :images, controller: :'project/images', only: :destroy, concerns: [:movable, :batch_processable] do
                 collection do
                   patch :upload

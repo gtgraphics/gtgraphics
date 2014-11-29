@@ -6,6 +6,7 @@ jQuery.prepare ->
   $('.resource-combobox').each ->
     $select = $(@)
     resourceName = $select.data('resource')
+    
     options = 
       allowClear: $select.data('includeBlank') || false
       placeholder: $select.data('placeholder') || ' '
@@ -37,10 +38,11 @@ jQuery.prepare ->
           multiple = ids.length > 1
           ids = ids[0] unless multiple
           jQuery.get url, { id: ids }, (record) ->
-            if multiple
-              callback(record[resourceName])
-            else
-              callback(record)
+            # if multiple
+            #   callback(record[resourceName])
+            # else
+            #   callback(record)
+            callback(record[resourceName] || record)  
             $select.trigger('select2-init')
       escapeMarkup: (markup) ->
         markup
@@ -64,5 +66,12 @@ jQuery.prepare ->
           formatter.formatSelection(data, container, escapeMarkup)
         else
           Select2.util.escapeMarkup(result.text)
+
+    if $select.data('allowNonExisting')
+      options.createSearchChoice = (term, data) ->
+        if $(data).filter(->
+          @id.localeCompare(term) is 0
+        ).length is 0
+          { id: term }
 
     $select.select2(options)

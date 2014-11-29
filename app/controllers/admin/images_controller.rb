@@ -1,4 +1,6 @@
 class Admin::ImagesController < Admin::ApplicationController
+  include Admin::TaggableController
+
   respond_to :html
 
   before_action :load_image, only: %i(show edit update customize apply_customization destroy download convert_to_attachment dimensions preview pages)
@@ -22,7 +24,7 @@ class Admin::ImagesController < Admin::ApplicationController
     image_ids = Array(params[:id])
     if image_ids.any?
       if image_ids.one?
-        redirect_to params.merge(action: :show) and return        
+        redirect_to admin_image_path(image_ids.first) and return
       else
         @images = @images.where(id: image_ids)
       end
@@ -41,12 +43,14 @@ class Admin::ImagesController < Admin::ApplicationController
     end
 
     @users = User.order(:first_name, :last_name)
-  
+    @tags = Image.available_tags.popularity
+
     @images.includes!(:styles) if params[:include_styles].to_b
     @images.where!(author_id: params[:author_id]) if params[:author_id].present?
     @images = @images.created(params[:period]) if params[:period].present?
     @images.where!(content_type: params[:content_type]) if params[:content_type].present?
     @images = @images.page(params[:page])
+    @images = @images.tagged(params[:tag])
 
     respond_with :admin, @images do |format|
       format.json
@@ -70,6 +74,7 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def show
+    @taggings = @image.taggings.eager_load(:tag).order('tags.label')
     respond_with :admin, @image do |format|
       format.json
     end
@@ -77,6 +82,8 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def upload
     @image = ::Image.new(image_upload_params)
+    tags = Tag.where(label: params[:tag])
+    tags.each { |tag| @image.taggings.find_or_initialize_by(tag: tag) }
     @image.author = current_user
     @image.save!
     respond_to do |format|
@@ -156,6 +163,7 @@ class Admin::ImagesController < Admin::ApplicationController
     end
   end
 
+
   # Batch Processing
 
   def batch_process
@@ -165,6 +173,8 @@ class Admin::ImagesController < Admin::ApplicationController
       assign_owner
     elsif params.key? :convert_to_attachment
       convert_to_attachment
+    elsif params.key? :assign_tags
+      assign_tags
     else
       respond_to do |format|
         format.any { head :bad_request }
@@ -177,6 +187,7 @@ class Admin::ImagesController < Admin::ApplicationController
     ::Image.accessible_by(current_ability).destroy_all(id: image_ids)
     flash_for ::Image, :destroyed, multiple: true
     location = request.referer || admin_images_path
+    
     respond_to do |format|
       format.html { redirect_to location }
       format.js { redirect_via_turbolinks_to location }
@@ -184,22 +195,30 @@ class Admin::ImagesController < Admin::ApplicationController
   end
   private :destroy_multiple # invoked through :batch_process
 
+
+  # Owner Assignment
+
   def assign_owner
     @image_owner_assignment_activity = Admin::ImageOwnerAssignmentActivity.new
     @image_owner_assignment_activity.image_ids = Array(params[:image_ids])
     @image_owner_assignment_activity.author = current_user
+
     respond_to do |format|
       format.js { render :assign_owner }
     end
   end
-  private :assign_owner # invoked through :batch_processger
+  private :assign_owner # invoked through :batch_process
 
   def associate_owner
     @image_owner_assignment_activity = Admin::ImageOwnerAssignmentActivity.execute(image_owner_assignment_params)
+   
     respond_to do |format|
       format.js
     end
   end
+
+
+  # Attachment Conversion
 
   def convert_to_attachment
     Image.transaction do

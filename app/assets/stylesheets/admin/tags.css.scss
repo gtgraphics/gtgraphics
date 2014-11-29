@@ -17,11 +17,17 @@
   .caption {
     display: inline-block;
     padding: 0;
-    max-width: 70px;
+    max-width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
+  .btn-tag {
+    margin-left: 4px;
+    margin-right: 0px;
+  }
+
   @include box-shadow(none);
   position: relative;
   &:before, &:after {
@@ -55,7 +61,7 @@
   }
 }
 
-a.tag {
+a.tag, .tag.interactive {
   &:hover, &:focus, &:active, &.active {
     background-color: #ebebeb;
     border-color: #adadad;

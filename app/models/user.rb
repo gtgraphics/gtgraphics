@@ -56,7 +56,7 @@ class User < ActiveRecord::Base
   end
   alias_method :name, :full_name
 
-  def mail_formatted_name
+  def rfc5322
     if full_name.present?
       %{"#{full_name}" <#{email}>}
     else
