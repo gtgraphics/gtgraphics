@@ -1,4 +1,4 @@
-class Admin::ApplicationPresenter < Presenter
+class Admin::ApplicationPresenter < ActionPresenter::Base
   class_attribute :action_buttons, instance_accessor: false
   self.action_buttons = [:show, :edit, :destroy]
 

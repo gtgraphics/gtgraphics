@@ -1,5 +1,3 @@
 class Page::ApplicationPresenter < ::ApplicationPresenter
-  def page
-    present object.page
-  end
+  delegates_presented :page
 end

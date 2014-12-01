@@ -1,4 +1,4 @@
-class ApplicationPresenter < Presenter
+class ApplicationPresenter < ActionPresenter::Base
   protected
   def placeholder
     '&ndash;'.html_safe

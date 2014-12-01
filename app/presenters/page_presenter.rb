@@ -1,9 +1,7 @@
 class PagePresenter < ApplicationPresenter
   presents :page
 
-  def embeddable
-    present super
-  end
+  delegate_presented :embeddable
 
   def permalink
     h.page_permalink_url(page.permalink, locale: nil)

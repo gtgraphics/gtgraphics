@@ -2,13 +2,11 @@ class ImagePresenter < ApplicationPresenter
   include FileAttachablePresenter
 
   presents :image
+  
+  delegate_presented :author, with: 'Admin::UserPresenter'
 
   def artist
     exif_data[:artist]
-  end
-
-  def author
-    present super, with: Admin::UserPresenter if image.author
   end
 
   def author_name(linked = true)
