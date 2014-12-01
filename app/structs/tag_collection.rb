@@ -3,51 +3,43 @@ class TagCollection
 
   SEPARATOR = ','
 
-  attr_reader :taggable, :list, :separator
+  attr_reader :taggable, :list
   delegate :taggings, to: :taggable, allow_nil: true
   private :taggable, :taggings
 
-  def initialize(*args)
-    options = args.extract_options!
-    @separator = options.fetch(:separator, SEPARATOR)
-    if args.first.nil?
+  def initialize(taggable_or_list = nil)
+    if taggable_or_list.nil?
       @list = SortedSet.new
-    elsif args.first.is_a?(Taggable)
-      @taggable = args.first
+    elsif taggable_or_list.is_a?(Taggable)
+      @taggable = taggable_or_list
       @list = SortedSet.new(@taggable.tags.pluck(:label))
-    elsif args.first.respond_to?(:to_a)
-      @list = SortedSet.new(args.first.to_a)
+    elsif taggable_or_list.respond_to?(:to_a)
+      @list = SortedSet.new(taggable_or_list.to_a)
     else
       fail ArgumentError, 'First argument must be a Taggable or respond to #to_a'
     end
   end
 
   def self.parse(*args)
-    options = args.extract_options!
-    separator = options.fetch(:separator, SEPARATOR)
     list = args.flatten.flat_map do |arg|
       if arg.respond_to?(:to_a)
         arg.to_a.map(&:to_s)
       else
-        arg.to_s.split(separator)
+        arg.to_s.split(SEPARATOR)
       end
     end
-    new(list, separator: separator)
-  end
-
-  def self.separator
-    SEPARATOR
+    new(list)
   end
 
   delegate :to_a, :each, :count, :length, :any?, :empty?, to: :list
   delegate :[], to: :to_a
 
   def to_s
-    to_a.join(separator)
+    to_a.join(SEPARATOR)
   end
 
   def inspect
-    "#<#{self.class.name} list: #{list.inspect}, separator: #{separator.inspect}>"
+    "#<#{self.class.name} list: #{list.inspect}>"
   end
 
   def initialize_copy(source)
@@ -150,7 +142,7 @@ class TagCollection
 
   private
   def extract_tags(*args)
-    self.class.parse(*args, separator: separator).to_a
+    self.class.parse(*args).to_a
   end
 
   def add_raw(labels)

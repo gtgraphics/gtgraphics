@@ -27,7 +27,6 @@ module Taggable
     end
 
     def tag!(*tokens)
-      tokens = TagCollection.parse(*tokens).to_a
       transaction do
         find_each { |record| record.tag!(tokens) }
       end
@@ -35,7 +34,6 @@ module Taggable
     end
 
     def untag!(*tokens)
-      tokens = TagCollection.parse(*tokens).to_a
       transaction do
         find_each { |record| record.untag!(tokens) }
       end

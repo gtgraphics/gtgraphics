@@ -13,7 +13,7 @@
               - @tags.each do |tag, taggings_count|
                 - selected_tags = Array(params[:tag])
                 - if selected_tags.include?(tag.label)
-                  = link_to params.except(:page).merge(tag: (selected_tags - [tag.label]).presence), class: 'list-group-item active', data: { drop: 'assign', url: 'blabla' } do
+                  = link_to params.except(:page).merge(tag: (selected_tags - [tag.label]).presence), class: 'list-group-item active' do
                     = tag.label
                     .pull-right
                       = prepend_icon :times, translate('helpers.links.remove'), caption_html: { class: 'sr-only' }
@@ -24,7 +24,7 @@
           .list-group#author
             - @users.each do |user|
               - active = user.id == params[:author_id].to_i
-              = active_link_to active ? params.except(:page, :author_id) : params.except(:page).merge(author_id: user.to_param), class: 'list-group-item', active: active, data: { drop: 'assign' } do
+              = active_link_to active ? params.except(:page, :author_id) : params.except(:page).merge(author_id: user.to_param), class: 'list-group-item', active: active do
                 %span.avatar
                   %span.icon= gravatar_image_tag user.email, default: :mm, size: 24, class: 'img-circle'
                   %span.caption= user.name
