@@ -33,6 +33,7 @@ class Image < ActiveRecord::Base
   include Ownable
   include PeriodFilterable
   include PersistenceContextTrackable
+  include Randomizable
   include Taggable
   include TitleSearchable
   include Translatable

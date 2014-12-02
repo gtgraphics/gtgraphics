@@ -1,6 +1,6 @@
 module BackgroundHelper
   def background_image
-    @background_image ||= Image.tagged('Wallpaper').except(:distinct).order('RANDOM()').first
+    @background_image ||= Image.tagged('Wallpaper').sample
   end 
 
   def background_url
