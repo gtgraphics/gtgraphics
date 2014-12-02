@@ -1,7 +1,0 @@
-%fieldset
-  %legend= Page::Image.model_name.human
-  .fields
-    = fields.input :image_id, required: true, as: :image_select
-
-    - Page::Image.available_shop_providers.each do |shop_provider|
-      = fields.input :"#{shop_provider}_url", as: :affixed_string, input_html: { class: 'shop-provider-input', prefix: shop_provider_icon(shop_provider) }

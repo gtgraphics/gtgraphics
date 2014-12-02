@@ -95,13 +95,16 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def create
-    @page = Page.create(new_page_params) do |p|
-      p.author = current_user
-      p.set_next_available_slug(p.title.parameterize) if p.title.present?
-      p.build_embeddable if p.embeddable.nil?
-      if !p.content? and p.support_templates? and p.embeddable_type.in?(Page.embeddable_types)
-        p.template ||= p.template_class.default
+    Page.transaction do
+      @page = Page.create(new_page_params) do |p|
+        p.author = current_user
+        p.set_next_available_slug(p.title.parameterize) if p.title.present?
+        p.build_embeddable if p.embeddable.nil?
+        if !p.content? and p.support_templates? and p.embeddable_type.in?(Page.embeddable_types)
+          p.template ||= p.template_class.default
+        end
       end
+      @page.move_to_child_with_index(@page.parent, 0) if @page.parent
     end
     flash_for @page
     respond_to do |format|

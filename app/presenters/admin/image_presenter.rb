@@ -1,5 +1,6 @@
 class Admin::ImagePresenter < Admin::ApplicationPresenter
   include FileAttachablePresenter
+  include Admin::TaggablePresenter
   include Admin::PageEmbeddablePresenter
   include Admin::Image::CustomizablePresenter
 

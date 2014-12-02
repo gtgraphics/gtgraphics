@@ -74,7 +74,7 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def show
-    @taggings = @image.taggings.eager_load(:tag).order('tags.label')
+    @tags = @image.tags.order(:label)
     respond_with :admin, @image do |format|
       format.json
     end
@@ -237,7 +237,10 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def image_params
-    params.require(:image).permit(:asset, :title, :description, :author_id, :tag_tokens)
+    params.require(:image).permit(
+      :asset, :title, :description, :author_id, :tag_tokens,
+      *Image.available_shop_providers.map { |provider| :"#{provider}_url" }
+    )
   end
 
   def image_customization_params

@@ -135,6 +135,12 @@ de:
         camera: Kamera
         created_at: Hochgeladen am
         preserve_aspect_ratio: Seitenverhältnis beibehalten
+        shop_urls: Shops-Verknüpfungen
+        deviantart_url: DeviantArt
+        fineartprint_url: Fineartprint
+        mygall_url: MyGall
+        redbubble_url: RedBubble
+        artflakes_url: Artflakes
       image/style:
         asset: Bilddatei
         crop_x: X-Position
@@ -195,11 +201,6 @@ de:
       page/image:
         image: Bild
         image_id: Bild
-        deviantart_url: Deviantart-URL
-        fineartprint_url: Fineartprint-URL
-        mygall_url: MyGall-URL
-        redbubble_url: RedBubble-URL
-        artflakes_url: Artflakes-URL
       page/project:
         project: Projekt
         project_id: Projekt

@@ -18,6 +18,7 @@
 #  height                :integer
 #  original_filename     :string(255)
 #  asset_token           :string(255)      not null
+#  shop_urls             :text
 #
 
 class Image < ActiveRecord::Base
@@ -26,6 +27,7 @@ class Image < ActiveRecord::Base
   include Image::ProjectAssignable
   include Image::Resizable
   include Image::ExifStorable
+  include Image::Buyable
 
   include Filterable
   include Ownable

@@ -45,13 +45,13 @@
             = button_tag name: 'assign_tags', class: 'btn btn-default deactivatable-batch-control', title: translate('helpers.links.assign_tags'), data: { toggle: 'tooltip', container: 'body' } do
               = prepend_icon :tag, translate('helpers.links.assign_tags'), caption_html: { class: 'sr-only' }
 
+          .pull-right
+            = paginate @images
+
           .btn-group.only-js.pull-right
             %span.btn.btn-success.fileinput-button
               = prepend_icon :upload, translate('helpers.links.upload', model: Image.model_name.human)
               = file_field_tag :image_upload, name: 'image[asset]', multiple: true, accept: 'image/gif|image/png|image/jpeg|image/jpg', data: { url: upload_admin_images_path(tag: params[:tag]) }
-
-          .pull-right
-            = paginate @images
 
         #images_empty_hint.well.text-center{class: @images.any? ? 'hidden' : nil}
           = translate('views.hints.empty', model: Image.model_name.human(count: 2))

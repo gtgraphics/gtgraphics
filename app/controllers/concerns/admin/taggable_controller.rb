@@ -6,7 +6,7 @@ module Admin::TaggableController
   end
 
   def tag
-    taggable.tag!(params.fetch(:tags))
+    taggable.tag!(params.fetch(:tag))
     respond_to do |format|
       format.html { redirect_to :back }
       format.js { redirect_via_turbolinks_to :back }
@@ -14,7 +14,7 @@ module Admin::TaggableController
   end
 
   def untag
-    taggable.untag!(params.fetch(:tags))
+    taggable.untag!(params.fetch(:tag))
     respond_to do |format|
       format.html { redirect_to :back }
       format.js { redirect_via_turbolinks_to :back }

@@ -9,8 +9,10 @@
     %td
       = link_to image.title, [:admin, image]
       %br
+      /= image.tag_list size: :sm
       %span.text-muted.ignored= image.summary
-    %td= image.created_at
+    %td
+      %span.ignored= image.created_at
     - if local_assigns.fetch(:actions, true)
       %td.actions
         = image.action_buttons icon_only: true

@@ -1,3 +1,3 @@
 class Page::ApplicationPresenter < ::ApplicationPresenter
-  delegates_presented :page
+  delegate_presented :page
 end

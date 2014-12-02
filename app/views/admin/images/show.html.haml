@@ -13,15 +13,15 @@
           %li.divider
           %li= link_to prepend_icon(:trash, translate('helpers.links.destroy'), outline: true, fixed_width: true), [:admin, image], method: :delete, data: { confirm: translate('helpers.confirmations.destroy', model: Image.model_name.human) }
 
-  - if @taggings.any?
+  - if @tags.any?
     #tags.panel.panel-invisible
       %ul.tags
-        - @taggings.each do |tagging|
+        - @tags.each do |tag|
           %li
             .tag.tag-interactive
-              = link_to admin_images_path(tags: tagging.tag.label) do
-                = tagging.tag.label
-              = link_to untag_admin_image_path(@image, tags: tagging.tag.label), class: 'pull-right btn-tag', method: :patch, remote: true, data: { confirm: translate('helpers.confirmations.destroy', model: Tag.model_name.human) } do
+              = link_to admin_images_path(tag: tag.label) do
+                = tag.label
+              = link_to untag_admin_image_path(@image, tag: tag.label), class: 'pull-right btn-tag', method: :patch, remote: true, data: { confirm: translate('helpers.confirmations.destroy', model: Tag.model_name.human) } do
                 = prepend_icon :times, translate('helpers.links.remove'), caption_html: { class: 'sr-only' }
 
   .row
@@ -73,7 +73,7 @@
 
       / Details
       = panel prepend_icon(:info, translate('views.admin.images.headlines.details'), fixed_width: true) do
-        %dl.dl-horizontal
+        %dl.dl-horizontal#properties
           = image.list_item :content_type
           = image.list_item :file_size, true
           = image.list_item :dimensions, true
@@ -84,3 +84,12 @@
           = image.list_item :taken_at if image.taken_at.present?
           = image.list_item :pages_count, true
 
+      - if image.shop_urls.values.any?(&:present?)
+        / Shops
+        = panel prepend_icon(:dollar, translate('views.admin.images.headlines.shops'), fixed_width: true), body: false do
+          .list-group#shop_providers
+            - image.shop_urls.each do |provider, url|
+              - if url.present?
+                = link_to url, target: '_blank', class: ['list-group-item', 'shop-provider', provider] do
+                  = shop_provider_icon(provider)
+                  = Image.human_attribute_name(:"#{provider}_url")
