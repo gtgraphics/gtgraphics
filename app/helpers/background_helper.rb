@@ -1,8 +1,6 @@
 module BackgroundHelper
   def background_image
-    @background_image ||= Image.joins(:pages).
-      where(pages: { id: Page.find_by(path: 'wallpapers').try(:self_and_descendants) }).
-      order('RANDOM()').first
+    @background_image ||= Image.tagged('Wallpaper').except(:distinct).order('RANDOM()').first
   end 
 
   def background_url
