@@ -1,5 +1,5 @@
 = paginator.render do
-  .btn-group
+  .btn-group{class: local_assigns.fetch(:right, false) ? 'pull-right' : nil}
     = prev_page_tag
     = next_page_tag
     

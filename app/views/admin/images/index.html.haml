@@ -45,8 +45,7 @@
             = button_tag name: 'assign_tags', class: 'btn btn-default deactivatable-batch-control', title: translate('helpers.links.assign_tags'), data: { toggle: 'tooltip', container: 'body' } do
               = prepend_icon :tag, translate('helpers.links.assign_tags'), caption_html: { class: 'sr-only' }
 
-          .pull-right
-            = paginate @images
+          = paginate @images, right: true
 
           .btn-group.only-js.pull-right
             %span.btn.btn-success.fileinput-button
