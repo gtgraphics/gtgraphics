@@ -17,6 +17,8 @@ GEM
       erubis (~> 2.7.0)
       rack (~> 1.5.2)
       rack-test (~> 0.6.2)
+    actionpresenter (0.1.0)
+      rails (~> 4.0)
     active_link_to (1.0.2)
       actionpack
     activemodel (4.0.8)
@@ -325,6 +327,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionpresenter
   active_link_to
   acts_as_list
   acts_as_sanitizable

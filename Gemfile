@@ -19,7 +19,6 @@ gem 'http_accept_language'
 gem 'acts_as_list'
 gem 'acts_as_sanitizable'
 gem 'acts_as_tree'
-gem 'actionpresenter', github: 'tlux/actionpresenter'
 gem 'awesome_nested_set', '3.0.0.rc.5'
 gem 'annotate'
 gem 'bcrypt-ruby'
@@ -30,6 +29,9 @@ gem 'ransack'
 gem 'virtus'
 gem 'mini_magick'
 gem 'carrierwave'
+
+# Presenters
+gem 'actionpresenter'
 
 # Views
 gem 'haml-rails'
