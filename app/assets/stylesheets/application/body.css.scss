@@ -1,7 +1,11 @@
 @import 'bootstrap_config';
 
+html, body {
+  min-height: 100%;
+}
+
 body {
-  padding-top: 50px;
+  padding-top: 0px;
   padding-bottom: 80px;
 }
 

@@ -1,7 +1,4 @@
-- if breadcrumbs.many?
+- if breadcrumbs.reject(&:last?).many?
   %ul.breadcrumb
-    - breadcrumbs.each do |breadcrumb|
-      - if breadcrumb.last?
-        %li.active= breadcrumb.caption
-      - else
-        %li= link_to_if breadcrumb.destination.present?, breadcrumb.caption, breadcrumb.destination
+    - breadcrumbs.reject(&:last?).each do |breadcrumb|
+      %li= link_to_if breadcrumb.destination.present?, breadcrumb.caption, breadcrumb.destination

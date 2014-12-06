@@ -22,10 +22,10 @@
   - @page.translated_locales.reject { |locale| locale == I18n.locale }.each do |translated_locale|
     %link{rel: 'alternate', hreflang: translated_locale, href: page_url(@page, locale: translated_locale)}
 
-- content_for :body_styles, "background-image: url(#{background_url})"
-    
 - content_for :content do
-  = facebook_sdk_anchor
+  = facebook_sdk_anchor unless Rails.env.development?
+
+  #background{class: page.root? ? 'homepage' : 'subpage', style: "background-image: url(#{background_url})"}
 
   .container
 
@@ -33,21 +33,23 @@
       .col-sm-12
 
         = link_to :root, id: 'brand' do
-          = image_tag 'logo.svg', id: 'logo', alt: 'GT Graphics'
+          = image_tag 'logo.png', id: 'logo', alt: 'GT Graphics'
           .sr-only GT Graphics
 
         %nav.navbar.navbar-top{role: 'navigation'}
           .navbar-header
-            %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
-              = prepend_icon :bars, translate('helpers.links.menu'), fixed_width: true, size: :lg
+            - unless page.root?
+              %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
+                = prepend_icon :bars, translate('helpers.links.menu'), fixed_width: true, caption_html: { class: 'sr-only' }
 
-          .navbar-collapse.collapse
+          .navbar-collapse{class: page.root? ? nil : 'collapse'}
             %ul.nav.navbar-nav
+              // = active_link_to icon(:home, size: :lg), :root, wrap_tag: :li, active: :exclusive
               - menu_items.each do |page|
                 = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page)
             %ul.nav.navbar-nav.navbar-right
               - available_locales.sort_by { |locale| translate(locale, scope: :languages, locale: locale) }.each do |locale|
-                = active_link_to page_path(@page, locale: locale), wrap_tag: :li, hreflang: locale, lang: locale, active: locale == I18n.locale do
+                = active_link_to page_path(@page, locale: locale), wrap_tag: :li, hreflang: locale, lang: locale, active: locale == I18n.locale, title: translate(locale, scope: :languages, locale: locale), data: {  } do
                   = prepend_flag_icon locale, translate(locale, scope: :languages, locale: locale), caption_html:{ class: 'sr-only' }
 
 

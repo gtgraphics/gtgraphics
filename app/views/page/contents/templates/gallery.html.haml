@@ -1,9 +1,4 @@
 .page-header
-  .pull-right
-    = form_tag search_page_path(@page.path), class: 'form-inline' do
-      = text_field_tag :query, @query, class: 'form-control', placeholder: translate('helpers.prompts.search')
-      = button_tag prepend_icon(:search, translate('helpers.links.search')), class: 'btn btn-default'
-      = button_link_to prepend_icon(:times, translate('helpers.links.reset')), @page
   %h1
     = page.title
 

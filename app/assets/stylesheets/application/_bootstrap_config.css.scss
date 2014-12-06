@@ -31,7 +31,7 @@ $brand-danger:          #d9534f;
 //## Settings for some of the most global styles.
 
 //** Background color for `<body>`.
-$body-bg:               #090909;
+$body-bg:               rgb(30, 30, 30);
 //** Global text color on `<body>`.
 $text-color:            $gray-lighter; // $gray-dark;
 
@@ -69,7 +69,7 @@ $line-height-computed:    floor(($font-size-base * $line-height-base)); // ~20px
 
 //** By default, this inherits from the `<body>`.
 $headings-font-family:    inherit;
-$headings-font-weight:    700;
+$headings-font-weight:    300;
 $headings-line-height:    1.1;
 $headings-color:          $text-color;
 
@@ -858,7 +858,7 @@ $component-offset-horizontal: 180px;
 
 //== Custom GT Graphics Styles
 
-$content-bg: rgba(40, 40, 40, 0.92);
+$content-bg: rgb(40, 40, 40);
 $content-padding: 15px;
 $content-padding-lg: 25px;
 $footer-bg: $content-bg; // rgba(10, 10, 10, 0.92);

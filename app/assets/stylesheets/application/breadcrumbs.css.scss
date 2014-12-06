@@ -3,7 +3,8 @@
 .breadcrumb {
   padding: 0;
   margin: 0;
-  font-size: 12px;
+  font-size: 14px;
+  text-transform: uppercase;
   a {
     color: $breadcrumb-active-color;
     &:hover {
