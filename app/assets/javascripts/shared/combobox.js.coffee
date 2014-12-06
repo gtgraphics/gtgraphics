@@ -1,9 +1,9 @@
 $.extend jQuery.fn.select2.defaults,
-  formatNoMatches: -> I18n.translate('javascript.select2.noMatches')
-  formatInputTooShort: (input, min) -> I18n.translate('javascript.select2.inputTooShort', min: min, required: min - input.length)
-  formatInputTooLong: (input, max) -> I18n.translate('javascript.select2.inputTooLong', max: max, required: input.length - max)
-  formatSelectionTooBig: (limit) -> I18n.translate('javascript.select2.selectionTooBig', limit: limit)
-  formatLoadMore: (page) -> I18n.translate('javascript.select2.loadMore', page: page)
+  formatNoMatches: -> I18n.translate('javascript.select2.no_matches')
+  formatInputTooShort: (input, min) -> I18n.translate('javascript.select2.input_too_short', min: min, required: min - input.length)
+  formatInputTooLong: (input, max) -> I18n.translate('javascript.select2.input_too_long', max: max, required: input.length - max)
+  formatSelectionTooBig: (limit) -> I18n.translate('javascript.select2.selection_too_big', limit: limit)
+  formatLoadMore: (page) -> I18n.translate('javascript.select2.load_more', page: page)
   formatSearching: -> I18n.translate('javascript.select2.searching')
 
 jQuery.prepare ->

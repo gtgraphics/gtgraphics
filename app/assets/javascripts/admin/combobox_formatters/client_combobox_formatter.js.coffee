@@ -8,7 +8,7 @@ class @ClientComboboxFormatter extends @ComboboxFormatter
 
     unless client.known
       $unknown = $('<div />', class: 'client-combobox-known text-muted pull-right').appendTo($container)
-      $unknown.text(I18n.translate('views.admin.clients.createUnknown'))
+      $unknown.text(I18n.translate('views.admin.clients.create_unknown'))
 
     $container
 

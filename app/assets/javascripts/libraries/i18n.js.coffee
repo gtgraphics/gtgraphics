@@ -2,6 +2,7 @@ window.I18n ||= {}
  
 VALID_OPTIONS = ['scope', 'locale', 'default', 'fallbacks']
  
+ 
 humanizeKeypath = (keypath) ->
   console.warn "I18n: no translation found for #{keypath}"
   _(keypath.split('.')).chain().last().humanize().value()
@@ -19,6 +20,7 @@ tryToInterpolate = (str, interpolations)  ->
     str
   else
     str.interpolate(interpolations)
+
 
 _(I18n).extend
  

@@ -4,9 +4,9 @@ class @Editor.Control.ViewMode extends @Editor.Control.ButtonControl
     $button = $('<button />', class: 'btn btn-default dropdown-toggle', type: 'button', tabindex: '-1', 'data-toggle': 'dropdown')
     $button.append($('<b />', class: 'caret')).appendTo($buttonGroup)
     $dropdown = $('<ul />', class: 'dropdown-menu').appendTo($buttonGroup)
-    @createDropdownListItem('richText', I18n.translate('javascript.editor.viewModes.richText'), 'font').appendTo($dropdown)
-    @createDropdownListItem('html', I18n.translate('javascript.editor.viewModes.html'), 'code').appendTo($dropdown)
-    @createDropdownListItem('preview', I18n.translate('javascript.editor.viewModes.preview'), 'file-o').appendTo($dropdown)
+    @createDropdownListItem('richText', I18n.translate('javascript.editor.view_modes.rich_text'), 'font').appendTo($dropdown)
+    @createDropdownListItem('html', I18n.translate('javascript.editor.view_modes.html'), 'code').appendTo($dropdown)
+    @createDropdownListItem('preview', I18n.translate('javascript.editor.view_modes.preview'), 'file-o').appendTo($dropdown)
     $buttonGroup
 
   getEditor: ->

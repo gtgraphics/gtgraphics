@@ -1,9 +1,9 @@
 jQuery.timeago.settings.allowFuture = true  
 jQuery.timeago.settings.strings =
-  prefixAgo: -> I18n.translate('javascript.timeago.prefixAgo')
-  prefixFromNow: -> I18n.translate('javascript.timeago.prefixFromNow')
-  suffixAgo: -> I18n.translate('javascript.timeago.suffixAgo')
-  suffixFromNow: -> I18n.translate('javascript.timeago.suffixFromNow')
+  prefixAgo: -> I18n.translate('javascript.timeago.prefix_ago')
+  prefixFromNow: -> I18n.translate('javascript.timeago.prefix_from_now')
+  suffixAgo: -> I18n.translate('javascript.timeago.suffix_ago')
+  suffixFromNow: -> I18n.translate('javascript.timeago.suffix_from_now')
   seconds: (seconds) -> I18n.translate('javascript.timeago.seconds', seconds: seconds)
   minute: (minutes) -> I18n.translate('javascript.timeago.minute', minutes: minutes)
   minutes: (minutes) -> I18n.translate('javascript.timeago.minutes', minutes: minutes)

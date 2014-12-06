@@ -3,7 +3,7 @@ class @Editor.Control.AlignLeft extends @Editor.Control.FontControl
     'justifyleft'
 
   getCaption: ->
-    I18n.translate('javascript.editor.alignLeft')
+    I18n.translate('javascript.editor.align_left')
 
   getIcon: ->
     'align-left'

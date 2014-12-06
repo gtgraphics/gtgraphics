@@ -3,7 +3,7 @@ class @Editor.Control.AlignJustify extends @Editor.Control.FontControl
     'justifyfull'
 
   getCaption: ->
-    I18n.translate('javascript.editor.alignJustify')
+    I18n.translate('javascript.editor.align_justify')
 
   getIcon: ->
     'align-justify'

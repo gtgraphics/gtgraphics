@@ -9,7 +9,7 @@ $(document).ready ->
       acceptFileTypes = /^image\/(gif|jpe?g|png)$/i
       file = data.originalFiles[0]
       if file.type.length and !acceptFileTypes.test(file.type)
-        alert I18n.translate('activerecord.errors.models.project/image.attributes.base.invalidFileType', filename: file.name)
+        alert I18n.translate('activerecord.errors.models.project/image.attributes.base.invalid_file_type', filename: file.name)
       else
         data.submit()
 

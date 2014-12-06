@@ -48,9 +48,9 @@ namespace :i18n do
     locale_files = Dir.glob("#{Rails.root}/config/locales/**/*.yml")
     translations = locale_files.inject({}) do |translations, file|
       locale_translations = YAML.load_file(file)
-      locale_translations.deep_transform_keys! do |key|
-        key.split('/').map { |part| part.camelize(:lower) }.join('/')
-      end
+      # locale_translations.deep_transform_keys! do |key|
+      #   key.split('/').map { |part| part.camelize(:lower) }.join('/')
+      # end
       translations.deep_merge!(locale_translations)
     end
 
@@ -81,7 +81,7 @@ namespace :i18n do
 
   def header_data
     <<-JAVASCRIPT.strip_heredoc
-      I18n || (I18n = {});
+      window.I18n || (window.I18n = {});
       I18n.translations || (I18n.translations = {});
     JAVASCRIPT
   end
