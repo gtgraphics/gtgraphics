@@ -1,7 +1,7 @@
 .col-sm-8.col-sm-offset-2
   = page_header
 
-  = simple_form_for @user_update_activity, as: :user_update, url: @user_update_activity.user == current_user ? :admin_account : [:admin, @user_update_activity.user], method: :patch, wrapper: :horizontal_form, html: { class: 'form-horizontal' } do |form|
+  = simple_form_for @user_update_form, as: :user_update, url: @user_update_form.user == current_user ? :admin_account : [:admin, @user_update_form.user], method: :patch, wrapper: :horizontal_form, html: { class: 'form-horizontal' } do |form|
 
     %fieldset
       %legend= translate('views.forms.basics')
@@ -16,7 +16,7 @@
       .fields
         = form.input :reset_password, as: :boolean, wrapper: :horizontal_boolean, input_html: { data: { toggle: 'passwordFields' } }
         #password_fields
-          = form.input :current_password, required: true if @user_update_activity.user == current_user
+          = form.input :current_password, required: true if @user_update_form.user == current_user
           = form.input :generate_password, as: :radio_buttons, wrapper: :horizontal_radio_and_checkboxes, collection: [[translate('helpers.boolean.yes'), true], [translate('helpers.boolean.no'), false]], input_html: { data: { toggle: 'generatePasswordFields' } }
           #generate_password_fields
             = form.input :password, required: true

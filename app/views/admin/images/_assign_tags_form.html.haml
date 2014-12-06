@@ -1,4 +1,4 @@
-= simple_form_for @tag_assignment_activity, as: :tag_assignment, url: :associate_tags_with_admin_images, remote: true, method: :patch, html: { class: 'form-horizontal' } do |form|
+= simple_form_for @tag_assignment_form, as: :tag_assignment, url: :associate_tags_with_admin_images, remote: true, method: :patch, html: { class: 'form-horizontal' } do |form|
 
   .modal-body
     = form.input_field :record_type, as: :hidden

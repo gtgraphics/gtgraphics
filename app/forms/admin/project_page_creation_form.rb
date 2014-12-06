@@ -1,4 +1,4 @@
-class Admin::ProjectPageCreationActivity < Admin::MultiplePageCreationActivity
+class Admin::ProjectPageCreationForm < Admin::MultiplePageCreationForm
   include Tokenizable
 
   embeds_many :projects

@@ -1,7 +1,7 @@
-<% if @image_owner_assignment_activity.errors.empty?%>
+<% if @image_owner_assignment_form.errors.empty?%>
 
 $.hideModal()
-Turbolinks.visit('<%= admin_images_path(author_id: @image_owner_assignment_activity.author) %>')
+Turbolinks.visit('<%= admin_images_path(author_id: @image_owner_assignment_form.author) %>')
 
 <% else %>
 

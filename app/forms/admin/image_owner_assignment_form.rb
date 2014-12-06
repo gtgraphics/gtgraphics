@@ -1,4 +1,4 @@
-class Admin::ImageOwnerAssignmentActivity < Activity
+class Admin::ImageOwnerAssignmentForm < Form
   embeds_many :images
   embeds_one :author, class_name: 'User'
 

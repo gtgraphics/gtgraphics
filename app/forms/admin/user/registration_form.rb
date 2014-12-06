@@ -1,4 +1,4 @@
-class Admin::User::RegistrationActivity < Activity
+class Admin::User::RegistrationForm < Form
   handles :user
 
   attribute :first_name, String

@@ -199,9 +199,9 @@ class Admin::ImagesController < Admin::ApplicationController
   # Owner Assignment
 
   def assign_owner
-    @image_owner_assignment_activity = Admin::ImageOwnerAssignmentActivity.new
-    @image_owner_assignment_activity.image_ids = Array(params[:image_ids])
-    @image_owner_assignment_activity.author = current_user
+    @image_owner_assignment_form = Admin::ImageOwnerAssignmentForm.new
+    @image_owner_assignment_form.image_ids = Array(params[:image_ids])
+    @image_owner_assignment_form.author = current_user
 
     respond_to do |format|
       format.js { render :assign_owner }
@@ -210,7 +210,7 @@ class Admin::ImagesController < Admin::ApplicationController
   private :assign_owner # invoked through :batch_process
 
   def associate_owner
-    @image_owner_assignment_activity = Admin::ImageOwnerAssignmentActivity.execute(image_owner_assignment_params)
+    @image_owner_assignment_form = Admin::ImageOwnerAssignmentForm.execute(image_owner_assignment_params)
    
     respond_to do |format|
       format.js

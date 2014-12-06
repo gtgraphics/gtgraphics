@@ -1,4 +1,4 @@
-class Admin::TagAssignmentActivity < Activity
+class Admin::TagAssignmentForm < Form
   attribute :record_type, String
   attribute :record_ids, Array[Integer]
   attribute :tag_list, TagCollection, coercer: ->(list) { TagCollection.parse(list) }

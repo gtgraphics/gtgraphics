@@ -6,16 +6,16 @@ class Admin::SessionsController < Admin::ApplicationController
   end
 
   def new
-    @user_login_activity = Admin::User::LoginActivity.new
+    @user_login_form = Admin::User::LoginForm.new
     respond_to do |format|
       format.html
     end
   end
 
   def create
-    @user_login_activity = Admin::User::LoginActivity.new(login_params)
-    if @user_login_activity.valid?
-      auto_login @user_login_activity.user, @user_login_activity.permanent?
+    @user_login_form = Admin::User::LoginForm.new(login_params)
+    if @user_login_form.valid?
+      auto_login @user_login_form.user, @user_login_form.permanent?
       respond_to do |format|
         format.html { redirect_back_or_to :admin_root }
       end
@@ -35,6 +35,6 @@ class Admin::SessionsController < Admin::ApplicationController
 
   private
   def login_params
-    params.require(:session).permit(:email, :password, :permanent)
+    params.require(:session).permit(:login, :password, :permanent)
   end
 end

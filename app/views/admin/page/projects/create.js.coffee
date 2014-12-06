@@ -1,6 +1,6 @@
 $modal = $('#modal')
 
-<% if @project_page_creation_activity.errors.empty? %>
+<% if @project_page_creation_form.errors.empty? %>
 
 $.hideModal()
 Turbolinks.visit('<%= @location %>')

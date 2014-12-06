@@ -2,7 +2,7 @@ class Admin::Page::ProjectsController < Admin::Page::ApplicationController
   before_action :load_project, only: %i(edit update)
 
   def new
-    @project_page_creation_activity = Admin::ProjectPageCreationActivity.new do |a|
+    @project_page_creation_form = Admin::ProjectPageCreationForm.new do |a|
       a.template = "Template::Project".constantize.default
       a.parent_page = @page
     end
@@ -12,13 +12,13 @@ class Admin::Page::ProjectsController < Admin::Page::ApplicationController
   end
 
   def create
-    @project_page_creation_activity = Admin::ProjectPageCreationActivity.new do |a|
-      a.attributes = project_page_creation_activity_params
+    @project_page_creation_form = Admin::ProjectPageCreationForm.new do |a|
+      a.attributes = project_page_creation_form_params
       a.parent_page = @page
       a.execute
     end
-    if @project_page_creation_activity.errors.empty?
-      @location = admin_page_path(@project_page_creation_activity.parent_page)
+    if @project_page_creation_form.errors.empty?
+      @location = admin_page_path(@project_page_creation_form.parent_page)
     end
     respond_to do |format|
       format.js
@@ -34,7 +34,7 @@ class Admin::Page::ProjectsController < Admin::Page::ApplicationController
     params.require(:page_project).permit(:name, :description, :released_on, :client_name, :client_url)
   end
 
-  def project_page_creation_activity_params
-    params.require(:project_page_creation_activity).permit(:project_id_tokens, :template_id, :published)
+  def project_page_creation_form_params
+    params.require(:project_page_creation_form).permit(:project_id_tokens, :template_id, :published)
   end
 end

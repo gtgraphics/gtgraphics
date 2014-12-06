@@ -25,14 +25,14 @@ module Admin::TaggableController
   # Tag Assignment
 
   def assign_tags
-    @tag_assignment_activity = Admin::TagAssignmentActivity.new
+    @tag_assignment_form = Admin::TagAssignmentForm.new
 
     record_ids = Array(params[:"#{controller_name.singularize}_ids"])
     records = controller_name.classify.constantize.where(id: record_ids)
 
-    @tag_assignment_activity.record_type = controller_name.classify
-    @tag_assignment_activity.record_ids = record_ids
-    @tag_assignment_activity.tag_list = Tag.common(records)
+    @tag_assignment_form.record_type = controller_name.classify
+    @tag_assignment_form.record_ids = record_ids
+    @tag_assignment_form.tag_list = Tag.common(records)
 
     respond_to do |format|
       format.js { render :assign_tags }
@@ -40,7 +40,7 @@ module Admin::TaggableController
   end
 
   def associate_tags
-    @tag_assignment_activity = Admin::TagAssignmentActivity.execute(tag_assignment_params)
+    @tag_assignment_form = Admin::TagAssignmentForm.execute(tag_assignment_params)
 
     respond_to do |format|
       format.js

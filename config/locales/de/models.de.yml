@@ -44,16 +44,16 @@ de:
         style_id: Stil
         source: Quelle
         original_style: Original verwenden
-      admin/user/change_password_activity:
+      admin/user/change_password_form:
         current_password: Aktuelles Passwort
         generate_password: Password generieren?
         password: Passwort
         password_confirmation: Password (Wdh.)
-      admin/user/login_activity:
-        email: E-Mail-Adresse
+      admin/user/login_form:
+        login: Username oder E-Mail-Adresse
         password: Passwort
         permanent: Angemeldet bleiben
-      admin/user/registration_activity:
+      admin/user/registration_form:
         first_name: Vorname
         last_name: Nachname
         email: E-Mail-Adresse
@@ -61,7 +61,7 @@ de:
         password: Passwort
         password_confirmation: Passwort (Wdh.)
         preferred_locale: Standardsprache
-      admin/user/update_activity:
+      admin/user/update_form:
         first_name: Vorname
         last_name: Nachname
         email: E-Mail-Adresse
@@ -70,26 +70,26 @@ de:
         password: Passwort
         password_confirmation: Passwort (Wdh.)
         preferred_locale: Standardsprache
-      admin/user/account_update_activity:
+      admin/user/account_update_form:
         current_password: Aktuelles Passwort
-      admin/image_page_creation_activity:
+      admin/image_page_creation_form:
         image_ids: Bilder
         image_id_tokens: Bilder
         template_id: Vorlage
-      admin/image_owner_assignment_activity:
+      admin/image_owner_assignment_form:
         image_ids: Bilder
         author_id: Urheber
-      admin/project_image_assignment_activity:
+      admin/project_image_assignment_form:
         image_id_tokens: Bilder
-      admin/project_page_creation_activity:
+      admin/project_page_creation_form:
         project_ids: Projekt
         project_id_tokens: Projekt
         template_id: Vorlage
-      admin/tag_assignment_activity:
+      admin/tag_assignment_form:
         tag_list: Tags
     errors:
       models:
-        admin/user/login_activity:
+        admin/user/login_form:
           attributes:
             base:
               invalid: Die Anmeldedaten sind ungültig.

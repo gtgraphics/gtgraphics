@@ -1,4 +1,4 @@
-<% if @project_image_assignment_activity.errors.empty? %>
+<% if @project_image_assignment_form.errors.empty? %>
 
 $.hideModal()
 Turbolinks.visit('<%= admin_project_path(@project) %>')

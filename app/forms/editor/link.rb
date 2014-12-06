@@ -1,4 +1,4 @@
-class Editor::Link < EditorActivity
+class Editor::Link < EditorForm
   include Rails.application.routes.url_helpers
   include RouteHelper
 

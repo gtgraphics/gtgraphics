@@ -1,4 +1,4 @@
-class Admin::ImagePageCreationActivity < Admin::MultiplePageCreationActivity
+class Admin::ImagePageCreationForm < Admin::MultiplePageCreationForm
   include Tokenizable
 
   embeds_many :images

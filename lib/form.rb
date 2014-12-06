@@ -1,21 +1,35 @@
-class Activity
+class Form
   include ActiveModel::Model
   include Virtus.model
   extend ActiveModel::Callbacks
 
-  include Activity::EmbedsOneExtension
-  include Activity::EmbedsManyExtension
+  include Form::EmbedsOneExtension
+  include Form::EmbedsManyExtension
  
   define_model_callbacks :initialize, :validation, :execute
 
   def initialize(*)
     run_callbacks :initialize do
-      activity = super
-      yield(activity) if block_given?
+      form = super
+      yield(form) if block_given?
     end
   end
  
   class << self
+    def attribute_with_form(name, *args)
+      attribute_without_form(name, *args)
+
+      unless method_defined?("#{name}?")
+        class_eval <<-RUBY
+          def #{name}?
+            #{name}.present?
+          end
+        RUBY
+      end
+    end
+
+    alias_method_chain :attribute, :form
+
     def handles(name, options = {})
       class_name = options.fetch(:class_name) { name.to_s.classify }.to_s
       class_eval <<-RUBY
@@ -37,12 +51,12 @@ class Activity
  
   def execute
     execute!
-  rescue ActivityInvalid
+  rescue FormInvalid
     false
   end
  
   def execute!
-    raise ActivityInvalid.new(self) unless valid?
+    raise FormInvalid.new(self) unless valid?
     run_callbacks :execute do
       perform
       true
@@ -70,6 +84,6 @@ class Activity
  
   protected
   def perform
-    raise NotImplementedError, "#{self.class.name}#perform must be overridden to execute this activity"
+    raise NotImplementedError, "#{self.class.name}#perform must be overridden to execute this form"
   end
 end

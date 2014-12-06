@@ -1,4 +1,4 @@
-class Activity
+class Form
   module EmbedsOneExtension
     extend ActiveSupport::Concern
 

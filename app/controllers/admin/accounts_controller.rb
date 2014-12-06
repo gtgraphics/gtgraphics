@@ -19,19 +19,19 @@ class Admin::AccountsController < Admin::ApplicationController
   end
 
   def edit
-    @user_update_activity = Admin::User::AccountUpdateActivity.new
-    @user_update_activity.user = @user
+    @user_update_form = Admin::User::AccountUpdateForm.new
+    @user_update_form.user = @user
     respond_to do |format|
       format.html { render 'admin/users/edit' }
     end
   end
 
   def update
-    @user_update_activity = Admin::User::AccountUpdateActivity.new
-    @user_update_activity.user = @user
-    @user_update_activity.attributes = user_account_update_params
-    if @user_update_activity.execute
-      flash_for @user_update_activity.user, :updated
+    @user_update_form = Admin::User::AccountUpdateForm.new
+    @user_update_form.user = @user
+    @user_update_form.attributes = user_account_update_params
+    if @user_update_form.execute
+      flash_for @user_update_form.user, :updated
       respond_to do |format|
         format.html { redirect_to :edit_admin_account }
       end

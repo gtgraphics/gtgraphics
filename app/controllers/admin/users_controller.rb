@@ -27,16 +27,16 @@ class Admin::UsersController < Admin::ApplicationController
   end
 
   def new
-    @user_registration_activity = Admin::User::RegistrationActivity.new
+    @user_registration_form = Admin::User::RegistrationForm.new
     respond_to do |format|
       format.html
     end
   end
 
   def create
-    @user_registration_activity = Admin::User::RegistrationActivity.new(user_registration_params)
-    if @user_registration_activity.execute
-      flash_for @user_registration_activity.user, :created
+    @user_registration_form = Admin::User::RegistrationForm.new(user_registration_params)
+    if @user_registration_form.execute
+      flash_for @user_registration_form.user, :created
       respond_to do |format|
         format.html { redirect_to :admin_users }
       end
@@ -54,19 +54,19 @@ class Admin::UsersController < Admin::ApplicationController
   end
 
   def edit
-    @user_update_activity = Admin::User::UpdateActivity.new
-    @user_update_activity.user = @user
+    @user_update_form = Admin::User::UpdateForm.new
+    @user_update_form.user = @user
     respond_to do |format|
       format.html
     end
   end
 
   def update
-    @user_update_activity = Admin::User::UpdateActivity.new
-    @user_update_activity.user = @user
-    @user_update_activity.attributes = user_update_params
-    if @user_update_activity.execute
-      flash_for @user_update_activity.user, :updated
+    @user_update_form = Admin::User::UpdateForm.new
+    @user_update_form.user = @user
+    @user_update_form.attributes = user_update_params
+    if @user_update_form.execute
+      flash_for @user_update_form.user, :updated
       respond_to do |format|
         format.html { redirect_to :admin_users }
       end

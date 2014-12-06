@@ -1,7 +1,7 @@
-<% if @tag_assignment_activity.errors.empty?%>
+<% if @tag_assignment_form.errors.empty?%>
 
 $.hideModal()
-Turbolinks.visit('<%= admin_images_path(tag: @tag_assignment_activity.tag_list.to_a) %>')
+Turbolinks.visit('<%= admin_images_path(tag: @tag_assignment_form.tag_list.to_a) %>')
 
 <% else %>
 

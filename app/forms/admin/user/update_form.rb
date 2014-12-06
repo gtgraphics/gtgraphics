@@ -1,4 +1,4 @@
-class Admin::User::UpdateActivity < Activity
+class Admin::User::UpdateForm < Form
   handles :user
 
   delegate :first_name, :first_name=, to: :user

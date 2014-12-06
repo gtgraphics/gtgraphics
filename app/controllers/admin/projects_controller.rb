@@ -112,17 +112,17 @@ class Admin::ProjectsController < Admin::ApplicationController
   end
 
   def assign_images
-    @project_image_assignment_activity = Admin::ProjectImageAssignmentActivity.new
-    @project_image_assignment_activity.project = @project
+    @project_image_assignment_form = Admin::ProjectImageAssignmentForm.new
+    @project_image_assignment_form.project = @project
     respond_to do |format|
       format.js
     end
   end
 
   def attach_images
-    @project_image_assignment_activity = Admin::ProjectImageAssignmentActivity.new(project_image_assignment_params)
-    @project_image_assignment_activity.project = @project
-    @project_image_assignment_activity.execute
+    @project_image_assignment_form = Admin::ProjectImageAssignmentForm.new(project_image_assignment_params)
+    @project_image_assignment_form.project = @project
+    @project_image_assignment_form.execute
     respond_to do |format|
       format.js
     end
@@ -173,6 +173,6 @@ class Admin::ProjectsController < Admin::ApplicationController
   end
 
   def project_image_assignment_params
-    params.require(:project_image_assignment_activity).permit(:image_id_tokens)
+    params.require(:project_image_assignment_form).permit(:image_id_tokens)
   end
 end

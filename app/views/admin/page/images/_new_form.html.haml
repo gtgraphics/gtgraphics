@@ -1,4 +1,4 @@
-= simple_form_for @image_page_creation_activity, as: :image_page_creation_activity, url: admin_page_image_path(@page), remote: true, html: { class: 'form-horizontal' } do |form|
+= simple_form_for @image_page_creation_form, as: :image_page_creation_form, url: admin_page_image_path(@page), remote: true, html: { class: 'form-horizontal' } do |form|
 
   .modal-body
     = form.input :image_id_tokens, as: :image_select, multiple: true

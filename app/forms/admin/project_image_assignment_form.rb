@@ -1,4 +1,4 @@
-class Admin::ProjectImageAssignmentActivity < Activity
+class Admin::ProjectImageAssignmentForm < Form
   include Tokenizable
 
   embeds_one :project

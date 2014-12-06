@@ -20,7 +20,7 @@
 #  asset_token           :string(255)      not null
 #
 
-class Editor::Image < EditorActivity
+class Editor::Image < EditorForm
   ALIGNMENTS = %w(left right top middle bottom).freeze
 
   embeds_one :image

@@ -1,4 +1,4 @@
-class Admin::User::AccountUpdateActivity < Admin::User::UpdateActivity
+class Admin::User::AccountUpdateForm < Admin::User::UpdateForm
   attribute :current_password, String
 
   validates :current_password, presence: true, if: :reset_password?
