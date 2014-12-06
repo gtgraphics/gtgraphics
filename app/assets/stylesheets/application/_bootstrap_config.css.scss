@@ -858,7 +858,7 @@ $component-offset-horizontal: 180px;
 
 //== Custom GT Graphics Styles
 
-$content-bg: rgba(40,40,40,.92);
+$content-bg: rgba(40, 40, 40, 0.92);
 $content-padding: 15px;
 $content-padding-lg: 25px;
-$footer-bg: $content-bg;
+$footer-bg: $content-bg; // rgba(10, 10, 10, 0.92);

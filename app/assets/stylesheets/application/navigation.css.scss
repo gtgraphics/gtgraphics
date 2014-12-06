@@ -41,11 +41,11 @@
   &.navbar-top {
     margin-bottom: 0;
     border: none;
-    //background-color: rgba($brand-primary, 0.25);
-    // margin-bottom: 5px;
     border-radius: 0;
+    background-color: rgba($link-color, 0.8);
 
     .navbar-nav {
+
       > li {
         > a {
           color: white;
@@ -62,24 +62,6 @@
         &.active > a {
           background-color: $content-bg;
           box-shadow: inset 0 6px 8px rgba(black, 0.3);
-        }
-      }
-
-      @for $i from 1 through 6 {
-        $alpha: (1 - ($i - 1) / 6) * 0.75;
-
-        > li:nth-child(#{$i}):not(.active) {
-          > a {
-            background-color: rgba($link-color, $alpha);
-
-            &:hover, &:focus {
-              background-color: rgba($link-hover-color, $alpha);
-            }
-
-            &:active {
-              background-color: rgba(darken($link-hover-color, 15%), $alpha);
-            }
-          }
         }
       }
     }

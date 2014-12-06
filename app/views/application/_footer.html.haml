@@ -1,21 +1,10 @@
 %nav.navbar.navbar-footer.navbar-fixed-bottom.hidden-xs{role: 'navigation'}
   .container
-    %ul.nav.navbar-nav
-      %li.dropdown
-        = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
-          = prepend_icon :globe, translate(locale, scope: :languages), size: :lg, caption_html: { lang: 'en' }
-          %b.caret
-        %ul.dropdown-menu
-          - I18n.available_locales.sort_by { |locale| translate(locale, scope: :languages, locale: locale) }.each do |locale|
-            = active_link_to page_path(@page, locale: locale), wrap_tag: :li, hreflang: locale, lang: locale, active: locale == I18n.locale do
-              = prepend_flag_icon(locale, translate(locale, scope: :languages, locale: locale))
-
-    / %p.navbar-text.copyright 
-    /   &copy; 2006-#{Date.today.year} GT Graphics
-
-    %ul.nav.navbar-nav
-      - (Page.primary - menu_items).each do |page|
-        %li= link_to page, page
+    - secondary_menu_items = Page.published.primary.without(menu_items)
+    - if secondary_menu_items.any?
+      %ul.nav.navbar-nav
+        - secondary_menu_items.each do |page|
+          %li= link_to page, page
 
     .navbar-text.social-buttons
       = facebook_site_like_button
