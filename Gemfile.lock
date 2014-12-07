@@ -187,6 +187,8 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    masonry-rails (0.2.4)
+      railties
     method_source (0.8.2)
     mime-types (1.25.1)
     mini_magick (3.7.0)
@@ -367,6 +369,7 @@ DEPENDENCIES
   kaminari
   letter_opener
   liquid
+  masonry-rails
   mini_magick
   miro
   nokogiri

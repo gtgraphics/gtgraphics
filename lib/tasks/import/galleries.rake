@@ -6,19 +6,19 @@ namespace :gtg do
 
       desc 'Import wallpapers from the remote GT Graphics gallery'
       task :wallpapers => :environment do
-        gallery_page = Page.find_by! path: 'work/wallpapers'
+        gallery_page = Page.find_by! path: 'wallpapers'
         import_gallery 'wallpapers', gallery_page
       end
 
       desc 'Import artworks from the remote GT Graphics gallery'
       task :artworks => :environment do
-        gallery_page = Page.find_by! path: 'work/artworks'
+        gallery_page = Page.find_by! path: 'artworks'
         import_gallery 'artworks', gallery_page
       end
 
       desc 'Import photos from the remote GT Graphics gallery'
       task :photos => :environment do
-        path = 'work/photography'
+        path = 'photography'
         gallery_page = Page.find_by! path: path
         %w(nature architecture people misc).each do |subgallery_name|
           subgallery_page = Page.find_by! path: "#{path}/#{subgallery_name}"
@@ -62,6 +62,15 @@ namespace :gtg do
           end
         end
 
+        # Shop Links
+        image.shop_urls = {
+          deviantart:   parser.shop_url('da'),
+          fineartprint: parser.shop_url('fineartprint'),
+          mygall:       parser.shop_url('mygall'),
+          redbubble:    parser.shop_url('redbubble'),
+          artflakes:    parser.shop_url('artflakes')
+        }
+
         image.save!
 
         puts "- #{image.remote_asset_url}"
@@ -104,15 +113,6 @@ namespace :gtg do
 
         # Metadata (strip concluding path separator)
         page.metadata[:social_uri] = image_page_url.gsub(/\/\z/, '')
-
-        # Shop Links
-        page.embeddable.shop_urls = {
-          deviantart:   parser.shop_url('da'),
-          fineartprint: parser.shop_url('fineartprint'),
-          mygall:       parser.shop_url('mygall'),
-          redbubble:    parser.shop_url('redbubble'),
-          artflakes:    parser.shop_url('artflakes')
-        }
 
         # Persist and return Page
         page.tap(&:save!)

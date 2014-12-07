@@ -1,4 +1,4 @@
 /%li
 /  = link_to_unless current_page.last?, translate('views.pagination.next').html_safe, url, rel: 'next', remote: remote
 
-= button_link_to_unless current_page.last?, icon(:angle, direction: :right, fixed_width: true), url, rel: 'next', title: translate('views.pagination.next'), data: { toggle: 'tooltip', placement: 'top', container: 'body' }
+= button_link_to_unless current_page.last?, icon(:angle, direction: :right, fixed_width: true), url, id: 'next_page', rel: 'next', title: translate('views.pagination.next'), data: { toggle: 'tooltip', placement: 'top', container: 'body' }

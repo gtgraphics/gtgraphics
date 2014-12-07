@@ -5,45 +5,44 @@
       %h1= image.title
 
     = link_to page_path(page, format: @image.format) do
-      = image_tag attached_asset_path(@image, :custom), alt: @image.title, class: 'img-responsive img-rounded'
+      = image_tag attached_asset_path(@image, :custom), alt: image.title, class: 'img-responsive'
 
-    %br
 
-    .row
-      .col-sm-8
-        - if image.description.present?
-          = fieldset 'Description' do
-            = raw image.description
+    .page-body
 
-        = fieldset 'Artist' do
-          .clearfix
-            .pull-left
-              = image.author.gravatar size: 45
-            = image.author.name
-            %br
-            %span.text-muted= image.taken_at
+      .row
+        .col-sm-8
+          - if image.description.present?
+            = fieldset 'Description' do
+              = raw image.description
 
-        = fieldset 'Comments' do
-          = page.embeddable.facebook_comments colorscheme: :dark
+          = fieldset 'Artist' do
+            .clearfix
+              .pull-left
+                = image.author.gravatar size: 45
+              = image.author.name
+              %br
+              %span.text-muted= image.taken_at
 
-      .col-sm-4
-        = fieldset 'Share' do
-          %ul
-            %li= page.embeddable.facebook_like_button style: :button_count
-            %li= link_to page.permalink, page.permalink
+          = fieldset 'Comments' do
+            = page.embeddable.facebook_comments colorscheme: :dark
 
-        = fieldset 'Buy' do
-          = button_link_to buy_image_path(page.path), type: :primary, block: true do
-            = prepend_icon :dollar, "Contact #{image.author.first_name}", fixed_width: true
-          = page.embeddable.shop_links
+        .col-sm-4
+          = fieldset 'Share' do
+            %ul
+              %li= page.embeddable.facebook_like_button style: :button_count
+              %li= link_to page.permalink, page.permalink
 
-        = fieldset 'Downloads' do
-          %ul
-            %li= link_to 'Original', download_image_path(page.path, format: image.format)
-            - @image_styles.each do |style|
-              - present style do |style|
-                = content_tag_for :li, style do
-                  = link_to style.title, download_image_path(page.path, format: style.format, style_id: style.position)
-                  (#{style.width} &times; #{style.height})
+          = fieldset 'Buy' do
+            = button_link_to buy_image_path(page.path), type: :primary, block: true do
+              = prepend_icon :dollar, "Contact #{image.author.first_name}", fixed_width: true
+            = page.embeddable.shop_links
 
-     
+          = fieldset 'Downloads' do
+            %ul
+              %li= link_to 'Original', download_image_path(page.path, format: image.format)
+              - @image_styles.each do |style|
+                - present style do |style|
+                  = content_tag_for :li, style do
+                    = link_to style.title, download_image_path(page.path, format: style.format, style_id: style.position)
+                    (#{style.width} &times; #{style.height})

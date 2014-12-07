@@ -63,6 +63,7 @@ gem 'select2-bootstrap-css'
 gem 'underscore-rails', github: 'rweng/underscore-rails', tag: 'v1.6.0'
 gem 'underscore-string-rails'
 gem 'autoprefixer-rails'
+gem 'masonry-rails'
 
 # Tools
 group :development do

@@ -9,6 +9,14 @@ class ImageUploader < AttachmentUploader
     end
   end
 
+  version :brick, from_version: :custom do
+    process resize_to_fit: [400, 400]
+
+    def full_filename(file)
+      "bricks/#{file}"
+    end
+  end
+
   def store_dir
     'system/images'
   end
