@@ -7,7 +7,7 @@
   %br
 
 .page-body
-  #gallery.transitions-enabled.infinite-scroll.clearfix.row
+  #gallery.transitions-enabled.infinite-scroll.clearfix.row{data: { total_pages: @image_pages.total_pages }}
     - @image_pages.each do |image_page|
       .brick.col-sm-4
         = link_to image_page do

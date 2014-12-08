@@ -10,7 +10,7 @@ class ImageUploader < AttachmentUploader
   end
 
   version :brick, from_version: :custom do
-    process resize_to_fit: [400, 400]
+    process resize_to_fit: [350, nil]
 
     def full_filename(file)
       "bricks/#{file}"

@@ -22,7 +22,7 @@
   a {
     color: $breadcrumb-active-color;
     &:hover {
-      color: lighten($breadcrumb-active-color, 20%);
+      color: $headings-color;
     }
   }
 }

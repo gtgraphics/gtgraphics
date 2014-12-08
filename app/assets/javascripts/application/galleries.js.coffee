@@ -16,10 +16,9 @@ $(document).ready ->
     navSelector: '#pagination' # selector for the paged navigation
     nextSelector: '#pagination #next_page' # selector for the NEXT link (to page 2)
     itemSelector: '.brick' # selector for all items you'll retrieve
-    loading:
-      finishedMsg: 'No more pages to load.'
-      img: "http://i.imgur.com/6RMhx.gif"
-
+    maxPage: $container.data('totalPages')
+    loading: {}
+    
   # trigger Masonry as a callback
   , (newElements) ->
     

@@ -8,7 +8,7 @@ class Page::ContentsController < Page::ApplicationController
   end
 
   def gallery
-    @image_pages = @child_pages.images.preload(embeddable: :image).search(@query).page(params[:page]).per(15)
+    @image_pages = @child_pages.images.preload(embeddable: :image).search(@query).page(params[:page]).per(16)
     respond_with_page
   end
 
