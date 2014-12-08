@@ -44,6 +44,7 @@ gem 'builder'
 gem 'coffeebeans'
 gem 'turbolinks'
 gem 'country_select'
+gem 'nprogress-rails'
 
 # Assets
 # gem 'sprockets', '2.11.0' # newer versions do not work properly

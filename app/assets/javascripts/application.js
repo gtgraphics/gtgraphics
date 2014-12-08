@@ -6,4 +6,7 @@
 //= require masonry/jquery.infinitescroll.min
 //= require masonry/modernizr-transitions
 
+//= require nprogress
+//= require nprogress-turbolinks
+
 //= require_tree ./application

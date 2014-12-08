@@ -207,6 +207,7 @@ GEM
     net-ssh (2.9.1)
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
+    nprogress-rails (0.1.6.3)
     oauth (0.4.7)
     oauth2 (0.9.3)
       faraday (>= 0.8, < 0.10)
@@ -373,6 +374,7 @@ DEPENDENCIES
   mini_magick
   miro
   nokogiri
+  nprogress-rails
   pg
   pry-byebug
   pry-rails
