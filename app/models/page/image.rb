@@ -20,6 +20,20 @@ class Page < ActiveRecord::Base
     delegate :title, to: :image, allow_nil: true
     delegate :format, to: :image
 
+    def previous_sibling
+      @previous_sibling ||= begin
+        sibling = page.left_sibling
+        sibling if sibling.try(:image?)
+      end
+    end
+
+    def next_sibling
+      @next_sibling ||= begin
+        sibling = page.right_sibling
+        sibling if sibling.try(:image?)
+      end
+    end
+
     def to_liquid
       { 'image' => image }
     end

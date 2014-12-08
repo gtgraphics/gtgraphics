@@ -1,0 +1,16 @@
+@import 'bootstrap_config';
+
+fieldset {
+  legend {
+    text-transform: uppercase;
+    font-weight: 300;
+    font-size: 18px;
+    color: $gray;
+    border-bottom: none;
+    margin-bottom: 10px;
+  }
+
+  + fieldset {
+    margin-top: $grid-gutter-width;
+  }
+}

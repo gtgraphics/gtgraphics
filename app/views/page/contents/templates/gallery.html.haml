@@ -9,9 +9,10 @@
 .page-body
   #gallery.transitions-enabled.infinite-scroll.clearfix.row{data: { total_pages: @image_pages.total_pages }}
     - @image_pages.each do |image_page|
-      .brick.col-sm-4
-        = link_to image_page do
-          = image_tag attached_asset_path(image_page.embeddable.image, :brick), class: 'img-responsive', alt: image_page.title
+      .brick.col-xs-4
+        = link_to image_page, class: 'gallery-link' do
+          = image_tag attached_asset_path(image_page.embeddable.image, :brick), class: 'gallery-image img-responsive', alt: image_page.title
+          %h3.sr-only= image_page.title
 
   = paginate @image_pages
 

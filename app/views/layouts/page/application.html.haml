@@ -23,10 +23,10 @@
     %link{rel: 'alternate', hreflang: translated_locale, href: page_url(@page, locale: translated_locale)}
 
 - content_for :content do
-  = facebook_sdk_anchor unless Rails.env.development?
+  = facebook_sdk_anchor
 
   #background{class: page.root? ? 'homepage' : 'subpage'}
-    = image_tag background_url
+    = image_tag background_url, alt: background_image.title
 
   .container
 

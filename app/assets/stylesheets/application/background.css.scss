@@ -12,8 +12,8 @@
   min-width: 100%;
   min-height: 100%;
 
-  @media (max-width: $screen-md-min) {
-    background-image: none !important;
+  @media (max-width: $screen-sm-max) {
+    display: none;
   }
 
   &.subpage {

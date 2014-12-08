@@ -63,6 +63,9 @@ de:
     pages:
       embeddable:
         error: Der Editor konnte nicht geladen werden.
+      gallery:
+        loading_message: Bilder werden geladen...
+        finished_message: Alle Bilder wurden geladen. 
 
     select2:
       no_matches: Es wurden keine Ergebnisse gefunden.

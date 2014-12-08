@@ -4,8 +4,11 @@
     .page-header
       %h1= image.title
 
-    = link_to page_path(page, format: @image.format) do
+    - if page.embeddable.next_sibling.nil?
       = image_tag attached_asset_path(@image, :custom), alt: image.title, class: 'img-responsive'
+    - else
+      = link_to page_path(page.embeddable.next_sibling) do
+        = image_tag attached_asset_path(@image, :custom), alt: image.title, class: 'img-responsive'
 
 
     .page-body
@@ -13,10 +16,10 @@
       .row
         .col-sm-8
           - if image.description.present?
-            = fieldset 'Description' do
+            = fieldset Image.human_attribute_name(:description) do
               = raw image.description
 
-          = fieldset 'Artist' do
+          = fieldset Image.human_attribute_name(:artist) do
             .clearfix
               .pull-left
                 = image.author.gravatar size: 45
@@ -24,7 +27,7 @@
               %br
               %span.text-muted= image.taken_at
 
-          = fieldset 'Comments' do
+          = fieldset Page::Image.human_attribute_name(:comments) do
             = page.embeddable.facebook_comments colorscheme: :dark
 
         .col-sm-4
@@ -33,7 +36,7 @@
               %li= page.embeddable.facebook_like_button style: :button_count
               %li= link_to page.permalink, page.permalink
 
-          = fieldset 'Buy' do
+          = fieldset Image.human_attribute_name(:shop_urls) do
             = button_link_to buy_image_path(page.path), type: :primary, block: true do
               = prepend_icon :dollar, "Contact #{image.author.first_name}", fixed_width: true
             = page.embeddable.shop_links

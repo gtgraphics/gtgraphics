@@ -23,6 +23,7 @@
 
   .navbar-nav {
     > li > a { 
+      outline: none;
       color: #666;
       &:hover, &:focus {
         color: lighten(#666, 20%);

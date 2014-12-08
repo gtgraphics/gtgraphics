@@ -4,4 +4,52 @@
   .brick {
     margin-bottom: $grid-gutter-width;
   }
+
+  .gallery-link {
+    outline: none;
+    display: block;
+    overflow: hidden;
+
+    .gallery-image-title {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 15px;
+      right: 15px;
+      font-weight: 300;
+      color: rgba($text-color, 0.8);
+      opacity: 0;
+      transition: all 400ms ease-out;
+      text-align: center;
+      font-size: 18px;
+      text-shadow: 0 1px 4px rgba(black, 0.8);
+      background: linear-gradient(to bottom, rgba(black, 0.5) 0%, rgba(black, 0) 20%);
+    }
+
+    .gallery-image {
+      transition: all 800ms ease-out;
+    }
+
+    &:hover, &:focus {
+      .gallery-image-title {
+        opacity: 1;
+      }
+      .gallery-image {
+        transform: scale(1.1);
+      }
+    }
+  }
+}
+
+.masonry,
+.masonry .masonry-brick {
+  transition-duration: 400ms;
+}
+
+.masonry {
+  transition-property: height, width;
+}
+
+.masonry .masonry-brick {
+  transition-property: left, right, top;
 }

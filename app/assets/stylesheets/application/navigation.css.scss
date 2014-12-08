@@ -82,6 +82,7 @@
     .navbar-nav {
       > li {
         > a {
+          outline: none;
           color: white;
           font-weight: bold;
           @media (min-width: $screen-lg-min) {
