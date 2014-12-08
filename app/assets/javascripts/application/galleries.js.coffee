@@ -1,16 +1,16 @@
 $(document).ready ->
 
-  $container = $('#gallery')
+  $container = $('#gallery').css(opacity: 0)
 
   $container.imagesLoaded ->
     $container.masonry
       itemSelector: '.brick'
       columnWidth: (containerWidth) ->
-        bla = Math.round(containerWidth / 3)
-        console.log containerWidth
-        console.log bla
-        return bla
+        Math.round(containerWidth / 3)
       gutter: 20
+      transitionDuration: '200ms'
+    $container.animate(opacity: 1)
+
 
   $container.infinitescroll
     navSelector: '#pagination' # selector for the paged navigation
@@ -29,5 +29,5 @@ $(document).ready ->
     $newElems.imagesLoaded ->
       
       # show elems now they're ready
-      $newElems.animate opacity: 1
-      $container.masonry 'appended', $newElems, true
+      $newElems.animate(opacity: 1)
+      $container.masonry('appended', $newElems, true)
