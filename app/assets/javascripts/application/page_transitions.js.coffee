@@ -1,5 +1,6 @@
 TRANSITION_DURATION = 200
 
+
 $(document).on 'page:before-unload', ->
   $('#page_content').animate(opacity: 0)
   $('#background').animate(opacity: 0)

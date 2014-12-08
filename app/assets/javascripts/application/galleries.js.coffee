@@ -17,7 +17,7 @@ $(document).ready ->
     nextSelector: '#pagination #next_page' # selector for the NEXT link (to page 2)
     itemSelector: '.brick' # selector for all items you'll retrieve
     maxPage: $gallery.data('totalPages')
-    loading: {}
+    loading: { }
     
   # trigger Masonry as a callback
   , (newElements) ->

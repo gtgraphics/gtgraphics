@@ -1,5 +1,7 @@
+@import 'bootstrap_config';
+
 #gallery {
   .brick {
-    margin-bottom: 30px;
+    margin-bottom: $grid-gutter-width;
   }
 }
