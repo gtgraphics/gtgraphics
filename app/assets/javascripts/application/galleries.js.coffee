@@ -14,14 +14,23 @@ $(document).ready ->
 
   if $gallery.length
 
-    scrollOptions = {
+    scrollOptions =
       navSelector: '#pagination' # selector for the paged navigation
       nextSelector: '#pagination #next_page' # selector for the NEXT link (to page 2)
       itemSelector: '.brick' # selector for all items you'll retrieve
       maxPage: $gallery.data('totalPages')
-      loading: {}
-    }
+      loading:
+        start: ->
+          NProgress.start()
+          scroller = $gallery.data('infinitescroll')
+          scroller.beginAjax(scroller.options)
+        finished: ->
+          scroller = $gallery.data('infinitescroll')
+          NProgress.done()
+      errorCallback: (state) ->
+        NProgress.done()
 
+    $(scrollOptions.navSelector).hide()
 
     $gallery.infinitescroll(scrollOptions,
       # trigger Masonry as a callback
@@ -39,6 +48,8 @@ $(document).ready ->
           $newElems.animate(opacity: 1)
           $gallery.masonry('appended', $newElems, true)
     )
+
+    # Dirty hack because infinite scroll does not seem to provide any kind of hook
 
 
 $(document).on 'page:fetch', ->
