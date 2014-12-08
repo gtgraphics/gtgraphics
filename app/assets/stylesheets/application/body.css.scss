@@ -9,9 +9,11 @@ body {
   padding-bottom: 80px;
 }
 
-#page_content {
+#page_content_wrapper {
   background-color: $content-bg;
+}
 
+#page_content {
   .page-body {
     // background-color: rgb(30, 30, 30);
     padding: $content-padding;

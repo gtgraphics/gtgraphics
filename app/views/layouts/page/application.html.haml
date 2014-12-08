@@ -25,7 +25,8 @@
 - content_for :content do
   = facebook_sdk_anchor unless Rails.env.development?
 
-  #background{class: page.root? ? 'homepage' : 'subpage', style: "background-image: url(#{background_url})"}
+  #background{class: page.root? ? 'homepage' : 'subpage'}
+    = image_tag background_url
 
   .container
 
@@ -54,14 +55,15 @@
                     = prepend_flag_icon locale, translate(locale, scope: :languages, locale: locale), caption_html:{ class: 'sr-only' }
 
           - unless @page.homepage?
-            #page_content
-              = render_flashes
-              = render 'breadcrumbs'
+            #page_content_wrapper
+              #page_content
+                = render_flashes
+                = render 'breadcrumbs'
 
-              - if content_for? :page_content
-                = yield :page_content
-              - else
-                = yield
+                - if content_for? :page_content
+                  = yield :page_content
+                - else
+                  = yield
 
   = render 'footer'
 

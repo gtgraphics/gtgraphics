@@ -1,22 +1,22 @@
 $(document).ready ->
 
-  $container = $('#gallery').css(opacity: 0)
+  $gallery = $('#gallery').css(opacity: 0)
 
-  $container.imagesLoaded ->
-    $container.masonry
+  $gallery.imagesLoaded ->
+    $gallery.masonry
       itemSelector: '.brick'
       columnWidth: (containerWidth) ->
         Math.round(containerWidth / 3)
       gutter: 20
       transitionDuration: '200ms'
-    $container.animate(opacity: 1)
+    $gallery.animate(opacity: 1)
 
 
-  $container.infinitescroll
+  $gallery.infinitescroll
     navSelector: '#pagination' # selector for the paged navigation
     nextSelector: '#pagination #next_page' # selector for the NEXT link (to page 2)
     itemSelector: '.brick' # selector for all items you'll retrieve
-    maxPage: $container.data('totalPages')
+    maxPage: $gallery.data('totalPages')
     loading: {}
     
   # trigger Masonry as a callback
@@ -30,4 +30,4 @@ $(document).ready ->
       
       # show elems now they're ready
       $newElems.animate(opacity: 1)
-      $container.masonry('appended', $newElems, true)
+      $gallery.masonry('appended', $newElems, true)
