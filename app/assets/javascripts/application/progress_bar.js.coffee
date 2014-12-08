@@ -1,8 +1,7 @@
-NProgress.configure({
+NProgress.configure
   showSpinner: false,
   ease: 'ease',
   speed: 500
-});
 
 $(document).ready ->
   NProgress.start() 
