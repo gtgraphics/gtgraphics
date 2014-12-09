@@ -1,13 +1,6 @@
 $(document).on 'page:change', ->
   $gallery = $('#gallery').css(opacity: 0)
 
-  $gallery.masonry
-    itemSelector: '.gallery-item'
-    columnWidth: (containerWidth) ->
-      Math.floor(containerWidth / 3.0)
-    gutter: 20
-    animate: false
-
   # Prepare infinite scroller
   scrollOptions =
     navSelector: '#pagination' # selector for the paged navigation
@@ -27,19 +20,30 @@ $(document).on 'page:change', ->
   $(scrollOptions.navSelector).hide()
 
   # Image 
-  $gallery.imagesLoaded().always ->
 
+  $gallery.find('img').load ->
+    console.log 'loaded single img'
+
+  $gallery.allImagesLoaded ->
+    console.log 'LOADED!'
+
+  $gallery.allImagesLoaded ->
     $gallery.animate(opacity: 1)
-    $gallery.masonry('reload')
+    $gallery.masonry
+      itemSelector: '.gallery-item'
+      columnWidth: (containerWidth) ->
+        Math.floor(containerWidth / 3.0)
+      gutter: 20
+      animate: false
 
-    # Apply infinite scroller to masonry
-    $gallery.infinitescroll scrollOptions, (html) ->
-      $appendedElements = $(html).css(opacity: 0)
-      $appendedElements.imagesLoaded().always ->
-        NProgress.done()
-        $appendedElements.animate(opacity: 1)
-        $gallery.append($appendedElements)
-        $gallery.masonry('appended', $appendedElements, true)
+  # Apply infinite scroller to masonry
+  $gallery.infinitescroll scrollOptions, (html) ->
+    $appendedElements = $(html).css(opacity: 0)
+    $appendedElements.allImagesLoaded ->
+      NProgress.done()
+      $appendedElements.animate(opacity: 1)
+      $gallery.append($appendedElements)
+      $gallery.masonry('appended', $appendedElements, true)
 
 
 $(document).on 'page:before-unload page:receive', ->
