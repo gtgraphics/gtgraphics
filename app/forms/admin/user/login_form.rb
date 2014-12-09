@@ -11,7 +11,11 @@ class Admin::User::LoginForm < Form
   validates :password, presence: true
   validate :verify_credentials_and_load_user, if: [:login?, :password?]
 
-  before_validation :sanitize_email_address, if: :login_via_email?
+  before_validation :sanitize_login
+
+  def email
+    login_via_email? ? login : "#{login}@#{EMAIL_DOMAIN}"
+  end
 
   def login_via_email?
     login? && login.include?('@')
@@ -19,15 +23,10 @@ class Admin::User::LoginForm < Form
 
   private
   def sanitize_email_address
-    self.email = email.downcase
+    self.login = login.downcase
   end
 
-  def verify_credentials_and_load_user
-    if login_via_email?
-      email = self.login
-    else
-      email = "#{login}@#{EMAIL_DOMAIN}"
-    end 
+  def verify_credentials_and_load_user 
     self.user = User.authenticate(email, password)
     errors.add :base, :invalid if user.nil?
   end
