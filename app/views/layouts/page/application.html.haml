@@ -25,8 +25,9 @@
 - content_for :content do
   = facebook_sdk_anchor
 
-  #background{class: page.root? ? 'homepage' : 'subpage'}
-    = image_tag background_url, alt: background_image.title
+  - if background_image
+    #background{class: page.root? ? 'homepage' : 'subpage'}
+      = image_tag background_url, alt: background_image.title
 
   .container
 

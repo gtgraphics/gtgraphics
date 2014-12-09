@@ -119,6 +119,7 @@ de:
         aspect_ratio: Seitenverhältnis
         asset: Bilddatei
         dimensions: Maße
+        pages: Assoziierte Seiten
         pages_count: Seiten
         pixels_count: Pixelzahl
         crop_x: X-Position
@@ -141,6 +142,9 @@ de:
         mygall_url: MyGall
         redbubble_url: RedBubble
         artflakes_url: Artflakes
+        propagate_changes_to_pages: Änderungen für assoziierte Seiten übernehmen
+        propagate_changes_to_page: Änderungen für assoziierte Seite übernehmen
+        propagate_changes_to_n_pages: 'Änderungen für %{count} assoziierte Seiten übernehmen'
       image/style:
         asset: Bilddatei
         crop_x: X-Position

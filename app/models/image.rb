@@ -57,6 +57,7 @@ class Image < ActiveRecord::Base
 
   # before_save :set_predefined_style_dimensions
   before_validation :set_default_title, on: :create
+  after_update :propagate_changes_to_pages!, if: :propagate_changes_to_pages?
 
   def dominant_colors
     @dominant_colors ||= Miro::DominantColors.new(asset.custom.path)
@@ -91,13 +92,15 @@ class Image < ActiveRecord::Base
 
   # Page Propagation
 
-  after_update :propagate_changes_to_pages!, if: :propagate_changes_to_pages?
+  def propagate_changes_to_pages?
+    @propagate_changes_to_pages = true unless defined? @propagate_changes_to_pages
+    @propagate_changes_to_pages
+  end
+  alias_method :propagate_changes_to_pages, :propagate_changes_to_pages?
 
-  attr_reader :propagate_changes_to_pages
-  alias_method :propagate_changes_to_pages?, :propagate_changes_to_pages
 
-  def propagate_to_pages=(propagate)
-    @propagate_to_pages = propagate.to_b
+  def propagate_changes_to_pages=(propagate)
+    @propagate_changes_to_pages = propagate.to_b
   end
 
   private
@@ -109,12 +112,14 @@ class Image < ActiveRecord::Base
 
   def propagate_changes_to_pages!
     transaction do
-      translations.each do |image_translation|
-        Globalize.with_locale(image_translation.locale) do
-	  pages.each do |page|
+      pages.each do |page|
+        translations.each do |image_translation|
+          Globalize.with_locale(image_translation.locale) do
             page.title = image_translation.title
           end
         end
+        page.set_next_available_slug
+        page.save!
       end
     end
   end

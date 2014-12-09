@@ -238,7 +238,7 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def image_params
     params.require(:image).permit(
-      :asset, :title, :description, :author_id, :tag_tokens,
+      :asset, :title, :description, :author_id, :tag_tokens, :propagate_changes_to_pages,
       *Image.available_shop_providers.map { |provider| :"#{provider}_url" }
     )
   end

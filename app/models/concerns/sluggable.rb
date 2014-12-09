@@ -45,7 +45,6 @@ module Sluggable
       end
     end
 
-    private
     def set_slug
       if source_attribute = self.class.slug_options[:from]
         self.send("#{self.class.slug_attribute}=", self.generate_slug)
