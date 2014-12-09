@@ -1,4 +1,4 @@
-$(document).on 'page:load page:restore', ->
+$(document).on 'page:change', ->
 
   $gallery = $('#gallery').css(opacity: 0)
 
@@ -6,7 +6,7 @@ $(document).on 'page:load page:restore', ->
     $gallery.masonry
       itemSelector: '.brick'
       columnWidth: (containerWidth) ->
-        Math.round((containerWidth - 2) / 3)
+        Math.round(containerWidth / 3)
       gutter: 20
       animate: false
     $gallery.animate(opacity: 1)
@@ -23,12 +23,12 @@ $(document).on 'page:load page:restore', ->
           scroller.beginAjax(scroller.options)
         finished: ->
           NProgress.done()
+          $(window).triggerHandler('resize')
       errorCallback: (state) ->
         NProgress.done()
+        $(window).triggerHandler('resize')
 
     $(scrollOptions.navSelector).hide()
-
-    $(window).trigger('resize')
 
     $gallery.infinitescroll(scrollOptions,
       # trigger Masonry as a callback
@@ -45,8 +45,7 @@ $(document).on 'page:load page:restore', ->
           # show elems now they're ready
           $newElems.animate(opacity: 1)
           $gallery.masonry('appended', $newElems, true)
-          $(window).trigger('resize')
     )
 
-$(document).on 'page:fetch', ->
+$(document).on 'page:before-unload', ->
   $('#gallery').infinitescroll('destroy')
