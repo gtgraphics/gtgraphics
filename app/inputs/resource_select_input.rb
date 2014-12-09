@@ -14,7 +14,8 @@ class ResourceSelectInput < SimpleForm::Inputs::StringInput
         paginated: paginated?,
         include_blank: include_blank,
         multiple: multiple?,
-        allow_non_existing: allow_non_existing?
+        allow_non_existing: allow_non_existing?,
+        token_separators: token_separators
       }
     }.deep_merge(opts)
   end
@@ -42,5 +43,9 @@ class ResourceSelectInput < SimpleForm::Inputs::StringInput
 
   def url
     raise NotImplementedError
+  end
+
+  def token_separators
+    nil
   end
 end

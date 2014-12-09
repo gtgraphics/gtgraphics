@@ -67,6 +67,9 @@ jQuery.prepare ->
         else
           Select2.util.escapeMarkup(result.text)
 
+    if $select.data('tokenSeparators')
+      options.tokenSeparators = $select.data('tokenSeparators')
+
     if $select.data('allowNonExisting')
       options.createSearchChoice = (term, data) ->
         if $(data).filter(->

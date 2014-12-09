@@ -93,7 +93,7 @@ class Image < ActiveRecord::Base
   # Page Propagation
 
   def propagate_changes_to_pages?
-    @propagate_changes_to_pages = true unless defined? @propagate_changes_to_pages
+    @propagate_changes_to_pages = false unless defined? @propagate_changes_to_pages
     @propagate_changes_to_pages
   end
   alias_method :propagate_changes_to_pages, :propagate_changes_to_pages?

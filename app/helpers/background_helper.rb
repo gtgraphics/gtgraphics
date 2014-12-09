@@ -1,6 +1,8 @@
 module BackgroundHelper
+  BACKGROUND_TAG = 'Layout'
+
   def background_image
-    @background_image ||= Image.tagged('Wallpaper').sample
+    @background_image ||= Image.tagged(BACKGROUND_TAG).sample
   end 
 
   def background_url

@@ -92,6 +92,7 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def edit
+    @image.propagate_changes_to_pages = true
     respond_with :admin, @image
   end
 

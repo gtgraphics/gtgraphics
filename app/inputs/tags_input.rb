@@ -22,4 +22,8 @@ class TagsInput < ResourceSelectInput
   def allow_non_existing?
     true
   end
+
+  def token_separators
+    [',']
+  end
 end
