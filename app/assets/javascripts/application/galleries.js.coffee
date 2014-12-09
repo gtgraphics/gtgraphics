@@ -1,4 +1,4 @@
-$(document).ready ->
+$(document).on 'page:load page:restore', ->
 
   $gallery = $('#gallery').css(opacity: 0)
 
@@ -6,13 +6,10 @@ $(document).ready ->
     $gallery.masonry
       itemSelector: '.brick'
       columnWidth: (containerWidth) ->
-        Math.round(containerWidth / 3)
+        Math.round((containerWidth - 2) / 3)
       gutter: 20
       animate: false
     $gallery.animate(opacity: 1)
-
-    # This is a Fix for the Firefox Issue with rendering Masonry
-    $(window).trigger('resize')
 
     scrollOptions =
       navSelector: '#pagination' # selector for the paged navigation
@@ -25,12 +22,13 @@ $(document).ready ->
           scroller = $gallery.data('infinitescroll')
           scroller.beginAjax(scroller.options)
         finished: ->
-          scroller = $gallery.data('infinitescroll')
           NProgress.done()
       errorCallback: (state) ->
         NProgress.done()
 
     $(scrollOptions.navSelector).hide()
+
+    $(window).trigger('resize')
 
     $gallery.infinitescroll(scrollOptions,
       # trigger Masonry as a callback
@@ -47,6 +45,7 @@ $(document).ready ->
           # show elems now they're ready
           $newElems.animate(opacity: 1)
           $gallery.masonry('appended', $newElems, true)
+          $(window).trigger('resize')
     )
 
 $(document).on 'page:fetch', ->

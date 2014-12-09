@@ -7,3 +7,8 @@ $(document).ready ->
   $background = $('#background')
   $background.imagesLoaded().always ->
     $background.addClass('in')
+
+$(document).on 'page:restore', ->
+  $background = $('#background')
+  $background.imagesLoaded().always ->
+    $background.addClass('in')
