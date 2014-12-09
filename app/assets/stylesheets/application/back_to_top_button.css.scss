@@ -7,8 +7,6 @@
   position: fixed;
   bottom: 40px;
   right: 40px;
-  color: rgba($text-color, 0.3);
-  text-shadow: 0 0 2px rgba(black, 0.6);
 
   &.affix-top {
     opacity: 0;
@@ -19,7 +17,12 @@
     opacity: 1;
   }
 
-  &:hover {
-    color: rgba($text-color, 0.8)
+  a {
+    display: block;
+    color: rgba($text-color, 0.3);
+    text-shadow: 0 0 2px rgba(black, 0.5);
+    &:hover {
+     color: rgba($text-color, 0.8)
+    }
   }
 }
