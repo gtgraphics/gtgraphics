@@ -27,6 +27,7 @@
     }
 
     .gallery-image {
+      display: block; // needed as FF renders bullshit
       transition: all 800ms ease-out;
       min-width: 100%;
     }
