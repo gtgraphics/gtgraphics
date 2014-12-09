@@ -22,7 +22,7 @@ class Admin::User::LoginForm < Form
   end
 
   private
-  def sanitize_email_address
+  def sanitize_login
     self.login = login.downcase
   end
 
