@@ -6,7 +6,7 @@ $(document).on 'page:change', ->
     $gallery.masonry
       itemSelector: '.brick'
       columnWidth: (containerWidth) ->
-        Math.round(containerWidth / 3)
+        Math.floor(containerWidth / 3.0)
       gutter: 20
       animate: false
     $gallery.animate(opacity: 1)
