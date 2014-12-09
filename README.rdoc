@@ -3,3 +3,10 @@
 {<img src="https://codeclimate.com/github/gtgraphics/gtgraphics.png" />}[https://codeclimate.com/github/gtgraphics/gtgraphics]
 
 A project presentation and portfolio web site.
+
+== Requirements
+
+* Ruby 2.1.0
+* PostgreSQL
+* ImageMagick and RMagick:
+  sudo apt-get install imagemagick libmagickwand libmagickwand-dev

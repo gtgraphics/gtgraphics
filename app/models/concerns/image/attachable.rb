@@ -65,15 +65,15 @@ class Image < ActiveRecord::Base
       end
 
       def set_geometry
-        custom_img = MiniMagick::Image.open(asset.custom.path)
-        self.width = custom_img[:width]
-        self.height = custom_img[:height]
+        img = Magick::Image.read(asset.custom.path).first
+        self.width = img.columns
+        self.height = img.rows
       end
 
       def set_original_geometry
-        original_img = MiniMagick::Image.open(asset.path)
-        self.original_width = original_img[:width]
-        self.original_height = original_img[:height]
+        img = Magick::Image.read(asset.path).first
+        self.original_width = img.columns
+        self.original_height = img.rows
       end
     end
   end

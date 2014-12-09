@@ -27,7 +27,8 @@ gem 'globalize'
 gem 'state_machine'
 gem 'ransack'
 gem 'virtus'
-gem 'mini_magick'
+#gem 'mini_magick'
+gem 'rmagick'
 gem 'carrierwave'
 
 # Presenters
