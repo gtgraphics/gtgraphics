@@ -21,12 +21,6 @@ $(document).on 'page:change', ->
 
   # Image 
 
-  $gallery.find('img').load ->
-    console.log 'loaded single img'
-
-  $gallery.allImagesLoaded ->
-    console.log 'LOADED!'
-
   $gallery.allImagesLoaded ->
     $gallery.animate(opacity: 1)
     $gallery.masonry
@@ -40,10 +34,10 @@ $(document).on 'page:change', ->
   $gallery.infinitescroll scrollOptions, (html) ->
     $appendedElements = $(html).css(opacity: 0)
     $appendedElements.allImagesLoaded ->
-      NProgress.done()
       $appendedElements.animate(opacity: 1)
       $gallery.append($appendedElements)
-      $gallery.masonry('appended', $appendedElements, true)
+      $gallery.masonry 'appended', $appendedElements, ->
+        NProgress.done()
 
 
 $(document).on 'page:before-unload page:receive', ->
