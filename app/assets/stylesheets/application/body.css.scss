@@ -28,4 +28,8 @@ body {
       padding: $content-padding-lg;
     }
   }
+
+  .page-header + .page-body {
+    padding-top: 0;
+  }
 }
