@@ -28,6 +28,7 @@
 
     .gallery-image {
       transition: all 800ms ease-out;
+      min-width: 100%;
     }
 
     &:hover, &:focus {
