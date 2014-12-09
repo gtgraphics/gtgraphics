@@ -8,11 +8,7 @@ $(document).on 'page:change', ->
     gutter: 20
     animate: false
 
-  $gallery.imagesLoaded().always ->
-    $gallery.animate(opacity: 1)
-    $gallery.masonry('reload')
-    $(window).trigger('resize')
-
+  # Prepare infinite scroller
   scrollOptions =
     navSelector: '#pagination' # selector for the paged navigation
     nextSelector: '#pagination #next_page' # selector for the NEXT link (to page 2)
@@ -30,12 +26,22 @@ $(document).on 'page:change', ->
 
   $(scrollOptions.navSelector).hide()
 
-  $gallery.infinitescroll scrollOptions, (html) ->
-    $appendedElements = $(html).css(opacity: 0)
-    $appendedElements.imagesLoaded().always ->
-      NProgress.done()
-      $appendedElements.animate(opacity: 1)
-      $gallery.masonry('appended', $appendedElements, true)
+  # Image 
+  $gallery.imagesLoaded().always ->
+
+    $gallery.animate(opacity: 1)
+    $gallery.masonry('reload')
+
+    # Apply infinite scroller to masonry
+    $gallery.infinitescroll scrollOptions, (html) ->
+      $appendedElements = $(html).css(opacity: 0)
+      $appendedElements.imagesLoaded().always ->
+        NProgress.done()
+        $appendedElements.animate(opacity: 1)
+        $gallery.append($appendedElements)
+        $gallery.masonry('appended', $appendedElements, true)
+
 
 $(document).on 'page:before-unload page:receive', ->
-  $('#gallery').infinitescroll('destroy')
+  $('#gallery').masonry('destroy').infinitescroll('destroy')
+
