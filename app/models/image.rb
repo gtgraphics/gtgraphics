@@ -63,7 +63,7 @@ class Image < ActiveRecord::Base
   end
 
   def manipulated?
-    cropped? or resized? or false
+    cropped? || resized?
   end
 
   def to_attachment(version = :custom)
@@ -89,10 +89,33 @@ class Image < ActiveRecord::Base
     title
   end
 
+  # Page Propagation
+
+  after_update :propagate_changes_to_pages!, if: :propagate_changes_to_pages?
+
+  attr_reader :propagate_changes_to_pages
+  alias_method :propagate_changes_to_pages?, :propagate_changes_to_pages
+
+  def propagate_to_pages=(propagate)
+    @propagate_to_pages = propagate.to_b
+  end
+
   private
   def set_default_title
     if title.blank? and original_filename.present?
       self.title = File.basename(original_filename, '.*').titleize
+    end
+  end
+
+  def propagate_changes_to_pages!
+    transaction do
+      translations.each do |image_translation|
+        Globalize.with_locale(image_translation.locale) do
+	  pages.each do |page|
+            page.title = image_translation.title
+          end
+        end
+      end
     end
   end
 end
