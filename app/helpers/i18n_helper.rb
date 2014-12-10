@@ -3,6 +3,14 @@ module I18nHelper
     I18n.available_locales.sort_by { |locale| translate(locale, scope: :languages) }
   end
 
+  def next_locale
+    @next_locale ||= begin
+      index = I18n.available_locales.index(I18n.locale).next % I18n.available_locales.count
+      locale = I18n.available_locales[index]
+      locale if locale != I18n.locale
+    end
+  end
+
   def i18n_javascript_file(*locales)
     fallbacks = I18n.try(:fallbacks)
     locales = locales.flatten.sort

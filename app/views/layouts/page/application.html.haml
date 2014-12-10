@@ -41,21 +41,7 @@
           .sr-only GT Graphics
 
         #page_wrapper
-          %nav.navbar.navbar-top{role: 'navigation'}
-            .navbar-header
-              - unless page.root?
-                %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
-                  = prepend_icon :bars, translate('helpers.links.menu'), fixed_width: true, caption_html: { class: 'sr-only' }
-
-            .navbar-collapse{class: page.root? ? nil : 'collapse'}
-              %ul.nav.navbar-nav
-                // = active_link_to icon(:home, size: :lg), :root, wrap_tag: :li, active: :exclusive
-                - menu_items.each do |page|
-                  = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page)
-              %ul.nav.navbar-nav.navbar-right
-                - available_locales.sort_by { |locale| translate(locale, scope: :languages, locale: locale) }.each do |locale|
-                  = active_link_to page_path(@page, locale: locale), wrap_tag: :li, hreflang: locale, lang: locale, active: locale == I18n.locale, title: translate(locale, scope: :languages, locale: locale) do
-                    = prepend_flag_icon locale, translate(locale, scope: :languages, locale: locale), caption_html:{ class: 'sr-only' }
+          = render 'navbar'
 
           - unless @page.homepage?
             #page_content_wrapper

@@ -216,7 +216,7 @@ $input-group-addon-border-color: $input-border;
 //## Dropdown menu container and contents.
 
 //** Background for the dropdown menu.
-$dropdown-bg:                    #fff;
+$dropdown-bg:                    $text-color;
 //** Dropdown menu `border-color`.
 $dropdown-border:                rgba(0,0,0,.15);
 //** Dropdown menu `border-color` **for IE8**.

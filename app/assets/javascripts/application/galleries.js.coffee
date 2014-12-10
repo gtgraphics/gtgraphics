@@ -63,7 +63,6 @@ $(document).on 'page:change', ->
     $appendedElements = $(html).css(opacity: 0)
     $appendedElements.allImagesLoaded ->
       $appendedElements.animate(opacity: 1)
-      $gallery.append($appendedElements)
       $gallery.masonry 'appended', $appendedElements, ->
         NProgress.done()
 
