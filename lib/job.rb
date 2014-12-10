@@ -8,7 +8,7 @@ module Job
     class_attribute :queue_name, :max_attempts, :max_run_time
 
     %w(before success error after failure).each do |method|
-      instance_eval %{
+      instance_eval <<-RUBY
         def #{method}(method_name = nil, &block)
           _add_callback(:#{method}, :push, method_name, &block)
         end
@@ -20,7 +20,7 @@ module Job
         def skip_#{method}(method_name)
           _remove_callback(:#{method}, method_name)
         end
-      }
+      RUBY
     end
   end
 
