@@ -86,7 +86,8 @@ gem 'pry-rails'
 gem 'countries'
 
 # Image Processing
-gem 'exifr'
+# gem 'exifr'
+gem 'mini_exiftool'
 gem 'miro' # dominant color detection
 
 # Deployment

@@ -7,7 +7,8 @@ class Image < ActiveRecord::Base
     included do
       store :exif_data
 
-      before_save :set_exif_data, if: [:asset_changed?, :exif_capable?]
+      before_save :write_copyright, if: -> { exif_capable? and (asset_changed? or author_id_changed?) }
+      before_save :cache_exif_data, if: [:exif_capable?, :asset_changed?]
     end
 
     module ClassMethods
@@ -20,25 +21,40 @@ class Image < ActiveRecord::Base
       end
     end
 
-    def camera
-      exif_data[:model]
+    def exif
+      @exif ||= begin
+        raise 'Document is not capable to contain Exif metadata' unless exif_capable?
+        MiniExiftool.new(asset.path, replace_invalid_chars: '')
+      end
     end
 
     def exif_capable?
       content_type.in?(self.class.exif_capable_content_types)
     end
 
+    # Accessors for commonly accessed data
+
+    def camera
+      exif_data['Model']
+    end
+
     def software
-      exif_data[:software]
+      exif_data['Software']
     end
 
     def taken_at
-      (exif_data[:date_time_original] || exif_data[:date_time]).try(:to_datetime)
+      (exif_data['DateTimeOriginal'] || exif_data['DateTime']).try(:to_datetime)
     end
     
     private
-    def set_exif_data
-      self.exif_data = EXIFR::JPEG.new(asset.path).to_hash rescue nil
+    def cache_exif_data
+      self.exif_data = exif.to_hash
+    end
+
+    def write_copyright
+      year = taken_at.try(:year) || Date.today.year
+      exif.copyright = [author.name, author.email, year].join(', ')
+      exif.save!
     end
   end
 end

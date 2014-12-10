@@ -8,5 +8,5 @@ A project presentation and portfolio web site.
 
 * Ruby 2.1.0
 * PostgreSQL
-* ImageMagick and RMagick:
-  sudo apt-get install imagemagick libmagickwand libmagickwand-dev
+* ImageMagick: sudo apt-get install imagemagick libmagickwand libmagickwand-dev
+* ExifTool: sudo apt-get install exiftool
