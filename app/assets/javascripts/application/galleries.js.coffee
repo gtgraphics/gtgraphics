@@ -21,51 +21,55 @@ $(window).resize ->
     $gallery.masonry('reload')
 
 $(document).on 'page:change', ->
-  setColumns()
+  $gallery = $(GALLERY_SELECTOR)
 
-  $gallery = $(GALLERY_SELECTOR).hide().css(opacity: 0)
+  if $gallery.length
+    $gallery.hide().css(opacity: 0)
 
-  # Prepare infinite scroller
-  scrollerOptions =
-    navSelector: PAGINATION_SELECTOR # selector for the paged navigation
-    nextSelector: NEXT_PAGE_SELECTOR # selector for the NEXT link (to page 2)
-    itemSelector: GALLERY_ITEM_SELECTOR # selector for all items you'll retrieve
-    maxPage: $gallery.data('totalPages')
-    loading:
-      start: ->
-        NProgress.start()
-        Loader.start()
-        scroller = $gallery.data('infinitescroll')
-        scroller.beginAjax(scroller.options)
-      finished: ->
+    # Determine how many gallery columns should be displayed
+    setColumns()
+
+    # Prepare infinite scroller
+    scrollerOptions =
+      navSelector: PAGINATION_SELECTOR # selector for the paged navigation
+      nextSelector: NEXT_PAGE_SELECTOR # selector for the NEXT link (to page 2)
+      itemSelector: GALLERY_ITEM_SELECTOR # selector for all items you'll retrieve
+      maxPage: $gallery.data('totalPages')
+      loading:
+        start: ->
+          NProgress.start()
+          Loader.start()
+          scroller = $gallery.data('infinitescroll')
+          scroller.beginAjax(scroller.options)
+        finished: ->
+          # currently not used
+      errorCallback: (state) ->
         NProgress.done()
         Loader.done()
-    errorCallback: (state) ->
-      NProgress.done()
-      Loader.start()
 
-  $(scrollerOptions.navSelector).hide()
 
-  # Image
-  Loader.start()
+    $(scrollerOptions.navSelector).hide()
 
-  $gallery.allImagesLoaded ->
-    Loader.done()
+    # Image
+    Loader.start()
 
-    $gallery.show().animate(opacity: 1)
-    $gallery.masonry
-      itemSelector: GALLERY_ITEM_SELECTOR
-      columnWidth: (containerWidth) ->
-        containerWidth / columnsCount
-      gutter: 0
-      animate: true
+    $gallery.allImagesLoaded ->
+      Loader.done()
 
-    # Apply infinite scroller to masonry
-    $gallery.infinitescroll scrollerOptions, (html) ->
-      $appendedElements = $(html).css(opacity: 0)
-      $appendedElements.allImagesLoaded ->
-        $appendedElements.animate(opacity: 1)
-        $gallery.masonry 'appended', $appendedElements, ->
+      $gallery.show().animate(opacity: 1)
+      $gallery.masonry
+        itemSelector: GALLERY_ITEM_SELECTOR
+        columnWidth: (containerWidth) ->
+          containerWidth / columnsCount
+        gutter: 0
+        animate: true
+
+      # Apply infinite scroller to masonry
+      $gallery.infinitescroll scrollerOptions, (html) ->
+        $appendedElements = $(html).css(opacity: 0)
+        $appendedElements.allImagesLoaded ->
+          $appendedElements.animate(opacity: 1)
+          $gallery.masonry('appended', $appendedElements)
           NProgress.done()
           Loader.done()
 
