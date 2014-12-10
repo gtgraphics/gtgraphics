@@ -6,7 +6,8 @@
   = yield_region :main
   %br
 
-#gallery.transitions-enabled.infinite-scroll.clearfix{data: { total_pages: @image_pages.total_pages }}
+#gallery.clearfix{data: { total_pages: @image_pages.total_pages }}
+  .gallery-grid-sizer
   - @image_pages.each do |image_page|
     .gallery-item
       = link_to image_page, class: 'gallery-link', data: { open: 'lightbox' } do

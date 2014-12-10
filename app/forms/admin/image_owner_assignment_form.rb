@@ -7,5 +7,6 @@ class Admin::ImageOwnerAssignmentForm < Form
 
   def perform
     images.update_all(author_id: author_id)
+    Delayed::Job.enqueue(ImageCopyrightAssignmentJob.new(image_ids))
   end
 end

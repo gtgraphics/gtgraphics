@@ -24,12 +24,14 @@ class Image < ActiveRecord::Base
   class Style < ActiveRecord::Base
     include Image::Attachable
     include Image::Croppable
+    include Image::ExifAnalyzable
     include Image::Resizable
     include PersistenceContextTrackable
     include TitleSearchable
     include Translatable
 
     belongs_to :image, inverse_of: :styles
+    delegate :author, to: :image
 
     translates :title, fallbacks_for_empty_translations: true
 

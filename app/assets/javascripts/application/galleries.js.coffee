@@ -1,3 +1,11 @@
+GALLERY_SELECTOR = '#gallery'
+GALLERY_ITEM_SELECTOR = '.gallery-item'
+GALLERY_GRID_SIZING_SELECTOR = '.gallery-grid-sizer'
+
+PAGINATION_SELECTOR = '#pagination'
+NEXT_PAGE_SELECTOR = '#pagination #next_page'
+
+
 columnsCount = null
 
 setColumns = ->
@@ -12,19 +20,21 @@ setColumns = ->
 
 $(window).resize ->
   setColumns()
-  if $('#gallery').data('masonry')
-    $('#gallery').masonry('reload')
+  $gallery = $(GALLERY_SELECTOR)
+  if $gallery.data('masonry')
+    # reloads the wall
+    $gallery.masonry()
 
 $(document).on 'page:change', ->
   setColumns()
 
-  $gallery = $('#gallery').css(opacity: 0)
+  $gallery = $(GALLERY_SELECTOR).css(opacity: 0)
 
   # Prepare infinite scroller
   scrollOptions =
-    navSelector: '#pagination' # selector for the paged navigation
-    nextSelector: '#pagination #next_page' # selector for the NEXT link (to page 2)
-    itemSelector: '.gallery-item' # selector for all items you'll retrieve
+    navSelector: PAGINATION_SELECTOR # selector for the paged navigation
+    nextSelector: NEXT_PAGE_SELECTOR # selector for the NEXT link (to page 2)
+    itemSelector: GALLERY_ITEM_SELECTOR # selector for all items you'll retrieve
     maxPage: $gallery.data('totalPages')
     loading:
       start: ->
@@ -38,13 +48,16 @@ $(document).on 'page:change', ->
 
   $(scrollOptions.navSelector).hide()
 
-  # Image 
+  # Image
   $gallery.allImagesLoaded ->
     $gallery.animate(opacity: 1)
     $gallery.masonry
-      itemSelector: '.gallery-item'
-      columnWidth: (containerWidth) ->
-        Math.floor(containerWidth / columnsCount)
+      itemSelector: GALLERY_ITEM_SELECTOR
+      columnWidth: ->
+        console.log $gallery.find('.gallery-grid-sizer').width()
+        $gallery.find('.gallery-grid-sizer').width()
+      # columnWidth: (containerWidth) ->
+      #   Math.floor(containerWidth / columnsCount)
       gutter: 0
       animate: true
 
@@ -57,6 +70,5 @@ $(document).on 'page:change', ->
       $gallery.masonry 'appended', $appendedElements, ->
         NProgress.done()
 
-
 $(document).on 'page:before-unload page:receive', ->
-  $('#gallery').masonry('destroy').infinitescroll('destroy')
+  $(GALLERY_SELECTOR).masonry('destroy').infinitescroll('destroy') 
