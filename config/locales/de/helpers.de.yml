@@ -96,3 +96,5 @@ de:
     units:
       pixels: Pixel
       pixels_abbr: px
+    loader:
+      loading: 'Lade'

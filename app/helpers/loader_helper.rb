@@ -1,12 +1,7 @@
 module LoaderHelper
   def loader(options = {})
-    size = options.delete(:size)
-    options[:class] ||= ''
-    options[:class] << ' loader'
-    options[:class] << " loader-#{size.to_s.dasherize}" if size.present?
-    options[:class].strip!
-    content_tag :div, options do
-      prepend_icon(:refresh, translate('views.admin.loader.loading'), spin: true)
+    content_tag :div, id: 'loader' do
+      prepend_icon :circle, translate('helpers.loader.loading'), outline: true, style: :notch, fixed_width: true, spin: true
     end
   end
 end

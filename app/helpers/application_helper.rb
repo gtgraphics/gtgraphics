@@ -4,7 +4,7 @@ module ApplicationHelper
   end
 
   def body_css
-    classes = []
+    classes = ['gtgraphics']
     classes << I18n.locale.to_s
     classes << 'admin' if admin_controller?
     classes << content_for(:body_css).presence

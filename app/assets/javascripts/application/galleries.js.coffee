@@ -12,8 +12,6 @@ setColumns = ->
   columnsCount = 1
   columnsCount = 2 if width >= 768
   columnsCount = 3 if width >= 992
-  console.log width
-  console.log columnsCount
 
 $(window).resize ->
   setColumns()
@@ -25,10 +23,10 @@ $(window).resize ->
 $(document).on 'page:change', ->
   setColumns()
 
-  $gallery = $(GALLERY_SELECTOR).css(opacity: 0)
+  $gallery = $(GALLERY_SELECTOR).hide().css(opacity: 0)
 
   # Prepare infinite scroller
-  scrollOptions =
+  scrollerOptions =
     navSelector: PAGINATION_SELECTOR # selector for the paged navigation
     nextSelector: NEXT_PAGE_SELECTOR # selector for the NEXT link (to page 2)
     itemSelector: GALLERY_ITEM_SELECTOR # selector for all items you'll retrieve
@@ -36,18 +34,25 @@ $(document).on 'page:change', ->
     loading:
       start: ->
         NProgress.start()
+        Loader.start()
         scroller = $gallery.data('infinitescroll')
         scroller.beginAjax(scroller.options)
       finished: ->
         NProgress.done()
+        Loader.done()
     errorCallback: (state) ->
       NProgress.done()
+      Loader.start()
 
-  $(scrollOptions.navSelector).hide()
+  $(scrollerOptions.navSelector).hide()
 
   # Image
+  Loader.start()
+
   $gallery.allImagesLoaded ->
-    $gallery.animate(opacity: 1)
+    Loader.done()
+
+    $gallery.show().animate(opacity: 1)
     $gallery.masonry
       itemSelector: GALLERY_ITEM_SELECTOR
       columnWidth: (containerWidth) ->
@@ -56,12 +61,13 @@ $(document).on 'page:change', ->
       animate: true
 
     # Apply infinite scroller to masonry
-    $gallery.infinitescroll scrollOptions, (html) ->
+    $gallery.infinitescroll scrollerOptions, (html) ->
       $appendedElements = $(html).css(opacity: 0)
       $appendedElements.allImagesLoaded ->
         $appendedElements.animate(opacity: 1)
         $gallery.masonry 'appended', $appendedElements, ->
           NProgress.done()
+          Loader.done()
 
 $(document).on 'page:before-unload page:receive', ->
   $(GALLERY_SELECTOR).masonry('destroy').infinitescroll('destroy') 
