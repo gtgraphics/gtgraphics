@@ -2,8 +2,6 @@
 //= require underscore.string
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui/draggable
-//= require jquery-ui/droppable
 //= require_tree ./core_ext
 //= require turbolinks
 //= require jquery.turbolinks
