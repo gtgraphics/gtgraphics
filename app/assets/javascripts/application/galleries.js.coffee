@@ -1,6 +1,5 @@
 GALLERY_SELECTOR = '#gallery'
 GALLERY_ITEM_SELECTOR = '.gallery-item'
-GALLERY_GRID_SIZING_SELECTOR = '.gallery-grid-sizer'
 
 PAGINATION_SELECTOR = '#pagination'
 NEXT_PAGE_SELECTOR = '#pagination #next_page'
@@ -23,7 +22,7 @@ $(window).resize ->
   $gallery = $(GALLERY_SELECTOR)
   if $gallery.data('masonry')
     # reloads the wall
-    $gallery.masonry()
+    $gallery.masonry('reload')
 
 $(document).on 'page:change', ->
   setColumns()
@@ -53,11 +52,9 @@ $(document).on 'page:change', ->
     $gallery.animate(opacity: 1)
     $gallery.masonry
       itemSelector: GALLERY_ITEM_SELECTOR
-      columnWidth: ->
-        console.log $gallery.find('.gallery-grid-sizer').width()
-        $gallery.find('.gallery-grid-sizer').width()
-      # columnWidth: (containerWidth) ->
-      #   Math.floor(containerWidth / columnsCount)
+      columnWidth: (containerWidth) ->
+        width = containerWidth / columnsCount
+        width
       gutter: 0
       animate: true
 

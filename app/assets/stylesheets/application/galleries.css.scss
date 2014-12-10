@@ -1,32 +1,37 @@
 @import 'bootstrap_config';
 
 #gallery {
-  margin: 0 5px;
+  $item-margin-xs: 10px;
+  $item-margin-sm: $item-margin-xs;
+  $item-margin-md: 20px;
+  $item-margin-lg: $item-margin-md;
 
-  @media (min-width: $screen-lg-min) {
-    margin: 0 10px;
-  }
+  margin: -($item-margin-xs / 2) $item-margin-xs / 2;
+  @media (min-width: $screen-sm-min) { margin: -($item-margin-sm / 2) $item-margin-sm / 2; }
+  @media (min-width: $screen-md-min) { margin: -($item-margin-md / 2) $item-margin-md / 2; }
+  @media (min-width: $screen-lg-min) { margin: -($item-margin-lg / 2) $item-margin-lg / 2; }
 
-  .gallery-item, .gallery-grid-sizer {
+  .gallery-grid-sizer, .gallery-item {
     width: 100%;
-  }
-
-  .gallery-item {
-    padding: 0 5px;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
 
     @media (min-width: $screen-sm-min) {
-      width: calc(100% / 2);
+      // width: calc(100% / 2);
+      $columns-count: 2;
+      width: floor((1 / $columns-count) * 100%);
     }
 
     @media (min-width: $screen-md-min) {
-      width: calc(100% / 3);
-      margin-left: 20px;
-      margin-right: 20px;
-      margin-bottom: 20px;
+      // width: calc(100% / 3);
+      $columns-count: 3;
+      width: floor((1 / $columns-count) * 100%);
     }
+  }
+
+  .gallery-item {
+    padding: $item-margin-sm / 2;
+    @media (min-width: $screen-sm-min) { padding: $item-margin-sm / 2; }
+    @media (min-width: $screen-md-min) { padding: $item-margin-md / 2; }
+    @media (min-width: $screen-lg-min) { padding: $item-margin-lg / 2; }
   }
 
   .gallery-link {
