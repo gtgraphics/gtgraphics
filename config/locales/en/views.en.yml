@@ -12,6 +12,8 @@ en:
       previous: "&lsaquo; Prev"
       next: "Next &rsaquo;"
       truncate: "..."
+    loader:
+      loading: Loading
     admin:
       title: GT Graphics Administration
       editor:

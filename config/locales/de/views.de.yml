@@ -20,6 +20,8 @@ de:
       previous: Vorige Seite
       next: Nächste Seite
       truncate: "..."
+    loader:
+      loading: Lade
 
     admin:
       title: GT Graphics Administration
