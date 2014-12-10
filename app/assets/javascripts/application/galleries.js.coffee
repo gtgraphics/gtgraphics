@@ -55,13 +55,13 @@ $(document).on 'page:change', ->
       gutter: 0
       animate: true
 
-  # Apply infinite scroller to masonry
-  $gallery.infinitescroll scrollOptions, (html) ->
-    $appendedElements = $(html).css(opacity: 0)
-    $appendedElements.allImagesLoaded ->
-      $appendedElements.animate(opacity: 1)
-      $gallery.masonry 'appended', $appendedElements, ->
-        NProgress.done()
+    # Apply infinite scroller to masonry
+    $gallery.infinitescroll scrollOptions, (html) ->
+      $appendedElements = $(html).css(opacity: 0)
+      $appendedElements.allImagesLoaded ->
+        $appendedElements.animate(opacity: 1)
+        $gallery.masonry 'appended', $appendedElements, ->
+          NProgress.done()
 
 $(document).on 'page:before-unload page:receive', ->
   $(GALLERY_SELECTOR).masonry('destroy').infinitescroll('destroy') 
