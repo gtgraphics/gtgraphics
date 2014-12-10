@@ -8,14 +8,12 @@ NEXT_PAGE_SELECTOR = '#pagination #next_page'
 columnsCount = null
 
 setColumns = ->
-  width = $(window).width()
-  if width < 768 # sm
-    columnsCount = 1
-  else if width < 992 # md
-    columnsCount = 2
-  else # lg
-    columnsCount = 3
-
+  width = window.innerWidth
+  columnsCount = 1
+  columnsCount = 2 if width >= 768
+  columnsCount = 3 if width >= 992
+  console.log width
+  console.log columnsCount
 
 $(window).resize ->
   setColumns()
@@ -53,8 +51,7 @@ $(document).on 'page:change', ->
     $gallery.masonry
       itemSelector: GALLERY_ITEM_SELECTOR
       columnWidth: (containerWidth) ->
-        width = containerWidth / columnsCount
-        width
+        containerWidth / columnsCount
       gutter: 0
       animate: true
 

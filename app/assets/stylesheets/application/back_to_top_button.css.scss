@@ -5,7 +5,7 @@
               color 400ms ease-out;
   opacity: 0;
   position: fixed;
-  bottom: 40px;
+  bottom: 60px;
   right: 40px;
 
   &.affix-top {
@@ -20,7 +20,7 @@
   a {
     display: block;
     color: rgba($text-color, 0.3);
-    text-shadow: 0 0 2px rgba(black, 0.5);
+    text-shadow: 0 0 2px rgba(black, 0.75);
     &:hover {
      color: rgba($text-color, 0.8)
     }
