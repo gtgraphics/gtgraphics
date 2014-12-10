@@ -6,15 +6,14 @@
   = yield_region :main
   %br
 
-.page-body
-  #gallery.transitions-enabled.infinite-scroll.clearfix.row{data: { total_pages: @image_pages.total_pages }}
-    - @image_pages.each do |image_page|
-      .gallery-item.col-xs-4
-        = link_to image_page, class: 'gallery-link', data: { open: 'lightbox' } do
-          = image_tag attached_asset_path(image_page.embeddable.image, :brick), class: 'gallery-image img-responsive', alt: image_page.title
-          %h3.sr-only= image_page.title
+#gallery.transitions-enabled.infinite-scroll.clearfix{data: { total_pages: @image_pages.total_pages }}
+  - @image_pages.each do |image_page|
+    .gallery-item
+      = link_to image_page, class: 'gallery-link', data: { open: 'lightbox' } do
+        = image_tag attached_asset_path(image_page.embeddable.image, :brick), class: 'gallery-image img-responsive', alt: image_page.title
+        %h3.sr-only= image_page.title
 
-  = paginate @image_pages
+= paginate @image_pages
 
 .page-footer
   - if region_content_for? :footer

@@ -1,4 +1,23 @@
+columnsCount = null
+
+setColumns = ->
+  width = $(window).width()
+  if width < 768 # sm
+    columnsCount = 1
+  else if width < 992 # md
+    columnsCount = 2
+  else # lg
+    columnsCount = 3
+
+
+$(window).resize ->
+  setColumns()
+  if $('#gallery').data('masonry')
+    $('#gallery').masonry('reload')
+
 $(document).on 'page:change', ->
+  setColumns()
+
   $gallery = $('#gallery').css(opacity: 0)
 
   # Prepare infinite scroller
@@ -20,15 +39,14 @@ $(document).on 'page:change', ->
   $(scrollOptions.navSelector).hide()
 
   # Image 
-
   $gallery.allImagesLoaded ->
     $gallery.animate(opacity: 1)
     $gallery.masonry
       itemSelector: '.gallery-item'
       columnWidth: (containerWidth) ->
-        Math.floor(containerWidth / 3.0)
-      gutter: 20
-      animate: false
+        Math.floor(containerWidth / columnsCount)
+      gutter: 0
+      animate: true
 
   # Apply infinite scroller to masonry
   $gallery.infinitescroll scrollOptions, (html) ->
@@ -42,4 +60,3 @@ $(document).on 'page:change', ->
 
 $(document).on 'page:before-unload page:receive', ->
   $('#gallery').masonry('destroy').infinitescroll('destroy')
-
