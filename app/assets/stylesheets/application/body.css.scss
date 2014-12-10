@@ -6,7 +6,7 @@ html, body {
 
 body {
   padding-top: 0px;
-  padding-bottom: 80px;
+  padding-bottom: 40px;
 }
 
 #page_content_wrapper {
@@ -18,7 +18,7 @@ body {
     transition: opacity 200ms ease-out;
     opacity: 0; 
   }
-  
+
   opacity: 1;
 
   .page-body {

@@ -6,7 +6,7 @@
   text-transform: uppercase;
   padding: $content-padding;
 
-  @media (min-width: $screen-lg-min) {
+  @media (min-width: $screen-md-min) {
     padding: $content-padding-lg;
   }
 
