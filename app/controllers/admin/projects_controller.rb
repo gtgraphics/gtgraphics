@@ -122,7 +122,7 @@ class Admin::ProjectsController < Admin::ApplicationController
   def attach_images
     @project_image_assignment_form = Admin::ProjectImageAssignmentForm.new(project_image_assignment_params)
     @project_image_assignment_form.project = @project
-    @project_image_assignment_form.execute
+    @project_image_assignment_form.submit
     respond_to do |format|
       format.js
     end

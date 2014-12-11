@@ -35,7 +35,7 @@ class Admin::UsersController < Admin::ApplicationController
 
   def create
     @user_registration_form = Admin::User::RegistrationForm.new(user_registration_params)
-    if @user_registration_form.execute
+    if @user_registration_form.submit
       flash_for @user_registration_form.user, :created
       respond_to do |format|
         format.html { redirect_to :admin_users }
@@ -65,7 +65,7 @@ class Admin::UsersController < Admin::ApplicationController
     @user_update_form = Admin::User::UpdateForm.new
     @user_update_form.user = @user
     @user_update_form.attributes = user_update_params
-    if @user_update_form.execute
+    if @user_update_form.submit
       flash_for @user_update_form.user, :updated
       respond_to do |format|
         format.html { redirect_to :admin_users }

@@ -15,7 +15,7 @@ class Admin::Page::ProjectsController < Admin::Page::ApplicationController
     @project_page_creation_form = Admin::ProjectPageCreationForm.new do |a|
       a.attributes = project_page_creation_form_params
       a.parent_page = @page
-      a.execute
+      a.submit
     end
     if @project_page_creation_form.errors.empty?
       @location = admin_page_path(@project_page_creation_form.parent_page)

@@ -6,7 +6,7 @@ class Form
   include Form::EmbedsOneExtension
   include Form::EmbedsManyExtension
  
-  define_model_callbacks :initialize, :validation, :execute
+  define_model_callbacks :initialize, :validation, :submit
 
   def initialize(*)
     run_callbacks :initialize do
@@ -40,24 +40,24 @@ class Form
       embeds_one name, class_name: class_name
     end
 
-    def execute(attributes = {}, &block)
-      new(attributes, &block).tap(&:execute)
+    def submit(attributes = {}, &block)
+      new(attributes, &block).tap(&:submit)
     end
  
-    def execute!(attributes = {}, &block)
-      new(attributes, &block).tap(&:execute!)
+    def submit!(attributes = {}, &block)
+      new(attributes, &block).tap(&:submit!)
     end
   end
  
-  def execute
-    execute!
+  def submit
+    submit!
   rescue FormInvalid
     false
   end
  
-  def execute!
+  def submit!
     raise FormInvalid.new(self) unless valid?
-    run_callbacks :execute do
+    run_callbacks :submit do
       perform
       true
     end
@@ -84,6 +84,6 @@ class Form
  
   protected
   def perform
-    raise NotImplementedError, "#{self.class.name}#perform must be overridden to execute this form"
+    raise NotImplementedError, "#{self.class.name}#perform must be overridden to submit this form"
   end
 end

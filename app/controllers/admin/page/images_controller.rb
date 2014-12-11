@@ -10,7 +10,7 @@ class Admin::Page::ImagesController < Admin::Page::ApplicationController
   end
 
   def create
-    @image_page_creation_form = Admin::ImagePageCreationForm.execute(image_page_creation_form_params) do |a|
+    @image_page_creation_form = Admin::ImagePageCreationForm.submit(image_page_creation_form_params) do |a|
       a.parent_page = @page
     end
     if @image_page_creation_form.errors.empty?

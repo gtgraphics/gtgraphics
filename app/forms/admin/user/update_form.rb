@@ -19,7 +19,7 @@ class Admin::User::UpdateForm < Form
 
   before_validation :sanitize_email_address, -> { email.present? }
   before_validation :set_generated_password, if: [:reset_password?, :generate_password?]
-  after_execute :send_generated_password, if: [:reset_password?, :generate_password?]
+  after_submit :send_generated_password, if: [:reset_password?, :generate_password?]
 
   def perform
     user.password = password if reset_password?

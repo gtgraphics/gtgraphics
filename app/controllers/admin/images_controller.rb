@@ -211,7 +211,7 @@ class Admin::ImagesController < Admin::ApplicationController
   private :assign_owner # invoked through :batch_process
 
   def associate_owner
-    @image_owner_assignment_form = Admin::ImageOwnerAssignmentForm.execute(image_owner_assignment_params)
+    @image_owner_assignment_form = Admin::ImageOwnerAssignmentForm.submit(image_owner_assignment_params)
    
     respond_to do |format|
       format.js

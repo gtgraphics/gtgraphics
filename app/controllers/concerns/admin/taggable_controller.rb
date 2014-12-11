@@ -40,7 +40,7 @@ module Admin::TaggableController
   end
 
   def associate_tags
-    @tag_assignment_form = Admin::TagAssignmentForm.execute(tag_assignment_params)
+    @tag_assignment_form = Admin::TagAssignmentForm.submit(tag_assignment_params)
 
     respond_to do |format|
       format.js

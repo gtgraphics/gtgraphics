@@ -17,7 +17,7 @@ class Admin::User::RegistrationForm < Form
 
   before_validation :sanitize_email_address, if: -> { email.present? }
   before_validation :set_generated_password, if: :generate_password?
-  after_execute :send_generated_password, if: :generate_password?
+  after_submit :send_generated_password, if: :generate_password?
 
   def perform
     self.user = ::User.create! do |user|

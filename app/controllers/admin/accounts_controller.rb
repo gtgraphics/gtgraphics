@@ -30,7 +30,7 @@ class Admin::AccountsController < Admin::ApplicationController
     @user_update_form = Admin::User::AccountUpdateForm.new
     @user_update_form.user = @user
     @user_update_form.attributes = user_account_update_params
-    if @user_update_form.execute
+    if @user_update_form.submit
       flash_for @user_update_form.user, :updated
       respond_to do |format|
         format.html { redirect_to :edit_admin_account }
