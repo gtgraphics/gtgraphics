@@ -47,7 +47,6 @@ $(document).on 'page:change', ->
         NProgress.done()
         Loader.done()
 
-
     $(scrollerOptions.navSelector).hide()
 
     # Image
