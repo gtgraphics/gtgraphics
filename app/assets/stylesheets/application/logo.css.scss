@@ -1,0 +1,25 @@
+@import 'bootstrap_config';
+
+#brand {
+  margin: 20px auto;
+  width: 300px;
+  display: block;
+  
+  @media (min-width: $screen-sm-min) {
+    margin: 25px $content-padding;
+  }
+
+  @media (min-width: $screen-md-min) {
+    margin: 30px $content-padding-lg;
+    width: 330px;
+  }
+
+  @media (min-width: $screen-lg-min) {
+    margin: 35px $content-padding-lg;
+    width: 350px;
+  }
+
+  #logo {
+    width: 100%;
+  }
+}

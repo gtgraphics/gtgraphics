@@ -12,6 +12,7 @@
   transition: opacity 400ms ease-out;
   opacity: 0;
   pointer-events: none; // disallow dragging and saving of image
+  z-index: 1;
 
   img {
     position: absolute; 

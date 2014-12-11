@@ -33,28 +33,25 @@
 
   .container
 
-    #content_wrapper.row
-      .col-sm-12
+    #content_wrapper
+      = link_to :root, id: 'brand' do
+        = image_tag 'logo.png', id: 'logo', alt: 'GT Graphics'
+        .sr-only GT Graphics
 
-        = link_to :root, id: 'brand' do
-          = image_tag 'logo.png', id: 'logo', alt: 'GT Graphics'
-          .sr-only GT Graphics
+      #page_wrapper
+        = render 'navbar'
 
-        #page_wrapper
-          = render 'navbar'
+        - unless @page.homepage?
+          #page_content
+            = render_flashes
+            = render 'breadcrumbs'
 
-          - unless @page.homepage?
-            #page_content_wrapper
-              #page_content
-                = render_flashes
-                = render 'breadcrumbs'
+            - if content_for? :page_content
+              = yield :page_content
+            - else
+              = yield
 
-                - if content_for? :page_content
-                  = yield :page_content
-                - else
-                  = yield
-
-          = loader
+        = loader
 
   = render 'footer'
 

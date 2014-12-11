@@ -1,20 +1,15 @@
-.page-header
-  %h1
-    = page.title
+- if @image_pages.any?
 
-- if region_content_for? :main
-  = yield_region :main
-  %br
+  #gallery.clearfix{data: { total_pages: @image_pages.total_pages }}
+    - @image_pages.each do |image_page|
+      .gallery-item
+        = link_to image_page, class: 'gallery-link', data: { open: 'lightbox' } do
+          = image_tag attached_asset_path(image_page.embeddable.image, :brick), class: 'gallery-image img-responsive', alt: image_page.title
+          %h3.sr-only= image_page.title
 
-#gallery.clearfix{data: { total_pages: @image_pages.total_pages }}
-  - @image_pages.each do |image_page|
-    .gallery-item
-      = link_to image_page, class: 'gallery-link', data: { open: 'lightbox' } do
-        = image_tag attached_asset_path(image_page.embeddable.image, :brick), class: 'gallery-image img-responsive', alt: image_page.title
-        %h3.sr-only= image_page.title
+  = paginate @image_pages
 
-= paginate @image_pages
-
-.page-footer
-  - if region_content_for? :footer
-    = yield_region :footer
+- else
+  .page-body
+    .text-center
+      In dieser Kategorie wurden keine Bilder gefunden.

@@ -1,0 +1,25 @@
+@import 'bootstrap_config';
+
+#content_wrapper {
+  position: relative;
+  z-index: 2;
+}
+
+#page_content {
+  background-color: $content-bg;
+
+  .page-body {
+    padding: $content-padding;
+    @media (min-width: $screen-md-min) {
+      padding: $content-padding-lg;
+    }
+  }
+
+  .page-header + .page-body {
+    padding-top: 0;
+  }
+
+  .page-body + .page-body {
+    padding-top: 0;
+  }
+}
