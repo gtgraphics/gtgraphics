@@ -2,7 +2,7 @@
   .navbar-header
     - unless page.root?
       %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
-        = prepend_icon :bars, translate('helpers.links.menu'), fixed_width: true, size: 2, caption_html: { class: 'sr-only' }
+        = prepend_icon :bars, translate('helpers.links.menu'), size: 2, caption_html: { class: 'sr-only' }
 
   .navbar-collapse{class: page.root? ? nil : 'collapse'}
     / Primary
