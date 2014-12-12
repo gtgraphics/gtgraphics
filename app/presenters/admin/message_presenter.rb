@@ -17,7 +17,7 @@ class Admin::MessagePresenter < Admin::ApplicationPresenter
 
   def recipients
     super.collect do |recipient|
-      if recipient.me? 
+      if recipient.me?
         I18n.translate('views.admin.account.me')
       else
         h.link_to recipient.full_name, [:admin, recipient]
@@ -27,7 +27,8 @@ class Admin::MessagePresenter < Admin::ApplicationPresenter
 
   def subject
     if message.is_a?(Message::BuyRequest)
-      default_subject = I18n.translate('views.admin.messages.buy_request_subject', image: message.image)
+      default_subject = I18n.t('views.admin.messages.buy_request_subject',
+                               image: message.image)
     else
       default_subject = I18n.translate('helpers.prompts.no_subject')
     end

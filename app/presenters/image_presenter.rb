@@ -9,21 +9,19 @@ class ImagePresenter < ApplicationPresenter
     exif_data[:artist]
   end
 
-  def author_name(linked = true)
+  def author_name(_linked = true)
     author ? author.name : artist
   end
 
   def dimensions(include_originals = false)
-    original_dimensions = I18n.translate(:dimensions, width: original_width, height: original_height)
-    if image.cropped?
-      crop_dimensions = I18n.translate(:dimensions, width: width, height: height)
-      if include_originals
-        "#{crop_dimensions} (#{original_dimensions})"
-      else
-        crop_dimensions
-      end
+    original_dimensions = I18n.translate(:dimensions, width: original_width,
+                                                      height: original_height)
+    return original_dimensions unless image.cropped?
+    crop_dimensions = I18n.translate(:dimensions, width: width, height: height)
+    if include_originals
+      "#{crop_dimensions} (#{original_dimensions})"
     else
-      original_dimensions
+      crop_dimensions
     end
   end
 
@@ -48,7 +46,8 @@ class ImagePresenter < ApplicationPresenter
 
   def shop_link(name)
     url = image.shop_urls[name]
-    human_name = I18n.translate(name, scope: 'views.page/image.shops', default: name.to_s.humanize)
+    human_name = I18n.translate(name, scope: 'views.page/image.shops',
+                                      default: name.to_s.humanize)
 
     h.link_to url, target: '_blank' do
       h.concat h.shop_provider_icon(name)

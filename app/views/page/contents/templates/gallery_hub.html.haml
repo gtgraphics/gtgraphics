@@ -1,0 +1,17 @@
+.page-header
+  %h1= page.title
+
+.page-body
+  - @gallery_pages.each_slice(2) do |gallery_pages|
+    .row
+      - gallery_pages.each do |gallery_page|
+        .col-sm-6
+          = link_to gallery_page, class: 'submenu-item' do
+            .submenu-item-title
+              = gallery_page.title
+            - image_page = gallery_page.children.sample
+            - if image_page
+              = image_tag attached_asset_path(image_page.embeddable.image, :window), class: 'submenu-item-image', alt: image_page.title
+
+
+    /%h2= gallery_page

@@ -11,21 +11,23 @@ class Page::ApplicationController < ApplicationController
   helper_method :page, :template_file
 
   breadcrumbs do |b|
-    pages = @page.self_and_ancestors.accessible_by(current_ability).with_translations_for_current_locale
+    pages = @page.self_and_ancestors.accessible_by(current_ability)
+            .with_translations_for_current_locale
     pages.each do |page|
       b.append page.title, page
     end
-  end 
- 
+  end
+
   def show
-    if self.respond_to?(@template.filename)
-      self.send(@template.filename)
+    if respond_to?(@template.filename)
+      send(@template.filename)
     else
       respond_with_page
     end
   end
 
   protected
+
   def render_page
     render template_path
   end
@@ -47,18 +49,20 @@ class Page::ApplicationController < ApplicationController
 
   private
   def load_page
-    @page = Page.accessible_by(current_ability).find_by!(path: params[:path] || '')
+    @page = Page.accessible_by(current_ability)
+            .find_by!(path: params[:path] || '')
   end
 
   def load_template
-    if @page.support_templates?
-      @template = @page.template 
-      @region_definitions = @template.region_definitions
-    end
+    return unless @page.support_templates?
+    @template = @page.template
+    @region_definitions = @template.region_definitions
   end
 
   def load_menu_items
-    @menu_items = Page.primary.published.menu_items.accessible_by(current_ability).with_translations_for_current_locale
+    @menu_items = Page.primary.published.menu_items
+                  .accessible_by(current_ability)
+                  .with_translations_for_current_locale
   end
 
   def increment_hits

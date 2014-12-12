@@ -8,7 +8,7 @@ class Admin::ApplicationPresenter < ActionPresenter::Base
     whitelist = options.delete(:only)
     blacklist = options.delete(:except)
 
-    if whitelist or blacklist
+    if whitelist || blacklist
       if blacklist
         allowed_actions = self.class.action_buttons - Array(blacklist)
       else
@@ -17,7 +17,6 @@ class Admin::ApplicationPresenter < ActionPresenter::Base
     else
       allowed_actions = self.class.action_buttons
     end
-
 
     h.content_tag :div, class: 'btn-toolbar' do
       allowed_actions.each do |action_button|
@@ -68,21 +67,29 @@ class Admin::ApplicationPresenter < ActionPresenter::Base
 
   def show_button(options = {})
     button_options = { active: readable?, icon: :eye, caption: :view }
-    button :show, default_button_options(options).deep_merge(options.reverse_merge(button_options))
+    button :show, default_button_options(options).deep_merge(
+      options.reverse_merge(button_options)
+    )
   end
 
   def edit_button(options = {})
     button_options = { active: editable?, icon: :pencil }
-    button :edit, default_button_options(options).deep_merge(options.reverse_merge(button_options))
+    button :edit, default_button_options(options).deep_merge(
+      options.reverse_merge(button_options)
+    )
   end
 
   def destroy_button(options = {})
     button_options = {
       active: destroyable?, method: :delete,
-      type: :danger, active: destroyable?, icon: :trash, icon_options: { outline: true },
-      data: { confirm: I18n.translate('helpers.confirmations.destroy', model: object.class.model_name.human) }
+      type: :danger, active: destroyable?,
+      icon: :trash, icon_options: { outline: true },
+      data: { confirm: I18n.translate('helpers.confirmations.destroy',
+                                      model: object.class.model_name.human) }
     }
-    button :destroy, default_button_options(options).deep_merge(options.reverse_merge(button_options))
+    button :destroy, default_button_options(options).deep_merge(
+      options.reverse_merge(button_options)
+    )
   end
 
   # Attributes
@@ -94,7 +101,7 @@ class Admin::ApplicationPresenter < ActionPresenter::Base
   def list_item(attribute, *args)
     h.capture do
       h.concat h.content_tag(:dt, caption_for(attribute))
-      h.concat h.content_tag(:dd, self.public_send(attribute, *args))
+      h.concat h.content_tag(:dd, public_send(attribute, *args))
     end
   end
 
@@ -103,18 +110,24 @@ class Admin::ApplicationPresenter < ActionPresenter::Base
     active = options.delete(:active) { true }
     caption = options.delete(:caption) { type }
     if caption.is_a?(Symbol)
-      caption = I18n.translate(caption, scope: 'helpers.links', model: object.class.model_name.human)
+      caption = I18n.translate(caption, scope: 'helpers.links',
+                                        model: object.class.model_name.human)
     end
     icon_only = options.delete(:icon_only) { false }
     icon_name = options.delete(:icon) { type }
-    icon_options = options.delete(:icon_options) { Hash.new }.reverse_merge(fixed_width: true)
+    icon_options = options.delete(:icon_options) { Hash.new }
+                   .reverse_merge(fixed_width: true)
     if icon_only
-      options.deep_merge!(title: caption, data: { toggle: 'tooltip', placement: 'top', container: 'body' })
+      options.deep_merge!(title: caption, data: { toggle: 'tooltip',
+                                                  placement: 'top',
+                                                  container: 'body' })
     end
 
     h.button_link_to_if active, send("#{type}_path"), options do
       if icon_name
-        icon_options.deep_merge!(caption_html: { class: 'sr-only' }) if icon_only
+        if icon_only
+          icon_options.deep_merge!(caption_html: { class: 'sr-only' })
+        end
         h.prepend_icon(icon_name, caption, icon_options)
       else
         caption

@@ -1,5 +1,5 @@
 class Page::ImagesController < Page::ApplicationController
-  before_action :load_image 
+  before_action :load_image
   before_action :load_image_styles, only: :show
  
   breadcrumbs do |b|
@@ -17,9 +17,10 @@ class Page::ImagesController < Page::ApplicationController
       end
     end
   end
-  
+
   def download
-    if style_id = params[:style_id]
+    style_id = params[:style_id]
+    if style_id
       @image_style = @image.styles.find_by!(position: style_id)
       image = @image_style
     else
@@ -61,6 +62,7 @@ class Page::ImagesController < Page::ApplicationController
   end
 
   private
+
   def load_image
     @image = @page.embeddable.image
   end
@@ -70,6 +72,7 @@ class Page::ImagesController < Page::ApplicationController
   end
 
   def message_params
-    params.require(:message).permit(:first_sender_name, :last_sender_name, :sender_email, :body)
+    params.require(:message).permit(:first_sender_name, :last_sender_name,
+                                    :sender_email, :body)
   end
 end

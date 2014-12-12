@@ -1,0 +1,28 @@
+@import 'bootstrap_config';
+
+.row:last-child .submenu-item {
+  margin-bottom: 0;
+}
+
+.submenu-item {
+  display: block;
+  margin-bottom: $grid-gutter-width;
+
+  .submenu-item-title {
+    font-size: 18px;
+    font-weight: 300;
+    padding: 10px;
+    text-align: center;
+    background-color: rgba(black, 0.2);
+    text-transform: uppercase;
+    transition: all 200ms ease-out;
+  }
+
+  &:hover .submenu-item-title {
+    background-color: rgba(black, 0.4);
+  }
+
+  .submenu-item-image {
+    width: 100%;
+  }
+}

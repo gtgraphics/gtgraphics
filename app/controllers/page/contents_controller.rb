@@ -8,7 +8,14 @@ class Page::ContentsController < Page::ApplicationController
   end
 
   def gallery
-    @image_pages = @child_pages.images.preload(embeddable: :image).search(@query).page(params[:page]).per(16)
+    @image_pages = @child_pages.images.preload(embeddable: :image)
+                   .page(params[:page]).per(16)
+    respond_with_page
+  end
+
+  def gallery_hub
+    @gallery_pages = @child_pages.contents.with_template(:gallery)
+                     .preload(:embeddable)
     respond_with_page
   end
 
@@ -19,11 +26,13 @@ class Page::ContentsController < Page::ApplicationController
   end
 
   private
-  def load_child_pages
-    @child_pages = @page.children.accessible_by(current_ability).with_translations_for_current_locale
-  end
 
   def load_query
     @query = params[:query].presence
-  end 
+  end
+
+  def load_child_pages
+    @child_pages = @page.children.accessible_by(current_ability)
+                   .with_translations_for_current_locale
+  end
 end

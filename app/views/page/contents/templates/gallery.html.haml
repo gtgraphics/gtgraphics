@@ -4,8 +4,10 @@
     - @image_pages.each do |image_page|
       .gallery-item
         = link_to image_page, class: 'gallery-link', data: { open: 'lightbox' } do
-          = image_tag attached_asset_path(image_page.embeddable.image, :brick), class: 'gallery-image img-responsive', alt: image_page.title
-          %h3.sr-only= image_page.title
+          %figure.gallery-image-container
+            = image_tag attached_asset_path(image_page.embeddable.image, :brick), class: 'gallery-image img-responsive', alt: image_page.title
+            %figcaption.gallery-image-caption
+              %h3.sr-only= image_page.title
 
   = paginate @image_pages
 

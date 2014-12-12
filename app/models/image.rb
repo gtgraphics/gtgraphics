@@ -41,14 +41,17 @@ class Image < ActiveRecord::Base
   # Disallow changing the asset as all custom_styles depend on it
   attr_readonly :asset
 
-  has_many :styles, class_name: 'Image::Style', inverse_of: :image, dependent: :destroy
-  has_many :image_pages, class_name: 'Page::Image', inverse_of: :image, dependent: :destroy
+  has_many :styles, class_name: 'Image::Style', inverse_of: :image,
+                    dependent: :destroy
+  has_many :image_pages, class_name: 'Page::Image', inverse_of: :image,
+                         dependent: :destroy
   has_many :pages, through: :image_pages
-  has_many :buy_requests, class_name: 'Message::BuyRequest', foreign_key: :delegator_id, dependent: :destroy
+  has_many :buy_requests, class_name: 'Message::BuyRequest',
+                          foreign_key: :delegator_id, dependent: :destroy
 
   has_image
   has_owner :author, default_owner_to_current_user: false
-  
+
   translates :title, :description, fallbacks_for_empty_translations: true
   sanitizes :title, with: :squish
 
@@ -69,8 +72,8 @@ class Image < ActiveRecord::Base
 
   def to_attachment(version = :custom)
     Attachment.new do |attachment|
-      attachment.asset = asset.versions.fetch(version.to_sym) do 
-        raise ArgumentError, "unknown version: #{version}"
+      attachment.asset = asset.versions.fetch(version.to_sym) do
+        fail ArgumentError, "unknown version: #{version}"
       end.file
       attachment.original_filename = original_filename
       attachment.content_type = content_type
@@ -93,11 +96,12 @@ class Image < ActiveRecord::Base
   # Page Propagation
 
   def propagate_changes_to_pages?
-    @propagate_changes_to_pages = false unless defined? @propagate_changes_to_pages
+    unless defined? @propagate_changes_to_pages
+      @propagate_changes_to_pages = false
+    end
     @propagate_changes_to_pages
   end
   alias_method :propagate_changes_to_pages, :propagate_changes_to_pages?
-
 
   def propagate_changes_to_pages=(propagate)
     @propagate_changes_to_pages = propagate.to_b
@@ -105,7 +109,7 @@ class Image < ActiveRecord::Base
 
   private
   def set_default_title
-    if title.blank? and original_filename.present?
+    if title.blank? && original_filename.present?
       self.title = File.basename(original_filename, '.*').titleize
     end
   end

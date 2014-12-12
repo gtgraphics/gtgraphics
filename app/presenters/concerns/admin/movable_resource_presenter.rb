@@ -7,7 +7,9 @@ module Admin::MovableResourcePresenter
       method: :patch,
       icon: :chevron, icon_options: { direction: :up }
     }
-    button :move_up, default_button_options(options).deep_merge(options.reverse_merge(button_options))
+    button :move_up, default_button_options(options).deep_merge(
+      options.reverse_merge(button_options)
+    )
   end
 
   def move_down_button(options = {})
@@ -16,7 +18,9 @@ module Admin::MovableResourcePresenter
       method: :patch,
       icon: :chevron, icon_options: { direction: :down }
     }
-    button :move_down, default_button_options(options).deep_merge(options.reverse_merge(button_options))
+    button :move_down, default_button_options(options).deep_merge(
+      options.reverse_merge(button_options)
+    )
   end
 
   def move_up_path

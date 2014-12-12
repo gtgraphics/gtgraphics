@@ -1,9 +1,8 @@
 %nav.navbar.navbar-footer.navbar-fixed-bottom.hidden-xs{role: 'navigation'}
   .container
-    - secondary_menu_items = Page.published.primary.without(menu_items)
-    - if secondary_menu_items.any?
+    - if footer_menu_items.any?
       %ul.nav.navbar-nav
-        - secondary_menu_items.each do |page|
+        - footer_menu_items.each do |page|
           %li= link_to page, page
 
     .navbar-text.social-buttons

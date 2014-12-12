@@ -1,18 +1,26 @@
-%nav.navbar.navbar-top{role: 'navigation'}
-  .navbar-header
-    - unless page.root?
-      %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
-        = prepend_icon :bars, translate('helpers.links.menu'), fixed_width: true, size: 2, caption_html: { class: 'sr-only' }
+#nav_content
 
-  .navbar-collapse{class: page.root? ? nil : 'collapse'}
-    / Primary
-    %ul.nav.navbar-nav#nav_primary
-      - menu_items.each do |page|
-        = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page)
+  %nav.navbar.navbar-top#navbar_primary{role: 'navigation', class: secondary_menu_items.any? ? 'has-submenu' : nil}
+    .navbar-header
+      - unless page.root?
+        %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
+          = prepend_icon :bars, translate('helpers.links.menu'), fixed_width: true, size: 2, caption_html: { class: 'sr-only' }
 
-    - if next_locale
-      / Locale
-      %ul.nav.navbar-nav.navbar-right#nav_secondary
-        %li
-          = link_to page_path(@page, locale: next_locale), hreflang: next_locale do
-            = prepend_icon :globe, next_locale.to_s.upcase, fixed_width: true
+    .navbar-collapse{class: page.root? ? nil : 'collapse'}
+      / Primary
+      %ul.nav.navbar-nav#nav_menu_items
+        - primary_menu_items.each do |page|
+          = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page)
+
+      - if next_locale
+        / Locale
+        %ul.nav.navbar-nav.navbar-right#nav_locale
+          %li
+            = link_to page_path(@page, locale: next_locale), hreflang: next_locale do
+              = prepend_icon :globe, next_locale.to_s.upcase, fixed_width: true
+
+  -# if secondary_menu_items.any?
+  -#  %nav.navbar.navbar-top#navbar_secondary{role: 'navigation'}
+  -#    %ul.nav.navbar-nav#nav_submenu_items
+  -#      - secondary_menu_items.each do |page|
+  -#        %li= link_to page.title, page

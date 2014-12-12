@@ -11,7 +11,7 @@ class Image::StylePresenter < ApplicationPresenter
 
   def pixels_count
     h.capture do
-      h.concat h.number_to_human(image.width * image.height) 
+      h.concat h.number_to_human(image.width * image.height)
       h.concat ' '
       h.concat I18n.translate(:pixels)
     end
