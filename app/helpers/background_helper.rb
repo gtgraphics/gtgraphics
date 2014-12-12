@@ -7,5 +7,10 @@ module BackgroundHelper
 
   def background_url
     attached_asset_path(background_image, :custom) if background_image
-  end 
+  end
+
+  def background_image_tag(options = {})
+    options = options.reverse_merge(alt: background_image.title)
+    image_tag background_url, options
+  end
 end

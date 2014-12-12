@@ -2,7 +2,10 @@
   %meta{property: 'og:title', content: 'GT Graphics'}
   %meta{property: 'og:description', content: @page.meta_description || ''}
 
-- content_for :page_content do
-  = yield
+- content_for :body_content do
+  - if content_for? :homepage_content
+    = yield :homepage_content
+  - else
+    = yield
 
 = render template: 'layouts/page/application'

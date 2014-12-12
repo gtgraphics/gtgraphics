@@ -12,11 +12,10 @@ $loader-width: 130px;
   position: fixed;
   background-color: rgba(black, 0.75);
   text-align: center;
-
   width: $loader-width;
   left: 50%;
   margin-left: -$loader-width / 2;
-  bottom: 80px;
+  bottom: 100px;
 
   //pointer-events: none;
   .caption {

@@ -27,9 +27,11 @@
 
   %a{name: 'top'}
 
-  - if background_image
+  - if content_for? :body_content
+    = yield :body_content
+  - elsif background_image
     #background{class: page.root? ? 'homepage' : 'subpage'}
-      = image_tag background_url, alt: background_image.title
+      = background_image_tag
 
   .container
 
@@ -41,11 +43,10 @@
       #page_wrapper
         = render 'navbar'
 
-        - unless @page.homepage?
+        - unless content_for? :body_content
           #page_content
             = render_flashes
             = render 'breadcrumbs'
-
             - if content_for? :page_content
               = yield :page_content
             - else
@@ -58,6 +59,5 @@
   #back_to_top.visible-md.visible-lg
     = link_to '#top' do
       = prepend_icon :angle, translate('helpers.links.back_to_top'), fixed_width: true, direction: :up, size: 3, caption_html: { class: 'sr-only' }
-
 
 = render template: 'layouts/application'

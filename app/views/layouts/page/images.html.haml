@@ -6,6 +6,9 @@
   %meta{property: 'og:image:height', content: 1500}
 
 - content_for :page_content do
-  = yield
+  - if content_for? :image_content
+    = yield :image_content
+  - else
+    = yield
 
 = render template: 'layouts/page/application'

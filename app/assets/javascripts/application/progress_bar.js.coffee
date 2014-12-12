@@ -5,6 +5,8 @@ NProgress.configure
 
 $(document).ready ->
   NProgress.start() 
+  $(document).allImagesLoaded ->
+    NProgress.done()
 
 $(window).load ->
   NProgress.done()
@@ -13,9 +15,8 @@ $(document).on 'page:fetch', ->
   NProgress.start()
 
 $(document).on 'page:change', ->
-  $(document).imagesLoaded ->
+  $(document).allImagesLoaded ->
     NProgress.done()
 
 $(document).on 'page:restore', ->
   NProgress.remove()
-
