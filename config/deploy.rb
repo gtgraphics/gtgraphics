@@ -40,6 +40,9 @@ set :linked_dirs, %w(log tmp/pids tmp/cache tmp/sockets vendor/bundle public/sys
 set :assets_roles, [:web, :app]
 set :delayed_job_server_role, :worker
 
+# Cronjobs
+set :whenever_identifier, -> { "#{fetch(:application)}_#{fetch(:stage)}" }
+
 # Define Server
 server 'gtgraphics.de', user: 'gtgraphics', roles: %w(web app db worker)
 
