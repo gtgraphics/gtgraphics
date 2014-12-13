@@ -15,9 +15,8 @@ $loader-width: 130px;
   width: $loader-width;
   left: 50%;
   margin-left: -$loader-width / 2;
-  bottom: 100px;
+  bottom: 120px;
 
-  //pointer-events: none;
   .caption {
     margin-left: 6px;
     line-height: 21px;

@@ -2,11 +2,12 @@
 
 #brand {
   margin: 20px auto;
-  width: 300px;
+  width: 215px;
   display: block;
   
   @media (min-width: $screen-sm-min) {
     margin: 25px $content-padding;
+    width: 300px;
   }
 
   @media (min-width: $screen-md-min) {
