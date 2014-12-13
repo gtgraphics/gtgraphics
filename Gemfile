@@ -80,6 +80,7 @@ group :development do
 end
 gem 'delayed_job_active_record'
 gem 'daemons'
+gem 'whenever'
 gem 'request_store'
 gem 'nokogiri'
 gem 'exception_notification', group: [:staging, :production]

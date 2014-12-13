@@ -93,6 +93,7 @@ GEM
       json (>= 1.7)
       mime-types (>= 1.16)
     choice (0.1.6)
+    chronic (0.10.2)
     chunky_png (1.3.0)
     climate_control (0.0.3)
       activesupport (>= 3.0)
@@ -338,6 +339,8 @@ GEM
       coercible (~> 1.0)
       descendants_tracker (~> 0.0.1)
       equalizer (~> 0.0.7)
+    whenever (0.9.4)
+      chronic (>= 0.6.3)
 
 PLATFORMS
   ruby
@@ -412,3 +415,4 @@ DEPENDENCIES
   underscore-string-rails
   user_agent
   virtus
+  whenever
