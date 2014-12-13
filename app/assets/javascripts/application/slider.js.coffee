@@ -1,8 +1,9 @@
 $(document).ready ->
-  $carousel = $('.fullscreen-carousel')
+  $carousel = $('#slider')
 
   $carousel.carousel(interval: false, pause: false)
 
+  # Make carousel images cover the whole background
   $carousel.css
     margin: 0
     width: $(window).outerWidth()
@@ -33,3 +34,4 @@ $(document).ready ->
       width: $(window).outerWidth()
       height: $(window).outerHeight()
 
+  # TODO Switch to next or previous slice when using scroll wheel
