@@ -1,24 +1,27 @@
 class Admin::PagesController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_page, only: %i(show edit edit_metadata update destroy move publish hide
-                                     enable_in_menu disable_in_menu toggle_menu_item change_template)
+  before_action :load_page, only: %i(show edit edit_metadata update destroy move
+                                     publish hide enable_in_menu disable_in_menu
+                                     toggle_menu_item change_template)
   before_action :load_parent_page, only: %i(index new create show edit update)
   before_action :build_page_tree
 
   helper_method :available_templates
 
   breadcrumbs do |b|
-    if @parent_page 
-      pages = @parent_page.self_and_ancestors.where.not(parent_id: nil).with_translations_for_current_locale
+    if @parent_page
+      pages = @parent_page.self_and_ancestors.where.not(parent_id: nil)
+              .with_translations_for_current_locale
       pages.each do |page|
         b.append page.title, [:admin, page]
       end
     end
     if @page
-      b.append @page.title, [:admin, @page] 
+      b.append @page.title, [:admin, @page]
       if action_name.in? %w(edit update)
-        b.append translate('breadcrumbs.edit', model: Page.model_name.human), [:edit, :admin, @page]
+        b.append translate('breadcrumbs.edit', model: Page.model_name.human),
+                 [:edit, :admin, @page]
       end
     end
   end
@@ -30,7 +33,8 @@ class Admin::PagesController < Admin::ApplicationController
         redirect_to [:admin, Page.root]
       end
       format.json do
-        if page_id_or_ids = params[:id] and page_id_or_ids.present?
+        page_id_or_ids = params[:id]
+        if page_id_or_ids && page_id_or_ids.present?
           if page_id_or_ids.is_a?(Array)
             @pages = Page.where(id: page_id_or_ids)
           else
@@ -41,7 +45,8 @@ class Admin::PagesController < Admin::ApplicationController
           @pages = Page.search(params[:query])
         end
         @pages = @pages.with_translations_for_current_locale.page(params[:page])
-        if assignable_id = params[:parent_assignable_id] and assignable_id.present?
+        assignable_id = params[:parent_assignable_id]
+        if assignable_id.present?
           @pages = @pages.assignable_as_parent_of(assignable_id)
         end
       end
@@ -49,7 +54,8 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def tree
-    if page_id = params[:node]
+    page_id = params[:node]
+    if page_id
       pages = Page.find(page_id).children
     else
       pages = Page.where(depth: 0..1)
@@ -63,7 +69,8 @@ class Admin::PagesController < Admin::ApplicationController
   def autocomplete
     query = params[:query]
     if query.present?
-      @pages = Page.search(query).with_translations_for_current_locale.uniq.limit(3)
+      @pages = Page.search(query).with_translations_for_current_locale
+               .uniq.limit(3)
     else
       @pages = Page.none
     end
@@ -83,9 +90,13 @@ class Admin::PagesController < Admin::ApplicationController
     @page = Page.new do |p|
       p.title = I18n.translate('page.default_title')
       p.parent = @parent_page || Page.root
-      p.embeddable_type = params[:page_type] ? "Page::#{params[:page_type].strip.classify}" : 'Page::Content'
+      if params[:page_type]
+        p.embeddable_type = "Page::#{params[:page_type].strip.classify}"
+      else
+        p.embeddable_type = 'Page::Content'
+      end
       p.build_embeddable
-      if p.support_templates? and p.embeddable_type.in?(Page.embeddable_types)
+      if p.support_templates? && p.embeddable_type.in?(Page.embeddable_types)
         p.template = p.template_class.default
       end
     end
@@ -100,7 +111,8 @@ class Admin::PagesController < Admin::ApplicationController
         p.author = current_user
         p.set_next_available_slug(p.title.parameterize) if p.title.present?
         p.build_embeddable if p.embeddable.nil?
-        if !p.content? and p.support_templates? and p.embeddable_type.in?(Page.embeddable_types)
+        if !p.content? && p.support_templates? &&
+           p.embeddable_type.in?(Page.embeddable_types)
           p.template ||= p.template_class.default
         end
       end
@@ -137,7 +149,8 @@ class Admin::PagesController < Admin::ApplicationController
   def destroy
     @page.destroy
     flash_for @page
-    respond_with :admin, @page, location: [:admin, @page.right_sibling || @page.left_sibling || @page.parent || Page.root]
+    respond_with :admin, @page, location: [:admin, @page.right_sibling ||
+      @page.left_sibling || @page.parent || Page.root]
   end
 
   def publish
@@ -183,15 +196,23 @@ class Admin::PagesController < Admin::ApplicationController
       slug = @page.slug
       case params[:position]
       when 'inside'
-        slug = slug.next while Page.without(@page).exists?(parent_id: target_page.id, slug: slug)
+        while Page.without(@page).exists?(parent_id: target_page.id, slug: slug)
+          slug = slug.next
+        end
         @page.update_column(:slug, slug)
         @page.move_to_child_with_index(target_page, 0)
       when 'before'
-        slug = slug.next while Page.without(@page).exists?(parent_id: target_page.parent_id, slug: slug)
+        while Page.without(@page).exists?(parent_id: target_page.parent_id,
+                                          slug: slug)
+          slug = slug.next
+        end
         @page.update_column(:slug, slug)
         @page.move_to_left_of(target_page)
       when 'after'
-        slug = slug.next while Page.without(@page).exists?(parent_id: target_page.parent_id, slug: slug)
+        while Page.without(@page).exists?(parent_id: target_page.parent_id,
+                                          slug: slug)
+          slug = slug.next
+        end
         @page.update_column(:slug, slug)
         @page.move_to_right_of(target_page)
       else
@@ -202,7 +223,8 @@ class Admin::PagesController < Admin::ApplicationController
       @page.refresh_path!(true)
 
       # Update Counter Caches
-      [@page.id, @page.parent_id, target_page.id, target_page.parent_id, previous_parent_id].compact.uniq.each do |page_id|
+      [@page.id, @page.parent_id, target_page.id, target_page.parent_id,
+       previous_parent_id].compact.uniq.each do |page_id|
         Page.reset_counters(page_id, :children)
       end
     end
@@ -240,9 +262,9 @@ class Admin::PagesController < Admin::ApplicationController
       conditions << Page.arel_table[:id].in(open_nodes)
       conditions << Page.arel_table[:parent_id].in(open_nodes)
     end
-    pages = Page.where(conditions.reduce(:or)) \
-                .includes(:translations).with_locales(Globalize.fallbacks) \
-                .references(:translations)
+    pages = Page.where(conditions.reduce(:or))
+            .includes(:translations).with_locales(Globalize.fallbacks)
+            .references(:translations)
     @page_tree = Admin::PageTree.new(pages, selected: @page)
   end
 
@@ -251,9 +273,11 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def load_parent_page
-    if parent_id = params[:page_id]
+    parent_id = params[:page_id]
+    page_params = params[:page]
+    if parent_id
       @parent_page = Page.find_by(id: parent_id)
-    elsif !request.get? and page_params = params[:page]
+    elsif !request.get? && page_params
       @parent_page = Page.find_by(id: page_params[:parent_id])
     elsif @page
       @parent_page = @page.parent
@@ -265,7 +289,8 @@ class Admin::PagesController < Admin::ApplicationController
     embeddable_attributes_params = case page_params[:embeddable_type]
     when 'Page::ContactForm' then { recipient_ids: [] }
     when 'Page::Content' then [:template_id]
-    when 'Page::Redirection' then [:external, :destination_page_id, :destination_url, :permanent]
+    when 'Page::Redirection'
+      [:external, :destination_page_id, :destination_url, :permanent]
     end
     page_params.permit :embeddable_type, :parent_id, :title, :parent_id,
                        embeddable_attributes: embeddable_attributes_params || []
