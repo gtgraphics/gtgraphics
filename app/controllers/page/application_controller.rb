@@ -35,6 +35,7 @@ class Page::ApplicationController < ApplicationController
   def respond_with_page
     respond_to do |format|
       format.html { render_page }
+      yield(format) if block_given?
     end
   end
 

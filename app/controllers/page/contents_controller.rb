@@ -10,7 +10,9 @@ class Page::ContentsController < Page::ApplicationController
   def gallery
     @image_pages = @child_pages.images.preload(embeddable: :image)
                    .page(params[:page]).per(16)
-    respond_with_page
+    respond_with_page do |format|
+      format.rss { render template_path }
+    end
   end
 
   def gallery_hub

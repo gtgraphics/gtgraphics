@@ -3,7 +3,7 @@ GtGraphics::Application.configure do
 
   config.middleware.use ExceptionNotification::Rack, email: {
     email_prefix: "[Staging] ",
-    sender_address: %{"GT Graphics Exception Notifier" <error@gtgraphics.de>},
+    sender_address: %{"GT Graphics Exception Notifier" <noreply@gtgraphics.de>},
     exception_recipients: %w(webmaster@gtgraphics.de)
   }
 
@@ -17,7 +17,7 @@ GtGraphics::Application.configure do
   config.eager_load = true
 
   # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
 
   # Enable Rack::Cache to put a simple HTTP cache in front of your application
