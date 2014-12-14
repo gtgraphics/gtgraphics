@@ -27,7 +27,10 @@ $(document).ready ->
       '-moz-background-size': 'cover'
       '-o-background-size': 'cover'
       'background-size': 'cover'
-    $img.remove()
+      
+    # loader acts crazy when removing the image,
+    # so we will only hide it as a workaround
+    $img.hide()
 
   $(window).on 'resize', ->
     $carousel.css
