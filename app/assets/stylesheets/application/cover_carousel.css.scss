@@ -1,0 +1,12 @@
+.cover-carousel {
+  position: absolute;
+  z-index: 1;
+  .item {
+    background: {
+      size: 100%;
+      size: cover;
+      position: center;
+      repeat: no-repeat;
+    }
+  }
+}

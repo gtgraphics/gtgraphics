@@ -1,7 +1,9 @@
 @import 'bootstrap_config';
 
-.row:last-child .submenu-item {
-  margin-bottom: 0;
+@media (min-width: $screen-sm-min) {
+  .row:last-child .submenu-item {
+    margin-bottom: 0;
+  }
 }
 
 .submenu-item {
@@ -18,8 +20,11 @@
     transition: all 200ms ease-out;
   }
 
-  &:hover .submenu-item-title {
-    background-color: rgba(black, 0.4);
+  &:hover {
+    transform: scale(1.03);
+    .submenu-item-title {
+      background-color: rgba(black, 0.4);
+    }
   }
 
   .submenu-item-image {
