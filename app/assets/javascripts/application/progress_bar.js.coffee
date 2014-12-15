@@ -4,9 +4,7 @@ NProgress.configure
   speed: 500
 
 $(document).ready ->
-  NProgress.start() 
-  $(document).allImagesLoaded ->
-    NProgress.done()
+  NProgress.start()
 
 $(window).load ->
   NProgress.done()
@@ -15,8 +13,13 @@ $(document).on 'page:fetch', ->
   NProgress.start()
 
 $(document).on 'page:change', ->
-  $(document).allImagesLoaded ->
-    NProgress.done()
+  $carousel = $('#cover_carousel')
+  if $carousel.length
+    $(document).on 'init.gtg.carousel', ->
+      NProgress.done()
+  else
+    $(document).allImagesLoaded ->
+      NProgress.done()
 
 $(document).on 'page:restore', ->
   NProgress.remove()
