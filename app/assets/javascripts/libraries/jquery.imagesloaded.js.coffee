@@ -10,6 +10,6 @@ $.fn.allImagesLoaded = (callback) ->
     $source.trigger('imagesLoaded')
 
   $images.load(callbackWrapper)
-  $images.error(callbackWrapper)
+  #$images.error(callbackWrapper)
 
   $images

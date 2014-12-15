@@ -3,7 +3,7 @@
   #gallery.clearfix{data: { total_pages: @image_pages.total_pages }}
     - @image_pages.each do |image_page|
       .gallery-item
-        = link_to image_page, class: 'gallery-link', data: { open: 'lightbox' } do
+        = link_to image_page, class: 'gallery-link', remote: true, data: { open: 'lightbox' } do
           %figure.gallery-image-container
             = image_tag attached_asset_path(image_page.embeddable.image, :brick), class: 'gallery-image img-responsive', alt: image_page.title
             %figcaption.gallery-image-caption

@@ -9,6 +9,7 @@ class Page::ImagesController < Page::ApplicationController
   def default
     respond_to do |format|
       format.html { render_page }
+      format.js { render_page }
       format.send(@image.format) do
         send_file @image.asset.custom.path, filename: @image.virtual_filename,
                                             content_type: @image.content_type,
