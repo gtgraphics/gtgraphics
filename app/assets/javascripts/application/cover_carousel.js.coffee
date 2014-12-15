@@ -28,6 +28,8 @@ class CoverCarousel
       $(@).trigger('init.gtg.carousel')
       coverCarousel.cycle() if coverCarousel.options.autostart
 
+    @addIndicatorEvents()
+
   cycle: ->
     @transitionTimeout = setTimeout =>
       clearTimeout(@transitionTimeout)
@@ -69,19 +71,6 @@ class CoverCarousel
 
   # Navigation
 
-  nextItem: ->
-    $nextItem = @$active.next(CoverCarousel.ITEM_SELECTOR)
-    $nextItem = @$items.first() unless $nextItem.length
-    $nextItem
-
-  prevItem: ->
-    $prevItem = @$active.prev(CoverCarousel.ITEM_SELECTOR)
-    $prevItem = @$items.last() unless $prevItem.length
-    $prevItem
-
-
-  # Helpers
-
   extractItem: (itemOrIndex) ->
     if itemOrIndex instanceof jQuery
       itemOrIndex
@@ -96,9 +85,30 @@ class CoverCarousel
     else
       itemOrIndex
 
+  nextItem: ->
+    $nextItem = @$active.next(CoverCarousel.ITEM_SELECTOR)
+    $nextItem = @$items.first() unless $nextItem.length
+    $nextItem
+
+  prevItem: ->
+    $prevItem = @$active.prev(CoverCarousel.ITEM_SELECTOR)
+    $prevItem = @$items.last() unless $prevItem.length
+    $prevItem
+
   transitionCarousel: (target) ->
     @$carousel.carousel(target)
     @$carousel.carousel('pause')
+
+  addIndicatorEvents: ->
+    carouselSelector = '#' + @$carousel.attr('id')
+    $indicators = $("[data-slide-to][data-target='#{carouselSelector}']")
+    $indicators.on 'click', (event) =>
+      event.preventDefault()
+      @pause()
+      $indicator = $(event.target)
+      index = $indicator.data('slideTo')
+      @slideTo index, =>
+        @cycle()
 
   loadItem: (item, callback) ->
     $item = @extractItem(item)
@@ -141,7 +151,6 @@ class CoverCarousel
       height: $win.outerHeight()
     @$carousel.css(dimensions)
     @$carousel.find('.item').css(dimensions)
-
 
 
 $(document).ready ->
