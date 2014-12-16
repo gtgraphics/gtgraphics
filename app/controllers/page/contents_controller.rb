@@ -23,6 +23,15 @@ class Page::ContentsController < Page::ApplicationController
     respond_with_page
   end
 
+  def about_hub
+    users = User.all.to_a
+    @about_pages = @child_pages.each_with_object({}) do |page, pages|
+      user = users.find { |u| u.name == page.title }
+      pages[user] = page if user
+    end
+    respond_with_page
+  end
+
   def search
     respond_to do |format|
       format.html { redirect_to page_path(@page, query: @query) }

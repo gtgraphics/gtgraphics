@@ -13,4 +13,8 @@ module BackgroundHelper
     options = options.reverse_merge(alt: background_image.title)
     image_tag background_url, options
   end
+
+  def background_css(url)
+    "background-image: url(#{url});"
+  end
 end

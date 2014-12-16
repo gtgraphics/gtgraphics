@@ -1,0 +1,13 @@
+- content_for :body_content do
+  .container
+
+    #content_wrapper
+      = link_to :root, id: 'brand' do
+        = image_tag 'logo.png', id: 'logo', alt: 'GT Graphics'
+        .sr-only GT Graphics
+
+      #page_wrapper
+        = render 'navbar'
+        = yield :page_wrapper_content
+
+= render template: 'layouts/page/application'

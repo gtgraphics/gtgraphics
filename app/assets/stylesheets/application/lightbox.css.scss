@@ -1,0 +1,55 @@
+#lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  background-color: white;
+  opacity: 0;
+  transition: opacity 250ms ease-out;
+
+  &.opened {
+    display: block;
+    opacity: 1;
+  }
+}
+
+body.lightbox-active {
+  overflow: hidden;
+}
+
+#lightbox_image {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: {
+    size: contain;
+    repeat: no-repeat;
+    position: center;
+  }
+  transition: all 500ms ease-out;
+}
+
+#lightbox_watermark {
+  position: fixed;
+  background-image: asset-url('logo.png');
+  z-index: 1;
+}
+
+#lightbox_controls {
+  .carousel-control {
+    position: fixed;
+    .fa {
+      position: absolute;
+      top: 50%;
+      width: 30px;
+      height: 30px;
+      margin-top: -15px;
+      margin-left: -15px;
+      font-size: 30px;
+    }
+  }
+}

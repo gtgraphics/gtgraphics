@@ -5,6 +5,10 @@
   z-index: 2;
 }
 
+#page_wrapper {
+  box-shadow: 0 1px 3px rgba(black, 0.25);
+}
+
 #page_content {
   background-color: $content-bg;
   

@@ -28,8 +28,8 @@ class Page::ApplicationController < ApplicationController
 
   protected
 
-  def render_page
-    render template_path
+  def render_page(options = {})
+    render template_path, options
   end
 
   def respond_with_page

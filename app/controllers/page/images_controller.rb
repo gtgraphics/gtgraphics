@@ -7,9 +7,10 @@ class Page::ImagesController < Page::ApplicationController
   end
 
   def default
+    @previous_page = @page.left_sibling || @page.siblings.last
+    @next_page = @page.right_sibling || @page.siblings.first
     respond_to do |format|
-      format.html { render_page }
-      format.js { render_page }
+      format.html { render_page layout: !request.xhr? }
       format.send(@image.format) do
         send_file @image.asset.custom.path, filename: @image.virtual_filename,
                                             content_type: @image.content_type,

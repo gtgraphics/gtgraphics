@@ -27,37 +27,15 @@
 
   %a{name: 'top'}
 
+  = yield :pre_body_content
+
   - if content_for? :body_content
     = yield :body_content
-  - elsif background_image
-    #background{class: page.root? ? 'homepage' : 'subpage'}
-      = background_image_tag
+  - else
+    = yield
 
-  .container
+  = loader
 
-    #content_wrapper
-      = link_to :root, id: 'brand' do
-        = image_tag 'logo.png', id: 'logo', alt: 'GT Graphics'
-        .sr-only GT Graphics
-
-      #page_wrapper
-        = render 'navbar'
-
-        - unless content_for? :body_content
-          #page_content
-            = render_flashes
-            = render 'breadcrumbs'
-            - if content_for? :page_content
-              = yield :page_content
-            - else
-              = yield
-
-        = loader
-
-  = render 'footer'
-
-  #back_to_top.visible-md.visible-lg
-    = link_to '#top' do
-      = prepend_icon :angle, translate('helpers.links.back_to_top'), fixed_width: true, direction: :up, size: 3, caption_html: { class: 'sr-only' }
+  = yield :post_body_content
 
 = render template: 'layouts/application'

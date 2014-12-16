@@ -1,0 +1,11 @@
+.page-header
+  %h1= page.title
+
+.page-body
+  .row
+    - @about_pages.each do |user, page|
+      .col-sm-6
+        = link_to page, class: 'submenu-item' do
+          .submenu-item-title
+            = page.title
+          = gravatar_image_tag user.email, size: 400, default: :mm, class: 'submenu-item-image', alt: page.title

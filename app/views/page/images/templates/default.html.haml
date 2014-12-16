@@ -1,51 +1,23 @@
-- present @page do |page|
-  - present @image do |image|
+#lightbox_container.carousel.slide{data: { ride: 'carousel', pause: 'true' }}
 
-    .page-header
-      %h1= image.title
+  %nav.navbar.navbar-top#navbar_lightbox{role: 'navigation'}
+    %ul.nav.navbar-nav#nav_menu_items
+      %li
+        = link_to page.parent do
+          &times;
 
-    - if page.embeddable.next_sibling.nil?
-      = image_tag attached_asset_path(@image, :custom), alt: image.title, class: 'img-responsive'
-    - else
-      = link_to page_path(page.embeddable.next_sibling) do
-        = image_tag attached_asset_path(@image, :custom), alt: image.title, class: 'img-responsive'
+  #lightbox_image{style: background_css(attached_asset_path(@image, :custom))}
+    = image_tag attached_asset_path(@image, :custom), alt: @image.title, class: 'sr-only'
 
+  #lightbox_watermark
 
-    .page-body
+  #lightbox_controls
+    - if @previous_page
+      = link_to @previous_page, class: 'carousel-control left', role: 'button' do
+        = icon :chevron, direction: :left
+        /.glyphicon.glyphicon-chevron-left
 
-      .row
-        .col-sm-8
-          - if image.description.present?
-            = fieldset Image.human_attribute_name(:description) do
-              = raw image.description
-
-          = fieldset Image.human_attribute_name(:artist) do
-            .clearfix
-              .pull-left
-                = image.author.gravatar size: 45
-              = image.author.name
-              %br
-              %span.text-muted= image.taken_at
-
-          = fieldset Page::Image.human_attribute_name(:comments) do
-            = page.embeddable.facebook_comments colorscheme: :dark
-
-        .col-sm-4
-          = fieldset 'Share' do
-            %ul
-              %li= page.embeddable.facebook_like_button style: :button_count
-              %li= link_to page.permalink, page.permalink
-
-          = fieldset Image.human_attribute_name(:shop_urls) do
-            = button_link_to buy_image_path(page.path), type: :primary, block: true do
-              = prepend_icon :dollar, "Contact #{image.author.first_name}", fixed_width: true
-            = page.embeddable.shop_links
-
-          = fieldset 'Downloads' do
-            %ul
-              %li= link_to 'Original', download_image_path(page.path, format: image.format)
-              - @image_styles.each do |style|
-                - present style do |style|
-                  = content_tag_for :li, style do
-                    = link_to style.title, download_image_path(page.path, format: style.format, style_id: style.position)
-                    (#{style.width} &times; #{style.height})
+    - if @next_page
+      = link_to @next_page, class: 'carousel-control right', role: 'button' do
+        = icon :chevron, direction: :right
+        /.glyphicon.glyphicon-chevron-right
