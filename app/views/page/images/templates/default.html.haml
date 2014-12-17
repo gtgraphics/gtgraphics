@@ -13,11 +13,9 @@
 
   #lightbox_controls
     - if @previous_page
-      = link_to @previous_page, class: 'carousel-control left', role: 'button' do
+      = link_to @previous_page, class: 'carousel-control left', role: 'button', data: { hotkey: 'left' } do
         = icon :chevron, direction: :left
-        /.glyphicon.glyphicon-chevron-left
 
     - if @next_page
-      = link_to @next_page, class: 'carousel-control right', role: 'button' do
+      = link_to @next_page, class: 'carousel-control right', role: 'button', data: { hotkey: 'right' } do
         = icon :chevron, direction: :right
-        /.glyphicon.glyphicon-chevron-right
