@@ -14,9 +14,21 @@
   }
 
   .lightbox-watermark {
+    pointer-events: none;
     position: fixed;
-    background-image: asset-url('logo.png');
     z-index: 1;
+    width: 304px;
+    height: 93px;
+    bottom: 0px;
+    right: 0px;
+    box-sizing: content-box;
+    background: {
+      image: asset-url('watermark.png');
+      size: 100%;
+      size: contain;
+      position: center;
+      repeat: no-repeat;
+    }
   }
 
   .lightbox-controls {

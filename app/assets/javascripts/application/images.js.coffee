@@ -5,7 +5,8 @@ $(document).ready ->
 
 $(document).ready ->
   $lightbox = $('#lightbox')
-  $lightboxImage = $('.lightbox-image', $lightbox).hide().css(opacity: 0)
+  $lightboxImageContainer = $('.lightbox-image-container', $lightbox)
+  $lightboxImageContainer.hide().css(opacity: 0)
 
   if $lightbox.length
 
@@ -25,6 +26,6 @@ $(document).ready ->
 
     # More beautiful image loading
     Loader.start()
-    $lightboxImage.allImagesLoaded ->
+    $lightboxImageContainer.allImagesLoaded ->
       Loader.done()
-      $lightboxImage.show().animate(opacity: 1)
+      $lightboxImageContainer.show().animate(opacity: 1)
