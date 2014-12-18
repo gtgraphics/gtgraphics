@@ -5,6 +5,7 @@ $(document).ready ->
 
 $(document).ready ->
   $lightbox = $('#lightbox')
+  $lightboxImage = $('.lightbox-image', $lightbox).hide().css(opacity: 0)
 
   if $lightbox.length
 
@@ -23,7 +24,6 @@ $(document).ready ->
       Turbolinks.visit(url)
 
     # More beautiful image loading
-    $lightboxImage = $('.lightbox-image', $lightbox).hide().css(opacity: 0)
     Loader.start()
     $lightboxImage.allImagesLoaded ->
       Loader.done()

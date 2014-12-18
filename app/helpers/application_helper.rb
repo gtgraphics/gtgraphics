@@ -4,9 +4,10 @@ module ApplicationHelper
   end
 
   def body_css
-    classes = ['gtgraphics']
-    classes << I18n.locale.to_s
+    classes = ['gtgraphics', I18n.locale.to_s]
     classes << 'admin' if admin_controller?
+    classes << controller_name
+    classes << "#{controller_name}-#{action_name}"
     classes << content_for(:body_css).presence
     classes.compact.flatten
   end

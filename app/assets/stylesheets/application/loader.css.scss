@@ -1,6 +1,7 @@
 @import 'bootstrap_config';
 
 $loader-width: 130px;
+$loader-height: 45px;
 
 #loader {
   display: none;
@@ -13,8 +14,9 @@ $loader-width: 130px;
   background-color: rgba(black, 0.75);
   text-align: center;
   width: $loader-width;
+  height: $loader-height;
   left: 50%;
-  margin-left: -$loader-width / 2;
+  margin-left: round(-$loader-width / 2);
   bottom: 120px;
 
   .caption {
@@ -24,5 +26,13 @@ $loader-width: 130px;
       size: 18px;
       weight: 300;
     }
+  }
+}
+
+body.images-show {
+  #loader {
+    top: 50%;
+    bottom: auto;
+    margin-top: round(-$loader-height / 2);
   }
 }
