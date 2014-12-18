@@ -9,7 +9,7 @@ $(document).ready ->
 $(window).load ->
   NProgress.done()
 
-$(document).on 'page:fetch', -> 
+$(document).on 'page:fetch', ->
   NProgress.start()
 
 $(document).on 'page:change', ->
@@ -23,3 +23,4 @@ $(document).on 'page:change', ->
 
 $(document).on 'page:restore', ->
   NProgress.remove()
+  Loader.remove()

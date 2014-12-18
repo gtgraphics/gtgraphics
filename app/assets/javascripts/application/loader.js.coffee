@@ -10,3 +10,6 @@ TRANSITION_DURATION = 200
     $loader = $(LOADER_SELECTOR)
     $loader.animate { opacity: 0 }, TRANSITION_DURATION, ->
       $loader.hide()
+
+  remove: ->
+    $(LOADER_SELECTOR).remove()
