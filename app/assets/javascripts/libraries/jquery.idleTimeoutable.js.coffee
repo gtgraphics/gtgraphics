@@ -7,13 +7,11 @@ DEFAULTS =
   idleOnInit: false
 
 setIdle = ($element, options) ->
-  console.debug 'idle'
   $element.addClass(options.idleClass).removeClass(options.awakeClass)
   $element.trigger('idle')
   $element.data('isIdle', true)
 
 setAwake = ($element, options) ->
-  console.debug 'awaken'
   $element.removeClass(options.idleClass).addClass(options.awakeClass)
   $element.trigger('awake')
   $element.removeData('isIdle')
