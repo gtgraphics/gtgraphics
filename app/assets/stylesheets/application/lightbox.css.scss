@@ -1,49 +1,46 @@
 #lightbox {
-  #lightbox_controls {
+  .lightbox-image {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: {
+      size: contain;
+      repeat: no-repeat;
+      position: center;
+    }
+    transition: all 500ms ease-out;
+  }
+
+  .lightbox-watermark {
+    position: fixed;
+    background-image: asset-url('logo.png');
+    z-index: 1;
+  }
+
+  .lightbox-controls {
     opacity: 1;
     transition: opacity 200ms ease-out;
+
+    .carousel-control {
+      position: fixed;
+      .fa {
+        position: absolute;
+        top: 50%;
+        width: 30px;
+        height: 30px;
+        margin-top: -15px;
+        margin-left: -15px;
+        font-size: 30px;
+      }
+    }
   }
 
   &.idle {
-    #lightbox_controls {
+    .lightbox-controls {
       opacity: 0;
       transition: opacity 1s ease-in;
-
-    }
-  }
-}
-
-#lightbox_image {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: {
-    size: contain;
-    repeat: no-repeat;
-    position: center;
-  }
-  transition: all 500ms ease-out;
-}
-
-#lightbox_watermark {
-  position: fixed;
-  background-image: asset-url('logo.png');
-  z-index: 1;
-}
-
-#lightbox_controls {
-  .carousel-control {
-    position: fixed;
-    .fa {
-      position: absolute;
-      top: 50%;
-      width: 30px;
-      height: 30px;
-      margin-top: -15px;
-      margin-left: -15px;
-      font-size: 30px;
     }
   }
 }

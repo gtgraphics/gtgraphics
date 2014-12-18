@@ -6,12 +6,12 @@
         = link_to @gallery_page, data: { hotkey: 'esc' } do
           &times;
 
-  #lightbox_image{style: background_css(attached_asset_path(@image, :custom))}
+  .lightbox-image{style: background_css(attached_asset_path(@image, :custom))}
     = image_tag attached_asset_path(@image, :custom), alt: @image.title, class: 'sr-only'
 
-  #lightbox_watermark
+  .lightbox-watermark
 
-  #lightbox_controls
+  .lightbox-controls
     - if @previous_page
       = link_to @previous_page, class: 'carousel-control left', role: 'button', data: { hotkey: 'left' } do
         = icon :chevron, direction: :left
