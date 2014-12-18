@@ -117,9 +117,12 @@ class Image < ActiveRecord::Base
   def propagate_changes_to_pages!
     transaction do
       pages.each do |page|
-        translations.each do |image_translation|
-          Globalize.with_locale(image_translation.locale) do
-            page.title = image_translation.title
+        translations.each do |translation|
+          Globalize.with_locale(translation.locale) do
+            page.title = translation.title
+            page.meta_description = HTML::FullSanitizer.new.sanitize(
+              translation.description
+            )
           end
         end
         page.set_next_available_slug
