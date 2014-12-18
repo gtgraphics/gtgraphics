@@ -1,5 +1,7 @@
 MODIFIER_SEPARATOR_CHAR = '+'
 
+MODIFIERS = ['ctrl', 'alt', 'shift', 'meta']
+
 SPECIAL_KEYS =
   'backspace': 8
   'tab': 9
@@ -67,14 +69,15 @@ SPECIAL_KEYS =
   "'": 222
 
 $(document).on 'keyup', (event) ->
-  # If modal is displayed, prevent catching hotkeys from body
+
+  # If a modal is shown, prevent catching hotkeys from body
   $modal = $('#modal')
-  if $modal.length > 0 or $modal.is(':visible')
+  if $modal.length and $modal.is(':visible')
     $scope = $modal
   else
-    $scope = null
+    $scope = $(document)
 
-  $('[data-hotkey]', $scope).each ->
+  $scope.find('[data-hotkey]').each ->
     $element = $(@)
 
     keys = $element.data('hotkey').toLowerCase().split(MODIFIER_SEPARATOR_CHAR)
@@ -84,14 +87,13 @@ $(document).on 'keyup', (event) ->
     if key.length == 1 and event.which == key.toUpperCase().charCodeAt(0)
       pressed = true
     else
-      pressed = event.which == SPECIAL_KEYS[key]
+      pressed = (event.which == SPECIAL_KEYS[key])
 
-    jQuery.each ['ctrl', 'alt', 'shift', 'meta'], (index, modifier) ->
+    # Check whether a modifier has been pressed as well
+    jQuery.each MODIFIERS, (index, modifier) ->
       if jQuery.inArray(modifier, modifiers) >= 0
-        pressed = pressed && event["#{modifier}Key"]
+        pressed &&= event["#{modifier}Key"]
 
     if pressed
-      $element.click().trigger('hotkey')
-      return false
-    else
-      return true
+      event.preventDefault()
+      $element.trigger('hotkey')

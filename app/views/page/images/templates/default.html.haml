@@ -1,9 +1,9 @@
-#lightbox_container.carousel.slide{data: { ride: 'carousel', pause: 'true' }}
+#lightbox
 
   %nav.navbar.navbar-top#navbar_lightbox{role: 'navigation'}
     %ul.nav.navbar-nav#nav_menu_items
       %li
-        = link_to page.parent do
+        = link_to @gallery_page, data: { hotkey: 'esc' } do
           &times;
 
   #lightbox_image{style: background_css(attached_asset_path(@image, :custom))}
