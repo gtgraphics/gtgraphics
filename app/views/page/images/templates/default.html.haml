@@ -10,8 +10,8 @@
     .lightbox-image{style: background_css(attached_asset_path(@image, :custom))}
       = image_tag attached_asset_path(@image, :custom), width: @image.width, height: @image.height, alt: @image.title, class: 'sr-only'
 
-    .lightbox-watermark
-      .sr-only GT Graphics
+    / .lightbox-watermark
+    /   .sr-only GT Graphics
 
   .lightbox-controls
     - if @previous_page
