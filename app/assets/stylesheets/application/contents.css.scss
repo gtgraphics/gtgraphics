@@ -6,12 +6,14 @@
 }
 
 #page_wrapper {
-  box-shadow: 0 1px 3px rgba(black, 0.25);
+  @media (min-width: $screen-sm-min) {
+    box-shadow: 0 1px 3px rgba(black, 0.25);
+  }
 }
 
 #page_content {
   background-color: $content-bg;
-  
+
   margin-bottom: 10px;
   @media (min-width: $screen-sm-min) {
     margin-bottom: 80px;

@@ -9,7 +9,7 @@ module ImageUploadable
     self.watermark = false
 
     process :set_content_type
-  
+
     version :custom do
       process :crop
       process :resize
@@ -67,7 +67,7 @@ module ImageUploadable
   def watermark
     return unless watermarked?
     manipulate! do |img|
-      watermark = Magick::Image.read("#{Rails.root}/config/watermark.png").first
+      watermark = Magick::Image.read("#{Rails.root}/assets/images/watermark.png").first
       img = img.composite(watermark, Magick::SouthEastGravity, 0, 0, Magick::OverCompositeOp)
       img = yield(img) if block_given?
       img

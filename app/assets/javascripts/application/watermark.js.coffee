@@ -17,12 +17,12 @@ alignWatermark = ->
   else
     ratio = containerWidth / imageWidth
 
-  containerImageWidth = Math.round(imageWidth * ratio)
-  containerImageHeight = Math.round(imageHeight * ratio)
+  containerImageWidth = imageWidth * ratio
+  containerImageHeight = imageHeight * ratio
 
-  right = (containerWidth - containerImageWidth) / 2
+  right = Math.round((containerWidth - containerImageWidth) / 2)
   right = 0 if right < 0
-  bottom = (containerHeight - containerImageHeight) / 2
+  bottom = Math.round((containerHeight - containerImageHeight) / 2)
   bottom = 0 if bottom < 0
 
   $watermark = $('.lightbox-watermark', $lightbox)

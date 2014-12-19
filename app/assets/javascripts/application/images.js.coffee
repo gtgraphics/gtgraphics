@@ -15,7 +15,7 @@ $(document).ready ->
 
     # Allow navigation in the gallery via mousewheel
     $lightbox.mousewheel (event) ->
-      $controls = $(@).find('.carousel-control')
+      $controls = $lightbox.find('.carousel-control')
       right = event.deltaY < 0
       if right
         $control = $controls.filter('.right')
@@ -29,3 +29,17 @@ $(document).ready ->
     $lightboxImageContainer.allImagesLoaded ->
       Loader.done()
       $lightboxImageContainer.show().animate(opacity: 1)
+
+    # Add swipe for mobile devices
+    if Modernizr.touch
+      $lightbox.swipe
+        swipe: (event, direction) ->
+          $controls = $lightbox.find('.carousel-control')
+          switch direction
+            when 'left'
+              $control = $controls.filter('.right')
+            when 'right'
+              $control = $controls.filter('.left')
+          if $control and $control.length
+            url = $control.attr('href')
+            Turbolinks.visit(url)

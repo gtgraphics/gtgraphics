@@ -1,3 +1,6 @@
+@import 'bootstrap_config';
+@import 'compass';
+
 #lightbox {
   .lightbox-image {
     position: fixed;
@@ -17,11 +20,17 @@
     pointer-events: none;
     position: fixed;
     z-index: 1;
-    width: 304px;
-    height: 93px;
+
+    width: 163px;
+    height: 50px;
+
+    @media (min-width: $screen-md-min) {
+      width: 304px;
+      height: 93px;
+    }
+
     bottom: 0px;
     right: 0px;
-    box-sizing: content-box;
     background: {
       image: asset-url('watermark.png');
       size: 100%;
@@ -37,6 +46,8 @@
 
     .carousel-control {
       position: fixed;
+      background: none;
+
       .fa {
         position: absolute;
         top: 50%;
