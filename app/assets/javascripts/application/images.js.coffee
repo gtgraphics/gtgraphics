@@ -31,15 +31,14 @@ $(document).ready ->
       $lightboxImageContainer.show().animate(opacity: 1)
 
     # Add swipe for mobile devices
-    if Modernizr.touch
-      $lightbox.swipe
-        swipe: (event, direction) ->
-          $controls = $lightbox.find('.carousel-control')
-          switch direction
-            when 'left'
-              $control = $controls.filter('.right')
-            when 'right'
-              $control = $controls.filter('.left')
-          if $control and $control.length
-            url = $control.attr('href')
-            Turbolinks.visit(url)
+    $lightbox.swipe
+      swipe: (event, direction) ->
+        $controls = $lightbox.find('.carousel-control')
+        switch direction
+          when 'left'
+            $control = $controls.filter('.right')
+          when 'right'
+            $control = $controls.filter('.left')
+        if $control and $control.length
+          url = $control.attr('href')
+          Turbolinks.visit(url)
