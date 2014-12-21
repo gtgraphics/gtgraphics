@@ -5,18 +5,22 @@ module ImageUploadable
     include CarrierWave::RMagick
     include CarrierWave::MimeTypes
 
-    class_attribute :watermark, instance_accessor: false
-    self.watermark = false
-
     process :set_content_type
 
     version :custom do
       process :crop
       process :resize
-      process :watermark
 
       def full_filename(file)
         "custom/#{file}"
+      end
+    end
+
+    version :public, from_version: :custom do
+      process :watermark
+
+      def full_filename(file)
+        "public/#{file}"
       end
     end
 
@@ -56,16 +60,7 @@ module ImageUploadable
     model.try(:resized?) || false
   end
 
-  def watermarked?
-    if model.respond_to?(:watermarked?)
-      model.watermarked?
-    else
-      self.class.watermark
-    end
-  end
-
   def watermark
-    return unless watermarked?
     manipulate! do |img|
       watermark = Magick::Image.read("#{Rails.root}/assets/images/watermark.png").first
       img = img.composite(watermark, Magick::SouthEastGravity, 0, 0, Magick::OverCompositeOp)
