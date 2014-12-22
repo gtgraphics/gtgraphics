@@ -7,7 +7,7 @@
   only screen and (     -o-min-device-pixel-ratio: 2/1),
   only screen and (        min-device-pixel-ratio: 2),
   only screen and (                min-resolution: 192dpi),
-  only screen and (                min-resolution: 2dppx) { 
+  only screen and (                min-resolution: 2dppx) {
     background-image: asset-url($image-url);
   }
 }
@@ -35,7 +35,7 @@
   border-top: 0;
   border-bottom: $size solid;
   border-right: $size solid transparent;
-  border-left: $size solid transparent; 
+  border-left: $size solid transparent;
 }
 
 @mixin caret-right($size: 4px) {
@@ -71,4 +71,16 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+// Blur
+
+@mixin blur($radius) {
+  filter: blur(#{$radius}px);
+  -webkit-filter: blur(#{$radius}px);
+  -moz-filter: blur(#{$radius}px);
+  -o-filter: blur(#{$radius}px);
+  -ms-filter: blur(#{$radius}px);
+  filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'blur\'><feGaussianBlur stdDeviation=\'#{$radius}\' /></filter></svg>#blur");
+  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='#{$radius}');
 }

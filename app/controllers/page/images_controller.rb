@@ -27,7 +27,7 @@ class Page::ImagesController < Page::ApplicationController
     @message = Message::BuyRequest.new
     @message.image = @image
     respond_to do |format|
-      format.html
+      format.html { render layout: 'page/contents' }
     end
   end
 

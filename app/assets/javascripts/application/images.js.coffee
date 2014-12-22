@@ -17,10 +17,10 @@ $(document).ready ->
   $lightboxImageContainer = $('.lightbox-image-container', $lightbox)
   $lightboxImageContainer.hide().css(opacity: 0)
 
-  if $lightboxImageContainer.length
+  if $lightbox.length
 
     # Hide carousel controls after 5 seconds if no user input happens
-    $lightboxImageContainer.idleTimeoutable()
+    $lightbox.idleTimeoutable()
 
     # Allow navigation in the gallery via mousewheel
     # $lightbox.mousewheel (event) ->
@@ -29,13 +29,14 @@ $(document).ready ->
 
     # More beautiful image loading
     Loader.start()
-    $lightboxImageContainer.allImagesLoaded ->
+    $('.lightbox-image', $lightboxImageContainer).allImagesLoaded ->
       Loader.done()
       $lightboxImageContainer.show().animate(opacity: 1)
 
     # Add swipe for mobile devices
-    $lightboxImageContainer.swipe
-      swipe: (event, direction) ->
-        prev = (direction == 'left')
-        return unless prev or direction == 'right'
-        slide($lightbox, prev)
+    if Modernizr.touch
+      $lightboxImageContainer.swipe
+        swipe: (event, direction) ->
+          prev = (direction == 'left')
+          return unless prev or direction == 'right'
+          slide($lightbox, prev)

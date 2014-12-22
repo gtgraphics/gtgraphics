@@ -1,39 +1,50 @@
-%nav.navbar.navbar-lightbox.navbar-fixed-top#navbar_lightbox{role: 'navigation'}
-  .container-fluid
-    %p.navbar-text
-      = @image.title
+- present @image do |image|
 
-    - if @image_styles.any?
-      %p.navbar-text.navbar-right
-        .btn-group.pull-right
-          = button_link_to '#', type: :primary, class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
-            = prepend_icon :download, 'Download'
-            = caret
-          %ul.dropdown-menu
-            - @image_styles.each do |image_style|
-              - present image_style do |image_style|
-                %li
-                  = link_to download_image_path(@page.path, style_id: image_style.position), data: { no_turbolink: true } do
-                    .image-style-title
+  %nav.navbar.navbar-lightbox.navbar-fixed-top#navbar_lightbox{role: 'navigation'}
+    .container-fluid
+      .navbar-header
+        = link_to :root, class: 'navbar-brand' do
+          %span.sr-only GT Graphics
+      %ul.nav.navbar-nav.navbar-right
+        - if @image_styles.any?
+          %li.downloads
+            = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+              = prepend_icon :download, 'Download', fixed_width: true
+              = caret
+            %ul.dropdown-menu.dropdown-menu-right
+              - @image_styles.each do |image_style|
+                - present image_style do |image_style|
+                  %li
+                    = link_to download_image_path(@page.path, style_id: image_style.position), data: { no_turbolink: true } do
                       = image_style.title
-                    %small.image-style-info.text-muted
-                      #{image_style.file_size}
 
+        %li.buy
+          = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+            = prepend_icon :dollar, 'Erwerben', fixed_width: true
+            = caret
+          %ul.dropdown-menu.dropdown-menu-right.shop-providers
+            = image.shop_links
 
-#lightbox
+  #lightbox
 
-  .lightbox-image-container
-    .lightbox-image{style: background_css(attached_asset_path(@image, :public))}
-      = image_tag attached_asset_path(@image, :public), width: @image.width, height: @image.height, alt: @image.title, class: 'sr-only'
+    .lightbox-image-container
+      .lightbox-background{style: background_css(attached_asset_path(@image, :public))}
+      .lightbox-image{style: background_css(attached_asset_path(@image, :public))}
+        = image_tag attached_asset_path(@image, :public), width: @image.width, height: @image.height, alt: @image.title, class: 'sr-only'
 
-    / .lightbox-watermark
-    /   .sr-only GT Graphics
+    .lightbox-caption
+      .container
+        .row
+          .col-md-6
+            .lightbox-description
+              %h1= image.title
+              = image.description
 
-  .lightbox-controls
-    - if @previous_page
-      = link_to @previous_page, class: 'carousel-control left', role: 'button', data: { hotkey: 'left' } do
-        = icon :chevron, direction: :left
+    .lightbox-controls
+      - if @previous_page
+        = link_to @previous_page, class: 'carousel-control left', role: 'button', data: { hotkey: 'left' } do
+          = icon :chevron, direction: :left
 
-    - if @next_page
-      = link_to @next_page, class: 'carousel-control right', role: 'button', data: { hotkey: 'right' } do
-        = icon :chevron, direction: :right
+      - if @next_page
+        = link_to @next_page, class: 'carousel-control right', role: 'button', data: { hotkey: 'right' } do
+          = icon :chevron, direction: :right
