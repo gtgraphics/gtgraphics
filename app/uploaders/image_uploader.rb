@@ -9,19 +9,19 @@ class ImageUploader < AttachmentUploader
     end
   end
 
-  version :window, from_version: :custom do
-    process resize_to_fill: [530, 200]
-
-    def full_filename(file)
-      "windows/#{file}"
-    end
-  end
-
   version :brick, from_version: :custom do
     process resize_to_fit: [350, nil]
 
     def full_filename(file)
       "bricks/#{file}"
+    end
+  end
+
+  version :menu_bricks, from_version: :custom do
+    process resize_to_fill: [530, 200]
+
+    def full_filename(file)
+      "menu_bricks/#{file}"
     end
   end
 
