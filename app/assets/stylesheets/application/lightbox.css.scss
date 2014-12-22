@@ -2,12 +2,22 @@
 @import 'compass';
 
 #lightbox {
-  .lightbox-image {
-    position: fixed;
+
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  .lightbox-image-container, .lightbox-image {
+    position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
+  }
+
+  .lightbox-image {
     background: {
       size: contain;
       repeat: no-repeat;
@@ -16,36 +26,13 @@
     transition: all 500ms ease-out;
   }
 
-  .lightbox-watermark {
-    pointer-events: none;
-    position: fixed;
-    z-index: 1;
-    width: 163px;
-    height: 50px;
-
-    @media (min-width: $screen-md-min) {
-      width: 304px;
-      height: 93px;
-    }
-
-    bottom: 0px;
-    right: 0px;
-    background: {
-      image: asset-url('watermark.png');
-      size: 100%;
-      size: contain;
-      position: center;
-      repeat: no-repeat;
-    }
-  }
-
   .lightbox-controls {
     opacity: 1;
     transition: opacity 200ms ease-out;
 
     .carousel-control {
-      position: fixed;
       background: none;
+      width: 100px;
 
       .fa {
         position: absolute;
@@ -63,6 +50,8 @@
     .lightbox-controls {
       opacity: 0;
       transition: opacity 1s ease-in;
+      pointer-events: none;
     }
   }
+
 }

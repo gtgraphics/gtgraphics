@@ -1,7 +1,7 @@
 namespace :deploy do
   namespace :delayed_job do
     def args
-      fetch(:delayed_job_args, "")
+      fetch(:delayed_job_args, '')
     end
 
     def delayed_job_roles
@@ -9,9 +9,9 @@ namespace :deploy do
     end
 
     desc 'Stop the delayed_job process'
-    task :stop => [:set_rails_env] do
+    task stop: [:set_rails_env] do
       on roles(delayed_job_roles) do
-        within release_path do    
+        within release_path do
           with rails_env: fetch(:rails_env) do
             execute release_path.join('bin/delayed_job'), :stop
           end
@@ -20,7 +20,7 @@ namespace :deploy do
     end
 
     desc 'Start the delayed_job process'
-    task :start => [:set_rails_env] do
+    task start: [:set_rails_env] do
       on roles(delayed_job_roles) do
         within release_path do
           with rails_env: fetch(:rails_env) do
@@ -31,7 +31,7 @@ namespace :deploy do
     end
 
     desc 'Restart the delayed_job process'
-    task :restart => [:set_rails_env] do
+    task restart: [:set_rails_env] do
       on roles(delayed_job_roles) do
         within release_path do
           with rails_env: fetch(:rails_env) do

@@ -1,10 +1,26 @@
-#lightbox
+%nav.navbar.navbar-lightbox.navbar-fixed-top#navbar_lightbox{role: 'navigation'}
+  .container-fluid
+    %p.navbar-text
+      = @image.title
 
-  %nav.navbar.navbar-top#navbar_lightbox{role: 'navigation'}
-    %ul.nav.navbar-nav#nav_menu_items
-      %li
-        = link_to @gallery_page, data: { hotkey: 'esc' } do
-          &times;
+    - if @image_styles.any?
+      %p.navbar-text.navbar-right
+        .btn-group.pull-right
+          = button_link_to '#', type: :primary, class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+            = prepend_icon :download, 'Download'
+            = caret
+          %ul.dropdown-menu
+            - @image_styles.each do |image_style|
+              - present image_style do |image_style|
+                %li
+                  = link_to download_image_path(@page.path, style_id: image_style.position), data: { no_turbolink: true } do
+                    .image-style-title
+                      = image_style.title
+                    %small.image-style-info.text-muted
+                      #{image_style.file_size}
+
+
+#lightbox
 
   .lightbox-image-container
     .lightbox-image{style: background_css(attached_asset_path(@image, :public))}

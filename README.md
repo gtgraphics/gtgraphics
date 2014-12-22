@@ -8,7 +8,7 @@ A project presentation and portfolio web site.
 
 * Ruby 2.1.0
 * PostgreSQL
-* ImageMagick:
+* ImageMagick
 * ExifTool
 
 ## Setup

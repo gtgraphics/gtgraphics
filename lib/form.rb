@@ -1,3 +1,4 @@
+# Provides an abstract interface for creating form objects
 class Form
   include ActiveModel::Model
   include Virtus.model
@@ -5,7 +6,7 @@ class Form
 
   include Form::EmbedsOneExtension
   include Form::EmbedsManyExtension
- 
+
   define_model_callbacks :initialize, :validation, :submit
 
   def initialize(*)
@@ -14,18 +15,16 @@ class Form
       yield(form) if block_given?
     end
   end
- 
+
   class << self
     def attribute_with_form(name, *args)
       attribute_without_form(name, *args)
-
-      unless method_defined?("#{name}?")
-        class_eval <<-RUBY
-          def #{name}?
-            #{name}.present?
-          end
-        RUBY
-      end
+      return if method_defined?("#{name}?")
+      class_eval <<-RUBY
+        def #{name}?
+          #{name}.present?
+        end
+      RUBY
     end
 
     alias_method_chain :attribute, :form
@@ -43,47 +42,55 @@ class Form
     def submit(attributes = {}, &block)
       new(attributes, &block).tap(&:submit)
     end
- 
+
     def submit!(attributes = {}, &block)
       new(attributes, &block).tap(&:submit!)
     end
   end
- 
-  def submit
-    submit!
+
+  def submit(options = {})
+    submit!(options)
   rescue FormInvalid
     false
   end
- 
-  def submit!
-    raise FormInvalid.new(self) unless valid?
+
+  def submit!(options = {})
+    fail FormInvalid.new(self) unless perform_validations(options)
     run_callbacks :submit do
       perform
       true
     end
   end
- 
+
   def inspect
     if self.class.attribute_set.any?
-      attributes_str = " " + self.class.attribute_set.map(&:name).map do |key|
+      attributes_str = ' ' + self.class.attribute_set.map(&:name).map do |key|
         "#{key}: #{attributes[key].inspect}"
       end.join(', ')
     end
     "#<#{self.class.name}#{attributes_str}>"
   end
- 
+
   def valid?(*)
     run_callbacks :validation do
       super
     end
   end
- 
+
   def to_s
     inspect
   end
- 
+
   protected
+
   def perform
-    raise NotImplementedError, "#{self.class.name}#perform must be overridden to submit this form"
+    fail NotImplementedError, "#{self.class.name}#perform must be overridden " \
+                              'to submit this form'
+  end
+
+  private
+
+  def perform_validations(options = {})
+    options[:validate] == false || valid?(options[:context])
   end
 end

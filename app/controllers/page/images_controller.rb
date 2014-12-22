@@ -19,14 +19,8 @@ class Page::ImagesController < Page::ApplicationController
 
   def download
     style_id = params[:style_id]
-    if style_id
-      @image_style = @image.styles.find_by!(position: style_id)
-      image = @image_style
-    else
-      image = @image
-    end
-
-    render_image(image, :attachment)
+    @image_style = @image.styles.find_by!(position: style_id)
+    render_image(@image_style, :attachment)
   end
 
   def buy
@@ -69,9 +63,10 @@ class Page::ImagesController < Page::ApplicationController
   end
 
   def render_image(image, disposition = :inline)
-    send_file image.asset.custom.path, filename: image.virtual_filename,
-                                       content_type: image.content_type,
-                                       disposition: disposition,
-                                       x_sendfile: true
+    path = image.asset.versions[:public].path
+    send_file path, filename: image.virtual_filename,
+                    content_type: image.content_type,
+                    disposition: disposition,
+                    x_sendfile: true
   end
 end

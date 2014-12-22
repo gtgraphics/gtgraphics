@@ -1,6 +1,8 @@
 class Image::StylePresenter < ApplicationPresenter
+  include FileAttachablePresenter
+
   presents :style
-  
+
   def title
     super.presence || dimensions
   end
@@ -15,5 +17,22 @@ class Image::StylePresenter < ApplicationPresenter
       h.concat ' '
       h.concat I18n.translate(:pixels)
     end
+  end
+
+  # Aspect Ratio
+
+  KNOWN_ASPECT_RATIOS = %w(16:10 16:9 4:3 3:2).freeze
+
+  def self.known_aspect_ratios
+    KNOWN_ASPECT_RATIOS.each_with_object({}) do |caption, ratios|
+      ratio = Rational(*caption.split(':', 2))
+      ratios[ratio] = caption
+    end
+  end
+
+  def aspect_ratio
+    caption = self.class.known_aspect_ratios[style.aspect_ratio]
+    return I18n.translate('aspect_ratios.others') if caption.nil?
+    I18n.translate(caption, scope: :aspect_ratios, default: caption)
   end
 end

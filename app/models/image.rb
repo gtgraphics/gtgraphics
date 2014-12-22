@@ -108,10 +108,10 @@ class Image < ActiveRecord::Base
   end
 
   private
+
   def set_default_title
-    if title.blank? && original_filename.present?
-      self.title = File.basename(original_filename, '.*').titleize
-    end
+    return if title.present? || original_filename.blank?
+    self.title = File.basename(original_filename, '.*').titleize
   end
 
   def propagate_changes_to_pages!

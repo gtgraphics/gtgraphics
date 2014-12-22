@@ -55,7 +55,14 @@ class Image < ActiveRecord::Base
         end
       end
 
+      # Dimensions
+
+      def aspect_ratio
+        Rational(width, height)
+      end
+
       protected
+
       def set_content_type
         self.content_type = asset.custom.file.content_type
       end

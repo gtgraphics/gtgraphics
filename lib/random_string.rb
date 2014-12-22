@@ -4,7 +4,7 @@ class RandomString
     ('a'..'z'),
     ('0'..'9'),
     ['#', '!', '?', '=', '/', '+', '@', '$']
-  ]
+  ].freeze
 
   attr_reader :length, :chars
 
@@ -23,5 +23,6 @@ class RandomString
     length = @length.is_a?(Range) ? rand(@length) : @length
     length.times.collect { @chars.sample }.shuffle.join
   end
+
   alias_method :to_s, :generate
 end

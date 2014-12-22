@@ -1,5 +1,4 @@
-ruby '2.1.0'
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.8'
@@ -27,7 +26,6 @@ gem 'globalize'
 gem 'state_machine'
 gem 'ransack'
 gem 'virtus'
-#gem 'mini_magick'
 gem 'rmagick'
 gem 'carrierwave'
 

@@ -34,6 +34,7 @@ module ImageUploadable
   end
 
   protected
+
   def crop
     return unless cropped?
     manipulate! do |img|
@@ -62,8 +63,9 @@ module ImageUploadable
 
   def watermark
     manipulate! do |img|
-      watermark = Magick::Image.read("#{Rails.root}/assets/images/watermark.png").first
-      img = img.composite(watermark, Magick::SouthEastGravity, 0, 0, Magick::OverCompositeOp)
+      watermark = Magick::Image.read("#{Rails.root}/config/watermark.png").first
+      img = img.composite(watermark, Magick::SouthEastGravity,
+                          0, 0, Magick::OverCompositeOp)
       img = yield(img) if block_given?
       img
     end

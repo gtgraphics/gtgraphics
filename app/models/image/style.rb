@@ -48,7 +48,8 @@ class Image < ActiveRecord::Base
         if title.present?
           super
         else
-          image.title.parameterize.underscore + File.extname(original_filename).downcase
+          image.title.parameterize.underscore +
+          File.extname(original_filename).downcase
         end
       end
     end

@@ -1,6 +1,13 @@
 @import 'bootstrap/mixins';
 @import 'bootstrap/variables';
 
+//== Custom GT Graphics Styles
+
+$content-bg: rgb(40, 40, 40);
+$content-padding: 15px;
+$content-padding-lg: 25px;
+$footer-bg: $content-bg; // rgba(10, 10, 10, 0.92);
+
 
 // https://raw.githubusercontent.com/twbs/bootstrap-sass/master/vendor/assets/stylesheets/bootstrap/_variables.scss
 
@@ -79,11 +86,11 @@ $headings-color:          $text-color;
 //## Specify custom location and filename of the included Glyphicons icon font. Useful for those including Bootstrap via Bower.
 
 //** Load fonts from this directory.
-$icon-font-path: "bootstrap/";
-//** File name for all font files.
-$icon-font-name:          "glyphicons-halflings-regular";
-//** Element ID within SVG icon file.
-$icon-font-svg-id:        "glyphicons_halflingsregular";
+// $icon-font-path: "bootstrap/";
+// //** File name for all font files.
+// $icon-font-name:          "glyphicons-halflings-regular";
+// //** Element ID within SVG icon file.
+// $icon-font-svg-id:        "glyphicons_halflingsregular";
 
 
 //== Components
@@ -105,9 +112,9 @@ $padding-xs-horizontal:     5px;
 $line-height-large:         1.33;
 $line-height-small:         1.5;
 
-$border-radius-base:        4px;
-$border-radius-large:       6px;
-$border-radius-small:       3px;
+$border-radius-base:        0;
+$border-radius-large:       0;
+$border-radius-small:       0;
 
 //** Global color for active items (e.g., navs or dropdowns).
 $component-active-color:    #fff;
@@ -216,16 +223,16 @@ $input-group-addon-border-color: $input-border;
 //## Dropdown menu container and contents.
 
 //** Background for the dropdown menu.
-$dropdown-bg:                    $text-color;
+$dropdown-bg:                    rgba($content-bg, 0.95);
 //** Dropdown menu `border-color`.
 $dropdown-border:                rgba(0,0,0,.15);
 //** Dropdown menu `border-color` **for IE8**.
-$dropdown-fallback-border:       #ccc;
+$dropdown-fallback-border:       #333;
 //** Divider color for between dropdown items.
-$dropdown-divider-bg:            #e5e5e5;
+$dropdown-divider-bg:            #666;
 
 //** Dropdown link text color.
-$dropdown-link-color:            $gray-dark;
+$dropdown-link-color:            $text-color;
 //** Hover color for dropdown links.
 $dropdown-link-hover-color:      darken($gray-dark, 5%);
 //** Hover background for dropdown links.
@@ -853,12 +860,3 @@ $hr-border:                   $gray-lighter;
 
 //** Horizontal offset for forms and lists.
 $component-offset-horizontal: 180px;
-
-
-
-//== Custom GT Graphics Styles
-
-$content-bg: rgb(40, 40, 40);
-$content-padding: 15px;
-$content-padding-lg: 25px;
-$footer-bg: $content-bg; // rgba(10, 10, 10, 0.92);
