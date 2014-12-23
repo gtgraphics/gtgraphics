@@ -4,7 +4,7 @@
   margin: 20px auto;
   width: 215px;
   display: block;
-  
+
   @media (min-width: $screen-sm-min) {
     margin: 25px $content-padding;
     width: 300px;
@@ -19,8 +19,8 @@
     margin: 35px $content-padding-lg;
     width: 350px;
   }
+}
 
-  #logo {
-    width: 100%;
-  }
+#logo {
+  width: 100%;
 }

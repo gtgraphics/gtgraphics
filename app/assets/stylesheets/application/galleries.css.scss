@@ -74,12 +74,13 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
 
     .gallery-image-caption-wrapper {
       position: absolute;
-      top: -2px;
-      bottom: -2px;
-      left: -2px;
-      right: -2px;
+      top: -1px;
+      bottom: -1px;
+      left: -1px;
+      right: -1px;
       opacity: 0;
       transition: opacity 200ms ease-out;
+      background-color: rgba(black, 0.6);
 
       .gallery-image-caption-container {
         display: table;
@@ -90,7 +91,6 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
         .gallery-image-caption {
           display: table-cell;
           vertical-align: middle;
-          background-color: rgba(black, 0.6);
           padding: 30px;
           text-align: center;
 

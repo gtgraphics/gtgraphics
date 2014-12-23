@@ -6,6 +6,7 @@
       .container-fluid
         .navbar-header
           = link_to :root, class: 'navbar-brand' do
+            = image_tag 'lightbox_logo.png', id: 'logo', alt: 'GT Graphics'
             %span.sr-only GT Graphics
         %ul.nav.navbar-nav.navbar-right
           - if @image_styles.any?
