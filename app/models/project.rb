@@ -51,6 +51,7 @@ class Project < ActiveRecord::Base
   end
 
   private
+
   def set_client
     if client_name.blank?
       self.client = nil
@@ -60,13 +61,11 @@ class Project < ActiveRecord::Base
   end
 
   def destroy_client_if_unreferenced
-    client.destroy if client.projects.without(self).empty?
+    client.destroy if client && client.projects.without(self).empty?
   end
 
   def destroy_replaced_client_if_unreferenced
     client = Client.find_by(id: client_id_was)
-    if client and client.projects.empty?
-      client.destroy
-    end
+    client.destroy if client && client.projects.empty?
   end
 end

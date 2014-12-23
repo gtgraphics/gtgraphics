@@ -27,6 +27,7 @@ class Image < ActiveRecord::Base
   include Image::ProjectAssignable
   include Image::Resizable
   include Image::ExifStorable
+  include Image::ExifCopyrightProtectable
   include Image::Buyable
 
   include Filterable

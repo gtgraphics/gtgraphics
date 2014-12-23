@@ -25,6 +25,7 @@ class Image < ActiveRecord::Base
     include Image::Attachable
     include Image::Croppable
     include Image::ExifAnalyzable
+    include Image::ExifCopyrightProtectable
     include Image::Resizable
     include PersistenceContextTrackable
     include TitleSearchable
@@ -49,7 +50,7 @@ class Image < ActiveRecord::Base
           super
         else
           image.title.parameterize.underscore +
-          File.extname(original_filename).downcase
+            File.extname(original_filename).downcase
         end
       end
     end

@@ -24,12 +24,5 @@ class Image < ActiveRecord::Base
     def exif_capable?
       content_type.in?(self.class.exif_capable_content_types)
     end
-
-    def write_exif_copyright!
-      year = (exif.date_time_created || exif.date_time).year rescue Date.today.year
-      exif.copyright = "GT Graphics #{year}, #{author.name} (#{author.email})"
-      exif.save!
-      true
-    end
   end
 end

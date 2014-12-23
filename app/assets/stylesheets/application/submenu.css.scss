@@ -10,6 +10,8 @@
   display: block;
   margin-bottom: $grid-gutter-width;
   transition: all 200ms ease-out;
+  backface-visibility: hidden;
+  text-decoration: none;
 
   .submenu-item-title {
     font-size: 18px;
@@ -18,12 +20,19 @@
     text-align: center;
     background-color: rgba(black, 0.2);
     text-transform: uppercase;
+    color: $text-color;
+    text-decoration: none;
   }
 
-  &:hover {
+  &:hover, &:focus {
+    outline: none;
     transform: scale(1.03);
+    text-decoration: none;
+
     .submenu-item-title {
+      color: $text-color;
       background-color: rgba(black, 0.4);
+      text-decoration: none;
     }
   }
 

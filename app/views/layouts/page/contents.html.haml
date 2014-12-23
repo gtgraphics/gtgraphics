@@ -1,12 +1,9 @@
 - content_for :pre_body_content do
   #background{class: page.root? ? 'homepage' : 'subpage'}
-    = background_image_tag 
+    = background_image_tag
 
 - content_for :page_wrapper_content do
   #page_content
-    - if content_for? :content_content
-      = yield :content_content
-    - else
-      = yield
+    = yield
 
 = render template: 'layouts/page/default'

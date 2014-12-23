@@ -1,7 +1,11 @@
 namespace :gtg do
   namespace :import do
     desc 'Import all remote GT Graphics projects'
-    task :projects => :environment do
+    task projects: :environment do
+      puts 'Destroying existing Projects'
+      Project.destroy_all
+
+      puts 'Importing Projects'
 
       showcase_pages = {}
 
@@ -12,7 +16,7 @@ namespace :gtg do
 
         project_parser = Import::ProjectPageParser.new(project_page_url)
 
-        path = "about/#{project_parser.author.first_name.parameterize}/showcase"
+        path = 'showcase'
 
         showcase_page = showcase_pages[path] ||= begin
           page = Page.find_by(path: path)

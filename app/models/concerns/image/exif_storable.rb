@@ -1,13 +1,14 @@
 class Image < ActiveRecord::Base
+  # This module controls the database caching of the Exif data that is
+  # embedded in uploaded images
   module ExifStorable
     extend ActiveSupport::Concern
 
     included do
       include Image::ExifAnalyzable
-      
+
       store :exif_data
 
-      before_save :write_copyright_to_exif, if: -> { exif_capable? and (asset_changed? or author_id_changed?) }
       before_save :cache_exif_data, if: [:exif_capable?, :asset_changed?]
     end
 
@@ -37,6 +38,7 @@ class Image < ActiveRecord::Base
     end
 
     private
+
     def cache_exif_data
       self.exif_data = exif.to_hash
     end
