@@ -8,6 +8,7 @@
 
 .submenu-item {
   display: block;
+  outline: none;
   margin-bottom: $grid-gutter-width;
   transition: all 200ms ease-out;
   backface-visibility: hidden;
@@ -25,7 +26,6 @@
   }
 
   &:hover, &:focus {
-    outline: none;
     transform: scale(1.03);
     text-decoration: none;
 

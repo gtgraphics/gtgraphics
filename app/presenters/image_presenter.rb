@@ -35,7 +35,7 @@ class ImagePresenter < ApplicationPresenter
   end
 
   def taken_at
-    h.time_ago(image.taken_at) if image.taken_at
+    h.time_ago(image.try(:taken_at) || image.created_at)
   end
 
   def shop_links(include_buy_request = true)

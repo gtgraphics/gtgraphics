@@ -56,33 +56,65 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
     outline: none;
     display: block;
     overflow: hidden;
-
-    .gallery-image-title {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 15px;
-      right: 15px;
-      font-weight: 300;
-      color: rgba($text-color, 0.8);
-      opacity: 0;
-      transition: all 400ms ease-out;
-      text-align: center;
-      font-size: 18px;
-      text-shadow: 0 1px 4px rgba(black, 0.8);
-      background: linear-gradient(to bottom, rgba(black, 0.5) 0%, rgba(black, 0) 20%);
-    }
+    position: relative;
+    transition: all 200ms ease-out;
+    backface-visibility: hidden;
 
     .gallery-image {
       display: block; // needed as FF renders bullshit
-      transition: all 800ms ease-out;
+      transition: all 3s ease-in-out;
       min-width: 100%;
     }
 
+    .gallery-image-caption-wrapper {
+      position: absolute;
+      top: -2px;
+      bottom: -2px;
+      left: -2px;
+      right: -2px;
+      opacity: 0;
+      transition: opacity 200ms ease-out;
+
+      .gallery-image-caption-container {
+        display: table;
+        width: 100%;
+        height: 100%;
+        min-height: 100%;
+
+        .gallery-image-caption {
+          display: table-cell;
+          vertical-align: middle;
+          background-color: rgba(black, 0.6);
+          padding: 30px;
+          text-align: center;
+
+          .gallery-image-title {
+            padding: 0;
+            margin: 0;
+            font-size: 16px;
+            text-transform: uppercase;
+            color: white;
+            text-shadow: 0 1px 1px rgba(black, 0.4);
+          }
+
+          .gallery-image-info {
+            margin-top: 5px;
+            color: $text-color;
+            font-size: 12px;
+            opacity: 0.4;
+            text-shadow: 0 1px 1px rgba(black, 0.8);
+          }
+        }
+      }
+    }
+
     &:hover, &:focus {
-      .gallery-image-title {
+      transform: scale(1.03);
+
+      .gallery-image-caption-wrapper {
         opacity: 1;
       }
+
       .gallery-image {
         transform: scale(1.1);
       }

@@ -1,13 +1,18 @@
 - if @image_pages.any?
 
   #gallery.clearfix{data: { total_pages: @image_pages.total_pages }}
-    - @image_pages.each do |image_page|
-      .gallery-item
-        = link_to image_page, class: 'gallery-link' do
-          %figure.gallery-image-container
-            = image_tag attached_asset_path(image_page.embeddable.image, :brick), class: 'gallery-image img-responsive', alt: image_page.title
-            %figcaption.gallery-image-caption
-              %h3.sr-only= image_page.title
+    - @image_pages.each do |page|
+      - present page.embeddable do |image_page|
+        .gallery-item
+          = link_to page, class: 'gallery-link' do
+            %figure.gallery-image-container
+              = image_tag attached_asset_path(image_page.image, :brick), class: 'gallery-image img-responsive', alt: page.title
+              %figcaption.gallery-image-caption-wrapper
+                .gallery-image-caption-container
+                  .gallery-image-caption
+                    %h3.gallery-image-title= page.title
+                    .gallery-image-info
+                      = image_page.image.author
 
   = paginate @image_pages
 
