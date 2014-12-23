@@ -61,8 +61,8 @@ class ImagePresenter < ApplicationPresenter
   def shop_link(name)
     human_name = I18n.translate(name, scope: 'views.page/image.shops',
                                       default: name.to_s.humanize)
-
-    h.link_to shop_url(name), target: '_blank' do
+    target = (name.to_s != 'gtgraphics') ? '_blank' : nil
+    h.link_to shop_url(name), target: target do
       h.concat h.shop_provider_icon(name)
       h.concat h.content_tag(:span, human_name, class: 'caption')
     end

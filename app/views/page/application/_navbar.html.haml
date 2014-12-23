@@ -1,6 +1,7 @@
 #nav_content
 
   %nav.navbar.navbar-top#navbar_primary{role: 'navigation', class: secondary_menu_items.any? ? 'has-submenu' : nil}
+
     .navbar-header
       - unless page.root?
         %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}

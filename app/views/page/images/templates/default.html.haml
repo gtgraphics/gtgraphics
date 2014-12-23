@@ -1,31 +1,44 @@
 - present @image do |image|
 
-  %nav.navbar.navbar-lightbox.navbar-fixed-top#navbar_lightbox{role: 'navigation'}
-    .container-fluid
-      .navbar-header
-        = link_to :root, class: 'navbar-brand' do
-          %span.sr-only GT Graphics
-      %ul.nav.navbar-nav.navbar-right
-        - if @image_styles.any?
-          %li.downloads
-            = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
-              = prepend_icon :download, 'Download', fixed_width: true
-              = caret
-            %ul.dropdown-menu.dropdown-menu-right
-              - @image_styles.each do |image_style|
-                - present image_style do |image_style|
-                  %li
-                    = link_to download_image_path(@page.path, style_id: image_style.position), data: { no_turbolink: true } do
-                      = image_style.title
-
-        %li.buy
-          = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
-            = prepend_icon :dollar, 'Erwerben', fixed_width: true
-            = caret
-          %ul.dropdown-menu.dropdown-menu-right.shop-providers
-            = image.shop_links
-
   #lightbox
+
+    %nav.navbar.navbar-lightbox.navbar-fixed-top#navbar_lightbox{role: 'navigation'}
+      .container-fluid
+        .navbar-header
+          = link_to :root, class: 'navbar-brand' do
+            %span.sr-only GT Graphics
+        %ul.nav.navbar-nav.navbar-right
+          - if @image_styles.any?
+            / Download
+            %li.downloads
+              = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+                = prepend_icon :download, 'Download', fixed_width: true
+                = caret
+              %ul.dropdown-menu.dropdown-menu-right
+                - @image_styles.each do |image_style|
+                  - present image_style do |image_style|
+                    %li
+                      = link_to download_image_path(@page.path, style_id: image_style.position), data: { no_turbolink: true } do
+                        = image_style.title
+
+          / Buy
+          %li.buy
+            = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+              = prepend_icon :dollar, 'Erwerben', fixed_width: true
+              = caret
+            %ul.dropdown-menu.dropdown-menu-right.shop-providers
+              = image.shop_links
+
+          - if next_locale
+            / Locale
+            %li#nav_locale
+              = link_to page_path(@page, locale: next_locale), hreflang: next_locale do
+                = prepend_icon :globe, next_locale.to_s.upcase, fixed_width: true
+
+          - if @gallery_page
+            %li
+              = link_to @gallery_page do
+                = icon :times, size: :lg, fixed_width: true
 
     .lightbox-image-container
       .lightbox-background{style: background_css(attached_asset_path(@image, :public))}
