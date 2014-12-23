@@ -14,7 +14,7 @@ class ImagePresenter < ApplicationPresenter
   end
 
   def description
-    super.html_safe
+    super.try(:html_safe)
   end
 
   def dimensions(include_originals = false)
