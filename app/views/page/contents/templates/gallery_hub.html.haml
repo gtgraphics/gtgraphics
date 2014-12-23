@@ -11,4 +11,4 @@
               = gallery_page.title
             - image_page = gallery_page.children.sample
             - if image_page
-              = image_tag attached_asset_path(image_page.embeddable.image, :window), class: 'submenu-item-image', alt: image_page.title
+              = image_tag attached_asset_path(image_page.embeddable.image, :menu_brick), class: 'submenu-item-image', alt: image_page.title

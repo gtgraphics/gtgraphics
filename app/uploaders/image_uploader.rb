@@ -17,7 +17,7 @@ class ImageUploader < AttachmentUploader
     end
   end
 
-  version :menu_bricks, from_version: :custom do
+  version :menu_brick, from_version: :custom do
     process resize_to_fill: [530, 200]
 
     def full_filename(file)

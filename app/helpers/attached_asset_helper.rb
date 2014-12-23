@@ -4,7 +4,9 @@ module AttachedAssetHelper
     if version.nil?
       url = object.asset.url
     else
-      url = object.asset.versions[version.to_sym].url
+      url = object.asset.versions.fetch(version.to_sym) do
+        fail ArgumentError, "Version not found: #{version}"
+      end.url
     end
     timestamp = object.asset_updated_at.to_i
     "#{url}?#{timestamp}"
