@@ -58,8 +58,13 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
     overflow: hidden;
     position: relative;
     transition: all 200ms ease-out;
+
+    // meant to fix scaling artifacts occuring in WebKit
     backface-visibility: hidden;
-    perspective: 1000; // improves blurry Webkit rendering
+
+    // meant to improve blurry WebKit rendering
+    perspective: 1000;
+    transform: translate3d(0,0,0);
 
     .gallery-image {
       display: block; // needed as FF renders bullshit

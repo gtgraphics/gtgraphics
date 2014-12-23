@@ -12,8 +12,13 @@
   margin-bottom: $grid-gutter-width;
   transition: all 200ms ease-out;
   text-decoration: none;
+
+  // meant to fix scaling artifacts occuring in WebKit
   backface-visibility: hidden;
-  perspective: 1000; // improves blurry Webkit rendering
+
+  // meant to improve blurry WebKit rendering
+  perspective: 1000;
+  transform: translate3d(0,0,0);
 
   .submenu-item-title {
     font-size: 18px;
