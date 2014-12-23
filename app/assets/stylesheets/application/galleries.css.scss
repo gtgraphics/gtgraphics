@@ -116,6 +116,7 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
 
     &:hover, &:focus {
       transform: scale(0.97);
+      outline: none;
 
       .gallery-image-caption-wrapper {
         opacity: 1;

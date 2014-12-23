@@ -34,6 +34,7 @@
   &:hover, &:focus {
     transform: scale(0.97);
     text-decoration: none;
+    outline: none;
 
     .submenu-item-title {
       color: $text-color;
