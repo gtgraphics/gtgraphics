@@ -11,8 +11,9 @@
   outline: none;
   margin-bottom: $grid-gutter-width;
   transition: all 200ms ease-out;
-  backface-visibility: hidden;
   text-decoration: none;
+  backface-visibility: hidden;
+  perspective: 1000; // improves blurry Webkit rendering
 
   .submenu-item-title {
     font-size: 18px;
