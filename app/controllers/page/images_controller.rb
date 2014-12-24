@@ -3,6 +3,7 @@ class Page::ImagesController < Page::ApplicationController
   before_action :load_image_styles, only: :show
 
   breadcrumbs do |b|
+    # TODO: Localize
     b.append 'Buy', '#' if action_name.in? %w(buy request_purchase)
   end
 

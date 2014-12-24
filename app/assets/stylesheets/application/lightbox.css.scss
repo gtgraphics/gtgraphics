@@ -125,31 +125,34 @@ $lightbox-nav-height: 50px;
     }
   }
 
-  .lightbox-caption {
-    position: fixed;
-    bottom: 0;
+  // .lightbox-caption {
+  //   position: fixed;
+  //   bottom: 0;
 
-    @media (min-width: $screen-sm-min) {
-      left: 100px;
-      right: 100px;
-    }
+  //   @media (min-width: $screen-sm-min) {
+  //     left: 100px;
+  //     right: 100px;
+  //   }
 
-    .lightbox-description {
-      background-color: rgba(black, 0.75);
-      padding: 20px;
-      font-weight: 300;
-      font-size: 18px;
-      word-wrap: break-word;
-      h1 {
-        margin-top: 0;
-        text-transform: uppercase;
-      }
-    }
+  //   .lightbox-description {
+  //     background-color: rgba(black, 0.75);
+  //     padding: 20px;
+  //     font-weight: 300;
+  //     font-size: 18px;
+  //     word-wrap: break-word;
+  //     h1 {
+  //       margin-top: 0;
+  //       text-transform: uppercase;
+  //     }
+  //   }
+  // }
+}
 
-  }
+#lightbox_page_wrapper {
+  position: absolute;
+  margin: 0;
+  // background-color: rgba($content-bg, 0.95);
+}
 
-  .lightbox-title {
-
-  }
-
+#lightbox_page_content {
 }

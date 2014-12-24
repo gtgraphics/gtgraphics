@@ -1,0 +1,15 @@
+// Hack to make Facebook Comments Box and Like Buttons responsive
+
+.fb-comments {
+  iframe[style], span, iframe span[style] {
+    width: 100% !important;
+  }
+}
+
+.fb-like-box {
+  width: 100% !important;
+
+  iframe[style], span, iframe span[style] {
+    width: 100% !important;
+  }
+}

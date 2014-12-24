@@ -12,6 +12,13 @@ slide = ($lightbox, prev) ->
   url = $control.attr('href')
   Turbolinks.visit(url)
 
+repositionCaption = ->
+  $captionContainer = $('#lightbox_page_wrapper')
+  $title = $('.lightbox-title', $captionContainer)
+  windowHeight = $(window).outerHeight()
+  titleHeight = $title.outerHeight()
+  $captionContainer.css(top: windowHeight - titleHeight)
+
 $(document).ready ->
   $lightbox = $('#lightbox')
   $lightboxImageContainer = $('.lightbox-image-container', $lightbox)
@@ -21,11 +28,6 @@ $(document).ready ->
 
     # Hide carousel controls after 5 seconds if no user input happens
     $lightbox.idleTimeoutable()
-
-    # Allow navigation in the gallery via mousewheel
-    # $lightbox.mousewheel (event) ->
-    #   return if event.deltaY == 0
-    #   slide($lightbox, event.deltaY > 0)
 
     # More beautiful image loading
     Loader.start()
@@ -40,3 +42,18 @@ $(document).ready ->
           prev = (direction == 'left')
           return unless prev or direction == 'right'
           slide($lightbox, prev)
+
+    # Position caption container
+    repositionCaption()
+
+$(window).resize ->
+  repositionCaption()
+
+# $(window).scroll ->
+#   windowHeight = $(window).outerHeight()
+#   scrollY = $(window).scrollTop()
+
+#   scrollRatio = 1 - (scrollY / windowHeight)
+
+#   $image = $('.lightbox-image')
+#   $image.css(opacity: scrollRatio)

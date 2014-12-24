@@ -5,32 +5,34 @@
   z-index: 2;
 }
 
-#page_wrapper {
+#page_wrapper, #lightbox_page_wrapper {
+  width: 100%;
+  margin-bottom: 10px;
+
   @media (min-width: $screen-sm-min) {
+    margin-bottom: 80px;
     box-shadow: 0 1px 3px rgba(black, 0.25);
   }
 }
 
-#page_content {
+#page_content, #lightbox_page_wrapper {
   background-color: $content-bg;
-
-  margin-bottom: 10px;
-  @media (min-width: $screen-sm-min) {
-    margin-bottom: 80px;
-  }
 
   .page-body {
     padding: $content-padding;
+    margin: 0;
+
     @media (min-width: $screen-md-min) {
       padding: $content-padding-lg;
     }
   }
 
+  .page-body + .page-body,
   .page-header + .page-body {
     padding-top: 0;
-  }
 
-  .page-body + .page-body {
-    padding-top: 0;
+    &.well {
+      padding-top: $content-padding-lg;
+    }
   }
 }

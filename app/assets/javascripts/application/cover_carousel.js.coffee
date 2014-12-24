@@ -112,7 +112,7 @@ class CoverCarousel
 
   loadItem: (item, callback) ->
     $item = @extractItem(item)
-   
+
     if $item.hasClass(CoverCarousel.LOADED_CLASS)
       callback() if callback()
     else
@@ -121,7 +121,7 @@ class CoverCarousel
 
       $cover = $item.find(".#{CoverCarousel.COVER_CLASS}")
       unless $cover.length
-        $cover = $('<div />', class: CoverCarousel.COVER_CLASS).prependTo($item) 
+        $cover = $('<div />', class: CoverCarousel.COVER_CLASS).prependTo($item)
 
       $image = $(new Image())
       imageSrc = $item.data('cover')

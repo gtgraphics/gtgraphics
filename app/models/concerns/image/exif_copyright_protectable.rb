@@ -16,7 +16,8 @@ class Image < ActiveRecord::Base
 
     def write_exif_copyright!
       return false if exif.copyright.present?
-      year = (exif.date_time_created || exif.date_time).year rescue Date.today.year
+      year = (exif.date_time_original || exif.date_time_created ||
+        exif.date_time).year rescue Date.today.year
       exif.copyright = "GT Graphics #{year}, #{author.name} (#{author.email})"
       exif.save!
       true

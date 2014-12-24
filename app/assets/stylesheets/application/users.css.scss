@@ -1,0 +1,17 @@
+.user-info {
+  display: inline-block;
+
+  .user-avatar {
+    display: inline-block;
+  }
+
+  .user-name {
+    display: inline-block;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  .user-avatar + .user-name {
+    margin-left: 6px;
+  }
+}

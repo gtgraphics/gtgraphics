@@ -3,8 +3,7 @@
 .page-header {
   margin: 0;
   border-bottom: 0;
-  text-transform: uppercase;
-  
+
   padding: $content-padding;
   @media (min-width: $screen-md-min) {
     padding: $content-padding-lg;
@@ -13,6 +12,7 @@
   h1 {
     margin: 0;
     padding: 0;
+    text-transform: uppercase;
   }
 }
 

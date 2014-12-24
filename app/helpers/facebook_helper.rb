@@ -4,7 +4,8 @@ module FacebookHelper
   end
 
   def facebook_config
-    @@facebook_config ||= YAML.load_file("#{Rails.root}/config/facebook.yml").deep_symbolize_keys
+    @facebook_config ||= YAML.load_file(
+      "#{Rails.root}/config/facebook.yml").deep_symbolize_keys
   end
 
   def facebook_meta_tags
@@ -20,7 +21,9 @@ module FacebookHelper
   end
 
   def facebook_comments(url, options = {})
-    options = options.reverse_merge(width: '100%', count: 5, colorscheme: :light, order_by: :reverse_time)
+    options = options.reverse_merge(
+      width: '100%', count: 5, colorscheme: :light, order_by: :reverse_time
+    )
     content_tag :div, nil, class: 'fb-comments', data: {
       href: url,
       width: options[:width],
@@ -31,8 +34,10 @@ module FacebookHelper
   end
 
   def facebook_like_button(url, options = {})
-    options = options.reverse_merge(width: '100%', style: :standard, label: :like, 
-                                    show_faces: true, share_button: false)
+    options = options.reverse_merge(
+      width: '100%', style: :standard, label: :like,
+      show_faces: true, share_button: false
+    )
     content_tag :div, nil, class: 'fb-like', data: {
       href: url,
       width: options[:width],
@@ -44,6 +49,7 @@ module FacebookHelper
   end
 
   def facebook_site_like_button(options = {})
-    facebook_like_button("http://www.facebook.com/gtgraphics.de", style: :button_count, show_faces: false)
+    facebook_like_button('https://www.facebook.com/gtgraphics.de',
+                         style: :button_count, show_faces: false)
   end
 end
