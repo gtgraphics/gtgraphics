@@ -25,6 +25,11 @@
     @media (min-width: $screen-md-min) {
       padding: $content-padding-lg;
     }
+
+    &.well {
+      border: none;
+      background-color: rgba(black, 0.15);
+    }
   }
 
   .page-body + .page-body,

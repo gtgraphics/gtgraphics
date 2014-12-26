@@ -46,7 +46,7 @@
         .lightbox-background{style: background_css(attached_asset_path(@image, :public))}
         %figure.lightbox-image{style: background_css(attached_asset_path(@image, :public))}
           = image_tag attached_asset_path(@image, :public), width: @image.width, height: @image.height, alt: @image.title, class: 'sr-only'
-          %figcaption.sr-only
+          %figcaption.hidden
             = image.description
 
       .lightbox-controls
@@ -58,7 +58,7 @@
           = link_to @next_page, class: 'carousel-control right', role: 'button', data: { hotkey: 'right' } do
             = icon :chevron, direction: :right
 
-    .container
+    .container.js-only
       #content_wrapper
         #lightbox_page_wrapper
           #lightbox_page_content
@@ -92,12 +92,11 @@
               /     %ul.dropdown-menu.dropdown-menu-right.shop-providers
               /       = image.shop_links
 
-
             .page-body
               .row
-                .col-sm-6
+                .col-sm-6.lightbox-caption
                   = image.description
-                .col-sm-6
+                .col-sm-6.lightbox-metadata
                   %dl.dl-horizontal
                     %dt Aufnahme
                     %dd= image.taken_at
@@ -107,5 +106,6 @@
                     - if image.software.present?
                       %dt Software
                       %dd= image.software
-            .page-body.well
+
+            .page-body.well.lightbox-comments
               = image_page.facebook_comments colorscheme: :dark

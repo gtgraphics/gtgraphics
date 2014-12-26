@@ -5,6 +5,7 @@ DEFAULTS =
   idleClass: 'idle'
   awakeClass: null
   idleOnInit: false
+  target: 'body'
 
 setIdle = ($element, options) ->
   $element.addClass(options.idleClass).removeClass(options.awakeClass)
@@ -24,6 +25,8 @@ jQuery.fn.idleTimeoutable = (options = {}) ->
     $element = $(@)
 
     elementOpts = _(_(options).defaults($element.data())).defaults(DEFAULTS)
+
+    $target = $(elementOpts.target)
 
     if elementOpts.idleOnInit
       setIdle($element, elementOpts)
@@ -46,7 +49,7 @@ jQuery.fn.idleTimeoutable = (options = {}) ->
       setAwake($element, elementOpts) if isIdle($element)
       startTimeout()
 
-    $element.mousemove -> awaken()
+    $target.mousemove -> awaken()
     $(document).keydown -> awaken()
 
     startTimeout()
