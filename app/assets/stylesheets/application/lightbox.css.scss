@@ -65,7 +65,7 @@ $lightbox-nav-height: 50px;
   left: 0;
   right: 0;
 
-  .lightbox-image-container, .lightbox-image, .lightbox-background {
+  .lightbox-image-container, .lightbox-image, .lightbox-background, .lightbox-controls {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -88,15 +88,14 @@ $lightbox-nav-height: 50px;
   }
 
   .lightbox-image {
-    background-size: contain
+    background-size: contain;
   }
 
   .lightbox-controls {
     opacity: 1;
     transition: opacity 200ms ease-out;
-  }
+    z-index: 4;
 
-  .lightbox-controls {
     .carousel-control {
       background: none;
       width: 100px;
@@ -130,7 +129,13 @@ $lightbox-nav-height: 50px;
   position: absolute;
   margin: 0;
   border-top: 1px solid rgba(white, 0.04);
-  transition: margin 1s ease-in-out;
+
+  .lightbox-title h1 {
+    max-width: 60%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 
   .lightbox-caption {
     font-size: 18px;
@@ -144,22 +149,4 @@ $lightbox-nav-height: 50px;
       font-weight: 300;
     }
   }
-}
-
-#lightbox_page_background {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  background-size: cover;
-  z-index: 1;
-  opacity: 0.1;
-  overflow: hidden;
-  @include blur(15);
-}
-
-#lightbox_page_content {
-  position: relative;
-  z-index: 2;
 }

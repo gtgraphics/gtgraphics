@@ -10,6 +10,7 @@ module ImageUploadable
     version :custom do
       process :crop
       process :resize
+      process :strip
 
       def full_filename(file)
         "custom/#{file}"
@@ -66,6 +67,14 @@ module ImageUploadable
       watermark = Magick::Image.read("#{Rails.root}/config/watermark.png").first
       img = img.composite(watermark, Magick::SouthEastGravity,
                           0, 0, Magick::OverCompositeOp)
+      img = yield(img) if block_given?
+      img
+    end
+  end
+
+  def strip
+    manipulate! do |img|
+      img.strip!
       img = yield(img) if block_given?
       img
     end

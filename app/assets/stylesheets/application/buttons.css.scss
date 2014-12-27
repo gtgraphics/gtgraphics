@@ -1,3 +1,20 @@
 .btn {
   border: none;
 }
+
+.btn-header {
+  padding: 0;
+}
+
+.btn-header-icon {
+  border-radius: 50%;
+  background-color: rgba(black, 0.2);
+  width: 32px;
+  height: 32px;
+  padding: 6px 0;
+  text-align: center;
+
+  &:hover, &:focus {
+    background-color: rgba(black, 0.35);
+  }
+}

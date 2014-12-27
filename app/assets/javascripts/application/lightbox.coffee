@@ -17,6 +17,7 @@ repositionCaption = ->
   $title = $('.lightbox-title', $captionContainer)
   windowHeight = $(window).outerHeight()
   titleHeight = $title.outerHeight()
+  titleHeight = 0
   $captionContainer.css(top: windowHeight - titleHeight)
 
 $(document).ready ->

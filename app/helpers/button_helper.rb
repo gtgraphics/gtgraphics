@@ -32,7 +32,7 @@ module ButtonHelper
   private
   def extract_button_options!(args)
     options = args.extract_options!.dup
-    
+
     type = options.delete(:as) || options.delete(:type) || 'default'
     size = options.delete(:size).to_s
     size = case size
@@ -44,7 +44,7 @@ module ButtonHelper
     block_mode = options.delete(:block)
 
     css = options.delete(:class).to_s + " btn"
-    css << " btn-#{type}" if type
+    css << " btn-#{type.to_s.dasherize}" if type
     css << " btn-#{size}" if size
     css << " btn-block" if block_mode
     css << " disabled" if options.delete(:disabled)
