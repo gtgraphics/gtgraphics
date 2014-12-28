@@ -16,10 +16,15 @@ repositionCaption = ->
   $captionContainer.css(top: windowHeight - titleHeight)
 
 resizeImage = ->
+  $image = $('#lightbox .lightbox-image')
+
+  if window.innerWidth < 992
+    $image.css(opacity: 1, bottom: 0)
+    return
+
   imageMargin = $(window).scrollTop()
   windowHeight = $(window).outerHeight()
   imageHeight = windowHeight - imageMargin
-  $image = $('#lightbox .lightbox-image')
   imageWindowRatio = imageHeight / windowHeight
   if imageWindowRatio < 0.3
     opacity = 0

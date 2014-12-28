@@ -2,7 +2,7 @@
 
 #content_wrapper {
   position: relative;
-  z-index: 2;
+  z-index: 5; // leave some space below for lightbox for example
 }
 
 #page_wrapper, #lightbox_page_wrapper {
