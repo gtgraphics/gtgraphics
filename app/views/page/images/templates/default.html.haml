@@ -8,6 +8,13 @@
             = image_tag 'lightbox_logo.png', id: 'logo', alt: 'GT Graphics'
             %span.sr-only GT Graphics
         %ul.nav.navbar-nav.navbar-right
+          %li.details{data: { spy: 'affix', offset_top: 1 }}
+            = link_to '#details', data: { scroll: true } do
+              = prepend_icon :info, translate('helpers.links.details'), fixed_width: true, style: :circle
+          %li.comment{data: { spy: 'affix', offset_top: 1 }}
+            = link_to '#comments', data: { scroll: true } do
+              = prepend_icon :comment, translate('helpers.links.comment'), fixed_width: true
+
           / - if @image_styles.any?
           /   / Download
           /   %li.downloads
@@ -62,45 +69,29 @@
       #content_wrapper
         #lightbox_page_wrapper
           #lightbox_page_content
-            .page-header.lightbox-title.clearfix
-              %h1.pull-left= image.title
-              = user_info image.author, class: 'pull-right' if image.author
+            #info
+              %a{name: 'info'}
 
-            / .btn-toolbar.pull-right
-            /   .btn-group
-            /     = button_link_to user_info(image.author), '#', type: :header
+              .page-header.lightbox-title.clearfix
+                %h1.pull-left= image.title
+                = user_info image.author, class: 'pull-right' if image.author
 
-            /   .btn-group
-            /     = button_link_to '#', type: :header_icon, class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
-            /       = prepend_icon :download, 'Download', fixed_width: true, caption_html: { class: 'sr-only' }
-            /     %ul.dropdown-menu.dropdown-menu-right
-            /       - @image_styles.each do |image_style|
-            /         - present image_style do |image_style|
-            /           %li
-            /             = link_to download_image_path(@page.path, style_id: image_style.position), data: { no_turbolink: true } do
-            /               = image_style.title
+              .page-body
+                .row
+                  - if image.description.present?
+                    .col-sm-6.lightbox-caption
+                      = image.description
+                  .col-sm-6.lightbox-metadata
+                    %dl.dl-horizontal
+                      %dt Aufnahme
+                      %dd= image.taken_at
+                      - if image.camera.present?
+                        %dt Kamera
+                        %dd= image.camera
+                      - if image.software.present?
+                        %dt Software
+                        %dd= image.software
 
-            /   .btn-group
-            /     = button_link_to '#', type: :header_icon, class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
-            /       = prepend_icon :dollar, 'Erwerben', fixed_width: true, caption_html: { class: 'sr-only' }
-            /     %ul.dropdown-menu.dropdown-menu-right.shop-providers
-            /       = image.shop_links
-
-            .page-body
-              .row
-                - if image.description.present?
-                  .col-sm-6.lightbox-caption
-                    = image.description
-                .col-sm-6.lightbox-metadata
-                  %dl.dl-horizontal
-                    %dt Aufnahme
-                    %dd= image.taken_at
-                    - if image.camera.present?
-                      %dt Kamera
-                      %dd= image.camera
-                    - if image.software.present?
-                      %dt Software
-                      %dd= image.software
-
-            .page-body.well.lightbox-comments
+            .page-body.well.lightbox-comments#comments
+              %a{name: 'comments'}
               = image_page.facebook_comments colorscheme: :dark

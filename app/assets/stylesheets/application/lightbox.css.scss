@@ -55,6 +55,18 @@ $lightbox-nav-height: 50px;
     &.open > a {
       background-color: rgba($content-bg, 0.95);
     }
+
+    &.comment, &.details {
+      &.affix {
+        opacity: 0;
+        transition: opacity 500ms ease-in;
+      }
+
+      &.affix-top {
+        opacity: 1;
+        transition: opacity 500ms ease-out;
+      }
+    }
   }
 }
 

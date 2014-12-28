@@ -14,8 +14,10 @@ en:
       new: 'Create %{model}'
       upload: 'Upload %{model}'
       edit: Edit
+      details: Details
       destroy: Remove
       destroy_selected: Remove Selected
+      comment: Comment
       view: View
       cancel: Cancel
       download: Download

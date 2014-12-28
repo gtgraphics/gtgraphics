@@ -21,8 +21,16 @@ repositionCaption = ->
   $captionContainer.css(top: windowHeight - titleHeight)
 
 resizeImage = ->
-  scrollTop = $(window).scrollTop()
-  $('#lightbox .lightbox-image').css(marginBottom: scrollTop)
+  imageMargin = $(window).scrollTop()
+  windowHeight = $(window).outerHeight()
+  imageHeight = (windowHeight - imageMargin)
+  $image = $('#lightbox .lightbox-image')
+  imageWindowRatio = imageHeight / windowHeight
+  if imageWindowRatio < 0.3
+    opacity = 0
+  else
+    opacity = 1
+  $image.css(opacity: opacity, marginBottom: imageMargin)
 
 $(document).ready ->
   $lightbox = $('#lightbox')
@@ -59,11 +67,7 @@ $(window).resize ->
   repositionCaption()
   resizeImage()
 
-# $(window).scroll ->
-#   windowHeight = $(window).outerHeight()
-#   scrollY = $(window).scrollTop()
-
-#   scrollRatio = 1 - (scrollY / windowHeight)
-
-#   $image = $('.lightbox-image')
-#   $image.css(opacity: scrollRatio)
+$(document).on 'click', '#navbar_lightbox .details a', (event) ->
+  event.preventDefault()
+  infoHeight = $('#info').outerHeight()
+  $(window).scrollTo(infoHeight, duration: 1000, easing: 'swing')

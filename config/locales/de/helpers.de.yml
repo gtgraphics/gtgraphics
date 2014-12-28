@@ -40,11 +40,13 @@ de:
       assign_tags: Tags zuweisen
       back_to_top: Zurück zum Anfang
       cancel: Abbrechen
+      comment: Kommentieren
       customize: Anpassen
       close: Schließen
       convert_to: 'Umwandeln zu %{model}'
       crop: Zuschneiden
       crop_and_scale: 'Zuschneiden/Skalieren'
+      details: Details
       destroy: Löschen
       destroy_selected: Ausgewählte löschen
       disable_in_menu: In Menüs verstecken
