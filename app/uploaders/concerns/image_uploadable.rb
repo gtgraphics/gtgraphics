@@ -18,7 +18,8 @@ module ImageUploadable
     end
 
     version :public, from_version: :custom do
-      process :watermark
+      # process :watermark
+      process :set_copyright
       process convert: 'jpeg'
       process quality: 85
 

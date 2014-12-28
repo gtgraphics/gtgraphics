@@ -2,7 +2,8 @@
 @import 'compass';
 @import 'shared/mixins';
 
-$lightbox-nav-height: 50px;
+$lightbox-nav-height: 65px;
+$lightbox-control-size: 100px;
 
 .navbar-lightbox {
   height: $lightbox-nav-height;
@@ -14,6 +15,8 @@ $lightbox-nav-height: 50px;
   background: -ms-linear-gradient(top,  rgba($content-bg, 0.75) 0%,rgba($content-bg, 0) 100%); /* IE10+ */
   background: linear-gradient(to bottom,  rgba($content-bg, 0.75) 0%,rgba($content-bg, 0) 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
+  padding-right: $lightbox-control-size + 20px;
+  transition: all 200ms ease-out;
 
   .container-fluid .navbar-brand {
     margin-left: 0;
@@ -23,23 +26,13 @@ $lightbox-nav-height: 50px;
     margin-left: 15px;
   }
 
-  .navbar-brand {
-    opacity: 0.5;
-    width: 150px;
-    height: $lightbox-nav-height;
-    padding: 14px 0;
-    transition: opacity 200ms ease-in-out;
-
-    &:hover, &:focus {
-      opacity: 1;
-    }
-  }
-
   .navbar-nav > li {
+    transition: opacity 800ms ease-in-out;
+
     > a {
       padding: {
-        top: 15px;
-        bottom: 15px;
+        top: 20px;
+        bottom: 20px;
       }
       color: rgba($text-color, 0.5);
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
@@ -68,6 +61,27 @@ $lightbox-nav-height: 50px;
       }
     }
   }
+
+  &.idle {
+    transition: all 1s ease-in;
+    opacity: 0;
+  }
+}
+
+#lightbox_brand {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 20px 38px;
+  z-index: $zindex-navbar-fixed + 1;
+  opacity: 0.5;
+  outline: none;
+  transition: opacity 200ms ease-in-out;
+
+  &:hover, &:focus {
+    opacity: 1;
+    outline: none;
+  }
 }
 
 #lightbox {
@@ -77,6 +91,7 @@ $lightbox-nav-height: 50px;
   bottom: 0;
   left: 0;
   right: 0;
+  user-select: none;
 
   .lightbox-image-container, .lightbox-image, .lightbox-background, .lightbox-controls {
     position: absolute;
@@ -87,11 +102,11 @@ $lightbox-nav-height: 50px;
   }
 
   .lightbox-background, .lightbox-image {
+    transition: opacity 500ms ease-out;
     background: {
       repeat: no-repeat;
       position: center;
     }
-    transition: all 500ms ease-out;
   }
 
   .lightbox-background {
@@ -109,23 +124,9 @@ $lightbox-nav-height: 50px;
     transition: opacity 200ms ease-out;
     z-index: 4;
 
-    .carousel-control {
-      background: none;
-      width: 100px;
-      margin: {
-        top: $lightbox-nav-height;
-        bottom: $lightbox-nav-height;
-      }
-
-      .fa {
-        position: absolute;
-        top: 50%;
-        width: 30px;
-        height: 30px;
-        margin-top: -15px;
-        margin-left: -15px;
-        font-size: 30px;
-      }
+    .lightbox-control {
+      top: $lightbox-control-size;
+      bottom: $lightbox-control-size;
     }
   }
 
@@ -140,14 +141,19 @@ $lightbox-nav-height: 50px;
 
 #lightbox_page_wrapper {
   position: absolute;
-  margin: 0;
+  margin: {
+    top: 0; // $grid-gutter-width;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
   border-top: 1px solid rgba(white, 0.04);
 
   .lightbox-title h1 {
-    max-width: 60%;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    max-width: 100%;
   }
 
   .lightbox-caption {
@@ -156,12 +162,88 @@ $lightbox-nav-height: 50px;
     word-wrap: break-word;
   }
 
-  .user-info {
-    margin-top: 3px;
+  .lightbox-author-name {
+    display: block;
+    margin-top: 8px;
+    font-size: 16px;
+    margin-top: 8px;
+    color: $gray-light;
 
-    .user-name {
-      font-size: 16px;
-      font-weight: 300;
+    &:before {
+      content: '\2014 \00A0';
+    }
+
+    a {
+      color: $gray-light;
+      &:hover, &:focus {
+        color: darken($gray-light, 15%);
+      }
     }
   }
+}
+
+.lightbox-control {
+  color: white;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  width: $lightbox-control-size;
+  position: absolute;
+  outline: none;
+  opacity: 0.5;
+  transition: opacity 200ms ease-in-out;
+  margin: 0;
+  font-size: 35px;
+  font-weight: 100;
+
+  &:hover, &:focus {
+    outline: none;
+    opacity: 1;
+    color: white;
+  }
+
+  b {
+    position: absolute;
+    font-weight: 100;
+    font-size: 70px;
+    line-height: 52px;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 60px;
+    margin-top: -30px;
+    text-align: center;
+
+    &.close-icon {
+      font-size: 60px;
+      line-height: 53px;
+    }
+  }
+
+  .fa {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin-top: -25px;
+    height: 30px;
+  }
+
+  &.left {
+    left: 0;
+  }
+
+  &.right {
+    right: 0;
+  }
+}
+
+#lightbox_close {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: auto;
+  margin: 0;
+  width: $lightbox-control-size;
+  height: 60px;
+  z-index: $zindex-navbar-fixed + 1;
 }

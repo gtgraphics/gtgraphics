@@ -7,6 +7,18 @@ module IconHelper
     content_tag :b, nil, class: css
   end
 
+  def close
+    content_tag :b, '&times;'.html_safe, class: 'close-icon'
+  end
+
+  def left_chevron
+    content_tag :b, '&lsaquo;'.html_safe, class: 'chevron left'
+  end
+
+  def right_chevron
+    content_tag :b, '&rsaquo;'.html_safe, class: 'chevron right'
+  end
+
   # Font Awesome
 
   def icon(name, options = {})
@@ -28,7 +40,7 @@ module IconHelper
   end
 
   # Flags
-  
+
   def flag_icon(locale, options = {})
     size = options.delete(:size) { 16 }
     options[:class] = "#{options[:class]} flag flag-#{size} flag-#{size}-#{locale}"

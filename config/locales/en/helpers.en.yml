@@ -30,6 +30,9 @@ en:
       close: Close
       sign_out: Sign out
       sign_in: Sign in
+      view_mode: View Mode
+      next: Next
+      previous: Previous
     confirmations:
       destroy: 'Do you really want to delete this %{model}?'
       destroy_selected: 'Do you really want to delete all selected %{model}?'

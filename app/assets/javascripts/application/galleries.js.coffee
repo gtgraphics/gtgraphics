@@ -55,7 +55,7 @@ $(document).on 'page:change', ->
     $gallery.allImagesLoaded ->
       Loader.done()
 
-      $gallery.show().animate(opacity: 1)
+      $gallery.show().transition(opacity: 1)
       $gallery.masonry
         itemSelector: GALLERY_ITEM_SELECTOR
         columnWidth: (containerWidth) ->
@@ -67,10 +67,10 @@ $(document).on 'page:change', ->
       $gallery.infinitescroll scrollerOptions, (html) ->
         $appendedElements = $(html).css(opacity: 0)
         $appendedElements.allImagesLoaded ->
-          $appendedElements.animate(opacity: 1)
+          $appendedElements.transition(opacity: 1)
           $gallery.masonry('appended', $appendedElements)
           NProgress.done()
           Loader.done()
 
 $(document).on 'page:before-unload page:receive', ->
-  $(GALLERY_SELECTOR).masonry('destroy').infinitescroll('destroy') 
+  $(GALLERY_SELECTOR).masonry('destroy').infinitescroll('destroy')

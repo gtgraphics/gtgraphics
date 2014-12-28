@@ -18,14 +18,14 @@
   %meta{property: 'og:url', content: page_url(@page)}
 
   - # References to other translations
-  %link{rel: 'canonical', href: page_url(@page)}  
+  %link{rel: 'canonical', href: page_url(@page)}
   - @page.translated_locales.reject { |locale| locale == I18n.locale }.each do |translated_locale|
     %link{rel: 'alternate', hreflang: translated_locale, href: page_url(@page, locale: translated_locale)}
 
 - content_for :content do
   = facebook_sdk_anchor
 
-  %a{name: 'top'}
+  %a#top{name: 'top'}
 
   = yield :pre_body_content
 

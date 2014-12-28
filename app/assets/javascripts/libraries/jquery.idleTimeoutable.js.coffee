@@ -6,6 +6,7 @@ DEFAULTS =
   awakeClass: null
   idleOnInit: false
   target: 'body'
+  if: null
 
 setIdle = ($element, options) ->
   $element.addClass(options.idleClass).removeClass(options.awakeClass)

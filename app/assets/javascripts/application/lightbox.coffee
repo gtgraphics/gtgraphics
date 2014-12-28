@@ -23,30 +23,32 @@ repositionCaption = ->
 resizeImage = ->
   imageMargin = $(window).scrollTop()
   windowHeight = $(window).outerHeight()
-  imageHeight = (windowHeight - imageMargin)
+  imageHeight = windowHeight - imageMargin
   $image = $('#lightbox .lightbox-image')
   imageWindowRatio = imageHeight / windowHeight
   if imageWindowRatio < 0.3
     opacity = 0
   else
     opacity = 1
-  $image.css(opacity: opacity, marginBottom: imageMargin)
+  $image.css(opacity: opacity, bottom: imageMargin)
 
 $(document).ready ->
+  $lightboxNav = $('#navbar_lightbox')
   $lightbox = $('#lightbox')
+
   $lightboxImageContainer = $('.lightbox-image-container', $lightbox)
   $lightboxImageContainer.hide().css(opacity: 0)
 
   if $lightbox.length
 
     # Hide carousel controls after 5 seconds if no user input happens
-    $lightbox.idleTimeoutable()
+    $lightbox.add($lightboxNav).idleTimeoutable()
 
     # More beautiful image loading
     Loader.start()
     $('.lightbox-image', $lightboxImageContainer).allImagesLoaded ->
       Loader.done()
-      $lightboxImageContainer.show().animate(opacity: 1)
+      $lightboxImageContainer.show().transition(duration: 500, opacity: 1)
 
     # Add swipe for mobile devices
     if Modernizr.touch
@@ -67,7 +69,46 @@ $(window).resize ->
   repositionCaption()
   resizeImage()
 
-$(document).on 'click', '#navbar_lightbox .details a', (event) ->
-  event.preventDefault()
+
+# Scrolling
+
+refreshNavigationScrollState = ->
+  $navbar = $('#navbar_lightbox')
+  $info = $('li.info', $navbar)
+  $comment = $('li.comment', $navbar)
+
   infoHeight = $('#info').outerHeight()
-  $(window).scrollTo(infoHeight, duration: 1000, easing: 'swing')
+  scrollTop = $(window).scrollTop()
+
+  if scrollTop == 0
+    $info.css(opacity: 1)
+  else
+    $info.css(opacity: 0)
+
+  if scrollTop > infoHeight
+    $comment.css(opacity: 0)
+  else
+    $comment.css(opacity: 1)
+
+SCROLL_OPTIONS =
+  duration: 1000
+  easing: 'swing'
+
+$(document).ready ->
+  $navbar = $('#navbar_lightbox')
+
+  $('li.info a', $navbar).click (event) ->
+    event.preventDefault()
+    infoHeight = $('#info').outerHeight()
+    $(window).scrollTo(infoHeight, SCROLL_OPTIONS)
+    $(@).blur()
+
+  $('li.comment a', $navbar).click (event) ->
+    event.preventDefault()
+    $(window).scrollTo('#comments', SCROLL_OPTIONS)
+    $(@).blur()
+
+  refreshNavigationScrollState()
+
+$(window).scroll ->
+  refreshNavigationScrollState()
