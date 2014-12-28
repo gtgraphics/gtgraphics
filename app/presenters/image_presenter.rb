@@ -29,6 +29,10 @@ class ImagePresenter < ApplicationPresenter
     end
   end
 
+  def styles
+    super.map { |style| present(style) }
+  end
+
   def styles_count
     count = image.styles.count
     "#{count} #{Image::Style.model_name.human(count: count)}"
@@ -56,6 +60,10 @@ class ImagePresenter < ApplicationPresenter
     else
       image.shop_urls[name]
     end
+  end
+
+  def shop_urls
+    super.reject { |_name, value| value.nil? }
   end
 
   def shop_link(name)

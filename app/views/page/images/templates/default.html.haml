@@ -8,12 +8,30 @@
     %nav.navbar.navbar-lightbox.navbar-fixed-top#navbar_lightbox{role: 'navigation'}
       .container-fluid.visible-md.visible-lg
         %ul.nav.navbar-nav.navbar-right
+          %li.enlarge-image
+            = link_to '#top', data: { scroll: true } do
+              = prepend_icon :search_plus, translate('helpers.links.enlarge_image'), fixed_width: true
           %li.info
             = link_to '#info' do
               = prepend_icon :info, translate('helpers.links.details'), fixed_width: true, style: :circle
           %li.comment
-            = link_to '#comments' do
+            = link_to '#comments', data: { scroll: true } do
               = prepend_icon :comment, translate('helpers.links.comment'), fixed_width: true
+
+          - if image.styles.any?
+            %li.dropdown
+              = dropdown prepend_icon(:download, translate('helpers.links.download'), fixed_width: true) do
+                - image.styles.each do |style|
+                  %li
+                    = link_to download_image_path(style_id: style.position), data: { no_turbolink: true } do
+                      = style.title
+
+          %li.dropdown
+            - if image.shop_urls.any?
+              = dropdown prepend_icon(:dollar, translate('helpers.links.buy'), fixed_width: true), href: image.shop_url('gtgraphics'), menu_html: { class: 'shop-providers' } do
+                = image.shop_links
+            - else
+              = link_to prepend_icon(:dollar, translate('helpers.links.buy'), fixed_width: true), image.shop_url('gtgraphics')
 
           - if next_locale
             / Locale
@@ -52,10 +70,8 @@
             #info
               %a{name: 'info'}
 
-              .page-header.lightbox-title.clearfix
-                %h1.pull-left= image.title
-                .pull-right
-                  = link_to close, '#top', data: { scroll: true }
+              .page-header.lightbox-title
+                %h1= image.title
 
               .page-body
                 .row

@@ -81,3 +81,8 @@
     }
   }
 }
+
+.prepend-icon + .caret,
+.append-icon + .caret {
+  margin-left: 5px;
+}

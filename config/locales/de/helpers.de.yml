@@ -39,6 +39,7 @@ de:
       assign_owner: Eigentümer zuweisen
       assign_tags: Tags zuweisen
       back_to_top: Zurück zum Anfang
+      buy: Erwerben
       cancel: Abbrechen
       comment: Kommentieren
       customize: Anpassen
@@ -57,6 +58,7 @@ de:
       edit_regions: Inhalte bearbeiten
       enable_in_menu: In Menüs anzeigen
       enlarge: Vergrößern
+      enlarge_image: Bild zeigen
       hide: Verstecken
       make_default: Als Standard festlegen
       menu: Menü
@@ -81,7 +83,7 @@ de:
       uncrop: Original wiederherstellen
       upload: '%{model} hochladen'
       view: Ansehen
-      view_mode: Ansichtsmodus
+      view_mode: Betrachtungsmodus
       toggle_navigation: Navigation umschalten
     confirmations:
       destroy: '%{model} wirklich entfernen?'

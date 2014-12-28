@@ -19,8 +19,7 @@ class Page::ImagesController < Page::ApplicationController
   end
 
   def download
-    style_id = params[:style_id]
-    @image_style = @image.styles.find_by!(position: style_id)
+    @image_style = @image.styles.find_by!(position: params[:style_id])
     render_image(@image_style, :attachment)
   end
 

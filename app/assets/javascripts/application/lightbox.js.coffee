@@ -1,8 +1,3 @@
-$(document).ready ->
-  $('#lightbox .carousel-control').on 'hotkey', ->
-    url = $(@).attr('href')
-    Turbolinks.visit(url)
-
 slide = ($lightbox, prev) ->
   $controls = $lightbox.find('.carousel-control')
   if prev
@@ -40,6 +35,10 @@ $(document).ready ->
   $lightboxImageContainer.hide().css(opacity: 0)
 
   if $lightbox.length
+    # Add hotkeys
+    $('.lightbox-control', $lightbox).on 'hotkey', ->
+      url = $(@).attr('href')
+      Turbolinks.visit(url)
 
     # Hide carousel controls after 5 seconds if no user input happens
     $lightbox.add($lightboxNav).idleTimeoutable()
@@ -72,43 +71,37 @@ $(window).resize ->
 
 # Scrolling
 
+COMMENT_BOX_OFFSET = 20
+
 refreshNavigationScrollState = ->
   $navbar = $('#navbar_lightbox')
   $info = $('li.info', $navbar)
   $comment = $('li.comment', $navbar)
+  $enlargeImage = $('li.enlarge-image', $navbar)
 
   infoHeight = $('#info').outerHeight()
   scrollTop = $(window).scrollTop()
 
-  if scrollTop == 0
-    $info.css(opacity: 1)
+  if scrollTop >= infoHeight
+    $info.hide()
+    $enlargeImage.show()
   else
-    $info.css(opacity: 0)
+    $info.show()
+    $enlargeImage.hide()
 
-  if scrollTop > infoHeight
-    $comment.css(opacity: 0)
+  if scrollTop > infoHeight + COMMENT_BOX_OFFSET
+    $comment.hide()
   else
-    $comment.css(opacity: 1)
-
-SCROLL_OPTIONS =
-  duration: 1000
-  easing: 'swing'
+    $comment.show()
 
 $(document).ready ->
-  $navbar = $('#navbar_lightbox')
-
-  $('li.info a', $navbar).click (event) ->
-    event.preventDefault()
-    infoHeight = $('#info').outerHeight()
-    $(window).scrollTo(infoHeight, SCROLL_OPTIONS)
-    $(@).blur()
-
-  $('li.comment a', $navbar).click (event) ->
-    event.preventDefault()
-    $(window).scrollTo('#comments', SCROLL_OPTIONS)
-    $(@).blur()
-
   refreshNavigationScrollState()
+
+  $('#navbar_lightbox li.info a').click (event) ->
+    event.preventDefault()
+    options = _($(@).data()).defaults(duration: 500, easing: 'swing')
+    infoHeight = $('#info').outerHeight()
+    $(window).scrollTo(infoHeight, options)
 
 $(window).scroll ->
   refreshNavigationScrollState()

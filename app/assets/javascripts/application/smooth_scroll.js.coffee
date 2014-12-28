@@ -1,5 +1,5 @@
 DEFAULTS =
-  duration: 1000
+  duration: 500
   easing: 'swing'
 
 $(document).on 'click', '[data-scroll]', (event) ->

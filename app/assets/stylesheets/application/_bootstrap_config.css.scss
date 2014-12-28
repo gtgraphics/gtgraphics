@@ -223,13 +223,13 @@ $input-group-addon-border-color: $input-border;
 //## Dropdown menu container and contents.
 
 //** Background for the dropdown menu.
-$dropdown-bg:                    white;
+$dropdown-bg:                    rgba(30, 30, 30, 0.95);;
 //** Dropdown menu `border-color`.
 $dropdown-border:                transparent;
 //** Dropdown menu `border-color` **for IE8**.
 $dropdown-fallback-border:       transparent;
 //** Divider color for between dropdown items.
-$dropdown-divider-bg:            $gray-light;
+$dropdown-divider-bg:            $gray;
 
 //** Dropdown link text color.
 $dropdown-link-color:            $text-color;

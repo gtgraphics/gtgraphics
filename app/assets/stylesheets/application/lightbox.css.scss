@@ -15,7 +15,7 @@ $lightbox-control-size: 100px;
   background: -ms-linear-gradient(top,  rgba($content-bg, 0.75) 0%,rgba($content-bg, 0) 100%); /* IE10+ */
   background: linear-gradient(to bottom,  rgba($content-bg, 0.75) 0%,rgba($content-bg, 0) 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
-  padding-right: $lightbox-control-size + 20px;
+  padding-right: $lightbox-control-size;
   transition: all 200ms ease-out;
 
   .container-fluid .navbar-brand {
@@ -27,9 +27,8 @@ $lightbox-control-size: 100px;
   }
 
   .navbar-nav > li {
-    transition: opacity 800ms ease-in-out;
-
     > a {
+      outline: none;
       padding: {
         top: 20px;
         bottom: 20px;
@@ -39,6 +38,7 @@ $lightbox-control-size: 100px;
       transition: color 200ms ease-in-out, text-shadow 200ms ease-in-out;
 
       &:hover, &:focus {
+        outline: none;
         background: none;
         color: $text-color;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
@@ -46,19 +46,9 @@ $lightbox-control-size: 100px;
     }
 
     &.open > a {
-      background-color: rgba($content-bg, 0.95);
-    }
-
-    &.comment, &.details {
-      &.affix {
-        opacity: 0;
-        transition: opacity 500ms ease-in;
-      }
-
-      &.affix-top {
-        opacity: 1;
-        transition: opacity 500ms ease-out;
-      }
+      outline: none;
+      color: $text-color;
+      background-color: rgba(30, 30, 30, 0.95);
     }
   }
 
