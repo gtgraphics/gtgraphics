@@ -20,6 +20,10 @@ repositionCaption = ->
   titleHeight = 0
   $captionContainer.css(top: windowHeight - titleHeight)
 
+resizeImage = ->
+  scrollTop = $(window).scrollTop()
+  $('#lightbox .lightbox-image').css(marginBottom: scrollTop)
+
 $(document).ready ->
   $lightbox = $('#lightbox')
   $lightboxImageContainer = $('.lightbox-image-container', $lightbox)
@@ -46,9 +50,14 @@ $(document).ready ->
 
     # Position caption container
     repositionCaption()
+    resizeImage()
+
+$(window).scroll ->
+  resizeImage()
 
 $(window).resize ->
   repositionCaption()
+  resizeImage()
 
 # $(window).scroll ->
 #   windowHeight = $(window).outerHeight()

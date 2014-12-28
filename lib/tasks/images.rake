@@ -7,7 +7,12 @@ namespace :gtg do
       images.find_each do |image|
         image.recreate_assets!
         image.styles.each(&:recreate_assets!) if include_styles
-        puts image.title
+
+        if include_styles && image.styles.size > 0
+          puts "#{image.title} + #{image.styles.size} Styles"
+        else
+          puts image.title
+        end
       end
     end
   end

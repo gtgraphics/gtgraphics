@@ -21,12 +21,36 @@ class Image < ActiveRecord::Base
 
     # Accessors for commonly accessed data
 
+    def artist
+      @artist ||= User.find_by_name(artist_name) if artist_name.present?
+    end
+
+    def artist_name
+      exif_data['Artist'] || exif_data['Creator'] || exif_data['By-line']
+    end
+
+    def camera_manufacturer
+      exif_data['Make']
+    end
+
     def camera
       exif_data['Model']
     end
 
     def copyright
       exif_data['Copyright']
+    end
+
+    def iso_value
+      exif_data['ISO']
+    end
+
+    def orientation
+      if exif_data['Orientation'] =~ /horizontal/i
+        :landscape
+      else
+        :portrait
+      end
     end
 
     def software

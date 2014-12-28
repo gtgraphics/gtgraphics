@@ -32,7 +32,7 @@
           - if next_locale
             / Locale
             %li#nav_locale
-              = link_to page_path(@page, locale: next_locale), hreflang: next_locale do
+              = link_to change_locale_path(next_locale), hreflang: next_locale do
                 = prepend_icon :globe, next_locale.to_s.upcase, fixed_width: true
 
           - if @gallery_page
@@ -64,31 +64,33 @@
           #lightbox_page_content
             .page-header.lightbox-title.clearfix
               %h1.pull-left= image.title
+              = user_info image.author, class: 'pull-right' if image.author
 
-              .btn-toolbar.pull-right
-                .btn-group
-                  = button_link_to user_info(image.author), '#', type: :header
+            / .btn-toolbar.pull-right
+            /   .btn-group
+            /     = button_link_to user_info(image.author), '#', type: :header
 
-                .btn-group
-                  = button_link_to '#', type: :header_icon, class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
-                    = prepend_icon :download, 'Download', fixed_width: true, caption_html: { class: 'sr-only' }
-                  %ul.dropdown-menu.dropdown-menu-right
-                    - @image_styles.each do |image_style|
-                      - present image_style do |image_style|
-                        %li
-                          = link_to download_image_path(@page.path, style_id: image_style.position), data: { no_turbolink: true } do
-                            = image_style.title
+            /   .btn-group
+            /     = button_link_to '#', type: :header_icon, class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+            /       = prepend_icon :download, 'Download', fixed_width: true, caption_html: { class: 'sr-only' }
+            /     %ul.dropdown-menu.dropdown-menu-right
+            /       - @image_styles.each do |image_style|
+            /         - present image_style do |image_style|
+            /           %li
+            /             = link_to download_image_path(@page.path, style_id: image_style.position), data: { no_turbolink: true } do
+            /               = image_style.title
 
-                .btn-group
-                  = button_link_to '#', type: :header_icon, class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
-                    = prepend_icon :dollar, 'Erwerben', fixed_width: true, caption_html: { class: 'sr-only' }
-                  %ul.dropdown-menu.dropdown-menu-right.shop-providers
-                    = image.shop_links
+            /   .btn-group
+            /     = button_link_to '#', type: :header_icon, class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+            /       = prepend_icon :dollar, 'Erwerben', fixed_width: true, caption_html: { class: 'sr-only' }
+            /     %ul.dropdown-menu.dropdown-menu-right.shop-providers
+            /       = image.shop_links
 
             .page-body
               .row
-                .col-sm-6.lightbox-caption
-                  = image.description
+                - if image.description.present?
+                  .col-sm-6.lightbox-caption
+                    = image.description
                 .col-sm-6.lightbox-metadata
                   %dl.dl-horizontal
                     %dt Aufnahme

@@ -9,8 +9,8 @@ class Page::ImagesController < Page::ApplicationController
 
   def default
     @gallery_page = @page.parent
-    @previous_page = @page.left_sibling || @page.siblings.last
-    @next_page = @page.right_sibling || @page.siblings.first
+    @previous_page = @page.left_sibling # || @page.siblings.last
+    @next_page = @page.right_sibling # || @page.siblings.first
 
     respond_to do |format|
       format.html { render_page }

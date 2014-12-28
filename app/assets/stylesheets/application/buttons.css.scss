@@ -1,3 +1,5 @@
+@import 'bootstrap_config';
+
 .btn {
   border: none;
 }
@@ -8,13 +10,16 @@
 
 .btn-header-icon {
   border-radius: 50%;
-  background-color: rgba(black, 0.2);
   width: 32px;
   height: 32px;
   padding: 6px 0;
   text-align: center;
+  color: $gray-light;
+  background-color: rgba(black, 0.25);
+  color: $text-color;
 
   &:hover, &:focus {
     background-color: rgba(black, 0.35);
+    color: $text-color;
   }
 }

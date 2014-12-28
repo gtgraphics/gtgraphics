@@ -84,8 +84,8 @@ class Admin::ImagesController < Admin::ApplicationController
     @image = ::Image.new(image_upload_params)
     tags = Tag.where(label: params[:tag])
     tags.each { |tag| @image.taggings.find_or_initialize_by(tag: tag) }
-    @image.author = current_user
     @image.save!
+
     respond_to do |format|
       format.js
     end
@@ -126,7 +126,7 @@ class Admin::ImagesController < Admin::ApplicationController
       @image.recreate_assets!
     end
     respond_to do |format|
-      format.js 
+      format.js
     end
   end
 
@@ -188,7 +188,7 @@ class Admin::ImagesController < Admin::ApplicationController
     ::Image.accessible_by(current_ability).destroy_all(id: image_ids)
     flash_for ::Image, :destroyed, multiple: true
     location = request.referer || admin_images_path
-    
+
     respond_to do |format|
       format.html { redirect_to location }
       format.js { redirect_via_turbolinks_to location }
@@ -212,7 +212,7 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def associate_owner
     @image_owner_assignment_form = Admin::ImageOwnerAssignmentForm.submit(image_owner_assignment_params)
-   
+
     respond_to do |format|
       format.js
     end

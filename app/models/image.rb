@@ -61,6 +61,7 @@ class Image < ActiveRecord::Base
 
   # before_save :set_predefined_style_dimensions
   before_validation :set_default_title, on: :create
+  before_create :set_author, unless: :author_id?
   after_update :propagate_changes_to_pages!, if: :propagate_changes_to_pages?
 
   def dominant_colors
@@ -109,6 +110,10 @@ class Image < ActiveRecord::Base
   end
 
   private
+
+  def set_author
+    self.author = artist || User.current
+  end
 
   def set_default_title
     return if title.present? || original_filename.blank?

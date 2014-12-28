@@ -51,6 +51,15 @@ class User < ActiveRecord::Base
 
   default_scope -> { order(:first_name, :last_name) }
 
+  def self.find_by_name(name)
+    find_by_name!(name) rescue nil
+  end
+
+  def self.find_by_name!(name)
+    find_by!("(#{table_name}.first_name || ' ' || #{table_name}.last_name) = ?",
+             name)
+  end
+
   def full_name
     "#{first_name} #{last_name}".strip
   end
