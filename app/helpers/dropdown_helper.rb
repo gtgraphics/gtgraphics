@@ -16,14 +16,13 @@ module DropdownHelper
 
     capture do
       link = link_to url, html_options do
-        concat label
-        concat caret
+        content_tag :div do
+          concat label
+          concat caret
+        end
       end
       concat link
-
-      if block_given?
-        concat content_tag(:ul, capture(&block), menu_html_options)
-      end
+      concat content_tag(:ul, capture(&block), menu_html_options)
     end
   end
 end

@@ -1,56 +1,78 @@
-TIMEOUT_STORE_KEY = 'idleTimeout'
+jQuery.idleTimeoutable =
+  defaults:
+    after: 5000
+    idleClass: 'idle'
+    awakeClass: null
+    idleOnInit: false
+    target: 'body'
 
-DEFAULTS =
-  after: 5000
-  idleClass: 'idle'
-  awakeClass: null
-  idleOnInit: false
-  target: 'body'
-  if: null
 
-setIdle = ($element, options) ->
-  $element.addClass(options.idleClass).removeClass(options.awakeClass)
-  $element.trigger('idle')
-  $element.data('isIdle', true)
+class IdleTimeoutable
+  constructor: ($element, options = {}) ->
+    @$element = $element
+    @options = _(_(options).defaults($element.data())).defaults(
+      jQuery.idleTimeoutable.defaults
+    )
+    @$target = $(@options.target)
 
-setAwake = ($element, options) ->
-  $element.removeClass(options.idleClass).addClass(options.awakeClass)
-  $element.trigger('awake')
-  $element.removeData('isIdle')
+    @timeout = null
+    if @options.idleOnInit
+      @idle()
+    else
+      @awaken()
 
-isIdle = ($element) ->
-  $element.data('isIdle')
+  idle: ->
+    return if @isIdle == true
+    @$element.addClass(@options.idleClass).removeClass(@options.awakeClass)
+    @$element.trigger('idle')
+    @isIdle = true
 
-jQuery.fn.idleTimeoutable = (options = {}) ->
+  awaken: ->
+    return if @isIdle == false
+    @$element.removeClass(@options.idleClass).addClass(@options.awakeClass)
+    @$element.trigger('awake')
+    @isIdle = false
+
+  start: ->
+    @stop()
+    @startTimeout()
+
+    @reactivationHandler = =>
+      @stopTimeout()
+      @awaken()
+      @startTimeout()
+
+    @$target.on 'mousemove', @reactivationHandler
+
+  stop: ->
+    @stopTimeout()
+    @$target.off 'mousemove', @reactivationHandler if @reactivationHandler
+
+  startTimeout: ->
+    @timeout = setTimeout =>
+      @idle()
+    , @options.after
+
+  stopTimeout: ->
+    return unless @timeout
+    clearTimeout(@timeout)
+    @timeout = null
+
+
+jQuery.fn.idleTimeoutable = (methodOrOptions = {}) ->
   @each ->
     $element = $(@)
 
-    elementOpts = _(_(options).defaults($element.data())).defaults(DEFAULTS)
+    timeoutable = $element.data('idleTimeoutable')
 
-    $target = $(elementOpts.target)
-
-    if elementOpts.idleOnInit
-      setIdle($element, elementOpts)
+    if jQuery.isPlainObject(methodOrOptions)
+      # initializes the IdleTimeoutable object and starts the timeout
+      jQuery.error 'idleTimeoutable already initialized' if timeoutable
+      timeoutable = new IdleTimeoutable($element, methodOrOptions)
+      timeoutable.start()
+      $element.data('idleTimeoutable', timeoutable)
     else
-      setAwake($element, elementOpts)
-
-    timeout = $element.data(TIMEOUT_STORE_KEY)
-
-    startTimeout = ->
-      timeout = setTimeout ->
-        setIdle($element, elementOpts)
-      , elementOpts.after
-      $element.data(TIMEOUT_STORE_KEY, timeout)
-      timeout
-
-    awaken = ->
-      clearTimeout(timeout) if timeout
-      timeout = null
-      $element.removeData(TIMEOUT_STORE_KEY)
-      setAwake($element, elementOpts) if isIdle($element)
-      startTimeout()
-
-    $target.mousemove -> awaken()
-    $(document).keydown -> awaken()
-
-    startTimeout()
+      # makes a method call on an existing IdleTimeoutable object
+      jQuery.error 'idleTimeoutable not initialized' unless timeoutable
+      args = Array.prototype.slice.call(arguments, 0)
+      timeoutable[methodOrOptions].apply(timeoutable, args.slice(1))

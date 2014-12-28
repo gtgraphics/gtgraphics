@@ -3,7 +3,7 @@ class ImagePresenter < ApplicationPresenter
 
   presents :image
 
-  delegate_presented :author, with: 'Admin::UserPresenter'
+  delegate_presented :author
 
   def artist
     exif_data[:artist]

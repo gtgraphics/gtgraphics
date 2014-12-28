@@ -46,7 +46,13 @@ $(document).ready ->
       Turbolinks.visit(url)
 
     # Hide carousel controls after 5 seconds if no user input happens
-    $lightbox.add($lightboxNav).idleTimeoutable()
+    $timeoutables = $lightbox.add($lightboxNav)
+    $timeoutables.idleTimeoutable()
+
+    $('.dropdown', $lightboxNav)
+      .on 'shown.bs.dropdown', -> $timeoutables.idleTimeoutable('stop')
+      .on 'hidden.bs.dropdown', -> $timeoutables.idleTimeoutable('start')
+
 
     # More beautiful image loading
     Loader.start()

@@ -76,14 +76,13 @@
               .page-body
                 .row
                   .col-md-1.hidden-xs.hidden-sm.lightbox-author-avatar
-                    = link_to about_author_path(image.author) do
-                      = image.author.gravatar
+                    = image.author.gravatar(true)
 
                   - if image.description.present?
                     .col-md-5.col-xs-12.lightbox-caption
                       = image.description
                       .lightbox-author-name
-                        = link_to image.author, about_author_path(image.author)
+                        = image.author.name(true)
 
                   .col-md-6.col-xs-12.lightbox-metadata
                     %dl.dl-horizontal
