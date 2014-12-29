@@ -62,6 +62,8 @@ class Image < ActiveRecord::Base
         metadata.copyright = image.copyright_note
         metadata.save!
       end
+    rescue MiniExiftool::Error => error
+      logger.error "Error writing Exif data: #{error.message}"
     end
   end
 end

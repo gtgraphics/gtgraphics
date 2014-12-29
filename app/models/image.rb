@@ -106,9 +106,13 @@ class Image < ActiveRecord::Base
   end
 
   def write_copyright!
-    with_metadata :public do |metadata|
-      metadata.copyright = copyright_note
-      metadata.save!
+    begin
+      with_metadata :public do |metadata|
+        metadata.copyright = copyright_note
+        metadata.save!
+      end
+    rescue MiniExiftool::Error => error
+      logger.error "Error writing Exif data: #{error.message}"
     end
     styles.each(&:write_copyright!)
   end
