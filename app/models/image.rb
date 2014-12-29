@@ -31,6 +31,7 @@ class Image < ActiveRecord::Base
 
   include Filterable
   include Ownable
+  include PagePropagatable
   include PeriodFilterable
   include PersistenceContextTrackable
   include Randomizable
@@ -61,10 +62,8 @@ class Image < ActiveRecord::Base
   validates :asset, presence: true
   validates :title, presence: true
 
-  # before_save :set_predefined_style_dimensions
   before_validation :set_default_title, on: :create
   before_create :set_author, unless: :author_id?
-  after_update :propagate_changes_to_pages!, if: :propagate_changes_to_pages?
   after_save :write_copyright!, if: [:exif_capable?, :write_copyright?]
 
   def dominant_colors
@@ -117,21 +116,6 @@ class Image < ActiveRecord::Base
     styles.each(&:write_copyright!)
   end
 
-  # Page Propagation
-
-  def propagate_changes_to_pages?
-    unless defined? @propagate_changes_to_pages
-      @propagate_changes_to_pages = false
-    end
-    @propagate_changes_to_pages
-  end
-
-  alias_method :propagate_changes_to_pages, :propagate_changes_to_pages?
-
-  def propagate_changes_to_pages=(propagate)
-    @propagate_changes_to_pages = propagate.to_b
-  end
-
   private
 
   def set_author
@@ -141,22 +125,6 @@ class Image < ActiveRecord::Base
   def set_default_title
     return if title.present? || original_filename.blank?
     self.title = File.basename(original_filename, '.*').titleize
-  end
-
-  def propagate_changes_to_pages!
-    transaction do
-      pages.each do |page|
-        translations.each do |translation|
-          Globalize.with_locale(translation.locale) do
-            page.title = translation.title
-            page.meta_description = HTML::FullSanitizer.new.sanitize(
-              translation.description
-            )
-          end
-        end
-        page.save!
-      end
-    end
   end
 
   def write_copyright?

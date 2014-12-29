@@ -8,6 +8,12 @@
   = form.input :description, input_html: { class: 'editor', rows: 10 }
   = form.association :author, as: :radio_buttons, wrapper: :horizontal_radio_and_checkboxes
 
+  - if @project.pages.any?
+    %fieldset
+      %legend= Image.human_attribute_name :pages
+      .fields
+        = form.input :propagate_changes_to_pages, as: :boolean, wrapper: :horizontal_boolean, label: translate(@project.pages.one? ? :propagate_changes_to_page : :propagate_changes_to_n_pages, scope: 'activerecord.attributes.project', count: @project.pages.count)
+
   = form_actions do
     = form.button :button, type: 'submit', class: 'btn-primary' do
       = prepend_icon :save, translate(@project.new_record? ? :create : :update, scope: 'helpers.submit', model: Project.model_name.human)

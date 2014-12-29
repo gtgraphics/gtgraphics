@@ -60,10 +60,10 @@ class Admin::ProjectsController < Admin::ApplicationController
     query = params[:query]
     if query.present?
       translated_title = Project::Translation.arel_table[:title]
-      @projects = Project.search(query).includes(:client, :images).
-                          select(Project.arel_table[Arel.star], translated_title).
-                          order(translated_title.asc).
-                          with_translations_for_current_locale.uniq.limit(3)
+      @projects = Project.search(query).includes(:client, :images)
+                  .select(Project.arel_table[Arel.star], translated_title)
+                  .order(translated_title.asc)
+                  .with_translations_for_current_locale.uniq.limit(3)
     else
       @projects = Project.none
     end
@@ -117,15 +117,18 @@ class Admin::ProjectsController < Admin::ApplicationController
   def assign_images
     @project_image_assignment_form = Admin::ProjectImageAssignmentForm.new
     @project_image_assignment_form.project = @project
+
     respond_to do |format|
       format.js
     end
   end
 
   def attach_images
-    @project_image_assignment_form = Admin::ProjectImageAssignmentForm.new(project_image_assignment_params)
+    @project_image_assignment_form = Admin::ProjectImageAssignmentForm.new
+    @project_image_assignment_form.attributes = project_image_assignment_params
     @project_image_assignment_form.project = @project
     @project_image_assignment_form.submit
+
     respond_to do |format|
       format.js
     end
@@ -133,6 +136,7 @@ class Admin::ProjectsController < Admin::ApplicationController
 
   def pages
     @pages = @project.pages.with_translations_for_current_locale
+
     respond_to do |format|
       format.js
     end
@@ -155,6 +159,7 @@ class Admin::ProjectsController < Admin::ApplicationController
     ::Project.accessible_by(current_ability).destroy_all(id: project_ids)
     flash_for ::Project, :destroyed, multiple: true
     location = request.referer || admin_images_path
+
     respond_to do |format|
       format.html { redirect_to location }
       format.js { redirect_via_turbolinks_to location }
@@ -163,6 +168,7 @@ class Admin::ProjectsController < Admin::ApplicationController
   private :destroy_multiple # invoked through :batch_process
 
   private
+
   def load_project
     @project = ::Project.find(params[:id])
   end
@@ -172,7 +178,10 @@ class Admin::ProjectsController < Admin::ApplicationController
   end
 
   def project_params
-    params.require(:project).permit(:title, :project_type, :url, :client_name, :released_in, :description, :author_id)
+    params.require(:project).permit(
+      :title, :project_type, :url, :client_name, :released_in, :description,
+      :author_id, :propagate_changes_to_pages
+    )
   end
 
   def project_image_assignment_params

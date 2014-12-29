@@ -6,7 +6,6 @@ class Admin::Project::ImagePresenter < Admin::ApplicationPresenter
 
   self.action_buttons = [:move_up, :move_down, :destroy]
 
-
   # Routes
 
   def show_path
