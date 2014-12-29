@@ -227,6 +227,9 @@ de:
         pages_count: Seiten
         author: Betreuer
         author_id: Betreuer
+        propagate_changes_to_pages: Änderungen für assoziierte Seiten übernehmen
+        propagate_changes_to_page: Änderungen für assoziierte Seite übernehmen
+        propagate_changes_to_n_pages: 'Änderungen für %{count} assoziierte Seiten übernehmen'
       shout:
         nickname: Verfasser
         message: Nachricht
