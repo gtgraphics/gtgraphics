@@ -27,7 +27,6 @@ class Image < ActiveRecord::Base
   include Image::ProjectAssignable
   include Image::Resizable
   include Image::ExifStorable
-  # include Image::ExifCopyrightProtectable
   include Image::Buyable
 
   include Filterable
@@ -38,6 +37,9 @@ class Image < ActiveRecord::Base
   include Taggable
   include TitleSearchable
   include Translatable
+
+  COPYRIGHT_NOTE = 'Copyright %{year} %{author}, GT Graphics. ' \
+                   'All rights reserved.'
 
   # Disallow changing the asset as all custom_styles depend on it
   attr_readonly :asset
@@ -63,6 +65,7 @@ class Image < ActiveRecord::Base
   before_validation :set_default_title, on: :create
   before_create :set_author, unless: :author_id?
   after_update :propagate_changes_to_pages!, if: :propagate_changes_to_pages?
+  after_save :write_copyright!, if: [:exif_capable?, :write_copyright?]
 
   def dominant_colors
     @dominant_colors ||= Miro::DominantColors.new(asset.custom.path)
@@ -93,6 +96,21 @@ class Image < ActiveRecord::Base
 
   def to_s
     title
+  end
+
+  # Copyright
+
+  def copyright_note
+    COPYRIGHT_NOTE % { year: taken_at.try(:year) || created_at.year,
+                       author: author.name }
+  end
+
+  def write_copyright!
+    with_metadata :public do |metadata|
+      metadata.copyright = copyright_note
+      metadata.save!
+    end
+    styles.each(&:write_copyright!)
   end
 
   # Page Propagation
@@ -131,9 +149,12 @@ class Image < ActiveRecord::Base
             )
           end
         end
-        page.set_next_available_slug
         page.save!
       end
     end
+  end
+
+  def write_copyright?
+    author_id_changed? || asset_changed?
   end
 end

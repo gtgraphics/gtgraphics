@@ -1,6 +1,19 @@
 class ImageUploader < AttachmentUploader
   include ImageUploadable
 
+  version :public, from_version: :custom do
+    process convert: 'jpeg'
+    process quality: 85
+
+    def filename
+      super.chomp(File.extname(super)) + '.jpg' if original_filename.present?
+    end
+
+    def full_filename(file)
+      "public/#{file}"
+    end
+  end
+
   version :social, from_version: :custom do
     process resize_to_fill: [500, 500]
     process convert: 'jpeg'

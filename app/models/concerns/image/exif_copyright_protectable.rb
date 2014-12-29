@@ -4,6 +4,9 @@ class Image < ActiveRecord::Base
   module ExifCopyrightProtectable
     extend ActiveSupport::Concern
 
+    COPYRIGHT_NOTE = 'Copyright %{year} %{name}, GT Graphics. ' \
+                     'All rights reserved.'
+
     included do
       include Image::ExifAnalyzable
 
@@ -17,8 +20,8 @@ class Image < ActiveRecord::Base
     def write_exif_copyright!
       return false if exif.copyright.present?
       year = (exif.date_time_original || exif.date_time_created ||
-        exif.date_time).year rescue Date.today.year
-      exif.copyright = "GT Graphics #{year}, #{author.name} (#{author.email})"
+        exif.date_time).try(:year) || Date.today.year
+      exif.copyright = COPYRIGHT_NOTE % { year: year, name: author.name }
       exif.save!
       true
     rescue MiniExiftool::Error

@@ -25,14 +25,16 @@ class Image < ActiveRecord::Base
     include Image::Attachable
     include Image::Croppable
     include Image::ExifAnalyzable
-    # include Image::ExifCopyrightProtectable
     include Image::Resizable
+
     include PersistenceContextTrackable
     include TitleSearchable
     include Translatable
 
     belongs_to :image, inverse_of: :styles
     delegate :author, to: :image
+
+    after_save :write_copyright!, if: :write_copyright?
 
     translates :title, fallbacks_for_empty_translations: true
 
@@ -53,6 +55,19 @@ class Image < ActiveRecord::Base
             File.extname(original_filename).downcase
         end
       end
+    end
+
+    def write_copyright!
+      with_metadata :public do |metadata|
+        metadata.copyright = image.copyright_note
+        metadata.save!
+      end
+    end
+
+    private
+
+    def write_copyright?
+      asset_changed?
     end
   end
 end

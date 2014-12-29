@@ -13,8 +13,6 @@ class Image < ActiveRecord::Base
     end
 
     def refresh_exif_data!
-      write_exif_copyright!
-      styles.each(&:write_exif_copyright!)
       cache_exif_data
       save!
     end
@@ -65,7 +63,10 @@ class Image < ActiveRecord::Base
     private
 
     def cache_exif_data
-      self.exif_data = exif.to_hash
+      self.exif_data = metadata
+    rescue MiniExiftool::Error => error
+      logger.error "Error reading Exif data: #{error.message}"
+      self.exif_data = {}
     end
   end
 end
