@@ -163,6 +163,12 @@ $lightbox-control-size: 100px;
     font-size: 18px;
     font-weight: 300;
     word-wrap: break-word;
+
+    + .lightbox-metadata {
+      @media (max-width: $screen-sm-max) {
+        margin-top: $grid-gutter-width;
+      }
+    }
   }
 
   .lightbox-author-name {

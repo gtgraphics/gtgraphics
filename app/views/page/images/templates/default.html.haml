@@ -78,11 +78,10 @@
                   .col-md-1.hidden-xs.hidden-sm.lightbox-author-avatar
                     = image.author.gravatar(true)
 
-                  - if image.description.present?
-                    .col-md-5.col-xs-12.lightbox-caption
-                      = image.description
-                      .lightbox-author-name
-                        = image.author.name(true)
+                  .col-md-5.col-xs-12.lightbox-caption
+                    = image.description
+                    .lightbox-author-name
+                      = image.author.name(true)
 
                   .col-md-6.col-xs-12.lightbox-metadata
                     %dl.dl-horizontal
