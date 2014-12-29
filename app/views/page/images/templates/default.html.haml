@@ -6,27 +6,27 @@
       %span.sr-only GT Graphics
 
     %nav.navbar.navbar-lightbox.navbar-fixed-top#navbar_lightbox{role: 'navigation'}
-      .container-fluid.visible-md.visible-lg
+      .container-fluid
         %ul.nav.navbar-nav.navbar-right
-          %li.enlarge-image
+          %li.enlarge-image.visible-md.visible-lg
             = link_to '#top', data: { scroll: true } do
               = prepend_icon :search_plus, translate('helpers.links.enlarge_image'), fixed_width: true
-          %li.info
+          %li.info.visible-md.visible-lg
             = link_to '#info' do
               = prepend_icon :info, translate('helpers.links.details'), fixed_width: true, style: :circle
-          %li.comment
+          %li.comment.visible-md.visible-lg
             = link_to '#comments', data: { scroll: true } do
               = prepend_icon :comment, translate('helpers.links.comment'), fixed_width: true
 
           - if image.styles.any?
-            %li.dropdown
+            %li.dropdown.visible-md.visible-lg
               = dropdown prepend_icon(:download, translate('helpers.links.download'), fixed_width: true) do
                 - image.styles.each do |style|
                   %li
                     = link_to download_image_path(style_id: style.position), data: { no_turbolink: true } do
                       = style.title
 
-          %li.dropdown
+          %li.dropdown.visible-md.visible-lg
             - if image.shop_urls.any?
               = dropdown prepend_icon(:dollar, translate('helpers.links.buy'), fixed_width: true), href: image.shop_url('gtgraphics'), menu_html: { class: 'shop-providers' } do
                 = image.shop_links

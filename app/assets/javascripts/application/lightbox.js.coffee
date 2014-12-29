@@ -9,11 +9,8 @@ slide = ($lightbox, prev) ->
 
 repositionCaption = ->
   $captionContainer = $('#lightbox_page_wrapper')
-  $title = $('.lightbox-title', $captionContainer)
   windowHeight = $(window).outerHeight()
-  titleHeight = $title.outerHeight()
-  titleHeight = 0
-  $captionContainer.css(top: windowHeight - titleHeight)
+  $captionContainer.css(top: windowHeight)
 
 resizeImage = ->
   $image = $('#lightbox .lightbox-image')

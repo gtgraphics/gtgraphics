@@ -1,7 +1,7 @@
 class Import::LocalizedPageParser
-  AUTHORS = {
-    'Taenaron' => 't.roetsch@gtgraphics.de',
-    'gucken' => 'j.michelmann@gtgraphics.de'
+  AUTHORS_MAP = {
+    'Taenaron' => 'Tobias Casper',
+    'gucken' => 'Jeff Michelmann'
   }.freeze
 
   attr_reader :url, :documents, :default_document
@@ -34,9 +34,9 @@ class Import::LocalizedPageParser
   def author
     author_str = default_document.css('.title-ct span:last').text.squish
     if author_str =~ /\A\(by (.*)\)\z/
-      User.find_by!(email: AUTHORS.fetch($1))
+      User.find_by_name(AUTHORS_MAP.fetch($1))
     else
-      raise "Author could not be extracted from document"
+      fail 'Author could not be extracted from document'
     end
   end
 

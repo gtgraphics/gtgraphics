@@ -31,30 +31,40 @@ $lightbox-control-size: 100px;
     margin-left: 15px;
   }
 
-  .navbar-nav > li {
-    > a {
-      outline: none;
-      padding: {
-        top: 20px;
-        bottom: 20px;
-      }
-      color: rgba($text-color, 0.5);
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-      transition: color 200ms ease-in-out, text-shadow 200ms ease-in-out;
+  .navbar-nav {
+    margin: 0;
 
-      &:hover, &:focus {
-        outline: none;
-        background: none;
-        color: $text-color;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-      }
+    &.navbar-right {
+      float: right;
     }
 
-    &.open > a {
-      outline: none;
-      color: $text-color;
-      background: none;
-      // background-color: rgba(30, 30, 30, 0.95);
+    > li {
+      float: left;
+
+      > a {
+        outline: none;
+        padding: {
+          top: 20px;
+          bottom: 20px;
+        }
+        color: rgba($text-color, 0.5);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        transition: color 200ms ease-in-out, text-shadow 200ms ease-in-out;
+
+        &:hover, &:focus {
+          outline: none;
+          background: none;
+          color: $text-color;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+        }
+      }
+
+      &.open > a {
+        outline: none;
+        color: $text-color;
+        background: none;
+        // background-color: rgba(30, 30, 30, 0.95);
+      }
     }
   }
 
@@ -144,13 +154,9 @@ $lightbox-control-size: 100px;
 
 #lightbox_page_wrapper {
   position: absolute;
-  margin: {
-    top: 0; // $grid-gutter-width;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
   border-top: 1px solid rgba(white, 0.04);
+  margin: 0;
+  // margin-top: 100%;
 
   .lightbox-title h1 {
     text-overflow: ellipsis;
@@ -160,23 +166,27 @@ $lightbox-control-size: 100px;
   }
 
   .lightbox-caption {
-    font-size: 18px;
-    font-weight: 300;
-    word-wrap: break-word;
+    @media (min-width: $screen-sm-min) {
+      font-size: 18px;
+      font-weight: 300;
+      word-wrap: break-word;
+    }
 
     + .lightbox-metadata {
       @media (max-width: $screen-sm-max) {
-        margin-top: $grid-gutter-width;
+        margin-top: 15px;
       }
     }
   }
 
   .lightbox-author-name {
     display: block;
-    margin-top: 8px;
-    font-size: 16px;
-    margin-top: 8px;
     color: $gray-light;
+
+    @media (min-width: $screen-sm-min) {
+      margin-top: 8px;
+      font-size: 16px;
+    }
 
     &:before {
       content: '\2014 \00A0';
@@ -186,6 +196,17 @@ $lightbox-control-size: 100px;
       color: $gray-light;
       &:hover, &:focus {
         color: darken($gray-light, 15%);
+      }
+    }
+  }
+
+  .lightbox-metadata {
+    dl {
+      margin: 0;
+      @media (max-width: $screen-xs-max) {
+        dd + dt {
+          margin-top: 10px;
+        }
       }
     }
   }
