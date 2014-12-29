@@ -1,5 +1,5 @@
 en:
-  attributes: 
+  attributes:
     author_id: Urheber
     description: Description
     slug: Slug
@@ -42,6 +42,14 @@ en:
         author: Artist
         dimensions: Dimensions
         content_type: File Type
+        shop_urls: Shop URLs
+        deviantart_url: DeviantArt
+        fineartprint_url: FineArtPrint
+        fineartamerica_url: FineArtAmerica
+        posterlounge_url: PosterLounge
+        mygall_url: MyGall
+        redbubble_url: RedBubble
+        artflakes_url: Artflakes
       image/translation:
         title: Title
       page:
@@ -82,7 +90,7 @@ en:
       page/homepage:
         one: Homepage
         other: Homepages
-      redirection: 
+      redirection:
         one: Redirection
         other: Redirections
       tag:

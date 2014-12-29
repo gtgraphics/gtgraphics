@@ -121,6 +121,7 @@ class Image < ActiveRecord::Base
     end
     @propagate_changes_to_pages
   end
+
   alias_method :propagate_changes_to_pages, :propagate_changes_to_pages?
 
   def propagate_changes_to_pages=(propagate)

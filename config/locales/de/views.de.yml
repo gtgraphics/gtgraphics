@@ -91,7 +91,9 @@ de:
       shops:
         gtgraphics: GT Graphics
         deviantart: DeviantArt
-        fineartprint: Fine Art Print
+        fineartprint: FineArtPrint
+        fineartamerica_url: FineArtAmerica
+        posterlounge_url: PosterLounge
         mygall: MyGall
         redbubble: RedBubble
         artflakes: Artflakes

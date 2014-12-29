@@ -34,7 +34,7 @@ class Image < ActiveRecord::Base
     belongs_to :image, inverse_of: :styles
     delegate :author, to: :image
 
-    after_save :write_copyright!, if: :write_copyright?
+    after_save :write_copyright!, if: :asset_changed?
 
     translates :title, fallbacks_for_empty_translations: true
 
@@ -62,12 +62,6 @@ class Image < ActiveRecord::Base
         metadata.copyright = image.copyright_note
         metadata.save!
       end
-    end
-
-    private
-
-    def write_copyright?
-      asset_changed?
     end
   end
 end

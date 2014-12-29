@@ -303,7 +303,7 @@ class Admin::PagesController < Admin::ApplicationController
     when 'Page::ContactForm' then [:id, :template_id, { recipient_ids: [] }]
     when 'Page::Content' then [:id, :template_id]
     when 'Page::Homepage' then [:id, :template_id]
-    when 'Page::Image' then [:id, :image_id, Page::Image.available_shop_providers.map { |shop_provider| :"#{shop_provider}_url" }]
+    when 'Page::Image' then [:id, :image_id]
     when 'Page::Project' then [:id, :project_id]
     when 'Page::Redirection' then [:id, :external, :destination_page_id, :destination_url, :permanent]
     end

@@ -15,11 +15,13 @@ class Image < ActiveRecord::Base
     end
 
     def metadata(version = nil)
-      data = {}
-      with_metadata(version) do |metadata|
-        data = metadata.to_hash
+      @metadata ||= {}
+      unless @metadata.include?(version)
+        with_metadata(version) do |metadata|
+          @metadata[version] = metadata.to_hash
+        end
       end
-      data
+      @metadata[version]
     end
 
     def with_metadata(version = nil)

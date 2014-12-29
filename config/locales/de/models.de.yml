@@ -138,7 +138,9 @@ de:
         preserve_aspect_ratio: Seitenverhältnis beibehalten
         shop_urls: Shop-Verknüpfungen
         deviantart_url: DeviantArt
-        fineartprint_url: Fineartprint
+        fineartprint_url: FineArtPrint
+        fineartamerica_url: FineArtAmerica
+        posterlounge_url: PosterLounge
         mygall_url: MyGall
         redbubble_url: RedBubble
         artflakes_url: Artflakes

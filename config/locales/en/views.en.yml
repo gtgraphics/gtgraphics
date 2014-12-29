@@ -28,3 +28,14 @@ en:
       templates:
         tabs:
           all: All
+
+    page/image:
+      shops:
+        gtgraphics: GT Graphics
+        deviantart: DeviantArt
+        fineartprint: FineArtPrint
+        fineartamerica_url: FineArtAmerica
+        posterlounge_url: PosterLounge
+        mygall: MyGall
+        redbubble: RedBubble
+        artflakes: Artflakes
