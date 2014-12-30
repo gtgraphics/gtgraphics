@@ -50,6 +50,9 @@ en:
         mygall_url: MyGall
         redbubble_url: RedBubble
         artflakes_url: Artflakes
+        taken_at: Taken
+        software: Software
+        camera: Camera
       image/translation:
         title: Title
       page:

@@ -11,24 +11,29 @@ $lightbox-control-size: 100px;
   padding-right: $lightbox-control-size;
   transition: all 200ms ease-out;
   z-index: 2;
+  background-color: $body-bg;
 
   @media (min-width: $screen-md-min) {
-    background: -moz-linear-gradient(top,  rgba($content-bg, 0.75) 0%, rgba($content-bg, 0) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba($content-bg, 0.75)), color-stop(100%,rgba($content-bg, 0))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  rgba($content-bg, 0.75) 0%,rgba($content-bg, 0) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  rgba($content-bg, 0.75) 0%,rgba($content-bg, 0) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  rgba($content-bg, 0.75) 0%,rgba($content-bg, 0) 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  rgba($content-bg, 0.75) 0%,rgba($content-bg, 0) 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
+    background: -moz-linear-gradient(top,  rgba(40,40,40,1) 0%, rgba(40,40,40,1) 25%, rgba(40,40,40,0) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(40,40,40,1)), color-stop(25%,rgba(40,40,40,1)), color-stop(100%,rgba(40,40,40,0))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(40,40,40,1) 0%,rgba(40,40,40,1) 25%,rgba(40,40,40,0) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(40,40,40,1) 0%,rgba(40,40,40,1) 25%,rgba(40,40,40,0) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(40,40,40,1) 0%,rgba(40,40,40,1) 25%,rgba(40,40,40,0) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(40,40,40,1) 0%,rgba(40,40,40,1) 25%,rgba(40,40,40,0) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#282828', endColorstr='#00282828',GradientType=0 ); /* IE6-9 */
+
+    position: fixed;
     z-index: $zindex-navbar-fixed;
+    top: 0;
+    left: 0;
+    right: 0;
   }
 
-  .container-fluid .navbar-brand {
-    margin-left: 0;
-  }
-
-  .container .navbar-brand {
-    margin-left: 15px;
+  .container-fluid {
+    @media (max-width: $screen-sm-max) {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 
   .navbar-nav {
@@ -80,10 +85,11 @@ $lightbox-control-size: 100px;
   position: fixed;
   top: 0;
   left: 0;
-  padding: 20px 38px;
-
+  padding: 20px;
   z-index: 3;
+
   @media (min-width: $screen-md-min) {
+    padding: 20px 38px;
     z-index: $zindex-navbar-fixed + 1;
   }
 
@@ -98,24 +104,30 @@ $lightbox-control-size: 100px;
 }
 
 #lightbox {
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
   user-select: none;
+  position: relative;
 
-  .lightbox-image-container, .lightbox-image, .lightbox-background, .lightbox-controls {
-    position: absolute;
+  @media (min-width: $screen-md-min) {
+    position: fixed;
+    z-index: 1;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
   }
 
+  .lightbox-image-container, .lightbox-image, .lightbox-background {
+    @media (min-width: $screen-md-min) {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+  }
+
   .lightbox-background, .lightbox-image {
-    transition: opacity 500ms ease-out;
+    transition: opacity 200ms ease-out;
     background: {
       repeat: no-repeat;
       position: center;
@@ -124,22 +136,49 @@ $lightbox-control-size: 100px;
 
   .lightbox-background {
     background-size: cover;
-    @include blur(20);
     opacity: 0.3;
+    @include blur(20);
   }
 
   .lightbox-image {
     background-size: contain;
+
+    img {
+      user-select: none;
+      width: 100%;
+      height: auto;
+
+      @media (min-width: $screen-md-min) {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+      }
+    }
   }
 
   .lightbox-controls {
     opacity: 1;
-    transition: opacity 200ms ease-out;
     z-index: 4;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transition: opacity 200ms ease-out;
 
     .lightbox-control {
-      top: $lightbox-control-size;
-      bottom: $lightbox-control-size;
+      top: 0;
+      bottom: 0;
+
+      @media (min-width: $screen-md-min) {
+        top: $lightbox-control-size;
+        bottom: $lightbox-control-size;
+      }
     }
   }
 
@@ -153,10 +192,18 @@ $lightbox-control-size: 100px;
 }
 
 #lightbox_page_wrapper {
-  position: absolute;
   border-top: 1px solid rgba(white, 0.04);
-  margin: 0;
-  // margin-top: 100%;
+  margin: {
+    top: 15px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  @media (min-width: $screen-md-min) {
+    position: absolute;
+    margin: 0;
+  }
 
   .lightbox-title h1 {
     text-overflow: ellipsis;
@@ -166,11 +213,9 @@ $lightbox-control-size: 100px;
   }
 
   .lightbox-caption {
-    @media (min-width: $screen-sm-min) {
-      font-size: 18px;
-      font-weight: 300;
-      word-wrap: break-word;
-    }
+    font-size: 18px;
+    font-weight: 300;
+    word-wrap: break-word;
 
     + .lightbox-metadata {
       @media (max-width: $screen-sm-max) {
@@ -182,11 +227,8 @@ $lightbox-control-size: 100px;
   .lightbox-author-name {
     display: block;
     color: $gray-light;
-
-    @media (min-width: $screen-sm-min) {
-      margin-top: 8px;
-      font-size: 16px;
-    }
+    margin-top: 8px;
+    font-size: 16px;
 
     &:before {
       content: '\2014 \00A0';
@@ -233,7 +275,6 @@ $lightbox-control-size: 100px;
 
   b {
     position: absolute;
-    font-weight: 100;
     font-size: 70px;
     line-height: 52px;
     top: 50%;
@@ -242,11 +283,6 @@ $lightbox-control-size: 100px;
     height: 60px;
     margin-top: -30px;
     text-align: center;
-
-    &.close-icon {
-      font-size: 60px;
-      line-height: 53px;
-    }
   }
 
   .fa {
@@ -276,4 +312,8 @@ $lightbox-control-size: 100px;
   width: $lightbox-control-size;
   height: 60px;
   z-index: $zindex-navbar-fixed + 1;
+  b {
+    font-size: 45px;
+    line-height: 50px;
+  }
 }

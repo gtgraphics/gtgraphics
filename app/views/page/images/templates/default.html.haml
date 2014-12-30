@@ -1,37 +1,47 @@
+- content_for :back_url, page_path(@gallery_page) if @gallery_page
+
+.container.visible-xs
+  = link_to :root, id: 'brand' do
+    = image_tag 'logo.png', id: 'logo', alt: 'GT Graphics'
+    .sr-only GT Graphics
+  = render 'navbar'
+
+/ Overlay Logo
+= link_to :root, id: 'lightbox_brand', class: 'hidden-xs' do
+  = image_tag 'lightbox_logo.png', id: 'logo', alt: 'GT Graphics'
+  %span.sr-only GT Graphics
+
 - present @page.embeddable do |image_page|
   - present @image do |image|
 
-    = link_to :root, id: 'lightbox_brand' do
-      = image_tag 'lightbox_logo.png', id: 'logo', alt: 'GT Graphics'
-      %span.sr-only GT Graphics
-
-    %nav.navbar.navbar-lightbox.navbar-fixed-top#navbar_lightbox{role: 'navigation'}
+    / Navigation for Desktop-sized Devices
+    %nav.navbar.navbar-lightbox#navbar_lightbox.hidden-xs{role: 'navigation'}
       .container-fluid
         %ul.nav.navbar-nav.navbar-right
-          %li.enlarge-image.visible-md.visible-lg
+          %li.enlarge-image.hidden-sm
             = link_to '#top', data: { scroll: true } do
               = prepend_icon :search_plus, translate('helpers.links.enlarge_image'), fixed_width: true
-          %li.info.visible-md.visible-lg
+          %li.info.hidden-sm
             = link_to '#info' do
               = prepend_icon :info, translate('helpers.links.details'), fixed_width: true, style: :circle
-          %li.comment.visible-md.visible-lg
+          %li.comment.hidden-sm
             = link_to '#comments', data: { scroll: true } do
               = prepend_icon :comment, translate('helpers.links.comment'), fixed_width: true
 
           - if image.styles.any?
-            %li.dropdown.visible-md.visible-lg
+            %li.dropdown.hidden-sm
               = dropdown prepend_icon(:download, translate('helpers.links.download'), fixed_width: true) do
                 - image.styles.each do |style|
                   %li
                     = link_to download_image_path(style_id: style.position), data: { no_turbolink: true } do
                       = style.title
 
-          %li.dropdown.visible-md.visible-lg
+          %li.dropdown.hidden-sm
             - if image.shop_urls.any?
-              = dropdown prepend_icon(:dollar, translate('helpers.links.buy'), fixed_width: true), href: image.shop_url('gtgraphics'), menu_html: { class: 'shop-providers' } do
+              = dropdown prepend_icon(:shopping_cart, translate('helpers.links.buy'), fixed_width: true), href: image.shop_url('gtgraphics'), menu_html: { class: 'shop-providers' } do
                 = image.shop_links
             - else
-              = link_to prepend_icon(:dollar, translate('helpers.links.buy'), fixed_width: true), image.shop_url('gtgraphics')
+              = link_to prepend_icon(:shopping_cart, translate('helpers.links.buy'), fixed_width: true), image.shop_url('gtgraphics')
 
           - if next_locale
             / Locale
@@ -46,10 +56,10 @@
 
     #lightbox
       .lightbox-image-container
-        .lightbox-background{style: background_css(attached_asset_path(@image, :public))}
+        .lightbox-background.hidden-xs.hidden-sm{style: background_css(attached_asset_path(@image, :public))}
         %figure.lightbox-image{style: background_css(attached_asset_path(@image, :public))}
-          = image_tag attached_asset_path(@image, :public), width: @image.width, height: @image.height, alt: @image.title, class: 'sr-only'
-          %figcaption.hidden
+          = image_tag attached_asset_path(@image, :public), width: @image.width, height: @image.height, alt: @image.title
+          %figcaption.sr-only
             = image.description
 
       .lightbox-controls
@@ -74,26 +84,47 @@
                 %h1= image.title
 
               .page-body
+                / Author and Description
                 .row
-                  .col-md-1.hidden-xs.hidden-sm.lightbox-author-avatar
+                  .col-xs-2.col-md-1.lightbox-author-avatar
                     = image.author.gravatar(true)
 
-                  .col-md-5.col-xs-12.lightbox-caption
+                  .col-xs-10.col-md-5.lightbox-caption
                     = image.description
                     .lightbox-author-name
                       = image.author.name(true)
 
-                  .col-md-6.col-xs-12.lightbox-metadata
+                  .col-xs-12.col-md-6.lightbox-metadata
+                    %h3.visible-xs.visible-sm
+                      = prepend_icon :info, translate('helpers.links.details'), fixed_width: true
                     %dl.dl-horizontal
-                      %dt Aufnahme
+                      %dt= Image.human_attribute_name :taken_at
                       %dd= image.taken_at
                       - if image.camera.present?
-                        %dt Kamera
+                        %dt= Image.human_attribute_name :camera
                         %dd= image.camera
                       - if image.software.present?
-                        %dt Software
+                        %dt= Image.human_attribute_name :software
                         %dd= image.software
 
+              .page-body
+                .row.visible-xs.visible-sm
+                  - if image.shop_links.present?
+                    / Buy
+                    .col-xs-12.col-sm-6
+                      %h3= prepend_icon :shopping_cart, translate('helpers.links.buy'), fixed_width: true
+                      %ul.shop-providers
+                        = image.shop_links
+
+                  - if image.styles.any?
+                    / Download
+                    .col-xs-12.col-sm-6
+                      %h3= prepend_icon :download, translate('helpers.links.download'), fixed_width: true
+                      %ul.image-styles
+                        - image.styles.each do |style|
+                          %li= link_to style.title, download_image_path(style_id: style.position), data: { no_turbolink: true }
+
+            / Comments
             .page-body.well.lightbox-comments#comments
               %a{name: 'comments'}
               = image_page.facebook_comments colorscheme: :dark

@@ -17,27 +17,51 @@
 
 #page_content, #lightbox_page_wrapper {
   background-color: $content-bg;
+}
 
-  .page-body {
-    padding: $content-padding;
-    margin: 0;
+.page-body + .page-body,
+.page-header + .page-body {
+  padding-top: 0;
 
-    @media (min-width: $screen-md-min) {
-      padding: $content-padding-lg;
-    }
+  &.well {
+    padding-top: $content-padding-lg;
+  }
+}
 
-    &.well {
-      border: none;
-      background-color: rgba(black, 0.15);
-    }
+.page-body {
+  padding: $content-padding;
+  margin: 0;
+
+  @media (min-width: $screen-md-min) {
+    padding: $content-padding-lg;
   }
 
-  .page-body + .page-body,
-  .page-header + .page-body {
-    padding-top: 0;
+  &.well {
+    border: none;
+    background-color: rgba(black, 0.15);
+  }
 
-    &.well {
-      padding-top: $content-padding-lg;
+  h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid $gray-dark;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    li {
+      position: relative;
+      padding-left: 15px;
+
+      &:before {
+        position: absolute;
+        left: 2px;
+        content: "▪";
+        color: $gray;
+      }
     }
   }
 }

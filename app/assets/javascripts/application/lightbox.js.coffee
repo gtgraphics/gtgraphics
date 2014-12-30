@@ -1,9 +1,10 @@
 slide = ($lightbox, prev) ->
-  $controls = $lightbox.find('.carousel-control')
+  $controls = $lightbox.find('.lightbox-control')
   if prev
     $control = $controls.filter('.left')
   else
     $control = $controls.filter('.right')
+  return false unless $control.length
   url = $control.attr('href')
   Turbolinks.visit(url)
 
@@ -13,25 +14,30 @@ repositionCaption = ->
   $captionContainer.css(top: windowHeight)
 
 resizeImage = ->
-  $image = $('#lightbox .lightbox-image')
+  $lightbox = $('#lightbox')
+  $image = $('.lightbox-image', $lightbox)
+  $controls = $('.lightbox-controls', $lightbox)
+  $elements = $image.add($controls)
 
   if window.innerWidth < 992
-    $image.css(opacity: 1, bottom: 0)
+    $elements.css(bottom: 0)
     return
 
   imageMargin = $(window).scrollTop()
   windowHeight = $(window).outerHeight()
   imageHeight = windowHeight - imageMargin
   imageWindowRatio = imageHeight / windowHeight
-  if imageWindowRatio < 0.3
-    opacity = 0
+
+  $elements.css(bottom: imageMargin)
+  if imageWindowRatio < 0.33
+    $elements.addClass('ghost')
   else
-    opacity = 1
-  $image.css(opacity: opacity, bottom: imageMargin)
+    $elements.removeClass('ghost')
 
 $(document).ready ->
   $lightboxNav = $('#navbar_lightbox')
   $lightbox = $('#lightbox')
+  $lightboxControls = $('.lightbox-controls', $lightbox)
 
   $lightboxImageContainer = $('.lightbox-image-container', $lightbox)
   $lightboxImageContainer.hide().css(opacity: 0)
@@ -42,6 +48,8 @@ $(document).ready ->
       url = $(@).attr('href')
       Turbolinks.visit(url)
 
+    $lightboxImage = $('.lightbox-image', $lightboxImageContainer)
+
     # Hide carousel controls after 5 seconds if no user input happens
     $timeoutables = $lightbox.add($lightboxNav)
     $timeoutables.idleTimeoutable()
@@ -50,20 +58,19 @@ $(document).ready ->
       .on 'shown.bs.dropdown', -> $timeoutables.idleTimeoutable('stop')
       .on 'hidden.bs.dropdown', -> $timeoutables.idleTimeoutable('start')
 
-
     # More beautiful image loading
     Loader.start()
-    $('.lightbox-image', $lightboxImageContainer).allImagesLoaded ->
+    $lightboxImage.allImagesLoaded ->
       Loader.done()
       $lightboxImageContainer.show().transition(duration: 500, opacity: 1)
 
     # Add swipe for mobile devices
-    if Modernizr.touch
-      $lightboxImageContainer.swipe
-        swipe: (event, direction) ->
-          prev = (direction == 'left')
-          return unless prev or direction == 'right'
-          slide($lightbox, prev)
+    $('.lightbox-controls', $lightbox).swipe
+      swipe: (event, direction) ->
+        return false if window.innerWidth >= 992
+        prev = (direction == 'right')
+        return unless prev or direction == 'left'
+        slide($lightbox, prev)
 
     # Position caption container
     repositionCaption()

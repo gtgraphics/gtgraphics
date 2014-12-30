@@ -5,21 +5,19 @@
 }
 
 .btn-header {
-  padding: 0;
-}
-
-.btn-header-icon {
+  margin: 0;
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  padding: 6px 0;
+  border: 1px solid $navbar-inverse-toggle-border-color;
+  color: $navbar-inverse-toggle-icon-bar-bg;
+  background-color: transparent;
+  width: 40px;
+  height: 40px;
+  padding: 0;
   text-align: center;
-  color: $gray-light;
-  background-color: rgba(black, 0.25);
-  color: $text-color;
+  padding: 9px;
 
   &:hover, &:focus {
-    background-color: rgba(black, 0.35);
-    color: $text-color;
+    color: $navbar-inverse-toggle-icon-bar-bg;
+    background-color: $navbar-inverse-toggle-hover-bg;
   }
 }
