@@ -80,8 +80,24 @@
             #info
               %a{name: 'info'}
 
-              .page-header.lightbox-title
-                %h1= image.title
+              .page-header.lightbox-title.clearfix
+                %h1.pull-left= image.title
+                / %ul.nav.nav-pills.pull-right
+                /   - if image.styles.any?
+                /     %li.dropdown.hidden-sm
+                /       = dropdown prepend_icon(:download, translate('helpers.links.download'), fixed_width: true), right: true do
+                /         - image.styles.each do |style|
+                /           %li
+                /             = link_to download_image_path(style_id: style.position), data: { no_turbolink: true } do
+                /               = style.title
+
+                /   %li.dropdown.hidden-sm
+                /     - if image.shop_urls.any?
+                /       = dropdown prepend_icon(:shopping_cart, translate('helpers.links.buy'), fixed_width: true), href: image.shop_url('gtgraphics'), right: true, menu_html: { class: 'shop-providers' } do
+                /         = image.shop_links
+                /     - else
+                /       = link_to prepend_icon(:shopping_cart, translate('helpers.links.buy'), fixed_width: true), image.shop_url('gtgraphics')
+
 
               .page-body
                 / Author and Description

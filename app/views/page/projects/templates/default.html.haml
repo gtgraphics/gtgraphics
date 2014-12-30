@@ -4,22 +4,23 @@
     .page-header
       %h1= project.title
 
-    .row
-      - if @images.any?
-        .col-sm-8
-          - @images.each_slice(3) do |images|
-            .row
-              - images.each do |image|
-                .col-sm-4
-                  .thumbnail
-                    = image_tag attached_asset_path(image, :thumbnail), alt: image.title, class: 'img-responsive'
+    .page-body
+      .row
+        - if @images.any?
+          .col-sm-8
+            - @images.each_slice(3) do |images|
+              .row
+                - images.each do |image|
+                  .col-sm-4
+                    .thumbnail
+                      = image_tag attached_asset_path(image, :brick), alt: image.title, class: 'img-responsive'
 
-      .col-sm-4
-        %dl.dl-horizontal
-          %dt= Project.human_attribute_name :client_name
-          %dd= project.client
-          %dt= Project.human_attribute_name :released_in
-          %dd= project.released_in
+        .col-sm-4
+          %dl.dl-horizontal
+            %dt= Project.human_attribute_name :client_name
+            %dd= project.client
+            %dt= Project.human_attribute_name :released_in
+            %dd= project.released_in
 
-        .content
-          = project.description
+          .content
+            = project.description
