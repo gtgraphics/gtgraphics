@@ -205,11 +205,32 @@ $lightbox-control-size: 100px;
     margin: 0;
   }
 
-  .lightbox-title h1 {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    max-width: 100%;
+  .lightbox-title {
+    h1 {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      max-width: 100%;
+
+      @media (min-width: $screen-md-min) {
+        float: left;
+      }
+    }
+
+    .btn-toolbar {
+      @media (min-width: $screen-md-min) {
+        float: right;
+      }
+    }
+
+    #social_buttons {
+      margin-top: 15px;
+      height: 20px;
+
+      @media (min-width: $screen-md-min) {
+        margin-top: 0px;
+      }
+    }
   }
 
   .lightbox-caption {
@@ -314,6 +335,6 @@ $lightbox-control-size: 100px;
   z-index: $zindex-navbar-fixed + 1;
   b {
     font-size: 45px;
-    line-height: 50px;
+    line-height: 55px;
   }
 }

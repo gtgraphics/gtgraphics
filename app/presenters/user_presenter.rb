@@ -2,7 +2,19 @@ class UserPresenter < ApplicationPresenter
   presents :user
 
   def name(linked = false)
-    h.link_to_if linked, user.name, h.about_author_path(user)
+    h.link_to_if about_page? && linked, user.name, path
+  end
+
+  def path
+    @path ||= begin
+      page = Page.where(parent_id: Page.where(path: 'about'))
+             .find_by(title: user.name)
+      h.page_path(page) if page
+    end
+  end
+
+  def about_page?
+    path.present?
   end
 
   def gravatar(*args)
@@ -12,6 +24,6 @@ class UserPresenter < ApplicationPresenter
       alt: name
     )
     image_tag = h.gravatar_image_tag email, options.reverse_merge(default: :mm)
-    h.link_to_if args.first, image_tag, h.about_author_path(user)
+    h.link_to_if about_page? && args.first, image_tag, path
   end
 end

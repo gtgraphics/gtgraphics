@@ -85,6 +85,7 @@ de:
       view: Ansehen
       view_mode: Betrachtungsmodus
       toggle_navigation: Navigation umschalten
+      tweet: Twittern
     confirmations:
       destroy: '%{model} wirklich entfernen?'
       destroy_selected: 'Möchten Sie die ausgewählten %{model} wirklich entfernen?'

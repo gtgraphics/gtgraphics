@@ -1,13 +1,4 @@
 module RouteHelper
-  def about_author_path(author)
-    @author_paths ||= {}
-    @author_paths[author] ||= begin
-      pages = Page.find_by!(path: 'about')
-      page = pages.children.find_by!(title: author.name)
-      page_path(page)
-    end
-  end
-
   def change_locale_path(locale)
     url_for(path: @page.try(:path), locale: locale)
   end

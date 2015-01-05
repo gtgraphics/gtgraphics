@@ -134,6 +134,7 @@ de:
         taken_at: Aufnahme
         software: Software
         camera: Kamera
+        iso_value: ISO-Wert
         created_at: Hochgeladen am
         preserve_aspect_ratio: Seitenverhältnis beibehalten
         shop_urls: Shop-Verknüpfungen

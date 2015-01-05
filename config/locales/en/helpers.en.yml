@@ -35,6 +35,7 @@ en:
       view_mode: View Mode
       next: Next
       previous: Previous
+      tweet: Tweet
     confirmations:
       destroy: 'Do you really want to delete this %{model}?'
       destroy_selected: 'Do you really want to delete all selected %{model}?'

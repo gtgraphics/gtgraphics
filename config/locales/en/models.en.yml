@@ -53,6 +53,7 @@ en:
         taken_at: Taken
         software: Software
         camera: Camera
+        iso_value: ISO Value
       image/translation:
         title: Title
       page:

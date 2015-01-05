@@ -44,12 +44,14 @@ class Page < ActiveRecord::Base
       end
 
       def embedding(*types)
-        types = Array(types).flatten.map { |type| "Page::#{type.to_s.classify}" }
+        types = Array(types).flatten.map do |type|
+          "Page::#{type.to_s.classify}"
+        end
         where(embeddable_type: types.many? ? types : types.first)
       end
 
       def embeddable_classes
-        @@embeddable_classes ||= embeddable_types.map(&:constantize).freeze
+        @embeddable_classes ||= embeddable_types.map(&:constantize).freeze
       end
 
       def embeddable_types
@@ -58,7 +60,7 @@ class Page < ActiveRecord::Base
     end
 
     def build_embeddable(attributes = {})
-      raise 'invalid embeddable type' unless embeddable_class
+      fail 'invalid embeddable type' unless embeddable_class
       self.embeddable = embeddable_class.new(attributes)
     end
 
@@ -70,7 +72,26 @@ class Page < ActiveRecord::Base
       embeddable_type.in?(EMBEDDABLE_TYPES) ? embeddable_type.constantize : nil
     end
 
+    # Enable dynamic delegation to embeddable
+
+    def embedding?
+      !embeddable_id.nil? && !embeddable_type.nil?
+    end
+
+    def method_missing(method_name, *args, &block)
+      if embedding? && embeddable.respond_to?(method_name)
+        embeddable.public_send(method_name, *args, &block)
+      else
+        super
+      end
+    end
+
+    def respond_to_missing?(method_name, include_private = false)
+      (embedding? && embeddable.respond_to?(method_name)) || super
+    end
+
     private
+
     def destroy_embeddable
       embeddable.try :destroy
     end

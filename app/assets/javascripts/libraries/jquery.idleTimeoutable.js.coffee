@@ -42,14 +42,14 @@ class IdleTimeoutable
       @awaken()
       @startTimeout()
 
-    @$target.on 'mousemove', @reactivationHandler
-    $(window).on 'scroll', @reactivationHandler
+    @$target.on 'mousedown mousemove', @reactivationHandler
+    $(window).on 'scroll resize', @reactivationHandler
 
   stop: ->
     @stopTimeout()
     if @reactivationHandler
-      @$target.off 'mousemove', @reactivationHandler
-      $(window).off 'scroll', @reactivationHandler
+      @$target.off 'mousedown mousemove', @reactivationHandler
+      $(window).off 'scroll resize', @reactivationHandler
 
   startTimeout: ->
     @timeout = setTimeout =>
