@@ -6,54 +6,55 @@
     .sr-only GT Graphics
   = render 'navbar'
 
-/ Overlay Logo
-= link_to :root, id: 'lightbox_brand', class: 'hidden-xs' do
-  = image_tag 'lightbox_logo.png', id: 'logo', alt: 'GT Graphics'
-  %span.sr-only GT Graphics
-
 - present @page do |page|
   - present @page.embeddable do |image_page|
     - present @image do |image|
 
-      / Navigation for Desktop-sized Devices
-      %nav.navbar.navbar-lightbox#navbar_lightbox.hidden-xs{role: 'navigation'}
-        .container-fluid
-          %ul.nav.navbar-nav.navbar-right
-            %li.enlarge-image.hidden-sm
-              = link_to '#top', data: { scroll: true } do
-                = prepend_icon :search_plus, translate('helpers.links.enlarge_image'), fixed_width: true
-            %li.info.hidden-sm
-              = link_to '#info' do
-                = prepend_icon :info, translate('helpers.links.details'), fixed_width: true, style: :circle
-            %li.comment.hidden-sm
-              = link_to '#comments', data: { scroll: true } do
-                = prepend_icon :comment, translate('helpers.links.comment'), fixed_width: true
+      #navbar_lightbox_container
+        / Overlay Logo
+        = link_to :root, id: 'lightbox_brand', class: 'hidden-xs' do
+          = image_tag 'lightbox_logo.png', id: 'logo', alt: 'GT Graphics'
+          %span.sr-only GT Graphics
 
-            - if image.styles.any?
+        / Navigation for Desktop size Devices
+        %nav.navbar.navbar-lightbox#navbar_lightbox.hidden-xs{role: 'navigation'}
+          .container-fluid
+            %ul.nav.navbar-nav.navbar-right
+              %li.enlarge-image.hidden-sm
+                = link_to '#top', data: { scroll: true } do
+                  = prepend_icon :search_plus, translate('helpers.links.enlarge_image'), fixed_width: true
+              %li.info.hidden-sm
+                = link_to '#info' do
+                  = prepend_icon :info, translate('helpers.links.details'), fixed_width: true, style: :circle
+              %li.comment.hidden-sm
+                = link_to '#comments', data: { scroll: true } do
+                  = prepend_icon :comment, translate('helpers.links.comment'), fixed_width: true
+
+              - if image.styles.any?
+                %li.dropdown.hidden-sm
+                  = dropdown prepend_icon(:download, translate('helpers.links.download'), fixed_width: true) do
+                    - image.styles.each do |style|
+                      %li
+                        = link_to download_image_path(style_id: style.position), data: { no_turbolink: true } do
+                          = style.title
+
               %li.dropdown.hidden-sm
-                = dropdown prepend_icon(:download, translate('helpers.links.download'), fixed_width: true) do
-                  - image.styles.each do |style|
-                    %li
-                      = link_to download_image_path(style_id: style.position), data: { no_turbolink: true } do
-                        = style.title
+                - if image.shop_urls.any?
+                  = dropdown prepend_icon(:shopping_cart, translate('helpers.links.buy'), fixed_width: true), href: image.shop_url('gtgraphics'), menu_html: { class: 'shop-providers' } do
+                    = image.shop_links
+                - else
+                  = link_to prepend_icon(:shopping_cart, translate('helpers.links.buy'), fixed_width: true), image.shop_url('gtgraphics')
 
-            %li.dropdown.hidden-sm
-              - if image.shop_urls.any?
-                = dropdown prepend_icon(:shopping_cart, translate('helpers.links.buy'), fixed_width: true), href: image.shop_url('gtgraphics'), menu_html: { class: 'shop-providers' } do
-                  = image.shop_links
-              - else
-                = link_to prepend_icon(:shopping_cart, translate('helpers.links.buy'), fixed_width: true), image.shop_url('gtgraphics')
+              - if next_locale
+                / Locale
+                %li#nav_locale
+                  = link_to change_locale_path(next_locale), hreflang: next_locale do
+                    = prepend_icon :globe, next_locale.to_s.upcase, fixed_width: true
 
-            - if next_locale
-              / Locale
-              %li#nav_locale
-                = link_to change_locale_path(next_locale), hreflang: next_locale do
-                  = prepend_icon :globe, next_locale.to_s.upcase, fixed_width: true
-
-        - if @gallery_page
-          = link_to @gallery_page, id: 'lightbox_close', class: 'lightbox-control', role: 'button' do
-            = close
-            %span.sr-only= translate('helpers.links.close')
+          - if @gallery_page
+            = link_to @gallery_page, id: 'lightbox_close', class: 'lightbox-control', role: 'button' do
+              = close
+              %span.sr-only= translate('helpers.links.close')
 
       #lightbox
         .lightbox-image-container
@@ -81,9 +82,14 @@
               #info
                 %a{name: 'info'}
 
+                / .page-body
+                /   %ul
+                /     %li= link_to prepend_icon(:download, 'Herunterladen'), '#'
+                /     %li= link_to prepend_icon(:shopping_cart, 'Erwerben'), '#'
+
                 .page-header.lightbox-title.clearfix
-                  %h1
-                    = image.title
+                  %h1= image.title
+
                   #social_buttons.btn-toolbar
                     .btn-group= page.facebook_like_button
                     /.btn-group= page.google_like_button
@@ -92,18 +98,18 @@
                 .page-body
                   / Author and Description
                   .row
-                    .col-xs-2.col-md-1.lightbox-author-avatar
+                    .lightbox-author-avatar.hidden-xs.hidden-sm.col-md-1
                       = image.author.gravatar(true)
 
-                    .col-xs-10.col-md-5.lightbox-caption
+                    .lightbox-caption.col-xs-12.col-md-11
                       = image.description
                       .lightbox-author-name
                         = image.author.name(true)
 
-                    .col-xs-12.col-md-6.lightbox-metadata
-                      %h3.visible-xs.visible-sm
-                        = prepend_icon :info, translate('helpers.links.details'), fixed_width: true
-                      = image.attribute_list :taken_at, :camera, :software, :iso_value
+                    / .col-xs-12.col-md-6.lightbox-metadata
+                    /   %h3.visible-xs.visible-sm
+                    /     = prepend_icon :info, translate('helpers.links.details'), fixed_width: true
+                    /   = image.attribute_list :taken_at, :camera, :software, :iso_value
 
                 .page-body
                   .row.visible-xs.visible-sm

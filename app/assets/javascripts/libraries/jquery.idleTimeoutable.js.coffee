@@ -5,6 +5,7 @@ jQuery.idleTimeoutable =
     awakeClass: null
     idleOnInit: false
     target: 'body'
+    awakeOn: 'mousedown mousemove'
 
 
 class IdleTimeoutable
@@ -33,6 +34,14 @@ class IdleTimeoutable
     @$element.trigger('awake')
     @isIdle = false
 
+  toggle: ->
+    @stop()
+    if @isIdle
+      @awaken()
+    else
+      @idle()
+    @start()
+
   start: ->
     @stop()
     @startTimeout()
@@ -42,14 +51,15 @@ class IdleTimeoutable
       @awaken()
       @startTimeout()
 
-    @$target.on 'mousedown mousemove', @reactivationHandler
+    @$target.on @options.awakeOn, @reactivationHandler
     $(window).on 'scroll resize', @reactivationHandler
 
   stop: ->
     @stopTimeout()
     if @reactivationHandler
-      @$target.off 'mousedown mousemove', @reactivationHandler
+      @$target.off @options.awakeOn, @reactivationHandler
       $(window).off 'scroll resize', @reactivationHandler
+      @reactivationHandler = null
 
   startTimeout: ->
     @timeout = setTimeout =>

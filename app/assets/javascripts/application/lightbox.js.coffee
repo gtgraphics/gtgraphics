@@ -6,6 +6,7 @@ slide = ($lightbox, prev) ->
     $control = $controls.filter('.right')
   return false unless $control.length
   url = $control.attr('href')
+  # TODO Some fancy effect
   Turbolinks.visit(url)
 
 repositionCaption = ->
@@ -34,15 +35,27 @@ resizeImage = ->
   else
     $elements.removeClass('ghost')
 
-$(document).ready ->
-  $lightboxNav = $('#navbar_lightbox')
-  $lightbox = $('#lightbox')
-  $lightboxControls = $('.lightbox-controls', $lightbox)
+repositionNavigation = ->
+  # $navbar = $('#navbar_lightbox')
+  # navHeight = $navbar.outerHeight(true)
+  # breakpoint = window.innerHeight - navHeight
+  # $navbarContainer = $('#navbar_lightbox_container')
 
-  $lightboxImageContainer = $('.lightbox-image-container', $lightbox)
-  $lightboxImageContainer.hide().css(opacity: 0)
+  # if $(window).scrollTop() > breakpoint
+  #   # console.log 'further scrolled'
+  #   $navbarContainer.addClass('affix').removeClass('affix-top')
+  # else
+  #   $navbarContainer.removeClass('affix').addClass('affix-top')
+
+$(document).ready ->
+  $lightbox = $('#lightbox')
 
   if $lightbox.length
+    $navbarContainer = $('#navbar_lightbox_container')
+    $navbar = $('#navbar_lightbox', $navbarContainer)
+    $lightboxControls = $('.lightbox-controls', $lightbox)
+    $lightboxImageContainer = $('.lightbox-image-container', $lightbox)
+
     # Add hotkeys
     $('.lightbox-control', $lightbox).on 'hotkey', ->
       url = $(@).attr('href')
@@ -51,37 +64,47 @@ $(document).ready ->
     $lightboxImage = $('.lightbox-image', $lightboxImageContainer)
 
     # Hide carousel controls after 5 seconds if no user input happens
-    $timeoutables = $lightbox.add($lightboxNav)
-    $timeoutables.idleTimeoutable()
+    $timeoutables = $lightbox.add($navbarContainer)
+    $timeoutables.idleTimeoutable(idleClass: 'unobstrusive', awakeOn: 'mousemove')
 
-    $('.dropdown', $lightboxNav)
+    $('.dropdown', $navbar)
       .on 'shown.bs.dropdown', -> $timeoutables.idleTimeoutable('stop')
       .on 'hidden.bs.dropdown', -> $timeoutables.idleTimeoutable('start')
 
+    $('.lightbox-controls', $lightbox).click (event) ->
+      $timeoutables.idleTimeoutable('toggle') unless $('.dropdown.open').length
+
     # More beautiful image loading
+    $('#lightbox, #lightbox_page_wrapper').hide()
     Loader.start()
     $lightboxImage.allImagesLoaded ->
       Loader.done()
-      $lightboxImageContainer.show().transition(duration: 500, opacity: 1)
+      # $lightboxImageContainer.show().transition(duration: 500, opacity: 1)
+      $('#lightbox, #lightbox_page_wrapper').show().transition(duration: 500, opacity: 1)
 
     # Add swipe for mobile devices
-    $('.lightbox-controls', $lightbox).swipe
-      swipe: (event, direction) ->
-        return false if window.innerWidth >= 992
-        prev = (direction == 'right')
-        return unless prev or direction == 'left'
-        slide($lightbox, prev)
+    if $('html').hasClass('touch') # TODO: Use Modernizr builtin support
+      $('.lightbox-controls', $lightbox).swipe
+        swipeLeft: ->
+          console.debug 'swipe left'
+          slide($lightbox, false) if window.innerWidth < 992
+        swipeRight: ->
+          console.debug 'swipe right'
+          slide($lightbox, true) if window.innerWidth < 992
 
     # Position caption container
     repositionCaption()
     resizeImage()
+    repositionNavigation()
 
 $(window).scroll ->
   resizeImage()
+  repositionNavigation()
 
 $(window).resize ->
   repositionCaption()
   resizeImage()
+  repositionNavigation()
 
 
 # Scrolling
@@ -120,3 +143,4 @@ $(document).ready ->
 
 $(window).scroll ->
   refreshNavigationScrollState()
+
