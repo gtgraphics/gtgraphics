@@ -61,6 +61,11 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
     }
   }
 
+  .gallery-image-container {
+    // fix that prevents displaying borders on the edges while transforming
+    margin: -1px;
+  }
+
   .gallery-link {
     outline: none;
     display: block;
