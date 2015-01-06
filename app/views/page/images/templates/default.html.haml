@@ -57,7 +57,7 @@
 
       #lightbox
         .lightbox-image-container
-          .lightbox-background.hidden-xs.hidden-sm.except-ie{style: background_css(attached_asset_path(@image, :public))}
+          .lightbox-background.hidden-xs.hidden-sm{style: background_css(attached_asset_path(@image, :public))}
           %figure.lightbox-image{style: background_css(attached_asset_path(@image, :public))}
             = image_tag attached_asset_path(@image, :public), width: @image.width, height: @image.height, alt: @image.title
             %figcaption.sr-only
@@ -86,7 +86,7 @@
                     = image.title
                   #social_buttons.btn-toolbar
                     .btn-group= page.facebook_like_button
-                    .btn-group= page.google_like_button
+                    /.btn-group= page.google_like_button
                     .btn-group= page.twitter_share_button
 
                 .page-body

@@ -1,4 +1,4 @@
-module GravatarHelper
+module Social::GravatarHelper
   def gravatar_image_tag(email, options = {})
     html_options = options.except(*Gravatar::VALID_OPTIONS).deep_dup
     html_options[:alt] ||= email

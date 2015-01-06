@@ -1,4 +1,4 @@
-module TwitterHelper
+module Social::TwitterHelper
   def twitter_share_button(*args)
     options = args.extract_options!.reverse_merge(count: false)
     count = options[:count] == false ? 'none' : options[:count].to_s

@@ -103,6 +103,10 @@ $lightbox-control-size: 100px;
   }
 }
 
+html.cssfilters #lightbox .lightbox-background {
+  display: block;
+}
+
 #lightbox {
   user-select: none;
   position: relative;
@@ -135,6 +139,7 @@ $lightbox-control-size: 100px;
   }
 
   .lightbox-background {
+    display: none;
     background-size: cover;
     opacity: 0.3;
     @include blur(20);

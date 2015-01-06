@@ -1,4 +1,4 @@
-module FacebookHelper
+module Social::FacebookHelper
   def facebook_app_id
     facebook_config[:app_id]
   end

@@ -5,9 +5,10 @@ module PartialHelper
     path = path.join('/')
     lookup_context.template_exists?(partial_name, path, true)
   end
-  
+
   def try_render(*args)
     render(*args)
   rescue ActionView::MissingTemplate
+    nil
   end
 end
