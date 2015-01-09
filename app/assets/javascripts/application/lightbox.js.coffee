@@ -35,24 +35,12 @@ resizeImage = ->
   else
     $elements.removeClass('ghost')
 
-repositionNavigation = ->
-  # $navbar = $('#navbar_lightbox')
-  # navHeight = $navbar.outerHeight(true)
-  # breakpoint = window.innerHeight - navHeight
-  # $navbarContainer = $('#navbar_lightbox_container')
-
-  # if $(window).scrollTop() > breakpoint
-  #   # console.log 'further scrolled'
-  #   $navbarContainer.addClass('affix').removeClass('affix-top')
-  # else
-  #   $navbarContainer.removeClass('affix').addClass('affix-top')
 
 $(document).ready ->
   $lightbox = $('#lightbox')
 
   if $lightbox.length
-    $navbarContainer = $('#navbar_lightbox_container')
-    $navbar = $('#navbar_lightbox', $navbarContainer)
+    $navbar = $('#navbar_lightbox')
     $lightboxControls = $('.lightbox-controls', $lightbox)
     $lightboxImageContainer = $('.lightbox-image-container', $lightbox)
 
@@ -64,7 +52,7 @@ $(document).ready ->
     $lightboxImage = $('.lightbox-image', $lightboxImageContainer)
 
     # Hide carousel controls after 5 seconds if no user input happens
-    $timeoutables = $lightbox.add($navbarContainer)
+    $timeoutables = $lightbox.add($navbar)
     $timeoutables.idleTimeoutable(idleClass: 'unobstrusive', awakeOn: 'mousemove')
 
     $('.dropdown', $navbar)
@@ -75,36 +63,32 @@ $(document).ready ->
       $timeoutables.idleTimeoutable('toggle') unless $('.dropdown.open').length
 
     # More beautiful image loading
-    $('#lightbox, #lightbox_page_wrapper').hide()
+    $fadedElements = $('#lightbox, #lightbox_page_wrapper, #nav_lightbox_actions')
+    $fadedElements.hide().css(opacity: 0)
     Loader.start()
     $lightboxImage.allImagesLoaded ->
+      $fadedElements.show().transition(duration: 500, opacity: 1)
+      refreshNavigationScrollState()
       Loader.done()
-      # $lightboxImageContainer.show().transition(duration: 500, opacity: 1)
-      $('#lightbox, #lightbox_page_wrapper').show().transition(duration: 500, opacity: 1)
 
     # Add swipe for mobile devices
     if $('html').hasClass('touch') # TODO: Use Modernizr builtin support
       $('.lightbox-controls', $lightbox).swipe
         swipeLeft: ->
-          console.debug 'swipe left'
           slide($lightbox, false) if window.innerWidth < 992
         swipeRight: ->
-          console.debug 'swipe right'
           slide($lightbox, true) if window.innerWidth < 992
 
     # Position caption container
     repositionCaption()
     resizeImage()
-    repositionNavigation()
 
 $(window).scroll ->
   resizeImage()
-  repositionNavigation()
 
 $(window).resize ->
   repositionCaption()
   resizeImage()
-  repositionNavigation()
 
 
 # Scrolling
@@ -112,7 +96,7 @@ $(window).resize ->
 COMMENT_BOX_OFFSET = 20
 
 refreshNavigationScrollState = ->
-  $navbar = $('#navbar_lightbox')
+  $navbar = $('#nav_lightbox_actions')
   $info = $('li.info', $navbar)
   $comment = $('li.comment', $navbar)
   $enlargeImage = $('li.enlarge-image', $navbar)
@@ -133,8 +117,6 @@ refreshNavigationScrollState = ->
     $comment.show()
 
 $(document).ready ->
-  refreshNavigationScrollState()
-
   $('#navbar_lightbox li.info a').click (event) ->
     event.preventDefault()
     options = _($(@).data()).defaults(duration: 500, easing: 'swing')

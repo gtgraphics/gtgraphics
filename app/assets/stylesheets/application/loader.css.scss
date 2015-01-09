@@ -36,3 +36,8 @@ body.images-show {
     margin-top: round(-$loader-height / 2);
   }
 }
+
+.loading {
+  opacity: 0 !important;
+  transition: opacity 500ms fade-out !important;
+}

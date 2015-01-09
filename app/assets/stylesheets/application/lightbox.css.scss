@@ -2,110 +2,57 @@
 @import 'compass';
 @import 'shared/mixins';
 
-$lightbox-nav-height: 65px;
+$lightbox-nav-height: 60px;
 $lightbox-control-size: 100px;
 
-#navbar_lightbox_container {
-  width: 100%;
+.navbar-lightbox {
   height: $lightbox-nav-height;
-  display: none;
+  border: none;
+  transition: all 200ms ease-out;
+  background-color: $body-bg;
 
   @media (min-width: $screen-sm-min) {
     display: block;
   }
 
+  @media (max-width: $screen-sm-max) {
+    margin-bottom: 0;
+  }
+
   @media (min-width: $screen-md-min) {
     position: fixed;
-    z-index: 300;
-  }
+    z-index: $zindex-navbar-fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: transparent;
 
-  #lightbox_brand, .navbar-lightbox {
-    position: absolute;
-  }
-
-  .navbar-lightbox {
-    width: 100%;
-    height: $lightbox-nav-height;
-    border: none;
-    padding-right: $lightbox-control-size;
-    transition: all 200ms ease-out;
-    background-color: $body-bg;
-
-    @media (min-width: $screen-md-min) {
+    &:before {
+      display: block;
+      position: fixed;
+      content: ' ';
+      top: 0;
+      left: 0;
+      right: 0;
+      height: $lightbox-nav-height;
+      z-index: $zindex-navbar-fixed - 1;
+      transition: opacity 200ms ease-in-out;
       background: -moz-linear-gradient(top,  rgba(40,40,40,1) 0%, rgba(40,40,40,1) 25%, rgba(40,40,40,0) 100%); /* FF3.6+ */
       background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(40,40,40,1)), color-stop(25%,rgba(40,40,40,1)), color-stop(100%,rgba(40,40,40,0))); /* Chrome,Safari4+ */
       background: -webkit-linear-gradient(top,  rgba(40,40,40,1) 0%,rgba(40,40,40,1) 25%,rgba(40,40,40,0) 100%); /* Chrome10+,Safari5.1+ */
       background: -o-linear-gradient(top,  rgba(40,40,40,1) 0%,rgba(40,40,40,1) 25%,rgba(40,40,40,0) 100%); /* Opera 11.10+ */
       background: -ms-linear-gradient(top,  rgba(40,40,40,1) 0%,rgba(40,40,40,1) 25%,rgba(40,40,40,0) 100%); /* IE10+ */
       background: linear-gradient(to bottom,  rgba(40,40,40,1) 0%,rgba(40,40,40,1) 25%,rgba(40,40,40,0) 100%); /* W3C */
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#282828', endColorstr='#00282828',GradientType=0 ); /* IE6-9 */
-
-      z-index: $zindex-navbar-fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-
-    .container-fluid {
-      @media (max-width: $screen-sm-max) {
-        padding-left: 0;
-        padding-right: 0;
-      }
-    }
-
-    .navbar-nav {
-      margin: 0;
-
-      &.navbar-right {
-        float: right;
-      }
-
-      > li {
-        float: left;
-
-        > a {
-          outline: none;
-          padding: {
-            top: 20px;
-            bottom: 20px;
-          }
-          color: rgba($text-color, 0.5);
-          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-          transition: color 200ms ease-in-out, text-shadow 200ms ease-in-out;
-
-          &:hover, &:focus {
-            outline: none;
-            background: none;
-            color: $text-color;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-          }
-        }
-
-        &.open > a {
-          outline: none;
-          color: $text-color;
-          background: none;
-          // background-color: rgba(30, 30, 30, 0.95);
-        }
-      }
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#282828', endColorstr='#00282828', GradientType=0); /* IE6-9 */
     }
   }
 
-  #lightbox_brand {
-    top: 0;
-    left: 0;
-    padding: 20px;
-    z-index: 3;
-
-    @media (min-width: $screen-md-min) {
-      padding: 20px 38px;
-      z-index: $zindex-navbar-fixed + 1;
-    }
-
+  .navbar-brand {
+    padding: 20px 38px;
     opacity: 0.5;
     outline: none;
     transition: opacity 200ms ease-in-out;
+    z-index: $zindex-navbar-fixed + 2;
 
     &:hover, &:focus {
       opacity: 1;
@@ -113,8 +60,76 @@ $lightbox-control-size: 100px;
     }
   }
 
+  .navbar-brand, #nav_lightbox_controls {
+    position: relative;
+    height: $lightbox-nav-height;
+  }
+
+  #nav_lightbox_controls {
+    z-index: $zindex-navbar-fixed + 1;
+  }
+
+  #nav_close {
+    margin-left: 0;
+  }
+
+  .navbar-nav {
+    &.navbar-right {
+      margin-left: 15px;
+
+      &:first-child {
+        margin-right: -15px;
+      }
+    }
+
+    > li {
+      float: left;
+
+      > a {
+        outline: none;
+        padding: {
+          top: 20px;
+          bottom: 20px;
+        }
+        color: rgba($text-color, 0.5);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        transition: color 200ms ease-in-out, text-shadow 200ms ease-in-out;
+
+        &:hover, &:focus {
+          outline: none;
+          background: none;
+          color: $text-color;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+        }
+      }
+
+      &.open > a {
+        outline: none;
+        color: $text-color;
+        background: none;
+      }
+    }
+  }
+
+  #nav_lightbox_controls {
+    opacity: 1;
+  }
+
+  &.unobstrusive {
+    @media (min-width: $screen-md-min) {
+      &:before, #nav_lightbox_controls {
+        transition: all 1s ease-in;
+        opacity: 0;
+      }
+
+      .navbar-brand {
+        transition: all 1s ease-in;
+        opacity: 0.2;
+      }
+    }
+  }
+
   #lightbox_close {
-    position: absolute;
     text-decoration: none;
     top: 0;
     right: 0;
@@ -125,25 +140,9 @@ $lightbox-control-size: 100px;
     z-index: $zindex-navbar-fixed + 1;
     font-size: 45px;
     line-height: 55px;
+    padding-top: 0;
+    padding-bottom: 0;
   }
-
-  &.unobstrusive {
-    .navbar-lightbox {
-      @media (min-width: $screen-md-min) {
-        transition: all 1s ease-in;
-        opacity: 0;
-      }
-    }
-
-    #lightbox_brand {
-      transition: all 1s ease-in;
-      opacity: 0.2;
-    }
-  }
-}
-
-html.cssfilters #lightbox .lightbox-background {
-  display: block;
 }
 
 #lightbox {
@@ -234,6 +233,10 @@ html.cssfilters #lightbox .lightbox-background {
   }
 }
 
+html.cssfilters #lightbox .lightbox-background {
+  display: block;
+}
+
 #lightbox_page_wrapper {
   border-top: 1px solid rgba(white, 0.04);
   margin: {
@@ -319,13 +322,16 @@ html.cssfilters #lightbox .lightbox-background {
 }
 
 .lightbox-control {
+  position: absolute;
+}
+
+.lightbox-control, #lightbox_close {
   color: white;
+  opacity: 0.5;
   text-align: center;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
   width: $lightbox-control-size;
-  position: absolute;
   outline: none;
-  opacity: 0.5;
   transition: opacity 200ms ease-in-out;
   margin: 0;
   font-weight: 100;

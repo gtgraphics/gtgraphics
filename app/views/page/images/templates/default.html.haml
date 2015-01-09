@@ -10,16 +10,24 @@
   - present @page.embeddable do |image_page|
     - present @image do |image|
 
-      #navbar_lightbox_container
-        / Overlay Logo
-        = link_to :root, id: 'lightbox_brand', class: 'hidden-xs' do
-          = image_tag 'lightbox_logo.png', id: 'logo', alt: 'GT Graphics'
-          %span.sr-only GT Graphics
+      / Navigation for Desktop size Devices
+      %nav.navbar.navbar-lightbox#navbar_lightbox.hidden-xs{role: 'navigation'}
+        .container-fluid
+          = link_to :root, id: 'lightbox_brand', class: 'navbar-brand hidden-xs' do
+            = image_tag 'lightbox_logo.png', id: 'logo', alt: 'GT Graphics'
+            %span.sr-only GT Graphics
 
-        / Navigation for Desktop size Devices
-        %nav.navbar.navbar-lightbox#navbar_lightbox.hidden-xs{role: 'navigation'}
-          .container-fluid
-            %ul.nav.navbar-nav.navbar-right
+          #nav_lightbox_controls
+            - if @gallery_page
+              %ul#nav_close.nav.navbar-nav.navbar-right
+                %li
+                  = link_to @gallery_page, id: 'lightbox_close', class: 'lightbox-control', role: 'button' do
+                    = close
+                    %span.sr-only= translate('helpers.links.close')
+
+            = render 'locale_nav'
+
+            %ul#nav_lightbox_actions.nav.navbar-nav.navbar-right
               %li.enlarge-image.hidden-sm
                 = link_to '#top', data: { scroll: true } do
                   = prepend_icon :search_plus, translate('helpers.links.enlarge_image'), fixed_width: true
@@ -44,17 +52,6 @@
                     = image.shop_links
                 - else
                   = link_to prepend_icon(:shopping_cart, translate('helpers.links.buy'), fixed_width: true), image.shop_url('gtgraphics')
-
-              - if next_locale
-                / Locale
-                %li#nav_locale
-                  = link_to change_locale_path(next_locale), hreflang: next_locale do
-                    = prepend_icon :globe, next_locale.to_s.upcase, fixed_width: true
-
-          - if @gallery_page
-            = link_to @gallery_page, id: 'lightbox_close', class: 'lightbox-control', role: 'button' do
-              = close
-              %span.sr-only= translate('helpers.links.close')
 
       #lightbox
         .lightbox-image-container
