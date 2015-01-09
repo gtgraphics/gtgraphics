@@ -59,11 +59,12 @@ $(document).ready ->
       .on 'shown.bs.dropdown', -> $timeoutables.idleTimeoutable('stop')
       .on 'hidden.bs.dropdown', -> $timeoutables.idleTimeoutable('start')
 
-    $('.lightbox-controls', $lightbox).click (event) ->
+    $('.lightbox-controls, .lightbox-image', $lightbox).click (event) ->
+      event.stopPropagation()
       $timeoutables.idleTimeoutable('toggle') unless $('.dropdown.open').length
 
     # More beautiful image loading
-    $fadedElements = $('#lightbox, #lightbox_page_wrapper, #nav_lightbox_actions')
+    $fadedElements = $('#lightbox .lightbox-image-container, #lightbox_page_wrapper, #nav_lightbox_actions')
     $fadedElements.hide().css(opacity: 0)
     Loader.start()
     $lightboxImage.allImagesLoaded ->
