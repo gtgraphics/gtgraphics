@@ -24,7 +24,6 @@ class IdleTimeoutable
 
   idle: ->
     return false if @isIdle == true
-    console.log 'idle'
     @$element.addClass(@options.idleClass).removeClass(@options.awakeClass)
     @$element.trigger('idle')
     @isIdle = true
