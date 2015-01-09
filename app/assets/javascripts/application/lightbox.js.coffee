@@ -60,7 +60,6 @@ $(document).ready ->
       .on 'hidden.bs.dropdown', -> $timeoutables.idleTimeoutable('start')
 
     $('.lightbox-controls, .lightbox-image', $lightbox).click (event) ->
-      event.stopPropagation()
       $timeoutables.idleTimeoutable('toggle') unless $('.dropdown.open').length
 
     # More beautiful image loading

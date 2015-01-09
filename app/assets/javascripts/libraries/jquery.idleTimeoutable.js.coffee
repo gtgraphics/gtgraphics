@@ -23,24 +23,28 @@ class IdleTimeoutable
       @awaken()
 
   idle: ->
-    return if @isIdle == true
+    return false if @isIdle == true
+    console.log 'idle'
     @$element.addClass(@options.idleClass).removeClass(@options.awakeClass)
     @$element.trigger('idle')
     @isIdle = true
+    true
 
   awaken: ->
-    return if @isIdle == false
+    return false if @isIdle == false
     @$element.removeClass(@options.idleClass).addClass(@options.awakeClass)
     @$element.trigger('awake')
     @isIdle = false
+    true
 
   toggle: ->
     @stop()
     if @isIdle
       @awaken()
+      @start()
     else
       @idle()
-    @start()
+    true
 
   start: ->
     @stop()
@@ -50,9 +54,11 @@ class IdleTimeoutable
       @stopTimeout()
       @awaken()
       @startTimeout()
+      true
 
     @$target.on @options.awakeOn, @reactivationHandler
     $(window).on 'scroll resize', @reactivationHandler
+    true
 
   stop: ->
     @stopTimeout()
@@ -60,6 +66,14 @@ class IdleTimeoutable
       @$target.off @options.awakeOn, @reactivationHandler
       $(window).off 'scroll resize', @reactivationHandler
       @reactivationHandler = null
+    true
+
+  restart: ->
+    @stop()
+    @start()
+
+  destroy: ->
+    @stop()
 
   startTimeout: ->
     @timeout = setTimeout =>
