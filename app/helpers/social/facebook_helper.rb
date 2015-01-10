@@ -48,8 +48,12 @@ module Social::FacebookHelper
     }
   end
 
+  def facebook_page_url
+    facebook_config[:page_url]
+  end
+
   def facebook_site_like_button(options = {})
-    facebook_like_button('https://www.facebook.com/gtgraphics.de',
-                         style: :button_count, show_faces: false)
+    facebook_like_button facebook_page_url,
+                         style: :button_count, show_faces: false
   end
 end

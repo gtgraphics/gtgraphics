@@ -305,11 +305,11 @@ $lightbox-control-size: 100px;
     }
 
     #social_buttons {
-      margin-top: 15px;
-      height: 20px;
+      margin-top: 20px;
 
       @media (min-width: $screen-md-min) {
-        margin-top: 0px;
+        margin-top: 0;
+        padding: 9px 0;
       }
     }
   }

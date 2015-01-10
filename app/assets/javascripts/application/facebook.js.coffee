@@ -1,9 +1,5 @@
 $fbRoot = null
-eventsBound = false
-
-$ ->
-  loadFacebookSDK()
-  bindFacebookEvents() unless eventsBound
+facebookEventsBound = false
 
 bindFacebookEvents = ->
   $(document)
@@ -12,7 +8,7 @@ bindFacebookEvents = ->
     .on('page:load', ->
       FB?.XFBML.parse()
     )
-  eventsBound = true
+  facebookEventsBound = true
 
 saveFacebookRoot = ->
   $fbRoot = $('#fb-root').detach()
@@ -34,3 +30,7 @@ loadFacebookSDK = ->
 initializeFacebookSdk = ->
   appId = $('meta[property="fb:app_id"]').attr('content')
   FB.init(appId: appId, status: true, cookie: true, xfbml: true)
+
+$(document).ready ->
+  loadFacebookSDK()
+  bindFacebookEvents() unless facebookEventsBound

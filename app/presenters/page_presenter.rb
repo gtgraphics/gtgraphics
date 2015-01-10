@@ -23,7 +23,8 @@ class PagePresenter < ApplicationPresenter
 
   # Google Plus Integration
 
-  def google_like_button(options = {})
+  def google_plus_like_button(options = {})
+    h.google_plus_like_button(social_uri)
   end
 
   # Twitter Integration
