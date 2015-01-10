@@ -39,14 +39,12 @@ $(document).on 'page:change', ->
       maxPage: $gallery.data('totalPages')
       loading:
         start: ->
-          NProgress.start()
           Loader.start()
           scroller = $gallery.data('infinitescroll')
           scroller.beginAjax(scroller.options)
         finished: ->
           # currently not used
       errorCallback: (state) ->
-        NProgress.done()
         Loader.done()
 
     $(scrollerOptions.navSelector).hide()
@@ -54,10 +52,10 @@ $(document).on 'page:change', ->
     # Image
     Loader.start()
 
-    $gallery.allImagesLoaded ->
+    $(GALLERY_ITEM_SELECTOR, $gallery).allImagesLoaded ->
       Loader.done()
 
-      $gallery.show().transition(opacity: 1)
+      $gallery.show().transition(opacity: 1, duration: 500)
       $gallery.masonry
         itemSelector: GALLERY_ITEM_SELECTOR
         columnWidth: (containerWidth) ->
@@ -71,10 +69,8 @@ $(document).on 'page:change', ->
         $appendedElements.allImagesLoaded ->
           $appendedElements.show().transition(opacity: 1, duration: 500)
           $gallery.masonry('appended', $appendedElements)
-          NProgress.done()
           Loader.done()
 
 $(document).on 'page:before-unload page:receive', ->
   $gallery = $(GALLERY_SELECTOR)
-  if $gallery.hasClass('masonry')
-    $gallery.masonry('destroy').infinitescroll('destroy')
+  $gallery.masonry('destroy').infinitescroll('destroy')

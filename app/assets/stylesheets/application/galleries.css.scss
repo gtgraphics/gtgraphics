@@ -54,7 +54,7 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
       padding: $gallery-item-gutter-sm / 2;
 
       .no-js & {
-        width: calc(100% / 2);
+        width: 50%;
         float: left;
 
         @media (max-width: $screen-sm-max) {
@@ -69,7 +69,7 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
       padding: $gallery-item-gutter-md / 2;
 
       .no-js & {
-        width: calc(100% / 3);
+        width: 33.333333333%;
 
         &:nth-child(3n - 2) {
           clear: left;

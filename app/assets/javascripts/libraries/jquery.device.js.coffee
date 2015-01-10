@@ -1,7 +1,11 @@
 jQuery.device =
   getSize: ->
-    body = $('body').get(0)
-    window.getComputedStyle(body, ':before').getPropertyValue('content')
+    detector = window.getComputedStyle($('body').get(0), ':before')
+    size = detector.getPropertyValue('content')
+    if size.length == 4
+      size.slice(1, 3)
+    else
+      size
 
   isExtraSmall: ->
     @getSize() == 'xs'
