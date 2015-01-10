@@ -53,17 +53,21 @@ $(document).ready ->
 
     # Hide carousel controls after 5 seconds if no user input happens
     $timeoutables = $lightbox.add($navbar)
-    $timeoutables.idleTimeoutable(idleClass: 'unobstrusive', awakeOn: 'mousemove')
+    $timeoutables.idleTimeoutable idleClass: 'unobstrusive',
+                                  awakeOn: ['keydown', 'mousemove']
 
     $('.dropdown', $navbar)
       .on 'shown.bs.dropdown', -> $timeoutables.idleTimeoutable('stop')
       .on 'hidden.bs.dropdown', -> $timeoutables.idleTimeoutable('start')
 
-    $('.lightbox-controls, .lightbox-image', $lightbox).click (event) ->
-      $timeoutables.idleTimeoutable('toggle') unless $('.dropdown.open').length
+    $lightboxControls.mousedown (event) ->
+      event.stopPropagation()
+      unless $('.dropdown.open').length
+        $timeoutables.each ->
+          $(@).idleTimeoutable('toggle')
 
     # More beautiful image loading
-    $fadedElements = $('#lightbox .lightbox-image-container, #lightbox_page_wrapper, #nav_lightbox_actions')
+    $fadedElements = $('#lightbox_page_wrapper, #nav_lightbox_actions').add($lightboxImageContainer)
     $fadedElements.hide().css(opacity: 0)
     Loader.start()
     $lightboxImage.allImagesLoaded ->

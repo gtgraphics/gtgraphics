@@ -5,7 +5,7 @@ jQuery.idleTimeoutable =
     awakeClass: null
     idleOnInit: false
     target: 'body'
-    awakeOn: 'mousedown mousemove'
+    awakeOn: ['keydown', 'mousedown', 'mousemove']
 
 
 class IdleTimeoutable
@@ -15,6 +15,14 @@ class IdleTimeoutable
       jQuery.idleTimeoutable.defaults
     )
     @$target = $(@options.target)
+
+    if _(@options.awakeOn).isArray()
+      @awakeOn = @options.awakeOn
+    else
+      @awakeOn = [@options.awakeOn]
+    @awakeOn = _(@awakeOn).compact()
+
+    console.log @awakeOn
 
     @timeout = null
     if @options.idleOnInit
@@ -40,31 +48,20 @@ class IdleTimeoutable
     @stop()
     if @isIdle
       @awaken()
-      @start()
     else
       @idle()
+    @start()
     true
 
   start: ->
     @stop()
     @startTimeout()
-
-    @reactivationHandler = =>
-      @stopTimeout()
-      @awaken()
-      @startTimeout()
-      true
-
-    @$target.on @options.awakeOn, @reactivationHandler
-    $(window).on 'scroll resize', @reactivationHandler
+    @attachEvents()
     true
 
   stop: ->
     @stopTimeout()
-    if @reactivationHandler
-      @$target.off @options.awakeOn, @reactivationHandler
-      $(window).off 'scroll resize', @reactivationHandler
-      @reactivationHandler = null
+    @detachEvents()
     true
 
   restart: ->
@@ -83,6 +80,55 @@ class IdleTimeoutable
     return unless @timeout
     clearTimeout(@timeout)
     @timeout = null
+
+  attachEvents: ->
+    @reactivationHandler = =>
+      @stopTimeout()
+      @awaken()
+      @startTimeout()
+      true
+
+    # Mousemove
+    if _(@awakeOn).contains('mousemove')
+      @mouseMoveReactivationHandler = (event) =>
+        currentMousePosition = "#{event.clientX}x#{event.clientY}"
+        if currentMousePosition != @lastMousePosition
+          @reactivationHandler()
+          @lastMousePosition = currentMousePosition
+        true
+      @$target.on 'mousemove', @mouseMoveReactivationHandler
+
+    # Mousedown
+    if _(@awakeOn).contains('mousedown')
+      @$target.on 'mousedown', @reactivationHandler
+
+    # Keydown
+    if _(@awakeOn).contains('keydown')
+      @$target.on 'keydown', @reactivationHandler
+
+    # Window events
+    $(window).on 'scroll resize', @reactivationHandler
+
+  detachEvents: ->
+    # Mousemove
+    if _(@awakeOn).contains('mousemove') && @mouseMoveReactivationHandler
+      @$target.off 'mousemove', @mouseMoveReactivationHandler
+
+    if @reactivationHandler
+      # Mousedown
+      if _(@awakeOn).contains('mousedown')
+        @$target.off 'mousedown', @reactivationHandler
+
+      # Keydown
+      if _(@awakeOn).contains('keydown')
+        @$target.off 'keydown', @reactivationHandler
+
+      # Window events
+      $(window).off 'scroll resize', @reactivationHandler
+
+    # Remove event handler functions
+    @mouseMoveReactivationHandler = null
+    @reactivationHandler = null
 
 
 jQuery.fn.idleTimeoutable = (methodOrOptions = {}) ->
