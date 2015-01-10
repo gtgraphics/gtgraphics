@@ -21,19 +21,18 @@ resizeImage = ->
   $elements = $image.add($controls)
 
   if $.device.isExtraSmall() || $.device.isSmall()
-    $elements.css(bottom: 0).removeClass('ghost')
-    return
-
-  imageMargin = $(window).scrollTop()
-  windowHeight = $(window).outerHeight()
-  imageHeight = windowHeight - imageMargin
-  imageWindowRatio = imageHeight / windowHeight
-
-  $elements.css(bottom: imageMargin)
-  if imageWindowRatio < 0.33
-    $elements.addClass('ghost')
+    $elements.css(bottom: '').removeClass('ghost')
   else
-    $elements.removeClass('ghost')
+    imageMargin = $(window).scrollTop()
+    windowHeight = $(window).outerHeight()
+    imageHeight = windowHeight - imageMargin
+    imageWindowRatio = imageHeight / windowHeight
+
+    $elements.css(bottom: imageMargin)
+    if imageWindowRatio < 0.33
+      $elements.addClass('ghost')
+    else
+      $elements.removeClass('ghost')
 
 
 $(document).ready ->
