@@ -12,7 +12,7 @@
                   .gallery-image-caption
                     %h3.gallery-image-title= page.title
 
-  = paginate @image_pages
+  = paginate @image_pages, theme: :gallery
 
 - else
   .page-body

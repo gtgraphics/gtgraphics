@@ -29,7 +29,6 @@ resizeImage = ->
     else
       $elements.removeClass('ghost')
 
-
 $(document).ready ->
   $lightbox = $('#lightbox')
 

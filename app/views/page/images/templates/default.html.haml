@@ -37,7 +37,7 @@
                   = prepend_icon :comment, translate('helpers.links.comment'), fixed_width: true
 
               - if image.styles.any?
-                %li.dropdown.hidden-sm
+                %li.dropdown.hidden-sm.js-only
                   = dropdown prepend_icon(:download, translate('helpers.links.download'), fixed_width: true) do
                     - image.styles.each do |style|
                       %li

@@ -1,0 +1,5 @@
+#pagination.btn-group
+  = button_link_to_if collection.next_page?, url_for(page: collection.current_page), class: 'btn btn-default' do
+    = prepend_icon :chevron, translate('helpers.links.previous'), direction: :left
+
+  = link_to_next_page @image_pages, prepend_icon(:chevron, translate('helpers.links.next'), direction: :right), class: 'btn btn-default'
