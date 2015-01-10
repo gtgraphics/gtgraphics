@@ -177,7 +177,7 @@ $lightbox-control-size: 100px;
   }
 
   .lightbox-background {
-    display: none;
+    // display: none;
     background-size: cover;
     opacity: 0.3;
     @include blur(20);
@@ -233,8 +233,12 @@ $lightbox-control-size: 100px;
   }
 }
 
-html.cssfilters #lightbox .lightbox-background {
-  display: block;
+@media all and (-ms-high-contrast:none) {
+  // Nasty IE hack to prevent IE 10 and 11 from displaying the blurry background
+  // which does not work properly in those browsers
+  #lightbox .lightbox-background {
+    display: none;
+  }
 }
 
 #lightbox_page_wrapper {
