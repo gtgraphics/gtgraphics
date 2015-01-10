@@ -29,7 +29,7 @@ class ImageUploader < AttachmentUploader
   end
 
   version :brick, from_version: :custom do
-    process resize_to_fit: [350, nil]
+    process resize_to_fit: [354, nil]
     process convert: 'jpeg'
     process quality: 85
 

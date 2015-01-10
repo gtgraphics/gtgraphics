@@ -67,10 +67,12 @@ $(document).on 'page:change', ->
       $gallery.infinitescroll scrollerOptions, (html) ->
         $appendedElements = $(html).hide().css(opacity: 0)
         $appendedElements.allImagesLoaded ->
-          $appendedElements.show().transition(opacity: 1)
+          $appendedElements.show().transition(opacity: 1, duration: 500)
           $gallery.masonry('appended', $appendedElements)
           NProgress.done()
           Loader.done()
 
 $(document).on 'page:before-unload page:receive', ->
-  $(GALLERY_SELECTOR).masonry('destroy').infinitescroll('destroy')
+  $gallery = $(GALLERY_SELECTOR)
+  if $gallery.hasClass('masonry')
+    $gallery.masonry('destroy').infinitescroll('destroy')
