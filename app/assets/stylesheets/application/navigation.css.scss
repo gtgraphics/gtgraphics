@@ -3,6 +3,8 @@
 @import 'shared/mixins';
 
 .navbar {
+  user-select: none;
+
   @media (min-width: $screen-sm-min) {
     .navbar-nav:not(.navbar-right):first-child {
       margin-left: -15px;
