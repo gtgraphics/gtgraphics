@@ -104,6 +104,10 @@ class IdleTimeoutable
     if _(@awakeOn).contains('keydown')
       @$target.on 'keydown', @reactivationHandler
 
+    # Touch Start
+    if _(@awakeOn).contains('tap')
+      @$target.swipe(tap: @reactivationHandler, threshold: 50)
+
     # Window events
     $(window).on 'scroll resize', @reactivationHandler
 
@@ -120,6 +124,10 @@ class IdleTimeoutable
       # Keydown
       if _(@awakeOn).contains('keydown')
         @$target.off 'keydown', @reactivationHandler
+
+      # Touch Start
+      if _(@awakeOn).contains('tap')
+        @$target.off 'tap', @reactivationHandler
 
       # Window events
       $(window).off 'scroll resize', @reactivationHandler

@@ -1,0 +1,18 @@
+@import 'bootstrap_config';
+
+body:before {
+  content: 'xs';
+  display: none;
+
+  @media (min-width: $screen-sm-min) {
+    content: 'sm';
+  }
+
+  @media (min-width: $screen-md-min) {
+    content: 'md';
+  }
+
+  @media (min-width: $screen-lg-min) {
+    content: 'lg';
+  }
+}

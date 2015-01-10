@@ -20,8 +20,8 @@ resizeImage = ->
   $controls = $('.lightbox-controls', $lightbox)
   $elements = $image.add($controls)
 
-  if window.innerWidth < 992
-    $elements.css(bottom: 0)
+  if $.device.isExtraSmall() || $.device.isSmall()
+    $elements.css(bottom: 0).removeClass('ghost')
     return
 
   imageMargin = $(window).scrollTop()
@@ -60,11 +60,14 @@ $(document).ready ->
       .on 'shown.bs.dropdown', -> $timeoutables.idleTimeoutable('stop')
       .on 'hidden.bs.dropdown', -> $timeoutables.idleTimeoutable('start')
 
-    $lightboxControls.mousedown (event) ->
-      event.stopPropagation()
-      unless $('.dropdown.open').length
-        $timeoutables.each ->
-          $(@).idleTimeoutable('toggle')
+    $lightboxControls.swipe
+      tap: (event, target) ->
+        event.preventDefault()
+        event.stopPropagation()
+        unless $('.dropdown.open').length
+          $timeoutables.each ->
+            $(@).idleTimeoutable('toggle')
+      threshold: 50
 
     # More beautiful image loading
     $fadedElements = $('#lightbox_page_wrapper, #nav_lightbox_actions').add($lightboxImageContainer)
@@ -77,11 +80,11 @@ $(document).ready ->
 
     # Add swipe for mobile devices
     if $('html').hasClass('touch') # TODO: Use Modernizr builtin support
-      $('.lightbox-controls', $lightbox).swipe
+      $lightboxControls.swipe
         swipeLeft: ->
-          slide($lightbox, false) if window.innerWidth < 992
+          slide($lightbox, false) if $.device.isExtraSmall() || $.device.isSmall()
         swipeRight: ->
-          slide($lightbox, true) if window.innerWidth < 992
+          slide($lightbox, true) if $.device.isExtraSmall() || $.device.isSmall()
 
     # Position caption container
     repositionCaption()
