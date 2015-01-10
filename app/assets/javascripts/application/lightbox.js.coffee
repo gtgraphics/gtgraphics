@@ -59,6 +59,7 @@ $(document).ready ->
       .on 'shown.bs.dropdown', -> $timeoutables.idleTimeoutable('stop')
       .on 'hidden.bs.dropdown', -> $timeoutables.idleTimeoutable('start')
 
+    # Touch Swipe
     $lightboxControls.swipe
       tap: (event, target) ->
         event.preventDefault()
@@ -66,6 +67,10 @@ $(document).ready ->
         unless $('.dropdown.open').length
           $timeoutables.each ->
             $(@).idleTimeoutable('toggle')
+      swipeLeft: ->
+        slide($lightbox, false) if $.device.isExtraSmall() || $.device.isSmall()
+      swipeRight: ->
+        slide($lightbox, true) if $.device.isExtraSmall() || $.device.isSmall()
       threshold: 50
 
     # More beautiful image loading
@@ -76,14 +81,6 @@ $(document).ready ->
       $fadedElements.show().transition(duration: 500, opacity: 1)
       refreshNavigationScrollState()
       Loader.done()
-
-    # Add swipe for mobile devices
-    if $('html').hasClass('touch') # TODO: Use Modernizr builtin support
-      $lightboxControls.swipe
-        swipeLeft: ->
-          slide($lightbox, false) if $.device.isExtraSmall() || $.device.isSmall()
-        swipeRight: ->
-          slide($lightbox, true) if $.device.isExtraSmall() || $.device.isSmall()
 
     # Position caption container
     repositionCaption()

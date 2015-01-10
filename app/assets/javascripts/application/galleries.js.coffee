@@ -8,10 +8,12 @@ NEXT_PAGE_SELECTOR = '#pagination #next_page'
 columnsCount = null
 
 setColumns = ->
-  width = window.innerWidth
-  columnsCount = 1
-  columnsCount = 2 if width >= 768
-  columnsCount = 3 if width >= 992
+  if $.device.isMedium() || $.device.isLarge()
+    columnsCount = 3
+  else if $.device.isSmall()
+    columnsCount = 2
+  else
+    columnsCount = 1
 
 $(window).resize ->
   setColumns()

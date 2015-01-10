@@ -3,11 +3,13 @@
 
 //== Custom GT Graphics Styles
 
+$navbar-height-xs: 70px;
 $content-bg: rgb(40, 40, 40);
 $content-padding: 15px;
 $content-padding-lg: 25px;
 $footer-bg: $content-bg; // rgba(10, 10, 10, 0.92);
-
+$loader-width: 130px;
+$loader-height: 45px;
 
 // https://raw.githubusercontent.com/twbs/bootstrap-sass/master/vendor/assets/stylesheets/bootstrap/_variables.scss
 

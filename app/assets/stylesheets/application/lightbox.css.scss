@@ -2,11 +2,11 @@
 @import 'compass';
 @import 'shared/mixins';
 
-$lightbox-nav-height: 60px;
+$lightbox-navbar-height: 60px;
 $lightbox-control-size: 100px;
 
 .navbar-lightbox {
-  height: $lightbox-nav-height;
+  height: $lightbox-navbar-height;
   border: none;
   transition: all 200ms ease-out;
   background-color: $body-bg;
@@ -34,7 +34,7 @@ $lightbox-control-size: 100px;
       top: 0;
       left: 0;
       right: 0;
-      height: $lightbox-nav-height;
+      height: $lightbox-navbar-height;
       z-index: $zindex-navbar-fixed - 1;
       transition: opacity 200ms ease-in-out;
       background: -moz-linear-gradient(top,  rgba(40,40,40,1) 0%, rgba(40,40,40,1) 25%, rgba(40,40,40,0) 100%); /* FF3.6+ */
@@ -62,7 +62,7 @@ $lightbox-control-size: 100px;
 
   .navbar-brand, #nav_lightbox_controls {
     position: relative;
-    height: $lightbox-nav-height;
+    height: $lightbox-navbar-height;
   }
 
   #nav_lightbox_controls {
@@ -116,7 +116,7 @@ $lightbox-control-size: 100px;
   }
 
   &.unobstrusive {
-    @media (min-width: $screen-md-min) {
+    @media (min-width: $screen-sm-min) {
       &:before, #nav_lightbox_controls {
         transition: all 1s ease-in;
         opacity: 0;
@@ -145,27 +145,40 @@ $lightbox-control-size: 100px;
   }
 }
 
+#nav_lightbox_xs {
+  background-color: $body-bg;
+  width: 100%;
+  position: fixed;
+  z-index: $zindex-navbar-fixed;
+
+  .navbar {
+    border-bottom: 1px solid $gray-dark;
+  }
+}
+
 #lightbox {
   user-select: none;
-  position: relative;
+  z-index: 1;
+  position: absolute;
+  top: $navbar-height-xs;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  @media (min-width: $screen-sm-min) {
+    top: 0;
+  }
 
   @media (min-width: $screen-md-min) {
     position: fixed;
-    z-index: 1;
+  }
+
+  .lightbox-image-container, .lightbox-image, .lightbox-background {
+    position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
-  }
-
-  .lightbox-image-container, .lightbox-image, .lightbox-background {
-    @media (min-width: $screen-md-min) {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    }
   }
 
   .lightbox-background, .lightbox-image {
@@ -177,7 +190,6 @@ $lightbox-control-size: 100px;
   }
 
   .lightbox-background {
-    // display: none;
     background-size: cover;
     opacity: 0.3;
     @include blur(20);
@@ -187,20 +199,17 @@ $lightbox-control-size: 100px;
     background-size: contain;
 
     img {
+      // width: 100%;
+      // height: auto;
       user-select: none;
-      width: 100%;
-      height: auto;
-
-      @media (min-width: $screen-md-min) {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        margin: -1px;
-        padding: 0;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        border: 0;
-      }
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
     }
   }
 
@@ -215,8 +224,13 @@ $lightbox-control-size: 100px;
     transition: opacity 200ms ease-out;
 
     .lightbox-control {
+      // top: -$navbar-height-xs / 2;
       top: 0;
       bottom: 0;
+
+      @media (min-width: $screen-sm-min) {
+        top: 0;
+      }
 
       @media (min-width: $screen-md-min) {
         top: $lightbox-control-size;
@@ -243,16 +257,13 @@ $lightbox-control-size: 100px;
 
 #lightbox_page_wrapper {
   border-top: 1px solid rgba(white, 0.04);
-  margin: {
-    top: 15px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
+  margin: 0;
+  position: absolute;
+  top: 100%;
 
-  @media (min-width: $screen-md-min) {
-    position: absolute;
-    margin: 0;
+  @media (min-width: $screen-sm-min) {
+    top: 0;
+    margin-top: -$lightbox-navbar-height;
   }
 
   .lightbox-title {
@@ -358,7 +369,7 @@ $lightbox-control-size: 100px;
     top: 50%;
     left: 0;
     right: 0;
-    margin-top: -25px;
+    margin-top: -15px;
     height: 30px;
   }
 
@@ -368,5 +379,17 @@ $lightbox-control-size: 100px;
 
   &.right {
     right: 0;
+  }
+}
+
+body.images-show {
+  #loader {
+    top: 50%;
+    bottom: auto;
+    margin-top: round(-$loader-height / 2);
+
+    @media (max-width: $screen-xs-max) {
+      margin-top: round(-$loader-height / 2 + $navbar-height-xs / 2);
+    }
   }
 }
