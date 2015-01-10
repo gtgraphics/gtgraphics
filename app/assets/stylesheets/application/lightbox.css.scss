@@ -266,6 +266,10 @@ $lightbox-control-size: 100px;
     margin-top: -$lightbox-navbar-height;
   }
 
+  @media (min-width: $screen-md-min) {
+    margin-top: 0;
+  }
+
   .lightbox-title {
     h1 {
       text-overflow: ellipsis;
