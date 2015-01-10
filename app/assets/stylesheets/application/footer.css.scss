@@ -1,7 +1,8 @@
 @import 'bootstrap_config';
 
+$footer-vertical-padding: 12px;
+
 .navbar-footer {
-  $vertical-padding: 12px;
 
   color: #666;
   background-color: $footer-bg;
@@ -17,12 +18,12 @@
 
   .navbar-text, .navbar-nav > li > a {
     margin: 0;
-    padding: $vertical-padding 14px;
+    padding: $footer-vertical-padding 14px;
     line-height: normal;
   }
 
   .navbar-nav {
-    > li > a { 
+    > li > a {
       outline: none;
       color: #666;
       &:hover, &:focus {
@@ -37,14 +38,11 @@
       }
     }
   }
+}
 
-  .navbar-text {
-    &.copyright {
-      padding-left: 0;
-    }
-    &.social-buttons {
-      padding-top: $vertical-padding - 2px;
-      padding-bottom: $vertical-padding - 2px;
-    }
-  }
+#site_social_buttons {
+  padding-top: $footer-vertical-padding - 2px;
+  padding-bottom: $footer-vertical-padding - 2px;
+  box-sizing: content-box;
+  height: 20px;
 }
