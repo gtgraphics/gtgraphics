@@ -65,9 +65,9 @@ $(document).on 'page:change', ->
 
       # Apply infinite scroller to masonry
       $gallery.infinitescroll scrollerOptions, (html) ->
-        $appendedElements = $(html).css(opacity: 0)
+        $appendedElements = $(html).hide().css(opacity: 0)
         $appendedElements.allImagesLoaded ->
-          $appendedElements.transition(opacity: 1)
+          $appendedElements.show().transition(opacity: 1)
           $gallery.masonry('appended', $appendedElements)
           NProgress.done()
           Loader.done()

@@ -22,8 +22,6 @@ class IdleTimeoutable
       @awakeOn = [@options.awakeOn]
     @awakeOn = _(@awakeOn).compact()
 
-    console.log @awakeOn
-
     @timeout = null
     if @options.idleOnInit
       @idle()
