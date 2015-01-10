@@ -66,8 +66,8 @@ de:
       move_up: Nach oben
       move_down: Nach unten
       new: '%{model} erstellen'
-      next: Nächstes
-      previous: Voriges
+      next: Weiter
+      previous: Zurück
       open: Öffnen
       options: Optionen
       page_settings: Seiteneinstellungen

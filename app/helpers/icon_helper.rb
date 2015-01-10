@@ -1,10 +1,13 @@
 module IconHelper
   # Bootstrap
 
-  def caret(direction = :down)
+  def caret(*args)
+    options = args.extract_options!
+    direction = args.first || :down
     css = 'caret'
     css << "-#{direction}" if direction != :down
-    content_tag :b, nil, class: css
+    options[:class] = [css, options[:class]].compact.uniq
+    content_tag :b, nil, options
   end
 
   def close

@@ -20,7 +20,7 @@ module DropdownHelper
       link = link_to url, html_options do
         content_tag :div do
           concat label
-          concat caret
+          concat caret class: 'js-only'
         end
       end
       concat link

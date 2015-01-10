@@ -255,16 +255,32 @@ $lightbox-control-size: 100px;
   }
 }
 
-#lightbox_page_wrapper {
-  border-top: 1px solid rgba(white, 0.04);
-  margin: 0;
+#lightbox_content_wrapper {
   position: absolute;
   top: 100%;
+  left: $content-padding;
+  right: $content-padding;
 
   @media (min-width: $screen-sm-min) {
-    top: 0;
-    margin-top: -$lightbox-navbar-height;
+    left: auto;
+    right: auto;
+    width: $container-sm - $grid-gutter-width;
   }
+
+  @media (min-width: $screen-md-min) {
+    width: $container-md - $grid-gutter-width;
+  }
+
+  @media (min-width: $screen-lg-min) {
+    width: $container-lg - $grid-gutter-width;
+  }
+}
+
+#lightbox_page_wrapper {
+  position: absolute;
+  border-top: 1px solid rgba(white, 0.04);
+  margin: 0;
+  top: 100%;
 
   @media (min-width: $screen-md-min) {
     margin-top: 0;

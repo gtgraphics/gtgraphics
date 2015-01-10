@@ -1,8 +1,13 @@
 @import 'bootstrap_config';
 
-#content_wrapper {
+#content_container, #lightbox_content_container {
+
+}
+
+#content_wrapper, #lightbox_content_wrapper {
   position: relative;
   z-index: 5; // leave some space below for lightbox for example
+  // margin: 0 auto;
 }
 
 #page_wrapper, #lightbox_page_wrapper {
@@ -15,7 +20,7 @@
   }
 }
 
-#page_content, #lightbox_page_wrapper {
+#page_content, #lightbox_page_content {
   background-color: $content-bg;
 }
 

@@ -9,11 +9,6 @@ slide = ($lightbox, prev) ->
   # TODO Some fancy effect
   Turbolinks.visit(url)
 
-repositionCaption = ->
-  $captionContainer = $('#lightbox_page_wrapper')
-  windowHeight = $(window).outerHeight()
-  $captionContainer.css(top: windowHeight)
-
 resizeImage = ->
   $lightbox = $('#lightbox')
   $image = $('.lightbox-image', $lightbox)
@@ -82,15 +77,12 @@ $(document).ready ->
       refreshNavigationScrollState()
       Loader.done()
 
-    # Position caption container
-    repositionCaption()
     resizeImage()
 
 $(window).scroll ->
   resizeImage()
 
 $(window).resize ->
-  repositionCaption()
   resizeImage()
 
 
