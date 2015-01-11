@@ -6,9 +6,10 @@
     .row
       - gallery_pages.each do |gallery_page|
         .col-sm-6
-          = link_to gallery_page, class: 'submenu-item' do
-            .submenu-item-title
-              = gallery_page.title
-            - image_page = gallery_page.children.sample
-            - if image_page
-              = image_tag attached_asset_path(image_page.embeddable.image, :menu_brick), class: 'submenu-item-image', alt: image_page.title
+          .submenu-item
+            = link_to gallery_page, class: 'submenu-link' do
+              .submenu-item-title
+                = gallery_page.title
+              - image_page = gallery_page.children.sample
+              - if image_page
+                = image_tag attached_asset_path(image_page.embeddable.image, :menu_brick), class: 'submenu-item-image', alt: image_page.title
