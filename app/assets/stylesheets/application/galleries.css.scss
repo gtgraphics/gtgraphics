@@ -92,7 +92,7 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
     display: block;
     overflow: hidden;
     position: relative;
-    transition: all 200ms ease-out;
+    transition: transform 200ms ease-out;
 
     // meant to fix scaling artifacts occuring in WebKit
     backface-visibility: hidden;

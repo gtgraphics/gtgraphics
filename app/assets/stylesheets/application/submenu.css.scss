@@ -7,11 +7,12 @@
 }
 
 .submenu-item {
-  display: block;
-  outline: none;
   margin-bottom: $grid-gutter-width;
-  transition: transform, scale 200ms ease-out;
-  text-decoration: none;
+  outline: none;
+  display: block;
+  overflow: hidden;
+  position: relative;
+  transition: transform 200ms ease-out;
 
   // meant to fix scaling artifacts occuring in WebKit
   backface-visibility: hidden;
