@@ -3,7 +3,6 @@
 
 - content_for :javascripts do
   = javascript_include_tag 'application', data: { turbolinks_track: true }
-  = google_plus_script_tag
 
 - content_for :head do
   %meta{name: 'description', content: @page.meta_description || ''}

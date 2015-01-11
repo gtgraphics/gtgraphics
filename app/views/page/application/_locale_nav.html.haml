@@ -2,5 +2,5 @@
   / Locale
   %ul.nav.navbar-nav.navbar-right#nav_locale
     %li
-      = link_to change_locale_path(next_locale), hreflang: next_locale do
+      = link_to change_locale_path(next_locale), hreflang: next_locale, data: { no_turbolink: true } do
         = prepend_icon :globe, next_locale.to_s.upcase, fixed_width: true

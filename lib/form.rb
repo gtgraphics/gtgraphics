@@ -8,6 +8,7 @@ class Form
   include Form::EmbedsManyExtension
 
   define_model_callbacks :initialize, :validation, :submit
+  class_attribute :handled_object_name, instance_accessor: false
 
   def initialize(*)
     run_callbacks :initialize do
@@ -29,6 +30,14 @@ class Form
 
     alias_method_chain :attribute, :form
 
+    def submit(attributes = {}, &block)
+      new(attributes, &block).tap(&:submit)
+    end
+
+    def submit!(attributes = {}, &block)
+      new(attributes, &block).tap(&:submit!)
+    end
+
     def handles(name, options = {})
       class_name = options.fetch(:class_name) { name.to_s.classify }.to_s
       class_eval <<-RUBY
@@ -37,15 +46,19 @@ class Form
         end
       RUBY
       embeds_one name, class_name: class_name
+      self.handled_object_name = name
     end
 
-    def submit(attributes = {}, &block)
-      new(attributes, &block).tap(&:submit)
+    def delegate_attributes(*names)
+      options = names.extract_options!.reverse_merge(
+        to: handled_object_name, allow_nil: true
+      )
+      names.each do |name|
+        delegate name, "#{name}=", "#{name}?", options
+      end
     end
 
-    def submit!(attributes = {}, &block)
-      new(attributes, &block).tap(&:submit!)
-    end
+    alias_method :delegate_attribute, :delegate_attributes
   end
 
   def submit(options = {})

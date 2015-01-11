@@ -61,6 +61,7 @@ de:
         password: Passwort
         password_confirmation: Passwort (Wdh.)
         preferred_locale: Standardsprache
+        twitter_username: Twitter-Benutzername
       admin/user/update_form:
         first_name: Vorname
         last_name: Nachname
@@ -70,6 +71,7 @@ de:
         password: Passwort
         password_confirmation: Passwort (Wdh.)
         preferred_locale: Standardsprache
+        twitter_username: Twitter-Benutzername
       admin/user/account_update_form:
         current_password: Aktuelles Passwort
       admin/image_page_creation_form:
@@ -255,6 +257,7 @@ de:
         password: Passwort
         password_confirmation: Passwort (Wdh.)
         preferred_locale: Standardsprache
+        twitter_username: Twitter-Benutzername
 
     errors:
       models:
@@ -368,13 +371,18 @@ de:
         one: Benutzer
         other: Benutzer
 
+  homepage: Startseite
+
   page:
     default_title: Unbenannte Seite
     states:
       published: öffentlich
       hidden: unsichtbar
 
-  homepage: Startseite
+  page/image:
+    twitter_share_text:
+      owned: 'Gerade gesehen bei #GTGraphics: "%{title}" von @%{author}'
+      ownerless: 'Gerade gesehen bei #GTGraphics: "%{title}"'
 
   image:
     predefined_styles:

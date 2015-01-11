@@ -131,4 +131,9 @@ en:
       drafted: Draft
       hidden: Invisible
 
+  page/image:
+    twitter_share_text:
+      owned: 'Check out "%{title}" by @%{author} on #GTGraphics'
+      ownerless: 'Check out "%{title}" on #GTGraphics'
+
   homepage: Homepage

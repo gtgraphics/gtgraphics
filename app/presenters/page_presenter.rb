@@ -24,13 +24,14 @@ class PagePresenter < ApplicationPresenter
   # Google Plus Integration
 
   def google_plus_like_button(options = {})
-    h.google_plus_like_button(social_uri)
+    h.google_plus_like_button(social_uri, options)
   end
 
   # Twitter Integration
 
   def twitter_share_button(options = {})
-    options = options.reverse_merge(text: title, url: social_uri)
+    text = embeddable.try(:twitter_share_text) || title
+    options = options.reverse_merge(text: text, url: social_uri)
     h.twitter_share_button(options)
   end
 end

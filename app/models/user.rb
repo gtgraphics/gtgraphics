@@ -23,6 +23,7 @@
 #  last_logout_at                  :datetime
 #  last_activity_at                :datetime
 #  last_login_from_ip_address      :string(255)
+#  twitter_username                :string(255)
 #
 
 class User < ActiveRecord::Base

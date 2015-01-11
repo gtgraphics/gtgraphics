@@ -97,14 +97,14 @@ class Admin::UsersController < Admin::ApplicationController
 
   def user_registration_params
     params.require(:user_registration).permit(
-      :first_name, :last_name, :email, :preferred_locale,
+      :first_name, :last_name, :email, :preferred_locale, :twitter_username,
       :generate_password, :password, :password_confirmation
     )
   end
 
   def user_update_params
     params.require(:user_update).permit(
-      :first_name, :last_name, :email, :preferred_locale,
+      :first_name, :last_name, :email, :preferred_locale, :twitter_username,
       :reset_password, :generate_password, :password, :password_confirmation
     )
   end

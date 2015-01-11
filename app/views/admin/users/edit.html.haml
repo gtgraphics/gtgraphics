@@ -12,6 +12,11 @@
         = form.input :preferred_locale, collection: available_locales_for_select, include_blank: translate('helpers.prompts.custom')
 
     %fieldset
+      %legend= translate('views.forms.social')
+      .fields
+        = form.input :twitter_username
+
+    %fieldset
       %legend= translate('views.forms.password')
       .fields
         = form.input :reset_password, as: :boolean, wrapper: :horizontal_boolean, input_html: { data: { toggle: 'passwordFields' } }

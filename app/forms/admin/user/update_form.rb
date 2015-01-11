@@ -1,10 +1,8 @@
 class Admin::User::UpdateForm < Form
   handles :user
 
-  delegate :first_name, :first_name=, to: :user
-  delegate :last_name, :last_name=, to: :user
-  delegate :email, :email=, to: :user
-  delegate :preferred_locale, :preferred_locale=, to: :user
+  delegate_attributes :first_name, :last_name, :email, :preferred_locale,
+                      :twitter_username
 
   attribute :reset_password, Boolean, default: false
   attribute :generate_password, Boolean, default: true
@@ -36,7 +34,7 @@ class Admin::User::UpdateForm < Form
   end
 
   def send_generated_password
-    Admin::User::PasswordMailer.changed_password_email(user, password).deliver 
+    Admin::User::PasswordMailer.changed_password_email(user, password).deliver
   end
 
   def verify_email_uniqueness

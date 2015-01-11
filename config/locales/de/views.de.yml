@@ -6,6 +6,7 @@ de:
       basics: Basisdaten
       password: Passwort
       settings: Einstellungen
+      social: Soziale Netzwerke
     hints:
       empty: 'Es wurden bislang keine %{model} erstellt.'
       not_found: 'Es wurden keine %{model} gefunden.'
