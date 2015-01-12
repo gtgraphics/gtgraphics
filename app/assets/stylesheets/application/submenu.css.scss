@@ -32,7 +32,11 @@
     text-decoration: none;
   }
 
-  &:hover, &:focus {
+  .submenu-item-image {
+    width: 100%;
+  }
+
+  &:hover, &:focus, &:active {
     transform: scale(0.97);
     text-decoration: none;
     outline: none;
@@ -44,7 +48,7 @@
     }
   }
 
-  .submenu-item-image {
-    width: 100%;
+  &:active {
+    opacity: 0.75;
   }
 }
