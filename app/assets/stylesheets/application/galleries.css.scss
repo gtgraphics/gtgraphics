@@ -82,17 +82,11 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
     }
   }
 
-  .gallery-image-container {
-    // fix that prevents displaying borders on the edges while transforming
-    margin: -1px;
-  }
-
   .gallery-link {
     outline: none;
     display: block;
     overflow: hidden;
     position: relative;
-    transition: transform 200ms ease-out;
 
     // meant to fix scaling artifacts occuring in WebKit
     backface-visibility: hidden;
@@ -101,9 +95,15 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
     perspective: 1000;
     transform: translate3d(0,0,0);
 
+    .gallery-image-wrapper {
+      transition: transform 200ms ease-out;
+      overflow: hidden;
+    }
+
     .gallery-image {
       display: block; // needed as FF renders bullshit
-      transition: all 3s ease-in-out;
+      transition: transform 3s ease-in-out,
+                  opacity 200ms ease-out;
       min-width: 100%;
     }
 
@@ -111,13 +111,10 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
       position: absolute;
       opacity: 0;
       transition: opacity 200ms ease-out;
-      background-color: rgba(black, 0.6);
-
-      // Fixes ugly borders that might occur when scaling
-      top: -2px;
-      bottom: -2px;
-      left: -2px;
-      right: -2px;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
 
       .gallery-image-caption-container {
         display: table;
@@ -143,8 +140,7 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
       }
     }
 
-    &:hover, &:focus {
-      transform: scale(0.97);
+    &:hover, &:focus, &:active {
       outline: none;
 
       .gallery-image-caption-wrapper {
@@ -153,7 +149,17 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
 
       .gallery-image {
         transform: scale(1.1);
+        opacity: 0.5;
       }
+
+      .gallery-image-wrapper {
+        transform: scale(0.97);
+        background-color: black;
+      }
+    }
+
+    &:active {
+      opacity: 0.75;
     }
   }
 }
