@@ -37,7 +37,6 @@
   }
 
   &:hover, &:focus, &:active {
-    transform: scale(0.97);
     text-decoration: none;
     outline: none;
 
@@ -48,7 +47,12 @@
     }
   }
 
+  &:hover, &:focus {
+    transform: scale(0.97);
+  }
+
   &:active {
-    opacity: 0.75;
+    // opacity: 0.75;
+    transform: scale(0.94);
   }
 }

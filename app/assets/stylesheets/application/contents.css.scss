@@ -1,9 +1,5 @@
 @import 'bootstrap_config';
 
-#content_container, #lightbox_content_container {
-
-}
-
 #content_wrapper, #lightbox_content_wrapper {
   position: relative;
   z-index: 5; // leave some space below for lightbox for example
@@ -43,7 +39,7 @@
 
   &.well {
     border: none;
-    background-color: rgba(black, 0.15);
+    background-color: $content-bg-dark; // rgba(black, 0.15);
   }
 
   h3 {

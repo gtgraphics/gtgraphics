@@ -1,13 +1,11 @@
 @import 'bootstrap_config';
 
-$footer-vertical-padding: 12px;
+$footer-vertical-padding: 13px;
 
 .navbar-footer {
-
   color: #666;
   background-color: $footer-bg;
   font-size: 12px;
-  min-height: 40px;
   height: auto;
   border-top: none;
   box-shadow: 0 -1px 5px rgba(0, 0, 0, .4);
@@ -26,10 +24,13 @@ $footer-vertical-padding: 12px;
     > li > a {
       outline: none;
       color: #666;
+      transition: all 200ms ease-in-out;
+
       &:hover, &:focus {
         color: lighten(#666, 20%);
-        background-color: rgba(20,20,20,.8);
+        background-color: $content-bg-dark;
       }
+
       &.icon-link {
         padding: {
           left: 9px;
@@ -41,8 +42,8 @@ $footer-vertical-padding: 12px;
 }
 
 #site_social_buttons {
-  padding-top: $footer-vertical-padding - 2px;
-  padding-bottom: $footer-vertical-padding - 2px;
+  padding-top: $footer-vertical-padding - 3px;
+  padding-bottom: $footer-vertical-padding - 3px;
   box-sizing: content-box;
   height: 20px;
 }

@@ -159,7 +159,10 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
     }
 
     &:active {
-      opacity: 0.75;
+      // opacity: 0.75;
+      .gallery-image-wrapper {
+        transform: scale(0.94);
+      }
     }
   }
 }
