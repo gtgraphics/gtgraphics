@@ -1,0 +1,12 @@
+@import 'bootstrap_config';
+
+.alert {
+  margin-bottom: 0;
+  border: none;
+  border-top: 1px solid $content-bg;
+
+  @media (min-width: $screen-md-min) {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+}

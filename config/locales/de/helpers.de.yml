@@ -13,6 +13,10 @@ de:
       message:
         marked_read: Nachricht wurde als gelesen markiert.
         marked_unread: Nachricht wurde als ungelesen markiert.
+      message/contact:
+        created: Ihre Nachricht wurde erfolgreich versendet.
+      message/buy_request:
+        created: Ihre Kaufanfrage wurde erfolgreich versendet.
       page:
         disabled_in_menu: Die Seite wird absofort in keinem Menü mehr angezeigt.
         enabled_in_menu: Die Seite wird absofort in Menüs angezeigt.
@@ -38,6 +42,7 @@ de:
       apply: Anwenden
       assign_owner: Eigentümer zuweisen
       assign_tags: Tags zuweisen
+      back: Zurück
       back_to_top: Zurück zum Anfang
       buy: Erwerben
       cancel: Abbrechen

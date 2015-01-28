@@ -4,7 +4,8 @@ class Page::ImagesController < Page::ApplicationController
 
   breadcrumbs do |b|
     if action_name.in? %w(buy request_purchase)
-      b.append translate('views.images.buy', image: @image.title), buy_image_path(@page)
+      b.append translate('views.images.buy', image: @image.title),
+               buy_image_path(@page.path)
     end
   end
 
@@ -27,6 +28,7 @@ class Page::ImagesController < Page::ApplicationController
   def buy
     @message = Message::BuyRequest.new
     @message.image = @image
+
     respond_to do |format|
       format.html { render layout: 'page/contents' }
     end
@@ -39,7 +41,7 @@ class Page::ImagesController < Page::ApplicationController
       @message.notify!
       flash_for @message
       respond_to do |format|
-        format.html { redirect_to @page }
+        format.html { redirect_to buy_image_path(@page.path) }
       end
     else
       respond_to do |format|

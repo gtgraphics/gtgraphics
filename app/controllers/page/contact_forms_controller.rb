@@ -20,11 +20,13 @@ class Page::ContactFormsController < Page::ApplicationController
   end
 
   private
+
   def load_contact_form
     @contact_form = @page.embeddable
   end
 
   def message_params
-    params.require(:message).permit(:first_sender_name, :last_sender_name, :sender_email, :subject, :body)
+    params.require(:message).permit(:first_sender_name, :last_sender_name,
+                                    :sender_email, :subject, :body)
   end
 end
