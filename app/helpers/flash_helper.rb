@@ -13,7 +13,7 @@ module FlashHelper
     message = block_given? ? capture(&block) : args.first
     return if message.blank?
 
-    dismissable = options.delete(:dismissable, false)
+    dismissable = options.delete(:dismissable) { false }
 
     options[:class] ||= ''
     options[:class] << " alert alert-#{type}"
