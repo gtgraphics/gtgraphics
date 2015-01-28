@@ -12,7 +12,7 @@
         .row
           .col-sm-4.hidden-xs
             = link_to @page do
-              = image_tag attached_asset_path(@image, :brick), class: 'img-responsive'
+              = image_tag attached_asset_path(@image, :brick), class: 'img-responsive', alt: @image.title
 
           .col-sm-8
             = simple_form_for @message, as: :message, url: request_image_purchase_path(@page.path), wrapper: :vertical_form, defaults: { input_html: { class: 'input-lg' }} do |form|
