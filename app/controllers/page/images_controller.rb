@@ -3,8 +3,9 @@ class Page::ImagesController < Page::ApplicationController
   before_action :load_image_styles, only: :show
 
   breadcrumbs do |b|
-    # TODO: Localize
-    b.append 'Buy', '#' if action_name.in? %w(buy request_purchase)
+    if action_name.in? %w(buy request_purchase)
+      b.append translate('views.images.buy', image: @image.title), buy_image_path(@page)
+    end
   end
 
   def default

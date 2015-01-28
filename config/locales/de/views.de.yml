@@ -98,3 +98,6 @@ de:
         mygall: MyGall
         redbubble: RedBubble
         artflakes: Artflakes
+
+    images:
+      buy: '%{image} erwerben'
