@@ -2,6 +2,9 @@
 
 .btn {
   border: none;
+  &:disabled, &.disabled {
+    opacity: 0.5;
+  }
 }
 
 .btn-header {
@@ -20,4 +23,8 @@
     color: $navbar-inverse-toggle-icon-bar-bg;
     background-color: $navbar-inverse-toggle-hover-bg;
   }
+}
+
+.btn-lg {
+  font-weight: 300;
 }

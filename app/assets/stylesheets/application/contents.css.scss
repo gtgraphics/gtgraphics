@@ -66,3 +66,9 @@
     }
   }
 }
+
+.page-prominent-container {
+  @media (min-width: $screen-md-min) {
+    padding: 20px 0;
+  }
+}

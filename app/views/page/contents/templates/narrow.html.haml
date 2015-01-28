@@ -1,7 +1,9 @@
-.page-header
-  %h1= page.title
+.row
+  .col-md-10.col-md-offset-1
+    .page-prominent-container
 
-.page-body
-  .row
-    .col-md-8.col-md-offset-2
-      = render_region :main
+      .page-header
+        %h1= page.title
+
+      .page-body
+        = render_region :main

@@ -189,14 +189,14 @@ $btn-link-disabled-color:        $gray-light;
 //##
 
 //** `<input>` background color
-$input-bg:                       #fff;
+$input-bg:                       $content-bg-dark;
 //** `<input disabled>` background color
 $input-bg-disabled:              $gray-lighter;
 
 //** Text color for `<input>`s
-$input-color:                    $gray;
+$input-color:                    $text-color;
 //** `<input>` border color
-$input-border:                   #ccc;
+$input-border:                   $input-bg;
 //** `<input>` border radius
 $input-border-radius:            $border-radius-base;
 //** Border color for inputs on focus
@@ -503,7 +503,7 @@ $state-warning-text:             #8a6d3b;
 $state-warning-bg:               #fcf8e3;
 $state-warning-border:           darken(adjust-hue($state-warning-bg, -10), 5%);
 
-$state-danger-text:              #a94442;
+$state-danger-text:              #B31512;
 $state-danger-bg:                #f2dede;
 $state-danger-border:            darken(adjust-hue($state-danger-bg, -10), 5%);
 
@@ -695,11 +695,11 @@ $list-group-link-heading-color: #333;
 //
 //##
 
-$panel-bg:                    transparent;
-$panel-body-padding:          0;
-$panel-heading-padding:       0;
-$panel-footer-padding:        $panel-heading-padding;
-$panel-border-radius:         $border-radius-base;
+$panel-bg:                    $content-bg-dark;
+$panel-body-padding:          15px;
+$panel-heading-padding:       15px 15px 0;
+$panel-footer-padding:        0 15px 15px;
+$panel-border-radius:         0;
 
 //** Border color for elements within panels
 $panel-inner-border:          transparent;

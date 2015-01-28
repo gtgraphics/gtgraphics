@@ -1,0 +1,24 @@
+@import 'bootstrap_config';
+
+.form-control {
+  box-shadow: none;
+  border: none;
+
+  &:focus {
+    border-color: $input-bg;
+    box-shadow: 0 0 8px $gray;
+  }
+
+  &::placeholder {
+    color: $gray;
+  }
+}
+
+.form-group.has-error .form-control {
+  border: 1px solid $state-danger-text !important;
+}
+
+
+.input-lg {
+  font-weight: 300;
+}

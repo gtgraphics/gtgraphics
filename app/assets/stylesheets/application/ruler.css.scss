@@ -1,0 +1,5 @@
+@import 'bootstrap_config';
+
+hr {
+  border-top-color: lighten($content-bg, 3%);
+}
