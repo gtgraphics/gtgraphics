@@ -16,6 +16,10 @@
 
 .form-group.has-error .form-control {
   border: 1px solid $state-danger-text !important;
+
+  &::placeholder {
+    color: $state-danger-text;
+  }
 }
 
 

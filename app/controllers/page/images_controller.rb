@@ -42,7 +42,7 @@ class Page::ImagesController < Page::ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :buy }
+        format.html { render :buy, layout: 'page/contents' }
       end
     end
   end
