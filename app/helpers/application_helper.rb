@@ -8,7 +8,9 @@ module ApplicationHelper
     classes << 'admin' if admin_controller?
     classes << controller_name.dasherize
     classes << "#{controller_name.dasherize}-#{action_name.dasherize}"
-    classes << "template-#{@page.template.file_name}" if page.support_templates?
+    if @page && @page.support_templates?
+      classes << "template-#{@page.template.file_name}"
+    end
     classes << content_for(:body_css).presence
     classes.compact.flatten
   end
