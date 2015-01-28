@@ -54,7 +54,7 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       execute :touch, release_path.join('tmp/restart.txt')
     end
-    invoke 'delayed_job:restart'
+    invoke 'deploy:delayed_job:restart'
   end
 
   after :publishing, :restart
