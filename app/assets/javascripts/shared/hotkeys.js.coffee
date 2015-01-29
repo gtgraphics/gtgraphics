@@ -90,9 +90,13 @@ $(document).on 'keyup', (event) ->
       pressed = (event.which == SPECIAL_KEYS[key])
 
     # Check whether a modifier has been pressed as well
-    jQuery.each MODIFIERS, (index, modifier) ->
-      if jQuery.inArray(modifier, modifiers) >= 0
-        pressed &&= event["#{modifier}Key"]
+    if modifiers.length
+      jQuery.each MODIFIERS, (index, modifier) ->
+        if jQuery.inArray(modifier, modifiers) >= 0
+          pressed &&= event["#{modifier}Key"]
+    else
+      pressed &&= !event.ctrlKey && !event.altKey &&
+        !event.shiftKey && !event.metaKey
 
     if pressed
       event.preventDefault()
