@@ -18,4 +18,7 @@
         - primary_menu_items.each do |page|
           = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page)
 
+        - footer_menu_items.each do |page|
+          = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page), class: 'visible-xs'
+
       = render 'locale_nav'

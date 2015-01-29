@@ -30,3 +30,15 @@
   opacity: 0 !important;
   transition: opacity 500ms fade-out !important;
 }
+
+.images-show, .homepages-show {
+  #loader {
+    top: 50%;
+    bottom: auto;
+    margin-top: round(-$loader-height / 2);
+
+    @media (max-width: $screen-xs-max) {
+      margin-top: round(-$loader-height / 2 + $navbar-height-xs / 2);
+    }
+  }
+}

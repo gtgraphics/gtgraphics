@@ -84,6 +84,7 @@ gem 'nokogiri'
 gem 'exception_notification', group: [:staging, :production]
 gem 'pry-rails'
 gem 'countries'
+gem 'faker'
 
 # Image Processing
 gem 'mini_exiftool'

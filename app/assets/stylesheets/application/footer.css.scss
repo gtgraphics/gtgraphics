@@ -4,11 +4,20 @@ $footer-vertical-padding: 13px;
 
 .navbar-footer {
   color: #666;
-  background-color: $footer-bg;
+  background-color: $content-bg-dark;
   font-size: 12px;
   height: auto;
   border-top: none;
-  box-shadow: 0 -1px 5px rgba(0, 0, 0, .4);
+  margin: 0;
+  border: none;
+  padding-left: $content-padding - $footer-vertical-padding;
+  padding-right: $content-padding - $footer-vertical-padding;
+
+  @media (min-width: $screen-md-min) {
+    padding-left: $content-padding-lg - $footer-vertical-padding;
+    padding-right: $content-padding-lg - $footer-vertical-padding;
+  }
+
 
   .author-social-buttons + .author-social-buttons {
     margin-left: 10px;
@@ -23,12 +32,12 @@ $footer-vertical-padding: 13px;
   .navbar-nav {
     > li > a {
       outline: none;
-      color: #666;
+      color: $gray;
       transition: all 200ms ease-in-out;
 
       &:hover, &:focus {
-        color: lighten(#666, 20%);
-        background-color: $content-bg-dark;
+        color: $text-color;
+        background: none;
       }
 
       &.icon-link {
@@ -46,4 +55,25 @@ $footer-vertical-padding: 13px;
   padding-bottom: $footer-vertical-padding - 3px;
   box-sizing: content-box;
   height: 20px;
+}
+
+.homepages-show.template-default {
+  @media (min-width: $screen-sm-min) {
+    #footer {
+      margin: 0;
+      position: fixed;
+      bottom: 0;
+      width: $container-sm - $grid-gutter-width;
+      box-shadow: 0 -1px 3px rgba(black, 0.25);
+    }
+  }
+
+  #footer {
+    @media (min-width: $screen-md-min) {
+      width: $container-md - $grid-gutter-width;
+    }
+    @media (min-width: $screen-lg-min) {
+      width: $container-lg - $grid-gutter-width;
+    }
+  }
 }

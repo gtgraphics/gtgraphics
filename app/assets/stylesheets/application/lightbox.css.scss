@@ -401,15 +401,3 @@ $lightbox-control-size: 100px;
     right: 0;
   }
 }
-
-body.images-show {
-  #loader {
-    top: 50%;
-    bottom: auto;
-    margin-top: round(-$loader-height / 2);
-
-    @media (max-width: $screen-xs-max) {
-      margin-top: round(-$loader-height / 2 + $navbar-height-xs / 2);
-    }
-  }
-}

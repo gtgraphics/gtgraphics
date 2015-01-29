@@ -1,6 +1,7 @@
 .cover-carousel {
   position: absolute;
   z-index: 1;
+
   .item {
     &.loaded {
       .cover, .carousel-caption {
@@ -11,6 +12,20 @@
     .cover, .carousel-caption {
       opacity: 0;
       transition: opacity 500ms ease-out;
+    }
+
+    .carousel-caption {
+      position: fixed;
+      font-size: 24px;
+      font-weight: 300;
+      bottom: 82px;
+      padding: 0;
+
+      h3 {
+        font-size: 32px;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
     }
 
     .cover {
@@ -26,5 +41,9 @@
         repeat: no-repeat;
       }
     }
+  }
+
+  .carousel-indicators {
+    bottom: 50px;
   }
 }
