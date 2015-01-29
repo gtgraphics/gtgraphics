@@ -18,7 +18,13 @@
         - primary_menu_items.each do |page|
           = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page)
 
+      %ul.nav.navbar-nav.visible-xs#nav_xs_menu_items
         - footer_menu_items.each do |page|
-          = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page), class: 'visible-xs'
+          = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page)
 
-      = render 'locale_nav'
+      - if next_locale
+        / Locale
+        %ul.nav.navbar-nav.visible-xs#nav_locale
+          %li
+            = link_to change_locale_path(next_locale), hreflang: next_locale, data: { no_turbolink: true } do
+              = prepend_icon :globe, next_locale.to_s.upcase, fixed_width: true

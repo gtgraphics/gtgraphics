@@ -1,10 +1,13 @@
 %footer#footer.hidden-xs
 
   %nav.navbar.navbar-footer{role: 'navigation'}
-    - if footer_menu_items.any?
-      %ul.nav.navbar-nav
-        - footer_menu_items.each do |page|
-          %li= link_to page, page
+    %ul.nav.navbar-nav
+      %li
+        = link_to change_locale_path(next_locale), hreflang: next_locale, data: { no_turbolink: true } do
+          = prepend_icon :globe, next_locale.to_s.upcase, fixed_width: true
+
+      - footer_menu_items.each do |page|
+        %li= link_to page, page
 
     #site_social_buttons.navbar-text
       = facebook_site_like_button
@@ -14,19 +17,19 @@
       / Tobias Roetsch
       %ul.nav.navbar-nav.author-social-buttons
         %li= link_to 'Tobias Roetsch', page_path('about/tobias')
-        %li.visible-md.visible-lg
+        %li.visible-lg
           = link_to 'http://facebook.com/roetsch', class: 'icon-link', title: 'Facebook', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
             = prepend_icon :facebook, 'Facebook', fixed_width: true, size: :lg, caption_html: { class: 'sr-only' }
-        %li.visible-md.visible-lg
+        %li.visible-lg
           = link_to 'http://plus.google.com/100168788162708178507', class: 'icon-link', title: 'Google Plus', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
             = prepend_icon :google_plus, 'Google Plus', fixed_width: true, size: :lg, caption_html: { class: 'sr-only' }
-        %li.visible-md.visible-lg
+        %li.visible-lg
           = link_to 'http://twitter.com/taenaron', class: 'icon-link', title: 'Twitter', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
             = prepend_icon :twitter, 'Twitter', fixed_width: true, size: :lg, caption_html: { class: 'sr-only' }
-        %li.visible-md.visible-lg
+        %li.visible-lg
           = link_to 'http://taenaron.deviantart.com', class: 'icon-link', title: 'DeviantArt', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
             = prepend_icon :deviantart, 'DeviantArt', fixed_width: true, size: :lg, caption_html: { class: 'sr-only' }
-        %li.visible-md.visible-lg
+        %li.visible-lg
           = link_to '#', class: 'icon-link', title: 'Behance', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
             = prepend_icon :behance, 'Behance', fixed_width: true, size: :lg, caption_html: { class: 'sr-only' }
 
@@ -34,12 +37,12 @@
       / Jeff Michelmann
       %ul.nav.navbar-nav.author-social-buttons
         %li= link_to 'Jeff Michelmann', page_path('about/jeff')
-        %li.visible-md.visible-lg
+        %li.visible-lg
           = link_to 'http://facebook.com/jeff.gucken', class: 'icon-link', title: 'Facebook', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
             = prepend_icon :facebook, 'Facebook', fixed_width: true, size: :lg, caption_html: { class: 'sr-only' }
-        %li.visible-md.visible-lg
+        %li.visible-lg
           = link_to 'http://twitter.com/jmichelmann', class: 'icon-link', title: 'Twitter', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
             = prepend_icon :twitter, 'Twitter', fixed_width: true, size: :lg, caption_html: { class: 'sr-only' }
-        %li.visible-md.visible-lg
+        %li.visible-lg
           = link_to 'http://gucken.deviantart.com', class: 'icon-link', title: 'DeviantArt', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
             = prepend_icon :deviantart, 'DeviantArt', fixed_width: true, size: :lg, caption_html: { class: 'sr-only' }
