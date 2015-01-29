@@ -74,6 +74,10 @@
 }
 
 #page_content {
+  @media (min-width: $screen-sm-min) {
+    min-height: 260px;
+  }
+
   a, button, input[type="submit"], input[type="button"] {
     transition: all 100ms ease-out;
   }
