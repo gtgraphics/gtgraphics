@@ -65,6 +65,7 @@ de:
         mark_unread: Als ungelesen markieren
         sender_html: '%{sender} (via %{contact_form})'
         buy_request_subject: "Kaufanfrage: %{image}"
+        default_subject: 'Kontaktaufnahme'
       pages:
         hits_since: '%{count} Aufrufe seit %{date}'
         empty_type: Bitte wählen Sie einen Seitentyp.
