@@ -31,14 +31,15 @@ class CoverCarousel
     @addIndicatorEvents()
 
   cycle: ->
+    clearTimeout(@transitionTimeout)
     @transitionTimeout = setTimeout =>
-      clearTimeout(@transitionTimeout)
       @next =>
         @cycle()
     , @options.interval
 
   pause: ->
     clearTimeout(@transitionTimeout)
+    @transitionTimeout = null
     @$carousel.carousel('pause')
 
   slideTo: (item, callback) ->
@@ -52,6 +53,7 @@ class CoverCarousel
       callback() if callback
 
   next: (callback) ->
+    console.log 'next'
     $item = @nextItem()
     $item.trigger('changing.gtg.carousel', 'next')
     @loadItem $item, =>
@@ -61,6 +63,7 @@ class CoverCarousel
       callback() if callback
 
   prev: (callback) ->
+    console.log 'prev'
     $item = @prevItem()
     $item.trigger('changing.gtg.carousel', 'prev')
     @loadItem $item, =>
@@ -114,7 +117,7 @@ class CoverCarousel
     $item = @extractItem(item)
 
     if $item.hasClass(CoverCarousel.LOADED_CLASS)
-      callback() if callback()
+      callback() if callback
     else
       $item.trigger('loading.gtg.carousel')
       $item.addClass(CoverCarousel.LOADING_CLASS)
@@ -158,12 +161,14 @@ $(document).ready ->
     $carousel = $(@)
     carousel = new CoverCarousel($carousel)
     $carousel.data('coverCarousel', carousel)
-    window.carousel = carousel
+    window.coverCarousel = carousel
+
+$(document).on 'page:receive', ->
+  $('[data-ride="coverCarousel"]').each ->
+    $(@).data('coverCarousel').pause()
 
 $(document).on 'loading.gtg.carousel', ->
-  NProgress.start()
   Loader.start()
 
 $(document).on 'loaded.gtg.carousel', ->
-  NProgress.done()
   Loader.done()
