@@ -28,6 +28,10 @@
       }
     }
 
+    &.active .cover {
+      animation: cover-zoom 7s ease-in-out;
+    }
+
     .cover {
       position: absolute;
       left: 0;
@@ -45,5 +49,14 @@
 
   .carousel-indicators {
     bottom: 50px;
+  }
+}
+
+@keyframes cover-zoom {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.07);
   }
 }

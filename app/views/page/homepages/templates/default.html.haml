@@ -5,6 +5,6 @@
   .carousel-inner{role: 'listbox'}
     - @images.each_with_index do |image, index|
       .item{class: index.zero? ? 'active' : nil, data: { cover: attached_asset_path(image, :custom) }}
-        .carousel-caption
-          %h3= Faker::Lorem.sentence(3)
-          %p= Faker::Lorem.sentence(20)
+        / .carousel-caption
+        /   %h3= Faker::Lorem.sentence(3)
+        /   %p= Faker::Lorem.sentence(20)
