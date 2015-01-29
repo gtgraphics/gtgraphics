@@ -74,7 +74,7 @@
 }
 
 #page_content {
-  a {
+  a, button, input[type="submit"], input[type="button"] {
     transition: all 100ms ease-out;
   }
 }
