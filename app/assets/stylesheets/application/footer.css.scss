@@ -2,11 +2,14 @@
 
 $footer-vertical-padding: 13px;
 
+#footer {
+  height: 40px;
+}
+
 .navbar-footer {
   color: #666;
   background-color: $content-bg-dark;
   font-size: 12px;
-  height: 40px;
   border-top: none;
   margin: 0;
   border: none;
@@ -18,7 +21,6 @@ $footer-vertical-padding: 13px;
     padding-right: $content-padding-lg - $footer-vertical-padding;
   }
 
-
   .author-social-buttons + .author-social-buttons {
     margin-left: 10px;
   }
@@ -26,7 +28,7 @@ $footer-vertical-padding: 13px;
   .navbar-text, .navbar-nav > li > a {
     margin: 0;
     padding: $footer-vertical-padding 14px;
-    line-height: normal;
+    line-height: 14px;
   }
 
   .navbar-nav {
