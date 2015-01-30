@@ -15,6 +15,6 @@ class MessageNotificationMailer < ActionMailer::Base
     end
     subject ||= translate('views.admin.messages.default_subject')
 
-    mail to: @recipient.rfc5322, from: @message.sender, subject: subject
+    mail to: @recipient.rfc5322, reply_to: @message.sender, subject: subject
   end
 end
