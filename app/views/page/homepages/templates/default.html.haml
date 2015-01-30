@@ -1,7 +1,7 @@
 #cover_carousel.cover-carousel.carousel.js-only{data: { ride: 'coverCarousel', interval: 12000 }}
-  %ol.carousel-indicators
-    - @images.count.times do |index|
-      %li{class: index.zero? ? 'active' : nil, data: { target: '#cover_carousel', slide_to: index }}
+  / %ol.carousel-indicators
+  /   - @images.count.times do |index|
+  /     %li{class: index.zero? ? 'active' : nil, data: { target: '#cover_carousel', slide_to: index }}
   .carousel-inner{role: 'listbox'}
     - @images.each_with_index do |image, index|
       .item{class: index.zero? ? 'active' : nil, data: { cover: attached_asset_path(image, :custom) }}
