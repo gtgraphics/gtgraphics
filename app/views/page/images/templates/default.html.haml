@@ -45,7 +45,7 @@
                           = style.title
 
               %li.dropdown.hidden-sm
-                - if image.shop_urls.any?
+                - if image.shop_urls.values.any?(&:present?)
                   = dropdown prepend_icon(:shopping_cart, translate('helpers.links.buy'), fixed_width: true), href: image.shop_url('gtgraphics'), menu_html: { class: 'shop-providers' } do
                     = image.shop_links
                 - else
