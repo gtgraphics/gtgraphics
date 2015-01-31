@@ -10,6 +10,7 @@ class ImageUploader < AttachmentUploader
     end
 
     def full_filename(file)
+      file = file.chomp(File.extname(file)) + '.jpg'
       "public/#{file}"
     end
   end
@@ -24,6 +25,7 @@ class ImageUploader < AttachmentUploader
     end
 
     def full_filename(file)
+      file = file.chomp(File.extname(file)) + '.jpg'
       "social/#{file}"
     end
   end
@@ -38,6 +40,7 @@ class ImageUploader < AttachmentUploader
     end
 
     def full_filename(file)
+      file = file.chomp(File.extname(file)) + '.jpg'
       "bricks/#{file}"
     end
   end
@@ -52,6 +55,7 @@ class ImageUploader < AttachmentUploader
     end
 
     def full_filename(file)
+      file = file.chomp(File.extname(file)) + '.jpg'
       "menu_bricks/#{file}"
     end
   end

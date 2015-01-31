@@ -4,8 +4,7 @@ module UsersHelper
     options = options.reverse_merge(
       alt: user.name, width: options[:size], height: options[:size])
     if user.photo.present?
-      image_tag attached_asset_path(current_user, :thumbnail, from: :photo),
-                options
+      image_tag attached_asset_path(user, :thumbnail, from: :photo), options
     else
       scope = "#{scope}/" if scope
       image_tag "#{scope}anonymous.png", options

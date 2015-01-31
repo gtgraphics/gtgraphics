@@ -28,6 +28,7 @@ module ImageUploadable
       end
 
       def full_filename(file)
+        file = file.chomp(File.extname(file)) + '.jpg'
         "thumbnails/#{file}"
       end
     end
