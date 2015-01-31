@@ -67,21 +67,9 @@ $lightbox-control-size: 100px;
       float: left;
 
       > a {
-        outline: none;
         padding: {
           top: 20px;
           bottom: 20px;
-        }
-        color: white;
-        opacity: 0.5;
-        transition: color 200ms ease-in-out, text-shadow 200ms ease-in-out;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-
-        &:hover, &:focus {
-          outline: none;
-          background: none;
-          opacity: 1;
-          color: white;
         }
       }
 
@@ -350,10 +338,7 @@ $lightbox-control-size: 100px;
   color: white;
   opacity: 0.5;
   text-align: center;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
   width: $lightbox-control-size;
-  outline: none;
-  transition: opacity 200ms ease-in-out;
   margin: 0;
   font-weight: 100;
   font-size: 25px;
@@ -362,12 +347,6 @@ $lightbox-control-size: 100px;
   @media (min-width: $screen-sm-min) {
     font-size: 30px;
     line-height: 42px;
-  }
-
-  &:hover, &:focus {
-    outline: none;
-    opacity: 1;
-    color: white;
   }
 
   .fa {
@@ -385,5 +364,22 @@ $lightbox-control-size: 100px;
 
   &.right {
     right: 0;
+  }
+}
+
+.lightbox-control,
+#lightbox_close,
+.navbar-lightbox .navbar-nav > li > a {
+  opacity: 0.5;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  transition: opacity 200ms ease-in-out;
+  outline: none;
+  color: white;
+
+  &:hover, &:focus {
+    outline: none;
+    opacity: 1;
+    color: white;
+    background: none;
   }
 }
