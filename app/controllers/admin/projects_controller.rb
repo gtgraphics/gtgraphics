@@ -43,7 +43,7 @@ class Admin::ProjectsController < Admin::ApplicationController
           @project_search.sorts = 'translations_title asc'
         end
       end
-      @projects = @project_search.result
+      @projects = @project_search.result(distinct: true)
     end
 
     if params[:client_id].present?

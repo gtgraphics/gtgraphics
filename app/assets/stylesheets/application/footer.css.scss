@@ -27,8 +27,8 @@
     margin: 0;
     padding: 14px;
     line-height: 14px;
-    color: rgba($text-color, 0.4);
-    text-shadow: 0 0 4px rgba(black, 0.7);
+    color: rgba($text-color, 0.5);
+    text-shadow: 0 0 4px rgba(black, 0.9);
   }
 
   .navbar-nav > li > a {
@@ -64,17 +64,17 @@
   .homepages-show.template-default & {
     margin: 0;
 
-    .navbar-text, .navbar-nav > li > a {
-      color: rgba($text-color, 0.5);
-      text-shadow: 0 0 4px rgba(black, 0.95);
-    }
+    // .navbar-text, .navbar-nav > li > a {
+    //   color: rgba($text-color, 0.5);
+    //   text-shadow: 0 0 4px rgba(black, 0.95);
+    // }
 
-    .navbar-nav > li > a {
-      &:hover, &:focus {
-        color: $text-color;
-        background: none;
-      }
-    }
+    // .navbar-nav > li > a {
+    //   &:hover, &:focus {
+    //     color: $text-color;
+    //     background: none;
+    //   }
+    // }
 
     @media (min-width: $screen-sm-min) {
       position: fixed;
