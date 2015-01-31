@@ -64,6 +64,18 @@
   .homepages-show.template-default & {
     margin: 0;
 
+    .navbar-text, .navbar-nav > li > a {
+      color: rgba($text-color, 0.5);
+      text-shadow: 0 0 4px rgba(black, 0.8);
+    }
+
+    .navbar-nav > li > a {
+      &:hover, &:focus {
+        color: $text-color;
+        background: none;
+      }
+    }
+
     @media (min-width: $screen-sm-min) {
       position: fixed;
       bottom: 8px;
