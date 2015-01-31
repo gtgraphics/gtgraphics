@@ -13,6 +13,7 @@ en:
     links:
       buy: Buy
       new: 'Create %{model}'
+      browse: Durchsuchen
       upload: 'Upload %{model}'
       edit: Edit
       details: Details

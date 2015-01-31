@@ -24,12 +24,15 @@
 #  last_activity_at                :datetime
 #  last_login_from_ip_address      :string(255)
 #  twitter_username                :string(255)
+#  photo                           :string(255)
+#  photo_updated_at                :datetime
 #
 
 class User < ActiveRecord::Base
   include Authenticatable
   include Authorizable
   include Excludable
+  include FileAttachable
   include PersistenceContextTrackable
   include User::Messaging
 
@@ -42,13 +45,19 @@ class User < ActiveRecord::Base
     author.has_many :snippets
   end
 
+  mount_uploader :photo, User::PhotoUploader
+
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :email, presence: true, email: true, uniqueness: { case_sensitive: false }
-  validates :preferred_locale, inclusion: { in: -> { I18n.available_locales.map(&:to_s) } }, allow_blank: true
+  validates :email, presence: true, email: true,
+                    uniqueness: { case_sensitive: false }
+  validates :preferred_locale,
+            inclusion: { in: -> { I18n.available_locales.map(&:to_s) } },
+            allow_blank: true
 
   before_validation :sanitize_preferred_locale
   before_save :sanitize_email_address, if: :email?
+  before_save :set_photo_updated_at, if: [:photo?, :photo_changed?]
 
   default_scope -> { order(:first_name, :last_name) }
 
@@ -68,7 +77,7 @@ class User < ActiveRecord::Base
 
   def rfc5322
     if full_name.present?
-      %{"#{full_name}" <#{email}>}
+      %("#{full_name}" <#{email}>)
     else
       email
     end
@@ -90,11 +99,16 @@ class User < ActiveRecord::Base
   end
 
   private
+
   def sanitize_email_address
     self.email = email.downcase
   end
 
   def sanitize_preferred_locale
     self.preferred_locale = preferred_locale.to_s.downcase.presence
+  end
+
+  def set_photo_updated_at
+    self.photo_updated_at = DateTime.now
   end
 end

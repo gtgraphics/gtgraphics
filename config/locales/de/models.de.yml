@@ -62,6 +62,7 @@ de:
         password_confirmation: Passwort (Wdh.)
         preferred_locale: Standardsprache
         twitter_username: Twitter-Benutzername
+        photo: Foto
       admin/user/update_form:
         first_name: Vorname
         last_name: Nachname
@@ -72,6 +73,8 @@ de:
         password_confirmation: Passwort (Wdh.)
         preferred_locale: Standardsprache
         twitter_username: Twitter-Benutzername
+        photo: Foto
+        remove_photo: Foto entfernen
       admin/user/account_update_form:
         current_password: Aktuelles Passwort
       admin/image_page_creation_form:
@@ -258,6 +261,7 @@ de:
         password_confirmation: Passwort (Wdh.)
         preferred_locale: Standardsprache
         twitter_username: Twitter-Benutzername
+        photo: Foto
 
     errors:
       models:

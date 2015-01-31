@@ -28,6 +28,7 @@ gem 'ransack'
 gem 'virtus'
 gem 'rmagick'
 gem 'carrierwave'
+gem 'paperclip'
 
 # Presenters
 gem 'actionpresenter'

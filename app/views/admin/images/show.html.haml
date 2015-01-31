@@ -61,7 +61,7 @@
         = panel do
           .row
             .col-sm-3
-              = image.author.gravatar(true)
+              = image.author.thumbnail(true, class: 'img-circle img-responsive')
             .col-sm-9
               = image.author.name(true)
               .text-muted= image.updated_at

@@ -3,8 +3,9 @@
   .content
     %ul.list-horizontal.list-wide
       - contact_form.recipients.order(:first_name, :last_name).each do |recipient|
-        %li.user
-          .avatar
-            = link_to gravatar_image_tag(recipient.email, default: :mm, class: 'img-circle', size: 28, alt: recipient.name), [:admin, recipient]
-          .name
-            = link_to recipient.name, [:admin, recipient]
+        - present [:admin, recipient] do |recipient|
+          %li.user
+            .avatar
+              = recipient.thumbnail(true, size: 28)
+            .name
+              = recipient.name(true)

@@ -50,9 +50,10 @@ class Admin::AccountsController < Admin::ApplicationController
     respond_to do |format|
       format.html { redirect_to :back }
     end
-  end 
+  end
 
   private
+
   def account_preferences_params
     params.permit(:image_view_mode)
   end
@@ -64,7 +65,8 @@ class Admin::AccountsController < Admin::ApplicationController
   def user_account_update_params
     params.require(:user_update).permit(
       :first_name, :last_name, :email, :preferred_locale,
-      :current_password, :reset_password, :generate_password, :password, :password_confirmation
+      :current_password, :reset_password, :generate_password, :password,
+      :password_confirmation, :photo, :remove_photo
     )
   end
 end

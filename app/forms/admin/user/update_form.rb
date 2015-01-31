@@ -2,29 +2,38 @@ class Admin::User::UpdateForm < Form
   handles :user
 
   delegate_attributes :first_name, :last_name, :email, :preferred_locale,
-                      :twitter_username
+                      :twitter_username, :photo
 
   attribute :reset_password, Boolean, default: false
   attribute :generate_password, Boolean, default: true
   attribute :password, String
+  attribute :remove_photo, Boolean, default: false
 
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :email, presence: true, email: true
   validate :verify_email_uniqueness, if: -> { email.present? }
-  validates :preferred_locale, inclusion: { in: -> { I18n.available_locales.map(&:to_s) } }, allow_blank: true
-  validates :password, presence: true, confirmation: { unless: :generate_password? }, if: :reset_password?
+  validates :preferred_locale,
+            inclusion: { in: -> { I18n.available_locales.map(&:to_s) } },
+            allow_blank: true
+  validates :password,
+            presence: true,
+            confirmation: { unless: :generate_password? }, if: :reset_password?
 
   before_validation :sanitize_email_address, -> { email.present? }
-  before_validation :set_generated_password, if: [:reset_password?, :generate_password?]
-  after_submit :send_generated_password, if: [:reset_password?, :generate_password?]
+  with_options if: [:reset_password?, :generate_password?] do |gen_passwd|
+    gen_passwd.before_validation :set_generated_password
+    gen_passwd.after_submit :send_generated_password
+  end
 
   def perform
     user.password = password if reset_password?
+    user.photo.remove! if remove_photo?
     user.save!
   end
 
   private
+
   def sanitize_email_address
     self.email = email.downcase
   end

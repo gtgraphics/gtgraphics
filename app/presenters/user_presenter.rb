@@ -17,13 +17,15 @@ class UserPresenter < ApplicationPresenter
     path.present?
   end
 
-  def gravatar(*args)
-    options = args.extract_options!.reverse_merge(
-      class: 'img-responsive img-circle',
-      size: 75,
-      alt: name
+  def thumbnail(*args)
+    options = args.extract_options!
+    options = options.reverse_merge(
+      width: options[:size],
+      height: options[:size],
+      class: 'img-circle'
     )
-    image_tag = h.gravatar_image_tag email, options.reverse_merge(default: :mm)
-    h.link_to_if about_page? && args.first, image_tag, path
+    linked = args.first && about_page?
+    content = h.user_thumbnail_image_tag(user, options)
+    h.link_to_if linked, content, path
   end
 end

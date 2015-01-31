@@ -14,7 +14,8 @@ module FileAttachable
     extend ActiveSupport::Concern
 
     included do
-      after_initialize :generate_asset_token, unless: :asset_token?
+      after_initialize :generate_asset_token
+
       before_validation :set_original_filename, if: [:asset?, :asset_changed?]
       before_validation :set_content_type, if: [:asset?, :asset_changed?]
       before_validation :set_file_size, if: [:asset?, :asset_changed?]
@@ -29,7 +30,7 @@ module FileAttachable
       asset.recreate_versions!
       set_content_type
       set_file_size
-      set_asset_updated_at 
+      set_asset_updated_at
       save!
     end
 
@@ -44,13 +45,15 @@ module FileAttachable
     end
 
     protected
+
     def generate_asset_token
+      return if !respond_to?(:asset_token) || asset_token?
       self.asset_token = SecureRandom.uuid
     end
 
     def set_original_filename
-      if asset.file.respond_to?(:original_filename) and original_filename.blank?
-        self.original_filename = asset.file.original_filename 
+      if asset.file.respond_to?(:original_filename) && original_filename.blank?
+        self.original_filename = asset.file.original_filename
       end
     end
 
@@ -63,6 +66,7 @@ module FileAttachable
     end
 
     private
+
     def set_asset_updated_at
       self.asset_updated_at = DateTime.now
     end

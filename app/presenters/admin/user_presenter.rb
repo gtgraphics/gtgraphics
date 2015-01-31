@@ -3,16 +3,16 @@ class Admin::UserPresenter < Admin::ApplicationPresenter
 
   self.action_buttons -= [:show]
 
-  def gravatar(*args)
-    options = args.extract_options!.reverse_merge(class: 'img-responsive img-circle', size: 80, alt: name(false))
-    linked = args.first || false
-    if user
-      image_tag = h.gravatar_image_tag user.email, options.reverse_merge(default: :mm)
-      h.link_to_if linked, image_tag, [:admin, user]
-    else
-      size = options.delete(:size)
-      h.image_tag 'admin/anonymous.png', options.reverse_merge(width: size, height: size)
-    end
+  def thumbnail(*args)
+    options = args.extract_options!
+    options = options.reverse_merge(
+      width: options[:size],
+      height: options[:size],
+      class: 'img-circle'
+    )
+    linked = args.first
+    content = h.user_thumbnail_image_tag(user, options)
+    h.link_to_if linked, content, [:admin, user]
   end
 
   def name(linked = false)

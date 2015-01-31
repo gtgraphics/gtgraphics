@@ -1,11 +1,13 @@
-= page_header do
-  .btn-toolbar
-    .btn-group
-      = create_button_link_for User, namespace: :admin, icon: :plus, caption: translate('helpers.links.new', model: User.model_name.human)
-    = paginate @users
+.row
+  .col-sm-offset-2.col-sm-8
+    = page_header do
+      .btn-toolbar
+        .btn-group
+          = create_button_link_for User, namespace: :admin, icon: :plus, caption: translate('helpers.links.new', model: User.model_name.human)
+        = paginate @users
 
-- if @users.any?
-  = render 'table'  
-- else
-  .well.text-center
-    = translate 'views.hints.empty', model: User.model_name.human(count: 2)
+    - if @users.any?
+      = render 'table'
+    - else
+      .well.text-center
+        = translate 'views.hints.empty', model: User.model_name.human(count: 2)

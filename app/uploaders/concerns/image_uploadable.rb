@@ -4,6 +4,7 @@ module ImageUploadable
   included do
     include CarrierWave::RMagick
     include CarrierWave::MimeTypes
+    include ImageQualityAdjustable
 
     process :set_content_type
 
@@ -73,18 +74,6 @@ module ImageUploadable
   def strip
     manipulate! do |img|
       img.strip!
-      img = yield(img) if block_given?
-      img
-    end
-  end
-
-  def quality(percentage)
-    manipulate! do |img|
-      unless img.quality == percentage
-        img.write(current_path) do
-          self.quality = percentage
-        end
-      end
       img = yield(img) if block_given?
       img
     end

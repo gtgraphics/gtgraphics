@@ -101,7 +101,7 @@
                 .page-body
                   .row
                     .lightbox-author-avatar.hidden-xs.hidden-sm.col-md-1
-                      = image.author.gravatar(true)
+                      = image.author.thumbnail(true, class: 'img-circle img-responsive')
 
                     .lightbox-caption.col-xs-12.col-md-11
                       = image.description

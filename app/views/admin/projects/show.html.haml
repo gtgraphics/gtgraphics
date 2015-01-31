@@ -49,7 +49,7 @@
         = panel do
           .row
             .col-sm-3
-              = project.author.gravatar(true)
+              = project.author.thumbnail(true, class: 'img-circle img-responsive')
             .col-sm-9
               = project.author.name(true)
               .text-muted= project.updated_at

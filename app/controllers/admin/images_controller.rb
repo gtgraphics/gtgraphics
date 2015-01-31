@@ -33,7 +33,7 @@ class Admin::ImagesController < Admin::ApplicationController
       @images = @images.search(query)
       @image_search = @images.ransack(params[:search])
       if @image_search.sorts.empty?
-        if query.blank? and request.format.json?
+        if query.blank? && request.format.json?
           @image_search.sorts = 'created_at desc'
         else
           @image_search.sorts = 'translations_title asc'
@@ -233,6 +233,7 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   private
+
   def load_image
     @image = ::Image.find(params[:id])
   end

@@ -13,7 +13,7 @@
             - @users.each do |user|
               = active_link_to params.except(:page).merge(author_id: user.to_param), class: 'list-group-item', active: user.id == params[:author_id].to_i do
                 %span.avatar
-                  %span.icon= gravatar_image_tag user.email, default: :mm, size: 24, class: 'img-circle'
+                  %span.icon= user_thumbnail_image_tag user, size: 24, class: 'img-circle'
                   %span.caption= user.name
 
         = panel link_to(prepend_icon(:calendar, Attachment.human_attribute_name(:created_at), fixed_width: true), '#period', data: { toggle: 'collapse' }), body: false do
@@ -29,7 +29,7 @@
           .btn-group.only-js
             %span.btn.btn-success.fileinput-button
               = prepend_icon :upload, translate('helpers.links.upload', model: Attachment.model_name.human)
-              = file_field_tag :attachment_upload, name: 'attachment[asset]', multiple: true, data: { url: upload_admin_attachments_path }
+              = file_field_tag :attachment_upload, name: 'attachment[asset]', multiple: true, data: {bfi_disabled: true, url: upload_admin_attachments_path }
           .btn-group
             = button_tag name: 'destroy', class: 'btn btn-danger deactivatable-batch-control', data: { hotkey: 'del', confirm: translate('helpers.confirmations.destroy_selected', model: Attachment.model_name.human(count: 2)) } do
               = prepend_icon :trash, translate('helpers.links.destroy_selected'), outline: true
