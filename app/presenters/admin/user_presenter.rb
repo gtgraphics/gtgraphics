@@ -11,7 +11,7 @@ class Admin::UserPresenter < Admin::ApplicationPresenter
       class: 'img-circle'
     )
     linked = args.first
-    content = h.user_thumbnail_image_tag(user, options)
+    content = h.user_thumbnail_image_tag(user, options.merge(scope: :admin))
     h.link_to_if linked, content, [:admin, user]
   end
 
