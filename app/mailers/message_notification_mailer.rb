@@ -1,4 +1,4 @@
-class MessageNotificationMailer < ActionMailer::Base
+class MessageNotificationMailer < ApplicationMailer
   layout 'admin/mailer'
 
   helper :attached_asset

@@ -1,11 +1,25 @@
+@import 'bootstrap_config';
+
 .cover-carousel {
   position: absolute;
   z-index: 1;
+
+  &:after {
+    content: ' ';
+    z-index: 3;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: inset 0 0 25px rgba($content-bg, 0.5);
+  }
 
   .carousel-inner {
     > .item {
       .cover {
         position: absolute;
+        z-index: 2;
         left: 0;
         right: 0;
         top: 0;
@@ -24,20 +38,6 @@
           animation: cover-zoom 12s ease-in-out;
         }
       }
-
-      // .carousel-caption {
-      //   position: fixed;
-      //   font-size: 24px;
-      //   font-weight: 300;
-      //   bottom: 82px;
-      //   padding: 0;
-
-      //   h3 {
-      //     font-size: 32px;
-      //     text-transform: uppercase;
-      //     font-weight: 700;
-      //   }
-      // }
     }
   }
 

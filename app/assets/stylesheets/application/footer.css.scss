@@ -1,79 +1,79 @@
 @import 'bootstrap_config';
 
-$footer-vertical-padding: 13px;
-
-#footer {
-  height: 40px;
-}
-
 .navbar-footer {
   color: #666;
-  background-color: $content-bg-dark;
   font-size: 12px;
   border-top: none;
   margin: 0;
   border: none;
-  padding-left: $content-padding - $footer-vertical-padding;
-  padding-right: $content-padding - $footer-vertical-padding;
+  padding: {
+    left: $content-padding;
+    right: $content-padding;
+  }
+  margin: 8px 0;
 
   @media (min-width: $screen-md-min) {
-    padding-left: $content-padding-lg - $footer-vertical-padding;
-    padding-right: $content-padding-lg - $footer-vertical-padding;
+    padding: {
+      left: $content-padding-lg;
+      right: $content-padding-lg;
+    }
   }
 
-  .author-social-buttons + .author-social-buttons {
-    margin-left: 10px;
+  .navbar-text:first-child {
+    padding-left: 0;
   }
 
   .navbar-text, .navbar-nav > li > a {
     margin: 0;
-    padding: $footer-vertical-padding 14px;
+    padding: 14px;
     line-height: 14px;
+    color: rgba($text-color, 0.4);
+    text-shadow: 0 0 4px rgba(black, 0.7);
   }
 
-  .navbar-nav {
-    > li > a {
-      outline: none;
-      color: $gray;
-      transition: all 200ms ease-in-out;
+  .navbar-nav > li > a {
+    outline: none;
+    transition: all 200ms ease-in-out;
 
-      &:hover, &:focus {
-        color: $text-color;
-        background: none;
-      }
+    &:hover, &:focus {
+      color: $text-color;
+      background: none;
+    }
 
-      &.icon-link {
-        padding: {
-          left: 9px;
-          right: 9px;
-        }
+    &.icon-link {
+      padding: {
+        left: 9px;
+        right: 9px;
       }
     }
   }
-}
 
-#site_social_buttons {
-  padding-top: $footer-vertical-padding - 3px;
-  padding-bottom: $footer-vertical-padding - 3px;
-  box-sizing: content-box;
-  height: 20px;
-}
+  .site-social-buttons + .author-social-buttons,
+  .author-social-buttons + .author-social-buttons {
+    margin-left: 10px;
+  }
 
-.homepages-show.template-default {
-  @media (min-width: $screen-sm-min) {
-    #footer {
+  .site-social-buttons {
+    padding: {
+      top: 11px;
+      bottom: 11px;
+    }
+    line-height: auto;
+  }
+
+  .homepages-show.template-default & {
+    margin: 0;
+
+    @media (min-width: $screen-sm-min) {
       position: fixed;
-      margin: 0;
-      bottom: 0;
+      bottom: 8px;
       width: $container-sm - $grid-gutter-width;
-      box-shadow: 0 -1px 3px rgba(black, 0.25);
     }
-  }
 
-  #footer {
     @media (min-width: $screen-md-min) {
       width: $container-md - $grid-gutter-width;
     }
+
     @media (min-width: $screen-lg-min) {
       width: $container-lg - $grid-gutter-width;
     }
