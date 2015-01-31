@@ -5,10 +5,3 @@
 
 .page-body
   = render_region :main
-
-  - if @child_pages.any?
-    %ul
-      - @child_pages.each do |child_page|
-        %li= link_to child_page, child_page
-
-  = render_region :footer

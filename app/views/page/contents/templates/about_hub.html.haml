@@ -1,12 +1,11 @@
 .page-header
   %h1= page.title
 
-.page-body
-  - if region_content_for? :header
-    .row
-      .col-sm-12
-        = yield_region :header
+- if region_content_for? :header
+  .page-body
+    = yield_region :header
 
+.page-body
   .row
     - @about_pages.each do |user, page|
       .col-sm-6
@@ -16,7 +15,6 @@
               = page.title
             = gravatar_image_tag user.email, size: 530, default: :mm, class: 'submenu-item-image', alt: page.title
 
-  - if region_content_for? :footer
-    .row
-      .col-sm-12
-        = yield_region :footer
+- if region_content_for? :footer
+  .page-body
+    = yield_region :footer
