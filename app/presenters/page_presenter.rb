@@ -18,7 +18,7 @@ class PagePresenter < ApplicationPresenter
   end
 
   def facebook_comments(options = {})
-    h.facebook_comments(social_uri, options)
+    h.facebook_comments(social_uri, options.reverse_merge(colorscheme: :dark))
   end
 
   # Google Plus Integration

@@ -137,6 +137,11 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
             text-transform: uppercase;
             color: white;
           }
+
+          .gallery-image-info {
+            margin-top: 5px;
+
+          }
         }
       }
     }
@@ -178,4 +183,8 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
   .masonry-brick {
     transition-property: left, right, top;
   }
+}
+
+.gallery-page-header {
+  padding-bottom: 0 !important;
 }

@@ -1,5 +1,4 @@
 - if @image_pages.any?
-
   #gallery.clearfix{data: { total_pages: @image_pages.total_pages }}
     - @image_pages.each do |page|
       - present page.embeddable do |image_page|

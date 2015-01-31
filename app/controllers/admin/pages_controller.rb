@@ -313,6 +313,6 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def available_templates
-    @page.available_templates.order(:name)
+    @page.available_templates.reorder(:name)
   end
 end

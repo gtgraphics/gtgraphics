@@ -1,9 +1,14 @@
 class Page::ContentsController < Page::ApplicationController
   before_action :load_child_pages, only: :show
-  before_action :load_query
 
   def default
     @child_pages = @child_pages.menu_items
+    respond_with_page
+  end
+
+  def gallery_hub
+    @gallery_pages = @child_pages.contents.with_template(:gallery)
+                     .preload(:embeddable)
     respond_with_page
   end
 
@@ -17,12 +22,6 @@ class Page::ContentsController < Page::ApplicationController
     end
   end
 
-  def gallery_hub
-    @gallery_pages = @child_pages.contents.with_template(:gallery)
-                     .preload(:embeddable)
-    respond_with_page
-  end
-
   def about_hub
     users = User.all.to_a
     @about_pages = @child_pages.each_with_object({}) do |page, pages|
@@ -32,17 +31,21 @@ class Page::ContentsController < Page::ApplicationController
     respond_with_page
   end
 
-  def search
-    respond_to do |format|
-      format.html { redirect_to page_path(@page, query: @query) }
+  def showcase_hub
+    @showcase_pages = @child_pages.contents.with_template(:showcase)
+                      .preload(:embeddable)
+    respond_with_page
+  end
+
+  def showcase
+    @project_pages = @child_pages.projects.preload(embeddable: :project)
+    if request.format.html?
+      @project_pages = @project_pages.page(params[:page]).per(16)
     end
+    respond_with_page
   end
 
   private
-
-  def load_query
-    @query = params[:query].presence
-  end
 
   def load_child_pages
     @child_pages = @page.children.accessible_by(current_ability)

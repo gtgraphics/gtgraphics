@@ -1,5 +1,10 @@
 @import 'bootstrap_config';
 
+// #page_wrapper {
+//   border-radius: 3px;
+//   overflow: hidden;
+// }
+
 #content_wrapper, #lightbox_content_wrapper {
   position: relative;
   z-index: 5; // leave some space below for lightbox for example
@@ -12,7 +17,7 @@
 
   @media (min-width: $screen-sm-min) {
     margin-bottom: 0;
-    box-shadow: 0 1px 3px rgba(black, 0.25);
+    box-shadow: 0 0 3px rgba(black, 0.25);
   }
 }
 

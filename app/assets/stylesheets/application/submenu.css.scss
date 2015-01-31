@@ -1,8 +1,10 @@
 @import 'bootstrap_config';
 
 @media (min-width: $screen-sm-min) {
-  .row:last-child .submenu-item {
-    margin-bottom: 0;
+  .row:last-child {
+    .submenu-item, .submenu-link {
+      margin-bottom: 0;
+    }
   }
 }
 

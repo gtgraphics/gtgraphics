@@ -54,6 +54,10 @@ class Project < ActiveRecord::Base
     title
   end
 
+  def cover
+    images.first
+  end
+
   private
 
   def set_client
