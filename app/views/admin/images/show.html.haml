@@ -45,7 +45,7 @@
                 .btn-group.only-js
                   %span.btn.btn-success.fileinput-button
                     = prepend_icon :upload, translate('helpers.links.upload', model: Image::Style.model_name.human)
-                    = file_field_tag :image_style_upload, name: 'image_style[asset]', multiple: true, data: { url: upload_admin_image_styles_path(@image) }
+                    = file_field_tag :image_style_upload, name: 'image_style[asset]', multiple: true, data: { url: upload_admin_image_styles_path(@image), bfi_disabled: true }
                 .btn-group
                   = button_link_to new_admin_image_style_path(@image), remote: true do
                     = prepend_icon :plus, translate('helpers.links.new', model: Image::Style.model_name.human)
