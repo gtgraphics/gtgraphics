@@ -90,10 +90,10 @@ $(window).resize ->
 COMMENT_BOX_OFFSET = 20
 
 refreshNavigationScrollState = ->
-  $navbar = $('#nav_lightbox_actions')
-  $info = $('li.info', $navbar)
-  $comment = $('li.comment', $navbar)
-  $enlargeImage = $('li.enlarge-image', $navbar)
+  $nav = $('#nav_lightbox_actions')
+  $info = $('li.info', $nav)
+  $comment = $('li.comment', $nav)
+  $enlargeImage = $('li.enlarge-image', $nav)
 
   infoHeight = $('#info').outerHeight()
   scrollTop = $(window).scrollTop()
@@ -105,10 +105,23 @@ refreshNavigationScrollState = ->
     $info.show()
     $enlargeImage.hide()
 
-  if scrollTop > infoHeight + COMMENT_BOX_OFFSET
+  if scrollTop > (infoHeight + COMMENT_BOX_OFFSET)
     $comment.hide()
   else
     $comment.show()
+
+refreshNavigationDisplayState = ->
+  $navbar = $('#navbar_lightbox')
+  if $.device.isExtraSmall() || $.device.isSmall()
+    $navbar.removeClass('ghost')
+  else
+    navbarHeight = $navbar.outerHeight(true)
+    scrollTop = $(window).scrollTop()
+    windowHeight = $(window).outerHeight()
+    if scrollTop > (windowHeight - navbarHeight)
+      $navbar.addClass('ghost')
+    else
+      $navbar.removeClass('ghost')
 
 $(document).ready ->
   $('#navbar_lightbox li.info a').click (event) ->
@@ -117,6 +130,11 @@ $(document).ready ->
     infoHeight = $('#info').outerHeight()
     $(window).scrollTo(infoHeight, options)
 
+  refreshNavigationDisplayState()
+
 $(window).scroll ->
   refreshNavigationScrollState()
+  refreshNavigationDisplayState()
 
+$(window).resize ->
+  refreshNavigationDisplayState()
