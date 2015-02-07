@@ -16,6 +16,10 @@
 
     .navbar-collapse {
       border-top: none;
+
+      @media (max-width: $screen-xs-max) {
+        max-height: none;
+      }
     }
 
     &#navbar_primary {
