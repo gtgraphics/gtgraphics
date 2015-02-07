@@ -29,7 +29,7 @@ class CoverCarousel
     @applyIndicatorEvents()
 
   destroy: ->
-    @pause()
+    @stop()
     $(document).off 'click', @getIndicatorSelector(), @indicatorEventHandler
     $(window).off 'resize', @resizeEventHandler
 
@@ -161,30 +161,33 @@ class CoverCarousel
     @$carousel.find('.item').css(dimensions)
 
 
-$(document).ready ->
+initOrDestroyCarousel = ->
   $('[data-ride="coverCarousel"]').each ->
     $carousel = $(@)
-    carousel = new CoverCarousel($carousel)
-    $carousel.data('coverCarousel', carousel)
-    window.coverCarousel = carousel
+    carousel = $carousel.data('coverCarousel')
+    if carousel && $.device.isExtraSmall()
+      $carousel.removeData('coverCarousel')
+      carousel.destroy()
+      carousel = null
+    else if !carousel && !$.device.isExtraSmall()
+      carousel = new CoverCarousel($carousel)
+      $carousel.data('coverCarousel', carousel)
+      carousel.start() unless carousel.isRunning
+      console.log carousel
+
+$(document).ready ->
+  initOrDestroyCarousel()
+
+$(window).resize ->
+  initOrDestroyCarousel()
 
 $(document).on 'page:receive', ->
-  $carousels = $('[data-ride="coverCarousel"]')
-  $carousels.each ->
-    $(@).data('coverCarousel').destroy()
+  $('[data-ride="coverCarousel"]').each ->
+    carousel = $(@).data('coverCarousel')
+    carousel.destroy() if carousel
 
 $(document).on 'loading.gtg.carousel', (event, context) ->
   Loader.start() if context.index == 0
 
 $(document).on 'loaded.gtg.carousel', (event, context) ->
   Loader.done() if context.index == 0
-
-$(window).resize ->
-  $('[data-ride="coverCarousel"]').each ->
-    carousel = $(@).data('coverCarousel')
-    return unless carousel
-    if $.device.isExtraSmall()
-      carousel.stop() if carousel.isRunning
-    else
-      carousel.start() unless carousel.isRunning
-
