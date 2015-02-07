@@ -3,16 +3,16 @@
   %nav.navbar.navbar-top#navbar_primary{role: 'navigation', class: secondary_menu_items.any? ? 'has-submenu' : nil}
 
     .navbar-header
-      %button.navbar-toggle.btn.btn-header.pull-right{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
-        = icon :bars, fixed_width: true
-        %span.sr-only= translate('helpers.links.menu')
-
       - unless page.root?
+        %button.navbar-toggle.btn.btn-header.pull-right{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
+          = icon :bars, fixed_width: true
+          %span.sr-only= translate('helpers.links.menu')
+
         = link_to yield(:back_url).presence || request.referer.presence || :root, class: 'btn btn-header', role: 'button' do
           = icon :chevron, direction: :left, fixed_width: true
           %span.sr-only= translate('helpers.links.back')
 
-    .navbar-collapse.collapse
+    .navbar-collapse{class: !page.root? && 'collapse'}
       / Primary
       %ul.nav.navbar-nav#nav_menu_items
         - primary_menu_items.each do |page|

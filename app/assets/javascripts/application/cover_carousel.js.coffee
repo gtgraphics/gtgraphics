@@ -39,10 +39,12 @@ class CoverCarousel
       @next =>
         @start()
     , @options.interval
+    @isRunning = true
 
   pause: ->
     clearTimeout(@transitionTimeout)
     @transitionTimeout = null
+    @isRunning = false
 
   stop: ->
     @pause()
@@ -176,3 +178,13 @@ $(document).on 'loading.gtg.carousel', (event, context) ->
 
 $(document).on 'loaded.gtg.carousel', (event, context) ->
   Loader.done() if context.index == 0
+
+$(window).resize ->
+  $('[data-ride="coverCarousel"]').each ->
+    carousel = $(@).data('coverCarousel')
+    return unless carousel
+    if $.device.isExtraSmall()
+      carousel.stop() if carousel.isRunning
+    else
+      carousel.start() unless carousel.isRunning
+
