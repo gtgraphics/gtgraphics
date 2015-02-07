@@ -1,10 +1,10 @@
-#cover_carousel.cover-carousel.carousel.js-only.hidden-xs{data: { ride: 'coverCarousel', interval: 12000 }}
+#cover_carousel.cover-carousel.js-only.hidden-xs{data: { ride: 'coverCarousel', interval: 12000 }}
   / %ol.carousel-indicators
   /   - @images.count.times do |index|
   /     %li{class: index.zero? ? 'active' : nil, data: { target: '#cover_carousel', slide_to: index }}
-  .carousel-inner{role: 'listbox'}
+  .cover-carousel-inner{role: 'listbox'}
     - @images.each_with_index do |image, index|
-      .item{class: index.zero? ? 'active' : nil, data: { cover: attached_asset_path(image, :custom) }}
+      .item{data: { cover: attached_asset_path(image, :custom) }}
         / .carousel-caption
         /   %h3= Faker::Lorem.sentence(3)
         /   %p= Faker::Lorem.sentence(20)
