@@ -9,8 +9,7 @@ class CoverCarousel
     autostart: true
 
   constructor: ($container, options = {}) ->
-    @$carousel = $container.carousel(pause: false)
-    @carousel = @$carousel.data('bs.carousel')
+    @$carousel = $container
     @options = _(_(options).defaults($container.data()))
                .defaults(CoverCarousel.DEFAULTS)
 
@@ -20,57 +19,51 @@ class CoverCarousel
       @$currentItem = @$items.first().addClass(CoverCarousel.ACTIVE_CLASS)
 
     @refreshCarouselSize()
-    $(window).resize =>
-      @refreshCarouselSize()
+    @applyCarouselResizerEvent()
 
     @pause()
-    coverCarousel = @
+    _this = @
     @slideTo @$currentItem, ->
       $(@).trigger('init.gtg.carousel')
-      coverCarousel.cycle() if coverCarousel.options.autostart
+      _this.start() if _this.options.autostart
 
-    @addIndicatorEvents()
+    @applyIndicatorEvents()
 
-  cycle: ->
-    clearTimeout(@transitionTimeout)
+  destroy: ->
+    @pause()
+    $(document).off 'click', @getIndicatorSelector(), @indicatorEventHandler
+    $(window).off 'resize', @resizeEventHandler
+
+  start: ->
+    @pause()
     @transitionTimeout = setTimeout =>
       @next =>
-        @cycle()
+        @start()
     , @options.interval
 
   pause: ->
     clearTimeout(@transitionTimeout)
     @transitionTimeout = null
-    @$carousel.carousel('pause')
+
+  stop: ->
+    @pause()
+    @slideTo(0)
 
   slideTo: (item, callback) ->
     $item = @extractItem(item)
     index = @extractItemIndex(item)
-    $item.trigger('changing.gtg.carousel', 'slideTo', index)
+    $item.trigger('changing.gtg.carousel', index)
     @loadItem index, =>
       @$currentItem = $item
-      @transitionCarousel(index)
-      $item.trigger('change.gtg.carousel', 'slideTo', index)
+      # @transitionCarousel(index)
+      $item.trigger('change.gtg.carousel', index)
       callback() if callback
 
   next: (callback) ->
-    $item = @nextItem()
-    $item.trigger('changing.gtg.carousel', 'next')
-    @loadItem $item, =>
-      @$currentItem = $item
-      @transitionCarousel('next')
-      $item.trigger('change.gtg.carousel', 'next')
-      callback() if callback
+    @slideTo(@nextItem(), callback)
 
   prev: (callback) ->
-    @$currentItem=
-    $item = @prevItem()
-    $item.trigger('changing.gtg.carousel', 'prev')
-    @loadItem $item, =>
-      @$currentItem = $item
-      @transitionCarousel('prev')
-      $item.trigger('change.gtg.carousel', 'prev')
-      callback() if callback
+    @slideTo(@prevItem(), callback)
 
   # Navigation
 
@@ -94,19 +87,24 @@ class CoverCarousel
     $prevItem = @$items.last() unless $prevItem.length
     $prevItem
 
-  transitionCarousel: (target) ->
-    @$carousel.carousel(target).carousel('pause')
-
-  addIndicatorEvents: ->
+  getIndicatorSelector: ->
     carouselSelector = '#' + @$carousel.attr('id')
-    $indicators = $("[data-slide-to][data-target='#{carouselSelector}']")
-    $indicators.on 'click', (event) =>
+    "[data-slide-to][data-target='#{carouselSelector}']"
+
+  applyIndicatorEvents: ->
+    @indicatorEventHandler = =>
       event.preventDefault()
       @pause()
       $indicator = $(event.target)
       index = $indicator.data('slideTo')
       @slideTo index, =>
-        @cycle()
+        @start()
+    $(document).on 'click', @getIndicatorSelector(), @indicatorEventHandler
+
+  applyCarouselResizerEvent: ->
+    @resizeEventHandler = =>
+      @refreshCarouselSize()
+    $(window).resize(@resizeEventHandler)
 
   loadItem: (item, callback) ->
     $item = @extractItem(item)
@@ -163,7 +161,7 @@ $(document).ready ->
 $(document).on 'page:receive', ->
   $carousels = $('[data-ride="coverCarousel"]')
   $carousels.each ->
-    $(@).data('coverCarousel').pause()
+    $(@).data('coverCarousel').destroy()
 
 # $(document).on 'loading.gtg.carousel', ->
 #   Loader.start()
