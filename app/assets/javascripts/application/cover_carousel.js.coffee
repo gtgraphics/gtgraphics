@@ -173,7 +173,6 @@ initOrDestroyCarousel = ->
       carousel = new CoverCarousel($carousel)
       $carousel.data('coverCarousel', carousel)
       carousel.start() unless carousel.isRunning
-      console.log carousel
 
 $(document).ready ->
   initOrDestroyCarousel()
