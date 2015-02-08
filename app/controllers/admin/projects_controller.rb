@@ -1,17 +1,20 @@
 class Admin::ProjectsController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_project, only: %i(show edit update destroy assign_images attach_images pages)
+  before_action :load_project, only: %i(show edit update destroy assign_images
+                                        attach_images pages)
 
   breadcrumbs do |b|
     b.append ::Project.model_name.human(count: 2), :admin_projects
     if action_name.in? %w(new create)
-      b.append translate('breadcrumbs.new', model: ::Project.model_name.human), :new_admin_project
+      b.append translate('breadcrumbs.new', model: ::Project.model_name.human),
+               :new_admin_project
     end
     if @project
       b.append @project.title, [:admin, @project]
       if action_name.in? %w(edit update)
-        b.append translate('breadcrumbs.edit', model: ::Project.model_name.human), [:edit, :admin, @project]
+        b.append t('breadcrumbs.edit', model: ::Project.model_name.human),
+                 [:edit, :admin, @project]
       end
     end
   end
@@ -19,25 +22,18 @@ class Admin::ProjectsController < Admin::ApplicationController
   def index
     @clients = Client.order(:name)
 
-    @projects = Project.uniq.with_translations_for_current_locale
-                .includes(:client, :author).select(
-                  Project.arel_table[Arel.star],
-                  Project::Translation.arel_table[:title]
-                )
+    @projects = Project.with_translations_for_current_locale
+                .eager_load(:client, :author)
 
     project_ids = Array(params[:id])
     if project_ids.any?
-      if project_ids.one?
-        return redirect_to params.merge(action: :show)
-      else
-        @projects = @projects.where(id: project_ids)
-      end
+      return redirect_to params.merge(action: :show) if project_ids.one?
+      @projects.where!(id: project_ids)
     else
-      query = params[:query]
-      @projects = @projects.search(query)
+      @projects = @projects.search(params[:query])
       @project_search = @projects.ransack(params[:search])
       if @project_search.sorts.empty?
-        if query.blank? && request.format.json?
+        if request.format.json?
           @project_search.sorts = 'created_at desc'
         else
           @project_search.sorts = 'translations_title asc'
@@ -46,9 +42,9 @@ class Admin::ProjectsController < Admin::ApplicationController
       @projects = @project_search.result(distinct: true)
     end
 
-    if params[:client_id].present?
-      @projects.where!(client_id: params[:client_id])
-    end
+    client_id = params[:client_id]
+    @projects.where!(client_id: client_id) if client_id.present?
+
     @projects = @projects.page(params[:page])
 
     respond_with :admin, @projects do |format|
