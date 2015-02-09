@@ -16,12 +16,12 @@ class Ability
     #     can :read, :all
     #   end
     #
-    # The first argument to `can` is the action you are giving the user 
+    # The first argument to `can` is the action you are giving the user
     # permission to do.
     # If you pass :manage it will apply to every action. Other common actions
     # here are :read, :create, :update and :destroy.
     #
-    # The second argument is the resource the user can perform the action on. 
+    # The second argument is the resource the user can perform the action on.
     # If you pass :all it will apply to every resource. Otherwise pass a Ruby
     # class of the resource.
     #
@@ -40,29 +40,30 @@ class Ability
     can :create, Message
     can :read, Page, published: true
 
-    if user
-      # Admins
-      can [:read, :destroy], Message, Message.joins(:recipients).where(users: { id: @user.id }) do |message|
-        message.recipient_ids.include?(@user.id)
-      end
+    return if user.nil?
 
-      can :manage, Attachment
-      can :manage, [Image, Image::Style]
-      can :manage, [Project, Project::Image]
-
-      can [:read, :create, :update], Page
-      can :destroy, Page, Page.where.not(parent_id: nil) do |page|
-        page.destroyable?
-      end
-      Page.embeddable_classes.each do |embeddable_class|
-        can [:read, :update], embeddable_class
-        can :create, embeddable_class, &:creatable?
-      end
-      can :manage, Page::Region
-
-      can :manage, Snippet
-      can :manage, [Template, Template::RegionDefinition]
-      can :manage, User
+    # Admins
+    can [:read, :destroy], Message, Message.joins(:recipients)
+      .where(users: { id: @user.id }) do |message|
+      message.recipient_ids.include?(@user.id)
     end
+
+    can :manage, Attachment
+    can :manage, [Image, Image::Style]
+    can :manage, [Project, Project::Image]
+
+    can [:read, :create, :update], Page
+    can :destroy, Page, Page.where.not(parent_id: nil) do |page|
+      page.destroyable?
+    end
+    Page.embeddable_classes.each do |embeddable_class|
+      can [:read, :update], embeddable_class
+      can :create, embeddable_class, &:creatable?
+    end
+    can :manage, Page::Region
+
+    can :manage, Snippet
+    can :manage, [Template, Template::RegionDefinition]
+    can :manage, User
   end
 end

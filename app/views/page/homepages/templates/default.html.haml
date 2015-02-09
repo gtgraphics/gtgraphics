@@ -1,10 +1,9 @@
 #cover_carousel.cover-carousel.js-only.hidden-xs{data: { ride: 'coverCarousel', interval: 12000 }}
-  / %ol.carousel-indicators
-  /   - @images.count.times do |index|
-  /     %li{class: index.zero? ? 'active' : nil, data: { target: '#cover_carousel', slide_to: index }}
   .cover-carousel-inner{role: 'listbox'}
-    - @images.each_with_index do |image, index|
-      .item{data: { cover: attached_asset_path(image, :custom) }}
-        / .carousel-caption
-        /   %h3= Faker::Lorem.sentence(3)
-        /   %p= Faker::Lorem.sentence(20)
+    - @covers.each do |image, page|
+      - if page
+        = link_to page, class: 'item', data: { cover: attached_asset_path(image, :custom) } do
+          %span.sr-only= image.title
+      - else
+        .item{data: { cover: attached_asset_path(image, :custom) }}
+          %span.sr-only= image.title
