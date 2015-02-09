@@ -1,5 +1,6 @@
 GtGraphics::Application.configure do
-  # Settings specified here will take precedence over those in config/application.rb.
+  # Settings specified here will take precedence over those in
+  # config/application.rb.
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
@@ -31,8 +32,8 @@ GtGraphics::Application.configure do
   # number of complex assets.
   config.assets.debug = true
 
-  #config.assets.debug = false
-  #config.serve_static_assets = false
-  #config.assets.js_compressor = :uglifier
-  #config.assets.precompile += %w(admin.js admin.css)
+  # config.assets.debug = false
+  # config.serve_static_assets = false
+  # config.assets.js_compressor = :uglifier
+  # config.assets.precompile += %w(admin.js admin.css)
 end
