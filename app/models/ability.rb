@@ -40,30 +40,30 @@ class Ability
     can :create, Message
     can :read, Page, published: true
 
-    return if user.nil?
+    if user
+      # Admins
+      can [:read, :destroy], Message, Message.joins(:recipients)
+        .where(users: { id: user.id }) do |message|
+        message.recipient_ids.include?(user.id)
+      end
 
-    # Admins
-    can [:read, :destroy], Message, Message.joins(:recipients)
-      .where(users: { id: @user.id }) do |message|
-      message.recipient_ids.include?(@user.id)
+      can :manage, Attachment
+      can :manage, [Image, Image::Style]
+      can :manage, [Project, Project::Image]
+
+      can [:read, :create, :update], Page
+      can :destroy, Page, Page.where.not(parent_id: nil) do |page|
+        page.destroyable?
+      end
+      Page.embeddable_classes.each do |embeddable_class|
+        can [:read, :update], embeddable_class
+        can :create, embeddable_class, &:creatable?
+      end
+      can :manage, Page::Region
+
+      can :manage, Snippet
+      can :manage, [Template, Template::RegionDefinition]
+      can :manage, User
     end
-
-    can :manage, Attachment
-    can :manage, [Image, Image::Style]
-    can :manage, [Project, Project::Image]
-
-    can [:read, :create, :update], Page
-    can :destroy, Page, Page.where.not(parent_id: nil) do |page|
-      page.destroyable?
-    end
-    Page.embeddable_classes.each do |embeddable_class|
-      can [:read, :update], embeddable_class
-      can :create, embeddable_class, &:creatable?
-    end
-    can :manage, Page::Region
-
-    can :manage, Snippet
-    can :manage, [Template, Template::RegionDefinition]
-    can :manage, User
   end
 end
