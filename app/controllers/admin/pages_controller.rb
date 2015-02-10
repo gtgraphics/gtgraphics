@@ -155,34 +155,22 @@ class Admin::PagesController < Admin::ApplicationController
 
   def publish
     @page.publish!
-    flash_for @page, :published
-    respond_to do |format|
-      format.html { redirect_to request.referer || [:admin, @page] }
-    end
+    flash_and_redirect_back(:published)
   end
 
   def hide
     @page.hide!
-    flash_for @page, :hidden
-    respond_to do |format|
-      format.html { redirect_to request.referer || [:admin, @page] }
-    end
+    flash_and_redirect_back(:hidden)
   end
 
   def enable_in_menu
     @page.enable_in_menu!
-    flash_for @page, :enabled_in_menu
-    respond_to do |format|
-      format.html { redirect_to request.referer || [:admin, @page] }
-    end
+    flash_and_redirect_back(:enabled_in_menu)
   end
 
   def disable_in_menu
     @page.disable_in_menu!
-    flash_for @page, :disabled_in_menu
-    respond_to do |format|
-      format.html { redirect_to request.referer || [:admin, @page] }
-    end
+    flash_and_redirect_back(:disabled_in_menu)
   end
 
   def move
@@ -271,5 +259,12 @@ class Admin::PagesController < Admin::ApplicationController
 
   def available_templates
     @page.available_templates.reorder(:name)
+  end
+
+  def flash_and_redirect_back(action)
+    flash_for @page, action
+    respond_to do |format|
+      format.html { redirect_to request.referer || [:admin, @page] }
+    end
   end
 end
