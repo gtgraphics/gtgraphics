@@ -186,58 +186,14 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def move
-    valid = true
-    error_message = nil
     target_page = Page.find(params[:to])
-    previous_parent_id = @page.parent_id
-
-    Page.transaction do
-      # Move Page in Tree
-      slug = @page.slug
-      case params[:position]
-      when 'inside'
-        while Page.without(@page).exists?(parent_id: target_page.id, slug: slug)
-          slug = slug.next
-        end
-        @page.update_column(:slug, slug)
-        @page.move_to_child_with_index(target_page, 0)
-      when 'before'
-        while Page.without(@page).exists?(parent_id: target_page.parent_id,
-                                          slug: slug)
-          slug = slug.next
-        end
-        @page.update_column(:slug, slug)
-        @page.move_to_left_of(target_page)
-      when 'after'
-        while Page.without(@page).exists?(parent_id: target_page.parent_id,
-                                          slug: slug)
-          slug = slug.next
-        end
-        @page.update_column(:slug, slug)
-        @page.move_to_right_of(target_page)
-      else
-        return valid = false
+    if Page::MoveStrategy.move(@page, target_page, params[:position])
+      respond_to do |format|
+        format.html { head :ok }
       end
-
-      # Update Path
-      @page.refresh_path!(true)
-
-      # Update Counter Caches
-      [@page.id, @page.parent_id, target_page.id, target_page.parent_id,
-       previous_parent_id].compact.uniq.each do |page_id|
-        Page.reset_counters(page_id, :children)
-      end
-    end
-
-    respond_to do |format|
-      format.html do
-        if valid
-          head :ok
-        elsif error_message.present?
-          render text: error_message, status: :unprocessable_entity
-        else
-          head :unprocessable_entity
-        end
+    else
+      respond_to do |format|
+        format.html { head :unprocessable_entity }
       end
     end
   end
@@ -255,6 +211,7 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   private
+
   def build_page_tree
     open_nodes = (cookies[:sitemap_state] || '').split
     conditions = [Page.arel_table[:depth].in(0..1)]
