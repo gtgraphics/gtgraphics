@@ -1,5 +1,5 @@
 class Page::ImagesController < Page::ApplicationController
-  force_ssl only: :buy, if: :live?
+  force_ssl only: [:buy, :request_purchase], if: :live?
 
   before_action :load_image
   before_action :load_image_styles, only: :show
