@@ -21,7 +21,7 @@ $lightbox-control-size: 100px;
 
   @media (min-width: $screen-md-min) {
     position: fixed;
-    z-index: 4;
+    z-index: $zindex-navbar-fixed;
     top: 0;
     left: 0;
     right: 0;
