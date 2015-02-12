@@ -24,11 +24,10 @@ class ApplicationController < ActionController::Base
 
   def force_no_ssl_redirect
     return true unless request.ssl?
-    url_options = { protocol: 'http://', host: request.host,
-                    path: request.fullpath }
-    insecure_url = url_for(url_options)
     flash.keep if respond_to?(:flash)
-    redirect_to insecure_url, status: :moved_permanently
+    url_options = params.to_h.with_indifferent_access
+                  .merge(protocol: 'https://')
+    redirect_to url_options, status: :moved_permanently
     false
   end
 
