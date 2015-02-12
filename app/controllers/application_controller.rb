@@ -22,10 +22,13 @@ class ApplicationController < ActionController::Base
     Rails.env.in? %w(production staging)
   end
 
-  def force_no_ssl
+  def force_no_ssl_redirect
     return true unless request.ssl?
-    current_params = params.to_h.with_indifferent_access
-    redirect_to current_params.merge(protocol: 'http://')
+    url_options = { protocol: 'http://', host: request.host,
+                    path: request.fullpath }
+    insecure_url = url_for(url_options)
+    flash.keep if respond_to?(:flash)
+    redirect_to insecure_url, status: :moved_permanently
     false
   end
 
