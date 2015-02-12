@@ -8,9 +8,20 @@
 
     .page-body
       .row
-        - if @images.any?
-          .col-sm-8
-            - @images.each_slice(3) do |images|
+        .col-sm-8
+          - if @images.size < 3
+            .row
+              - @images.each do |image|
+                .col-sm-12
+                  .thumbnail
+                    = image_tag attached_asset_path(image, :custom), alt: image.title, class: 'img-responsive'
+          - else
+            .row
+              .col-sm-12
+                .thumbnail
+                  = image_tag attached_asset_path(@images.first, :custom), alt: @images.first.title, class: 'img-responsive'
+
+            - @images.drop(1).each_slice(3) do |images|
               .row
                 - images.each do |image|
                   .col-sm-4
@@ -18,11 +29,7 @@
                       = image_tag attached_asset_path(image, :brick), alt: image.title, class: 'img-responsive'
 
         .col-sm-4
-          %dl.dl-horizontal
-            %dt= Project.human_attribute_name :client_name
-            %dd= project.client
-            %dt= Project.human_attribute_name :released_in
-            %dd= project.released_in
+          = project.attribute_list :client, :released_in
 
           .content
             = project.description
