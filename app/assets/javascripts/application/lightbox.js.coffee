@@ -19,15 +19,18 @@ resizeImage = ->
     $elements.css(bottom: '').removeClass('ghost')
   else
     imageMargin = $(window).scrollTop()
-    windowHeight = $(window).outerHeight()
-    imageHeight = windowHeight - imageMargin
-    imageWindowRatio = imageHeight / windowHeight
-
     $elements.css(bottom: imageMargin)
-    if imageWindowRatio < 0.33
-      $elements.addClass('ghost')
-    else
+    if imageIsDisplayed()
       $elements.removeClass('ghost')
+    else
+      $elements.addClass('ghost')
+
+imageIsDisplayed = ->
+  imageMargin = $(window).scrollTop()
+  windowHeight = $(window).outerHeight()
+  imageHeight = windowHeight - imageMargin
+  imageWindowRatio = imageHeight / windowHeight
+  imageWindowRatio >= 0.33
 
 $(document).ready ->
   $lightbox = $('#lightbox')
@@ -46,8 +49,10 @@ $(document).ready ->
 
     # Hide carousel controls after 5 seconds if no user input happens
     $timeoutables = $lightbox.add($navbar)
-    $timeoutables.idleTimeoutable idleClass: 'unobstrusive',
-                                  awakeOn: ['keydown', 'mousemove']
+    $timeoutables.idleTimeoutable
+      idleClass: 'unobstrusive',
+      awakeOn: ['keydown', 'mousemove'],
+      if: -> $(window).scrollTop() == 0
 
     $('.dropdown', $navbar)
       .on 'shown.bs.dropdown', -> $timeoutables.idleTimeoutable('stop')
@@ -110,18 +115,24 @@ refreshNavigationScrollState = ->
   else
     $comment.show()
 
+navigationIsFix = ->
+  return false if $.device.isExtraSmall() || $.device.isSmall()
+  $navbar = $('#navbar_lightbox')
+  navbarHeight = $navbar.outerHeight()
+  scrollTop = $(window).scrollTop()
+  windowHeight = $(window).outerHeight()
+  scrollTop > (windowHeight - navbarHeight)
+
 refreshNavigationDisplayState = ->
   $navbar = $('#navbar_lightbox')
-  if $.device.isExtraSmall() || $.device.isSmall()
-    $navbar.removeClass('ghost')
-  else
-    navbarHeight = $navbar.outerHeight(true)
+  if navigationIsFix()
+    navbarHeight = $navbar.outerHeight()
     scrollTop = $(window).scrollTop()
     windowHeight = $(window).outerHeight()
-    if scrollTop > (windowHeight - navbarHeight)
-      $navbar.addClass('ghost')
-    else
-      $navbar.removeClass('ghost')
+    delta = windowHeight - scrollTop - navbarHeight
+    $navbar.css(marginTop: delta)
+  else
+    $navbar.css(marginTop: '')
 
 $(document).ready ->
   $('#navbar_lightbox li.info a').click (event) ->

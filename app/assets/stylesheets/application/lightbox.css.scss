@@ -8,7 +8,7 @@ $lightbox-control-size: 100px;
 .navbar-lightbox {
   height: $lightbox-navbar-height;
   border: none;
-  transition: all 200ms ease-out;
+  transition: opacity 200ms ease-out;
   background-color: $body-bg;
 
   @media (min-width: $screen-sm-min) {
@@ -239,20 +239,6 @@ $lightbox-control-size: 100px;
     left: 0;
     right: 0;
   }
-
-  // @media (min-width: $screen-sm-min) {
-  //   left: auto;
-  //   right: auto;
-  //   width: $container-sm - $grid-gutter-width;
-  // }
-
-  // @media (min-width: $screen-md-min) {
-  //   width: $container-md - $grid-gutter-width;
-  // }
-
-  // @media (min-width: $screen-lg-min) {
-  //   width: $container-lg - $grid-gutter-width;
-  // }
 }
 
 #lightbox_page_wrapper {
@@ -260,6 +246,10 @@ $lightbox-control-size: 100px;
   background-color: $content-bg;
   margin: 0;
   top: 100%;
+
+  @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+    padding-top: 5px;
+  }
 
   @media (min-width: $screen-md-min) {
     background-color: rgba($content-bg, 0.75);

@@ -15,17 +15,17 @@
   }
 
   @media (min-width: $screen-sm-min) {
-    margin: 25px auto;
+    margin: 25px $content-padding;
     width: 300px;
   }
 
   @media (min-width: $screen-md-min) {
-    margin: 30px auto;
+    margin: 30px $content-padding-md;
     width: 330px;
   }
 
   @media (min-width: $screen-lg-min) {
-    margin: 35px auto;
+    margin: 35px $content-padding-lg;
     width: 350px;
   }
 }

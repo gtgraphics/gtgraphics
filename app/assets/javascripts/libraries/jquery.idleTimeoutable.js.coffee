@@ -6,6 +6,7 @@ jQuery.idleTimeoutable =
     idleOnInit: false
     target: 'body'
     awakeOn: ['keydown', 'mousedown', 'mousemove']
+    if: null
 
 
 class IdleTimeoutable
@@ -14,6 +15,7 @@ class IdleTimeoutable
     @options = _(_(options).defaults($element.data())).defaults(
       jQuery.idleTimeoutable.defaults
     )
+    console.log @options
     @$target = $(@options.target)
 
     if _(@options.awakeOn).isArray()
@@ -30,6 +32,7 @@ class IdleTimeoutable
 
   idle: ->
     return false if @isIdle == true
+    return false if @options.if && !@options.if.apply(@)
     @$element.addClass(@options.idleClass).removeClass(@options.awakeClass)
     @$element.trigger('idle')
     @isIdle = true
