@@ -83,54 +83,54 @@
               = icon :chevron, direction: :right
               %span.sr-only= translate('helpers.links.next')
 
-      #lightbox_content_container.container
-        #lightbox_content_wrapper
-          #lightbox_page_wrapper
-            #lightbox_page_content
-              #info
-                %a{name: 'info'}
 
-                .page-header.lightbox-title.clearfix
-                  %h1= image.title
+      #lightbox_content_wrapper
+        #lightbox_page_wrapper
+          #lightbox_page_content.container
+            #info
+              %a{name: 'info'}
 
-                  #social_buttons.btn-toolbar.js-only
-                    .btn-group= page.facebook_like_button
-                    .btn-group= page.google_plus_like_button
-                    .btn-group= page.twitter_share_button
+              .page-header.lightbox-title.clearfix
+                %h1= image.title
 
-                .page-body
-                  .row
-                    .lightbox-author-avatar.hidden-xs.hidden-sm.col-md-1
-                      = image.author.thumbnail(true, class: 'img-circle img-responsive')
+                #social_buttons.btn-toolbar.js-only
+                  .btn-group= page.facebook_like_button
+                  .btn-group= page.google_plus_like_button
+                  .btn-group= page.twitter_share_button
 
-                    .lightbox-caption.col-xs-12.col-md-11
-                      = image.description
-                      .lightbox-author-name
-                        = image.author.name(true)
+              .page-body
+                .row
+                  .lightbox-author-avatar.hidden-xs.hidden-sm.col-md-1
+                    = image.author.thumbnail(true, class: 'img-circle img-responsive')
 
-                    / .col-xs-12.col-md-6.lightbox-metadata
-                    /   %h3.visible-xs.visible-sm
-                    /     = prepend_icon :info, translate('helpers.links.details'), fixed_width: true
-                    /   = image.attribute_list :taken_at, :camera, :software, :iso_value
+                  .lightbox-caption.col-xs-12.col-md-11
+                    = image.description
+                    .lightbox-author-name
+                      = image.author.name(true)
 
-                .page-body.visible-xs.visible-sm
-                  .row
-                    - if image.shop_links.present?
-                      / Buy
-                      .col-xs-12.col-sm-6
-                        %h3= prepend_icon :shopping_cart, translate('helpers.links.buy'), fixed_width: true
-                        %ul.shop-providers
-                          = image.shop_links
+                  / .col-xs-12.col-md-6.lightbox-metadata
+                  /   %h3.visible-xs.visible-sm
+                  /     = prepend_icon :info, translate('helpers.links.details'), fixed_width: true
+                  /   = image.attribute_list :taken_at, :camera, :software, :iso_value
 
-                    - if image.styles.any?
-                      / Download
-                      .col-xs-12.col-sm-6
-                        %h3= prepend_icon :download, translate('helpers.links.download'), fixed_width: true
-                        %ul.image-styles
-                          - image.styles.each do |style|
-                            %li= link_to style.title, download_image_path(style_id: style.position), data: { no_turbolink: true }
+              .page-body.visible-xs.visible-sm
+                .row
+                  - if image.shop_links.present?
+                    / Buy
+                    .col-xs-12.col-sm-6
+                      %h3= prepend_icon :shopping_cart, translate('helpers.links.buy'), fixed_width: true
+                      %ul.shop-providers
+                        = image.shop_links
 
-              / Comments
-              .page-body.well.lightbox-comments.js-only#comments
-                %a{name: 'comments'}
-                = page.facebook_comments
+                  - if image.styles.any?
+                    / Download
+                    .col-xs-12.col-sm-6
+                      %h3= prepend_icon :download, translate('helpers.links.download'), fixed_width: true
+                      %ul.image-styles
+                        - image.styles.each do |style|
+                          %li= link_to style.title, download_image_path(style_id: style.position), data: { no_turbolink: true }
+
+            / Comments
+            .page-body.lightbox-comments.js-only#comments
+              %a{name: 'comments'}
+              = page.facebook_comments

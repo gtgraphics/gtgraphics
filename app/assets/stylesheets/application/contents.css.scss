@@ -14,14 +14,18 @@
 #page_wrapper, #lightbox_page_wrapper {
   width: 100%;
   margin-bottom: 10px;
+}
 
+#page_wrapper {
+  border-radius: 3px;
+  overflow: hidden;
   @media (min-width: $screen-sm-min) {
     margin-bottom: 0;
     box-shadow: 0 0 3px rgba(black, 0.25);
   }
 }
 
-#page_content, #lightbox_page_content {
+#page_content {
   background-color: $content-bg;
 }
 

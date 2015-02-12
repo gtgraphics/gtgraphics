@@ -1,5 +1,5 @@
 - displayed_breadcrumbs = breadcrumbs.reject { |b| b.first? || b.last? }
 - if displayed_breadcrumbs.any?
-  %ul.breadcrumb
+  %ul.breadcrumb{class: local_assigns.fetch(:center, false) && 'text-center'}
     - displayed_breadcrumbs.each do |breadcrumb|
       %li= link_to_if breadcrumb.destination.present?, breadcrumb.caption, breadcrumb.destination

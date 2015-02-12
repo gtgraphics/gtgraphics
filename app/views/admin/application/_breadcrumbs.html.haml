@@ -10,7 +10,7 @@
           - else
             = breadcrumb.caption
       - else
-        %li 
+        %li
           - if breadcrumb.first? and toolbar
             = link_to breadcrumb.destination, title: translate('breadcrumbs.home'), class: 'gtg-admin-breadcrumb-home', data: { toggle: 'tooltip', placement: 'bottom', container: '#toolbar' } do
               = icon(:home, fixed_width: true)
