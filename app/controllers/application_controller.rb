@@ -13,11 +13,17 @@ class ApplicationController < ActionController::Base
   include RouteHelper
 
   protected
+
   def default_url_options(options = nil)
     { locale: I18n.locale }
   end
 
+  def live?
+    Rails.env.in? %w(production staging)
+  end
+
   private
+
   def set_current_user
     User.current = current_user
   end
