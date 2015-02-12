@@ -1,8 +1,13 @@
 @import 'bootstrap_config';
 
+.breadcrumb {
+  // text-align: center;
+}
+
 .page-header {
   margin: 0;
   border-bottom: 0;
+  // text-align: center;
 
   padding: $content-padding;
   @media (min-width: $screen-md-min) {
