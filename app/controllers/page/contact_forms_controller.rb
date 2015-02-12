@@ -1,4 +1,6 @@
 class Page::ContactFormsController < Page::ApplicationController
+  force_ssl
+
   before_action :load_contact_form
 
   def show
