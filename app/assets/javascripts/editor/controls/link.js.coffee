@@ -24,7 +24,7 @@ class @Editor.Control.Link extends @Editor.Control.DialogButtonControl
     try
       doc = @getRegionDocument()
       $element = @getElementFromSelection()
-      ($element? and $element.any()) or (doc? and doc.queryCommandState('createlink'))
+      ($element? && $element.length) || (doc? && doc.queryCommandState('createlink'))
     catch
       false
 

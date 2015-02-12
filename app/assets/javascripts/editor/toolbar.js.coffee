@@ -4,6 +4,7 @@ class @Editor.Toolbar
       ['bold', 'italic', 'underline', 'strikethrough'],
       ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify'],
       ['orderedList', 'unorderedList', 'indent', 'outdent'],
+      'paragraph',
       ['link', 'unlink'],
       ['image'],
       'viewMode'

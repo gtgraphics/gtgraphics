@@ -5,7 +5,7 @@ class @Editor
 
   # Refreshers
 
-  constructor: ($textarea, options = {}) ->  
+  constructor: ($textarea, options = {}) ->
     jQuery.error 'input must be a textarea' unless $textarea.is('textarea')
     @$textarea = $textarea.addClass('editor-html')
     @$textarea.data('editor', @)
@@ -14,7 +14,7 @@ class @Editor
     @options = _(@options).defaults(Editor.defaults)
     @options = _(@options).defaults(_($textarea.data()).pick('previewUrl'))
     @options.controls ||= Editor.Toolbar.defaults.controls
-    
+
     @toolbar = @options.toolbar || new Editor.Toolbar(@, controls: @options.controls)
 
     # Get or create toolbar of this Editor (this is only the toolbar class not the rendered one)
@@ -50,14 +50,14 @@ class @Editor
     @applyEvents()
 
     @refreshInputState()
-    @refreshControlStates() 
+    @refreshControlStates()
     @updateViewModeState(@options.viewMode)
 
     # This is a hotfix to determine the textarea height in hidden wrapper elements
     interval = setInterval =>
       if @$textarea.outerHeight() > 0
         @refreshInputState()
-        @refreshControlStates() 
+        @refreshControlStates()
         @updateViewModeState(@options.viewMode)
         clearInterval(interval)
     , 10
@@ -66,7 +66,7 @@ class @Editor
     if @isRendered()
 
       @refreshInputState()
-      @refreshControlStates() 
+      @refreshControlStates()
       @updateViewModeState(@options.viewMode)
       @$editor.trigger('editor:rendered', @)
 
@@ -97,9 +97,9 @@ class @Editor
       @prepareFrames()
 
       # FF Fix
-      $regionFrame.on 'load', => 
+      $regionFrame.on 'load', =>
         @prepareRegionFrame($regionFrame)
-        $previewFrame.on 'load', => 
+        $previewFrame.on 'load', =>
           @preparePreviewFrame($previewFrame)
           @prepareFrames()
 
@@ -110,11 +110,11 @@ class @Editor
 
   applyEvents: ->
     # Textarea Events
-    
+
     @$textarea.on 'textchange', =>
       @refreshRegionContent()
       @$editor.trigger('editor:change', @)
-      
+
     @$textarea.on 'focus blur keyup paste', =>
       @refreshControlStates()
 
@@ -155,7 +155,7 @@ class @Editor
     @$editor.on 'editor:command:executed', (event, control) =>
       if control instanceof Editor.Control.ButtonControl
         @refreshInputContent()
-        @$region.focus().triggerHandler('focus') 
+        @$region.focus().triggerHandler('focus')
 
   isRendered: ->
     @$editor? and @$editor != undefined
@@ -241,7 +241,7 @@ class @Editor
     if @isRendered()
       @updateViewModeState(viewMode)
       # TODO FF Fix
-      switch viewMode 
+      switch viewMode
         when 'richText' then @$region.focus().triggerHandler('focus')
         when 'html' then @$textarea.focus().triggerHandler('focus')
       @refreshControlStates()
@@ -288,6 +288,9 @@ class @Editor
 
   getSelectedNodes: ->
     $(@getSelectedRange().getNodes())
+
+  getAnchorNode: ->
+    $(@getSelection().anchorNode)
 
   deleteSelectedContent: ->
     range = @getSelectedRange()

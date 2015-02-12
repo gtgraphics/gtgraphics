@@ -4,11 +4,11 @@ class @Editor.Control.FontControl extends @Editor.Control.ButtonControl
 
   executeCommandSync: ->
     doc = @getRegionDocument()
-    doc.execCommand(@getCommand(), false, null) if doc and @isInRichTextView()
+    doc.execCommand(@getCommand(), false, null) if doc && @isInRichTextView()
 
   queryActive: ->
     doc = @getRegionDocument()
-    if doc and @isInRichTextView()
+    if doc && @isInRichTextView()
       try
         doc.queryCommandState(@getCommand(), false, null)
       catch
@@ -18,7 +18,7 @@ class @Editor.Control.FontControl extends @Editor.Control.ButtonControl
 
   queryEnabled: ->
     doc = @getRegionDocument()
-    if doc and @isInRichTextView()
+    if doc && @isInRichTextView()
       try
         doc.queryCommandEnabled(@getCommand(), false, null)
       catch
@@ -29,7 +29,7 @@ class @Editor.Control.FontControl extends @Editor.Control.ButtonControl
   querySupported: ->
     return true
     doc = @getRegionDocument()
-    if doc and @isInRichTextView()
+    if doc && @isInRichTextView()
       try
         doc.queryCommandSupported(@getCommand(), false, null)
       catch

@@ -27,8 +27,10 @@ class Admin::ImagesController < Admin::ApplicationController
     @images = Image.with_translations_for_current_locale.eager_load(:author)
 
     image_ids = Array(params[:id])
-    if image_ids.any?
-      return redirect_to admin_image_path(image_ids.first) if image_ids.one?
+    if image_ids.one?
+      redirect_to admin_image_path(image_ids.first, format: params[:format])
+      return
+    elsif image_ids.many?
       @images.where!(id: image_ids)
     else
       @images = @images.search(params[:query])

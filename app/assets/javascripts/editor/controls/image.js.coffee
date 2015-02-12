@@ -22,7 +22,7 @@ class @Editor.Control.Image extends @Editor.Control.DialogButtonControl
 
   queryActive: ->
     $element = @getElementFromSelection()
-    $element? and $element.any()
+    $element? && $element.length
 
   onInitEditor: (editor) ->
     control = @
