@@ -1,6 +1,6 @@
 class Page::RedirectionsController < Page::ApplicationController
   before_action :load_redirection
-  
+
   def show
     if @redirection.external?
       destination_uri = URI.parse(@redirection.destination_url)
@@ -11,7 +11,7 @@ class Page::RedirectionsController < Page::ApplicationController
     else
       destination_url = page_path(@redirection.destination_page, request.query_parameters)
     end
-    
+
     respond_to do |format|
       format.html do
         status = @redirection.permanent? ? :moved_permanently : :found

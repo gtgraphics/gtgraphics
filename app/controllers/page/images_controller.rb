@@ -1,6 +1,4 @@
 class Page::ImagesController < Page::ApplicationController
-  # skip_before_action :force_no_ssl_redirect, only: %i(buy request_purchase),
-  #                                            if: :live?
   force_ssl only: %i(buy request_purchase), if: :live?
 
   before_action :load_image

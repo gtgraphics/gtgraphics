@@ -1,6 +1,4 @@
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception unless Rails.env.development?
 
   before_action :set_current_user
@@ -22,15 +20,6 @@ class ApplicationController < ActionController::Base
     Rails.env.in? %w(production staging)
   end
 
-  def force_no_ssl_redirect
-    return true unless request.ssl?
-    flash.keep if respond_to?(:flash)
-    url_options = params.to_h.with_indifferent_access
-                  .merge(protocol: 'https://')
-    redirect_to url_options, status: :moved_permanently
-    false
-  end
-
   private
 
   def set_current_user
@@ -49,7 +38,8 @@ class ApplicationController < ActionController::Base
       locale = current_user.try(:preferred_locale)
       locale ||= http_accept_language.compatible_language_from(
         I18n.available_locales)
-      redirect_to params.merge(locale: locale.to_s, id: params[:id].presence)
+      redirect_to params.to_h.with_indifferent_access.merge(
+        locale: locale.to_s, id: params[:id].presence)
     end
   end
 end
