@@ -1,4 +1,6 @@
 class Page::ImagesController < Page::ApplicationController
+  force_ssl only: :buy
+
   before_action :load_image
   before_action :load_image_styles, only: :show
 
