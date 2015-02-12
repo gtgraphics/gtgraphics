@@ -1,6 +1,8 @@
 class Page::ApplicationController < ApplicationController
   respond_to :html
 
+  before_action :force_no_ssl, if: :live?
+
   before_action :load_page
   before_action :load_template
 

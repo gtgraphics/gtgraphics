@@ -1,30 +1,37 @@
 class Admin::ApplicationController < ApplicationController
   skip_maintenance_check
 
+  skip_before_action :force_no_ssl, if: :live?
+  force_ssl if: :live?
+
   before_action :require_login
   before_action :set_translation_locale
 
   reset_breadcrumbs
-  # breadcrumbs do |b|
-  #   b.append I18n.translate('breadcrumbs.home'), :admin_root
-  # end
 
   protected
+
   def default_url_options(options = nil)
-    super.merge(translations: Globalize.locale != I18n.locale ? Globalize.locale : nil)
+    translated_locale = Globalize.locale != I18n.locale ? Globalize.locale : nil
+    super.merge(translations: translated_locale)
   end
 
   def not_authenticated
     respond_to do |format|
-      format.html { redirect_to :admin_login, alert: translate('helpers.flash.user.not_authenticated') }
+      format.html do
+        redirect_to :admin_login,
+                    alert: translate('helpers.flash.user.not_authenticated')
+      end
       format.any { head :unauthorized }
     end
   end
 
   private
+
   def set_translation_locale
     available_locales = I18n.available_locales.map(&:to_s)
-    if locale = params[:translations] and locale.in?(available_locales)
+    locale = params[:translations]
+    if locale && locale.in?(available_locales)
       Globalize.locale = locale
     else
       Globalize.locale = I18n.locale

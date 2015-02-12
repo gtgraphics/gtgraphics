@@ -1,4 +1,5 @@
 class Page::ContactFormsController < Page::ApplicationController
+  skip_before_action :force_no_ssl, if: :live?
   force_ssl if: :live?
 
   before_action :load_contact_form
