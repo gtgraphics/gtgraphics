@@ -7,14 +7,15 @@ module ErrorHandlingController
         respond_with_error :bad_request
       end
 
-      rescue_from ActiveRecord::RecordNotFound, ActionController::RoutingError do
+      rescue_from ActiveRecord::RecordNotFound,
+                  ActionController::RoutingError do
         respond_with_error :not_found
       end
-      
+
       rescue_from ActionController::UnknownFormat do
         respond_with_error :not_found
       end
-      
+
       rescue_from CanCan::AccessDenied do |exception|
         @error_message = exception.message
         @attempted_action = exception.action
@@ -25,10 +26,13 @@ module ErrorHandlingController
   end
 
   protected
+
   def respond_with_error(status)
     respond_to do |format|
-      format.html { render "errors/#{status}", layout: 'errors', status: status }
+      format.html do
+        render "errors/#{status}", layout: 'errors', status: status
+      end
       format.all { head status }
-    end    
+    end
   end
 end
