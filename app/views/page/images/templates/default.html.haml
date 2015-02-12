@@ -25,17 +25,17 @@
 
             %ul#nav_lightbox_actions.nav.navbar-nav.navbar-right
               %li.enlarge-image.hidden-sm.js-only
-                = link_to '#top', title: translate('helpers.links.enlarge_image'), data: { scroll: true, toggle: 'tooltip', placement: 'bottom' } do
+                = link_to '#top', title: translate('helpers.links.enlarge_image'), accesskey: 'p', data: { scroll: true, toggle: 'tooltip', placement: 'bottom' } do
                   = icon :search_plus, size: :lg, fixed_width: true
                   %span.sr-only= translate('helpers.links.enlarge_image')
 
               %li.info.hidden-sm.js-only
-                = link_to '#info', title: translate('helpers.links.details'), data: { toggle: 'tooltip', placement: 'bottom' } do
+                = link_to '#info', title: translate('helpers.links.details'), accesskey: 'i', data: { toggle: 'tooltip', placement: 'bottom' } do
                   = icon :info, size: :lg, fixed_width: true, style: :circle
                   %span.sr-only= translate('helpers.links.details')
 
               %li.comment.hidden-sm.js-only
-                = link_to '#comments', title: translate('helpers.links.comment'), data: { scroll: true, toggle: 'tooltip', placement: 'bottom' } do
+                = link_to '#comments', title: translate('helpers.links.comment'), accesskey: 'c', data: { scroll: true, toggle: 'tooltip', placement: 'bottom' } do
                   = icon :comment, size: :lg, fixed_width: true
                   %span.sr-only= translate('helpers.links.comment')
 
