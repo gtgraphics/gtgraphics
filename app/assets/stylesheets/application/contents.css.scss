@@ -78,7 +78,7 @@
   }
 }
 
-#page_content {
+#page_content, #lightbox_page_content {
   @media (min-width: $screen-sm-min) {
     min-height: 260px;
   }
