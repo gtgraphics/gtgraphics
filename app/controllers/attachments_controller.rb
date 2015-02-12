@@ -10,6 +10,7 @@ class AttachmentsController < ApplicationController
   end
 
   private
+
   def send_attachment(disposition)
     attachment = Attachment.find_by!(asset: params[:filename])
     attachment.increment_hits!

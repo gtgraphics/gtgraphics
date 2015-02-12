@@ -3,6 +3,7 @@ class SitemapsController < ActionController::Base
 
   def index
     @sitemaps = Sitemap.all
+
     respond_to do |format|
       format.xml
     end
@@ -12,6 +13,7 @@ class SitemapsController < ActionController::Base
     @sitemap = Sitemap.page(params[:page])
     @pages = @sitemap.pages.includes(:translations)
     @max_page_depth = Sitemap.pages.maximum(:depth).next
+
     respond_to do |format|
       format.xml
     end

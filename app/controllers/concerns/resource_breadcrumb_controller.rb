@@ -23,12 +23,14 @@ module ResourceBreadcrumbController
         end
 
         # Determine collection and element names
-        resource_class = case args.first
-        when NilClass then controller.controller_name.classify.constantize
-        when Class then args.first
-        when Symbol, String then args.first.to_s.classify.constantize
-        else raise ArgumentError, 'resource element and collection name could not be determined by reflection'
-        end
+        resource_class =
+          case args.first
+          when NilClass then controller.controller_name.classify.constantize
+          when Class then args.first
+          when Symbol, String then args.first.to_s.classify.constantize
+          else fail ArgumentError, 'resource element and collection name ' \
+                                   'could not be determined by reflection'
+          end
         element_name = resource_class.model_name.element.to_sym
         collection_name = resource_class.model_name.collection.to_sym
 
@@ -75,25 +77,30 @@ module ResourceBreadcrumbController
   end
 
   private
+
   def load_caption(record)
     RECORD_CAPTION_METHODS.collect { |method| record.try(method) }.compact.first
   end
 
   def load_record(element_name, options)
     record = instance_variable_get("@#{element_name}")
-    raise "@#{element_name} has not been set in #{self.class.name.deconstantize.underscore}/#{controller_name}##{action_name}" if options[:allow_nil] != true and record.nil?
+    if options[:allow_nil] != true && record.nil?
+      fail "@#{element_name} has not been set in " \
+           "#{self.class.name.deconstantize.underscore}/" \
+           "#{controller_name}##{action_name}"
+    end
     record
   end
 
   def singular_string?(str)
-    str.pluralize != str and str.singularize == str
+    str.pluralize != str && str.singularize == str
   end
 
   def try_call(proc_or_symbol_or_object)
     if proc_or_symbol_or_object.is_a? Symbol
       method(proc_or_symbol_or_object).call
     elsif proc_or_symbol_or_object.respond_to? :call
-      self.instance_eval(&proc_or_symbol_or_object)
+      instance_eval(&proc_or_symbol_or_object)
     else
       proc_or_symbol_or_object
     end

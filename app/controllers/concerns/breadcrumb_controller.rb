@@ -7,6 +7,7 @@ module BreadcrumbController
 
   module ClassMethods
     protected
+
     def breadcrumb(caption, destination, options = {})
       before_action(options) do |controller|
         controller.breadcrumbs.append(caption, destination)
@@ -14,7 +15,7 @@ module BreadcrumbController
     end
 
     def breadcrumbs(options = {}, &block)
-      raise ArgumentError, 'no block given' unless block_given?
+      fail ArgumentError, 'no block given' unless block_given?
       before_action(options) do |controller|
         controller.instance_exec(breadcrumbs, controller, &block)
       end
@@ -28,16 +29,18 @@ module BreadcrumbController
   end
 
   protected
+
   def breadcrumbs
     @breadcrumbs ||= Breadcrumb::Collection.new(self)
   end
 
   private
-  def breadcrumb_item_path(breadcrumb_item, options = {})
+
+  def breadcrumb_item_path(breadcrumb_item, _options = {})
     breadcrumb_item.path
   end
 
-  def breadcrumb_item_url(breadcrumb_item, options = {})
+  def breadcrumb_item_url(breadcrumb_item, _options = {})
     breadcrumb_item.url
   end
 end
