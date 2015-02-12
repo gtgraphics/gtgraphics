@@ -23,7 +23,10 @@ class ApplicationController < ActionController::Base
   end
 
   def force_no_ssl
-    redirect_to params.to_h.merge(protocol: 'http://') if request.ssl?
+    return true unless request.ssl?
+    redirection_params = params.to_h.symbolize_keys.merge(protocol: 'http://')
+    redirect_to redirection_params
+    false
   end
 
   private
