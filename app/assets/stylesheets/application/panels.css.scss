@@ -1,0 +1,54 @@
+@import 'bootstrap_config';
+
+.panel {
+  box-shadow: none;
+
+  &.panel-default {
+    border: none;
+  }
+
+  .list-group-item {
+    background-color: transparent;
+    border-color: $content-bg;
+    color: $text-color;
+
+    @media (min-width: $screen-md-min) {
+      padding: 10px 25px;
+    }
+    @media (min-width: $screen-lg-min) {
+      padding: 12px 25px;
+    }
+  }
+
+  a.list-group-item {
+    &:hover, &:focus, &:active {
+      background-color: darken($content-bg-dark, 3%);
+    }
+
+    &.active {
+      background-color: transparent;
+      position: relative;
+      border-color: $content-bg;
+
+      &:after {
+        position: absolute;
+        display: block;
+        content: ' ';
+        right: 0;
+        top: 50%;
+        margin-top: -5px;
+        width: 10px;
+        height: 10px;
+        border: {
+          top: 10px solid transparent;
+          bottom: 10px solid transparent;
+          right: 10px solid $content-bg;
+        }
+      }
+    }
+  }
+}
+
+.panel-heading {
+  padding: $panel-heading-padding;
+}

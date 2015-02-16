@@ -3,11 +3,15 @@
 
 //== Custom GT Graphics Styles
 
+$navbar-height-xs: 70px;
 $content-bg: rgb(40, 40, 40);
+$content-bg-dark: darken($content-bg, 3%);
 $content-padding: 15px;
+$content-padding-md: 20px;
 $content-padding-lg: 25px;
 $footer-bg: $content-bg; // rgba(10, 10, 10, 0.92);
-
+$loader-width: 130px;
+$loader-height: 45px;
 
 // https://raw.githubusercontent.com/twbs/bootstrap-sass/master/vendor/assets/stylesheets/bootstrap/_variables.scss
 
@@ -186,14 +190,14 @@ $btn-link-disabled-color:        $gray-light;
 //##
 
 //** `<input>` background color
-$input-bg:                       #fff;
+$input-bg:                       $content-bg-dark;
 //** `<input disabled>` background color
 $input-bg-disabled:              $gray-lighter;
 
 //** Text color for `<input>`s
-$input-color:                    $gray;
+$input-color:                    $text-color;
 //** `<input>` border color
-$input-border:                   #ccc;
+$input-border:                   $input-bg;
 //** `<input>` border radius
 $input-border-radius:            $border-radius-base;
 //** Border color for inputs on focus
@@ -223,20 +227,20 @@ $input-group-addon-border-color: $input-border;
 //## Dropdown menu container and contents.
 
 //** Background for the dropdown menu.
-$dropdown-bg:                    rgba($content-bg, 0.95);
+$dropdown-bg:                    rgba(30, 30, 30, 0.95);;
 //** Dropdown menu `border-color`.
-$dropdown-border:                rgba(0,0,0,.15);
+$dropdown-border:                transparent;
 //** Dropdown menu `border-color` **for IE8**.
-$dropdown-fallback-border:       #333;
+$dropdown-fallback-border:       transparent;
 //** Divider color for between dropdown items.
-$dropdown-divider-bg:            #666;
+$dropdown-divider-bg:            $gray;
 
 //** Dropdown link text color.
 $dropdown-link-color:            $text-color;
 //** Hover color for dropdown links.
-$dropdown-link-hover-color:      darken($gray-dark, 5%);
+$dropdown-link-hover-color:      $text-color;
 //** Hover background for dropdown links.
-$dropdown-link-hover-bg:         #f5f5f5;
+$dropdown-link-hover-bg:         $brand-primary;
 
 //** Active dropdown menu item text color.
 $dropdown-link-active-color:     $component-active-color;
@@ -431,8 +435,8 @@ $nav-tabs-justified-link-border-color:            #ddd;
 $nav-tabs-justified-active-link-border-color:     $body-bg;
 
 //== Pills
-$nav-pills-border-radius:                   $border-radius-base;
-$nav-pills-active-link-hover-bg:            $component-active-bg;
+$nav-pills-border-radius:                   20px;
+$nav-pills-active-link-hover-bg:            $content-bg-dark;
 $nav-pills-active-link-hover-color:         $component-active-color;
 
 
@@ -500,7 +504,7 @@ $state-warning-text:             #8a6d3b;
 $state-warning-bg:               #fcf8e3;
 $state-warning-border:           darken(adjust-hue($state-warning-bg, -10), 5%);
 
-$state-danger-text:              #a94442;
+$state-danger-text:              #B31512;
 $state-danger-bg:                #f2dede;
 $state-danger-border:            darken(adjust-hue($state-danger-bg, -10), 5%);
 
@@ -692,11 +696,11 @@ $list-group-link-heading-color: #333;
 //
 //##
 
-$panel-bg:                    transparent;
-$panel-body-padding:          0;
-$panel-heading-padding:       0;
-$panel-footer-padding:        $panel-heading-padding;
-$panel-border-radius:         $border-radius-base;
+$panel-bg:                    $content-bg-dark;
+$panel-body-padding:          15px;
+$panel-heading-padding:       15px 15px 0;
+$panel-footer-padding:        0 15px 15px;
+$panel-border-radius:         0;
 
 //** Border color for elements within panels
 $panel-inner-border:          transparent;

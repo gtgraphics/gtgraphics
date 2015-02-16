@@ -38,7 +38,7 @@ class Attachment < ActiveRecord::Base
   end
 
   def to_image
-    raise 'cannot be converted to Image' unless image?
+    fail 'cannot be converted to Image' unless image?
     Image.new do |image|
       image.asset = asset
       image.original_filename = original_filename
@@ -56,10 +56,9 @@ class Attachment < ActiveRecord::Base
   end
 
   private
-  
+
   def set_default_title
-    if title.blank? and original_filename.present?
-      self.title = File.basename(original_filename, '.*').titleize
-    end
+    return if title.present? || original_filename.blank?
+    self.title = File.basename(original_filename, '.*').titleize
   end
 end

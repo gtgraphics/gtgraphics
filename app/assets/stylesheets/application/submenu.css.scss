@@ -1,17 +1,20 @@
 @import 'bootstrap_config';
 
 @media (min-width: $screen-sm-min) {
-  .row:last-child .submenu-item {
-    margin-bottom: 0;
+  .row:last-child {
+    .submenu-item, .submenu-link {
+      margin-bottom: 0;
+    }
   }
 }
 
-.submenu-item {
-  display: block;
-  outline: none;
+.submenu-link {
   margin-bottom: $grid-gutter-width;
-  transition: all 200ms ease-out;
-  text-decoration: none;
+  outline: none;
+  display: block;
+  overflow: hidden;
+  position: relative;
+  transition: transform 200ms ease-out;
 
   // meant to fix scaling artifacts occuring in WebKit
   backface-visibility: hidden;
@@ -23,6 +26,7 @@
   .submenu-item-title {
     font-size: 18px;
     font-weight: 300;
+    // font-weight: 700;
     padding: 10px;
     text-align: center;
     background-color: rgba(black, 0.2);
@@ -31,8 +35,11 @@
     text-decoration: none;
   }
 
-  &:hover, &:focus {
-    transform: scale(0.97);
+  .submenu-item-image {
+    width: 100%;
+  }
+
+  &:hover, &:focus, &:active {
     text-decoration: none;
     outline: none;
 
@@ -43,7 +50,12 @@
     }
   }
 
-  .submenu-item-image {
-    width: 100%;
+  &:hover, &:focus {
+    transform: scale(0.97);
+  }
+
+  &:active {
+    // opacity: 0.75;
+    transform: scale(0.94);
   }
 }

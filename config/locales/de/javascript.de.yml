@@ -55,6 +55,15 @@ de:
       save: Speichern
       unlink: Verknüpfung entfernen
       unordered_list: Ungeordnete Liste
+      paragraph: Absatz
+      paragraphs:
+        default: Normal
+        h1: Überschrift 1
+        h2: Überschrift 2
+        h3: Überschrift 3
+        h4: Überschrift 4
+        h5: Überschrift 5
+        h6: Überschrift 6
       view_modes:
         rich_text: Rich Text
         html: HTML-Quelltext
@@ -65,7 +74,7 @@ de:
         error: Der Editor konnte nicht geladen werden.
       gallery:
         loading_message: Bilder werden geladen...
-        finished_message: Alle Bilder wurden geladen. 
+        finished_message: Alle Bilder wurden geladen.
 
     select2:
       no_matches: Es wurden keine Ergebnisse gefunden.

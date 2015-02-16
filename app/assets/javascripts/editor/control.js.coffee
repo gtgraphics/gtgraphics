@@ -6,7 +6,8 @@ class @Editor.Control
 
   render: ->
     unless @$control
-      @$control = @createControl().data('control', @)
+      @$control = @createControl()
+      @getControl().data('control', @)
       @onCreateControl()
     @refreshControlState()
     @$control
@@ -15,6 +16,12 @@ class @Editor.Control
     @$control.remove() if @$control
     @$control = null
     true
+
+  getControl: ->
+    @$control
+
+  getControlContainer: ->
+    @$control
 
   createControl: ->
     jQuery.error 'createControl() has not been implemented'
@@ -37,10 +44,10 @@ class @Editor.Control
     @refreshControlState() if @isRendered()
 
   isRendered: ->
-    @$control? and @$control != undefined
+    @$control? && @$control != undefined
 
   refreshInternalState: ->
-    if @querySupported() and @queryEnabled()
+    if @querySupported() && @queryEnabled()
       @disabled = false
       if @queryActive()
         @active = true
@@ -59,11 +66,11 @@ class @Editor.Control
   queryActive: ->
     false
 
-  # when updateState is invoked, queryActive determines whether this input has an enabled state
+  # when updateState is invoked, queryEnabled determines whether this input has an enabled state
   queryEnabled: ->
     true
 
-  # when updateState is invoked, queryActive determines whether this input has a supported state
+  # when updateState is invoked, querySupported determines whether this input has a supported state
   querySupported: ->
     true
 
@@ -71,30 +78,30 @@ class @Editor.Control
 
   activate: (active = true) ->
     @active = active
-    if @$control
+    if @isRendered()
       @refreshControlState()
-      @$control.trigger('editor:control:activated', @)
+      @getControl().trigger('editor:control:activated', @)
     true
 
   deactivate: ->
     @active = false
-    if @$control
+    if @isRendered()
       @refreshControlState()
-      @$control.trigger('editor:control:deactivated', @)
+      @getControl().trigger('editor:control:deactivated', @)
     true
 
   enable: ->
     @disabled = false
-    if @$control
+    if @isRendered()
       @refreshControlState()
-      @$control.trigger('editor:control:enabled', @)
+      @getControl().trigger('editor:control:enabled', @)
     true
 
   disable: (disabled = true) ->
     @disabled = disabled
-    if @$control
+    if @isRendered()
       @refreshControlState()
-      @$control.trigger('editor:control:disabled', @)
+      @getControl().trigger('editor:control:disabled', @)
     true
 
   toggle: ->
@@ -120,7 +127,7 @@ _(@Editor.Control).extend
   load: ($control, toolbar) ->
     jQuery.error 'Control must be a jQuery object' unless $control instanceof jQuery
     control = $control.data('control')
-    unless control? and control instanceof @Editor.Control
+    unless control? && control instanceof @Editor.Control
       controlName = $control.data('command')
       control = @init(controlName, toolbar)
       control.$control = $control

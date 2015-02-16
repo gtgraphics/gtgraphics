@@ -1,6 +1,9 @@
-.dropdown-menu {
+@import 'bootstrap_config';
+
+.dropdown-menu,
+.navbar-nav > li > .dropdown-menu {
+  border-radius: 3px;
   border: none;
-  // padding: 0;
 
   > li > a {
     padding: {

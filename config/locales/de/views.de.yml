@@ -6,6 +6,7 @@ de:
       basics: Basisdaten
       password: Passwort
       settings: Einstellungen
+      social: Soziale Netzwerke
     hints:
       empty: 'Es wurden bislang keine %{model} erstellt.'
       not_found: 'Es wurden keine %{model} gefunden.'
@@ -64,6 +65,7 @@ de:
         mark_unread: Als ungelesen markieren
         sender_html: '%{sender} (via %{contact_form})'
         buy_request_subject: "Kaufanfrage: %{image}"
+        default_subject: 'Kontaktaufnahme'
       pages:
         hits_since: '%{count} Aufrufe seit %{date}'
         empty_type: Bitte wählen Sie einen Seitentyp.
@@ -91,7 +93,12 @@ de:
       shops:
         gtgraphics: GT Graphics
         deviantart: DeviantArt
-        fineartprint: Fine Art Print
+        fineartprint: FineArtPrint
+        fineartamerica_url: FineArtAmerica
+        posterlounge_url: PosterLounge
         mygall: MyGall
         redbubble: RedBubble
         artflakes: Artflakes
+
+    images:
+      buy: '%{image} erwerben'

@@ -61,6 +61,8 @@ de:
         password: Passwort
         password_confirmation: Passwort (Wdh.)
         preferred_locale: Standardsprache
+        twitter_username: Twitter-Benutzername
+        photo: Foto
       admin/user/update_form:
         first_name: Vorname
         last_name: Nachname
@@ -70,6 +72,9 @@ de:
         password: Passwort
         password_confirmation: Passwort (Wdh.)
         preferred_locale: Standardsprache
+        twitter_username: Twitter-Benutzername
+        photo: Foto
+        remove_photo: Foto entfernen
       admin/user/account_update_form:
         current_password: Aktuelles Passwort
       admin/image_page_creation_form:
@@ -132,13 +137,16 @@ de:
         resize_width: Breite
         resize_height: Höhe
         taken_at: Aufnahme
-        software: Bearbeitungs-Software
+        software: Software
         camera: Kamera
+        iso_value: ISO-Wert
         created_at: Hochgeladen am
         preserve_aspect_ratio: Seitenverhältnis beibehalten
         shop_urls: Shop-Verknüpfungen
         deviantart_url: DeviantArt
-        fineartprint_url: Fineartprint
+        fineartprint_url: FineArtPrint
+        fineartamerica_url: FineArtAmerica
+        posterlounge_url: PosterLounge
         mygall_url: MyGall
         redbubble_url: RedBubble
         artflakes_url: Artflakes
@@ -225,6 +233,9 @@ de:
         pages_count: Seiten
         author: Betreuer
         author_id: Betreuer
+        propagate_changes_to_pages: Änderungen für assoziierte Seiten übernehmen
+        propagate_changes_to_page: Änderungen für assoziierte Seite übernehmen
+        propagate_changes_to_n_pages: 'Änderungen für %{count} assoziierte Seiten übernehmen'
       shout:
         nickname: Verfasser
         message: Nachricht
@@ -249,6 +260,8 @@ de:
         password: Passwort
         password_confirmation: Passwort (Wdh.)
         preferred_locale: Standardsprache
+        twitter_username: Twitter-Benutzername
+        photo: Foto
 
     errors:
       models:
@@ -362,13 +375,18 @@ de:
         one: Benutzer
         other: Benutzer
 
+  homepage: Startseite
+
   page:
     default_title: Unbenannte Seite
     states:
       published: öffentlich
       hidden: unsichtbar
 
-  homepage: Startseite
+  page/image:
+    twitter_share_text:
+      owned: 'Gerade gesehen bei #GTGraphics: "%{title}" von @%{author}'
+      ownerless: 'Gerade gesehen bei #GTGraphics: "%{title}"'
 
   image:
     predefined_styles:

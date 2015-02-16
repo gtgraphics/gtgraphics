@@ -9,18 +9,18 @@ class @Editor.Control.ButtonControl extends @Editor.Control
     $button
 
   onCreateControl: ->
-    @$control.click =>
+    @getControl().click =>
       @perform()
 
   perform: (contextData = {}) ->
     @onExecute()
-    @$control.trigger('editor:command:execute', @)
+    @getControl().trigger('editor:command:execute', @)
     @executeCommand =>
       @refresh()
       @onExecuted()
-      @$control.trigger('editor:command:executed', @)
+      @getControl().trigger('editor:command:executed', @)
     , contextData
-    @$control.tooltip('hide') # fix for assigned tooltips
+    @getControl().tooltip('hide') # fix for assigned tooltips
 
   getCaption: ->
     console.error 'no caption defined for control'
@@ -29,11 +29,11 @@ class @Editor.Control.ButtonControl extends @Editor.Control
     console.error 'no icon defined for control'
 
   refreshControlState: ->
-    @$control.prop('disabled', @disabled)
+    @getControl().prop('disabled', @disabled)
     if @active
-      @$control.addClass('active')
+      @getControl().addClass('active')
     else
-      @$control.removeClass('active')
+      @getControl().removeClass('active')
 
   onExecute: ->
 

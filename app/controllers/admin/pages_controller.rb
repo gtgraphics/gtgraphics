@@ -155,89 +155,33 @@ class Admin::PagesController < Admin::ApplicationController
 
   def publish
     @page.publish!
-    flash_for @page, :published
-    respond_to do |format|
-      format.html { redirect_to request.referer || [:admin, @page] }
-    end
+    flash_and_redirect_back(:published)
   end
 
   def hide
     @page.hide!
-    flash_for @page, :hidden
-    respond_to do |format|
-      format.html { redirect_to request.referer || [:admin, @page] }
-    end
+    flash_and_redirect_back(:hidden)
   end
 
   def enable_in_menu
     @page.enable_in_menu!
-    flash_for @page, :enabled_in_menu
-    respond_to do |format|
-      format.html { redirect_to request.referer || [:admin, @page] }
-    end
+    flash_and_redirect_back(:enabled_in_menu)
   end
 
   def disable_in_menu
     @page.disable_in_menu!
-    flash_for @page, :disabled_in_menu
-    respond_to do |format|
-      format.html { redirect_to request.referer || [:admin, @page] }
-    end
+    flash_and_redirect_back(:disabled_in_menu)
   end
 
   def move
-    valid = true
-    error_message = nil
     target_page = Page.find(params[:to])
-    previous_parent_id = @page.parent_id
-
-    Page.transaction do
-      # Move Page in Tree
-      slug = @page.slug
-      case params[:position]
-      when 'inside'
-        while Page.without(@page).exists?(parent_id: target_page.id, slug: slug)
-          slug = slug.next
-        end
-        @page.update_column(:slug, slug)
-        @page.move_to_child_with_index(target_page, 0)
-      when 'before'
-        while Page.without(@page).exists?(parent_id: target_page.parent_id,
-                                          slug: slug)
-          slug = slug.next
-        end
-        @page.update_column(:slug, slug)
-        @page.move_to_left_of(target_page)
-      when 'after'
-        while Page.without(@page).exists?(parent_id: target_page.parent_id,
-                                          slug: slug)
-          slug = slug.next
-        end
-        @page.update_column(:slug, slug)
-        @page.move_to_right_of(target_page)
-      else
-        return valid = false
+    if Page::MoveStrategy.move(@page, target_page, params[:position])
+      respond_to do |format|
+        format.html { head :ok }
       end
-
-      # Update Path
-      @page.refresh_path!(true)
-
-      # Update Counter Caches
-      [@page.id, @page.parent_id, target_page.id, target_page.parent_id,
-       previous_parent_id].compact.uniq.each do |page_id|
-        Page.reset_counters(page_id, :children)
-      end
-    end
-
-    respond_to do |format|
-      format.html do
-        if valid
-          head :ok
-        elsif error_message.present?
-          render text: error_message, status: :unprocessable_entity
-        else
-          head :unprocessable_entity
-        end
+    else
+      respond_to do |format|
+        format.html { head :unprocessable_entity }
       end
     end
   end
@@ -255,6 +199,7 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   private
+
   def build_page_tree
     open_nodes = (cookies[:sitemap_state] || '').split
     conditions = [Page.arel_table[:depth].in(0..1)]
@@ -303,7 +248,7 @@ class Admin::PagesController < Admin::ApplicationController
     when 'Page::ContactForm' then [:id, :template_id, { recipient_ids: [] }]
     when 'Page::Content' then [:id, :template_id]
     when 'Page::Homepage' then [:id, :template_id]
-    when 'Page::Image' then [:id, :image_id, Page::Image.available_shop_providers.map { |shop_provider| :"#{shop_provider}_url" }]
+    when 'Page::Image' then [:id, :image_id]
     when 'Page::Project' then [:id, :project_id]
     when 'Page::Redirection' then [:id, :external, :destination_page_id, :destination_url, :permanent]
     end
@@ -313,6 +258,13 @@ class Admin::PagesController < Admin::ApplicationController
   end
 
   def available_templates
-    @page.available_templates.order(:name)
+    @page.available_templates.reorder(:name)
+  end
+
+  def flash_and_redirect_back(action)
+    flash_for @page, action
+    respond_to do |format|
+      format.html { redirect_to request.referer || [:admin, @page] }
+    end
   end
 end

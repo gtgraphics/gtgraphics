@@ -4,11 +4,11 @@ TRANSITION_DURATION = 200
 @Loader =
 
   start: ->
-    $(LOADER_SELECTOR).show().animate({opacity: 1}, TRANSITION_DURATION)
+    $(LOADER_SELECTOR).show().transition(opacity: 1, duration: TRANSITION_DURATION)
 
   done: ->
     $loader = $(LOADER_SELECTOR)
-    $loader.animate { opacity: 0 }, TRANSITION_DURATION, ->
+    $loader.transition opacity: 0, duration: TRANSITION_DURATION, ->
       $loader.hide()
 
   remove: ->

@@ -1,7 +1,8 @@
 class Admin::UsersController < Admin::ApplicationController
   respond_to :html
 
-  before_action :load_user, only: %i(show edit update edit_password update_password destroy)
+  before_action :load_user, only: %i(show edit update edit_password
+                                     update_password destroy)
   before_action :redirect_to_account_page_if_current_user
 
   breadcrumbs do |b|
@@ -21,7 +22,9 @@ class Admin::UsersController < Admin::ApplicationController
     @current_users = User.current_users
     @users = User.all.uniq
     @user_search = @users.search(params[:search])
-    @user_search.sorts = ['first_name asc', 'last_name asc'] if @user_search.sorts.empty?
+    if @user_search.sorts.empty?
+      @user_search.sorts = ['first_name asc', 'last_name asc']
+    end
     @users = @user_search.result.page(params[:page])
     respond_with :admin, @users
   end
@@ -34,7 +37,8 @@ class Admin::UsersController < Admin::ApplicationController
   end
 
   def create
-    @user_registration_form = Admin::User::RegistrationForm.new(user_registration_params)
+    @user_registration_form = Admin::User::RegistrationForm.new(
+      user_registration_params)
     if @user_registration_form.submit
       flash_for @user_registration_form.user, :created
       respond_to do |format|
@@ -83,29 +87,33 @@ class Admin::UsersController < Admin::ApplicationController
   end
 
   private
+
   def load_user
     @user = User.find(params[:id])
   end
 
   def redirect_to_account_page_if_current_user
-    redirect_to params.slice(:action).merge(controller: 'accounts') if @user and @user == current_user
+    return if @user.nil? || @user != current_user
+    redirect_to params.slice(:action).merge(controller: 'accounts')
   end
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :preferred_locale)
+    params.require(:user).permit(:first_name, :last_name, :email,
+                                 :preferred_locale)
   end
 
   def user_registration_params
     params.require(:user_registration).permit(
-      :first_name, :last_name, :email, :preferred_locale,
+      :first_name, :last_name, :email, :preferred_locale, :twitter_username,
       :generate_password, :password, :password_confirmation
     )
   end
 
   def user_update_params
     params.require(:user_update).permit(
-      :first_name, :last_name, :email, :preferred_locale,
-      :reset_password, :generate_password, :password, :password_confirmation
+      :first_name, :last_name, :email, :preferred_locale, :twitter_username,
+      :reset_password, :generate_password, :password, :password_confirmation,
+      :photo, :remove_photo
     )
   end
 end

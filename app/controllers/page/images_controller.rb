@@ -1,16 +1,20 @@
 class Page::ImagesController < Page::ApplicationController
+  force_ssl only: %i(buy request_purchase), if: :live?
+
   before_action :load_image
   before_action :load_image_styles, only: :show
 
   breadcrumbs do |b|
-    # TODO: Localize
-    b.append 'Buy', '#' if action_name.in? %w(buy request_purchase)
+    if action_name.in? %w(buy request_purchase)
+      b.append translate('views.images.buy', image: @image.title),
+               buy_image_path(@page.path)
+    end
   end
 
   def default
     @gallery_page = @page.parent
-    @previous_page = @page.left_sibling || @page.siblings.last
-    @next_page = @page.right_sibling || @page.siblings.first
+    @previous_page = @page.left_sibling # || @page.siblings.last
+    @next_page = @page.right_sibling # || @page.siblings.first
 
     respond_to do |format|
       format.html { render_page }
@@ -19,14 +23,14 @@ class Page::ImagesController < Page::ApplicationController
   end
 
   def download
-    style_id = params[:style_id]
-    @image_style = @image.styles.find_by!(position: style_id)
+    @image_style = @image.styles.find_by!(position: params[:style_id])
     render_image(@image_style, :attachment)
   end
 
   def buy
     @message = Message::BuyRequest.new
     @message.image = @image
+
     respond_to do |format|
       format.html { render layout: 'page/contents' }
     end
@@ -39,11 +43,11 @@ class Page::ImagesController < Page::ApplicationController
       @message.notify!
       flash_for @message
       respond_to do |format|
-        format.html { redirect_to @page }
+        format.html { redirect_to buy_image_path(@page.path) }
       end
     else
       respond_to do |format|
-        format.html { render :buy }
+        format.html { render :buy, layout: 'page/contents' }
       end
     end
   end

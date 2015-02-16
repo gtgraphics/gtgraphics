@@ -21,9 +21,19 @@ de:
       template:
         default: Als Standardvorlage für Seiten dieses Typs verwenden
 
+    placeholders:
+      message:
+        first_sender_name: Ihr Vorname
+        last_sender_name: Ihr Nachname
+        sender_email: Ihre E-Mail-Adresse
+        subject: Betreff der Nachricht
+        body: Nachrichtentext
+
   helpers:
     submit:
       create_and_crop: '%{model} erstellen und zuschneiden'
+      message:
+        create: Nachricht verschicken
 
     # Labels and hints examples
     # labels:

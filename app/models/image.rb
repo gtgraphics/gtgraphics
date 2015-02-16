@@ -27,17 +27,20 @@ class Image < ActiveRecord::Base
   include Image::ProjectAssignable
   include Image::Resizable
   include Image::ExifStorable
-  include Image::ExifCopyrightProtectable
   include Image::Buyable
 
   include Filterable
   include Ownable
+  include PagePropagatable
   include PeriodFilterable
   include PersistenceContextTrackable
   include Randomizable
   include Taggable
   include TitleSearchable
   include Translatable
+
+  COPYRIGHT_NOTE = 'Copyright %{year} %{author}, GT Graphics. ' \
+                   'All rights reserved.'
 
   # Disallow changing the asset as all custom_styles depend on it
   attr_readonly :asset
@@ -59,9 +62,9 @@ class Image < ActiveRecord::Base
   validates :asset, presence: true
   validates :title, presence: true
 
-  # before_save :set_predefined_style_dimensions
   before_validation :set_default_title, on: :create
-  after_update :propagate_changes_to_pages!, if: :propagate_changes_to_pages?
+  before_create :set_author, unless: :author_id?
+  after_save :write_copyright!, if: [:exif_capable?, :write_copyright?]
 
   def dominant_colors
     @dominant_colors ||= Miro::DominantColors.new(asset.custom.path)
@@ -94,41 +97,37 @@ class Image < ActiveRecord::Base
     title
   end
 
-  # Page Propagation
+  # Copyright
 
-  def propagate_changes_to_pages?
-    unless defined? @propagate_changes_to_pages
-      @propagate_changes_to_pages = false
-    end
-    @propagate_changes_to_pages
+  def copyright_note
+    COPYRIGHT_NOTE % { year: taken_at.try(:year) || created_at.year,
+                       author: author.name }
   end
-  alias_method :propagate_changes_to_pages, :propagate_changes_to_pages?
 
-  def propagate_changes_to_pages=(propagate)
-    @propagate_changes_to_pages = propagate.to_b
+  def write_copyright!
+    begin
+      with_metadata :public do |metadata|
+        metadata.copyright = copyright_note
+        metadata.save!
+      end
+    rescue MiniExiftool::Error => error
+      logger.error "Error writing Exif data: #{error.message}"
+    end
+    styles.each(&:write_copyright!)
   end
 
   private
+
+  def set_author
+    self.author = artist || User.current
+  end
 
   def set_default_title
     return if title.present? || original_filename.blank?
     self.title = File.basename(original_filename, '.*').titleize
   end
 
-  def propagate_changes_to_pages!
-    transaction do
-      pages.each do |page|
-        translations.each do |translation|
-          Globalize.with_locale(translation.locale) do
-            page.title = translation.title
-            page.meta_description = HTML::FullSanitizer.new.sanitize(
-              translation.description
-            )
-          end
-        end
-        page.set_next_available_slug
-        page.save!
-      end
-    end
+  def write_copyright?
+    author_id_changed? || asset_changed?
   end
 end

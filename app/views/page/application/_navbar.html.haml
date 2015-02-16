@@ -4,18 +4,27 @@
 
     .navbar-header
       - unless page.root?
-        %button.navbar-toggle{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
-          = prepend_icon :bars, translate('helpers.links.menu'), fixed_width: true, size: 2, caption_html: { class: 'sr-only' }
+        %button.navbar-toggle.btn.btn-header.pull-right{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
+          = icon :bars, fixed_width: true
+          %span.sr-only= translate('helpers.links.menu')
 
-    .navbar-collapse{class: page.root? ? nil : 'collapse'}
+        = link_to yield(:back_url).presence || request.referer.presence || :root, class: 'btn btn-header', role: 'button' do
+          = icon :chevron, direction: :left, fixed_width: true
+          %span.sr-only= translate('helpers.links.back')
+
+    .navbar-collapse{class: !page.root? && 'collapse'}
       / Primary
       %ul.nav.navbar-nav#nav_menu_items
         - primary_menu_items.each do |page|
           = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page)
 
+      %ul.nav.navbar-nav.visible-xs#nav_xs_menu_items
+        - footer_menu_items.each do |page|
+          = active_link_to page.title, page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page)
+
       - if next_locale
         / Locale
-        %ul.nav.navbar-nav.navbar-right#nav_locale
+        %ul.nav.navbar-nav.visible-xs#nav_locale
           %li
-            = link_to page_path(@page, locale: next_locale), hreflang: next_locale do
+            = link_to change_locale_path(next_locale), hreflang: next_locale, data: { no_turbolink: true } do
               = prepend_icon :globe, next_locale.to_s.upcase, fixed_width: true

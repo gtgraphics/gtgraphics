@@ -1,11 +1,21 @@
 .page-header
   %h1= page.title
 
+- if region_content_for? :header
+  .page-body
+    = yield_region :header
+
 .page-body
   .row
     - @about_pages.each do |user, page|
       .col-sm-6
-        = link_to page, class: 'submenu-item' do
-          .submenu-item-title
-            = page.title
-          = gravatar_image_tag user.email, size: 400, default: :mm, class: 'submenu-item-image', alt: page.title
+        .submenu-item
+          = link_to page, class: 'submenu-link' do
+            .submenu-item-title
+              = page.title
+            - if user.photo.present?
+              = image_tag attached_asset_path(user, :menu_brick, from: :photo), class: 'submenu-item-image', alt: page.title
+
+- if region_content_for? :footer
+  .page-body
+    = yield_region :footer

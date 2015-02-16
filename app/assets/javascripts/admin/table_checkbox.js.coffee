@@ -62,8 +62,6 @@ jQuery.prepare ->
 
       $checkbox.closest('tr').toggleClass('active')
 
-      $checkbox.iCheck('update')
-      
       checked = !allCheckboxesChecked($checkboxes)
 
       cs = checkStatus($checkboxes)
@@ -90,7 +88,7 @@ DELAY = 100
 jQuery.prepare ->
   $(BATCH_CONTROLS_SELECTOR, @).hide()
   $(DEACTIVATABLE_BATCH_CONTROLS_SELECTOR, @).prop('disabled', true)
- 
+
 $(document).on 'toggled', '.table', (event, checkStatus) ->
   $batchBtn = $(@).closest('form').find(BATCH_CONTROLS_SELECTOR)
   $deactivatableBatchBtn = $(@).closest('form').find(DEACTIVATABLE_BATCH_CONTROLS_SELECTOR)

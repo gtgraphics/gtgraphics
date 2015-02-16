@@ -12,13 +12,17 @@
   .row
     .col-lg-8
 
+      - if project.description.present?
+        = panel Project.human_attribute_name(:description) do
+          = liquify project.description, with: project
+
       #project_image_upload_dropzone
         = form_tag batch_process_admin_project_images_path(@project), method: :patch, remote: true do
 
           .panel.panel-default
             .panel-heading
               %h4.panel-title= prepend_icon :picture, Project::Image.model_name.human(count: 2), outline: true, fixed_width: true
-        
+
             = render 'admin/project/images/table'
 
             .panel-footer.clearfix
@@ -38,21 +42,17 @@
     .col-lg-4
       - if project.url.present?
         .panel.panel-invisible
-          = button_link_to project.url, type: :primary, size: :lg, block: true, data: { no_turbolink: true } do
+          = button_link_to project.url, type: :primary, size: :lg, block: true, target: '_blank', data: { no_turbolink: true } do
             = prepend_icon :external_link, translate('helpers.model_links.view', model: Project.model_name.human), fixed_width: true
 
       - if project.author.present?
         = panel do
           .row
             .col-sm-3
-              = project.author.gravatar(true)
+              = project.author.thumbnail(true, class: 'img-circle img-responsive')
             .col-sm-9
               = project.author.name(true)
               .text-muted= project.updated_at
-
-      - if project.description.present?
-        = panel do
-          = liquify project.description, with: project
 
       = panel prepend_icon(:info, translate('views.admin.projects.headlines.details'), fixed_width: true) do
         %dl.dl-horizontal

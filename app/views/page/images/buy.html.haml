@@ -1,26 +1,26 @@
-.page-header
-  %h1 Buy #{@image}
+.row
+  .col-md-offset-1.col-md-10
+    .page-prominent-container
+      = render 'breadcrumbs'
 
-= simple_form_for @message, as: :message, url: request_image_purchase_path(@page.path), html: { class: 'form-horizontal' } do |form|
+      .page-header
+        %h1= translate('views.images.buy', image: @image.title)
 
-  = form.input :first_sender_name
-  = form.input :last_sender_name
-  = form.input :sender_email
+      .page-body
+        .row
+          .col-sm-4.hidden-xs
+            = link_to @page do
+              = image_tag attached_asset_path(@image, :brick), class: 'img-responsive', alt: @image.title
 
-  .form-group
-    %label.control-label.col-sm-3
-      = Image.model_name.human
-    .col-sm-9
-      .form-control-static
-        .pull-left
-          = link_to @page do
-            = image_tag attached_asset_path(@image, :thumbnail), class: 'img-responsive img-circle', width: 75, height: 75
-        = link_to @image.title, @page
+          .col-sm-8
+            = simple_form_for @message, as: :message, url: request_image_purchase_path(@page.path), wrapper: :vertical_form, defaults: { input_html: { class: 'input-lg' }} do |form|
 
+              = form.input :first_sender_name, label: false, input_html: { autofocus: true }
+              = form.input :last_sender_name, label: false
+              = form.input :sender_email, label: false
+              %hr
+              = form.input :body, label: false, input_html: { rows: 8 }
+              %hr
+              .form-group
+                = form.button :submit, class: 'btn-primary btn-lg pull-right'
 
-  = form.input :body, input_html: { rows: 8 }
-
-  .form-group
-    .col-sm-9.col-sm-offset-3
-      = form.button :submit, class: 'btn-primary'
-      = button_link_to translate('helpers.links.cancel'), page_path(@page)

@@ -3,14 +3,17 @@ module Image::Buyable
 
   SHOP_PROVIDERS = %w(
     deviantart
+    artflakes
+    fineartamerica
     fineartprint
     mygall
+    posterlounge
     redbubble
-    artflakes
   ).freeze
 
   included do
-    has_many :buy_requests, class_name: 'Message::BuyRequest', foreign_key: :delegator_id, dependent: :destroy
+    has_many :buy_requests, class_name: 'Message::BuyRequest',
+                            foreign_key: :delegator_id, dependent: :destroy
 
     store :shop_urls
 

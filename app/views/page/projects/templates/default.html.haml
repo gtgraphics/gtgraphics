@@ -1,25 +1,35 @@
+= render 'breadcrumbs'
+
 - present @page do |page|
   - present @project do |project|
 
     .page-header
       %h1= project.title
 
-    .row
-      - if @images.any?
+    .page-body
+      .row
         .col-sm-8
-          - @images.each_slice(3) do |images|
+          - if @images.size < 3
             .row
-              - images.each do |image|
-                .col-sm-4
+              - @images.each do |image|
+                .col-sm-12
                   .thumbnail
-                    = image_tag attached_asset_path(image, :thumbnail), alt: image.title, class: 'img-responsive'
+                    = image_tag attached_asset_path(image, :custom), alt: image.title, class: 'img-responsive'
+          - else
+            .row
+              .col-sm-12
+                .thumbnail
+                  = image_tag attached_asset_path(@images.first, :custom), alt: @images.first.title, class: 'img-responsive'
 
-      .col-sm-4
-        %dl.dl-horizontal
-          %dt= Project.human_attribute_name :client_name
-          %dd= project.client
-          %dt= Project.human_attribute_name :released_in
-          %dd= project.released_in
+            - @images.drop(1).each_slice(3) do |images|
+              .row
+                - images.each do |image|
+                  .col-sm-4
+                    .thumbnail
+                      = image_tag attached_asset_path(image, :brick), alt: image.title, class: 'img-responsive'
 
-        .content
-          = project.description
+        .col-sm-4
+          = project.attribute_list :client, :released_in
+
+          .content
+            = project.description

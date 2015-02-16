@@ -9,138 +9,146 @@ class CoverCarousel
     autostart: true
 
   constructor: ($container, options = {}) ->
-    @$carousel = $container.carousel(pause: false)
-    @carousel = @$carousel.data('bs.carousel')
-    @options = _(_(options).defaults($container.data())).defaults(CoverCarousel.DEFAULTS)
+    @$carousel = $container
+    @options = _(_(options).defaults($container.data()))
+               .defaults(CoverCarousel.DEFAULTS)
 
     @$items = @$carousel.find(CoverCarousel.ITEM_SELECTOR)
-    @$active = @$items.filter(".#{CoverCarousel.ACTIVE_CLASS}")
-    unless @$active.length
-      @$active = @$items.first().addClass(CoverCarousel.ACTIVE_CLASS)
+    @$currentItem = @$items.filter(".#{CoverCarousel.ACTIVE_CLASS}")
+    @$currentItem = @$items.first() unless @$currentItem.length
 
     @refreshCarouselSize()
-    $(window).resize =>
-      @refreshCarouselSize()
+    @applyCarouselResizerEvent()
 
     @pause()
-    coverCarousel = @
-    @slideTo @$active, ->
+    _this = @
+    @slideTo @$currentItem, ->
       $(@).trigger('init.gtg.carousel')
-      coverCarousel.cycle() if coverCarousel.options.autostart
+      _this.start() if _this.options.autostart
 
-    @addIndicatorEvents()
+    @applyIndicatorEvents()
 
-  cycle: ->
+  destroy: ->
+    @stop()
+    $(document).off 'click', @getIndicatorSelector(), @indicatorEventHandler
+    $(window).off 'resize', @resizeEventHandler
+
+  start: ->
+    @pause()
     @transitionTimeout = setTimeout =>
-      clearTimeout(@transitionTimeout)
       @next =>
-        @cycle()
+        @start()
     , @options.interval
+    @isRunning = true
 
   pause: ->
     clearTimeout(@transitionTimeout)
-    @$carousel.carousel('pause')
+    @transitionTimeout = null
+    @isRunning = false
+
+  stop: ->
+    @pause()
+    @slideTo(0)
 
   slideTo: (item, callback) ->
     $item = @extractItem(item)
     index = @extractItemIndex(item)
-    $item.trigger('changing.gtg.carousel', 'slideTo', index)
+    $item.trigger('changing.gtg.carousel', index)
     @loadItem index, =>
-      @$active = $item
-      @transitionCarousel(index)
-      $item.trigger('change.gtg.carousel', 'slideTo', index)
+      @$currentItem = $item
+      # @transitionCarousel(index)
+
+      # Set classes
+      @$items.removeClass('active next prev')
+      $item.addClass('active')
+      @prevItem().addClass('prev')
+      @nextItem().addClass('next')
+
+      $item.trigger('change.gtg.carousel', index)
       callback() if callback
 
   next: (callback) ->
-    $item = @nextItem()
-    $item.trigger('changing.gtg.carousel', 'next')
-    @loadItem $item, =>
-      @$active = $item
-      @transitionCarousel('next')
-      $item.trigger('change.gtg.carousel', 'next')
-      callback() if callback
+    @slideTo(@nextItem(), callback)
 
   prev: (callback) ->
-    $item = @prevItem()
-    $item.trigger('changing.gtg.carousel', 'prev')
-    @loadItem $item, =>
-      @$active = $item
-      @transitionCarousel('prev')
-      $item.trigger('change.gtg.carousel', 'prev')
-      callback() if callback
+    @slideTo(@prevItem(), callback)
 
   # Navigation
 
   extractItem: (itemOrIndex) ->
-    if itemOrIndex instanceof jQuery
-      itemOrIndex
-    else
-      $item = @$items.filter(":nth(#{itemOrIndex})")
-      jQuery.error 'item index out of range' unless $item.length
-      $item
+    return itemOrIndex if itemOrIndex instanceof jQuery
+    $item = @$items.filter(":nth(#{itemOrIndex})")
+    jQuery.error 'item index out of range' unless $item.length
+    $item
 
   extractItemIndex: (itemOrIndex) ->
-    if itemOrIndex instanceof jQuery
-      @$items.index(itemOrIndex)
-    else
-      itemOrIndex
+    return @$items.index(itemOrIndex) if itemOrIndex instanceof jQuery
+    itemOrIndex
 
-  nextItem: ->
-    $nextItem = @$active.next(CoverCarousel.ITEM_SELECTOR)
+  nextItem: ($item = @$currentItem) ->
+    $nextItem = $item.next(CoverCarousel.ITEM_SELECTOR)
     $nextItem = @$items.first() unless $nextItem.length
     $nextItem
 
-  prevItem: ->
-    $prevItem = @$active.prev(CoverCarousel.ITEM_SELECTOR)
+  prevItem: ($item = @$currentItem) ->
+    $prevItem = $item.prev(CoverCarousel.ITEM_SELECTOR)
     $prevItem = @$items.last() unless $prevItem.length
     $prevItem
 
-  transitionCarousel: (target) ->
-    @$carousel.carousel(target)
-    @$carousel.carousel('pause')
-
-  addIndicatorEvents: ->
+  getIndicatorSelector: ->
     carouselSelector = '#' + @$carousel.attr('id')
-    $indicators = $("[data-slide-to][data-target='#{carouselSelector}']")
-    $indicators.on 'click', (event) =>
+    "[data-slide-to][data-target='#{carouselSelector}']"
+
+  applyIndicatorEvents: ->
+    @indicatorEventHandler = =>
       event.preventDefault()
       @pause()
       $indicator = $(event.target)
       index = $indicator.data('slideTo')
       @slideTo index, =>
-        @cycle()
+        @start()
+    $(document).on 'click', @getIndicatorSelector(), @indicatorEventHandler
+
+  applyCarouselResizerEvent: ->
+    @resizeEventHandler = =>
+      @refreshCarouselSize()
+    $(window).resize(@resizeEventHandler)
 
   loadItem: (item, callback) ->
     $item = @extractItem(item)
+    index = @extractItemIndex(item)
 
+    # Item has already been loaded
     if $item.hasClass(CoverCarousel.LOADED_CLASS)
-      callback() if callback()
-    else
-      $item.trigger('loading.gtg.carousel')
-      $item.addClass(CoverCarousel.LOADING_CLASS)
+      callback() if callback
+      return $item
 
-      $cover = $item.find(".#{CoverCarousel.COVER_CLASS}")
-      unless $cover.length
-        $cover = $('<div />', class: CoverCarousel.COVER_CLASS).prependTo($item)
+    # Item must be loaded first
+    $item.trigger('loading.gtg.carousel', item: $item, index: index)
+    $item.addClass(CoverCarousel.LOADING_CLASS)
 
-      $image = $(new Image())
-      imageSrc = $item.data('cover')
+    $cover = $item.find(".#{CoverCarousel.COVER_CLASS}")
+    unless $cover.length
+      $cover = $('<div />', class: CoverCarousel.COVER_CLASS).prependTo($item)
 
-      loadingDone = (success) ->
-        $item.trigger('loaded.gtg.carousel', success)
-        $item.removeClass(CoverCarousel.LOADING_CLASS)
-        $item.addClass(CoverCarousel.LOADED_CLASS)
-        $image.remove()
+    $image = $(new Image())
+    imageSrc = $item.data('cover')
 
-      $image.load ->
-        $cover.css(backgroundImage: "url(#{imageSrc})")
-        callback() if callback
-        loadingDone(true)
-      $image.error ->
-        callback() if callback
-        loadingDone(false)
+    loaded = (success) ->
+      callback() if callback
+      $item.trigger('loaded.gtg.carousel',
+        success: success, item: $item, index: index)
+      $item.removeClass(CoverCarousel.LOADING_CLASS)
+      $item.addClass(CoverCarousel.LOADED_CLASS)
+      $image.remove()
 
-      $image.attr('src', imageSrc) # trigger the load events
+    $image.load ->
+      $cover.css(backgroundImage: "url(#{imageSrc})")
+      loaded(true)
+    $image.error ->
+      loaded(false)
+
+    $image.attr('src', imageSrc) # trigger the load events
 
     $item
 
@@ -153,17 +161,32 @@ class CoverCarousel
     @$carousel.find('.item').css(dimensions)
 
 
-$(document).ready ->
+initOrDestroyCarousel = ->
   $('[data-ride="coverCarousel"]').each ->
     $carousel = $(@)
-    carousel = new CoverCarousel($carousel)
-    $carousel.data('coverCarousel', carousel)
-    window.carousel = carousel
+    carousel = $carousel.data('coverCarousel')
+    if carousel && $.device.isExtraSmall()
+      $carousel.removeData('coverCarousel')
+      carousel.destroy()
+      carousel = null
+    else if !carousel && !$.device.isExtraSmall()
+      carousel = new CoverCarousel($carousel)
+      $carousel.data('coverCarousel', carousel)
+      carousel.start() unless carousel.isRunning
 
-$(document).on 'loading.gtg.carousel', ->
-  NProgress.start()
-  Loader.start()
+$(document).ready ->
+  initOrDestroyCarousel()
 
-$(document).on 'loaded.gtg.carousel', ->
-  NProgress.done()
-  Loader.done()
+$(window).resize ->
+  initOrDestroyCarousel()
+
+$(document).on 'page:receive', ->
+  $('[data-ride="coverCarousel"]').each ->
+    carousel = $(@).data('coverCarousel')
+    carousel.destroy() if carousel
+
+$(document).on 'loading.gtg.carousel', (event, context) ->
+  Loader.start() if context.index == 0
+
+$(document).on 'loaded.gtg.carousel', (event, context) ->
+  Loader.done() if context.index == 0

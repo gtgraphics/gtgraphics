@@ -22,17 +22,17 @@
               = fields.label :crop_x, class: 'control-label' do
                 = image.class.human_attribute_name :crop_position
             .col-sm-4
-              = fields.input_field :crop_x, as: :integer, placeholder: image.class.human_attribute_name(:crop_x), class: 'form-control crop-x', min: 0, max: image.width, data: { control: 'cropX' }
+              = fields.input_field :crop_x, as: :integer, placeholder: image.class.human_attribute_name(:crop_x), class: 'form-control crop-x', min: 0, max: image.original_width, data: { control: 'cropX' }
             .col-sm-4
-              = fields.input_field :crop_y, as: :integer, placeholder: image.class.human_attribute_name(:crop_y), class: 'form-control crop-y', min: 0, max: image.height, data: { control: 'cropY' }
+              = fields.input_field :crop_y, as: :integer, placeholder: image.class.human_attribute_name(:crop_y), class: 'form-control crop-y', min: 0, max: image.original_height, data: { control: 'cropY' }
           .form-group
             .col-sm-4
               = fields.label :crop_width, class: 'control-label' do
                 = image.class.human_attribute_name :crop_dimensions
             .col-sm-4
-              = fields.input_field :crop_width, as: :integer, placeholder: image.class.human_attribute_name(:crop_width), class: 'form-control crop-width', min: 1, max: image.width, data: { control: 'cropWidth' }
+              = fields.input_field :crop_width, as: :integer, placeholder: image.class.human_attribute_name(:crop_width), class: 'form-control crop-width', min: 1, max: image.original_width, data: { control: 'cropWidth' }
             .col-sm-4
-              = fields.input_field :crop_height, as: :integer, placeholder: image.class.human_attribute_name(:crop_height), class: 'form-control crop-height', min: 1, max: image.height, data: { control: 'cropHeight' }
+              = fields.input_field :crop_height, as: :integer, placeholder: image.class.human_attribute_name(:crop_height), class: 'form-control crop-height', min: 1, max: image.original_height, data: { control: 'cropHeight' }
 
     .col-sm-6
       .panel.panel-default.resize-panel

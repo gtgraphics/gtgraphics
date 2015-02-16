@@ -14,11 +14,26 @@ class Image < ActiveRecord::Base
       end
     end
 
-    def exif
-      @exif ||= begin
-        raise 'Document is not capable to contain Exif metadata' unless exif_capable?
-        MiniExiftool.new(asset.path, replace_invalid_chars: '')
+    def metadata(version = nil)
+      @metadata ||= {}
+      unless @metadata.include?(version)
+        with_metadata(version) do |metadata|
+          @metadata[version] = metadata.to_hash
+        end
       end
+      @metadata[version]
+    end
+
+    def with_metadata(version = nil)
+      if version.nil?
+        path = asset.path
+      else
+        path = asset.versions.fetch(version) do
+          fail ArgumentError, "Invalid version: #{version}"
+        end.path
+      end
+      metadata = MiniExiftool.new(path, replace_invalid_chars: '')
+      yield(metadata)
     end
 
     def exif_capable?

@@ -12,10 +12,10 @@
       %tr
         %td.checkbox-cell
         %td.thumbnail-cell
-          = link_to attached_asset_path(image, :custom) do
+          = link_to attached_asset_path(image, :public) do
             = image_tag attached_asset_path(image, :thumbnail), class: 'img-circle', alt: translate('views.admin.images.original'), width: 45, height: 45
         %td
-          = link_to translate('views.admin.images.original'), attached_asset_path(image, :custom), target: '_blank'
+          = link_to translate('views.admin.images.original'), attached_asset_path(image, :public), target: '_blank'
           %br
           %span.text-muted.ignored
             = image.dimensions

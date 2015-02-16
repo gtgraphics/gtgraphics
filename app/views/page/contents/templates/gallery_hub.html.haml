@@ -1,14 +1,23 @@
 .page-header
   %h1= page.title
 
+- if region_content_for? :header
+  .page-body
+    = yield_region :header
+
 .page-body
   - @gallery_pages.each_slice(2) do |gallery_pages|
     .row
       - gallery_pages.each do |gallery_page|
         .col-sm-6
-          = link_to gallery_page, class: 'submenu-item' do
-            .submenu-item-title
-              = gallery_page.title
-            - image_page = gallery_page.children.sample
-            - if image_page
-              = image_tag attached_asset_path(image_page.embeddable.image, :menu_brick), class: 'submenu-item-image', alt: image_page.title
+          .submenu-item
+            = link_to gallery_page, class: 'submenu-link' do
+              .submenu-item-title
+                = gallery_page.title
+              - image_page = gallery_page.children.sample
+              - if image_page
+                = image_tag attached_asset_path(image_page.embeddable.image, :menu_brick), class: 'submenu-item-image', alt: image_page.title
+
+- if region_content_for? :footer
+  .page-body
+    = yield_region :footer

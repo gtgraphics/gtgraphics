@@ -13,6 +13,10 @@ de:
       message:
         marked_read: Nachricht wurde als gelesen markiert.
         marked_unread: Nachricht wurde als ungelesen markiert.
+      message/contact:
+        created: Ihre Nachricht wurde erfolgreich versendet.
+      message/buy_request:
+        created: Ihre Kaufanfrage wurde erfolgreich versendet.
       page:
         disabled_in_menu: Die Seite wird absofort in keinem Menü mehr angezeigt.
         enabled_in_menu: Die Seite wird absofort in Menüs angezeigt.
@@ -38,13 +42,18 @@ de:
       apply: Anwenden
       assign_owner: Eigentümer zuweisen
       assign_tags: Tags zuweisen
+      back: Zurück
       back_to_top: Zurück zum Anfang
+      browse: Durchsuchen
+      buy: Erwerben
       cancel: Abbrechen
+      comment: Kommentieren
       customize: Anpassen
       close: Schließen
       convert_to: 'Umwandeln zu %{model}'
       crop: Zuschneiden
       crop_and_scale: 'Zuschneiden/Skalieren'
+      details: Details
       destroy: Löschen
       destroy_selected: Ausgewählte löschen
       disable_in_menu: In Menüs verstecken
@@ -55,6 +64,7 @@ de:
       edit_regions: Inhalte bearbeiten
       enable_in_menu: In Menüs anzeigen
       enlarge: Vergrößern
+      enlarge_image: Bild zeigen
       hide: Verstecken
       make_default: Als Standard festlegen
       menu: Menü
@@ -62,6 +72,8 @@ de:
       move_up: Nach oben
       move_down: Nach unten
       new: '%{model} erstellen'
+      next: Weiter
+      previous: Zurück
       open: Öffnen
       options: Optionen
       page_settings: Seiteneinstellungen
@@ -77,8 +89,9 @@ de:
       uncrop: Original wiederherstellen
       upload: '%{model} hochladen'
       view: Ansehen
-      view_mode: Ansichtsmodus
+      view_mode: Betrachtungsmodus
       toggle_navigation: Navigation umschalten
+      tweet: Twittern
     confirmations:
       destroy: '%{model} wirklich entfernen?'
       destroy_selected: 'Möchten Sie die ausgewählten %{model} wirklich entfernen?'

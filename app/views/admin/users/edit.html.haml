@@ -12,6 +12,21 @@
         = form.input :preferred_locale, collection: available_locales_for_select, include_blank: translate('helpers.prompts.custom')
 
     %fieldset
+      %legend= User.human_attribute_name(:photo)
+      .fields
+        - if @user_update_form.photo.present?
+          .form-group
+            .col-sm-offset-3.col-sm-9
+              = image_tag attached_asset_path(@user_update_form.user, :thumbnail, from: :photo), alt: User.human_attribute_name(:photo), class: 'img-rounded'
+          = form.input :remove_photo, as: :boolean, wrapper: :horizontal_boolean
+        = form.input :photo, as: :file, input_html: { data: { title: translate('helpers.links.browse') } }
+
+    %fieldset
+      %legend= translate('views.forms.social')
+      .fields
+        = form.input :twitter_username
+
+    %fieldset
       %legend= translate('views.forms.password')
       .fields
         = form.input :reset_password, as: :boolean, wrapper: :horizontal_boolean, input_html: { data: { toggle: 'passwordFields' } }

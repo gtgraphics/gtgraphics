@@ -5,7 +5,7 @@ class Admin::ImagePresenter < Admin::ApplicationPresenter
   include Admin::Image::CustomizablePresenter
 
   self.action_buttons = [:show, :enlarge, :edit, :destroy]
-  
+
   presents :image
   delegate_presented :author, with: 'Admin::UserPresenter'
 

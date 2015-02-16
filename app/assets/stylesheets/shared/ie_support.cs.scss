@@ -1,0 +1,12 @@
+html {
+  &.ie {
+    .except-ie {
+      display: none;
+    }
+  }
+  &:not(.ie) {
+    .ie-only {
+      display: none;
+    }
+  }
+}

@@ -3,7 +3,7 @@ class ImagePresenter < ApplicationPresenter
 
   presents :image
 
-  delegate_presented :author, with: 'Admin::UserPresenter'
+  delegate_presented :author
 
   def artist
     exif_data[:artist]
@@ -27,6 +27,10 @@ class ImagePresenter < ApplicationPresenter
     else
       crop_dimensions
     end
+  end
+
+  def styles
+    super.map { |style| present(style) }
   end
 
   def styles_count
@@ -56,6 +60,10 @@ class ImagePresenter < ApplicationPresenter
     else
       image.shop_urls[name]
     end
+  end
+
+  def shop_urls
+    super.reject { |_name, value| value.nil? }
   end
 
   def shop_link(name)

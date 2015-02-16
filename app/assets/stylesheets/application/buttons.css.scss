@@ -1,3 +1,30 @@
+@import 'bootstrap_config';
+
 .btn {
   border: none;
+  &:disabled, &.disabled {
+    opacity: 0.5;
+  }
+}
+
+.btn-header {
+  margin: 0;
+  border-radius: 50%;
+  border: 1px solid $navbar-inverse-toggle-border-color;
+  color: $navbar-inverse-toggle-icon-bar-bg;
+  background-color: transparent;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  text-align: center;
+  padding: 9px;
+
+  &:hover, &:focus {
+    color: $navbar-inverse-toggle-icon-bar-bg;
+    background-color: $navbar-inverse-toggle-hover-bg;
+  }
+}
+
+.btn-lg {
+  font-weight: 300;
 }

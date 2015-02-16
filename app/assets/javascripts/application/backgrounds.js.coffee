@@ -1,5 +1,3 @@
-TRANSITION_DURATION = 200
-
 prepareBackground = ->
   $background = $('#background')
   $background.allImagesLoaded ->

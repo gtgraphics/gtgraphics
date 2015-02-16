@@ -9,6 +9,7 @@
       %span.text-muted.ignored= project.summary
     %td= project.client(true)
     %td= project.released_in
+    %td= project.created_at
     - if local_assigns.fetch(:actions, true)
       %td.actions
         = project.action_buttons icon_only: true

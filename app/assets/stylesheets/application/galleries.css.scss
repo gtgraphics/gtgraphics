@@ -10,6 +10,8 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
 }
 
 #gallery {
+  @include clearfix;
+
   margin: 0 ($gallery-item-gutter-xs / 2);
   padding: ($gallery-item-gutter-xs / 2) 0;
   box-sizing: content-box;
@@ -50,10 +52,29 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
 
     @media (min-width: $screen-sm-min) {
       padding: $gallery-item-gutter-sm / 2;
+
+      .no-js & {
+        width: 50%;
+        float: left;
+
+        @media (max-width: $screen-sm-max) {
+          &:nth-child(2n - 1) {
+            clear: left;
+          }
+        }
+      }
     }
 
     @media (min-width: $screen-md-min) {
       padding: $gallery-item-gutter-md / 2;
+
+      .no-js & {
+        width: 33.333333333%;
+
+        &:nth-child(3n - 2) {
+          clear: left;
+        }
+      }
     }
 
     @media (min-width: $screen-lg-min) {
@@ -66,7 +87,6 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
     display: block;
     overflow: hidden;
     position: relative;
-    transition: all 200ms ease-out;
 
     // meant to fix scaling artifacts occuring in WebKit
     backface-visibility: hidden;
@@ -75,21 +95,26 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
     perspective: 1000;
     transform: translate3d(0,0,0);
 
+    .gallery-image-wrapper {
+      transition: transform 200ms ease-out;
+      overflow: hidden;
+    }
+
     .gallery-image {
       display: block; // needed as FF renders bullshit
-      transition: all 3s ease-in-out;
+      transition: transform 3s ease-in-out,
+                  opacity 200ms ease-out;
       min-width: 100%;
     }
 
     .gallery-image-caption-wrapper {
       position: absolute;
-      top: -1px;
-      bottom: -1px;
-      left: -1px;
-      right: -1px;
       opacity: 0;
       transition: opacity 200ms ease-out;
-      background-color: rgba(black, 0.6);
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
 
       .gallery-image-caption-container {
         display: table;
@@ -108,15 +133,20 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
             padding: 0;
             margin: 0;
             font-size: 18px;
+            font-weight: 300;
             text-transform: uppercase;
             color: white;
+          }
+
+          .gallery-image-info {
+            margin-top: 5px;
+
           }
         }
       }
     }
 
-    &:hover, &:focus {
-      transform: scale(0.97);
+    &:hover, &:focus, &:active {
       outline: none;
 
       .gallery-image-caption-wrapper {
@@ -125,6 +155,19 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
 
       .gallery-image {
         transform: scale(1.1);
+        opacity: 0.5;
+      }
+
+      .gallery-image-wrapper {
+        transform: scale(0.97);
+        background-color: black;
+      }
+    }
+
+    &:active {
+      // opacity: 0.75;
+      .gallery-image-wrapper {
+        transform: scale(0.94);
       }
     }
   }
@@ -140,4 +183,8 @@ $gallery-item-gutter-lg: $gallery-item-gutter-md;
   .masonry-brick {
     transition-property: left, right, top;
   }
+}
+
+.gallery-page-header {
+  padding-bottom: 0 !important;
 }

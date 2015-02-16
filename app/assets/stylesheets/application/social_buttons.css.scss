@@ -1,0 +1,8 @@
+#social_buttons {
+  height: 20px;
+  box-sizing: content-box;
+
+  .btn-group + .btn-group {
+    margin-left: 12px;
+  }
+}

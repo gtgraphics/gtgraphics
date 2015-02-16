@@ -1,6 +1,6 @@
-@import "compass";
-@import "flags/flag-16/*.png";
-@import "flags/flag-24/*.png";
+@import 'compass';
+@import 'flags/flag-16/*.png';
+@import 'flags/flag-24/*.png';
 
 @include all-flag-16-sprites;
 @include all-flag-24-sprites;

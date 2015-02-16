@@ -1,6 +1,6 @@
 - content_for :pre_body_content do
   #background{class: page.root? ? 'homepage' : 'subpage'}
-    = background_image_tag
+    = background_image_tag class: page.root? ? nil : 'grayscale'
 
 - content_for :page_wrapper_content do
   #page_content

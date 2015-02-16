@@ -25,3 +25,6 @@
 # Ignore generated ERDs.
 erd.pdf
 public/tmp
+
+# Ignore mail config.
+/config/mail.yml

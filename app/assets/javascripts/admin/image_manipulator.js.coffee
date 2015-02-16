@@ -110,17 +110,21 @@ class ImageManipulator
       totalWidth = @getCropX() + @getCropWidth()
       if totalWidth > @originalWidth
         @inputs.cropWidth.val(@originalWidth - @getCropX())
+      @inputs.cropWidth.attr('max', @originalWidth - @getCropX())
 
     @applyInputEvent @inputs.cropY, =>
       totalHeight = @getCropY() + @getCropHeight()
       if totalHeight > @originalHeight
         @inputs.cropHeight.val(@originalHeight - @getCropY())
+      @inputs.cropHeight.attr('max', @originalHeight - @getCropY())
 
     @applyInputEvent @inputs.cropWidth, =>
+      @inputs.cropWidth.attr('max', @originalWidth - @getCropX())
       if @inputs.cropAspectRatio.prop('checked')
         @setCropHeight(@cropAspectRatio.height * @getCropWidth())
 
     @applyInputEvent @inputs.cropHeight, =>
+      @inputs.cropHeight.attr('max', @originalHeight - @getCropY())
       if @inputs.cropAspectRatio.prop('checked')
         @setCropWidth(@cropAspectRatio.width * @getCropHeight())
 
@@ -141,7 +145,7 @@ class ImageManipulator
     @applyInputEvent @inputs.resizeHeight, =>
       if @inputs.resizeAspectRatio.prop('checked')
         @setResizeWidth(@resizeAspectRatio.width * @getResizeHeight())
-    
+
     @refreshResizeAspectRatioState()
     @inputs.resizeAspectRatio.on 'change', =>
       @refreshResizeAspectRatioState()

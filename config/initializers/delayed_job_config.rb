@@ -1,2 +1,3 @@
-Delayed::Worker.delay_jobs = !Rails.env.test?
-Delayed::Worker.destroy_failed_jobs = Rails.env.test?
+dev_environment = Rails.env.in? %w(development test)
+Delayed::Worker.delay_jobs = !dev_environment
+Delayed::Worker.destroy_failed_jobs = dev_environment

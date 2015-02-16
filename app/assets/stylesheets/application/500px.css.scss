@@ -1,0 +1,20 @@
+.footer-icon-500px {
+  display: block;
+  font-style: normal;
+  width: 21px;
+  height: 12px;
+  margin-top: 2px;
+
+  background: {
+    image: asset-url('footer_icons_500px.png');
+    repeat: no-repeat;
+    position: top left;
+    size: auto 100%;
+  }
+}
+
+a:hover, a:focus {
+  .footer-icon-500px {
+    background-position: top right;
+  }
+}

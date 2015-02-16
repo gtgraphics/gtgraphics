@@ -5,6 +5,6 @@ class ErrorsController < ActionController::Base
   include RouteHelper
 
   def unmatched_route
-    raise ActionController::RoutingError, "No route matches #{request.path}"
+    fail ActionController::RoutingError, "No route matches #{request.path}"
   end
 end

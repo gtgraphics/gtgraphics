@@ -7,6 +7,7 @@ class Admin::User::RegistrationForm < Form
   attribute :preferred_locale, String
   attribute :password, String
   attribute :generate_password, Boolean, default: true
+  attribute :twitter_username, String
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -26,6 +27,7 @@ class Admin::User::RegistrationForm < Form
       user.email = email
       user.preferred_locale = preferred_locale
       user.password = password
+      user.twitter_username = twitter_username
     end
   end
 
@@ -39,7 +41,7 @@ class Admin::User::RegistrationForm < Form
   end
 
   def send_generated_password
-    Admin::User::PasswordMailer.initial_password_email(user, password).deliver 
+    Admin::User::PasswordMailer.initial_password_email(user, password).deliver
   end
 
   def verify_email_uniqueness

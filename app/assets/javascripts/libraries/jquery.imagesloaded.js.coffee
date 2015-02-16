@@ -8,8 +8,12 @@ $.fn.allImagesLoaded = (callback) ->
     loadedCount++
     callback() if loadedCount == totalCount
     $source.trigger('imagesLoaded')
+    console.debug "Image loaded: #{loadedCount}/#{totalCount}"
 
-  $images.load(callbackWrapper)
-  #$images.error(callbackWrapper)
-
-  $images
+  $images.each ->
+    $image = $(@)
+    if $image.get(0).complete
+      callbackWrapper()
+    else
+      $image.load(callbackWrapper)
+      # $image.error(callbackWrapper)

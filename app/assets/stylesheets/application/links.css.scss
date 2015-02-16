@@ -1,6 +1,5 @@
 a {
-  //transition: all 200ms ease-out;
-  &:hover {
+  &:hover, &:focus, &:active {
     text-decoration: none;
   }
 }

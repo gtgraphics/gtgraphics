@@ -1,38 +1,95 @@
 @import 'bootstrap_config';
 
-#content_wrapper {
+// #page_wrapper {
+//   border-radius: 3px;
+//   overflow: hidden;
+// }
+
+#content_wrapper, #lightbox_content_wrapper {
   position: relative;
-  z-index: 2;
+  z-index: 5; // leave some space below for lightbox for example
+  // margin: 0 auto;
 }
 
 #page_wrapper, #lightbox_page_wrapper {
   width: 100%;
   margin-bottom: 10px;
+}
 
+#page_wrapper {
+  border-radius: 3px;
+  overflow: hidden;
   @media (min-width: $screen-sm-min) {
-    margin-bottom: 80px;
-    box-shadow: 0 1px 3px rgba(black, 0.25);
+    margin-bottom: 0;
+    box-shadow: 0 2px 3px rgba(black, 0.23);
   }
 }
 
-#page_content, #lightbox_page_wrapper {
+#page_content {
   background-color: $content-bg;
+}
 
-  .page-body {
-    padding: $content-padding;
-    margin: 0;
+.page-body + .page-body,
+.page-header + .page-body {
+  padding-top: 0;
 
-    @media (min-width: $screen-md-min) {
-      padding: $content-padding-lg;
-    }
+  &.well {
+    padding-top: $content-padding-lg;
+  }
+}
+
+.page-body {
+  padding: $content-padding;
+  margin: 0;
+
+  @media (min-width: $screen-md-min) {
+    padding: $content-padding-lg;
   }
 
-  .page-body + .page-body,
-  .page-header + .page-body {
-    padding-top: 0;
+  &.well {
+    border: none;
+    background-color: $content-bg-dark; // rgba(black, 0.15);
+  }
 
-    &.well {
-      padding-top: $content-padding-lg;
+  h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid $gray-dark;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    li {
+      position: relative;
+      padding-left: 15px;
+
+      &:before {
+        position: absolute;
+        left: 2px;
+        content: "▪";
+        color: $gray;
+      }
     }
+  }
+}
+
+.page-prominent-container {
+  @media (min-width: $screen-md-min) {
+    padding: 20px 0;
+  }
+}
+
+#page_content {
+  @media (min-width: $screen-sm-min) {
+    min-height: 260px;
+  }
+}
+
+#page_content, #lightbox_page_content {
+  a, button, input[type="submit"], input[type="button"] {
+    transition: all 100ms ease-out;
   }
 }

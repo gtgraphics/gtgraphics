@@ -1,14 +1,13 @@
 module UsersHelper
-  def user_info(user, options = {}, &block)
-    options = options.reverse_merge(avatar_size: 32)
-
-    content_tag :div, class: 'user-info' do
-      concat gravatar_image_tag(user.email, class: 'user-avatar img-circle',
-                                            alt: user.name,
-                                            default: :mm,
-                                            size: options[:avatar_size])
-      concat content_tag(:div, user.name, class: 'user-name')
-      concat capture(&block) if block_given?
+  def user_thumbnail_image_tag(user, options = {})
+    scope = options.delete(:scope)
+    options = options.reverse_merge(
+      alt: user.name, width: options[:size], height: options[:size])
+    if user.photo.present?
+      image_tag attached_asset_path(user, :thumbnail, from: :photo), options
+    else
+      scope = "#{scope}/" if scope
+      image_tag "#{scope}anonymous.png", options
     end
   end
 end

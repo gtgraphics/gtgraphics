@@ -1,50 +1,96 @@
 @import 'bootstrap_config';
 
 .navbar-footer {
-  $vertical-padding: 12px;
-
   color: #666;
-  background-color: $footer-bg;
   font-size: 12px;
-  min-height: 40px;
-  height: auto;
   border-top: none;
-  box-shadow: 0 -1px 5px rgba(0, 0, 0, .4);
+  margin: 0;
+  border: none;
+  padding: {
+    left: $content-padding;
+    right: $content-padding;
+  }
+  margin: 10px 0;
 
-  .author-social-buttons + .author-social-buttons {
-    margin-left: 10px;
+  @media (min-width: $screen-md-min) {
+    padding: {
+      left: $content-padding-lg;
+      right: $content-padding-lg;
+    }
+  }
+
+  .navbar-text:first-child {
+    padding-left: 0;
   }
 
   .navbar-text, .navbar-nav > li > a {
     margin: 0;
-    padding: $vertical-padding 14px;
-    line-height: normal;
+    padding: 14px;
+    line-height: 14px;
+    color: $gray-light;
+
+    @media (min-width: $screen-md-min) {
+      text-shadow: 0 0 4px rgba(black, 0.9);
+    }
   }
 
-  .navbar-nav {
-    > li > a { 
-      outline: none;
-      color: #666;
-      &:hover, &:focus {
-        color: lighten(#666, 20%);
-        background-color: rgba(20,20,20,.8);
-      }
-      &.icon-link {
-        padding: {
-          left: 9px;
-          right: 9px;
-        }
+  .navbar-nav > li > a {
+    outline: none;
+    transition: all 200ms ease-in-out;
+
+    &:hover, &:focus {
+      color: $text-color;
+      background: none;
+    }
+
+    &.icon-link {
+      padding: {
+        left: 9px;
+        right: 9px;
       }
     }
   }
 
-  .navbar-text {
-    &.copyright {
-      padding-left: 0;
+  .site-social-buttons + .author-social-buttons,
+  .author-social-buttons + .author-social-buttons {
+    margin-left: 10px;
+  }
+
+  .site-social-buttons {
+    padding: {
+      top: 11px;
+      bottom: 11px;
     }
-    &.social-buttons {
-      padding-top: $vertical-padding - 2px;
-      padding-bottom: $vertical-padding - 2px;
+    line-height: auto;
+  }
+
+  .homepages-show.template-default & {
+    margin: 0;
+
+    // .navbar-text, .navbar-nav > li > a {
+    //   color: rgba($text-color, 0.5);
+    //   text-shadow: 0 0 4px rgba(black, 0.95);
+    // }
+
+    // .navbar-nav > li > a {
+    //   &:hover, &:focus {
+    //     color: $text-color;
+    //     background: none;
+    //   }
+    // }
+
+    @media (min-width: $screen-sm-min) {
+      position: fixed;
+      bottom: 8px;
+      width: $container-sm - $grid-gutter-width;
+    }
+
+    @media (min-width: $screen-md-min) {
+      width: $container-md - $grid-gutter-width;
+    }
+
+    @media (min-width: $screen-lg-min) {
+      width: $container-lg - $grid-gutter-width;
     }
   }
 }

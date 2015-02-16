@@ -1,15 +1,15 @@
 module FlashableController
   extend ActiveSupport::Concern
- 
+
   def flash_for(object, *args)
     # return unless request.format.html?
-    
+
     options = args.extract_options!.reverse_merge(multiple: false, successful: true)
     action = args.first
 
     flashable = true
     if object.class.name.in? %w(Class Symbol String)
-      raise ArgumentError, 'action must be specified' if action.nil?
+      fail ArgumentError, 'action must be specified' if action.nil?
       if object.is_a?(Class)
         klass = object
       else
@@ -37,7 +37,7 @@ module FlashableController
       affixed_action << action.to_s
       affixed_action << '_multiple' if options[:multiple]
       message = translate(affixed_action, scope: ['helpers.flash', klass.name.underscore], model: model_name, default: String.new).presence
-      message ||= translate(affixed_action, scope: 'helpers.flash.defaults', model: model_name) 
+      message ||= translate(affixed_action, scope: 'helpers.flash.defaults', model: model_name)
       if message
         if !options[:successful] or options[:alert]
           flash.alert = message

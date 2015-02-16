@@ -13,19 +13,23 @@
 
 class Project < ActiveRecord::Base
   include Excludable
-  include PersistenceContextTrackable
   include Ownable
+  include PagePropagatable
+  include PersistenceContextTrackable
   include Taggable
   include TitleSearchable
   include Translatable
 
-  translates :title, :project_type, :description, :url, fallbacks_for_empty_translations: true
+  translates :title, :project_type, :description, :url,
+             fallbacks_for_empty_translations: true
   sanitizes :title, with: :squish
 
   belongs_to :client
-  has_many :project_images, class_name: 'Project::Image', inverse_of: :project, dependent: :destroy
+  has_many :project_images, class_name: 'Project::Image', inverse_of: :project,
+                            dependent: :destroy
   has_many :images, through: :project_images
-  has_many :project_pages, class_name: 'Page::Project', inverse_of: :project, dependent: :destroy
+  has_many :project_pages, class_name: 'Page::Project', inverse_of: :project,
+                           dependent: :destroy
   has_many :pages, through: :project_pages
 
   validates :title, presence: true, uniqueness: true
@@ -48,6 +52,10 @@ class Project < ActiveRecord::Base
 
   def to_s
     title
+  end
+
+  def cover
+    images.first
   end
 
   private

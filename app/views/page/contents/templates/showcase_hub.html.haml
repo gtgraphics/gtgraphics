@@ -1,0 +1,23 @@
+.page-header
+  %h1= page.title
+
+- if region_content_for? :header
+  .page-body
+    = yield_region :header
+
+.page-body
+  - @showcase_pages.each_slice(2) do |showcase_pages|
+    .row
+      - showcase_pages.each do |showcase_page|
+        .col-sm-6
+          .submenu-item
+            = link_to showcase_page, class: 'submenu-link' do
+              .submenu-item-title
+                = showcase_page.title
+              - project_page = showcase_page.children.first
+              - if project_page
+                = image_tag attached_asset_path(project_page.project.cover, :menu_brick), class: 'submenu-item-image', alt: project_page.title
+
+- if region_content_for? :footer
+  .page-body
+    = yield_region :footer

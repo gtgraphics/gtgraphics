@@ -1,30 +1,82 @@
+@import 'bootstrap_config';
+
 .cover-carousel {
   position: absolute;
   z-index: 1;
-  .item {
-    &.loaded {
-      .cover, .carousel-caption {
-        opacity: 1;
-      }
-    }
 
-    .cover, .carousel-caption {
-      opacity: 0;
-      transition: opacity 500ms ease-out;
-    }
+  .cover-carousel-inner {
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 
-    .cover {
+    > .item {
+      display: block;
       position: absolute;
       left: 0;
       right: 0;
       top: 0;
       bottom: 0;
-      background: {
-        size: 100%;
-        size: cover;
-        position: center;
-        repeat: no-repeat;
+      pointer-events: none;
+
+      .cover {
+        pointer-events: none;
+        position: absolute;
+        opacity: 0;
+        z-index: 3;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background: {
+          size: 100%;
+          size: cover;
+          position: center;
+          repeat: no-repeat;
+        }
+      }
+
+      &.prev .cover {
+        opacity: 1;
+      }
+
+      &.next .cover {
+        z-index: 4;
+      }
+
+      &.active {
+        z-index: 5;
+      }
+
+      &.active.loaded {
+        pointer-events: auto;
+
+        .cover {
+          opacity: 1;
+          z-index: 4;
+          animation: cover-zoom 12s ease-out;
+        }
       }
     }
+  }
+
+  .carousel-indicators {
+    bottom: 50px;
+  }
+}
+
+@keyframes cover-zoom {
+  0% {
+    opacity: 0;
+    transform: scale(1.1) rotate(-1deg);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
   }
 }

@@ -1,10 +1,25 @@
 module IconHelper
   # Bootstrap
 
-  def caret(direction = :down)
+  def caret(*args)
+    options = args.extract_options!
+    direction = args.first || :down
     css = 'caret'
     css << "-#{direction}" if direction != :down
-    content_tag :b, nil, class: css
+    options[:class] = [css, options[:class]].compact.uniq
+    content_tag :b, nil, options
+  end
+
+  def close
+    content_tag :b, '&times;'.html_safe, class: 'close-icon'
+  end
+
+  def left_chevron
+    content_tag :b, '&lsaquo;'.html_safe, class: 'chevron left'
+  end
+
+  def right_chevron
+    content_tag :b, '&rsaquo;'.html_safe, class: 'chevron right'
   end
 
   # Font Awesome
@@ -28,7 +43,7 @@ module IconHelper
   end
 
   # Flags
-  
+
   def flag_icon(locale, options = {})
     size = options.delete(:size) { 16 }
     options[:class] = "#{options[:class]} flag flag-#{size} flag-#{size}-#{locale}"

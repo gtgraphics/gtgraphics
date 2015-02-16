@@ -1,9 +1,18 @@
 @import 'bootstrap_config';
 
 #brand {
-  margin: 20px auto;
+  user-select: none;
+  margin: auto;
   width: 215px;
   display: block;
+
+  @media (max-width: $screen-xs-max) {
+    position: absolute;
+    left: 50%;
+    margin-left: -108px;
+    margin-top: 15px;
+    z-index: 1000;
+  }
 
   @media (min-width: $screen-sm-min) {
     margin: 25px $content-padding;
@@ -11,7 +20,7 @@
   }
 
   @media (min-width: $screen-md-min) {
-    margin: 30px $content-padding-lg;
+    margin: 30px $content-padding-md;
     width: 330px;
   }
 

@@ -16,9 +16,9 @@
 class Message < ActiveRecord::Base
   include Excludable
   include PersistenceContextTrackable
-  
-  # belongs_to :contact_form, class_name: 'Page::ContactForm'
-  has_many :recipiences, class_name: 'Message::Recipience', autosave: true, dependent: :destroy, inverse_of: :message
+
+  has_many :recipiences, class_name: 'Message::Recipience', autosave: true,
+                         dependent: :destroy, inverse_of: :message
   has_many :recipients, through: :recipiences
 
   validates :first_sender_name, presence: true
@@ -28,7 +28,7 @@ class Message < ActiveRecord::Base
   before_create :build_recipiences
 
   def sender
-    %{"#{sender_name}" <#{sender_email}>}
+    %("#{sender_name}" <#{sender_email}>)
   end
 
   def sender_name
@@ -36,12 +36,15 @@ class Message < ActiveRecord::Base
   end
 
   def notify!
-    raise "Message#notify! requires the message to be persisted" unless persisted?
-    notifier_job = MessageNotificationJob.new(self.id)
+    unless persisted?
+      fail 'Message#notify! requires the message to be persisted'
+    end
+    notifier_job = MessageNotificationJob.new(id)
     Delayed::Job.enqueue(notifier_job, queue: 'mailings')
   end
 
   protected
+
   def build_recipiences
     # overridden in subclasses
   end

@@ -1,11 +1,27 @@
-.page-header
-  %h1
-    = page.title
-    %small Showcase
+= render 'breadcrumbs'
 
+.page-header.gallery-page-header
+  %h1= page.title
 
+- if @project_pages.any?
+  #gallery.clearfix{data: { total_pages: @project_pages.total_pages }}
+    - @project_pages.each do |page|
+      - present page.embeddable do |project_page|
+        .gallery-item
+          = link_to page, class: 'gallery-link' do
+            %figure.gallery-image-container
+              .gallery-image-wrapper
+                = image_tag attached_asset_path(project_page.project.cover, :brick), class: 'gallery-image img-responsive', alt: page.title
+              %figcaption.gallery-image-caption-wrapper
+                .gallery-image-caption-container
+                  .gallery-image-caption
+                    %h3.gallery-image-title= page.title
+                    / .gallery-image-info
+                    /   = project_page.project.client_name
 
-- if page.children.projects.any?
-  %ul
-    - page.children.projects.each do |project_page|
-      %li= link_to project_page, project_page
+  = paginate @project_pages, theme: :gallery
+
+- else
+  .page-body
+    .text-center
+      In dieser Kategorie wurden keine Bilder gefunden.

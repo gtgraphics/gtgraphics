@@ -11,11 +11,16 @@ en:
       new: 'Create %{model}'
       edit: 'Edit %{model}'
     links:
+      buy: Buy
       new: 'Create %{model}'
+      browse: Durchsuchen
       upload: 'Upload %{model}'
       edit: Edit
+      details: Details
       destroy: Remove
       destroy_selected: Remove Selected
+      enlarge_image: Show Image
+      comment: Comment
       view: View
       cancel: Cancel
       download: Download
@@ -28,6 +33,10 @@ en:
       close: Close
       sign_out: Sign out
       sign_in: Sign in
+      view_mode: View Mode
+      next: Next
+      previous: Previous
+      tweet: Tweet
     confirmations:
       destroy: 'Do you really want to delete this %{model}?'
       destroy_selected: 'Do you really want to delete all selected %{model}?'

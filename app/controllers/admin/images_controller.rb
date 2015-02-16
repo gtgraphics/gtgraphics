@@ -3,43 +3,46 @@ class Admin::ImagesController < Admin::ApplicationController
 
   respond_to :html
 
-  before_action :load_image, only: %i(show edit update customize apply_customization destroy download convert_to_attachment dimensions preview pages)
+  before_action :load_image, only: %i(show edit update customize
+                                      apply_customization destroy download
+                                      convert_to_attachment dimensions preview
+                                      pages)
 
   breadcrumbs do |b|
     b.append ::Image.model_name.human(count: 2), :admin_images
     if action_name.in? %w(new create)
-      b.append translate('breadcrumbs.new', model: ::Image.model_name.human), :new_admin_image
+      b.append translate('breadcrumbs.new', model: ::Image.model_name.human),
+               :new_admin_image
     end
-    b.append @image.title, [:admin, @image] if action_name.in? %w(show edit update crop apply_crop)
+    if action_name.in? %w(show edit update crop apply_crop)
+      b.append @image.title, [:admin, @image]
+    end
     if action_name.in? %w(edit update crop apply_crop)
-      b.append translate('breadcrumbs.edit', model: ::Image.model_name.human), [:edit, :admin, @image]
+      b.append translate('breadcrumbs.edit', model: ::Image.model_name.human),
+               [:edit, :admin, @image]
     end
   end
 
   def index
-    @images = Image.with_translations_for_current_locale.
-                    select(Image.arel_table[Arel.star], Image::Translation.arel_table[:title]).
-                    uniq.includes(:author)
+    @images = Image.with_translations_for_current_locale.eager_load(:author)
 
     image_ids = Array(params[:id])
-    if image_ids.any?
-      if image_ids.one?
-        redirect_to admin_image_path(image_ids.first) and return
-      else
-        @images = @images.where(id: image_ids)
-      end
+    if image_ids.one?
+      redirect_to admin_image_path(image_ids.first, format: params[:format])
+      return
+    elsif image_ids.many?
+      @images.where!(id: image_ids)
     else
-      query = params[:query]
-      @images = @images.search(query)
+      @images = @images.search(params[:query])
       @image_search = @images.ransack(params[:search])
       if @image_search.sorts.empty?
-        if query.blank? and request.format.json?
+        if request.format.json?
           @image_search.sorts = 'created_at desc'
         else
           @image_search.sorts = 'translations_title asc'
         end
       end
-      @images = @image_search.result
+      @images = @image_search.result(distinct: true)
     end
 
     @users = User.order(:first_name, :last_name)
@@ -47,10 +50,8 @@ class Admin::ImagesController < Admin::ApplicationController
 
     @images.includes!(:styles) if params[:include_styles].to_b
     @images.where!(author_id: params[:author_id]) if params[:author_id].present?
-    @images = @images.created(params[:period]) if params[:period].present?
-    @images.where!(content_type: params[:content_type]) if params[:content_type].present?
-    @images = @images.page(params[:page])
     @images = @images.tagged(params[:tag])
+    @images = @images.page(params[:page])
 
     respond_with :admin, @images do |format|
       format.json
@@ -61,10 +62,9 @@ class Admin::ImagesController < Admin::ApplicationController
     query = params[:query]
     if query.present?
       translated_title = Image::Translation.arel_table[:title]
-      @images = Image.search(query).
-                      select(Image.arel_table[Arel.star], translated_title).
-                      order(translated_title.asc).
-                      with_translations_for_current_locale.uniq.limit(3)
+      @images = Image.search(query).with_translations_for_current_locale.uniq
+                .select(Image.arel_table[Arel.star], translated_title)
+                .order(translated_title.asc).limit(3)
     else
       @images = Image.none
     end
@@ -84,8 +84,8 @@ class Admin::ImagesController < Admin::ApplicationController
     @image = ::Image.new(image_upload_params)
     tags = Tag.where(label: params[:tag])
     tags.each { |tag| @image.taggings.find_or_initialize_by(tag: tag) }
-    @image.author = current_user
     @image.save!
+
     respond_to do |format|
       format.js
     end
@@ -126,7 +126,7 @@ class Admin::ImagesController < Admin::ApplicationController
       @image.recreate_assets!
     end
     respond_to do |format|
-      format.js 
+      format.js
     end
   end
 
@@ -188,7 +188,7 @@ class Admin::ImagesController < Admin::ApplicationController
     ::Image.accessible_by(current_ability).destroy_all(id: image_ids)
     flash_for ::Image, :destroyed, multiple: true
     location = request.referer || admin_images_path
-    
+
     respond_to do |format|
       format.html { redirect_to location }
       format.js { redirect_via_turbolinks_to location }
@@ -212,7 +212,7 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def associate_owner
     @image_owner_assignment_form = Admin::ImageOwnerAssignmentForm.submit(image_owner_assignment_params)
-   
+
     respond_to do |format|
       format.js
     end
@@ -233,6 +233,7 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   private
+
   def load_image
     @image = ::Image.find(params[:id])
   end

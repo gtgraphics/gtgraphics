@@ -18,10 +18,11 @@ class Message < ActiveRecord::Base
     belongs_to :image, foreign_key: :delegator_id
 
     def delegator
-      self.image
+      image
     end
 
     protected
+
     def build_recipiences
       recipiences.build(recipient: image.author)
     end

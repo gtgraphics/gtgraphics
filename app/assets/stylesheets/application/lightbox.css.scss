@@ -2,68 +2,150 @@
 @import 'compass';
 @import 'shared/mixins';
 
-$lightbox-nav-height: 50px;
+$lightbox-navbar-height: 60px;
+$lightbox-control-size: 100px;
 
 .navbar-lightbox {
-  height: $lightbox-nav-height;
+  height: $lightbox-navbar-height;
   border: none;
-  background: -moz-linear-gradient(top,  rgba($content-bg, 0.75) 0%, rgba($content-bg, 0) 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba($content-bg, 0.75)), color-stop(100%,rgba($content-bg, 0))); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top,  rgba($content-bg, 0.75) 0%,rgba($content-bg, 0) 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  rgba($content-bg, 0.75) 0%,rgba($content-bg, 0) 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  rgba($content-bg, 0.75) 0%,rgba($content-bg, 0) 100%); /* IE10+ */
-  background: linear-gradient(to bottom,  rgba($content-bg, 0.75) 0%,rgba($content-bg, 0) 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
+  transition: opacity 200ms ease-out;
+  background-color: $body-bg;
 
-  .container-fluid .navbar-brand {
-    margin-left: 0;
+  @media (min-width: $screen-sm-min) {
+    display: block;
   }
 
-  .container .navbar-brand {
-    margin-left: 15px;
+  @media (max-width: $screen-sm-max) {
+    margin-bottom: 0;
+  }
+
+  @media (min-width: $screen-md-min) {
+    position: fixed;
+    z-index: $zindex-navbar-fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: transparent;
   }
 
   .navbar-brand {
+    padding: 20px 38px;
     opacity: 0.5;
-    width: 150px;
-    height: $lightbox-nav-height;
-    padding: 14px 0;
+    outline: none;
     transition: opacity 200ms ease-in-out;
+    z-index: $zindex-navbar-fixed + 2;
 
     &:hover, &:focus {
       opacity: 1;
+      outline: none;
     }
   }
 
-  .navbar-nav > li {
-    > a {
-      padding: {
-        top: 15px;
-        bottom: 15px;
-      }
-      color: rgba($text-color, 0.5);
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-      transition: color 200ms ease-in-out, text-shadow 200ms ease-in-out;
+  .navbar-brand, #nav_lightbox_controls {
+    position: relative;
+    height: $lightbox-navbar-height;
+  }
 
-      &:hover, &:focus {
-        background: none;
+  #nav_lightbox_controls {
+    z-index: $zindex-navbar-fixed + 1;
+  }
+
+  #nav_close {
+    margin-left: 0;
+  }
+
+  .navbar-nav {
+    &.navbar-right {
+      margin-left: 15px;
+
+      &:first-child {
+        margin-right: -15px;
+      }
+    }
+
+    > li {
+      float: left;
+
+      > a {
+        padding: {
+          top: 20px;
+          bottom: 20px;
+        }
+      }
+
+      &.open > a {
+        outline: none;
         color: $text-color;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+        background: none;
       }
     }
+  }
 
-    &.open > a {
-      background-color: rgba($content-bg, 0.95);
+  #nav_lightbox_controls {
+    opacity: 1;
+  }
+
+  &.unobstrusive {
+    @media (min-width: $screen-sm-min) {
+      &:before, #nav_lightbox_controls {
+        transition: all 1s ease-in;
+        opacity: 0;
+      }
+
+      .navbar-brand {
+        transition: all 1s ease-in;
+        opacity: 0.2;
+      }
     }
+  }
+
+  #lightbox_close {
+    text-decoration: none;
+    top: 0;
+    right: 0;
+    left: auto;
+    margin: 0;
+    width: $lightbox-control-size;
+    height: 60px;
+    z-index: $zindex-navbar-fixed + 1;
+    font-size: 45px;
+    line-height: 58px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+#nav_lightbox_actions {
+  margin-right: 0;
+}
+
+#nav_lightbox_xs {
+  background-color: $body-bg;
+  width: 100%;
+  position: fixed;
+  z-index: $zindex-navbar-fixed;
+
+  .navbar {
+    border-bottom: 1px solid $gray-dark;
   }
 }
 
 #lightbox {
-  position: fixed;
-  top: 0;
+  user-select: none;
+  z-index: 1;
+  position: absolute;
+  top: $navbar-height-xs;
   bottom: 0;
   left: 0;
   right: 0;
+
+  @media (min-width: $screen-sm-min) {
+    top: 0;
+  }
+
+  @media (min-width: $screen-md-min) {
+    position: fixed;
+  }
 
   .lightbox-image-container, .lightbox-image, .lightbox-background {
     position: absolute;
@@ -74,85 +156,236 @@ $lightbox-nav-height: 50px;
   }
 
   .lightbox-background, .lightbox-image {
+    transition: opacity 200ms ease-out;
     background: {
       repeat: no-repeat;
       position: center;
     }
-    transition: all 500ms ease-out;
   }
 
   .lightbox-background {
     background-size: cover;
-    @include blur(20);
     opacity: 0.3;
+    @include blur(20);
   }
 
   .lightbox-image {
-    background-size: contain
+    background-size: contain;
+
+    img {
+      // width: 100%;
+      // height: auto;
+      user-select: none;
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
   }
 
   .lightbox-controls {
     opacity: 1;
+    z-index: 4;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     transition: opacity 200ms ease-out;
-  }
 
-  .lightbox-controls {
-    .carousel-control {
-      background: none;
-      width: 100px;
-      margin: {
-        top: $lightbox-nav-height;
-        bottom: $lightbox-nav-height;
+    .lightbox-control {
+      // top: -$navbar-height-xs / 2;
+      top: 0;
+      bottom: 0;
+
+      @media (min-width: $screen-sm-min) {
+        top: 0;
       }
 
-      .fa {
-        position: absolute;
-        top: 50%;
-        width: 30px;
-        height: 30px;
-        margin-top: -15px;
-        margin-left: -15px;
-        font-size: 30px;
+      @media (min-width: $screen-md-min) {
+        top: $lightbox-control-size;
+        bottom: $lightbox-control-size;
       }
     }
   }
 
-  &.idle {
+  &.unobstrusive {
     .lightbox-controls {
       opacity: 0;
       transition: opacity 1s ease-in;
-      pointer-events: none;
     }
   }
+}
 
-  // .lightbox-caption {
-  //   position: fixed;
-  //   bottom: 0;
+@media all and (-ms-high-contrast:none) {
+  // Nasty IE hack to prevent IE 10 and 11 from displaying the blurry background
+  // which does not work properly in those browsers
+  #lightbox .lightbox-background {
+    display: none;
+  }
+}
 
-  //   @media (min-width: $screen-sm-min) {
-  //     left: 100px;
-  //     right: 100px;
-  //   }
+#lightbox_content_wrapper {
+  position: absolute;
+  top: 100%;
+  left: $content-padding;
+  right: $content-padding;
 
-  //   .lightbox-description {
-  //     background-color: rgba(black, 0.75);
-  //     padding: 20px;
-  //     font-weight: 300;
-  //     font-size: 18px;
-  //     word-wrap: break-word;
-  //     h1 {
-  //       margin-top: 0;
-  //       text-transform: uppercase;
-  //     }
-  //   }
-  // }
+  @media (min-width: $screen-sm-min) {
+    left: 0;
+    right: 0;
+  }
 }
 
 #lightbox_page_wrapper {
   position: absolute;
+  background-color: $content-bg;
   margin: 0;
-  // background-color: rgba($content-bg, 0.95);
+  top: 100%;
+
+  @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+    padding-top: 5px;
+  }
+
+  @media (min-width: $screen-md-min) {
+    background-color: rgba($content-bg, 0.7);
+    margin-top: 0;
+  }
+
+  .lightbox-title {
+    h1 {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      max-width: 100%;
+
+      @media (min-width: $screen-md-min) {
+        float: left;
+      }
+    }
+
+    .btn-toolbar {
+      @media (min-width: $screen-md-min) {
+        float: right;
+      }
+    }
+
+    #social_buttons {
+      margin-top: 20px;
+
+      @media (min-width: $screen-md-min) {
+        margin-top: 0;
+        padding: 9px 0;
+      }
+    }
+  }
+
+  .lightbox-caption {
+    font-size: 18px;
+    font-weight: 300;
+    word-wrap: break-word;
+
+    + .lightbox-metadata {
+      @media (max-width: $screen-sm-max) {
+        margin-top: 15px;
+      }
+    }
+  }
+
+  .lightbox-author-name {
+    display: block;
+    color: $gray-light;
+    margin-top: 8px;
+    font-size: 16px;
+
+    &:before {
+      content: '\2014 \00A0';
+    }
+
+    a {
+      color: $gray-light;
+      &:hover, &:focus {
+        color: darken($gray-light, 15%);
+      }
+    }
+  }
+
+  .lightbox-metadata {
+    dl {
+      margin: 0;
+      @media (max-width: $screen-xs-max) {
+        dd + dt {
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+
+  .lightbox-comments {
+    box-shadow: none;
+  }
 }
 
 #lightbox_page_content {
+  @media (max-width: $screen-xs-max) {
+    padding: 0;
+  }
+}
+
+.lightbox-control {
+  position: absolute;
+}
+
+.lightbox-control, #lightbox_close {
+  color: white;
+  opacity: 0.5;
+  text-align: center;
+  width: $lightbox-control-size;
+  margin: 0;
+  font-weight: 100;
+  font-size: 25px;
+  line-height: 32px;
+
+  @media (min-width: $screen-sm-min) {
+    font-size: 30px;
+    line-height: 42px;
+  }
+
+  .fa {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin-top: -15px;
+    height: 30px;
+  }
+
+  &.left {
+    left: 0;
+  }
+
+  &.right {
+    right: 0;
+  }
+}
+
+.lightbox-control,
+#lightbox_close,
+.navbar-lightbox .navbar-nav > li > a {
+  opacity: 0.5;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  transition: opacity 200ms ease-in-out;
+  outline: none;
+  color: white;
+
+  &:hover, &:focus {
+    outline: none;
+    opacity: 1;
+    color: white;
+    background: none;
+  }
 }

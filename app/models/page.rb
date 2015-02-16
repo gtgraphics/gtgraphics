@@ -42,7 +42,7 @@ class Page < ActiveRecord::Base
 
   has_owner :author
 
-  has_many :redirections, class_name: 'Page::Redirection', foreign_key: :destination_page_id, 
+  has_many :redirections, class_name: 'Page::Redirection', foreign_key: :destination_page_id,
                           inverse_of: :destination_page, dependent: :destroy
   has_many :aliases, through: :redirections, source: :page
 
@@ -87,10 +87,10 @@ class Page < ActiveRecord::Base
   end
 
   private
+
   def set_title
-    if embeddable and embeddable.respond_to?(:to_title)
-      self.title = embeddable.to_title
-    end
+    return if embeddable.nil? || !embeddable.respond_to?(:to_title)
+    self.title = embeddable.to_title
   end
 
   def verify_root_uniqueness

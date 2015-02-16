@@ -34,6 +34,7 @@
             %th= sort_link @project_search, :translations_title
             %th= sort_link @project_search, :client_name, Project.human_attribute_name(:client_name)
             %th= sort_link @project_search, :released_in, Project.human_attribute_name(:released_in), default_order: :desc
+            %th= sort_link @project_search, :created_at, Project.human_attribute_name(:created_at), default_order: :desc
             %th.actions
         %tbody
           - @projects.each do |project|
