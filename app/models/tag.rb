@@ -28,7 +28,7 @@ class Tag < ActiveRecord::Base
     end
 
     alias_method :common, :applied_to
-    
+
     def search(query)
       return all if query.blank?
       where(arel_table[:label].matches("%#{query}%"))
@@ -45,7 +45,7 @@ class Tag < ActiveRecord::Base
 
       join_expression = arel_table.join(taggings, Arel::Nodes::OuterJoin).
         on(taggings[:tag_id].eq(arel_table[:id])).join_sources
-      
+
       joins(join_expression).select(select_expression).
       group(arel_table[:id]).order('taggings_count DESC')
     end
@@ -55,19 +55,20 @@ class Tag < ActiveRecord::Base
     end
 
     def popularity_by(column_name = nil)
-      popular.inject({}) do |result, tag|
+      popular.each_with_object({}) do |tag, result|
         if column_name
           key = tag[column_name]
         elsif block_given?
           key = yield(tag)
         else
-          raise ArgumentError, 'no column name or block given'
+          fail ArgumentError, 'no column name or block given'
         end
         result.merge!(key => tag.taggings_count)
       end
     end
 
     private
+
     def applied_to_any(records)
       taggings = Tagging.arel_table
       conditions = records.flatten.map do |record|

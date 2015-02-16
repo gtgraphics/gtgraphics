@@ -43,8 +43,11 @@ class User < ActiveRecord::Base
 
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :email, presence: true, email: true, uniqueness: { case_sensitive: false }
-  validates :preferred_locale, inclusion: { in: -> { I18n.available_locales.map(&:to_s) } }, allow_blank: true
+  validates :email, presence: true, email: true,
+                    uniqueness: { case_sensitive: false }
+  validates :preferred_locale,
+            inclusion: { in: -> { I18n.available_locales.map(&:to_s) } },
+            allow_blank: true
 
   before_validation :sanitize_preferred_locale
   before_save :sanitize_email_address, if: :email?
@@ -54,6 +57,7 @@ class User < ActiveRecord::Base
   def full_name
     "#{first_name} #{last_name}".strip
   end
+
   alias_method :name, :full_name
 
   def rfc5322
@@ -80,6 +84,7 @@ class User < ActiveRecord::Base
   end
 
   private
+
   def sanitize_email_address
     self.email = email.downcase
   end

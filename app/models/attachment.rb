@@ -56,6 +56,7 @@ class Attachment < ActiveRecord::Base
   end
 
   private
+  
   def set_default_title
     if title.blank? and original_filename.present?
       self.title = File.basename(original_filename, '.*').titleize

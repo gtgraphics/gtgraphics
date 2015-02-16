@@ -17,6 +17,7 @@ class Tagging < ActiveRecord::Base
   delegate :label, to: :tag
 
   private
+
   def destroy_unused_tag
     tag.destroy unless Tagging.exists?(tag: tag)
   end

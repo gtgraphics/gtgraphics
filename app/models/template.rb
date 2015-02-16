@@ -63,6 +63,7 @@ class Template < ActiveRecord::Base
   alias_attribute :filename, :file_name
 
   private
+
   def verify_region_labels_validity
     if region_definitions.any? { |region_definition| region_definition.errors.any? }
       errors.add(:region_labels, :contains_invalid)
