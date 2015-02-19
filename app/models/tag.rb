@@ -43,11 +43,11 @@ class Tag < ActiveRecord::Base
         arel_table[Arel.star], taggings_count
       ).projections
 
-      join_expression = arel_table.join(taggings, Arel::Nodes::OuterJoin).
-        on(taggings[:tag_id].eq(arel_table[:id])).join_sources
+      join_expression = arel_table.join(taggings, Arel::Nodes::OuterJoin)
+                        .on(taggings[:tag_id].eq(arel_table[:id])).join_sources
 
-      joins(join_expression).select(select_expression).
-      group(arel_table[:id]).order('taggings_count DESC')
+      joins(join_expression).select(select_expression)
+        .group(arel_table[:id]).order('taggings_count DESC')
     end
 
     def popularity
@@ -72,8 +72,8 @@ class Tag < ActiveRecord::Base
     def applied_to_any(records)
       taggings = Tagging.arel_table
       conditions = records.flatten.map do |record|
-        taggings[:taggable_id].eq(record.id).
-        and(taggings[:taggable_type].eq(record.class.name))
+        taggings[:taggable_id].eq(record.id)
+        .and(taggings[:taggable_type].eq(record.class.name))
       end.reduce(:or)
       joins(:taggings).where(conditions).uniq
     end

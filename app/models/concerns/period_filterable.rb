@@ -19,6 +19,7 @@ module PeriodFilterable
     end
 
     private
+
     def _parse_period(date)
       case date.to_s.downcase
       when 'today'

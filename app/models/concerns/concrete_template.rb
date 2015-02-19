@@ -6,10 +6,15 @@ module ConcreteTemplate
       acts_as_concrete_template_for(self.model_name.element, options)
     end
 
-    # acts_as_concrete_template :homepage, class_name: 'Page::Homepage', lookup_path: 'homepages/templates'
+    # acts_as_concrete_template :homepage, class_name: 'Page::Homepage',
+    # lookup_path: 'homepages/templates'
     def acts_as_concrete_template_for(page_type, options = {})
-      class_name = options.fetch(:class_name) { "Page::#{page_type.to_s.classify}" }
-      lookup_path = options.fetch(:lookup_path) { "#{class_name.pluralize.underscore}/templates" }
+      class_name = options.fetch(:class_name) do
+        "Page::#{page_type.to_s.classify}"
+      end
+      lookup_path = options.fetch(:lookup_path) do
+        "#{class_name.pluralize.underscore}/templates"
+      end
 
       self.template_lookup_path = lookup_path
 

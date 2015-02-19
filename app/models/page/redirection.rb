@@ -37,6 +37,7 @@ class Page < ActiveRecord::Base
     def internal?
       !external?
     end
+
     alias_method :internal, :internal?
 
     def internal=(internal)
@@ -44,6 +45,7 @@ class Page < ActiveRecord::Base
     end
 
     private
+
     def clear_obsolete_destination_attribute
       if external?
         self.destination_page = nil
@@ -53,13 +55,14 @@ class Page < ActiveRecord::Base
     end
 
     def sanitize_destination_url
-      if destination_url.present? and destination_url !~ /\A(http|https):\/\//i
+      if destination_url.present? && destination_url !~ /\A(http|https):\/\//i
         self.destination_url = 'http://' + destination_url
       end
     end
 
     def verify_destination_page_is_not_page
-      errors.add :destination_page_id, :self_reference if page == destination_page
+      return unless page == destination_page
+      errors.add :destination_page_id, :self_reference
     end
   end
 end

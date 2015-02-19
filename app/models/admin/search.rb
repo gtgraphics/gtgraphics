@@ -19,7 +19,7 @@ class Admin::Search
 
   def result
     self.class.searchable_classes.inject({}) do |result, model|
-      result.merge!(model => model.search(self.query))
+      result.merge!(model => model.search(query))
     end
   end
 
@@ -27,15 +27,17 @@ class Admin::Search
     result.values.flat_map(&:to_a)
   end
 
-  def to_json(options = {})
+  def to_json(_options = {})
     arr = []
     result.each do |model, results|
       children = []
       count = results.count
       results.limit(RESULT_LIMIT).each do |r|
-        children << { id: r.id, text: r.to_s, type: r.class.name.demodulize.camelize(:lower) }
+        children << { id: r.id, text: r.to_s,
+                      type: r.class.name.demodulize.camelize(:lower) }
       end
-      item = { text: "#{model.model_name.human} (#{count})", children: children }
+      item = { text: "#{model.model_name.human} (#{count})",
+               children: children }
       arr << item if children.any?
     end
     arr.to_json

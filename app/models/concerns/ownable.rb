@@ -30,13 +30,17 @@ module Ownable
     extend ActiveSupport::Concern
 
     included do
-      belongs_to owner_association_name.to_sym, class_name: 'User', foreign_key: owner_column.to_sym
+      belongs_to owner_association_name.to_sym, class_name: 'User',
+                                                foreign_key: owner_column.to_sym
 
-      delegate :name, to: owner_association_name.to_sym, prefix: true, allow_nil: true
+      delegate :name, to: owner_association_name.to_sym, prefix: true,
+                      allow_nil: true
 
       if default_owner_to_current_user
         before_validation do
-          send("#{owner_association_name}=", User.current) unless attributes[owner_column.to_s]
+          unless attributes[owner_column.to_s]
+            send("#{owner_association_name}=", User.current)
+          end
         end
       end
 

@@ -31,6 +31,7 @@ module Authenticatable
     end
 
     private
+
     def thread_store_key
       "authentications.#{self.name.underscore.pluralize}.current"
     end

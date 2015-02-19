@@ -15,7 +15,7 @@ module NestedSetRepresentable
         if record_or_id.is_a?(self.class)
           record = record_or_id
         else
-          record = self.unscoped.find(record_or_id) 
+          record = self.unscoped.find(record_or_id)
         end
         without(record, record.descendants)
       else

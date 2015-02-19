@@ -4,11 +4,13 @@ module Sluggable
   module ClassMethods
     def has_slug(*args)
       class_attribute :slug_attribute, :slug_options, instance_accessor: false
-      options = args.extract_options!.assert_valid_keys(:param, :from, :if, :unless, :on)
+      options = args.extract_options!.assert_valid_keys(:param, :from, :if,
+                                                        :unless, :on)
       self.slug_options = options.reverse_merge(param: true)
       self.slug_attribute = args.first || :slug
 
-      composed_of slug_attribute, mapping: [slug_attribute, 'to_s'], allow_nil: true, converter: :new
+      composed_of slug_attribute, mapping: [slug_attribute, 'to_s'],
+                                  allow_nil: true, converter: :new
 
       include Extensions
     end
@@ -34,21 +36,26 @@ module Sluggable
     end
 
     def generate_slug
-      if source_attribute = self.class.slug_options[:from]
-        source_proc = case source_attribute
-        when Proc then source_attribute
-        when Symbol then lambda { |object| object.public_send(source_attribute) }
-        else raise ArgumentError, "cannot infer slug from #{source_attribute.class.inspect}"
-        end
-        proc_args = [self].slice(0...source_proc.arity)
-        self.instance_exec(*proc_args, &source_proc)
-      end
+      source_attribute = self.class.slug_options[:from]
+      return unless source_attribute
+      source_proc = case source_attribute
+                    when Proc then source_attribute
+                    when Symbol
+                      lambda do |object|
+                        object.public_send(source_attribute)
+                      end
+                    else
+                      fail ArgumentError, 'cannot infer slug from ' +
+                                          source_attribute.class.name
+                    end
+      proc_args = [self].slice(0...source_proc.arity)
+      instance_exec(*proc_args, &source_proc)
     end
 
     def set_slug
-      if source_attribute = self.class.slug_options[:from]
-        self.send("#{self.class.slug_attribute}=", self.generate_slug)
-      end
+      source_attribute = self.class.slug_options[:from]
+      return unless source_attribute
+      send("#{self.class.slug_attribute}=", generate_slug)
     end
   end
 end

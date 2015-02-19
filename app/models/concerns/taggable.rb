@@ -59,11 +59,10 @@ module Taggable
   def tag_list
     @tag_list ||= TagCollection.new(self)
   end
-  
+
   def tag_list=(tokens)
     tag_list.set(tokens)
   end
-
 
   # Inquiries
 
@@ -73,7 +72,6 @@ module Taggable
       token.to_s.in?(tag_list.to_a)
     end
   end
-
 
   # Tag / Untag
 
@@ -92,7 +90,6 @@ module Taggable
   def untag!(*labels)
     tag_list.remove!(labels)
   end
-
 
   # Relatives
 
@@ -113,9 +110,9 @@ module Taggable
   end
 
   private
+
   def verify_tag_list_validity
-    if taggings.any? { |tagging| tagging.errors.any? }
-      errors.add(:tag_list, :contains_invalid)
-    end
+    return if taggings.none? { |tagging| tagging.errors.any? }
+    errors.add(:tag_list, :contains_invalid)
   end
 end

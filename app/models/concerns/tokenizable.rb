@@ -7,24 +7,29 @@ module Tokenizable
     def acts_as_tokenizable(*methods)
       tokenizes(*methods)
     end
-    
+
     def tokenizes(*methods)
       options = methods.extract_options!.reverse_merge(token: DEFAULT_TOKEN)
       methods.each do |method|
         method = method.to_sym
-        if association = try(:reflect_on_association, method)
+        association = try(:reflect_on_association, method)
+        if association
           # Are we working on an association?
-          raise 'association must be a one-to-many association to be used by tokenizer' unless association.collection?
+          fail 'association must be a one-to-many association to be used by ' \
+               'tokenizer' unless association.collection?
           singular_association_name = method.to_s.singularize
           class_eval <<-RUBY
             def #{singular_association_name}_tokens
-              @#{singular_association_name}_tokens ||= #{singular_association_name}_ids.join('#{options[:token]}')
+              @#{singular_association_name}_tokens ||=
+                #{singular_association_name}_ids.join('#{options[:token]}')
             end
 
             def #{singular_association_name}_tokens=(tokens)
-              ids = tokens.split('#{options[:token]}').map(&:to_i).reject(&:zero?)
+              ids = tokens.split('#{options[:token]}')
+                    .map(&:to_i).reject(&:zero?)
               self.#{singular_association_name}_ids = ids
-              @#{singular_association_name}_tokens = ids.join('#{options[:token]}')
+              @#{singular_association_name}_tokens =
+                ids.join('#{options[:token]}')
             end
           RUBY
         elsif method_defined?(method)
@@ -32,7 +37,8 @@ module Tokenizable
           singular_method_name = method.to_s.singularize
           class_eval <<-RUBY
             def #{singular_method_name}_tokens
-              @#{singular_method_name}_tokens ||= #{method}.join('#{options[:token]}')
+              @#{singular_method_name}_tokens ||=
+                #{method}.join('#{options[:token]}')
             end
 
             def #{singular_method_name}_tokens=(tokens)
@@ -41,7 +47,7 @@ module Tokenizable
             end
           RUBY
         else
-          raise "Association or method #{self.name}##{method} is not defined"
+          fail "Association or method #{name}##{method} is not defined"
         end
       end
     end

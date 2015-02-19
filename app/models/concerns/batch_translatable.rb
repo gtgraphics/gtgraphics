@@ -3,7 +3,8 @@ module BatchTranslatable
 
   module ClassMethods
     def acts_as_batch_translatable(options = {})
-      accepts_nested_attributes_for :translations, options.reverse_merge(allow_destroy: true)
+      accepts_nested_attributes_for :translations,
+                                    options.reverse_merge(allow_destroy: true)
       include Extensions
     end
   end
@@ -20,12 +21,15 @@ module BatchTranslatable
     # the current locale when saving a record.
 
     def translation
-      @translation ||= (translation_for(::Globalize.locale, false) || self.class.translation_class.new(locale: ::Globalize.locale))
+      @translation ||= (translation_for(::Globalize.locale, false) ||
+        self.class.translation_class.new(locale: ::Globalize.locale))
     end
 
     private
+
     def verify_translations_count
-      errors.add(:translations, :greater_than, count: 1) if translations.size.zero?
+      return unless translations.size.zero?
+      errors.add(:translations, :greater_than, count: 1)
     end
   end
 end

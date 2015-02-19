@@ -19,6 +19,7 @@ class Page < ActiveRecord::Base
 
     acts_as_uniquely_translated :page_id
 
-    composed_of :meta_keywords, class_name: 'TokenCollection', mapping: %w(meta_keywords to_s), converter: :new
+    composed_of :meta_keywords, class_name: 'TokenCollection',
+                                mapping: %w(meta_keywords to_s), converter: :new
   end
 end

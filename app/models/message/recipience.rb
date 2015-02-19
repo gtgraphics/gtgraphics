@@ -38,6 +38,7 @@ class Message < ActiveRecord::Base
     end
 
     private
+
     def destroy_message_if_unreferenced
       message.destroy if message.recipiences.empty?
     end
