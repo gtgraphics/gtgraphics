@@ -1,7 +1,9 @@
-@import "compass";
-@import "shops/shop-16/*.png";
+@import 'compass';
+@import 'shops/shop-16/*.png';
+// @import 'shops/shop-150/*.png';
 
 @include all-shop-16-sprites;
+// @include all-shop-150-sprites;
 
 .shop {
   display: inline-block;
@@ -17,10 +19,5 @@
   &.shop-16 {
     width: 16px;
     height: 16px;
-  }
-
-  &.shop-24 {
-    width: 24px;
-    height: 24px;
   }
 }

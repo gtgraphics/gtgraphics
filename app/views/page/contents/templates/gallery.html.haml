@@ -17,4 +17,4 @@
 - else
   .page-body
     .text-center
-      In dieser Kategorie wurden keine Bilder gefunden.
+      = translate('hints.empty', model: Image.model_name.human(count: 2))

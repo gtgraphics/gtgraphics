@@ -1,0 +1,3 @@
+en:
+  hints:
+    empty: 'No %{model} could be found in this category.'

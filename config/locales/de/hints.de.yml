@@ -1,0 +1,3 @@
+de:
+  hints:
+    empty: 'In dieser Kategorie wurden keine %{model} gefunden.'

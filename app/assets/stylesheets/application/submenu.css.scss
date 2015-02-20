@@ -8,7 +8,7 @@
   }
 }
 
-.submenu-link {
+.submenu-link, .icon-menu-link {
   margin-bottom: $grid-gutter-width;
   outline: none;
   display: block;
@@ -57,5 +57,19 @@
   &:active {
     // opacity: 0.75;
     transform: scale(0.94);
+  }
+}
+
+.icon-menu-link {
+  background-color: rgba(black, 0.2);
+  padding: 15px;
+  text-align: center;
+
+  img {
+    margin: 0 auto;
+  }
+
+  &:hover, &:focus, &:active {
+    background-color: rgba(black, 0.4);
   }
 }
