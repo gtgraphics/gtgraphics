@@ -1,5 +1,5 @@
 $(document).ready ->
-   $('.submenu-item').each ->
+   $('.submenu-item, .icon-menu-item').each ->
     $submenuItem = $(@)
     if $submenuItem.find('img').length
       $submenuItem.css(opacity: 0)
