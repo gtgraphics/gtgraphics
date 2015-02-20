@@ -1,7 +1,6 @@
 = render 'breadcrumbs'
 
-.page-header.gallery-page-header
-  %h1= page.title
+%h1.sr-only= page.title
 
 - if @project_pages.any?
   #gallery.clearfix{data: { total_pages: @project_pages.total_pages }}

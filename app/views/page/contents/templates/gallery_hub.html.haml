@@ -1,5 +1,6 @@
-.page-header
-  %h1= page.title
+= render 'breadcrumbs'
+
+%h1.sr-only= page.title
 
 - if region_content_for? :header
   .page-body

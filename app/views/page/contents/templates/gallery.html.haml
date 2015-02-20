@@ -1,3 +1,7 @@
+= render 'breadcrumbs'
+
+%h1.sr-only= page.title
+
 - if @image_pages.any?
   #gallery.clearfix{data: { total_pages: @image_pages.total_pages }}
     - @image_pages.each do |page|
