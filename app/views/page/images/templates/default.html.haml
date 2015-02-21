@@ -2,8 +2,8 @@
 
 #nav_lightbox_xs.container.visible-xs
   = link_to :root, id: 'brand' do
-    = image_tag 'logo.png', id: 'logo', alt: 'GT Graphics'
-    .sr-only GT Graphics
+    = image_tag 'logo.png', id: 'logo', alt: 'GTGRAPHICS'
+    .sr-only GTGRAPHICS
   = render 'navbar'
 
 - present @page do |page|
@@ -12,8 +12,8 @@
       %nav.navbar.navbar-lightbox#navbar_lightbox.hidden-xs{role: 'navigation'}
         .container-fluid
           = link_to :root, id: 'lightbox_brand', class: 'navbar-brand hidden-xs' do
-            = image_tag 'lightbox_logo.png', id: 'logo', alt: 'GT Graphics'
-            %span.sr-only GT Graphics
+            = image_tag 'lightbox_logo.png', id: 'logo', alt: 'GTGRAPHICS'
+            %span.sr-only GTGRAPHICS
 
           #nav_lightbox_controls
             - if @gallery_page

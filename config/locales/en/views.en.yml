@@ -1,6 +1,6 @@
 en:
   views:
-    title: GT Graphics
+    title: GTGRAPHICS
     forms:
       advanced_options: Advanced Options
       settings: Settings
@@ -16,7 +16,7 @@ en:
     loader:
       loading: Loading
     admin:
-      title: GT Graphics Administration
+      title: GTGRAPHICS Administration
       editor:
         target:
           self: This Window
@@ -32,7 +32,7 @@ en:
 
     page/image:
       shops:
-        gtgraphics: GT Graphics
+        gtgraphics: GTGRAPHICS
         deviantart: DeviantArt
         fineartprint: FineArtPrint
         fineartamerica_url: FineArtAmerica

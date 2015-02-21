@@ -4,7 +4,7 @@ GtGraphics::Application.configure do
 
   config.middleware.use ExceptionNotification::Rack, email: {
     email_prefix: '[Staging] ',
-    sender_address: %("GT Graphics Exception Notifier" <noreply@gtgraphics.de>),
+    sender_address: %("GTGRAPHICS Exception Notifier" <noreply@gtgraphics.de>),
     exception_recipients: %w(webmaster@gtgraphics.de)
   }
 

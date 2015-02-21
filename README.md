@@ -1,4 +1,4 @@
-# GT Graphics
+# GTGRAPHICS
 
 [<img src="https://codeclimate.com/github/gtgraphics/gtgraphics.png" />](https://codeclimate.com/github/gtgraphics/gtgraphics)
 

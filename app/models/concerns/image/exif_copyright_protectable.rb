@@ -4,7 +4,7 @@ class Image < ActiveRecord::Base
   module ExifCopyrightProtectable
     extend ActiveSupport::Concern
 
-    COPYRIGHT_NOTE = 'Copyright %{year} %{name}, GT Graphics. ' \
+    COPYRIGHT_NOTE = 'Copyright %{year} %{name}, GTGRAPHICS. ' \
                      'All rights reserved.'
 
     included do

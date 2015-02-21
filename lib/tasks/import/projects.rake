@@ -1,6 +1,6 @@
 namespace :gtg do
   namespace :import do
-    desc 'Import all remote GT Graphics projects'
+    desc 'Import all remote GTGRAPHICS projects'
     task projects: :environment do
       puts 'Destroying existing Projects'
       Project.destroy_all
