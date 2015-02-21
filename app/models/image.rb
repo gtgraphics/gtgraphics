@@ -25,8 +25,8 @@
 class Image < ActiveRecord::Base
   include Image::Attachable
   include Image::Croppable
-  include Image::ProjectAssignable
   include Image::Resizable
+  include Image::ProjectAssignable
   include Image::ExifStorable
   include Image::Buyable
 
@@ -44,7 +44,7 @@ class Image < ActiveRecord::Base
                    'All rights reserved.'
 
   # Disallow changing the asset as all custom_styles depend on it
-  attr_readonly :asset
+  # attr_readonly :asset
 
   has_many :styles, class_name: 'Image::Style', inverse_of: :image,
                     dependent: :destroy
@@ -55,6 +55,9 @@ class Image < ActiveRecord::Base
                           foreign_key: :delegator_id, dependent: :destroy
 
   has_image
+  acts_as_croppable
+  acts_as_resizable
+
   has_owner :author, default_owner_to_current_user: false
 
   translates :title, :description, fallbacks_for_empty_translations: true
