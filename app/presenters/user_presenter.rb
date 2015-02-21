@@ -28,12 +28,11 @@ class UserPresenter < ApplicationPresenter
     h.link_to_if linked, content, path
   end
 
-  def info
-    details = h.capture do
-      h.concat thumbnail(class: 'author-picture')
-      h.concat h.content_tag(:div, name, class: 'author-name')
-    end
-    return h.link_to details, path, class: 'author' if about_page?
-    h.content_tag :div, details, class: 'author'
+  def info_icon
+    pic = thumbnail(class: 'author-picture')
+    h.content_tag :div, pic, class: 'author-info' unless about_page?
+    h.link_to pic, path, class: 'author-info', title: name,
+                         data: { toggle: 'tooltip', placement: 'top',
+                                 container: 'body' }
   end
 end
