@@ -43,9 +43,6 @@ class Image < ActiveRecord::Base
   COPYRIGHT_NOTE = 'Copyright %{year} %{author}, GTGRAPHICS. ' \
                    'All rights reserved.'
 
-  # Disallow changing the asset as all custom_styles depend on it
-  # attr_readonly :asset
-
   has_many :styles, class_name: 'Image::Style', inverse_of: :image,
                     dependent: :destroy
   has_many :image_pages, class_name: 'Page::Image', inverse_of: :image,
@@ -68,6 +65,7 @@ class Image < ActiveRecord::Base
 
   before_validation :set_default_title, on: :create
   before_create :set_author, unless: :author_id?
+  after_update :destroy_styles, if: :asset_changed?
   after_save :write_copyright!, if: [:exif_capable?, :write_copyright?]
 
   def dominant_colors
@@ -133,5 +131,9 @@ class Image < ActiveRecord::Base
 
   def write_copyright?
     author_id_changed? || asset_changed?
+  end
+
+  def destroy_styles
+    styles.destroy_all
   end
 end

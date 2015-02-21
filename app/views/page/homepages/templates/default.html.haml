@@ -2,8 +2,8 @@
   .cover-carousel-inner{role: 'listbox'}
     - @covers.each do |image, page|
       - if page
-        = link_to page, class: 'item', data: { cover: attached_asset_path(image, :custom) } do
+        = link_to page, class: 'item', data: { cover: attached_asset_path(image, :public) } do
           %span.sr-only= image.title
       - else
-        .item{data: { cover: attached_asset_path(image, :custom) }}
+        .item{data: { cover: attached_asset_path(image, :public) }}
           %span.sr-only= image.title

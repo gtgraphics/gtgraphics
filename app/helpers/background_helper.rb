@@ -6,7 +6,7 @@ module BackgroundHelper
   end
 
   def background_url
-    attached_asset_path(background_image, :custom) if background_image
+    attached_asset_path(background_image, :public) if background_image
   end
 
   def background_image_tag(options = {})
