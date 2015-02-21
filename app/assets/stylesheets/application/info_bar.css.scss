@@ -1,32 +1,52 @@
 @import 'bootstrap_config';
 
 .info-bar {
-  background-color: $content-bg-dark;
-  margin-bottom: $content-padding;
+  margin-bottom: 2 * $content-padding;
 
   @media (min-width: $screen-md) {
+    background-color: $content-bg-dark;
     margin-bottom: $content-padding-md;
   }
 
   @media (min-width: $screen-lg) {
-    margin-bottom: $content-padding-lg
+    margin-bottom: $content-padding-lg;
+  }
+
+  .list-info-bar {
+    margin-bottom: $content-padding;
+    background-color: $content-bg-dark;
+
+    @media (min-width: $screen-md) {
+      background: none;
+      margin-bottom: 0;
+    }
   }
 }
 
-
 .list-info-bar {
   @include clearfix;
+
   margin: 0;
   padding: 0;
   list-style: none;
   display: block;
+  color: $gray-light;
 
   li {
     display: block;
     float: left;
     padding: 10px;
+    line-height: 1.45;
     + li {
       border-left: 1px solid $content-bg;
+    }
+
+    a {
+      color: $gray-light;
+
+      &:hover, &:focus, &:active {
+        color: $gray-lighter;
+      }
     }
   }
 }

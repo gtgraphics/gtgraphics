@@ -7,7 +7,7 @@
     margin-bottom: $content-padding-lg;
   }
 
-  @media (min-width: $screen-sm-min) {
+  @media (min-width: $screen-md-min) {
     &:last-child {
       margin-bottom: 0;
     }
