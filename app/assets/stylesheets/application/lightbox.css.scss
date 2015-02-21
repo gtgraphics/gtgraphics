@@ -166,6 +166,7 @@ $lightbox-control-size: 100px;
   .lightbox-background {
     background-size: cover;
     opacity: 0.3;
+    transform: scale(1.1);
     @include blur(20);
   }
 
