@@ -1,22 +1,22 @@
 namespace :gtg do
   namespace :import do
     namespace :galleries do
-      desc 'Import all remote GT Graphics galleries'
+      desc 'Import all remote GTGRAPHICS galleries'
       task :all => [:wallpapers, :artworks, :photos]
 
-      desc 'Import wallpapers from the remote GT Graphics gallery'
+      desc 'Import wallpapers from the remote GTGRAPHICS gallery'
       task :wallpapers => :environment do
         gallery_page = Page.find_by! path: 'wallpapers'
         import_gallery 'wallpapers', gallery_page
       end
 
-      desc 'Import artworks from the remote GT Graphics gallery'
+      desc 'Import artworks from the remote GTGRAPHICS gallery'
       task :artworks => :environment do
         gallery_page = Page.find_by! path: 'artworks'
         import_gallery 'artworks', gallery_page
       end
 
-      desc 'Import photos from the remote GT Graphics gallery'
+      desc 'Import photos from the remote GTGRAPHICS gallery'
       task :photos => :environment do
         path = 'photography'
         gallery_page = Page.find_by! path: path
@@ -44,7 +44,7 @@ namespace :gtg do
         # The image we want to create
         image = Image.new
 
-        # Author 
+        # Author
         image.author = parser.author
 
         # Assets
@@ -107,7 +107,7 @@ namespace :gtg do
 
         # Hits Count
         page.hits_count = parser.hits_count
-       
+
         # Avoid path collisions by determining the next available slug
         page.set_next_available_slug
 

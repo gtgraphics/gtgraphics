@@ -1,3 +1,3 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: %{"GT Graphics" <noreply@gtgraphics.de>}
+  default from: %{"GTGRAPHICS" <noreply@gtgraphics.de>}
 end

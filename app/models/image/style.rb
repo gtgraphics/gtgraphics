@@ -24,7 +24,7 @@ class Image < ActiveRecord::Base
   class Style < ActiveRecord::Base
     include Image::Attachable
     include Image::Croppable
-    include Image::Resizablepc
+    include Image::Resizable
     include Image::ExifAnalyzable
 
     include PersistenceContextTrackable

@@ -40,7 +40,7 @@ class Image < ActiveRecord::Base
   include TitleSearchable
   include Translatable
 
-  COPYRIGHT_NOTE = 'Copyright %{year} %{author}, GT Graphics. ' \
+  COPYRIGHT_NOTE = 'Copyright %{year} %{author}, GTGRAPHICS. ' \
                    'All rights reserved.'
 
   # Disallow changing the asset as all custom_styles depend on it

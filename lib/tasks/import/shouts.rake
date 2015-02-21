@@ -2,7 +2,7 @@ require 'csv'
 
 namespace :gtg do
   namespace :import do
-    desc 'Import all remote GT Graphics shouts from the star map'
+    desc 'Import all remote GTGRAPHICS shouts from the star map'
     task :shouts => :environment do
       # TODO
       filename = ENV.fetch('FILE') { "#{Rails.root}/tmp/shoutbox.csv" }

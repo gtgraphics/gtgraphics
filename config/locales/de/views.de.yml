@@ -1,6 +1,6 @@
 de:
   views:
-    title: GT Graphics
+    title: GTGRAPHICS
     forms:
       advanced_options: Erweiterte Optionen
       basics: Basisdaten
@@ -26,7 +26,7 @@ de:
       loading: Lade
 
     admin:
-      title: GT Graphics Administration
+      title: GTGRAPHICS Administration
       account:
         breadcrumbs:
           my_account: Ich
@@ -92,7 +92,7 @@ de:
 
     page/image:
       shops:
-        gtgraphics: GT Graphics
+        gtgraphics: GTGRAPHICS
         deviantart: DeviantArt
         fineartprint: FineArtPrint
         fineartamerica_url: FineArtAmerica
