@@ -6,28 +6,26 @@
     %h1= project.title
 
   .page-body
-    .info-bar
-      .row
-        .col-md-9
-          %ul.list-info-bar
-            %li.author
-              = project.author.info_icon
+    - if project.client.present? && project.project_type.present? && project.released_in.present?
+      .info-bar
+        .row
+          .col-md-9
+            %ul.list-info-bar
+              - if project.client.present?
+                %li.client
+                  = link_to_if project.client.website_url.present?, prepend_icon(:user, project.client, fixed_width: true), project.client.website_url
+              - if project.project_type.present?
+                %li.project-type
+                  = prepend_icon :tag, project.project_type, fixed_width: true
+              - if project.released_in.present?
+                %li.release-date
+                  = prepend_icon :clock, project.released_in, outline: true, fixed_width: true
 
-            - if project.client.present?
-              %li.client
-                = link_to_if project.client.website_url.present?, prepend_icon(:user, project.client, fixed_width: true), project.client.website_url
-            - if project.project_type.present?
-              %li.project-type
-                = prepend_icon :tag, project.project_type, fixed_width: true
-            - if project.released_in.present?
-              %li.release-date
-                = prepend_icon :clock, project.released_in, outline: true, fixed_width: true
-
-        .col-md-3
-          - if project.url.present?
-            / Project Link
-            = button_link_to project.url, as: :primary, block: true, size: :lg, target: '_blank' do
-              = append_icon :external_link, translate('helpers.links.view_project'), style: :square, fixed_width: true
+          .col-md-3
+            - if project.url.present?
+              / Project Link
+              = button_link_to project.url, as: :primary, block: true, size: :lg, target: '_blank' do
+                = append_icon :external_link, translate('helpers.links.view_project'), style: :square, fixed_width: true
 
     .row
       %div{class: project.description.present? ? 'col-md-9' : 'col-md-10 col-md-offset-1'}
@@ -40,4 +38,7 @@
 
       - if project.description.present?
         .col-md-3
-          = project.description
+          .content
+            = project.description
+          .content
+            = project.author.info

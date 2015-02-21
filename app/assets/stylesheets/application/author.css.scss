@@ -1,17 +1,27 @@
 @import 'bootstrap_config';
 
 .author-info {
+  $author-info-height: 43px;
+
   @include clearfix;
   display: block;
+  color: $gray-light;
+
+  &:hover, &:focus, &:active {
+    color: $gray-lighter;
+  }
 
   .author-picture {
     float: left;
     display: block;
-    width: 43px;
+    width: $author-info-height;
+    height: $author-info-height;
     margin-right: 10px;
   }
 
   .author-name {
-
+    display: table-cell;
+    height: $author-info-height;
+    vertical-align: middle;
   }
 }
