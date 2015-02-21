@@ -28,17 +28,18 @@
                 = append_icon :external_link, translate('helpers.links.view_project'), style: :square, fixed_width: true
 
     .row
-      %div{class: project.description.present? ? 'col-md-9' : 'col-md-10 col-md-offset-1'}
+      - if project.description.present?
+        .col-md-3.col-md-push-9
+          .project-description
+            .content
+              = project.description
+            .content
+              = project.author.info
+
+      %div{class: project.description.present? ? 'col-md-9 col-md-pull-3' : 'col-md-10 col-md-offset-1'}
         - present_collection(@images).each do |image|
           %figure.thumbnail.project-thumbnail
             = image_tag attached_asset_path(image, :public), alt: image.title, class: 'img-responsive img-emerging'
             - if image.description.present?
               %figcaption.caption
                 = image.description
-
-      - if project.description.present?
-        .col-md-3
-          .content
-            = project.description
-          .content
-            = project.author.info

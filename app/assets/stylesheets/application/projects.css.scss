@@ -19,3 +19,10 @@
   }
 }
 
+.project-description {
+  margin-bottom: 25px;
+
+  @media (min-width: $screen-md-min) {
+    margin-bottom: 0;
+  }
+}
