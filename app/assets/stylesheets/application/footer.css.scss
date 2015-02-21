@@ -3,7 +3,7 @@
 .navbar-footer {
   color: #666;
   font-size: 12px;
-  border-top: none;
+    border-top: none;
   margin: 0;
   border: none;
   padding: {
@@ -28,6 +28,7 @@
     padding: 14px;
     line-height: 14px;
     color: $gray-light;
+    font-weight: normal;
 
     @media (min-width: $screen-md-min) {
       text-shadow: 0 0 4px rgba(black, 0.9);

@@ -14,7 +14,7 @@ jQuery.prepare ->
     ['orderedList', 'unorderedList']
   ]
 
-  $('.image-editor, .attachment-editor', @).editor controls: [
+  $('.image-editor, .attachment-editor, .project-editor', @).editor controls: [
     ['bold', 'italic', 'underline', 'strikethrough'],
     ['orderedList', 'unorderedList', 'indent', 'outdent'],
     ['link', 'unlink'],

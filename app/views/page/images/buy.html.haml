@@ -1,6 +1,6 @@
 .row
   .col-md-offset-1.col-md-10
-    .page-prominent-container
+    .page-prominent-container-md
       = render 'breadcrumbs'
 
       .page-header
@@ -14,13 +14,12 @@
 
           .col-sm-8
             = simple_form_for @message, as: :message, url: request_image_purchase_path(@page.path), wrapper: :vertical_form, defaults: { input_html: { class: 'input-lg' }} do |form|
-
-              = form.input :first_sender_name, label: false, input_html: { autofocus: true }
-              = form.input :last_sender_name, label: false
-              = form.input :sender_email, label: false
-              %hr
-              = form.input :body, label: false, input_html: { rows: 8 }
-              %hr
-              .form-group
+              .content.form-inputs
+                = form.input :first_sender_name, label: false, input_html: { autofocus: true }
+                = form.input :last_sender_name, label: false
+                = form.input :sender_email, label: false
+              .content.form-inputs
+                = form.input :body, label: false, input_html: { rows: 8 }
+              .content.form-group
                 = form.button :submit, class: 'btn-primary btn-lg pull-right'
 

@@ -2,4 +2,9 @@
 
 hr {
   border-top-color: lighten($content-bg, 3%);
+
+  &.collapsed {
+    padding: 0;
+    margin: 0;
+  }
 }

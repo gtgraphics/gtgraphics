@@ -34,7 +34,7 @@
                 .btn-group.only-js
                   %span.btn.btn-success.fileinput-button
                     = prepend_icon :upload, translate('helpers.links.upload', model: Image.model_name.human(count: 2))
-                    = file_field_tag :image_upload, name: 'image[asset]', multiple: true, data: { url: upload_admin_project_images_path(@project) }
+                    = file_field_tag :image_upload, name: 'image[asset]', multiple: true, data: { url: upload_admin_project_images_path(@project), bfi_disabled: true }
                 .btn-group
                   = button_link_to [:assign_images_to, :admin, @project], remote: true do
                     = prepend_icon :mail_forward, translate('helpers.links.assign', model: Image.model_name.human(count: 2))

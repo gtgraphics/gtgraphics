@@ -1,35 +1,46 @@
-= render 'breadcrumbs'
+- present @project do |project|
 
-- present @page do |page|
-  - present @project do |project|
+  = render 'breadcrumbs'
 
-    .page-header
-      %h1= project.title
+  .page-header
+    %h1= project.title
 
-    .page-body
-      .row
-        .col-sm-8
-          - if @images.size < 3
-            .row
-              - @images.each do |image|
-                .col-sm-12
-                  .thumbnail
-                    = image_tag attached_asset_path(image, :custom), alt: image.title, class: 'img-responsive'
-          - else
-            .row
-              .col-sm-12
-                .thumbnail
-                  = image_tag attached_asset_path(@images.first, :custom), alt: @images.first.title, class: 'img-responsive'
+  .page-body
+    .row
+      .col-md-9
+        - present_collection(@images).each do |image|
+          %figure.thumbnail.project-thumbnail
+            = image_tag attached_asset_path(image, :custom), alt: image.title, class: 'img-responsive img-emerging'
+            - if image.description.present?
+              %figcaption.caption
+                = image.description
 
-            - @images.drop(1).each_slice(3) do |images|
-              .row
-                - images.each do |image|
-                  .col-sm-4
-                    .thumbnail
-                      = image_tag attached_asset_path(image, :brick), alt: image.title, class: 'img-responsive'
+      .col-md-3
+        - if project.url.present?
+          .content
+            = button_link_to project.url, as: :primary, block: true, size: :lg, target: '_blank' do
+              = append_icon :external_link, 'Zum Projekt', style: :square, fixed_width: true
+          %hr
 
-        .col-sm-4
-          = project.attribute_list :client, :released_in
+        .content
+          = button_link_to project.author.path, as: :toolbar_info, class: 'toolbar-author' do
+            .toolbar-author-image
+              = project.author.thumbnail
+            .toolbar-author-name.hidden-xs.hidden-sm
+              = project.author.name
 
+        .content
+          - if project.client.present?
+            .client
+              = prepend_icon :user, project.client, fixed_width: true
+          - if project.project_type.present?
+            .project-type
+              = prepend_icon :tag, project.project_type, fixed_width: true
+          - if project.released_in.present?
+            .release
+              = prepend_icon :clock, project.released_in, outline: true, fixed_width: true
+
+        - if project.description.present?
+          %hr
           .content
             = project.description

@@ -33,7 +33,7 @@
     // font-weight: 700;
     padding: 10px;
     text-align: center;
-    background-color: rgba(black, 0.2);
+    background-color: $content-bg-dark;
     text-transform: uppercase;
     color: $text-color;
     text-decoration: none;
@@ -49,7 +49,7 @@
 
     .submenu-item-title {
       color: $text-color;
-      background-color: rgba(black, 0.4);
+      background-color: $content-bg-darker;
       text-decoration: none;
     }
   }

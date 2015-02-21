@@ -1,5 +1,9 @@
 @import 'bootstrap_config';
 
+body {
+  font-weight: 300;
+}
+
 // #page_wrapper {
 //   border-radius: 3px;
 //   overflow: hidden;
@@ -76,8 +80,14 @@
   }
 }
 
-.page-prominent-container {
+.page-prominent-container-md {
   @media (min-width: $screen-md-min) {
+    padding: 20px 0;
+  }
+}
+
+.page-prominent-container-lg {
+  @media (min-width: $screen-lg-min) {
     padding: 20px 0;
   }
 }
@@ -92,4 +102,16 @@
   a, button, input[type="submit"], input[type="button"] {
     transition: all 100ms ease-out;
   }
+}
+
+.content + .content {
+  margin-top: $content-padding;
+
+  @media (min-width: $screen-md-min) {
+    margin-top: $content-padding-lg;
+  }
+}
+
+.text-lg {
+  font-size: $font-size-large;
 }

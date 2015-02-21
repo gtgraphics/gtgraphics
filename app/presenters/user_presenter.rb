@@ -21,8 +21,7 @@ class UserPresenter < ApplicationPresenter
     options = args.extract_options!
     options = options.reverse_merge(
       width: options[:size],
-      height: options[:size],
-      class: 'img-circle'
+      height: options[:size]
     )
     linked = args.first && about_page?
     content = h.user_thumbnail_image_tag(user, options)

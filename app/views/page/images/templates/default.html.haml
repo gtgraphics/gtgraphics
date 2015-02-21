@@ -19,7 +19,7 @@
             - if @gallery_page
               %ul#nav_close.nav.navbar-nav.navbar-right
                 %li
-                  = link_to @gallery_page, id: 'lightbox_close' do
+                  = link_to @gallery_page, id: 'lightbox_close', title: translate('helpers.links.close'), data: { toggle: 'tooltip', placement: 'bottom' } do
                     = close
                     %span.sr-only= translate('helpers.links.close')
 
@@ -101,7 +101,7 @@
               .page-body
                 .row
                   .lightbox-author-avatar.hidden-xs.hidden-sm.col-md-1
-                    = image.author.thumbnail(true, class: 'img-circle img-responsive')
+                    = image.author.thumbnail(true, class: 'img-responsive')
 
                   .lightbox-caption.col-xs-12.col-md-11
                     = image.description
