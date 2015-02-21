@@ -13,7 +13,7 @@
             %ul.list-info-bar
               - if project.client.present?
                 %li.client
-                  = link_to_if project.client.website_url.present?, prepend_icon(:user, project.client, fixed_width: true), project.client.website_url
+                  = link_to_if project.client.website_url.present?, prepend_icon(:user, project.client, fixed_width: true), project.client.website_url, target: '_blank'
               - if project.project_type.present?
                 %li.project-type
                   = prepend_icon :tag, project.project_type, fixed_width: true
