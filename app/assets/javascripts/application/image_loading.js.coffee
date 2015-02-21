@@ -1,5 +1,5 @@
 $(document).ready ->
-   $('.img-emerging').each ->
+   $('.img-emerging, .region-image img, .region-linked-image img').each ->
     $image = $(@)
     $image.css(opacity: 0)
     $image.allImagesLoaded ->
