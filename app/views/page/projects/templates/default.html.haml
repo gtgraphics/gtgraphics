@@ -6,7 +6,7 @@
     %h1= project.title
 
   .page-body
-    - if project.client.present? && project.project_type.present? && project.released_in.present?
+    - if project.client.present? || project.project_type.present? || project.released_in.present?
       .info-bar
         .row
           .col-md-9
