@@ -1,4 +1,5 @@
-= image_tag 'prints_header.jpg', alt: page.title, class: 'img-responsive img-emerging hidden-xs unselectable'
+.hidden-xs
+  = yield_region :header_image
 
 - if region_content_for? :main
   .page-body

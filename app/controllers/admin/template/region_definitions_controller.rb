@@ -10,7 +10,8 @@ class Admin::Template::RegionDefinitionsController < Admin::ApplicationControlle
   end
 
   def create
-    @region_definition = @template.region_definitions.create(region_definition_params)
+    @region_definition = @template.region_definitions
+                         .create(region_definition_params)
     respond_with :admin, abstract_template, @region_definition
   end
 
@@ -20,22 +21,26 @@ class Admin::Template::RegionDefinitionsController < Admin::ApplicationControlle
 
   def update
     @region_definition.update(region_definition_params)
-    respond_with :admin, abstract_template, @region_definition, location: [:admin, abstract_template]
+    respond_with :admin, abstract_template, @region_definition,
+                 location: [:admin, abstract_template]
   end
 
   def move_up
     @region_definition.move_higher
-    respond_with :admin, abstract_template, @region_definition, location: [:admin, abstract_template]
+    respond_with :admin, abstract_template, @region_definition,
+                 location: [:admin, abstract_template]
   end
 
   def move_down
     @region_definition.move_lower
-    respond_with :admin, abstract_template, @region_definition, location: [:admin, abstract_template]
+    respond_with :admin, abstract_template, @region_definition,
+                 location: [:admin, abstract_template]
   end
 
   def destroy
     @region_definition.destroy
-    respond_with :admin, abstract_template, @region_definition, location: [:admin, abstract_template]
+    respond_with :admin, abstract_template, @region_definition,
+                 location: [:admin, abstract_template]
   end
 
   private
@@ -48,10 +53,13 @@ class Admin::Template::RegionDefinitionsController < Admin::ApplicationControlle
   end
 
   def load_region_definition
-    @region_definition = @template.region_definitions.find_by!(label: params[:id])
+    @region_definition = @template.region_definitions
+                         .find_by!(label: params[:id])
   end
 
   def region_definition_params
-    params.require(:template_region_definition).permit(:name, :label)
+    params.require(:template_region_definition).permit(
+      :name, :label, :region_type
+    )
   end
 end

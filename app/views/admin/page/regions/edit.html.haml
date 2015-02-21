@@ -54,13 +54,4 @@
 
   %br
 
-  / = text_field_tag :title, @page.title, class: 'form-control input-lg', placeholder: Page.human_attribute_name(:title)
-  / %br
-
-  = form.input :body, label: false, input_html: { class: 'editor', rows: 22 }
-
-  / .clearfix.text-muted
-  /   .pull-left
-  /     = @region.definition
-  /   .pull-right
-  /     = time_ago @region.updated_at
+  = form.input :body, label: false, input_html: { data: { behavior: 'editor', type: @region.definition.region_type }, rows: 22 }

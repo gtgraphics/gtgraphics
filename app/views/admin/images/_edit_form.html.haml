@@ -1,7 +1,7 @@
 = simple_form_for [:admin, @image], html: { class: 'form-horizontal' } do |form|
 
   = form.input :title
-  = form.input :description, input_html: { class: 'image-editor', rows: 6 }
+  = form.input :description, input_html: { class: 'caption-editor', rows: 6 }
   = form.association :author, as: :radio_buttons, wrapper: :horizontal_radio_and_checkboxes
 
   %fieldset

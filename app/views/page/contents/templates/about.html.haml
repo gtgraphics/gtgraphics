@@ -1,0 +1,9 @@
+.hidden-xs
+  = yield_region :header_image
+
+- if region_content_for? :main
+  .page-body
+    .row
+      .col-md-offset-1.col-md-10.text-lg
+        = yield_region :main
+

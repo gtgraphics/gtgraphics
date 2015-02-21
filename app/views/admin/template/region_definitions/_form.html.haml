@@ -2,6 +2,7 @@
   .modal-body
     = form.input :name, input_html: { autofocus: @region_definition.persisted? }
     = form.input :label, input_html: { autofocus: @region_definition.new_record?, class: 'monospace' }
+    = form.input :region_type, collection: @region_definition.class.region_types.map { |rt| [translate(rt, scope: 'template/region_definitions.region_types', default: rt.titleize), rt] }
 
   .modal-footer
     = form.button :button, type: 'submit', class: 'btn-primary' do

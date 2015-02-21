@@ -136,4 +136,11 @@ en:
       owned: 'Check out "%{title}" by @%{author} on #GTGraphics'
       ownerless: 'Check out "%{title}" on #GTGraphics'
 
+  template/region_definitions:
+    region_types:
+      full: Full
+      simple: Simple
+      image: Image
+      linked_image: Linked Image
+
   homepage: Homepage

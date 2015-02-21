@@ -24,6 +24,7 @@
 #  last_activity_at                :datetime
 #  last_login_from_ip_address      :string(255)
 #  twitter_username                :string(255)
+#  asset_token                     :string(255)
 #  photo                           :string(255)
 #  photo_updated_at                :datetime
 #

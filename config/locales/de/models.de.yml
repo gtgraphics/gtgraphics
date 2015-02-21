@@ -252,6 +252,7 @@ de:
         usage: Verwendung
       template/region_definition:
         label: Schlüssel
+        region_type: Typ
       user:
         first_name: Vorname
         last_name: Nachname
@@ -387,6 +388,13 @@ de:
     twitter_share_text:
       owned: 'Gerade gesehen bei #GTGraphics: "%{title}" von @%{author}'
       ownerless: 'Gerade gesehen bei #GTGraphics: "%{title}"'
+
+  template/region_definitions:
+    region_types:
+      full: Vollständig
+      simple: Einfach
+      image: Bild
+      linked_image: Verknüpftes Bild
 
   image:
     predefined_styles:

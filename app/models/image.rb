@@ -19,6 +19,7 @@
 #  original_filename     :string(255)
 #  asset_token           :string(255)      not null
 #  shop_urls             :text
+#  dominant_colors       :text
 #
 
 class Image < ActiveRecord::Base

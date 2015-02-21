@@ -35,13 +35,7 @@ class Admin::ImagesController < Admin::ApplicationController
     else
       @images = @images.search(params[:query])
       @image_search = @images.ransack(params[:search])
-      if @image_search.sorts.empty?
-        if request.format.json?
-          @image_search.sorts = 'created_at desc'
-        else
-          @image_search.sorts = 'translations_title asc'
-        end
-      end
+      @image_search.sorts = 'created_at desc' if @image_search.sorts.empty?
       @images = @image_search.result(distinct: true)
     end
 

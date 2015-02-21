@@ -8,7 +8,7 @@
         = link_to @attachment.original_filename, [:download, :admin, @attachment]
 
   = form.input :title
-  = form.input :description, input_html: { class: 'attachment-editor', rows: 6 }
+  = form.input :description, input_html: { class: 'caption-editor', rows: 6 }
   = form.association :author, as: :radio_buttons, wrapper: :horizontal_radio_and_checkboxes
 
   = form_actions do

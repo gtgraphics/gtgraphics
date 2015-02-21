@@ -13,7 +13,7 @@
                 = prepend_icon :wrench, translate('helpers.links.options'), fixed_width: true
             - if @page.support_templates?
               %li{class: @page.template.region_definitions.empty? ? 'disabled' : nil}
-                = link_to [:admin, @page, :regions], accesskey: 'C' do
+                = link_to [:admin, @page, :regions] do
                   = prepend_icon :edit, translate('helpers.links.edit_regions'), fixed_width: true
 
             %li.divider
@@ -26,10 +26,10 @@
                 = link_to [:publish, :admin, @page], method: :patch do
                   = prepend_icon :eye, translate('helpers.links.publish'), fixed_width: true
             - if @page.menu_item?
-              %li= link_to prepend_icon(:square, translate('helpers.links.disable_in_menu'), outline: true, fixed_width: true), [:disable_in_menu, :admin, @page], method: :patch            
+              %li= link_to prepend_icon(:square, translate('helpers.links.disable_in_menu'), outline: true, fixed_width: true), [:disable_in_menu, :admin, @page], method: :patch
             - else
               %li= link_to prepend_icon(:check_square, translate('helpers.links.enable_in_menu'), outline: true, fixed_width: true), [:enable_in_menu, :admin, @page], method: :patch
-            
+
           - if can? :read, @page
             %li.divider
             %li
@@ -39,6 +39,10 @@
           - if can? :destroy, @page
             %li.divider
             %li= link_to prepend_icon(:trash, translate('helpers.links.destroy'), outline: true, fixed_width: true), [:admin, @page], method: :delete, data: { hotkey: 'del', confirm: translate('helpers.confirmations.destroy', model: Page.model_name.human) }
+
+    - if @page.support_templates?
+      = button_link_to [:admin, @page, :regions], accesskey: 'C', class: 'pull-right', title: translate('helpers.links.edit_regions'), data: { toggle: 'tooltip', placement: 'top', container: 'body' } do
+        = prepend_icon :edit, translate('helpers.links.edit_regions'), fixed_width: true, caption_html: { class: 'sr-only' }
 
     .btn-group.pull-right
       = button_link_to typed_new_admin_page_child_path(@page, page_type: :content), type: :primary, remote: true, accesskey: 'N' do

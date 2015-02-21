@@ -59,11 +59,11 @@ class Editor::Image < EditorForm
       url
     else
       if original_style?
-        model = self.image
+        model = image
       else
-        model = self.style
+        model = style
       end
-      model.asset.custom.url
+      model.asset.public.url
     end
   end
 
@@ -85,6 +85,7 @@ class Editor::Image < EditorForm
   end
 
   private
+
   def set_defaults
     if persisted?
       if internal? and image.nil?
