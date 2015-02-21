@@ -55,7 +55,7 @@ class Project < ActiveRecord::Base
   end
 
   def cover
-    images.first
+    @cover ||= images.first
   end
 
   private
