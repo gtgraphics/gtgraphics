@@ -90,6 +90,7 @@ de:
       upload: '%{model} hochladen'
       view: Ansehen
       view_mode: Betrachtungsmodus
+      view_project: Zum Projekt
       toggle_navigation: Navigation umschalten
       tweet: Twittern
     confirmations:

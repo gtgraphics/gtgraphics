@@ -41,6 +41,11 @@
       border-left: 1px solid $content-bg;
     }
 
+    &.author {
+      padding: 0;
+      width: 43px;
+    }
+
     a {
       color: $gray-light;
 

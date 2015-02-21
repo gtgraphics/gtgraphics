@@ -6,11 +6,13 @@
     %h1= project.title
 
   .page-body
-
     .info-bar
       .row
         .col-md-9
           %ul.list-info-bar
+            %li.author
+              = project.author.info_icon
+
             - if project.client.present?
               %li.client
                 = link_to_if project.client.website_url.present?, prepend_icon(:user, project.client, fixed_width: true), project.client.website_url
@@ -25,11 +27,10 @@
           - if project.url.present?
             / Project Link
             = button_link_to project.url, as: :primary, block: true, size: :lg, target: '_blank' do
-              = append_icon :external_link, 'Zum Projekt', style: :square, fixed_width: true
-
+              = append_icon :external_link, translate('helpers.links.view_project'), style: :square, fixed_width: true
 
     .row
-      .col-md-9
+      %div{class: project.description.present? ? 'col-md-9' : 'col-md-10 col-md-offset-1'}
         - present_collection(@images).each do |image|
           %figure.thumbnail.project-thumbnail
             = image_tag attached_asset_path(image, :public), alt: image.title, class: 'img-responsive img-emerging'
@@ -37,11 +38,6 @@
               %figcaption.caption
                 = image.description
 
-      .col-md-3
-        .content
-          = project.author.thumbnail
-          = project.author.name
-
-        - if project.description.present?
-          .content
-            = project.description
+      - if project.description.present?
+        .col-md-3
+          = project.description
