@@ -24,8 +24,8 @@ class Image < ActiveRecord::Base
   class Style < ActiveRecord::Base
     include Image::Attachable
     include Image::Croppable
+    include Image::Resizablepc
     include Image::ExifAnalyzable
-    include Image::Resizable
 
     include PersistenceContextTrackable
     include TitleSearchable
@@ -41,6 +41,8 @@ class Image < ActiveRecord::Base
     acts_as_list scope: :image_id
 
     has_image
+    acts_as_croppable
+    acts_as_resizable
 
     validates :image_id, presence: true, strict: true
 
