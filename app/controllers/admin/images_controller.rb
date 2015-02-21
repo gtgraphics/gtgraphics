@@ -131,7 +131,9 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def dimensions
-    if style = params[:style] and ::Image.attachment_definitions[:asset][:styles].keys.map(&:to_s).include?(style)
+    style = params[:style]
+    if style && ::Image.attachment_definitions[:asset][:styles]
+                .keys.map(&:to_s).include?(style)
       geometry = Paperclip::Geometry.from_file(@image.asset.path(style))
       width = geometry.width.to_i
       height = geometry.height.to_i
@@ -234,13 +236,15 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def image_params
     params.require(:image).permit(
-      :asset, :title, :description, :author_id, :tag_tokens, :propagate_changes_to_pages,
+      :asset, :title, :description, :author_id, :tag_tokens,
+      :propagate_changes_to_pages,
       *Image.available_shop_providers.map { |provider| :"#{provider}_url" }
     )
   end
 
   def image_customization_params
-    params.require(:image).permit(:cropped, :crop_x, :crop_y, :crop_width, :crop_height, :resized, :resize_width, :resize_height)
+    params.require(:image).permit(:cropped, :crop_x, :crop_y, :crop_width,
+      :crop_height, :resized, :resize_width, :resize_height)
   end
 
   def image_upload_params

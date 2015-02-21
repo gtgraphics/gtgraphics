@@ -5,6 +5,14 @@
   = form.association :author, as: :radio_buttons, wrapper: :horizontal_radio_and_checkboxes
 
   %fieldset
+    %legend= translate('views.forms.replace_image')
+    .fields
+      .form-group
+        .col-sm-9.col-sm-offset-3
+          = image_tag attached_asset_path(@image, :thumbnail), alt: @image.title, class: 'img-circle'
+      = form.input :asset, input_html: { title: translate('helpers.links.browse') }
+
+  %fieldset
     %legend= Image.human_attribute_name :shop_urls
     .fields
       - Image.available_shop_providers.each do |shop_provider|
