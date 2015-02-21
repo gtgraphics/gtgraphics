@@ -38,7 +38,7 @@ class UserPresenter < ApplicationPresenter
   end
 
   def info_icon
-    pic = thumbnail(class: 'author-picture')
+    pic = thumbnail(class: 'author-picture img-emerging')
     h.content_tag :div, pic, class: 'author-info' unless about_page?
     h.link_to pic, path, class: 'author-info', title: name,
                          data: { toggle: 'tooltip', placement: 'top',
