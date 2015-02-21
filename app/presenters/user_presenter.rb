@@ -27,4 +27,13 @@ class UserPresenter < ApplicationPresenter
     content = h.user_thumbnail_image_tag(user, options)
     h.link_to_if linked, content, path
   end
+
+  def info
+    details = h.capture do
+      h.concat thumbnail(class: 'author-picture')
+      h.concat h.content_tag(:div, name, class: 'author-name')
+    end
+    return h.link_to details, path, class: 'author' if about_page?
+    h.content_tag :div, details, class: 'author'
+  end
 end

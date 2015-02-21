@@ -1,0 +1,17 @@
+@import 'bootstrap_config';
+
+.author-info {
+  @include clearfix;
+  display: block;
+
+  .author-picture {
+    float: left;
+    display: block;
+    width: 43px;
+    margin-right: 10px;
+  }
+
+  .author-name {
+
+  }
+}
