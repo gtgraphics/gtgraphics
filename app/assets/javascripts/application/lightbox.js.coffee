@@ -70,7 +70,7 @@ $(document).ready ->
         slide($lightbox, false) if $.device.isExtraSmall() || $.device.isSmall()
       swipeRight: ->
         slide($lightbox, true) if $.device.isExtraSmall() || $.device.isSmall()
-      threshold: 50
+      threshold: 150
 
     # More beautiful image loading
     $fadedElements = $('#lightbox_page_wrapper, #nav_lightbox_actions').add($lightboxImageContainer)

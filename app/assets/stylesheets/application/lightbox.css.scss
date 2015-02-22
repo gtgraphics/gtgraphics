@@ -4,6 +4,8 @@
 
 $lightbox-navbar-height: 60px;
 $lightbox-control-size: 100px;
+$lightbox-height-xs: 380px;
+$lightbox-height-sm: 450px;
 
 .navbar-lightbox {
   height: $lightbox-navbar-height;
@@ -122,8 +124,8 @@ $lightbox-control-size: 100px;
 #nav_lightbox_xs {
   background-color: $body-bg;
   width: 100%;
-  position: fixed;
-  z-index: $zindex-navbar-fixed;
+  // position: fixed;
+  // z-index: $zindex-navbar-fixed;
 
   .navbar {
     border-bottom: 1px solid $gray-dark;
@@ -133,18 +135,24 @@ $lightbox-control-size: 100px;
 #lightbox {
   user-select: none;
   z-index: 1;
-  position: absolute;
-  top: $navbar-height-xs;
+  position: relative;
+  // position: absolute;
+  // top: $navbar-height-xs + 1px;
   bottom: 0;
   left: 0;
   right: 0;
+  height: $lightbox-height-xs;
 
   @media (min-width: $screen-sm-min) {
+    position: absolute;
+    height: $lightbox-height-sm;
     top: 0;
   }
 
   @media (min-width: $screen-md-min) {
     position: fixed;
+    height: auto;
+    bottom: 0;
   }
 
   .lightbox-image-container, .lightbox-image, .lightbox-background {
@@ -170,13 +178,20 @@ $lightbox-control-size: 100px;
     @include blur(20);
   }
 
+  .lightbox-image-container {
+    margin: 0 $content-padding;
+
+    @media (min-width: $screen-sm-min) {
+      margin: 0;
+    }
+  }
+
   .lightbox-image {
     background-size: contain;
 
     img {
-      // width: 100%;
-      // height: auto;
       user-select: none;
+      pointer-events: none;
       position: absolute;
       width: 1px;
       height: 1px;
@@ -231,14 +246,21 @@ $lightbox-control-size: 100px;
 }
 
 #lightbox_content_wrapper {
-  position: absolute;
-  top: 100%;
-  left: $content-padding;
-  right: $content-padding;
+  left: 0;
+  right: 0;
+  margin: 0 $content-padding;
 
   @media (min-width: $screen-sm-min) {
-    left: 0;
-    right: 0;
+    margin: 0;
+    top: $lightbox-height-sm - $lightbox-navbar-height;
+  }
+
+  @media (min-width: $screen-md-min) {
+    // left: $content-padding;
+    // right: $content-padding;
+
+    position: absolute;
+    top: 100%;
   }
 }
 
@@ -249,7 +271,7 @@ $lightbox-control-size: 100px;
   top: 100%;
 
   @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
-    padding-top: 5px;
+    padding-top: 10px;
   }
 
   @media (min-width: $screen-md-min) {
@@ -286,8 +308,6 @@ $lightbox-control-size: 100px;
   }
 
   .lightbox-caption {
-    font-size: 18px;
-    font-weight: 300;
     word-wrap: break-word;
 
     + .lightbox-metadata {

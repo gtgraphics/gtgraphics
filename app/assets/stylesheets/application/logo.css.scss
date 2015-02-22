@@ -1,16 +1,18 @@
 @import 'bootstrap_config';
 
+$brand-width: 190px;
+
 #brand {
   user-select: none;
   margin: auto;
-  width: 215px;
+  width: $brand-width;
   display: block;
 
   @media (max-width: $screen-xs-max) {
     position: absolute;
     left: 50%;
-    margin-left: -108px;
-    margin-top: 15px;
+    margin-left: -($brand-width / 2);
+    margin-top: 18px;
     z-index: 1000;
   }
 

@@ -66,6 +66,10 @@
             position: relative;
             z-index: 2;
 
+            // meant to improve animation rendering
+            backface-visibility: hidden;
+            perspective: 1000;
+
             @media (min-width: $screen-sm-min) {
               &:after {
                 position: absolute;

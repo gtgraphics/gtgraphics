@@ -28,9 +28,10 @@
   transform: translate3d(0,0,0);
 
   .submenu-item-title {
-    font-size: 18px;
-    font-weight: 300;
-    // font-weight: 700;
+    font-size: 16px;
+    @media (min-width: $screen-md-min) {
+      font-size: 18px;
+    }
     padding: 10px;
     text-align: center;
     background-color: $content-bg-dark;
