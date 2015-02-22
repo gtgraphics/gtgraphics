@@ -44,6 +44,12 @@
           width: 100%;
         }
 
+        // Meant to improve rendering of flickering fonts
+        // http://stackoverflow.com/questions/6843367/css3-transforms-cause-screen-flickering-or-aliased-font
+        * {
+          -webkit-transform-style: preserve-3d;
+        }
+
         > li {
           @media (min-width: $screen-sm-min) {
             width: 1%;
@@ -65,10 +71,6 @@
             transition: all 200ms ease-in-out;
             position: relative;
             z-index: 2;
-
-            // meant to improve animation rendering
-            backface-visibility: hidden;
-            perspective: 1000;
 
             @media (min-width: $screen-sm-min) {
               &:after {
