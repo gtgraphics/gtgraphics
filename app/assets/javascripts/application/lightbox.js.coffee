@@ -33,7 +33,7 @@ imageIsDisplayed = ->
   imageWindowRatio >= 0.33
 
 $(document).ready ->
-  $lightbox = $('.lightbox-with-details')
+  $lightbox = $('.lightbox')
 
   if $lightbox.length
     $navbar = $('#navbar_lightbox')
