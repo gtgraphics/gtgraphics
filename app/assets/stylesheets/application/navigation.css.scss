@@ -72,6 +72,10 @@
             position: relative;
             z-index: 2;
 
+            // Meant to improve rendering of flickering fonts
+            // http://stackoverflow.com/questions/6843367/css3-transforms-cause-screen-flickering-or-aliased-font
+            transform: translateZ(0);
+
             @media (min-width: $screen-sm-min) {
               &:after {
                 position: absolute;
