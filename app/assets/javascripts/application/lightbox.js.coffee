@@ -10,7 +10,7 @@ slide = ($lightbox, prev) ->
   Turbolinks.visit(url)
 
 resizeImage = ->
-  $lightbox = $('#lightbox')
+  $lightbox = $('.lightbox-with-details')
   $image = $('.lightbox-image', $lightbox)
   $controls = $('.lightbox-controls', $lightbox)
   $elements = $image.add($controls)
@@ -33,7 +33,7 @@ imageIsDisplayed = ->
   imageWindowRatio >= 0.33
 
 $(document).ready ->
-  $lightbox = $('#lightbox')
+  $lightbox = $('.lightbox-with-details')
 
   if $lightbox.length
     $navbar = $('#navbar_lightbox')

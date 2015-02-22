@@ -132,7 +132,7 @@ $lightbox-height-sm: 450px;
   }
 }
 
-#lightbox {
+.lightbox {
   user-select: none;
   z-index: 1;
   position: relative;
@@ -142,6 +142,21 @@ $lightbox-height-sm: 450px;
   left: 0;
   right: 0;
   height: $lightbox-height-xs;
+
+  // &.lightbox-without-details {
+
+  //   @media (max-width: $screen-sm-max) {
+  //     // position: absolute;
+  //     // height: auto;
+  //     height: 100%;
+  //     top: $lightbox-navbar-height + 1px;
+
+  //     @media (min-width: $screen-sm-min) {
+  //       top: 0;
+  //     }
+
+  //   }
+  // }
 
   @media (min-width: $screen-sm-min) {
     position: absolute;

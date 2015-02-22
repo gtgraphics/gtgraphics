@@ -37,9 +37,11 @@
               = project.author.info
 
       %div{class: project.description.present? ? 'col-md-9 col-md-pull-3' : 'col-md-10 col-md-offset-1'}
-        - present_collection(@images).each do |image|
-          %figure.thumbnail.project-thumbnail
-            = image_tag attached_asset_path(image, :public), alt: image.title, class: 'img-responsive img-emerging'
-            - if image.description.present?
-              %figcaption.caption
-                = image.description
+        - @project_images.each do |project_image|
+          - present project_image.image do |image|
+            %figure.thumbnail.project-thumbnail
+              = link_to show_project_image_path(@page.path, project_image.position) do
+                = image_tag attached_asset_path(image, :public), alt: image.title, class: 'img-responsive img-emerging'
+              - if image.description.present?
+                %figcaption.caption
+                  = image.description
