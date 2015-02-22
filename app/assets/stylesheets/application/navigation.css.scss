@@ -62,6 +62,24 @@
             }
           }
 
+          &:first-child > a {
+            border-top-left-radius: 3px;
+          }
+
+          &:last-child > a {
+            border-top-right-radius: 3px;
+          }
+
+          .homepages & {
+            &:first-child > a {
+              border-bottom-left-radius: 3px;
+            }
+
+            &:last-child > a {
+              border-bottom-right-radius: 3px;
+            }
+          }
+
           > a {
             outline: none;
             color: white;
