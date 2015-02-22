@@ -176,6 +176,7 @@ $lightbox-height-sm: 450px;
     bottom: 0;
     left: 0;
     right: 0;
+    transform: translateZ(0);
   }
 
   .lightbox-background, .lightbox-image {
