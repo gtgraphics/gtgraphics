@@ -333,10 +333,13 @@ $lightbox-height-sm: 450px;
     }
   }
 
+  .lightbox-description + .lightbox-author-name {
+    margin-top: 8px;
+  }
+
   .lightbox-author-name {
     display: block;
     color: $gray-light;
-    margin-top: 8px;
     font-size: 16px;
 
     // &:before {

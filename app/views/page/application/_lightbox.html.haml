@@ -106,7 +106,8 @@
                     = image.author.thumbnail(true, class: 'img-responsive')
 
                   .lightbox-caption.col-xs-12.col-md-11
-                    = image.description
+                    .lightbox-description
+                      = image.description
                     .lightbox-author-name
                       = image.author.name(true)
 
