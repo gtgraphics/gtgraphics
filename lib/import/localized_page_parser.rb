@@ -1,6 +1,6 @@
 class Import::LocalizedPageParser
   AUTHORS_MAP = {
-    'Taenaron' => 'Tobias Casper',
+    'Taenaron' => 'Tobias Roetsch',
     'gucken' => 'Jeff Michelmann'
   }.freeze
 
@@ -8,9 +8,8 @@ class Import::LocalizedPageParser
 
   def initialize(url)
     @url = url
-    @documents = I18n.available_locales.inject({}) do |documents_hash, locale|
-      documents_hash[locale] = Nokogiri::HTML(open("#{@url}?setlang=#{locale}"))
-      documents_hash
+    @documents = I18n.available_locales.each_with_object({}) do |locale, hash|
+      hash[locale] = Nokogiri::HTML(open("#{@url}?setlang=#{locale}"))
     end
     @default_document = @documents.fetch(I18n.default_locale)
   end
@@ -21,11 +20,11 @@ class Import::LocalizedPageParser
   attr_writer :locale
 
   def current_document
-    documents.fetch(self.locale)
+    documents.fetch(locale)
   end
 
   def with_locale(new_locale)
-    previous_locale = self.locale
+    previous_locale = locale
     self.locale = new_locale
     yield
     self.locale = previous_locale

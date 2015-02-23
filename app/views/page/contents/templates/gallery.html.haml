@@ -10,7 +10,7 @@
           = link_to page, class: 'gallery-link' do
             %figure.gallery-image-container
               .gallery-image-wrapper
-                = image_tag attached_asset_path(image_page.image, :brick), class: 'gallery-image img-responsive', alt: page.title
+                = image_tag attached_asset_path(image_page.image, :brick), class: 'gallery-image img-responsive', alt: page.title, width: image_page.image.width, height: image_page.image.height
               %figcaption.gallery-image-caption-wrapper
                 .gallery-image-caption-container
                   .gallery-image-caption
