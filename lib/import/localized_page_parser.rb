@@ -17,6 +17,7 @@ class Import::LocalizedPageParser
   def locale
     @locale ||= I18n.default_locale
   end
+
   attr_writer :locale
 
   def current_document
