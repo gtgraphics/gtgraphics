@@ -14,6 +14,10 @@ class CoverCarousel
                .defaults(CoverCarousel.DEFAULTS)
 
     @$items = @$carousel.find(CoverCarousel.ITEM_SELECTOR)
+    unless @$items.length
+      console.warn 'no items for carousel'
+      return
+
     @$currentItem = @$items.filter(".#{CoverCarousel.ACTIVE_CLASS}")
     @$currentItem = @$items.first() unless @$currentItem.length
 
