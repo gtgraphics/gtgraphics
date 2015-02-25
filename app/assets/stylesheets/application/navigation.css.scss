@@ -35,9 +35,9 @@
 
         // Meant to improve rendering of flickering fonts
         // http://stackoverflow.com/questions/6843367/css3-transforms-cause-screen-flickering-or-aliased-font
-        * {
-          -webkit-transform-style: preserve-3d;
-        }
+        // * {
+        //   -webkit-transform-style: preserve-3d;
+        // }
 
         > li {
           @media (min-width: $screen-sm-min) {

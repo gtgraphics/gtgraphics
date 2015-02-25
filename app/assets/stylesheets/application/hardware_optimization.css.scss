@@ -1,0 +1,7 @@
+.hw-rendered {
+  // Prevents rendering of flickering fonts and improves performance when
+  // rendering complex elements
+  // http://stackoverflow.com/questions/6843367/css3-transforms-cause-screen-flickering-or-aliased-font
+  transform-style: preserve-3d;
+  transform: translateZ(0);
+}
