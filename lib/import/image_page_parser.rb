@@ -4,11 +4,13 @@ class Import::ImagePageParser < Import::LocalizedPageParser
   end
 
   def variant_asset_urls
-    default_document.css('.image-box-content .grid_3 p .home-num-sign').collect { |anchor| anchor[:href] }
+    default_document.css('.image-box-content .grid_3 p .home-num-sign')
+      .collect { |anchor| anchor[:href] }
   end
 
   def hits_count
-    hits_text = default_document.css('.image-box-content .grid_3 .zoom-ct').inner_text.squish
+    hits_text = default_document.css('.image-box-content .grid_3 .zoom-ct')
+                .inner_text.squish
     if hits_text =~ /\AViews\: (.*)\z/
       $1.to_i
     else

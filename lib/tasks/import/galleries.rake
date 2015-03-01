@@ -101,7 +101,8 @@ namespace :gtg do
         I18n.available_locales.each do |locale|
           Globalize.with_locale(locale) do
             page.title = image.title
-            page.meta_description = HTML::FullSanitizer.new.sanitize(image.description)
+            page.meta_description = HTML::FullSanitizer.new
+                                    .sanitize(image.description)
           end
         end
 

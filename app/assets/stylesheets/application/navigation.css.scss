@@ -28,17 +28,6 @@
     }
 
     &#navbar_primary {
-      @media (min-width: $screen-sm-min) {
-        background: $brand-primary; /* Old browsers */
-        background: -moz-linear-gradient(top,  rgba(66,139,202,1) 0%, rgba(41,109,165,1) 100%); /* FF3.6+ */
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(66,139,202,1)), color-stop(100%,rgba(41,109,165,1))); /* Chrome,Safari4+ */
-        background: -webkit-linear-gradient(top,  rgba(66,139,202,1) 0%,rgba(41,109,165,1) 100%); /* Chrome10+,Safari5.1+ */
-        background: -o-linear-gradient(top,  rgba(66,139,202,1) 0%,rgba(41,109,165,1) 100%); /* Opera 11.10+ */
-        background: -ms-linear-gradient(top,  rgba(66,139,202,1) 0%,rgba(41,109,165,1) 100%); /* IE10+ */
-        background: linear-gradient(to bottom,  rgba(66,139,202,1) 0%,rgba(41,109,165,1) 100%); /* W3C */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#428bca', endColorstr='#296da5',GradientType=0 ); /* IE6-9 */
-      }
-
       .navbar-nav {
         @media (min-width: $screen-sm-min) {
           width: 100%;
@@ -46,9 +35,9 @@
 
         // Meant to improve rendering of flickering fonts
         // http://stackoverflow.com/questions/6843367/css3-transforms-cause-screen-flickering-or-aliased-font
-        * {
-          -webkit-transform-style: preserve-3d;
-        }
+        // * {
+        //   -webkit-transform-style: preserve-3d;
+        // }
 
         > li {
           @media (min-width: $screen-sm-min) {
@@ -64,6 +53,7 @@
 
           &:first-child > a {
             border-top-left-radius: 3px;
+            border-left: 0;
           }
 
           &:last-child > a {
@@ -88,24 +78,39 @@
             line-height: 23px;
             transition: all 200ms ease-in-out;
             position: relative;
-            z-index: 2;
+            z-index: 1;
 
             // Meant to improve rendering of flickering fonts
             // http://stackoverflow.com/questions/6843367/css3-transforms-cause-screen-flickering-or-aliased-font
             transform: translateZ(0);
 
+            // @media (min-width: $screen-sm-min) {
+            //   background: $brand-primary; /* Old browsers */
+            //   background: -moz-linear-gradient(top,  rgba(66,139,202,1) 0%, rgba(41,109,165,1) 100%); /* FF3.6+ */
+            //   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(66,139,202,1)), color-stop(100%,rgba(41,109,165,1))); /* Chrome,Safari4+ */
+            //   background: -webkit-linear-gradient(top,  rgba(66,139,202,1) 0%,rgba(41,109,165,1) 100%); /* Chrome10+,Safari5.1+ */
+            //   background: -o-linear-gradient(top,  rgba(66,139,202,1) 0%,rgba(41,109,165,1) 100%); /* Opera 11.10+ */
+            //   background: -ms-linear-gradient(top,  rgba(66,139,202,1) 0%,rgba(41,109,165,1) 100%); /* IE10+ */
+            //   background: linear-gradient(to bottom,  rgba(66,139,202,1) 0%,rgba(41,109,165,1) 100%); /* W3C */
+            //   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#428bca', endColorstr='#296da5',GradientType=0 ); /* IE6-9 */
+            // }
+
             @media (min-width: $screen-sm-min) {
-              &:after {
-                position: absolute;
-                content: ' ';
-                display: block;
-                top: 0;
-                bottom: 0;
-                border-left: 1px solid rgba(white, 0.125);
-                border-right: 1px solid rgba($content-bg, 0.125);
-                right: -1px;
-                z-index: 1;
-              }
+              background-color: $brand-primary;
+
+              border-left: 1px solid rgba(white, 0.125);
+
+              // &:after {
+              //   position: absolute;
+              //   content: ' ';
+              //   display: block;
+              //   top: 0;
+              //   bottom: 0;
+              //   border-left: 1px solid rgba(white, 0.125);
+              //   right: -1px;
+              //   z-index: 2;
+              //   width: 2px;
+              // }
             }
 
             @media (min-width: $screen-md-min) {

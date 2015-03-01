@@ -333,15 +333,18 @@ $lightbox-height-sm: 450px;
     }
   }
 
+  .lightbox-description + .lightbox-author-name {
+    // margin-top: 8px;
+  }
+
   .lightbox-author-name {
     display: block;
     color: $gray-light;
-    margin-top: 8px;
     font-size: 16px;
 
-    &:before {
-      content: '\2014 \00A0';
-    }
+    // &:before {
+    //   content: '\2014 \00A0';
+    // }
 
     a {
       color: $gray-light;
@@ -352,7 +355,7 @@ $lightbox-height-sm: 450px;
   }
 
   .lightbox-author-avatar {
-    margin-top: 4px;
+    margin-top: 1px;
   }
 
   .lightbox-metadata {
