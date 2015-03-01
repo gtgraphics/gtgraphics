@@ -2,24 +2,24 @@ namespace :gtg do
   namespace :truncate do
     namespace :galleries do
       desc 'Truncate all GTGRAPHICS galleries'
-      task :all => [:wallpapers, :artworks, :photos]
+      task all: [:wallpapers, :artworks, :photos]
 
       desc 'Truncate wallpapers in the GTGRAPHICS gallery'
-      task :wallpapers => :environment do
-        gallery_page = Page.find_by! path: 'work/wallpapers'
+      task wallpapers: :environment do
+        gallery_page = Page.find_by! path: 'wallpapers'
         destroy_images_and_pages_in(gallery_page)
       end
 
       desc 'Truncate artworks in the GTGRAPHICS gallery'
-      task :artworks => :environment do
-        gallery_page = Page.find_by! path: 'work/artworks'
+      task artworks: :environment do
+        gallery_page = Page.find_by! path: 'artworks'
         destroy_images_and_pages_in(gallery_page)
       end
 
       desc 'Truncate photos in the GTGRAPHICS gallery'
-      task :photos => :environment do
+      task photos: :environment do
         %w(nature architecture people misc).each do |subgallery_name|
-          subgallery_page = Page.find_by! path: "work/photography/#{subgallery_name}"
+          subgallery_page = Page.find_by! path: "photography/#{subgallery_name}"
           destroy_images_and_pages_in(subgallery_page)
         end
       end
