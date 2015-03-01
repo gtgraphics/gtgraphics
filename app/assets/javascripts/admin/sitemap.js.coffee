@@ -114,7 +114,7 @@ $(document)
 
   .on 'page:load', ->
     $sitemap = $(SITEMAP_SELECTOR)
-    $sitemap.slimScroll(scrollTo: cachedScrollTop) if $sitemap.exists() and cachedScrollTop 
+    $sitemap.slimScroll(scrollTo: cachedScrollTop) if $sitemap.exists() and cachedScrollTop
 
 
 # Disable keyboard navigation in sitemap if a modal is active

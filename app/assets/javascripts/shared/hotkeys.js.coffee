@@ -101,3 +101,4 @@ $(document).on 'keyup', (event) ->
     if pressed
       event.preventDefault()
       $element.trigger('hotkey')
+
