@@ -1,6 +1,6 @@
 class Import::LocalizedPageParser
   AUTHORS_MAP = {
-    'Taenaron' => 'Tobias Casper',
+    'Taenaron' => 'Tobias Roetsch',
     'gucken' => 'Jeff Michelmann'
   }.freeze
 
