@@ -40,19 +40,22 @@
         // }
 
         > li {
+          transition: all 200ms ease-in-out;
+
           @media (min-width: $screen-sm-min) {
             width: 1%;
             display: table-cell;
             float: none;
             white-space: nowrap;
+            background-color: $brand-primary;
           }
 
-          &:first-child > a {
+          &:first-child {
             border-top-left-radius: 3px;
             border-left: 0;
           }
 
-          &:last-child > a {
+          &:last-child {
             border-top-right-radius: 3px;
           }
 
@@ -66,13 +69,8 @@
             }
           }
 
-          > li + > li {
-            > a {
-              border-left: 1px solid rgba(white, 0.125);
-            }
-          }
-
           > a {
+            display: block;
             outline: none;
             color: white;
             text-align: center;
@@ -81,14 +79,15 @@
             transition: all 200ms ease-in-out;
             position: relative;
             z-index: 1;
+            border: none;
 
             // Meant to improve rendering of flickering fonts
             // http://stackoverflow.com/questions/6843367/css3-transforms-cause-screen-flickering-or-aliased-font
             transform: translateZ(0);
 
-            @media (min-width: $screen-sm-min) {
-              background-color: $brand-primary;
-            }
+            // @media (min-width: $screen-sm-min) {
+            //   background-color: $brand-primary;
+            // }
 
             @media (min-width: $screen-md-min) {
               padding: 12px $content-padding-lg;
@@ -100,18 +99,29 @@
             }
           }
 
-          &:not(.active) > a {
-            &:hover, &:focus {
-              color: $brand-primary;
-              background-color: transparent;
-
+          &:not(.active) {
+            &:hover {
               @media (min-width: $screen-sm-min) {
+                background-color: white;
+              }
+            }
+
+            > a {
+              &:hover, &:focus {
+                color: $brand-primary;
+                background-color: transparent;
+              }
+              &:focus {
                 background-color: white;
               }
             }
           }
 
           &.active {
+            @media (min-width: $screen-sm-min) {
+              background-color: $content-bg;
+            }
+
             > a {
               &, &:hover, &:focus {
                 color: $brand-primary;
@@ -119,14 +129,6 @@
 
                 @media (min-width: $screen-sm-min) {
                   color: white;
-                  background-color: $content-bg;
-                }
-              }
-
-              @media (min-width: $screen-sm-min) {
-                &:after {
-                  border-left: none;
-                  border-right-color: rgba(white, 0.125);
                 }
               }
             }
@@ -149,16 +151,6 @@
             }
           }
         }
-
-        &.navbar-right {
-          > li > a {
-            @media (min-width: $screen-sm-min) {
-              &:after {
-                display: none;
-              }
-            }
-          }
-        }
       }
 
       #nav_menu_items > li {
@@ -178,6 +170,7 @@
           bottom: 0;
           position: absolute;
           z-index: 3;
+          left: 0;
         }
 
         &:first-child:before {
@@ -191,8 +184,6 @@
           @media (min-width: $screen-sm-min) {
             font-size: 14px;
             line-height: 22px;
-            // border-left: 1px solid rgba(white, 0.125);
-            // margin-right: -1px;
           }
 
           @media (min-width: $screen-md-min) {
