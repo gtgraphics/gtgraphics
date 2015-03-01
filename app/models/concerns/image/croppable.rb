@@ -60,7 +60,7 @@ class Image < ActiveRecord::Base
 
       def asset_with_cropping=(asset)
         clear_crop_area
-        asset_without_cropping = asset
+        self.asset_without_cropping = asset
       end
 
       def crop_geometry

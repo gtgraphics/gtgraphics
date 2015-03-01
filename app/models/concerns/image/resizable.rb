@@ -51,7 +51,7 @@ class Image < ActiveRecord::Base
 
       def asset_with_resizing=(asset)
         clear_crop_area
-        asset_without_resizing = asset
+        self.asset_without_resizing = asset
       end
 
       def resize_geometry
