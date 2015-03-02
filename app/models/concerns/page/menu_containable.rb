@@ -1,7 +1,7 @@
 class Page < ActiveRecord::Base
   module MenuContainable
     extend ActiveSupport::Concern
-    
+
     included do
       scope :menu_items, -> { where(menu_item: true) }
     end
