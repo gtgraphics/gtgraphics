@@ -22,7 +22,7 @@ $(window).resize ->
     # reloads the wall
     $gallery.masonry('reload')
 
-$(document).on 'page:change', ->
+initGallery = ->
   $gallery = $(GALLERY_SELECTOR)
 
   if $gallery.length
@@ -53,23 +53,30 @@ $(document).on 'page:change', ->
     Loader.start()
 
     $(GALLERY_ITEM_SELECTOR, $gallery).allImagesLoaded ->
-      Loader.done()
+      setTimeout ->
+        Loader.done()
 
-      $gallery.show().transition(opacity: 1, duration: 500)
-      $gallery.masonry
-        itemSelector: GALLERY_ITEM_SELECTOR
-        columnWidth: (containerWidth) ->
-          containerWidth / columnsCount
-        gutter: 0
-        animate: true
+        # wait a bit so all browsers are ready
+        $gallery.show().transition(opacity: 1, duration: 500)
+        $gallery.masonry
+          itemSelector: GALLERY_ITEM_SELECTOR
+          columnWidth: (containerWidth) ->
+            containerWidth / columnsCount
+          gutter: 0
+          animate: true
 
-      # Apply infinite scroller to masonry
-      $gallery.infinitescroll scrollerOptions, (html) ->
-        $appendedElements = $(html).hide().css(opacity: 0)
-        $appendedElements.allImagesLoaded ->
-          $appendedElements.show().transition(opacity: 1, duration: 500)
-          $gallery.masonry('appended', $appendedElements)
-          Loader.done()
+        # Apply infinite scroller to masonry
+        $gallery.infinitescroll scrollerOptions, (html) ->
+          $appendedElements = $(html).hide().css(opacity: 0)
+          $appendedElements.allImagesLoaded ->
+            $appendedElements.show().transition(opacity: 1, duration: 500)
+            $gallery.masonry('appended', $appendedElements)
+            Loader.done()
+
+      , 50
+
+$(document).ready ->
+  initGallery()
 
 $(document).on 'page:before-unload page:receive', ->
   $gallery = $(GALLERY_SELECTOR)

@@ -17,12 +17,12 @@
       %ul.nav.navbar-nav#nav_menu_items
         - primary_menu_items.each do |page|
           = active_link_to page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page) do
-            %span.hw-rendered= page.title
+            = page.title
 
       %ul.nav.navbar-nav.visible-xs#nav_xs_menu_items
         - footer_menu_items.each do |page|
           = active_link_to page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page) do
-            %span.hw-rendered= page.title
+            = page.title
 
       - if next_locale
         / Locale
