@@ -176,7 +176,6 @@ $lightbox-height-sm: 450px;
     bottom: 0;
     left: 0;
     right: 0;
-    -webkit-transform: translateZ(0);
   }
 
   .lightbox-background, .lightbox-image {
@@ -190,9 +189,10 @@ $lightbox-height-sm: 450px;
   .lightbox-background {
     background-size: cover;
     opacity: 0.3;
-    // transform: scale(1.1);
-    // @include blur(15);
     filter: blur(15px);
+    transform: translateZ(0);
+    // backface-visibility: hidden;
+    // perspective: 1000;
   }
 
   .lightbox-image-container {
