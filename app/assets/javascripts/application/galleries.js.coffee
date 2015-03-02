@@ -57,13 +57,14 @@ initGallery = ->
         Loader.done()
 
         # wait a bit so all browsers are ready
-        $gallery.show().transition(opacity: 1, duration: 500)
+        $gallery.show()
         $gallery.masonry
           itemSelector: GALLERY_ITEM_SELECTOR
           columnWidth: (containerWidth) ->
             containerWidth / columnsCount
           gutter: 0
           animate: true
+        $gallery.transition(opacity: 1, duration: 500)
 
         # Apply infinite scroller to masonry
         $gallery.infinitescroll scrollerOptions, (html) ->
