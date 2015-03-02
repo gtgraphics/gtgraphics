@@ -49,6 +49,7 @@ class Page::ApplicationController < ApplicationController
   end
 
   private
+
   def load_page
     @page = Page.accessible_by(current_ability)
             .find_by!(path: params[:path] || '')

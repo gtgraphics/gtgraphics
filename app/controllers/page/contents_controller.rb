@@ -48,7 +48,7 @@ class Page::ContentsController < Page::ApplicationController
   private
 
   def load_child_pages
-    @child_pages = @page.children.accessible_by(current_ability)
+    @child_pages = @page.children.accessible_by(current_ability).visible
                    .with_translations_for_current_locale
   end
 end

@@ -56,6 +56,7 @@ class Page < ActiveRecord::Base
   default_scope -> { order(:lft) }
   scope :indexable, -> { where(indexable: true) }
   scope :primary, -> { where(depth: 1) }
+  scope :visible, -> { published.menu_items }
 
   delegate :name, to: :author, prefix: true, allow_nil: true
 
