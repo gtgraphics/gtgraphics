@@ -91,4 +91,5 @@ $(window).resize ->
 
 $(document).on 'page:before-unload page:receive', ->
   $gallery = $(GALLERY_SELECTOR)
-  $gallery.masonry('destroy').infinitescroll('destroy')
+  if $gallery.data('masonry')
+    $gallery.masonry('destroy').infinitescroll('destroy')
