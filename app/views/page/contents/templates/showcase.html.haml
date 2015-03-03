@@ -8,15 +8,14 @@
       - present page.embeddable do |project_page|
         .gallery-item
           = link_to page, class: 'gallery-link' do
-            %figure.gallery-image-container
-              .gallery-image-wrapper
-                = image_tag attached_asset_path(project_page.project.cover, :brick), class: 'gallery-image img-responsive', alt: page.title
-              %figcaption.gallery-image-caption-wrapper
-                .gallery-image-caption-container
-                  .gallery-image-caption
-                    %h3.gallery-image-title= page.title
-                    / .gallery-image-info
-                    /   = project_page.project.client_name
+            - if project_page.project.cover
+              %figure.gallery-image-container
+                .gallery-image-wrapper
+                  = image_tag attached_asset_path(project_page.project.cover, :brick), class: 'gallery-image img-responsive', alt: page.title
+                %figcaption.gallery-image-caption-wrapper
+                  .gallery-image-caption-container
+                    .gallery-image-caption
+                      %h3.gallery-image-title= page.title
 
   = paginate @project_pages, theme: :gallery
 

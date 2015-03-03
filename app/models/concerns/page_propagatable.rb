@@ -23,14 +23,8 @@ module PagePropagatable
   def propagate_changes_to_pages!
     transaction do
       pages.each do |page|
-        translations.each do |translation|
-          Globalize.with_locale(translation.locale) do
-            page.title = translation.title
-            page.meta_description = HTML::FullSanitizer.new.sanitize(
-              translation.description
-            )
-          end
-        end
+        page.title = title
+        page.meta_description = HTML::FullSanitizer.new.sanitize(description)
         page.save!
       end
     end

@@ -16,10 +16,12 @@ module FileAttachable
     included do
       after_initialize :generate_asset_token
 
-      before_validation :set_original_filename, if: [:asset?, :asset_changed?]
-      before_validation :set_content_type, if: [:asset?, :asset_changed?]
-      before_validation :set_file_size, if: [:asset?, :asset_changed?]
-      before_save :set_asset_updated_at, if: [:asset?, :asset_changed?]
+      with_options if: [:asset?, :asset_changed?] do |opts|
+        opts.before_validation :set_original_filename
+        opts.before_validation :set_content_type
+        opts.before_validation :set_file_size
+        opts.before_save :set_asset_updated_at
+      end
     end
 
     def mime_type

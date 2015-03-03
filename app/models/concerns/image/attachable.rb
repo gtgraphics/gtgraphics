@@ -22,8 +22,10 @@ class Image < ActiveRecord::Base
         validates :content_type, presence: true,
                                  inclusion: { in: ->(attachable) { attachable.class.permitted_content_types }, allow_blank: true }
 
-        before_create :set_original_geometry, if: :asset?
-        before_save :set_geometry, if: [:asset?, :asset_changed?]
+        with_options if: [:asset?, :asset_changed?] do |opts|
+          opts.before_save :set_original_geometry
+          opts.before_save :set_geometry
+        end
       end
 
       module ClassMethods
