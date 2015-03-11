@@ -101,7 +101,18 @@
                   .btn-group= page.twitter_share_button
 
               .page-body
-                = render 'image_info', image: image
+                .info-bar
+                  %ul.list-info-bar
+                    %li.author
+                      = image.author.info
+                    %li.taken-at
+                      = prepend_icon :clock, image.taken_at, outline: true, fixed_width: true
+
+                - if image.description.present?
+                  .lightbox-caption
+                    .lightbox-description
+                      = image.description
+
                 - if local_assigns.fetch(:photo, false)
                   = image.attribute_list :camera, :lens_model, :iso_value, :exposure_time, :focal_length, :f_number
 
