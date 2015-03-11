@@ -51,7 +51,7 @@ class Page::ApplicationController < ApplicationController
   private
 
   def load_page
-    @page = Page.accessible_by(current_ability)
+    @page = Page.accessible_by(current_ability).published
             .find_by!(path: params[:path] || '')
   end
 

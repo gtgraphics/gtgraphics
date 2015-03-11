@@ -13,8 +13,10 @@ class Page::ImagesController < Page::ApplicationController
 
   def default
     @gallery_page = @page.parent
-    @previous_page = @page.left_sibling # || @page.siblings.last
-    @next_page = @page.right_sibling # || @page.siblings.first
+
+    siblings = @page.siblings.published.menu_items.order(:lft)
+    @previous_page = siblings.where('lft < ?', @page.lft).last
+    @next_page = siblings.where('lft > ?', @page.lft).first
 
     respond_to do |format|
       format.html { render_page }
