@@ -47,3 +47,5 @@ en:
       default: '– Default –'
     units:
       pixels: Pixels
+      second: second
+      seconds: seconds

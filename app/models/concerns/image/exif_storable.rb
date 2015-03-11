@@ -27,20 +27,20 @@ class Image < ActiveRecord::Base
       exif_data['Artist'] || exif_data['Creator'] || exif_data['By-line']
     end
 
-    def camera_manufacturer
-      exif_data['Make']
-    end
-
-    def camera
-      exif_data['Model']
-    end
-
-    def copyright
-      exif_data['Copyright']
-    end
-
-    def iso_value
-      exif_data['ISO']
+    {
+      camera_manufacturer: 'Make',
+      camera: 'Model',
+      copyright: 'Copyright',
+      iso_value: 'ISO',
+      f_number: 'FNumber',
+      focal_length: 'FocalLength',
+      exposure_time: 'ExposureTime',
+      lens_model: 'LensModel',
+      software: 'Software'
+    }.each do |reader, exif_attr|
+      define_method reader do
+        exif_data[exif_attr]
+      end
     end
 
     def orientation
@@ -49,10 +49,6 @@ class Image < ActiveRecord::Base
       else
         :portrait
       end
-    end
-
-    def software
-      exif_data['Software']
     end
 
     def taken_at

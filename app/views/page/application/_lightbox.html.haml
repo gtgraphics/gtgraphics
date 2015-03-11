@@ -100,21 +100,17 @@
                   .btn-group= page.google_plus_like_button
                   .btn-group= page.twitter_share_button
 
-              .page-body
-                .row
-                  .lightbox-author-avatar.hidden-xs.hidden-sm.col-md-1
-                    = image.author.thumbnail(true, class: 'img-responsive')
+              - if local_assigns.fetch(:photo, false)
+                .page-body
+                  .row
+                    .col-md-6
+                      = render 'image_info', image: image
+                    .col-md-6
+                      = image.attribute_list :camera, :lens_model, :iso_value, :exposure_time, :focal_length, :f_number
 
-                  .lightbox-caption.col-xs-12.col-md-11
-                    .lightbox-description
-                      = image.description
-                    .lightbox-author-name
-                      = image.author.name(true)
-
-                  / .col-xs-12.col-md-6.lightbox-metadata
-                  /   %h3.visible-xs.visible-sm
-                  /     = prepend_icon :info, translate('helpers.links.details'), fixed_width: true
-                  /   = image.attribute_list :taken_at, :camera, :software, :iso_value
+              - else
+                .page-body
+                  = render 'image_info', image: image
 
               .page-body.visible-xs.visible-sm
                 .row
@@ -122,14 +118,14 @@
                     / Buy
                     .col-xs-12.col-sm-6
                       %h3= prepend_icon :shopping_cart, translate('helpers.links.buy'), fixed_width: true
-                      %ul.shop-providers
+                      %ul.list-unstyled.shop-providers
                         = image.shop_links
 
                   - if image.styles.any?
                     / Download
                     .col-xs-12.col-sm-6
                       %h3= prepend_icon :download, translate('helpers.links.download'), fixed_width: true
-                      %ul.image-styles
+                      %ul.list-unstyled.image-styles
                         - image.styles.each do |style|
                           %li= link_to style.title, download_image_path(style_id: style.position), data: { no_turbolink: true }
 

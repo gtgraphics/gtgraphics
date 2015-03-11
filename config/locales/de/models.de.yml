@@ -139,7 +139,11 @@ de:
         taken_at: Aufnahme
         software: Software
         camera: Kamera
-        iso_value: ISO-Wert
+        iso_value: Empfindlichkeit
+        exposure_time: Belichtungszeit
+        focal_length: Brennweite
+        f_number: Blendenzahl
+        lens_model: Linse
         created_at: Hochgeladen am
         preserve_aspect_ratio: Seitenverhältnis beibehalten
         shop_urls: Shop-Verknüpfungen

@@ -54,6 +54,10 @@ en:
         software: Software
         camera: Camera
         iso_value: ISO Value
+        exposure_time: Exposure Time
+        focal_length: Focal Length
+        f_number: F Number
+        lens_model: Lens Model
       image/translation:
         title: Title
       page:

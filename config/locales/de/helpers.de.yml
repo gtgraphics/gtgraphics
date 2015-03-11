@@ -111,5 +111,7 @@ de:
     units:
       pixels: Pixel
       pixels_abbr: px
+      second: Sekunde
+      seconds: Sekunden
     loader:
       loading: 'Lade'

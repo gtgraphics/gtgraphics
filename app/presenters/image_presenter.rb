@@ -42,6 +42,26 @@ class ImagePresenter < ApplicationPresenter
     h.time_ago(image.try(:taken_at) || image.created_at)
   end
 
+  def f_number
+    h.number_with_delimiter super
+  end
+
+  def iso_value
+    h.number_with_delimiter super
+  end
+
+  def exposure_time
+    return nil if image.exposure_time.blank?
+    "#{image.exposure_time} #{I18n.translate('helpers.units.second')}"
+  end
+
+  def focal_length
+    return nil if image.focal_length.blank?
+    value, unit = image.focal_length.split(' ', 2)
+    value = h.number_with_delimiter(value.to_f)
+    "#{value} #{unit}"
+  end
+
   def shop_links(include_buy_request = true)
     shop_providers = Image.available_shop_providers.dup
     shop_providers.unshift('gtgraphics') if include_buy_request

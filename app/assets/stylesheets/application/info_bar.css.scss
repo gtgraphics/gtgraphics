@@ -19,6 +19,22 @@
   }
 }
 
+#lightbox_content_wrapper .info-bar {
+  margin: 0;
+
+  @media (min-width: $screen-md) {
+    margin: 0;
+  }
+
+  + .lightbox-caption {
+    margin-top: $content-padding-lg;
+
+    @media (min-width: $screen-md) {
+      margin-top: $content-padding-lg;
+    }
+  }
+}
+
 .list-info-bar {
   @include clearfix;
 
@@ -34,6 +50,7 @@
     padding: 10px;
     line-height: 1.45;
     border-right: 1px solid $content-bg;
+    white-space: nowrap;
 
     &:last-child {
       border-right: none;
@@ -41,7 +58,10 @@
 
     &.author {
       padding: 0;
-      width: 43px;
+      .author-name {
+        white-space: nowrap;
+        padding-right: 10px;
+      }
     }
 
     a {

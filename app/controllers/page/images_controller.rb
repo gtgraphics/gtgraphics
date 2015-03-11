@@ -24,6 +24,8 @@ class Page::ImagesController < Page::ApplicationController
     end
   end
 
+  alias_method :photo, :default
+
   def download
     @image_style = @image.styles.find_by!(position: params[:style_id])
     render_image(@image_style, :attachment)
