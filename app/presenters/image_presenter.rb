@@ -52,7 +52,15 @@ class ImagePresenter < ApplicationPresenter
 
   def exposure_time
     return nil if image.exposure_time.blank?
-    "#{image.exposure_time} #{I18n.translate('helpers.units.second')}"
+    if image.exposure_time.is_a?(Rational)
+      value = image.exposure_time.to_s
+      unit = I18n.translate('helpers.units.second')
+    else
+      value = h.number_with_delimiter image.exposure_time
+      unit = I18n.translate(image.exposure_time == 1 ? :second : :seconds,
+                            scope: 'helpers.units')
+    end
+    "#{value} #{unit}"
   end
 
   def focal_length
