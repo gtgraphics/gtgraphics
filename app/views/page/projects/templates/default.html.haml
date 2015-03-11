@@ -41,7 +41,7 @@
           - present project_image.image do |image|
             %figure.thumbnail.project-thumbnail
               = link_to show_project_image_path(@page.path, project_image.position) do
-                = image_tag attached_asset_path(image, :public), alt: image.title, class: 'img-responsive img-emerging'
+                = unveiling_image_tag attached_asset_path(image, :public), alt: image.title, class: 'img-responsive', width: image.width, height: image.height
               - if image.description.present?
                 %figcaption.caption
                   = image.description
