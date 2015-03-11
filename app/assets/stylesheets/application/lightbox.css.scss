@@ -436,8 +436,13 @@ $lightbox-height-sm: 450px;
 }
 
 #lightbox_page_wrapper {
-  dl.dl-horizontal {
+  .lightbox-metadata {
     margin-top: 25px;
-    margin-bottom: 0;
+  }
+  .lightbox-metadata-column + .lightbox-metadata-column {
+    margin-top: 10px;
+    @media (min-width: $screen-sm-min) {
+      margin-top: 0;
+    }
   }
 }

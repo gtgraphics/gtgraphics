@@ -114,7 +114,11 @@
                       = image.description
 
                 - if local_assigns.fetch(:photo, false)
-                  = image.attribute_list :camera, :lens_model, :iso_value, :exposure_time, :focal_length, :f_number
+                  .lightbox-metadata.row
+                    .col-md-6.lightbox-metadata-column
+                      = image.attribute_list :camera, :lens_model, :iso_value
+                    .col-md-6.lightbox-metadata-column
+                      = image.attribute_list :exposure_time, :focal_length, :f_number
 
               .page-body.visible-xs.visible-sm
                 .row
