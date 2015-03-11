@@ -434,3 +434,10 @@ $lightbox-height-sm: 450px;
     background: none;
   }
 }
+
+#lightbox_page_wrapper {
+  dl.dl-horizontal {
+    margin-top: 25px;
+    margin-bottom: 0;
+  }
+}

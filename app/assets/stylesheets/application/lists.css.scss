@@ -4,29 +4,11 @@ dl.dl-horizontal {
   dt {
     font-weight: 300;
     color: $gray-light;
-    text-transform: uppercase;
-    font-size: 14px;
-    padding: 1px 0;
   }
 
   dd + dt {
     margin-top: $content-padding;
     @media (min-width: $screen-sm-min) {
-      margin-top: 0;
-    }
-  }
-
-  dd {
-
-  }
-}
-
-
-#lightbox_page_wrapper {
-  dl.dl-horizontal {
-    margin-top: 25px;
-    margin-bottom: 0;
-    @media (min-width: $screen-md-min) {
       margin-top: 0;
     }
   }

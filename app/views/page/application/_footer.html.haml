@@ -7,10 +7,12 @@
 
     %ul.nav.navbar-nav.social-buttons
       %li
-        = form_tag 'https://www.paypal.com/cgi-bin/webscr', id: 'paypal_donate_widget', class: 'hidden', method: :post do
-          = hidden_field_tag 'cmd', value: '_s-xclick'
-          = hidden_field_tag 'hosted_button_id', value: '2496MM64LY268'
-          = image_tag 'https://www.paypalobjects.com/de_DE/i/scr/pixel.gif', width: 1, height: 1, alt: ''
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal_donate_widget" class="hidden">
+        <input type="hidden" name="cmd" value="_s-xclick">
+        <input type="hidden" name="hosted_button_id" value="2496MM64LY268">
+        <input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online.">
+        <img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">
+        </form>
         = link_to 'https://www.paypal.com', data: { submit: '#paypal_donate_widget' } do
           = icon :paypal, fixed_width: true, size: :lg
           = translate('helpers.links.donate')

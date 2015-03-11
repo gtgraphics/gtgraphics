@@ -100,17 +100,10 @@
                   .btn-group= page.google_plus_like_button
                   .btn-group= page.twitter_share_button
 
-              - if local_assigns.fetch(:photo, false)
-                .page-body
-                  .row
-                    .col-md-6
-                      = render 'image_info', image: image
-                    .col-md-6
-                      = image.attribute_list :camera, :lens_model, :iso_value, :exposure_time, :focal_length, :f_number
-
-              - else
-                .page-body
-                  = render 'image_info', image: image
+              .page-body
+                = render 'image_info', image: image
+                - if local_assigns.fetch(:photo, false)
+                  = image.attribute_list :camera, :lens_model, :iso_value, :exposure_time, :focal_length, :f_number
 
               .page-body.visible-xs.visible-sm
                 .row
