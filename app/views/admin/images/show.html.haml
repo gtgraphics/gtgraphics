@@ -43,7 +43,7 @@
                     = prepend_icon :trash, translate('helpers.links.destroy_selected'), outline: true
               .btn-toolbar.pull-right
                 .btn-group.only-js
-                  %span.btn.btn-success.fileinput-button
+                  .btn.btn-success.btn-file
                     = prepend_icon :upload, translate('helpers.links.upload', model: Image::Style.model_name.human)
                     = file_field_tag :image_style_upload, name: 'image_style[asset]', multiple: true, data: { url: upload_admin_image_styles_path(@image), bfi_disabled: true }
                 .btn-group

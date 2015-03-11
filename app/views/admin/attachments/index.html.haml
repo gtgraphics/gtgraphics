@@ -27,7 +27,7 @@
 
         #toolbar.btn-toolbar
           .btn-group.only-js
-            %span.btn.btn-success.fileinput-button
+            .btn.btn-success.btn-file
               = prepend_icon :upload, translate('helpers.links.upload', model: Attachment.model_name.human)
               = file_field_tag :attachment_upload, name: 'attachment[asset]', multiple: true, data: {bfi_disabled: true, url: upload_admin_attachments_path }
           .btn-group

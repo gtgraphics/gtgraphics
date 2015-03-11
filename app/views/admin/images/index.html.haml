@@ -48,7 +48,7 @@
           = paginate @images, right: true
 
           .btn-group.only-js.pull-right
-            %span.btn.btn-success.fileinput-button
+            .btn.btn-success.btn-file
               = prepend_icon :upload, translate('helpers.links.upload', model: Image.model_name.human)
               = file_field_tag :image_upload, name: 'image[asset]', multiple: true, accept: 'image/gif|image/png|image/jpeg|image/jpg', data: { bfi_disabled: true, url: upload_admin_images_path(tag: params[:tag]) }
 
