@@ -2,7 +2,6 @@ class Image::StyleUploader < AttachmentUploader
   include ImageUploadable
 
   version :public, from_version: :custom do
-    process :watermark
     process convert: 'jpeg'
     process quality: 85
 
