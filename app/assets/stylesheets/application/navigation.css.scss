@@ -42,35 +42,35 @@
             float: none;
             white-space: nowrap;
             background-color: $brand-primary;
-          }
 
-          &:first-child {
-            border-top-left-radius: 3px;
-            border-left: 0;
-            > a {
-              border-top-left-radius: 3px;
-            }
-          }
-
-          &:last-child {
-            border-top-right-radius: 3px;
-            > a {
-              border-top-right-radius: 3px;
-            }
-          }
-
-          .homepages & {
             &:first-child {
-              border-bottom-left-radius: 3px;
+              border-top-left-radius: 3px;
+              border-left: 0;
               > a {
-                border-bottom-left-radius: 3px;
+                border-top-left-radius: 3px;
               }
             }
 
             &:last-child {
-              border-bottom-right-radius: 3px;
+              border-top-right-radius: 3px;
               > a {
+                border-top-right-radius: 3px;
+              }
+            }
+
+            .homepages & {
+              &:first-child {
+                border-bottom-left-radius: 3px;
+                > a {
+                  border-bottom-left-radius: 3px;
+                }
+              }
+
+              &:last-child {
                 border-bottom-right-radius: 3px;
+                > a {
+                  border-bottom-right-radius: 3px;
+                }
               }
             }
           }
@@ -118,7 +118,9 @@
                 background-color: transparent;
               }
               &:focus {
-                background-color: white;
+                @media (min-width: $screen-sm-min) {
+                  background-color: white;
+                }
               }
             }
           }
