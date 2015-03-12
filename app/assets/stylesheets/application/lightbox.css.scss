@@ -445,4 +445,18 @@ $lightbox-height-sm: 450px;
       margin-top: 0;
     }
   }
+
+  .author-info {
+    .author-picture {
+      margin-right: 0;
+      @media (min-width: $screen-sm-min) {
+        margin-right: 10px;
+      }
+    }
+    .author-name {
+      @media (max-width: $screen-xs-max) {
+        display: none;
+      }
+    }
+  }
 }
