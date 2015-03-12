@@ -15,6 +15,7 @@ en:
       new: 'Create %{model}'
       browse: Durchsuchen
       upload: 'Upload %{model}'
+      back_to_top: Back to top
       edit: Edit
       details: Details
       destroy: Remove

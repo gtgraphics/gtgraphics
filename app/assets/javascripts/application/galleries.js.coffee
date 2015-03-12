@@ -15,18 +15,10 @@ setColumns = ->
   else
     columnsCount = 1
 
-initGallery = ->
-  $gallery = $(GALLERY_SELECTOR)
-
-  if $gallery.length
-    prepareGallery()
-    Loader.start()
-    $(GALLERY_ITEM_SELECTOR, $gallery).allImagesLoaded ->
-      Loader.done()
-      galleryImagesLoaded()
-
 galleryImagesLoaded = ->
   Loader.done()
+
+  $('#back_to_top').show().transition(opacity: 1, duration: 500)
 
   $gallery = $(GALLERY_SELECTOR).show()
   $gallery.masonry
@@ -66,6 +58,8 @@ prepareGallery = ->
   $(GALLERY_SELECTOR).hide().css(opacity: 0)
   $(PAGINATION_SELECTOR).hide()
 
+  $('#back_to_top').hide().css(opacity: 0)
+
 $(document).ready ->
   prepareGallery()
   $gallery = $(GALLERY_SELECTOR)
@@ -78,9 +72,6 @@ $(document).ready ->
 $(window).load ->
   galleryImagesLoaded()
   initialLoad = false
-
-# $(document).ready ->
-#   initGallery()
 
 $(window).resize ->
   setColumns()
