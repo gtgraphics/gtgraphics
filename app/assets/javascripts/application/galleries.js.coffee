@@ -58,12 +58,13 @@ prepareGallery = ->
   $(GALLERY_SELECTOR).hide().css(opacity: 0)
   $(PAGINATION_SELECTOR).hide()
 
-  $('#back_to_top').hide().css(opacity: 0)
 
 $(document).ready ->
   prepareGallery()
   $gallery = $(GALLERY_SELECTOR)
   if $gallery.length
+    $('#back_to_top').hide().css(opacity: 0)
+
     Loader.start()
     unless initialLoad
       $gallery.allImagesLoaded ->
