@@ -94,3 +94,18 @@
     }
   }
 }
+
+.btn-page-foot {
+  color: $text-color;
+  background-color: darken($content-bg, 3%);
+
+  &:hover, &:focus {
+    color: white;
+    background-color: darken($content-bg, 6%);
+  }
+
+  &.disabled {
+    color: $gray-light;
+    background-color: transparent;
+  }
+}

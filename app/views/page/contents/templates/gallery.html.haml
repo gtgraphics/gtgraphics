@@ -16,7 +16,10 @@
                   .gallery-image-caption
                     %h3.gallery-image-title= page.title
 
-  = paginate @image_pages, theme: :gallery
+  .btn-toolbar-page-foot.clearfix
+    = button_link_to '#top', type: :page_foot, size: :lg, id: 'back_to_top', class: 'pull-right', title: translate('helpers.links.back_to_top'), data: { scroll: true, toggle: 'toolbar', placement: 'top' } do
+      = icon :angle, direction: :up
+    = paginate @image_pages, theme: :gallery
 
 - else
   .page-body

@@ -15,7 +15,7 @@ class Page::ContentsController < Page::ApplicationController
   def gallery
     @image_pages = @child_pages.images.preload(embeddable: :image)
     if request.format.html?
-      @image_pages = @image_pages.page(params[:page]).per(16)
+      @image_pages = @image_pages.page(params[:page]).per(3)
     end
     respond_with_page do |format|
       format.rss { render template_path }

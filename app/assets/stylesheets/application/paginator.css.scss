@@ -5,19 +5,7 @@
   margin: 0 auto;
   display: table;
 
-  .btn-pagination {
+  .btn-page-foot {
     display: table-cell;
-    color: $text-color;
-    background-color: darken($content-bg, 3%);
-
-    &:hover, &:focus {
-      color: white;
-      background-color: darken($content-bg, 6%);
-    }
-
-    &.disabled {
-      color: $gray-light;
-      background-color: transparent;
-    }
   }
 }

@@ -5,7 +5,10 @@ DEFAULTS =
 $(document).on 'click', '[data-scroll]', (event) ->
   event.preventDefault()
   $link = $(@)
-  target = $link.data('target') || $link.attr('href')
+  if target instanceof String
+    target = $link.data('scroll')
+  else
+    target = $link.data('target') || $link.attr('href')
 
   options = _(_($link.data()).pick(
     'scrollTarget', 'offsetTop', 'duration', 'easing'
