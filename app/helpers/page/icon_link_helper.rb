@@ -1,8 +1,16 @@
-module Page::ShopLinkHelper
+module Page::IconLinkHelper
   def shop_icon_link(name, url)
-    caption = translate(name, scope: 'views.page/image.shops',
+    icon_link(:shops, name, url)
+  end
+
+  def social_icon_link(name, url)
+    icon_link(:social, name, url)
+  end
+
+  def icon_link(scope, name, url)
+    caption = translate(name, scope: ['views.page/image', scope],
                               default: name.to_s.titleize)
-    image_path = "shops/shop-150/#{name}.png"
+    image_path = "#{scope}/#{scope.to_s.singularize}-150/#{name}.png"
     content_tag :div, class: 'icon-menu-item' do
       link_to url, target: '_blank', class: 'icon-menu-link',
                    title: caption, alt: caption,

@@ -1,0 +1,13 @@
+= simple_form_for @message || Message.new, as: :message, url: local_assigns.fetch(:page, @page), wrapper: :vertical_form, defaults: { input_html: { class: 'input-lg' }} do |form|
+  .content.form-inputs
+    .row
+      .col-sm-6
+        = form.input :first_sender_name, label: false, input_html: { autofocus: true }
+      .col-sm-6
+        = form.input :last_sender_name, label: false
+    = form.input :sender_email, label: false
+  .content.form-inputs
+    = form.input :subject, label: false
+    = form.input :body, label: false, input_html: { rows: 8 }
+  .content.form-group
+    = form.button :submit, class: 'btn-primary btn-lg'

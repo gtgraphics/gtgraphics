@@ -9,8 +9,7 @@
 
 - if @user
   %hr
-
-  .page-body
+  .page-body.social-icon-links
     .row
       - case @user.name
       - when 'Tobias Roetsch'
@@ -38,3 +37,15 @@
               = shop_icon_link :deviantart, 'http://gucken.deviantart.com/prints'
             .col-xs-4.col-sm-2
               = shop_icon_link :theuntappedsource, 'http://www.theuntappedsource.com/gucken'
+
+- if @contact_form
+  %hr
+  - if region_content_for? :contact_form_header
+    .page-body
+      .row
+        .col-sm-offset-1.col-sm-10
+          = yield_region :contact_form_header
+  .page-body
+    .row
+      .col-sm-offset-1.col-sm-10
+        = render 'contact_form', page: @contact_form

@@ -33,6 +33,7 @@ class Page::ContentsController < Page::ApplicationController
 
   def about
     @user = User.find_by_name(page.title)
+    @contact_form = page.children.contact_forms.first
     respond_with_page
   end
 
