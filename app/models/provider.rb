@@ -23,6 +23,8 @@ class Provider < ActiveRecord::Base
   validates :name, presence: true
   validates :logo, presence: true
 
+  sanitizes :name, with: :strip
+
   def to_param
     "#{id}-#{name.parameterize}"
   end

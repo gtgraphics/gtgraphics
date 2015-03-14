@@ -28,7 +28,17 @@ class User::SocialLink < ActiveRecord::Base
 
   delegate :name, to: :provider, prefix: true, allow_nil: true
 
+  sanitizes :url, with: :strip
+
+  before_validation :set_default_protocol, if: :url?
+
   def to_param
     "#{id}-#{provider.name.parameterize}"
+  end
+
+  private
+
+  def set_default_protocol
+    self.url = "http://#{url}" if url != %r{\A(http|https)\://}
   end
 end
