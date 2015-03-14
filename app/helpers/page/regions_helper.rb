@@ -4,7 +4,8 @@ module Page::RegionsHelper
     definition = @region_definitions.find { |d| d.label == label.to_s }
     return false unless definition
     region = @page.regions.find { |r| r.definition_id == definition.id }
-    region && region.body
+    region && region.body.present? &&
+      !region.body.in?(Page::Region::EMPTY_BODY_CONTENTS)
   end
 
   def yield_region(label)

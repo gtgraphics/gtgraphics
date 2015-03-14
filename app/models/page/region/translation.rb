@@ -17,6 +17,14 @@ class Page < ActiveRecord::Base
       include UniquelyTranslated
 
       acts_as_uniquely_translated :page_region_id
+
+      before_validation :clear_body, if: [:body?, :body_changed?]
+
+      private
+
+      def clear_body
+        self.body = nil if body.in?(Page::Region::EMPTY_BODY_CONTENTS)
+      end
     end
   end
 end

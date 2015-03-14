@@ -14,6 +14,8 @@ class Page < ActiveRecord::Base
   class Region < ActiveRecord::Base
     include Translatable
 
+    EMPTY_BODY_CONTENTS = %w(<br> <br />)
+
     belongs_to :page, inverse_of: :regions, touch: true
     belongs_to :definition, class_name: 'Template::RegionDefinition',
                             inverse_of: :regions
