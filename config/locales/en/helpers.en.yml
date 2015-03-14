@@ -4,9 +4,14 @@ en:
       'yes': 'Yes'
       'no': 'No'
     flash:
-      created: '%{model} has been created successfully.'
-      updated: '%{model} has been updated successfully.'
-      destroyed: '%{model} has been destroyed successfully.'
+      default:
+        created: '%{model} has been created successfully.'
+        updated: '%{model} has been updated successfully.'
+        destroyed: '%{model} has been destroyed successfully.'
+      message/contact:
+        created: Your message has been sent successfully.
+      message/buy_request:
+        created: Your request has been sent successfully.
     titles:
       new: 'Create %{model}'
       edit: 'Edit %{model}'

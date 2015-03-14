@@ -16,7 +16,7 @@ de:
       message/contact:
         created: Ihre Nachricht wurde erfolgreich versendet.
       message/buy_request:
-        created: Ihre Kaufanfrage wurde erfolgreich versendet.
+        created: Ihre Anfrage wurde erfolgreich versendet.
       page:
         disabled_in_menu: Die Seite wird absofort in keinem Menü mehr angezeigt.
         enabled_in_menu: Die Seite wird absofort in Menüs angezeigt.
