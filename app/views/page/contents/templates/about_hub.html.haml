@@ -17,4 +17,6 @@
 
 - if region_content_for? :footer
   .page-body
-    = yield_region :footer
+    .row
+      .col-sm-offset-1.col-sm-10
+        = yield_region :footer
