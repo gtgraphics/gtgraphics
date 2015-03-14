@@ -27,3 +27,10 @@ en:
     #     username: 'User name to sign in.'
     #     password: 'No special characters, please.'
 
+    placeholders:
+      message:
+        first_sender_name: Your First Name
+        last_sender_name: Your Last Name
+        sender_email: Your Email
+        subject: Subject
+        body: Message
