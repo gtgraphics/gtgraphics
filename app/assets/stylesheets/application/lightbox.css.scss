@@ -251,6 +251,10 @@ $lightbox-height-sm: 450px;
       opacity: 0;
       transition: opacity 1s ease-in;
     }
+    .lightbox-control {
+      pointer-events: none;
+      // visibility: hidden;
+    }
   }
 }
 
