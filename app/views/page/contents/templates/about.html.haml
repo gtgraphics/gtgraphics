@@ -7,36 +7,15 @@
       .col-md-offset-1.col-md-10.text-lg
         = yield_region :main
 
-- if @user
+- if @network_links.present?
   %hr
   .page-body.social-icon-links
     .row
-      - case @user.name
-      - when 'Tobias Roetsch'
-        .col-sm-10.col-sm-offset-1
-          .row
+      .col-sm-10.col-sm-offset-1
+        .row.text-center
+          - @network_links.each do |network_link|
             .col-xs-4.col-sm-2
-              = shop_icon_link :fineartprint, 'http://www.taenaron.fineartprint.de'
-            .col-xs-4.col-sm-2
-              = shop_icon_link :posterlounge, 'http://www.posterlounge.de/kuenstler/roetsch'
-            .col-xs-4.col-sm-2
-              = shop_icon_link :deviantart, 'http://taenaron.deviantart.com/prints'
-            .col-xs-4.col-sm-2
-              = shop_icon_link :artflakes, 'http://www.artflakes.com/de/shop/taenaron'
-            .col-xs-4.col-sm-2
-              = shop_icon_link :fineartamerica, 'http://fineartamerica.com/profiles/tobias-roetsch.html'
-            .col-xs-4.col-sm-2
-              = shop_icon_link :society6, 'http://society6.com/taenaron'
-
-      - when 'Jeff Michelmann'
-        .col-sm-10.col-sm-offset-1
-          .row
-            .col-xs-4.col-sm-2.col-sm-offset-3
-              = shop_icon_link :fineartprint, 'http://jmichelmann.fineartprint.de'
-            .col-xs-4.col-sm-2
-              = shop_icon_link :deviantart, 'http://gucken.deviantart.com/prints'
-            .col-xs-4.col-sm-2
-              = shop_icon_link :theuntappedsource, 'http://www.theuntappedsource.com/gucken'
+              = social_link_icon(network_link)
 
 - if @contact_form
   %hr

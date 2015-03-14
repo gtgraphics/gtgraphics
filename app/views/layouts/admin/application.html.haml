@@ -48,6 +48,7 @@
             = active_link_to Attachment.model_name.human(count: 2), :admin_attachments, wrap_tag: :li, accesskey: 'A'
             = active_link_to ::Template.model_name.human(count: 2), :admin_templates, wrap_tag: :li, accesskey: 'T'
             = active_link_to User.model_name.human(count: 2), :admin_users, wrap_tag: :li, accesskey: 'U'
+            = active_link_to Provider.model_name.human(count: 2), :admin_providers, wrap_tag: :li
 
           %ul.nav.navbar-nav.navbar-right#nav_secondary
             / Language Menu

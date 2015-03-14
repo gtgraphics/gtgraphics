@@ -33,6 +33,7 @@ class Page::ContentsController < Page::ApplicationController
 
   def about
     @user = User.find_by_name(page.title)
+    @network_links = @user.social_links.networks if @user
     @contact_form = page.children.contact_forms.first
     respond_with_page
   end
@@ -48,6 +49,13 @@ class Page::ContentsController < Page::ApplicationController
     if request.format.html?
       @project_pages = @project_pages.page(params[:page]).per(16)
     end
+    respond_with_page
+  end
+
+  def prints
+    @tobias_shops = @tobias.social_links.shops.includes(:provider)
+    @jeff_shops = @jeff.social_links.shops.includes(:provider)
+
     respond_with_page
   end
 

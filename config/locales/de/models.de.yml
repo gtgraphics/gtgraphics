@@ -267,6 +267,10 @@ de:
         preferred_locale: Standardsprache
         twitter_username: Twitter-Benutzername
         photo: Foto
+      user/social_link:
+        provider: Anbieter
+        provider_id: Anbieter
+        shop: Print-Shop
 
     errors:
       models:
@@ -349,6 +353,9 @@ de:
       project/image:
         one: Arbeitsbeispiel
         other: Arbeitsbeispiele
+      provider:
+        one: Anbieter
+        other: Anbieter
       shout:
         one: Stern
         other: Sterne

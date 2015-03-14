@@ -1,0 +1,14 @@
+= simple_form_for [:admin, @provider], html: { class: 'form-horizontal' } do |form|
+
+  .fields
+    = form.input :name
+    - if @provider.logo.present?
+      .form-group
+        .col-sm-offset-3.col-sm-9
+          = image_tag attached_asset_path(@provider, :thumbnail, from: :logo), alt: Provider.human_attribute_name(:logo), class: 'img-rounded img-editable'
+    = form.input :logo, as: :file, input_html: { title: translate('helpers.links.browse') }
+
+  = form_actions do
+    = form.button :button, type: 'submit', class: 'btn-primary' do
+      = prepend_icon :save, translate(:create, scope: 'helpers.submit', model: Provider.model_name.human)
+    = button_link_to translate('helpers.links.cancel'), :admin_providers

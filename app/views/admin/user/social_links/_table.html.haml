@@ -1,0 +1,12 @@
+- social_links ||= @social_links
+
+%table.table.table-hover
+  %thead
+    %tr
+      %th.thumbnail-cell
+      %th= User::SocialLink.human_attribute_name(:provider)
+      %th= User::SocialLink.human_attribute_name(:url)
+      %th.actions
+  %tbody
+    - social_links.each do |social_link|
+      = render 'admin/user/social_links/social_link', social_link: social_link

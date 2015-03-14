@@ -2,7 +2,7 @@
   .content.form-inputs
     .row
       .col-sm-6
-        = form.input :first_sender_name, label: false, input_html: { autofocus: true }
+        = form.input :first_sender_name, label: false, input_html: { autofocus: !@message.nil? }
       .col-sm-6
         = form.input :last_sender_name, label: false
     = form.input :sender_email, label: false

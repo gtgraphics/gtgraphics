@@ -34,7 +34,7 @@ GtGraphics::Application.routes.draw do
 
   get 'sitemap.:format', to: 'sitemaps#index', as: :sitemaps
   get 'sitemap.:page.:format', to: 'sitemaps#show', as: :sitemap
-  
+
   scope 'files', constraints: { filename: /.*/ } do
     get 'download/:filename' => 'attachments#download', as: :download_attachment
     get ':filename' => 'attachments#show', as: :attachment
@@ -48,7 +48,7 @@ GtGraphics::Application.routes.draw do
           post :login, action: :create
           match :logout, action: :destroy, via: [:get, :delete]
         end
-            
+
         scope '(:translations)', constraints: { translations: /[a-z]{2}/ } do
           scope constraints: Routing::LocaleConstraint.new(:translations) do
             get :search, controller: :search, action: :show
@@ -111,6 +111,8 @@ GtGraphics::Application.routes.draw do
               end
             end
 
+            resources :providers, except: :show
+
             resources :messages, only: [:index, :show, :destroy] do
               collection do
                 delete :destroy_multiple
@@ -150,7 +152,7 @@ GtGraphics::Application.routes.draw do
             end
 
             resources :tags, only: :index
-            
+
             resources :templates, except: :new, concerns: :movable do
               resources :region_definitions, controller: :'template/region_definitions', except: [:index, :show], concerns: :movable
               get ':template_type', on: :new, action: :new, as: :typed
@@ -164,12 +166,13 @@ GtGraphics::Application.routes.draw do
             end
 
             resources :users do
+              resources :social_links, controller: :'user/social_links', except: :show, concerns: :movable
               member do
                 get :edit_password
                 patch :update_password
               end
-            end 
-            
+            end
+
             root to: redirect('/admin/pages')
           end
         end

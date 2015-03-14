@@ -5,6 +5,10 @@ class Page::ApplicationController < ApplicationController
   before_action :load_template
 
   before_action :increment_hits
+  before_action do
+    @tobias = User.find_by_name('Tobias Roetsch')
+    @jeff = User.find_by_name('Jeff Michelmann')
+  end
 
   attr_reader :page
   protected :page
