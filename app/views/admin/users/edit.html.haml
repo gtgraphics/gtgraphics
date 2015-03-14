@@ -22,7 +22,11 @@
         = form.input :photo, as: :file, input_html: { data: { title: translate('helpers.links.browse') } }
 
     %fieldset
-      %legend= translate('views.forms.social')
+      %legend.clearfix
+        .pull-left= translate('views.forms.social')
+        .pull-right
+          = button_link_to [:admin, @user, :social_links], as: :link, size: :sm do
+            = prepend_icon :pencil, translate('helpers.links.manage'), fixed_width: true
       .fields
         = form.input :twitter_username
 

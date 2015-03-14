@@ -1,0 +1,8 @@
+- present social_link, with: Admin::User::SocialLinkPresenter do |social_link|
+  = content_tag_for :tr, social_link do
+    %td.thumbnail-cell
+      = link_to social_link.thumbnail(size: 40), edit_admin_user_social_link_path(@user, social_link)
+    %td= social_link.name(true)
+    %td= social_link.compact_url
+    %td.actions
+      = social_link.action_buttons icon_only: true

@@ -1,0 +1,20 @@
+.row
+  .col-sm-offset-2.col-sm-8
+    = page_header do
+      .btn-toolbar
+        .btn-group
+          = create_button_link_for User::SocialLink, namespace: :admin, icon: :plus, caption: translate('helpers.links.new', model: User::SocialLink.model_name.human)
+
+    = panel User::SocialLink.human_attribute_name(:networks), body: false do
+      - if @networks.any?
+        = render 'table', social_links: @networks
+      - else
+        .panel-body.text-center
+          = translate 'views.hints.empty', model: User::SocialLink.human_attribute_name(:networks)
+
+    = panel User::SocialLink.human_attribute_name(:shops), body: false do
+      - if @shops.any?
+        = render 'table', social_links: @shops
+      - else
+        .panel-body.text-center
+          = translate 'views.hints.empty', model: User::SocialLink.human_attribute_name(:shops)

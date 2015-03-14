@@ -8,7 +8,6 @@ class Image < ActiveRecord::Base
       def has_image(uploader_class = nil)
         include FileAttachable
         has_attachment(uploader_class)
-
         include Extensions
       end
     end

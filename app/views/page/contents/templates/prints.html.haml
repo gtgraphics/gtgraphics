@@ -7,33 +7,25 @@
       .col-sm-offset-1.col-sm-10.text-lg
         = yield_region :main
 
-%hr
+- if @tobias || @jeff
+  %hr
 
-.page-body
-  .row.social-icon-links
-    .col-sm-5.col-sm-offset-1.col-md-4.col-md-offset-1
-      %h2.submenu-title.text-center Tobias Roetsch
-      .row
-        .col-xs-4
-          = shop_icon_link :fineartprint, 'http://www.taenaron.fineartprint.de'
-        .col-xs-4
-          = shop_icon_link :posterlounge, 'http://www.posterlounge.de/kuenstler/roetsch'
-        .col-xs-4
-          = shop_icon_link :deviantart, 'http://taenaron.deviantart.com/prints'
-      .row
-        .col-xs-4
-          = shop_icon_link :artflakes, 'http://www.artflakes.com/de/shop/taenaron'
-        .col-xs-4
-          = shop_icon_link :fineartamerica, 'http://fineartamerica.com/profiles/tobias-roetsch.html'
-        .col-xs-4
-          = shop_icon_link :society6, 'http://society6.com/taenaron'
+  .page-body
+    .row.social-icon-links
+      - if @tobias
+        .col-sm-5.col-sm-offset-1.col-md-4.col-md-offset-1
+          %h2.submenu-title.text-center= @tobias.name
+          - @tobias_shops.each_slice(3) do |social_links|
+            .row
+              - social_links.each do |social_link|
+                .col-xs-4
+                  = social_link_icon(social_link)
 
-    .col-sm-5.col-md-4.col-md-offset-2
-      %h2.submenu-title.text-center Jeff Michelmann
-      .row
-        .col-xs-4
-          = shop_icon_link :fineartprint, 'http://jmichelmann.fineartprint.de'
-        .col-xs-4
-          = shop_icon_link :deviantart, 'http://gucken.deviantart.com/prints'
-        .col-xs-4
-          = shop_icon_link :theuntappedsource, 'http://www.theuntappedsource.com/gucken'
+      - if @jeff
+        .col-sm-5.col-md-4.col-md-offset-2
+          %h2.submenu-title.text-center= @jeff.name
+          - @jeff_shops.each_slice(3) do |social_links|
+            .row
+              - social_links.each do |social_link|
+                .col-xs-4
+                  = social_link_icon(social_link)

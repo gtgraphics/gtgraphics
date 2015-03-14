@@ -1,0 +1,8 @@
+- present provider, with: Admin::ProviderPresenter do |provider|
+  = content_tag_for :tr, provider do
+    %td.thumbnail-cell
+      = link_to provider.thumbnail(size: 40), [:edit, :admin, provider]
+    %td
+      = provider.name(true)
+    %td.actions
+      = provider.action_buttons icon_only: true

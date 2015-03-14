@@ -1,0 +1,10 @@
+.row
+  .col-sm-offset-2.col-sm-8
+    = page_header do
+      = create_button_link_for Provider, namespace: :admin, icon: :plus, caption: translate('helpers.links.new', model: Provider.model_name.human)
+
+    - if @providers.any?
+      = render 'table'
+    - else
+      .well.text-center
+        = translate 'views.hints.empty', model: Provider.model_name.human(count: 2)

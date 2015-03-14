@@ -6,6 +6,10 @@
   background-image: asset-url('admin/transparent.png');
 }
 
+.img-editable-sm {
+  background-size: 10px;
+}
+
 .image, .project {
   @include clearfix;
 

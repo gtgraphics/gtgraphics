@@ -64,6 +64,8 @@ class Ability
       can :manage, Snippet
       can :manage, [Template, Template::RegionDefinition]
       can :manage, User
+      can :manage, Provider
+      can :manage, User::SocialLink
     end
   end
 end

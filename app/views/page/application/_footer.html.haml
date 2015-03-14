@@ -18,50 +18,39 @@
           = translate('helpers.links.donate')
 
     / Tobias Roetsch
-    %ul.nav.navbar-nav.social-buttons.hidden-sm.hidden-xs
-      %li= link_to 'Tobias Roetsch', page_path('about/tobias')
-      %li.visible-lg
-        = link_to 'http://facebook.com/roetsch', class: 'icon-link', title: 'Facebook', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
-          = icon :facebook, fixed_width: true, size: :lg
-          %span.sr-only Facebook
-
-      %li.visible-lg
-        = link_to 'http://twitter.com/taenaron', class: 'icon-link', title: 'Twitter', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
-          = icon :twitter, fixed_width: true, size: :lg
-          %span.sr-only Twitter
-
-      %li.visible-lg
-        = link_to 'http://taenaron.deviantart.com', class: 'icon-link', title: 'DeviantArt', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
-          = icon :deviantart, fixed_width: true, size: :lg
-          %span.sr-only DeviantArt
-
-      %li.visible-lg
-        = link_to 'http://500px.com/taenaron', class: 'icon-link', title: '500px', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
-          %i.footer-icon-500px
-          %span.sr-only 500px
-
-      %li.visible-lg
-        = link_to 'http://www.behance.net/taenaron', class: 'icon-link', title: 'Behance', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
-          = icon :behance, fixed_width: true, size: :lg
-          %span.sr-only Behance
+    - cache [@tobias, :footer_social_buttons] do
+      %ul.nav.navbar-nav.social-buttons.hidden-sm.hidden-xs
+        %li= link_to @tobias.name, page_path('about/tobias')
+        %li.visible-lg
+          = footer_social_network_link @tobias, 'Facebook' do
+            = icon :facebook, fixed_width: true, size: :lg
+        %li.visible-lg
+          = footer_social_network_link @tobias, 'Twitter' do
+            = icon :twitter, fixed_width: true, size: :lg
+        %li.visible-lg
+          = footer_social_network_link @tobias, 'DeviantArt' do
+            = icon :deviantart, fixed_width: true, size: :lg
+        %li.visible-lg
+          = footer_social_network_link @tobias, '500px' do
+            %i.footer-icon-500px
+        %li.visible-lg
+          = footer_social_network_link @tobias, 'Behance' do
+            = icon :behance, fixed_width: true, size: :lg
+            %span.sr-only Behance
 
     / Jeff Michelmann
-    %ul.nav.navbar-nav.social-buttons.hidden-sm.hidden-xs
-      %li= link_to 'Jeff Michelmann', page_path('about/jeff')
-      %li.visible-lg
-        = link_to 'http://facebook.com/jeff.gucken', class: 'icon-link', title: 'Facebook', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
-          = icon :facebook, fixed_width: true, size: :lg
-          %span.sr-only Facebook
-
-      %li.visible-lg
-        = link_to 'http://twitter.com/jmichelmann', class: 'icon-link', title: 'Twitter', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
-          = icon :twitter, fixed_width: true, size: :lg
-          %span.sr-only Twitter
-
-      %li.visible-lg
-        = link_to 'http://gucken.deviantart.com', class: 'icon-link', title: 'DeviantArt', target: '_blank', data: { toggle: 'tooltip', placement: 'top' } do
-          = icon :deviantart, fixed_width: true, size: :lg
-          %span.sr-only DeviantArt
+    - cache [@jeff, :footer_social_buttons] do
+      %ul.nav.navbar-nav.social-buttons.hidden-sm.hidden-xs
+        %li= link_to 'Jeff Michelmann', page_path('about/jeff')
+        %li.visible-lg
+          = footer_social_network_link @jeff, 'Facebook' do
+            = icon :facebook, fixed_width: true, size: :lg
+        %li.visible-lg
+          = footer_social_network_link @jeff, 'Twittera' do
+            = icon :twitter, fixed_width: true, size: :lg
+        %li.visible-lg
+          = footer_social_network_link @jeff, 'DeviantArt' do
+            = icon :deviantart, fixed_width: true, size: :lg
 
     / Menu Items
     %ul.nav.navbar-nav.navbar-right

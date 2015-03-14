@@ -37,6 +37,9 @@ class User < ActiveRecord::Base
   include PersistenceContextTrackable
   include User::Messaging
 
+  has_many :social_links, class_name: 'User::SocialLink', dependent: :destroy
+  has_many :providers, through: :user_providers
+
   store :preferences, accessors: [:preferred_locale]
 
   with_options foreign_key: :author_id, dependent: :nullify do |author|
@@ -56,6 +59,7 @@ class User < ActiveRecord::Base
             inclusion: { in: -> { I18n.available_locales.map(&:to_s) } },
             allow_blank: true
 
+  after_initialize :generate_asset_token, unless: :asset_token?
   before_validation :sanitize_preferred_locale
   before_save :sanitize_email_address, if: :email?
   before_save :set_photo_updated_at, if: [:photo?, :photo_changed?]
@@ -101,6 +105,10 @@ class User < ActiveRecord::Base
   end
 
   private
+
+  def generate_asset_token
+    self.asset_token = SecureRandom.uuid
+  end
 
   def sanitize_email_address
     self.email = email.downcase

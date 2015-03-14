@@ -1,0 +1,11 @@
+- providers ||= @providers
+
+%table.table.table-hover
+  %thead
+    %tr
+      %th.thumbnail-cell
+      %th= Provider.human_attribute_name(:name)
+      %th.actions
+  %tbody
+    - providers.each do |provider|
+      = render provider

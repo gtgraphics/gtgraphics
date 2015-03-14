@@ -1,0 +1,11 @@
+= simple_form_for @social_link, as: :social_link, url: @social_link.new_record? ? admin_user_social_links_path(@user) : admin_user_social_link_path(@user, @social_link), html: { class: 'form-horizontal' } do |form|
+
+  .fields
+    = form.association :provider, collection: Provider.order(:name)
+    = form.input :url
+    = form.input :shop, as: :boolean, wrapper: :horizontal_boolean
+
+  = form_actions do
+    = form.button :button, type: 'submit', class: 'btn-primary' do
+      = prepend_icon :save, translate(:create, scope: 'helpers.submit', model: Provider.model_name.human)
+    = button_link_to translate('helpers.links.cancel'), [:admin, @user, :social_links]

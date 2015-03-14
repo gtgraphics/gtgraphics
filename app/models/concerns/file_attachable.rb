@@ -5,7 +5,6 @@ module FileAttachable
     def has_attachment(uploader_class = nil)
       uploader_class ||= "#{self.name}Uploader".constantize
       mount_uploader :asset, uploader_class
-
       include Extensions
     end
   end
@@ -51,7 +50,8 @@ module FileAttachable
 
     def generate_asset_token
       return if !respond_to?(:asset_token) || asset_token?
-      self.asset_token = SecureRandom.uuid
+      name = File.basename(asset.file.original_filename, '.*').slice(0...32)
+      self.asset_token = "#{SecureRandom.uuid}-#{name.parameterize}"
     end
 
     def set_original_filename
