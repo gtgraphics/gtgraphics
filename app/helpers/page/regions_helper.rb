@@ -1,11 +1,14 @@
 module Page::RegionsHelper
+  def html_present?(content)
+    content.present? && !content.in?(Page::Region::EMPTY_BODY_CONTENTS)
+  end
+
   def region_content_for?(label)
     @page.check_template_support!
     definition = @region_definitions.find { |d| d.label == label.to_s }
     return false unless definition
     region = @page.regions.find { |r| r.definition_id == definition.id }
-    region && region.body.present? &&
-      !region.body.in?(Page::Region::EMPTY_BODY_CONTENTS)
+    region && region.body.present? && !html_present?(region.body)
   end
 
   def yield_region(label)
