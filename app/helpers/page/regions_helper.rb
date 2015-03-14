@@ -8,7 +8,7 @@ module Page::RegionsHelper
     definition = @region_definitions.find { |d| d.label == label.to_s }
     return false unless definition
     region = @page.regions.find { |r| r.definition_id == definition.id }
-    region && region.body.present? && html_present?(region.body)
+    region && html_present?(region.body)
   end
 
   def yield_region(label)
