@@ -31,6 +31,11 @@ class Page::ContentsController < Page::ApplicationController
     respond_with_page
   end
 
+  def about
+    @user = User.find_by_name(page.title)
+    respond_with_page
+  end
+
   def showcase_hub
     @showcase_pages = @child_pages.contents.with_template(:showcase)
                       .preload(:embeddable)

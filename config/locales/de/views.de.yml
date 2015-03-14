@@ -96,10 +96,13 @@ de:
         deviantart: DeviantArt
         fineartprint: FineArtPrint
         fineartamerica_url: FineArtAmerica
+        fineartamerica: FineArtAmerica
         posterlounge_url: PosterLounge
         mygall: MyGall
         redbubble: RedBubble
         artflakes: Artflakes
+        theuntappedsource: The Untapped Source
+        posterlounge: PosterLounge
 
     images:
       buy: '%{image} erwerben'
