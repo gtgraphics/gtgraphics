@@ -59,7 +59,7 @@ namespace :deploy do
   after :publishing, :restart
 
   after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
+    on roles(:web) do
       within release_path do
         execute :rake, 'cache:rebuild_routes'
       end
