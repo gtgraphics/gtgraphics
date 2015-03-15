@@ -1,7 +1,6 @@
 $(document).ready ->
   $(':file:not([data-bfi-disabled])').each ->
     $file = $(@)
-    console.log $file
 
     title = $file.attr('title') || $file.data('title')
     $file.removeAttr('title')

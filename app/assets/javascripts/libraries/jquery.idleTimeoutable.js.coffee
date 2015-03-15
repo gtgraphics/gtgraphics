@@ -15,7 +15,6 @@ class IdleTimeoutable
     @options = _(_(options).defaults($element.data())).defaults(
       jQuery.idleTimeoutable.defaults
     )
-    console.log @options
     @$target = $(@options.target)
 
     if _(@options.awakeOn).isArray()
