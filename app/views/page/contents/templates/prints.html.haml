@@ -1,31 +1,32 @@
-.hidden-xs
-  = yield_region :header_image
+- cache [page, @tobias, @jeff] do
+  .hidden-xs
+    = yield_region :header_image
 
-- if region_content_for? :main
-  .page-body
-    .row
-      .col-sm-offset-1.col-sm-10.text-lg
-        = yield_region :main
+  - if region_content_for? :main
+    .page-body
+      .row
+        .col-sm-offset-1.col-sm-10.text-lg
+          = yield_region :main
 
-- if @tobias || @jeff
-  %hr
+  - if @tobias || @jeff
+    %hr
 
-  .page-body
-    .row.social-icon-links
-      - if @tobias
-        .col-sm-5.col-sm-offset-1.col-md-4.col-md-offset-1
-          %h2.submenu-title.text-center= @tobias.name
-          - @tobias_shops.each_slice(3) do |social_links|
-            .row
-              - social_links.each do |social_link|
-                .col-xs-4
-                  = social_link_icon(social_link)
+    .page-body
+      .row.social-icon-links
+        - if @tobias
+          .col-sm-5.col-sm-offset-1.col-md-4.col-md-offset-1
+            %h2.submenu-title.text-center= @tobias.name
+            - @tobias_shops.each_slice(3) do |social_links|
+              .row
+                - social_links.each do |social_link|
+                  .col-xs-4
+                    = social_link_icon(social_link)
 
-      - if @jeff
-        .col-sm-5.col-md-4.col-md-offset-2
-          %h2.submenu-title.text-center= @jeff.name
-          - @jeff_shops.each_slice(3) do |social_links|
-            .row
-              - social_links.each do |social_link|
-                .col-xs-4
-                  = social_link_icon(social_link)
+        - if @jeff
+          .col-sm-5.col-md-4.col-md-offset-2
+            %h2.submenu-title.text-center= @jeff.name
+            - @jeff_shops.each_slice(3) do |social_links|
+              .row
+                - social_links.each do |social_link|
+                  .col-xs-4
+                    = social_link_icon(social_link)

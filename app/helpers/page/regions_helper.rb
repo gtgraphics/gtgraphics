@@ -4,24 +4,25 @@ module Page::RegionsHelper
   end
 
   def region_content_for?(label)
-    @page.check_template_support!
-    definition = @region_definitions.find { |d| d.label == label.to_s }
-    return false unless definition
-    region = @page.regions.find { |r| r.definition_id == definition.id }
-    region && html_present?(region.body)
+    !yield_region(label).nil?
+  rescue Template::RegionDefinition::NotFound
+    false
   end
 
   def yield_region(label)
     @page.check_template_support!
     definition = @region_definitions.find { |d| d.label == label.to_s }
     if definition
-      return unless region_content_for?(label)
       region = @page.regions.find do |r|
         r.definition_id == definition.id
       end
-      content_tag :div, region.body.html_safe,
-                  id: "#{label}_region", class: [
-                    'region', "region-#{definition.region_type.dasherize}"]
+      cache [@page, region] do
+        body = region.body.html_safe
+        body = nil unless html_present?(body)
+        content_tag :div, body,
+                    id: "#{label}_region", class: [
+                      'region', "region-#{definition.region_type.dasherize}"]
+      end
     elsif Rails.env.development?
       fail Template::RegionDefinition::NotFound.new(label, @page.template)
     end

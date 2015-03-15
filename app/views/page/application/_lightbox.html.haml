@@ -1,143 +1,150 @@
+- page = local_assigns.fetch(:page)
+- image = local_assigns.fetch(:image)
 - details = local_assigns.fetch(:details, true)
+- buyable = local_assigns.fetch(:buyable, true)
+- photo = local_assigns.fetch(:photo, false)
 - close_url = local_assigns[:close_url]
+- previous_page_url = local_assigns[:previous_page_url]
+- next_page_url = local_assigns[:next_page_url]
 
-#nav_lightbox_xs.container.visible-xs
-  = link_to :root, id: 'brand' do
-    = image_tag 'logo.png', id: 'logo', alt: 'GTGRAPHICS'
-    .sr-only GTGRAPHICS
-  = render 'navbar', back_url: close_url
+- cache [page, image, image.author, :lightbox, details, photo, buyable, previous_page_url, next_page_url, close_url] do
+  #nav_lightbox_xs.container.visible-xs
+    = link_to :root, id: 'brand' do
+      = image_tag 'logo.png', id: 'logo', alt: 'GTGRAPHICS'
+      .sr-only GTGRAPHICS
+    = render 'navbar', back_url: close_url
 
-- present local_assigns.fetch(:page) do |page|
-  - present local_assigns.fetch(:image) do |image|
-    %nav.navbar.navbar-lightbox#navbar_lightbox.hidden-xs{role: 'navigation'}
-      .container-fluid
-        = link_to :root, id: 'lightbox_brand', class: 'navbar-brand hidden-xs' do
-          = image_tag 'lightbox_logo.png', id: 'logo', alt: 'GTGRAPHICS'
-          %span.sr-only GTGRAPHICS
+  - present page do |page|
+    - present image do |image|
+      %nav.navbar.navbar-lightbox#navbar_lightbox.hidden-xs{role: 'navigation'}
+        .container-fluid
+          = link_to :root, id: 'lightbox_brand', class: 'navbar-brand hidden-xs' do
+            = image_tag 'lightbox_logo.png', id: 'logo', alt: 'GTGRAPHICS'
+            %span.sr-only GTGRAPHICS
 
-        #nav_lightbox_controls
-          - if close_url
-            %ul#nav_close.nav.navbar-nav.navbar-right
-              %li
-                = link_to close_url, id: 'lightbox_close', title: translate('helpers.links.close'), data: { toggle: 'tooltip', placement: 'bottom' } do
-                  = close
-                  %span.sr-only= translate('helpers.links.close')
+          #nav_lightbox_controls
+            - if close_url
+              %ul#nav_close.nav.navbar-nav.navbar-right
+                %li
+                  = link_to close_url, id: 'lightbox_close', title: translate('helpers.links.close'), data: { toggle: 'tooltip', placement: 'bottom' } do
+                    = close
+                    %span.sr-only= translate('helpers.links.close')
 
-          %ul#nav_lightbox_actions.nav.navbar-nav.navbar-right
-            - if details
-              %li.enlarge-image.hidden-sm.js-only
-                = link_to '#top', title: translate('helpers.links.enlarge_image'), accesskey: 'p', data: { scroll: true, toggle: 'tooltip', placement: 'bottom' } do
-                  = icon :search_plus, size: :lg, fixed_width: true
-                  %span.sr-only= translate('helpers.links.enlarge_image')
+            %ul#nav_lightbox_actions.nav.navbar-nav.navbar-right
+              - if details
+                %li.enlarge-image.hidden-sm.js-only
+                  = link_to '#top', title: translate('helpers.links.enlarge_image'), accesskey: 'p', data: { scroll: true, toggle: 'tooltip', placement: 'bottom' } do
+                    = icon :search_plus, size: :lg, fixed_width: true
+                    %span.sr-only= translate('helpers.links.enlarge_image')
 
-              %li.info.hidden-sm.js-only
-                = link_to '#info', title: translate('helpers.links.details'), accesskey: 'i', data: { toggle: 'tooltip', placement: 'bottom' } do
-                  = icon :info, size: :lg, fixed_width: true, style: :circle
-                  %span.sr-only= translate('helpers.links.details')
+                %li.info.hidden-sm.js-only
+                  = link_to '#info', title: translate('helpers.links.details'), accesskey: 'i', data: { toggle: 'tooltip', placement: 'bottom' } do
+                    = icon :info, size: :lg, fixed_width: true, style: :circle
+                    %span.sr-only= translate('helpers.links.details')
 
-              %li.comment.hidden-sm.js-only
-                = link_to '#comments', title: translate('helpers.links.comment'), accesskey: 'c', data: { scroll: true, toggle: 'tooltip', placement: 'bottom' } do
-                  = icon :comment, size: :lg, fixed_width: true
-                  %span.sr-only= translate('helpers.links.comment')
+                %li.comment.hidden-sm.js-only
+                  = link_to '#comments', title: translate('helpers.links.comment'), accesskey: 'c', data: { scroll: true, toggle: 'tooltip', placement: 'bottom' } do
+                    = icon :comment, size: :lg, fixed_width: true
+                    %span.sr-only= translate('helpers.links.comment')
 
-            - if image.styles.any? && local_assigns.fetch(:styles, true)
-              %li.dropdown.hidden-sm.js-only
-                = link_to '#', id: 'image_download_dropdown', title: translate('helpers.links.download'), class: 'dropdown-toggle', :'aria-haspopup' => 'true', data: { toggle: 'dropdown' } do
-                  = icon :download, size: :lg, fixed_width: true
-                  = caret
-                  %span.sr-only= translate('helpers.links.download')
-                %ul.dropdown-menu{role: 'menu', :'aria-labelledby' => 'image_download_dropdown'}
-                  - image.styles.each do |style|
-                    %li
-                      = link_to download_image_path(style_id: style.position), data: { no_turbolink: true } do
-                        = style.title
-
-            - if local_assigns.fetch(:buyable, true)
-              %li.dropdown.hidden-sm
-                - if image.shop_urls.each_value.any?(&:present?)
-                  = link_to image.shop_url('gtgraphics'), title: translate('helpers.links.buy'), id: 'image_buy_dropdown', class: 'dropdown-toggle', :'aria-haspopup' => 'true', data: { toggle: 'dropdown' } do
-                    = icon :shopping_cart, size: :lg, fixed_width: true
+              - if image.styles.any? && local_assigns.fetch(:styles, true)
+                %li.dropdown.hidden-sm.js-only
+                  = link_to '#', id: 'image_download_dropdown', title: translate('helpers.links.download'), class: 'dropdown-toggle', :'aria-haspopup' => 'true', data: { toggle: 'dropdown' } do
+                    = icon :download, size: :lg, fixed_width: true
                     = caret
-                    %span.sr-only= translate('helpers.links.buy')
-                  %ul.dropdown-menu.shop-providers{role: 'menu', :'aria-labelledby' => 'image_buy_dropdown'}
-                    = image.shop_links
-                - else
-                  = link_to image.shop_url('gtgraphics'), title: translate('helpers.links.buy'), data: { toggle: 'tooltip', placement: 'bottom' } do
-                    = icon :shopping_cart, size: :lg, fixed_width: true
-                    %span.sr-only= translate('helpers.links.buy')
+                    %span.sr-only= translate('helpers.links.download')
+                  %ul.dropdown-menu{role: 'menu', :'aria-labelledby' => 'image_download_dropdown'}
+                    - image.styles.each do |style|
+                      %li
+                        = link_to download_image_path(style_id: style.position), data: { no_turbolink: true } do
+                          = style.title
 
-    #lightbox{class: ['lightbox', details ? 'lightbox-with-details' : 'lightbox-without-details']}
-      .lightbox-image-container
-        .lightbox-background.hidden-xs.hidden-sm{style: background_css(attached_asset_path(@image, :brick))}
-        %figure.lightbox-image{style: background_css(attached_asset_path(@image, :public))}
-          = image_tag attached_asset_path(@image, :public), width: @image.width, height: @image.height, alt: @image.title
-          %figcaption.sr-only
-            = image.description
+              - if buyable
+                %li.dropdown.hidden-sm
+                  - if image.shop_urls.each_value.any?(&:present?)
+                    = link_to image.shop_url('gtgraphics'), title: translate('helpers.links.buy'), id: 'image_buy_dropdown', class: 'dropdown-toggle', :'aria-haspopup' => 'true', data: { toggle: 'dropdown' } do
+                      = icon :shopping_cart, size: :lg, fixed_width: true
+                      = caret
+                      %span.sr-only= translate('helpers.links.buy')
+                    %ul.dropdown-menu.shop-providers{role: 'menu', :'aria-labelledby' => 'image_buy_dropdown'}
+                      = image.shop_links
+                  - else
+                    = link_to image.shop_url('gtgraphics'), title: translate('helpers.links.buy'), data: { toggle: 'tooltip', placement: 'bottom' } do
+                      = icon :shopping_cart, size: :lg, fixed_width: true
+                      %span.sr-only= translate('helpers.links.buy')
 
-      .lightbox-controls
-        - if local_assigns[:previous_page_url]
-          = link_to previous_page_url, class: 'lightbox-control left', role: 'button', data: { hotkey: 'left' } do
-            = icon :chevron, direction: :left
-            %span.sr-only= translate('helpers.links.previous')
+      #lightbox{class: ['lightbox', details ? 'lightbox-with-details' : 'lightbox-without-details']}
+        .lightbox-image-container
+          .lightbox-background.hidden-xs.hidden-sm{style: background_css(attached_asset_path(@image, :brick))}
+          %figure.lightbox-image{style: background_css(attached_asset_path(@image, :public))}
+            = image_tag attached_asset_path(@image, :public), width: @image.width, height: @image.height, alt: @image.title
+            %figcaption.sr-only
+              = image.description
 
-        - if local_assigns[:next_page_url]
-          = link_to next_page_url, class: 'lightbox-control right', role: 'button', data: { hotkey: 'right' } do
-            = icon :chevron, direction: :right
-            %span.sr-only= translate('helpers.links.next')
+        .lightbox-controls
+          - if previous_page_url
+            = link_to previous_page_url, class: 'lightbox-control left', role: 'button', data: { hotkey: 'left' } do
+              = icon :chevron, direction: :left
+              %span.sr-only= translate('helpers.links.previous')
 
-    - if details
-      #lightbox_content_wrapper
-        #lightbox_page_wrapper
-          #lightbox_page_content.container
-            #info
-              %a{name: 'info'}
+          - if next_page_url
+            = link_to next_page_url, class: 'lightbox-control right', role: 'button', data: { hotkey: 'right' } do
+              = icon :chevron, direction: :right
+              %span.sr-only= translate('helpers.links.next')
 
-              .page-header.lightbox-title.clearfix
-                %h1= image.title
+      - if details
+        #lightbox_content_wrapper
+          #lightbox_page_wrapper
+            #lightbox_page_content.container
+              #info
+                %a{name: 'info'}
 
-                #social_buttons.btn-toolbar.js-only
-                  .btn-group= page.facebook_like_button
-                  .btn-group= page.google_plus_like_button
-                  .btn-group= page.twitter_share_button
+                .page-header.lightbox-title.clearfix
+                  %h1= image.title
 
-              .page-body
-                .info-bar
-                  %ul.list-info-bar
-                    %li.author
-                      = image.author.info
-                    %li.taken-at
-                      = prepend_icon :clock, image.taken_at, outline: true, fixed_width: true
+                  #social_buttons.btn-toolbar.js-only
+                    .btn-group= page.facebook_like_button
+                    .btn-group= page.google_plus_like_button
+                    .btn-group= page.twitter_share_button
 
-                - if image.description.present?
-                  .lightbox-caption
-                    .lightbox-description
-                      = image.description
+                .page-body
+                  .info-bar
+                    %ul.list-info-bar
+                      %li.author
+                        = image.author.info
+                      %li.taken-at
+                        = prepend_icon :clock, image.taken_at, outline: true, fixed_width: true
 
-                - if local_assigns.fetch(:photo, false)
-                  .lightbox-metadata.row
-                    .col-md-6.lightbox-metadata-column
-                      = image.attribute_list :camera, :lens_model, :iso_value
-                    .col-md-6.lightbox-metadata-column
-                      = image.attribute_list :exposure_time, :focal_length, :f_number
+                  - if image.description.present?
+                    .lightbox-caption
+                      .lightbox-description
+                        = image.description
 
-              .page-body.visible-xs.visible-sm
-                .row
-                  - if image.shop_links.present?
-                    / Buy
-                    .col-xs-12.col-sm-6
-                      %h3= prepend_icon :shopping_cart, translate('helpers.links.buy'), fixed_width: true
-                      %ul.list-unstyled.shop-providers
-                        = image.shop_links
+                  - if photo
+                    .lightbox-metadata.row
+                      .col-md-6.lightbox-metadata-column
+                        = image.attribute_list :camera, :lens_model, :iso_value
+                      .col-md-6.lightbox-metadata-column
+                        = image.attribute_list :exposure_time, :focal_length, :f_number
 
-                  - if image.styles.any?
-                    / Download
-                    .col-xs-12.col-sm-6
-                      %h3= prepend_icon :download, translate('helpers.links.download'), fixed_width: true
-                      %ul.list-unstyled.image-styles
-                        - image.styles.each do |style|
-                          %li= link_to style.title, download_image_path(style_id: style.position), data: { no_turbolink: true }
+                .page-body.visible-xs.visible-sm
+                  .row
+                    - if image.shop_links.present?
+                      / Buy
+                      .col-xs-12.col-sm-6
+                        %h3= prepend_icon :shopping_cart, translate('helpers.links.buy'), fixed_width: true
+                        %ul.list-unstyled.shop-providers
+                          = image.shop_links
 
-            / Comments
-            .page-body.lightbox-comments.js-only#comments
-              %a{name: 'comments'}
-              = page.facebook_comments
+                    - if image.styles.any?
+                      / Download
+                      .col-xs-12.col-sm-6
+                        %h3= prepend_icon :download, translate('helpers.links.download'), fixed_width: true
+                        %ul.list-unstyled.image-styles
+                          - image.styles.each do |style|
+                            %li= link_to style.title, download_image_path(style_id: style.position), data: { no_turbolink: true }
+
+              / Comments
+              .page-body.lightbox-comments.js-only#comments
+                %a{name: 'comments'}
+                = page.facebook_comments

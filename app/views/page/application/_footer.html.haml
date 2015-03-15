@@ -17,40 +17,42 @@
           = icon :paypal, fixed_width: true, size: :lg
           = translate('helpers.links.donate')
 
-    / Tobias Roetsch
-    - cache [@tobias, :footer_social_buttons] do
-      %ul.nav.navbar-nav.social-buttons.hidden-sm.hidden-xs
-        %li= link_to @tobias.name, page_path('about/tobias')
-        %li.visible-lg
-          = footer_social_network_link @tobias, 'Facebook' do
-            = icon :facebook, fixed_width: true, size: :lg
-        %li.visible-lg
-          = footer_social_network_link @tobias, 'Twitter' do
-            = icon :twitter, fixed_width: true, size: :lg
-        %li.visible-lg
-          = footer_social_network_link @tobias, 'DeviantArt' do
-            = icon :deviantart, fixed_width: true, size: :lg
-        %li.visible-lg
-          = footer_social_network_link @tobias, '500px' do
-            %i.footer-icon-500px
-        %li.visible-lg
-          = footer_social_network_link @tobias, 'Behance' do
-            = icon :behance, fixed_width: true, size: :lg
-            %span.sr-only Behance
+    - cache [:footer_social_buttons, User.count, User.maximum(:updated_at).to_s(:number)] do
+      / Tobias Roetsch
+      - tobias = User.find_by_name('Tobias Roetsch')
+      - cache [:footer_social_buttons, tobias] do
+        %ul.nav.navbar-nav.social-buttons.hidden-sm.hidden-xs
+          %li= link_to tobias.name, page_path('about/tobias')
+          %li.visible-lg
+            = footer_social_network_link tobias, 'Facebook' do
+              = icon :facebook, fixed_width: true, size: :lg
+          %li.visible-lg
+            = footer_social_network_link tobias, 'Twitter' do
+              = icon :twitter, fixed_width: true, size: :lg
+          %li.visible-lg
+            = footer_social_network_link tobias, 'DeviantArt' do
+              = icon :deviantart, fixed_width: true, size: :lg
+          %li.visible-lg
+            = footer_social_network_link tobias, '500px' do
+              %i.footer-icon-500px
+          %li.visible-lg
+            = footer_social_network_link tobias, 'Behance' do
+              = icon :behance, fixed_width: true, size: :lg
 
-    / Jeff Michelmann
-    - cache [@jeff, :footer_social_buttons] do
-      %ul.nav.navbar-nav.social-buttons.hidden-sm.hidden-xs
-        %li= link_to 'Jeff Michelmann', page_path('about/jeff')
-        %li.visible-lg
-          = footer_social_network_link @jeff, 'Facebook' do
-            = icon :facebook, fixed_width: true, size: :lg
-        %li.visible-lg
-          = footer_social_network_link @jeff, 'Twitter' do
-            = icon :twitter, fixed_width: true, size: :lg
-        %li.visible-lg
-          = footer_social_network_link @jeff, 'DeviantArt' do
-            = icon :deviantart, fixed_width: true, size: :lg
+      / Jeff Michelmann
+      - jeff = User.find_by_name('Jeff Michelmann')
+      - cache [:footer_social_buttons, jeff] do
+        %ul.nav.navbar-nav.social-buttons.hidden-sm.hidden-xs
+          %li= link_to jeff.name, page_path('about/jeff')
+          %li.visible-lg
+            = footer_social_network_link jeff, 'Facebook' do
+              = icon :facebook, fixed_width: true, size: :lg
+          %li.visible-lg
+            = footer_social_network_link jeff, 'Twitter' do
+              = icon :twitter, fixed_width: true, size: :lg
+          %li.visible-lg
+            = footer_social_network_link jeff, 'DeviantArt' do
+              = icon :deviantart, fixed_width: true, size: :lg
 
     / Menu Items
     %ul.nav.navbar-nav.navbar-right

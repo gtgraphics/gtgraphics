@@ -1,29 +1,33 @@
 .page-prominent-container-md
   .row
     .col-md-offset-1.col-md-10
-      %h1.sr-only= page.title
+      - cache [page, :header] do
+        %h1.sr-only= page.title
 
-      - if region_content_for? :header
-        .page-body.text-lg
-          .row
-            .col-sm-12
-              = yield_region :header
+        - if region_content_for? :header
+          .page-body.text-lg
+            .row
+              .col-sm-12
+                = yield_region :header
 
       .page-body.submenu-body-embedded
         .row
           - @about_pages.each do |user, page|
-            .col-sm-6
-              .submenu-item
-                = link_to page, class: 'submenu-link' do
-                  .submenu-item-title
-                    = page.title
-                  - if user.photo.present?
-                    = image_tag attached_asset_path(user, :menu_brick, from: :photo), class: 'submenu-item-image', alt: page.title
-  %hr
-  .row
-    .col-md-offset-1.col-md-10
-      - if region_content_for? :footer
-        .page-body.text-lg
-          .row
-            .col-sm-12
-              = yield_region :footer
+            - cache [page, user, :brick] do
+              .col-sm-6
+                .submenu-item
+                  = link_to page, class: 'submenu-link' do
+                    .submenu-item-title
+                      = page.title
+                    - if user.photo.present?
+                      = image_tag attached_asset_path(user, :menu_brick, from: :photo), class: 'submenu-item-image', alt: page.title
+
+  - cache [page, :footer] do
+    %hr
+    .row
+      .col-md-offset-1.col-md-10
+        - if region_content_for? :footer
+          .page-body.text-lg
+            .row
+              .col-sm-12
+                = yield_region :footer

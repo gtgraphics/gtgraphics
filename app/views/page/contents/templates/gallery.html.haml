@@ -5,16 +5,17 @@
 - if @image_pages.any?
   #gallery.clearfix{data: { total_pages: @image_pages.total_pages }}
     - @image_pages.each do |page|
-      - present page.embeddable do |image_page|
-        .gallery-item
-          = link_to page, class: 'gallery-link' do
-            %figure.gallery-image-container
-              .gallery-image-wrapper
-                = image_tag attached_asset_path(image_page.image, :brick), class: 'gallery-image img-responsive', alt: page.title, width: image_page.image.width, height: image_page.image.height
-              %figcaption.gallery-image-caption-wrapper
-                .gallery-image-caption-container
-                  .gallery-image-caption
-                    %h3.gallery-image-title= page.title
+      - cache [page, page.embeddable, page.embeddable.image, :brick] do
+        - present page.embeddable do |image_page|
+          .gallery-item
+            = link_to page, class: 'gallery-link' do
+              %figure.gallery-image-container
+                .gallery-image-wrapper
+                  = image_tag attached_asset_path(image_page.image, :brick), class: 'gallery-image img-responsive', alt: page.title, width: image_page.image.width, height: image_page.image.height
+                %figcaption.gallery-image-caption-wrapper
+                  .gallery-image-caption-container
+                    .gallery-image-caption
+                      %h3.gallery-image-title= page.title
 
   .btn-toolbar-page-foot.clearfix
     = button_link_to '#top', type: :page_foot, size: :lg, id: 'back_to_top', class: 'pull-right', title: translate('helpers.links.back_to_top'), data: { scroll: true, toggle: 'tooltip', container: 'body', placement: 'top' } do

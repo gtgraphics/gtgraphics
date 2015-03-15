@@ -53,7 +53,9 @@ class Page::ContentsController < Page::ApplicationController
   end
 
   def prints
+    @tobias = User.find_by_name('Tobias Roetsch')
     @tobias_shops = @tobias.social_links.shops.includes(:provider)
+    @jeff = User.find_by_name('Jeff Michelmann')
     @jeff_shops = @jeff.social_links.shops.includes(:provider)
 
     respond_with_page

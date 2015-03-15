@@ -1,51 +1,52 @@
-- present @project do |project|
+- cache [page, @project, @project.author] do
+  - present @project do |project|
 
-  = render 'breadcrumbs'
+    = render 'breadcrumbs'
 
-  .page-header
-    %h1= project.title
+    .page-header
+      %h1= project.title
 
-  .page-body
-    - if project.client.present? || project.project_type.present? || project.released_in.present?
-      .info-bar
-        .row
-          .col-md-9
-            %ul.list-info-bar
-              - if project.client.present?
-                %li.client
-                  = link_to_if project.client.website_url.present?, prepend_icon(:user, project.client, fixed_width: true), project.client.website_url, target: '_blank'
-              - if project.project_type.present?
-                %li.project-type
-                  = prepend_icon :tag, project.project_type, fixed_width: true
-              - if project.released_in.present?
-                %li.release-date
-                  = prepend_icon :clock, project.released_in, outline: true, fixed_width: true
+    .page-body
+      - if project.client.present? || project.project_type.present? || project.released_in.present?
+        .info-bar
+          .row
+            .col-md-9
+              %ul.list-info-bar
+                - if project.client.present?
+                  %li.client
+                    = link_to_if project.client.website_url.present?, prepend_icon(:user, project.client, fixed_width: true), project.client.website_url, target: '_blank'
+                - if project.project_type.present?
+                  %li.project-type
+                    = prepend_icon :tag, project.project_type, fixed_width: true
+                - if project.released_in.present?
+                  %li.release-date
+                    = prepend_icon :clock, project.released_in, outline: true, fixed_width: true
 
-          .col-md-3
-            - if project.url.present?
-              / Project Link
-              = button_link_to project.url, as: :primary, block: true, size: :lg, target: '_blank' do
-                = append_icon :external_link, translate('helpers.links.view_project'), style: :square, fixed_width: true
+            .col-md-3
+              - if project.url.present?
+                / Project Link
+                = button_link_to project.url, as: :primary, block: true, size: :lg, target: '_blank' do
+                  = append_icon :external_link, translate('helpers.links.view_project'), style: :square, fixed_width: true
 
-    .row
-      - if project.description.present?
-        .col-md-3.col-md-push-9
-          .project-description
-            .content
-              = project.description
-            .content
-              = project.author.info
+      .row
+        - if project.description.present?
+          .col-md-3.col-md-push-9
+            .project-description
+              .content
+                = project.description
+              .content
+                = project.author.info
 
-      %div{class: project.description.present? ? 'col-md-9 col-md-pull-3' : 'col-md-10 col-md-offset-1'}
-        - @project_images.each do |project_image|
-          - present project_image.image do |image|
-            %figure.thumbnail.project-thumbnail
-              = link_to show_project_image_path(@page.path, project_image.position) do
-                = unveiling_image_tag attached_asset_path(image, :public), alt: image.title, class: 'img-responsive', width: image.width, height: image.height
-              - if image.description.present?
-                %figcaption.caption
-                  = image.description
+        %div{class: project.description.present? ? 'col-md-9 col-md-pull-3' : 'col-md-10 col-md-offset-1'}
+          - @project_images.each do |project_image|
+            - present project_image.image do |image|
+              %figure.thumbnail.project-thumbnail
+                = link_to show_project_image_path(@page.path, project_image.position) do
+                  = unveiling_image_tag attached_asset_path(image, :public), alt: image.title, class: 'img-responsive', width: image.width, height: image.height
+                - if image.description.present?
+                  %figcaption.caption
+                    = image.description
 
-  .btn-toolbar-page-foot.clearfix
-    = button_link_to '#top', type: :page_foot, size: :lg, id: 'back_to_top', class: 'pull-right', title: translate('helpers.links.back_to_top'), data: { scroll: true, toggle: 'tooltip', container: 'body', placement: 'top' } do
-      = icon :angle, direction: :up
+    .btn-toolbar-page-foot.clearfix
+      = button_link_to '#top', type: :page_foot, size: :lg, id: 'back_to_top', class: 'pull-right', title: translate('helpers.links.back_to_top'), data: { scroll: true, toggle: 'tooltip', container: 'body', placement: 'top' } do
+        = icon :angle, direction: :up

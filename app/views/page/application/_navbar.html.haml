@@ -13,16 +13,18 @@
           %span.sr-only= translate('helpers.links.back')
 
     .navbar-collapse{class: !page.root? && 'collapse'}
-      / Primary
-      %ul.nav.navbar-nav#nav_menu_items
-        - primary_menu_items.each do |page|
-          = active_link_to page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page) do
-            = page.title
+      - cache [:navbar, page, primary_menu_items.maximum(:updated_at).to_s(:number), footer_menu_items.maximum(:updated_at).to_s(:number)] do
+        / Primary
+        %ul.nav.navbar-nav#nav_menu_items
+          - primary_menu_items.each do |page|
+            = active_link_to page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page) do
+              = page.title
 
-      %ul.nav.navbar-nav.visible-xs#nav_xs_menu_items
-        - footer_menu_items.each do |page|
-          = active_link_to page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page) do
-            = page.title
+        / Additional Items (Only Mobile)
+        %ul.nav.navbar-nav.visible-xs#nav_xs_menu_items
+          - footer_menu_items.each do |page|
+            = active_link_to page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page) do
+              = page.title
 
       - if next_locale
         / Locale

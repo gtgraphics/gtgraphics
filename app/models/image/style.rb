@@ -31,7 +31,7 @@ class Image < ActiveRecord::Base
     include TitleSearchable
     include Translatable
 
-    belongs_to :image, inverse_of: :styles
+    belongs_to :image, inverse_of: :styles, touch: true
     delegate :author, to: :image
 
     after_save :write_copyright!, if: :asset_changed?
