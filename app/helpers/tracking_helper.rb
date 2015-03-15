@@ -5,20 +5,25 @@ module TrackingHelper
 
   def include_tracking_elements
     return unless Rails.env.production?
-    capture do
-      concat javascript_tag <<-JAVASCRIPT.strip_heredoc
-        document.write(unescape("%3Cscript src='#{TRACKING_SCRIPT_URL}' type='text/javascript'%3E%3C/script%3E"));
-      JAVASCRIPT
-      concat javascript_tag <<-JAVASCRIPT.strip_heredoc
-        try {
-          var tracker = Piwik.getTracker('#{TRACKING_URL}', #{SITE_ID});
-          tracker.trackPageView();
-          tracker.enableLinkTracking();
-        } catch( err ) {}
-      JAVASCRIPT
-      concat content_tag(
-        :noscript, image_tag("#{TRACKING_URL}?idsite=#{SITE_ID}")
-      )
-    end
+    snippet = <<-HTML.strip_heredoc
+      <!-- Piwik -->
+      <script type="text/javascript">
+        var _paq = _paq || [];
+        _paq.push(['setCustomUrl', document.location]);
+        _paq.push(['setDocumentTitle', document.title]);
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function() {
+          var u=(("https:" == document.location.protocol) ? "https" : "http") + "://stats.spdns.de/";
+          _paq.push(['setTrackerUrl', u+'piwik.php']);
+          _paq.push(['setSiteId', 5]);
+          var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
+          g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+        })();
+      </script>
+      <noscript><p><img src="http://stats.spdns.de/piwik.php?idsite=5" style="border:0;" alt="" /></p></noscript>
+      <!-- End Piwik Code -->
+    HTML
+    snippet.html_safe
   end
 end
