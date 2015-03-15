@@ -10,10 +10,8 @@ class GooglePlus
 
   load: (callback) ->
     if GooglePlus.initialized
-      console.log 'init'
       @init()
     else
-      console.log 'load + init'
       window.___gcfg = { lang: @locale, parsetags: 'explicit' }
       jQuery.getScript 'https://apis.google.com/js/plusone.js', =>
         @init()
