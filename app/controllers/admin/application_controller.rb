@@ -1,8 +1,7 @@
 class Admin::ApplicationController < ApplicationController
   skip_maintenance_check
 
-  skip_before_action :force_no_ssl_redirect, if: :live?
-  force_ssl if: :live?
+  force_ssl if Rails.env.production?
 
   before_action :require_login
   before_action :set_translation_locale
