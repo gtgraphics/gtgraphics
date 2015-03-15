@@ -17,16 +17,13 @@ class Routing::Cms::RouteCache
   end
 
   def matches?(page_type, path = nil, &block)
-    path = block || path || raise(ArgumentError, 'no path given')
-    paths = self.entries[page_type]
-    if paths
-      case path
-      when Proc then paths.any?(&path)
-      when Regexp then paths.any? { |item| item =~ path }
-      else paths.include?(path)
-      end
-    else
-      false
+    path = block || path || fail(ArgumentError, 'no path given')
+    paths = entries[page_type]
+    return false unless paths
+    case path
+    when Proc then paths.any?(&path)
+    when Regexp then paths.any? { |item| item =~ path }
+    else paths.include?(path)
     end
   end
 
@@ -39,11 +36,10 @@ class Routing::Cms::RouteCache
   end
 
   # Helpers
-  
+
   def page_type_for_path(path)
-    self.entries.keys.detect do |page_type|
-      paths = self.entries.fetch(page_type)
-      paths.include?(path)
+    entries.keys.detect do |page_type|
+      entries.fetch(page_type).include?(path)
     end
   end
 
@@ -52,6 +48,7 @@ class Routing::Cms::RouteCache
   end
 
   private
+
   def collect_paths
     hash = {}
     Page.find_each do |page|

@@ -58,13 +58,13 @@ namespace :deploy do
 
   after :publishing, :restart
 
-  after :restart, :clear_cache do
-    on roles(:web) do
-      within release_path do
-        execute :rake, 'cache:rebuild_routes'
-      end
-    end
-  end
+  # after :restart, :clear_cache do
+  #   on roles(:web) do
+  #     within release_path do
+  #       execute :rake, 'cache:rebuild_routes'
+  #     end
+  #   end
+  # end
 
   after :updated, :fix_permissions do
     on roles(:web) do
