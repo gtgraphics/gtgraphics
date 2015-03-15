@@ -20,6 +20,10 @@ class ApplicationController < ActionController::Base
     Rails.env.in? %w(production staging)
   end
 
+  def production?
+    Rails.env.production?
+  end
+
   private
 
   def set_current_user

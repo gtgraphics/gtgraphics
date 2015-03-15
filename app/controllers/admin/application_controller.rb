@@ -1,7 +1,7 @@
 class Admin::ApplicationController < ApplicationController
   skip_maintenance_check
 
-  force_ssl if Rails.env.production?
+  force_ssl if: :production?
 
   before_action :require_login
   before_action :set_translation_locale
