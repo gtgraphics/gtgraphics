@@ -1,7 +1,7 @@
 .page-prominent-container-md
   .row
     .col-md-offset-1.col-md-10
-      - cache [page, :header] do
+      - cache [I18n.locale, page, :header] do
         %h1.sr-only= page.title
 
         - if region_content_for? :header
@@ -13,7 +13,7 @@
       .page-body.submenu-body-embedded
         .row
           - @about_pages.each do |user, page|
-            - cache [page, user, :brick] do
+            - cache [I18n.locale, page, user, :brick] do
               .col-sm-6
                 .submenu-item
                   = link_to page, class: 'submenu-link' do
@@ -22,7 +22,7 @@
                     - if user.photo.present?
                       = image_tag attached_asset_path(user, :menu_brick, from: :photo), class: 'submenu-item-image', alt: page.title
 
-  - cache [page, :footer] do
+  - cache [I18n.locale, page, :footer] do
     %hr
     .row
       .col-md-offset-1.col-md-10

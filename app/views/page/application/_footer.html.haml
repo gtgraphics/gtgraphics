@@ -17,10 +17,10 @@
           = icon :paypal, fixed_width: true, size: :lg
           = translate('helpers.links.donate')
 
-    - cache [:footer_social_buttons, User.count, User.maximum(:updated_at).to_s(:number)] do
+    - cache [I18n.locale, :footer_social_buttons, User.count, User.maximum(:updated_at).to_s(:number)] do
       / Tobias Roetsch
       - tobias = User.find_by_name('Tobias Roetsch')
-      - cache [:footer_social_buttons, tobias] do
+      - cache [I18n.locale, :footer_social_buttons, tobias] do
         %ul.nav.navbar-nav.social-buttons.hidden-sm.hidden-xs
           %li= link_to tobias.name, page_path('about/tobias')
           %li.visible-lg
@@ -41,7 +41,7 @@
 
       / Jeff Michelmann
       - jeff = User.find_by_name('Jeff Michelmann')
-      - cache [:footer_social_buttons, jeff] do
+      - cache [I18n.locale, :footer_social_buttons, jeff] do
         %ul.nav.navbar-nav.social-buttons.hidden-sm.hidden-xs
           %li= link_to jeff.name, page_path('about/jeff')
           %li.visible-lg

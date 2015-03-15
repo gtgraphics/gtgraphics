@@ -7,7 +7,7 @@
 - previous_page_url = local_assigns[:previous_page_url]
 - next_page_url = local_assigns[:next_page_url]
 
-- cache [page, image, image.author, :lightbox, details, photo, buyable, previous_page_url, next_page_url, close_url] do
+- cache [I18n.locale, page, image, image.author, :lightbox, details, photo, buyable, previous_page_url, next_page_url, close_url] do
   #nav_lightbox_xs.container.visible-xs
     = link_to :root, id: 'brand' do
       = image_tag 'logo.png', id: 'logo', alt: 'GTGRAPHICS'

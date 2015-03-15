@@ -13,7 +13,7 @@
           %span.sr-only= translate('helpers.links.back')
 
     .navbar-collapse{class: !page.root? && 'collapse'}
-      - cache [:navbar, page, primary_menu_items.maximum(:updated_at).to_s(:number), footer_menu_items.maximum(:updated_at).to_s(:number)] do
+      - cache [I18n.locale, :navbar, page, primary_menu_items.maximum(:updated_at).to_s(:number), footer_menu_items.maximum(:updated_at).to_s(:number)] do
         / Primary
         %ul.nav.navbar-nav#nav_menu_items
           - primary_menu_items.each do |page|

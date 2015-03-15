@@ -5,7 +5,7 @@
 - if @project_pages.any?
   #gallery.clearfix{data: { total_pages: @project_pages.total_pages }}
     - @project_pages.each do |page|
-      - cache [page, page.embeddable, page.embeddable.project, :brick] do
+      - cache [I18n.locale, page, page.embeddable, page.embeddable.project, :brick] do
         - present page.embeddable do |project_page|
           .gallery-item
             = link_to page, class: 'gallery-link' do
