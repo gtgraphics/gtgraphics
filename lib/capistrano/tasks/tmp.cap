@@ -1,7 +1,7 @@
 namespace :deploy do
   namespace :tmp do
     desc 'Removes all tempfiles'
-    task recreate: [:set_rails_env] do
+    task clear: [:set_rails_env] do
       on roles(:app) do |host|
         within release_path do
           with rails_env: fetch(:rails_env) do
