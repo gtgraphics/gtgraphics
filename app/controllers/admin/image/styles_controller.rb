@@ -19,7 +19,7 @@ class Admin::Image::StylesController < Admin::ApplicationController
     style_ids = Array(params[:id])
     if style_ids.any?
       if style_ids.one?
-        redirect_to params.merge(action: :show) and return
+        redirect_to params.merge(action: :show) && return
       else
         @image_styles = @image.styles.where(id: image_style_id_or_ids)
       end
@@ -35,6 +35,8 @@ class Admin::Image::StylesController < Admin::ApplicationController
 
   def new
     @image_style = @image.styles.new
+    @image_style.asset = @image.asset
+    @image_style.original_filename = @image.original_filename
     respond_with :admin, @image, @image_style
   end
 

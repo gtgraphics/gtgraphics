@@ -50,8 +50,13 @@ module FileAttachable
 
     def generate_asset_token
       return if !respond_to?(:asset_token) || asset_token?
-      name = File.basename(asset.file.original_filename, '.*').slice(0...32)
-      self.asset_token = "#{SecureRandom.uuid}-#{name.parameterize}"
+      original_filename = asset.file.try(:original_filename)
+      if original_filename
+        name = File.basename(original_filename, '.*').slice(0...32)
+        self.asset_token = "#{SecureRandom.uuid}-#{name.parameterize}"
+      else
+        self.asset_token = SecureRandom.uuid
+      end
     end
 
     def set_original_filename
