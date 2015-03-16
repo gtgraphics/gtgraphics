@@ -13,6 +13,7 @@ namespace :deploy do
 
     namespace :rearrange do
       %i(project_images image_styles user_social_links).each do |task_name|
+        desc "Refreshes list positions of #{task_name}"
         task task_name => [:set_rails_env] do
           on roles(:app) do |host|
             within release_path do
