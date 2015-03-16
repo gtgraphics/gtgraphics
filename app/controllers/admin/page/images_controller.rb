@@ -22,6 +22,7 @@ class Admin::Page::ImagesController < Admin::Page::ApplicationController
   end
 
   private
+
   def image_page_creation_form_params
     params.require(:image_page_creation_form).permit(:image_id_tokens, :template_id, :published)
   end

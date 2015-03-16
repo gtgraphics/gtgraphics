@@ -56,7 +56,7 @@
                   %ul.dropdown-menu{role: 'menu', :'aria-labelledby' => 'image_download_dropdown'}
                     - image.styles.each do |style|
                       %li
-                        = link_to download_image_path(style_id: style.position), data: { no_turbolink: true } do
+                        = link_to download_image_path(style_id: style.position, format: style.format), class: 'download', data: { no_turbolink: true } do
                           = style.title
 
               - if buyable
