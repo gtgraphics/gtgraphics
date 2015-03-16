@@ -10,7 +10,7 @@ namespace :lists do
       Project.transaction do
         Project.includes(:project_images).find_each do |project|
           project.project_images.sort_by(&:position).each_with_index do |pi, idx|
-            pi.update_column(:position, idx.next)
+            pi.update_columns(position: idx.next, updated_at: Time.now)
           end
         end
       end
@@ -21,7 +21,7 @@ namespace :lists do
     task image_styles: :environment do
       Image.includes(:styles).find_each do |image|
         image.styles.sort_by(&:position).each_with_index do |style, index|
-          style.update_column(:position, index.next)
+          style.update_columns(position: index.next, updated_at: Time.now)
         end
       end
       puts 'Fixes Image::Style positions'
@@ -31,7 +31,7 @@ namespace :lists do
     task user_social_links: :environment do
       User.includes(:social_links).find_each do |user|
         user.social_links.sort_by(&:position).each_with_index do |sl, index|
-          sl.update_column(:position, index.next)
+          sl.update_columns(position: index.next, updated_at: Time.now)
         end
       end
       puts 'Fixes User::SocialLink positions'
