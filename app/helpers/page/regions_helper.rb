@@ -14,6 +14,7 @@ module Page::RegionsHelper
     definition = @region_definitions.find { |d| d.label == label.to_s }
     return if definition.nil?
     region = @page.regions.find { |r| r.definition_id == definition.id }
+    return if region.nil?
     body = region.body.html_safe
     body = nil unless html_present?(body)
     content_tag :div, body,
