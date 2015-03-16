@@ -195,6 +195,11 @@ GtGraphics::Application.routes.draw do
                                       url
                                     }
 
+      get 'pic-:slug.:format', to: redirect { |params, request|
+        page = Page.images.find_by!(slug: params[:slug])
+        page.image.asset.url(:public)
+      }
+
       # Permalinks
       get ':id' => 'page/permalinks#show', as: :page_permalink, id: /[A-Z0-9]{6}/i
     end
