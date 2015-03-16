@@ -4,9 +4,7 @@ module TrackingHelper
     capture do
       concat javascript_tag <<-JAVASCRIPT.strip_heredoc
         var _paq = _paq || [];
-        _paq.push(['setCustomUrl', document.location]);
-        _paq.push(['setDocumentTitle', document.title]);
-        _paq.push(['enableLinkTracking']);
+
         (function() {
           var u=(("https:" == document.location.protocol) ? "https" : "http") + "://stats.spdns.de/";
           _paq.push(['setTrackerUrl', u+'piwik.php']);
