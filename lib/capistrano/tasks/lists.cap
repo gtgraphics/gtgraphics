@@ -1,0 +1,28 @@
+namespace :deploy do
+  namespace :lists do
+    desc 'Refreshes all list positions'
+    task rearrange: [:set_rails_env] do
+      on roles(:app) do |host|
+        within release_path do
+          with rails_env: fetch(:rails_env) do
+            execute :rake, 'lists:rearrange'
+          end
+        end
+      end
+    end
+
+    namespace :rearrange do
+      %i(project_images image_styles user_social_links).each do |task_name|
+        task task_name => [:set_rails_env] do
+          on roles(:app) do |host|
+            within release_path do
+              with rails_env: fetch(:rails_env) do
+                execute :rake, "lists:rearrange:#{task_name}"
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+end
