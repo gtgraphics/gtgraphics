@@ -11,6 +11,10 @@ class PagePresenter < ApplicationPresenter
     page.metadata.fetch(:social_uri) { permalink }
   end
 
+  def url
+    h.page_url(page)
+  end
+
   # Facebook Integration
 
   def facebook_like_button(options = {})
@@ -24,7 +28,7 @@ class PagePresenter < ApplicationPresenter
   # Google Plus Integration
 
   def google_plus_like_button(options = {})
-    h.google_plus_like_button(social_uri, options)
+    h.google_plus_like_button(url, options)
   end
 
   # Twitter Integration
