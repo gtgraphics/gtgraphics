@@ -2,12 +2,13 @@
 - image = local_assigns.fetch(:image)
 - details = local_assigns.fetch(:details, true)
 - buyable = local_assigns.fetch(:buyable, true)
+- display_styles = local_assigns.fetch(:styles, true)
 - photo = local_assigns.fetch(:photo, false)
 - close_url = local_assigns[:close_url]
 - previous_page_url = local_assigns[:previous_page_url]
 - next_page_url = local_assigns[:next_page_url]
 
-- cache [I18n.locale, page, image, image.author, :lightbox, details, photo, buyable, previous_page_url, next_page_url, close_url] do
+- cache [I18n.locale, page, *@parents, image, image.author, :lightbox, details, display_styles, photo, buyable, previous_page_url, next_page_url, close_url] do
   #nav_lightbox_xs.container.visible-xs
     = link_to :root, id: 'brand' do
       = image_tag 'logo.png', id: 'logo', alt: 'GTGRAPHICS'
@@ -47,7 +48,7 @@
                     = icon :comment, size: :lg, fixed_width: true
                     %span.sr-only= translate('helpers.links.comment')
 
-              - if image.styles.any? && local_assigns.fetch(:styles, true)
+              - if image.styles.any? && display_styles
                 %li.dropdown.hidden-sm.js-only
                   = link_to '#', id: 'image_download_dropdown', title: translate('helpers.links.download'), class: 'dropdown-toggle', :'aria-haspopup' => 'true', data: { toggle: 'dropdown' } do
                     = icon :download, size: :lg, fixed_width: true
@@ -112,6 +113,10 @@
                     %ul.list-info-bar
                       %li.author
                         = image.author.info
+                      - if @parents.present?
+                        %li.image-type.hidden-xs
+                          = link_to @parents.last do
+                            = prepend_icon :tag, @parents.map(&:title).join(icon(:angle, fixed_width: true, direction: :right)).html_safe, fixed_width: true
                       %li.taken-at
                         = prepend_icon :clock, image.taken_at, outline: true, fixed_width: true
 

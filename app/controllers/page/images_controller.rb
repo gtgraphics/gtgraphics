@@ -10,7 +10,8 @@ class Page::ImagesController < Page::ApplicationController
   end
 
   def default
-    @gallery_page = @page.parent
+    @parents = @page.ancestors.published.offset(1).to_a
+    @gallery_page = @parents.last
 
     siblings = @page.siblings.published.menu_items.order(:lft)
     @previous_page = siblings.where('lft < ?', @page.lft).last
