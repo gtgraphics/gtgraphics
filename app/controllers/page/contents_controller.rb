@@ -14,7 +14,7 @@ class Page::ContentsController < Page::ApplicationController
 
   def gallery
     @image_pages = @child_pages.images.preload(embeddable: :image)
-    if params[:format].in?([nil, 'html'])
+    unless params[:format] == 'rss'
       # OPTIMIZE: if request.format.html? caused problems for some crawlers
       @image_pages = @image_pages.page(params[:page]).per(16)
     end
