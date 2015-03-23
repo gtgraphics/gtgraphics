@@ -3,9 +3,9 @@
   = translate('mailers.message_notification_mailer.send_notification_email.buy_request_caption_html', name: mail_to(@message.sender_email, @message.sender_name))
 
   %blockquote
-    = link_to image_tag(attached_asset_url(@message.image, :thumbnail), class: 'img-circle', width: 45, height: 45, alt: @message.image.title), admin_image_url(id: @message.image)
+    = link_to_if @message.image.pages.any?, image_tag(attached_asset_url(@message.image, :thumbnail), class: 'img-circle', width: 45, height: 45, alt: @message.image.title), page_url(@message.image.pages.first, locale: I18n.locale)
     %br
-    = link_to @message.image.title, admin_image_url(id: @message.image)
+    = link_to_if @message.image.pages.any?, @message.image.title, page_url(@message.image.pages.first, locale: I18n.locale)
 
   %hr
 

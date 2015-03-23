@@ -1,6 +1,7 @@
 class MessageNotificationMailer < ApplicationMailer
   layout 'admin/mailer'
 
+  helper :route
   helper :attached_asset
 
   def notification_email(message, recipient)
