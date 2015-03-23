@@ -29,3 +29,8 @@ en:
     # prompts:
     #   defaults:
     #     age: 'Select your age'
+
+  helpers:
+    submit:
+      message:
+        create: Send Message

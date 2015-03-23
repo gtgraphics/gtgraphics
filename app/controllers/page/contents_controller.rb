@@ -1,4 +1,6 @@
 class Page::ContentsController < Page::ApplicationController
+  BRICK_PAGE_SIZE = 16
+
   before_action :load_child_pages, only: :show
 
   def default
@@ -16,7 +18,7 @@ class Page::ContentsController < Page::ApplicationController
     @image_pages = @child_pages.images.preload(embeddable: :image)
     unless params[:format] == 'rss'
       # OPTIMIZE: if request.format.html? caused problems for some crawlers
-      @image_pages = @image_pages.page(params[:page]).per(16)
+      @image_pages = @image_pages.page(params[:page]).per(BRICK_PAGE_SIZE)
     end
     respond_with_page do |format|
       format.rss { render template_path }
@@ -47,8 +49,9 @@ class Page::ContentsController < Page::ApplicationController
 
   def showcase
     @project_pages = @child_pages.projects.preload(embeddable: :project)
-    if request.format.html?
-      @project_pages = @project_pages.page(params[:page]).per(16)
+    unless params[:format] == 'rss'
+      # OPTIMIZE: if request.format.html? caused problems for some crawlers
+      @project_pages = @project_pages.page(params[:page]).per(BRICK_PAGE_SIZE)
     end
     respond_with_page
   end

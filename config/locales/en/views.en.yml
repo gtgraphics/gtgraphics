@@ -43,3 +43,6 @@ en:
         artflakes: Artflakes
         theuntappedsource: The Untapped Source
         posterlounge: PosterLounge
+
+    images:
+      buy: 'Buy %{image}'
