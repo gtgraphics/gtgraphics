@@ -39,7 +39,7 @@ class Message < ActiveRecord::Base
     unless persisted?
       fail 'Message#notify! requires the message to be persisted'
     end
-    notifier_job = MessageNotificationJob.new(id)
+    notifier_job = MessageNotificationJob.new(id, I18n.locale)
     Delayed::Job.enqueue(notifier_job, queue: 'mailings')
   end
 

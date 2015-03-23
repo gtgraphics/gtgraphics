@@ -29,6 +29,10 @@ en:
       templates:
         tabs:
           all: All
+      messages:
+        replied_subject: "Re: %{subject}"
+        buy_request_subject: "Buy Request: %{image}"
+        default_subject: Inquiry
 
     page/image:
       shops:
