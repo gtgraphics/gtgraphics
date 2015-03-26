@@ -147,7 +147,7 @@
                         %h3= prepend_icon :download, translate('helpers.links.download'), fixed_width: true
                         %ul.list-unstyled.image-styles
                           - image.styles.each do |style|
-                            %li= link_to style.title, download_image_path(style_id: style.position), data: { no_turbolink: true }
+                            %li= link_to style.title, download_image_path(style_id: style.position, format: style.format), data: { no_turbolink: true }
 
               / Comments
               .page-body.lightbox-comments.js-only#comments
