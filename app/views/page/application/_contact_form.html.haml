@@ -9,7 +9,7 @@
   .content.form-inputs
     = form.input :subject, label: false
     = form.input :body, label: false, input_html: { rows: 8 }
-  - if @message.security_question
+  - if @message && @message.security_question
     .content-form-inputs
       = @message.security_question
       = form.input :security_answer, label: false
