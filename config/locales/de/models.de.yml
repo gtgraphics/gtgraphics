@@ -278,6 +278,14 @@ de:
           attributes:
             base:
               invalid_file_type: 'Ungültiger Dateityp: %{filename}'
+        message:
+          attributes:
+            base:
+              blocked: |
+                Sie haben erst vor Kurzem eine Anfrage an uns geschickt.
+                Wir werden uns so schnell wie möglich um Ihr Anliegen kümmern.
+                Sie können uns in ein paar Minuten erneut eine Nachricht
+                zukommen lassen.
         page/redirection:
           attributes:
             destination_page_id:

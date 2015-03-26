@@ -1,3 +1,8 @@
 .control-label abbr {
   display: none;
 }
+
+textarea {
+  resize: vertical;
+  min-height: 46px;
+}

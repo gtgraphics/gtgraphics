@@ -20,6 +20,10 @@
                 = form.input :sender_email, label: false
               .content.form-inputs
                 = form.input :body, label: false, input_html: { rows: 8 }
+              - if @message.security_question
+                .content-form-inputs
+                  = @message.security_question
+                  = form.input :security_answer, label: false
               .content.form-group
                 = form.button :submit, class: 'btn-primary btn-lg'
 

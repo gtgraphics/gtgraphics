@@ -34,3 +34,4 @@ en:
         sender_email: Your Email
         subject: Subject
         body: Message
+        security_answer: Answer of Security Question

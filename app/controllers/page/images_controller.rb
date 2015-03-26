@@ -42,6 +42,13 @@ class Page::ImagesController < Page::ApplicationController
   def request_purchase
     @message = Message::BuyRequest.new(message_params)
     @message.image = @image
+    @message.ip = request.ip
+
+    if @message.suspicious?
+      @message.security_question =
+        Message::SecurityQuestion.load(flash[:security_question])
+    end
+
     if @message.save
       @message.notify!
       flash_for @message
@@ -49,6 +56,11 @@ class Page::ImagesController < Page::ApplicationController
         format.html { redirect_to buy_image_path(@page.path) }
       end
     else
+      flash.now.alert = @message.errors[:base].to_sentence
+      if @message.suspicious?
+        @message.security_question = Message::SecurityQuestion.generate
+        flash[:security_question] = @message.security_question.dump
+      end
       respond_to do |format|
         format.html { render :buy, layout: 'page/contents' }
       end
@@ -67,7 +79,7 @@ class Page::ImagesController < Page::ApplicationController
 
   def message_params
     params.require(:message).permit(:first_sender_name, :last_sender_name,
-                                    :sender_email, :body)
+                                    :sender_email, :body, :security_answer)
   end
 
   def render_image(image, disposition = :inline)

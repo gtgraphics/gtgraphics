@@ -11,6 +11,7 @@
 #  created_at        :datetime
 #  delegator_id      :integer
 #  type              :string(255)      not null
+#  ip                :string(255)
 #
 
 class Message < ActiveRecord::Base

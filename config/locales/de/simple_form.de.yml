@@ -28,6 +28,7 @@ de:
         sender_email: Ihre E-Mail-Adresse
         subject: Betreff der Nachricht
         body: Nachrichtentext
+        security_answer: Antwort der Sicherheitsfrage
 
   helpers:
     submit:

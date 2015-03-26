@@ -50,3 +50,24 @@ en:
 
     images:
       buy: 'Buy %{image}'
+
+    messages:
+      security_questions:
+        '+':
+          - 'Calculate the result of %{left} + %{right}.'
+          - 'Please, calculate the result of %{left} plus %{right}.'
+          - 'Add the number %{left} and %{right}.'
+          - 'What is the result of %{left} plus %{right}?'
+          - 'Which result do you get when adding %{left} and %{right}?'
+          - 'What is the result of the addition of %{left} und %{right}?'
+        '-':
+          - 'Calculate the result of %{left} - %{right}.'
+          - 'Subtract %{right} from %{left}.'
+          - 'Calculate %{left} minus %{right}.'
+          - 'Which result do you get when substracting %{right} from %{left}?'
+          - 'What is the result of the substraction of %{left} and %{right}?'
+        '*':
+          - 'Multiply %{left} with %{right}.'
+          - 'What is the result of %{left} times %{right}.'
+          - 'Which result do you get when multiplying %{left} and %{right}?'
+          - 'What is the result of the multiplication of %{left} and %{right}?'

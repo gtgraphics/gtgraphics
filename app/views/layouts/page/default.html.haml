@@ -9,10 +9,10 @@
       #page_wrapper
         = render 'navbar'
 
-        - if notice && yield(:hide_notice) != true
+        - if notice.present? && yield(:hide_notice) != true
           .alert.alert-success= notice
 
-        - if alert && yield(:hide_alert) != true
+        - if alert.present? && yield(:hide_alert) != true
           .alert.alert-danger= alert
 
         = yield :page_wrapper_content

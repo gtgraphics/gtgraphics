@@ -6,6 +6,8 @@
 #  project_id :integer
 #  image_id   :integer
 #  position   :integer          not null
+#  created_at :datetime
+#  updated_at :datetime
 #
 
 class Project < ActiveRecord::Base

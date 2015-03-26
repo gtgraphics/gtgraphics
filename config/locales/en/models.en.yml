@@ -131,7 +131,15 @@ en:
       user/social_link:
         one: Link
         other: Links
-
+    errors:
+      models:
+        message:
+          attributes:
+            base:
+              blocked: |
+                You have recently sent a message to us. We will try to answer
+                your inquiry as quick as possible. Please try again in a few
+                minutes.
   page:
     states:
       published: Published

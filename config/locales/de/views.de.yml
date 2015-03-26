@@ -106,3 +106,24 @@ de:
 
     images:
       buy: '%{image} erwerben'
+
+    messages:
+      security_questions:
+        '+':
+          - 'Rechnen Sie %{left} + %{right}.'
+          - 'Rechnen Sie %{left} plus %{right}.'
+          - 'Addieren Sie die Zahlen %{left} und %{right}.'
+          - 'Was sind %{left} plus %{right}?'
+          - 'Welches Ergebnis erhalten Sie, wenn sie %{left} und %{right} addieren?'
+          - 'Was kommt bei der Addition der Zahlen %{left} und %{right} heraus?'
+        '-':
+          - 'Subtrahieren Sie %{right} von %{left}.'
+          - 'Ziehen Sie %{right} von %{left} ab.'
+          - 'Rechnen Sie %{left} - %{right}.'
+          - 'Rechnen Sie %{left} minus %{right}.'
+          - 'Was kommt bei der Subtraktion von %{left} und %{right} heraus?'
+        '*':
+          - 'Multiplizieren Sie %{left} mit %{right}.'
+          - 'Was ist das Ergebnis von %{left} mal %{right}?'
+          - 'Welches Ergebnis erhalten Sie, wenn sie %{left} und %{right} multiplizieren?'
+          - 'Was kommt heraus, wenn Sie %{left} mal %{right} rechnen?'

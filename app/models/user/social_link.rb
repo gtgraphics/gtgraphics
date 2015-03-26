@@ -8,6 +8,8 @@
 #  url         :string(255)
 #  shop        :boolean          default(FALSE), not null
 #  position    :integer
+#  created_at  :datetime
+#  updated_at  :datetime
 #
 
 class User::SocialLink < ActiveRecord::Base
