@@ -56,7 +56,7 @@ en:
         '+':
           - 'Calculate the result of %{left} + %{right}.'
           - 'Please, calculate the result of %{left} plus %{right}.'
-          - 'Add the number %{left} and %{right}.'
+          - 'Add the numbers %{left} and %{right}.'
           - 'What is the result of %{left} plus %{right}?'
           - 'Which result do you get when adding %{left} and %{right}?'
           - 'What is the result of the addition of %{left} und %{right}?'

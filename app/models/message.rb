@@ -18,8 +18,6 @@ class Message < ActiveRecord::Base
   include Excludable
   include PersistenceContextTrackable
 
-  SPAM_THRESHOLD = 1.day
-
   has_many :recipiences, class_name: 'Message::Recipience', autosave: true,
                          dependent: :destroy, inverse_of: :message
   has_many :recipients, through: :recipiences
@@ -36,9 +34,9 @@ class Message < ActiveRecord::Base
     opts.validate :verify_security_answer
   end
 
-  before_create :build_recipiences
-
   before_validation :sanitize_attributes, on: :create
+  before_create :build_recipiences
+  after_create :create_sender_info
 
   def sender
     %("#{sender_name}" <#{sender_email}>)
@@ -51,14 +49,10 @@ class Message < ActiveRecord::Base
   def suspicious?
     unless defined?(@suspicious)
       @suspicious =
-        recently_sent_from_same_ip? ||
+        Message::SenderInfo.recent?(ip) ||
         (sender_name.present? && first_sender_name == last_sender_name)
     end
     @suspicious
-  end
-
-  def recently_sent_from_same_ip?
-    Message.where(ip: ip).where('created_at > ?', SPAM_THRESHOLD.ago).exists?
   end
 
   attr_accessor :security_question, :security_answer
@@ -87,5 +81,9 @@ class Message < ActiveRecord::Base
   def verify_security_answer
     return true if security_question.valid?(security_answer)
     errors.add(:security_answer, :invalid)
+  end
+
+  def create_sender_info
+    Message::SenderInfo.create!(ip: ip)
   end
 end
