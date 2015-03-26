@@ -1,5 +1,5 @@
 !!!
-%html{lang: I18n.locale, class: 'no-js'}
+%html{lang: I18n.locale, class: 'no-js', prefix: 'og: http://ogp.me/ns#'}
 
   %head
     %title
@@ -21,7 +21,7 @@
 
     / Favicons
     %link{rel: 'shortcut icon', href: path_to_image('favicon.png')}
-
+    %link{rel: 'apple-touch-icon', href: path_to_image('apple-touch-icon-precomposed.png')}
     / JavaScripts
     <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js" type="text/javascript"></script>
@@ -36,4 +36,3 @@
       = yield :content
     - else
       = yield
-

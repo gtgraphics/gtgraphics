@@ -9,8 +9,14 @@ module TrackingHelper
           var u=(("https:" == document.location.protocol) ? "https" : "http") + "://stats.spdns.de/";
           _paq.push(['setTrackerUrl', u+'piwik.php']);
           _paq.push(['setSiteId', 5]);
-          var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
-          g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+          var piwikUrl = u + 'piwik.js';
+          var d = document;
+          var g = d.createElement('script');
+          g.type = 'text/javascript';
+          var s = d.getElementsByTagName('script')[0];
+          if (s.src != piwikUrl) {
+            g.defer=true; g.async=true; g.src=piwikUrl; s.parentNode.insertBefore(g,s);
+          }
         })();
       JAVASCRIPT
       concat '<noscript><p><img src="http://stats.spdns.de/piwik.php?idsite=5" ' \
