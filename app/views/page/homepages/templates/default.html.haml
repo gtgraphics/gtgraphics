@@ -1,9 +1,9 @@
+= render 'synopsis'
+
 #cover_carousel.cover-carousel.js-only.hidden-xs{data: { ride: 'coverCarousel', interval: 12000 }}
   .cover-carousel-inner{role: 'listbox'}
     - @covers.each do |image, page|
       - if page
-        = link_to page, class: 'item', data: { cover: attached_asset_path(image, :public) } do
-          %span.sr-only= image.title
+        = link_to page, class: 'item', data: { cover: attached_asset_path(image, :public) }
       - else
         .item{data: { cover: attached_asset_path(image, :public) }}
-          %span.sr-only= image.title

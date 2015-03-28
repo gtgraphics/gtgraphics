@@ -1,6 +1,6 @@
 - content_for :social_meta_tags do
   %meta{property: 'og:title', content: @image.title}
-  %meta{property: 'og:description', content: strip_tags(@image.description || '')}
+  %meta{property: 'og:description', content: strip_tags(@image.description || '').presence || @page.meta_description || ''}
   %meta{property: 'og:image', content: image_asset_url(@image, :social)}
   %meta{property: 'og:image:type', content: @image.content_type}
   %meta{property: 'og:image:width', content: 1500}
