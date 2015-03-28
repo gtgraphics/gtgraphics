@@ -2,8 +2,10 @@
 
 #cover_carousel.cover-carousel.js-only.hidden-xs{data: { ride: 'coverCarousel', interval: 12000 }}
   .cover-carousel-inner{role: 'listbox'}
-    - @covers.each do |image, page|
-      - if page
-        = link_to page, class: 'item', data: { cover: attached_asset_path(image, :public) }
+    - @covers.each do |image, image_page|
+      - if image_page
+        = link_to image_page, class: 'item', data: { cover: attached_asset_path(image, :public) } do
+          %span.hidden= image.title
       - else
         .item{data: { cover: attached_asset_path(image, :public) }}
+          %span.hidden= image.title
