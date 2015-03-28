@@ -39,9 +39,9 @@ class ApplicationController < ActionController::Base
       # if user is logged in his preferred locale will be used
       # if none of the above is set the locale will be determined through the
       # HTTP Accept Language header from the browser
-      locale = current_user.try(:preferred_locale)
-      locale ||= http_accept_language.compatible_language_from(
-        I18n.available_locales)
+      locale = http_accept_language
+               .compatible_language_from(I18n.available_locales)
+      locale = I18n.default_locale if locale.blank?
       redirect_to params.to_h.with_indifferent_access.merge(
         locale: locale.to_s, id: params[:id].presence)
     end
