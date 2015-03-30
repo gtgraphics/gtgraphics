@@ -13,14 +13,14 @@ class Admin::Project::ImagePresenter < Admin::ApplicationPresenter
   end
 
   def move_down_path
-    h.move_down_admin_project_image_path(project, image)
+    h.move_down_admin_project_image_path(project, project_image)
   end
 
   def move_up_path
-    h.move_up_admin_project_image_path(project, image)
+    h.move_up_admin_project_image_path(project, project_image)
   end
 
   def destroy_path
-    h.admin_project_image_path(project, image)
+    h.admin_project_image_path(project, project_image)
   end
 end

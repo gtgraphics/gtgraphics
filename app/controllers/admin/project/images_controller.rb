@@ -10,6 +10,9 @@ class Admin::Project::ImagesController < Admin::ApplicationController
       image.author = current_user
       image.save!
       @project_image = @project.project_images.create!(image: image)
+      @project_image.with_lock do
+        @project_image.update_column(:position, @project.project_images.count)
+      end
     end
     respond_to do |format|
       format.js { render :refresh_table }
@@ -17,14 +20,18 @@ class Admin::Project::ImagesController < Admin::ApplicationController
   end
 
   def move_up
-    @project_image.move_higher
+    @project_image.with_lock do
+      @project_image.move_higher
+    end
     respond_with :admin, @project, @project_image, location: [:admin, @project] do |format|
       format.js { render :refresh_table }
     end
   end
 
   def move_down
-    @project_image.move_lower
+    @project_image.with_lock do
+      @project_image.move_lower
+    end
     respond_with :admin, @project, @project_image, location: [:admin, @project] do |format|
       format.js { render :refresh_table }
     end
@@ -49,7 +56,7 @@ class Admin::Project::ImagesController < Admin::ApplicationController
 
   def destroy_multiple
     project_image_ids = Array(params[:project_image_ids]).map(&:to_i).reject(&:zero?)
-    Project::Image.accessible_by(current_ability).destroy_all(id: project_image_ids)
+    ::Project::Image.accessible_by(current_ability).destroy_all(id: project_image_ids)
     respond_to do |format|
       format.html { redirect_to [:admin, @project] }
       format.js { render :refresh_table }
@@ -58,12 +65,13 @@ class Admin::Project::ImagesController < Admin::ApplicationController
   private :destroy_multiple
 
   private
+
   def load_project
-    @project = Project.find(params[:project_id])
+    @project = ::Project.find(params[:project_id])
   end
 
   def load_project_image
-    @project_image = @project.project_images.find_by!(image_id: params[:id])
+    @project_image = @project.project_images.find_by!(id: params[:id])
   end
 
   def image_upload_params

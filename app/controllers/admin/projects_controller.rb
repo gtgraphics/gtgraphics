@@ -32,13 +32,7 @@ class Admin::ProjectsController < Admin::ApplicationController
     else
       @projects = @projects.search(params[:query])
       @project_search = @projects.ransack(params[:search])
-      if @project_search.sorts.empty?
-        if request.format.json?
-          @project_search.sorts = 'created_at desc'
-        else
-          @project_search.sorts = 'translations_title asc'
-        end
-      end
+      @project_search.sorts = 'created_at desc' if @project_search.sorts.empty?
       @projects = @project_search.result(distinct: true)
     end
 
@@ -170,7 +164,8 @@ class Admin::ProjectsController < Admin::ApplicationController
   end
 
   def new_project_params
-    params.require(:project).permit(:title, :project_type, :url, :client_name, :released_in)
+    params.require(:project).permit(:title, :project_type, :url,
+                                    :client_name, :released_in)
   end
 
   def project_params

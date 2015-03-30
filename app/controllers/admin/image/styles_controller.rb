@@ -68,8 +68,10 @@ class Admin::Image::StylesController < Admin::ApplicationController
   end
 
   def upload
-    @image_style = @image.styles.new(image_style_upload_params)
-    @image_style.save!
+    @image_style = @image.styles.create!(image_style_upload_params)
+    @image_style.with_lock do
+      @image_style.update_column(:position, @image.styles.count)
+    end
     respond_with :admin, @image, @image_style, location: [:admin, @image]
   end
 
@@ -96,12 +98,16 @@ class Admin::Image::StylesController < Admin::ApplicationController
   end
 
   def move_up
-    @image_style.move_higher
+    @image_style.with_lock do
+      @image_style.move_higher
+    end
     respond_with :admin, @image, @image_style
   end
 
   def move_down
-    @image_style.move_lower
+    @image_style.with_lock do
+      @image_style.move_lower
+    end
     respond_with :admin, @image, @image_style
   end
 
@@ -138,6 +144,7 @@ class Admin::Image::StylesController < Admin::ApplicationController
   private :destroy_multiple
 
   private
+
   def load_image
     @image = ::Image.find(params[:image_id])
   end
@@ -155,6 +162,8 @@ class Admin::Image::StylesController < Admin::ApplicationController
   end
 
   def image_style_customization_params
-    params.require(:image_style).permit(:cropped, :crop_x, :crop_y, :crop_width, :crop_height, :resized, :resize_width, :resize_height)
+    params.require(:image_style).permit(:cropped, :crop_x, :crop_y, :crop_width,
+                                        :crop_height, :resized, :resize_width,
+                                        :resize_height)
   end
 end

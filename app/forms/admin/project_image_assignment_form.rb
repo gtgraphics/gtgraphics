@@ -16,8 +16,11 @@ class Admin::ProjectImageAssignmentForm < Form
   def perform
     project_images.clear
     image_ids.each do |image_id|
-      project_images << project.project_images.build(image_id: image_id)
-      project.save!
+      project.with_lock do
+        project_image = project.project_images.create!(image_id: image_id)
+        project_image.update_column(:position, project.project_images.count)
+        project_images << project_image
+      end
     end
   end
 end
