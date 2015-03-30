@@ -58,17 +58,28 @@ prepareGallery = ->
   $(GALLERY_SELECTOR).hide().css(opacity: 0)
   $(PAGINATION_SELECTOR).hide()
 
+removePageQueryParam = ->
+  params = purl().param()
+  if params.page
+    delete params['page']
+    path = purl().attr('path')
+    if params.length
+      url = path + '?' + jQuery.param(params)
+    else
+      url = path
+    Turbolinks.visit(url)
 
 $(document).ready ->
   prepareGallery()
   $gallery = $(GALLERY_SELECTOR)
   if $gallery.length
     $('#back_to_top').hide().css(opacity: 0)
-
     Loader.start()
     unless initialLoad
       $gallery.allImagesLoaded ->
         galleryImagesLoaded()
+
+    removePageQueryParam()
 
 $(window).load ->
   galleryImagesLoaded()

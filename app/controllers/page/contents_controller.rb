@@ -19,6 +19,16 @@ class Page::ContentsController < Page::ApplicationController
     unless params[:format] == 'rss'
       # OPTIMIZE: if request.format.html? caused problems for some crawlers
       @image_pages = @image_pages.page(params[:page]).per(BRICK_PAGE_SIZE)
+      total_pages = @image_pages.total_pages
+      if @image_pages.current_page < 1
+        return redirect_to params.to_h.merge(page: nil)
+      elsif total_pages > 0 && @image_pages.current_page > total_pages
+        if total_pages == 1
+          return redirect_to params.to_h.merge(page: nil)
+        else
+          return redirect_to params.to_h.merge(page: total_pages)
+        end
+      end
     end
     respond_with_page do |format|
       format.rss { render template_path }
