@@ -5,9 +5,9 @@
   = javascript_include_tag 'application', data: { turbolinks_track: true }
 
 - content_for :head do
-  %meta{name: 'description', content: @page.meta_description || ''}
-  %meta{name: 'keywords', content: @page.meta_keywords || ''}
   - if action_name == 'show'
+    %meta{name: 'description', content: @page.meta_description || ''}
+    %meta{name: 'keywords', content: @page.meta_keywords || ''}
     %meta{name: 'robots', content: @page.indexable? ? 'index,follow' : 'noindex,follow'}
 
   - # Meta Elements for OpenGraph/Social Media integration
