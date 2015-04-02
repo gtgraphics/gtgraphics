@@ -14,7 +14,6 @@
   - if content_for? :social_meta_tags
     = yield :social_meta_tags
   - else
-    %meta{property: 'og:title', content: @page.title}
     %meta{property: 'og:description', content: @page.meta_description || ''}
     %meta{property: 'og:image', content: asset_url('social_icon.png')}
     %meta{property: 'og:image:type', content: 'image/png'}

@@ -3,16 +3,14 @@
 
   %head
     %title
-      - if content_for? :title
-        = yield :title
-      - else
-        = ([translate('views.title')] + breadcrumbs.collect(&:caption).drop(1)).reverse.join(' &middot; ').html_safe
+      = page_title
 
     / Meta Elements
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'}
     = csrf_meta_tags
     %meta{property: 'og:site_name', content: 'GTGRAPHICS'}
     %meta{property: 'og:type', content: 'website'}
+    %meta{property: 'og:title', content: page_title}
     = facebook_meta_tags
     = yield :head
 

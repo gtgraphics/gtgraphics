@@ -1,5 +1,4 @@
 - content_for :social_meta_tags do
-  %meta{property: 'og:title', content: @project.title}
   %meta{property: 'og:description', content: strip_tags(@project.description || '').presence || @page.meta_description || ''}
   - @project.images.each do |image|
     %meta{property: 'og:image', content: image_asset_url(image, :social)}
