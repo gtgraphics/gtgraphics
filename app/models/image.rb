@@ -68,6 +68,9 @@ class Image < ActiveRecord::Base
   after_update :destroy_styles, if: :asset_changed?
   after_save :write_copyright!, if: [:exif_capable?, :write_copyright?]
 
+  scope :landscape, -> { where(arel_table[:width].gteq(arel_table[:height])) }
+  scope :portrait, -> { where(arel_table[:width].lt(arel_table[:height])) }
+
   def dominant_colors
     @dominant_colors ||= Miro::DominantColors.new(asset.custom.path)
   end
