@@ -50,7 +50,9 @@ class Page::ImagesController < Page::ApplicationController
     end
 
     if @message.save
-      @message.notify!
+      notification_job = MessageNotificationJob.new(@message.id, I18n.locale)
+      Delayed::Job.enqueue(notification_job, queue: 'mailings')
+
       flash_for @message
       respond_to do |format|
         format.html { redirect_to buy_image_path(@page.path) }

@@ -58,11 +58,8 @@ class Message < ActiveRecord::Base
   attr_accessor :security_question, :security_answer
 
   def notify!
-    unless persisted?
-      fail 'Message#notify! requires the message to be persisted'
-    end
-    notifier_job = MessageNotificationJob.new(id, I18n.locale)
-    Delayed::Job.enqueue(notifier_job, queue: 'mailings')
+    fail 'Message#notify! requires the message to be saved' unless persisted?
+    MessageNotificationMailer.notification_email(self).deliver
   end
 
   protected

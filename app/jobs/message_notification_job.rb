@@ -6,10 +6,7 @@ class MessageNotificationJob < Struct.new(:message_id, :locale)
 
   def perform
     I18n.with_locale(locale) do
-      message = Message.find(message_id)
-      message.recipients.each do |recipient|
-        MessageNotificationMailer.notification_email(message, recipient).deliver
-      end
+      Message.find(message_id).notify!
     end
   end
 end
