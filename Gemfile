@@ -93,6 +93,7 @@ gem 'miro' # dominant color detection
 
 # Deployment
 group :development do
+  gem 'capistrano', '3.4.0'
   gem 'capistrano-rails'
   gem 'capistrano-rvm'
 end

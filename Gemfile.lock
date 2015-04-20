@@ -74,7 +74,7 @@ GEM
       columnize (~> 0.3)
       debugger-linecache (~> 1.2)
     cancan (1.6.10)
-    capistrano (3.2.1)
+    capistrano (3.4.0)
       i18n
       rake (>= 10.0.0)
       sshkit (~> 1.3)
@@ -113,7 +113,7 @@ GEM
       actionpack (>= 3.0.0)
       coffee-script
     color (1.7)
-    colorize (0.7.3)
+    colorize (0.7.7)
     columnize (0.8.9)
     compass (0.12.2)
       chunky_png (~> 1.2)
@@ -208,7 +208,7 @@ GEM
     multipart-post (2.0.0)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
-    net-ssh (2.9.1)
+    net-ssh (2.9.2)
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
     nprogress-rails (0.1.6.3)
@@ -314,8 +314,8 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
-    sshkit (1.5.1)
-      colorize
+    sshkit (1.7.1)
+      colorize (>= 0.7.0)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     state_machine (1.2.0)
@@ -368,6 +368,7 @@ DEPENDENCIES
   builder
   bullet
   cancan
+  capistrano (= 3.4.0)
   capistrano-rails
   capistrano-rvm
   carrierwave
