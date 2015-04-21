@@ -408,6 +408,11 @@ de:
       owned: 'Gerade gesehen bei #GTGraphics: "%{title}" von @%{author}'
       ownerless: 'Gerade gesehen bei #GTGraphics: "%{title}"'
 
+  page/project:
+    twitter_share_text:
+      owned: 'Gerade gesehen bei #GTGraphics: "%{title}" von @%{author}'
+      ownerless: 'Gerade gesehen bei #GTGraphics: "%{title}"'
+
   template/region_definitions:
     region_types:
       full: Vollständig

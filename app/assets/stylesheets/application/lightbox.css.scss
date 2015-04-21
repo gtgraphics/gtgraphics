@@ -285,6 +285,34 @@ $lightbox-height-sm: 450px;
   }
 }
 
+.lightbox-title, .project-title {
+  h1 {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100%;
+
+    @media (min-width: $screen-md-min) {
+      float: left;
+    }
+  }
+
+  .btn-toolbar {
+    @media (min-width: $screen-md-min) {
+      float: right;
+    }
+  }
+
+  #social_buttons {
+    margin-top: 20px;
+
+    @media (min-width: $screen-md-min) {
+      margin-top: 0;
+      padding: 9px 0;
+    }
+  }
+}
+
 #lightbox_page_wrapper {
   position: absolute;
   background-color: $content-bg;
@@ -298,34 +326,6 @@ $lightbox-height-sm: 450px;
   @media (min-width: $screen-md-min) {
     background-color: rgba($content-bg, 0.7);
     margin-top: 0;
-  }
-
-  .lightbox-title {
-    h1 {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-      max-width: 100%;
-
-      @media (min-width: $screen-md-min) {
-        float: left;
-      }
-    }
-
-    .btn-toolbar {
-      @media (min-width: $screen-md-min) {
-        float: right;
-      }
-    }
-
-    #social_buttons {
-      margin-top: 20px;
-
-      @media (min-width: $screen-md-min) {
-        margin-top: 0;
-        padding: 9px 0;
-      }
-    }
   }
 
   .lightbox-caption {

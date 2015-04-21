@@ -151,6 +151,11 @@ en:
       owned: 'Check out "%{title}" by @%{author} on #GTGraphics'
       ownerless: 'Check out "%{title}" on #GTGraphics'
 
+  page/project:
+    twitter_share_text:
+      owned: 'Check out "%{title}" by @%{author} on #GTGraphics'
+      ownerless: 'Check out "%{title}" on #GTGraphics'
+
   template/region_definitions:
     region_types:
       full: Full

@@ -12,4 +12,12 @@ class Page::ProjectPresenter < Page::ApplicationPresenter
   def release
     released_on.year
   end
+
+  def twitter_share_text
+    twitter_username = project_page.project.author.try(:twitter_username)
+    I18n.translate twitter_username.present? ? :owned : :ownerless,
+                   scope: ['page/project', :twitter_share_text],
+                   title: project_page.project.title,
+                   author: twitter_username
+  end
 end
