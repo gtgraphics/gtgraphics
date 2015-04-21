@@ -3,8 +3,9 @@ module FileAttachablePresenter
     file_extension = File.extname(original_filename).from(1).upcase
     default_translation = I18n.translate('content_types.default',
                                          extension: file_extension,
-                                         default: super)
-    I18n.translate(super, scope: :content_types, default: default_translation)
+                                         default: object.content_type || '')
+    I18n.translate(object.content_type, scope: :content_types,
+                                        default: default_translation || '')
   end
 
   def file_size

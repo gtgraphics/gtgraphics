@@ -41,6 +41,10 @@ class Admin::AttachmentPresenter < Admin::ApplicationPresenter
     h.attachment_path(attachment.asset.filename, locale: nil, translations: nil)
   end
 
+  def destroy_path
+    h.admin_attachment_path(attachment)
+  end
+
   def download_path
     h.download_attachment_path(attachment.asset.filename, locale: nil,
                                                           translations: nil)
