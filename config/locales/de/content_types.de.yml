@@ -1,6 +1,7 @@
 de:
   content_types:
     default: '%{extension}-Datei'
+    unknown: Unbekannter Dateityp
     'application/pdf': PDF-Dokument
     'application/zip': ZIP-Ordner
     'image/jpeg': JPEG-Bilddatei
