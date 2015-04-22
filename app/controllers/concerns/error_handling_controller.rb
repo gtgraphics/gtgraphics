@@ -32,6 +32,7 @@ module ErrorHandlingController
   def respond_with_error(status)
     respond_to do |format|
       format.html do
+        @suggested_pages = Page.primary.visible
         render "errors/#{status}", layout: 'errors', status: status
       end
       format.jpeg do

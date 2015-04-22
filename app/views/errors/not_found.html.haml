@@ -1,24 +1,25 @@
-.container
-  .row
-    .col-sm-8.col-sm-offset-2.col-lg-6.col-lg-offset-3
-      .page-body#error_logo
-        = link_to root_path(locale: I18n.locale) do
-          = image_tag 'lightbox_logo.png', alt: 'GTGRAPHICS'
+- cache [:error, response.status, I18n.locale, @suggested_pages.count, @suggested_pages.maximum(:updated_at)] do
+  .container
+    .row
+      .col-sm-8.col-sm-offset-2.col-lg-6.col-lg-offset-3
+        .page-body#error_logo
+          = link_to root_path(locale: I18n.locale) do
+            = image_tag 'lightbox_logo.png', alt: 'GTGRAPHICS'
 
-      #black_hole_container
-        #black_hole
+        #black_hole_container
+          #black_hole
 
-      #error_content
-        .page-header
-          .error-code
-            = icon :warning, fixed_width: true
-            = response.status
-          %h1= translate('views.errors.not_found.title')
+        #error_content
+          .page-header
+            .error-code
+              = icon :warning, fixed_width: true
+              = response.status
+            %h1= translate('views.errors.not_found.title')
 
-        .page-body
-          = translate('views.errors.not_found.body')
+          .page-body
+            = translate('views.errors.not_found.body')
 
-        .page-body
-          %ul.list-multicol
-            - Page.primary.visible.each do |page|
-              %li= link_to page.title, page
+          .page-body
+            %ul.list-multicol
+              - @suggested_pages.each do |page|
+                %li= link_to page.title, page
