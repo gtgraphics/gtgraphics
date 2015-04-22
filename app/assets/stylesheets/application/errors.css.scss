@@ -3,22 +3,25 @@
 #errors {
   height: 100%;
 
+  $black-hole-size: 800px;
+  $black-hole-offset: -90px;
+
   #black_hole_container, #black_hole {
-    width: 600px;
-    height: 600px;
+    width: $black-hole-size;
+    height: $black-hole-size;
   }
 
   #black_hole_container {
-    margin-left: -300px;
+    margin-left: -$black-hole-size / 2;
     left: 50%;
-    top: -95px;
+    top: $black-hole-offset - 95px;;
 
     @media (min-width: $screen-sm-min) {
-      top: -75px;
+      top: $black-hole-offset - 75px;
     }
 
     @media (min-width: $screen-md-min) {
-      top: -60px;
+      top: $black-hole-offset - 60px;
     }
 
     z-index: 1;
