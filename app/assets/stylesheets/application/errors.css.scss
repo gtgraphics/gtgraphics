@@ -11,7 +11,16 @@
   #black_hole_container {
     margin-left: -300px;
     left: 50%;
-    top: -75px;
+    top: -95px;
+
+    @media (min-width: $screen-sm-min) {
+      top: -75px;
+    }
+
+    @media (min-width: $screen-md-min) {
+      top: -60px;
+    }
+
     z-index: 1;
     position: absolute;
     overflow: hidden;
