@@ -7,8 +7,9 @@ class FontAwesome::Iconish
   end
 
   protected
+
   def css_classes
-    raise NotImplementedError
+    fail NotImplementedError
   end
 
   def set_size(css)

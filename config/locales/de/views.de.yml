@@ -127,3 +127,11 @@ de:
           - 'Was ist das Ergebnis von %{left} mal %{right}?'
           - 'Welches Ergebnis erhalten Sie, wenn sie %{left} und %{right} multiplizieren?'
           - 'Was kommt heraus, wenn Sie %{left} mal %{right} rechnen?'
+
+    errors:
+      not_found:
+        title: Ereignishorizont überschritten
+        body: |
+          Die angeforderte Seite konnte nicht gefunden werden. Wahrscheinlich
+          wurde sie verschoben oder entfernt. Nachfolgend stehen einige Seiten,
+          die dir dabei weiterhelfen könnten, dein Ziel zu finden.

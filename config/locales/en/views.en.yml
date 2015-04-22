@@ -71,3 +71,11 @@ en:
           - 'What is the result of %{left} times %{right}.'
           - 'Which result do you get when multiplying %{left} and %{right}?'
           - 'What is the result of the multiplication of %{left} and %{right}?'
+
+    errors:
+      not_found:
+        title: Event Horizon Crossed
+        body: |
+          The page you requested has not been found. Most likely, the page has
+          been moved, deleted, or you mistyped the URL. Here are a couple of
+          pages that may help you find what you were looking for:

@@ -207,6 +207,6 @@ GtGraphics::Application.routes.draw do
 
   # This route is a workaround for Error Pages by throwing a routing error that can be caught by a controller
   unless Rails.application.config.consider_all_requests_local
-    match '(*path)' => 'errors#unmatched_route', via: %i(get post patch put delete)
+    match '(:locale)(/*path)' => 'errors#unmatched_route', via: %i(get post patch put delete), constraints: { locale: /[a-z]{2}/ }
   end
 end
