@@ -9,8 +9,8 @@ class Routing::Cms::RouteCache
   end
 
   def initialize
-    # @cache = Rails.cache
-    @cache = ActiveSupport::Cache::MemoryStore.new
+    @cache = Rails.cache
+    # @cache = ActiveSupport::Cache::MemoryStore.new
   end
 
   def entries
