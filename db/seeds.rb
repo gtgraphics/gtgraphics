@@ -67,52 +67,50 @@ Template.benchmark "Seeding Templates" do
   end
 end
 
-Page.transaction do
-  PAGES.each do |path, config|
-    bm_title = path.blank? ? "Seeding Homepage" : "Seeding Page: #{path}"
+PAGES.each do |path, config|
+  bm_title = path.blank? ? "Seeding Homepage" : "Seeding Page: #{path}"
 
-    puts bm_title
-    Page.benchmark(bm_title) do
-      if path.present?
-        path_segments = path.split('/')
-        slug = path_segments.pop
-        parent_path = path_segments.join('/')
-        parent = Page.find_by!(path: parent_path)
-      else
-        path = ''
-      end
-
-      page_type = config.fetch(:type, :content).to_s.classify
-
-      template_class = "Template::#{page_type}".constantize
-      template = template_class.find_by!(file_name: config.fetch(:template, :default))
-
-      page = Page.find_by(path: path)
-      page ||= parent ? parent.children.new : Page.roots.new
-      page.slug = slug if page.new_record?
-      embeddable_type = "Page::#{page_type}"
-      type_changed = page.persisted? and embeddable_type != page.embeddable_type
-      if page.embeddable.nil? or type_changed
-        page.embeddable.destroy if type_changed
-        page.embeddable_type = embeddable_type
-        embeddable = page.build_embeddable        
-      end
-      page.template = template if page.support_templates?
-
-      I18n.available_locales.each do |locale|
-        I18n.with_locale(locale) do
-          page.title = config[locale]
-        end
-      end
-
-      page.published = config.fetch(:published, true)
-      page.menu_item = config.fetch(:menu, true)
-
-      if page.contact_form?
-        embeddable.recipients = User.all
-      end
-
-      page.save!
+  puts bm_title
+  Page.benchmark(bm_title) do
+    if path.present?
+      path_segments = path.split('/')
+      slug = path_segments.pop
+      parent_path = path_segments.join('/')
+      parent = Page.find_by!(path: parent_path)
+    else
+      path = ''
     end
+
+    page_type = config.fetch(:type, :content).to_s.classify
+
+    template_class = "Template::#{page_type}".constantize
+    template = template_class.find_by!(file_name: config.fetch(:template, :default))
+
+    page = Page.find_by(path: path)
+    page ||= parent ? parent.children.new : Page.roots.new
+    page.slug = slug if page.new_record?
+    embeddable_type = "Page::#{page_type}"
+    type_changed = page.persisted? && embeddable_type != page.embeddable_type
+    if page.embeddable.nil? || type_changed
+      page.embeddable.destroy if type_changed
+      page.embeddable_type = embeddable_type
+      embeddable = page.build_embeddable
+    end
+    page.template = template if page.support_templates?
+
+    I18n.available_locales.each do |locale|
+      I18n.with_locale(locale) do
+        page.title = config[locale]
+      end
+    end
+
+    page.published = config.fetch(:published, true)
+    page.menu_item = config.fetch(:menu, true)
+
+    if page.contact_form?
+      embeddable.recipients = User.all
+    end
+
+    page.save!
   end
 end

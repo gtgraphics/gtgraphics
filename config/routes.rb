@@ -178,7 +178,7 @@ GtGraphics::Application.routes.draw do
         end
       end
 
-      Routing::Cms::PageRouter.insert(self)
+      # Routing::Cms::PageRouter.insert(self)
 
       # Legacy URLs that have changed permanently (HTTP 301)
       get 'image/:slug', constraints: Routing::Legacy::ImageConstraint.new, to: redirect { |params, request|
@@ -206,7 +206,7 @@ GtGraphics::Application.routes.draw do
   end
 
   # This route is a workaround for Error Pages by throwing a routing error that can be caught by a controller
-  unless Rails.application.config.consider_all_requests_local
-    match '(:locale)(/*path)' => 'errors#unmatched_route', via: %i(get post patch put delete), constraints: { locale: /[a-z]{2}/ }
-  end
+  # unless Rails.application.config.consider_all_requests_local
+  #   match '(:locale)(/*path)' => 'errors#unmatched_route', via: %i(get post patch put delete), constraints: { locale: /[a-z]{2}/ }
+  # end
 end

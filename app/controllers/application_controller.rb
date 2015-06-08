@@ -42,6 +42,9 @@ class ApplicationController < ActionController::Base
       locale = http_accept_language
                .compatible_language_from(I18n.available_locales)
       locale = I18n.default_locale if locale.blank?
+
+      binding.pry
+
       redirect_to params.to_h.with_indifferent_access.merge(
         locale: locale.to_s, id: params[:id].presence)
     end

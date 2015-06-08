@@ -23,6 +23,10 @@ module RouteHelper
     page_path(options)
   end
 
+  def root_path(options = {})
+    root_page_path(options)
+  end
+
   def root_page_url(options = {})
     page_url(options)
   end
@@ -42,15 +46,15 @@ module RouteHelper
     options = args.extract_options!
     page = args.first
     if page.nil? || page.try(:root?)
-      public_send("root_#{suffix}", options)
+      public_send("root_page_#{suffix}", options)
     elsif page.respond_to?(:path)
       public_send("#{page.embeddable_class.model_name.element}_#{suffix}",
                   options.merge(path: page.path))
     else
-      root_path = public_send("root_#{suffix}",
+      root_path = public_send("root_page_#{suffix}",
                               locale: options.fetch(:locale, I18n.locale))
       path = page.to_s.gsub(/\A\//, '')
-      "#{root_path}/#{path}"
+      File.join(root_path, path)
     end
   end
 end

@@ -51,8 +51,8 @@ class Page::ApplicationController < ApplicationController
   private
 
   def load_page
-    @page = Page.accessible_by(current_ability).published
-            .find_by!(path: params[:path] || '')
+    @page = env['cms.page.instance']
+    fail ActiveRecord::RecordNotFound if cannot? :read, @page
   end
 
   def load_template
@@ -69,5 +69,23 @@ class Page::ApplicationController < ApplicationController
 
   def increment_hits
     @page.increment_hits!
+  end
+
+  def set_locale
+    available_locales = I18n.available_locales.map(&:to_s)
+    locale = params[:locale]
+    if locale && locale.in?(available_locales)
+      Globalize.locale = I18n.locale = locale.to_sym
+    else
+      # if user is logged in his preferred locale will be used
+      # if none of the above is set the locale will be determined through the
+      # HTTP Accept Language header from the browser
+      locale = http_accept_language
+               .compatible_language_from(I18n.available_locales)
+      locale = I18n.default_locale if locale.blank?
+
+      redirect_to params.to_h.with_indifferent_access.merge(
+        locale: locale.to_s, id: params[:id].presence)
+    end
   end
 end
