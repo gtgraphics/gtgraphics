@@ -1,4 +1,6 @@
 class Page::ApplicationController < ApplicationController
+  include Router::ControllerAdapter
+
   respond_to :html
 
   before_action :load_page

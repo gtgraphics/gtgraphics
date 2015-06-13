@@ -2,6 +2,13 @@ class Page::ImagesController < Page::ApplicationController
   before_action :load_image
   before_action :load_image_styles, only: :show
 
+  routes do
+    get :buy, as: :buy_image
+    post :buy, action: :request_purchase
+    get 'download/:style_id(/:dimensions)', action: :download,
+                                            as: :download_image
+  end
+
   breadcrumbs do |b|
     if action_name.in? %w(buy request_purchase)
       b.append translate('views.images.buy', image: @image.title),
