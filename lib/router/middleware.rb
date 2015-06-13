@@ -9,13 +9,13 @@ module Router
       path = normalize_path(env['REQUEST_PATH'])
       slugs = path.split(File::SEPARATOR)
       locale = slugs.pop
-      if locale.present? && locale.length == 2 && locale.in?(@available_locales)
+      if valid_locale?(locale)
         path = slugs.join(File::SEPARATOR)
       else
         locale = nil
       end
 
-      page = Page.published.find_by(path: path)
+      page = Page.find_by(path: path)
       return @app.call(env) if page.nil?
 
       env['cms.page.instance'] = page
@@ -24,7 +24,10 @@ module Router
       request.update_param('locale', locale)
       request.update_param('path', path)
 
-      controller_class(page).action(:show).call(env)
+      controller_class = "#{page.embeddable_type.pluralize}Controller".constantize
+      # TODO: Take care for the subroutes defined by the controller
+      # If it is no subroute, only accept env['ACCEPT_METHOD'] to be 'GET'
+      controller_class.action(:show).call(env)
     end
 
     private
@@ -36,10 +39,6 @@ module Router
       else
         pattern_class.new(path)
       end
-    end
-
-    def controller_class(page)
-      "#{page.embeddable_type.pluralize}Controller".constantize
     end
 
     def normalize_path(path)
