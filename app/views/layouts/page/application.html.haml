@@ -24,8 +24,8 @@
 
   - # References to other translations
   %link{rel: 'canonical', href: request.url}
-  - @page.translated_locales.reject { |locale| locale == I18n.locale }.each do |translated_locale|
-    %link{rel: 'alternate', hreflang: translated_locale, href: url_for(params.merge(locale: translated_locale, only_path: false))}
+  - I18n.available_locales.reject { |locale| locale == I18n.locale }.each do |translated_locale|
+    %link{rel: 'alternate', hreflang: translated_locale, href: url_for(request.path_parameters.merge(locale: translated_locale, only_path: false))}
 
 - content_for :content do
   = facebook_sdk_anchor
