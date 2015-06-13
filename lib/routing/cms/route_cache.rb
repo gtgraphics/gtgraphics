@@ -10,6 +10,7 @@ class Routing::Cms::RouteCache
 
   def initialize
     @cache = ActiveSupport::Cache::MemoryStore.new
+    # @cache = ActiveSupport::Cache::NullStore.new
   end
 
   def entries

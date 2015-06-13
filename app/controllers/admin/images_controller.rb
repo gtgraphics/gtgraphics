@@ -160,7 +160,6 @@ class Admin::ImagesController < Admin::ApplicationController
     end
   end
 
-
   # Batch Processing
 
   def batch_process

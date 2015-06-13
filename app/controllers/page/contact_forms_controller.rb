@@ -18,7 +18,8 @@ class Page::ContactFormsController < Page::ApplicationController
 
     if @message.save
       notification_job = MessageNotificationJob.new(@message.id, I18n.locale)
-      Delayed::Job.enqueue(notification_job, queue: 'mailings')
+      # Delayed::Job.enqueue(notification_job, queue: 'mailings')
+      notification_job.perform
 
       flash_for @message
       respond_to do |format|
