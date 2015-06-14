@@ -6,7 +6,9 @@ module Router
     end
 
     def call(env)
-      path = normalize_path(env['REQUEST_PATH'])
+      request_path = normalize_path(env['REQUEST_PATH'])
+
+      path = request_path
       slugs = path.split(File::SEPARATOR)
       locale = slugs.pop
       if valid_locale?(locale)
@@ -15,77 +17,74 @@ module Router
         locale = nil
       end
 
-      # TODO: How to find a page if a subroute has been defined? Such as:
-      # /wallpapers/image-name/buy
-
-      # 1st go through all the additional routes and look if the path can be
-      # parsed
-
-      matched_routes = {}
-      additional_routes_by_controller.each do |controller, routes|
-        match = nil
-        matched_route = nil
-        routes.each do |route|
-          pattern = build_pattern("*path/#{route.path}")
-          match = pattern.match(path)
-          if match
-            matched_route = route
-            break
-          end
-        end
-        next if match.nil?
-        path_params = match.names.zip(match.captures).to_h
-        matched_routes[controller] ||= []
-        matched_routes[controller] << MatchedRoute.new(matched_route, path_params)
-      end
-
-      binding.pry if matched_routes.any?
-
-      page = Page.find_by(path: path)
+      page, path_params = find_page(path, env['REQUEST_METHOD'])
       return @app.call(env) if page.nil?
 
       env['cms.page.instance'] = page
 
+      subpath = normalize_path(
+        request_path.sub(/\A#{Regexp.escape(page.path)}/, '')
+      )
+
       request = Rack::Request.new(env)
       request.update_param('locale', locale)
-      request.update_param('path', path)
+      request.update_param('path', page.path)
+      request.update_param('subpath', subpath)
+      path_params.each do |key, value|
+        request.update_param(key, value)
+      end
 
-      controller_class = "#{page.embeddable_type.pluralize}Controller".constantize
-      # TODO: Take care for the subroutes defined by the controller
-      # If it is no subroute, only accept env['ACCEPT_METHOD'] to be 'GET'
+      controller_class = controller_class_from_page_type(page.embeddable_type)
       controller_class.action(:show).call(env)
     end
 
     private
 
-    def build_pattern(path)
-      pattern_class = ActionDispatch::Journey::Path::Pattern
-      if pattern_class.respond_to?(:from_string)
-        pattern_class.from_string(path)
-      else
-        pattern_class.new(path)
+    def find_page(path, request_method)
+      matched_routes = matched_routes_by_resource(path, request_method)
+
+      conditions = []
+      conditions << Page.arel_table[:path].eq(path)
+        .and(Page.arel_table[:embeddable_type].not_in(matched_routes.keys))
+      conditions += matched_routes.collect do |page_type, matched_route|
+        Page.arel_table[:path].eq(matched_route[:path])
+        .and(Page.arel_table[:embeddable_type].eq(page_type))
+      end
+
+      page = Page.find_by(conditions.reduce(:or))
+      return nil if page.nil?
+      matched_route = matched_routes[page.embeddable_type] || {}
+      path_params = matched_route[:path_params] || {}
+      [page, path_params.with_indifferent_access]
+    end
+
+    def matched_routes_by_resource(path, request_method)
+      Page::EMBEDDABLE_TYPES.each_with_object({}) do |page_type, routes|
+        controller_class = controller_class_from_page_type(page_type)
+        next if controller_class.nil?
+        path_params = nil
+        controller_class.registered_routes.each do |route|
+          path_params = route.match(path, request_method)
+          break if path_params
+        end
+        next if path_params.nil?
+        path_params = path_params.with_indifferent_access
+        routes[page_type] = { page_type: page_type, path: path_params[:path],
+                              path_params: path_params.except(:path) }
       end
     end
 
-    def controller_classes
-      @controller_classes ||=
-        Page::EMBEDDABLE_TYPES
-        .collect { |name| "#{name.pluralize}Controller".safe_constantize }
-        .compact
-    end
-
-    def additional_routes_by_controller
-      @additional_routes_by_controller ||=
-        controller_classes.collect { |c| [c.name, c.registered_routes] }.to_h
-    end
-
     def normalize_path(path)
-      path.to_s.sub(/\A[\/]+/, '')
+      path.to_s.sub(%r{\A[/]+}, '')
     end
 
     def valid_locale?(locale)
       return false if locale.blank?
       locale.length == 2 && @available_locales.include?(locale)
+    end
+
+    def controller_class_from_page_type(page_type)
+      "#{page_type.pluralize}Controller".safe_constantize
     end
   end
 end
