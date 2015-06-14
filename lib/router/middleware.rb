@@ -2,20 +2,24 @@ module Router
   class Middleware
     include ActiveSupport::Benchmarkable
 
+    IGNORED_PATHS = %w(assets) +
+                    Dir.chdir("#{Rails.root}/public") { Dir.glob('*') }
+
     def initialize(app)
       @app = app
       @available_locales = I18n.available_locales.map(&:to_s)
     end
 
     def call(env)
+      request_path = normalize_path(env['REQUEST_PATH'])
+      return @app.call(env) if ignored_path?(request_path)
+
       page, action = nil
       request = Rack::Request.new(env)
-      request_path = normalize_path(env['REQUEST_PATH'])
 
       benchmark "Find Route: /#{request_path}" do
         path = request_path
         locale, path = extract_locale_from_path(path)
-
         page, action, path_params = find_page(path, env['REQUEST_METHOD'])
         if page
           env['cms.page.instance'] = page
@@ -37,8 +41,14 @@ module Router
 
     private
 
+    def ignored_path?(request_path)
+      IGNORED_PATHS.any? do |ignored_path|
+        request_path.start_with?(ignored_path)
+      end
+    end
+
     def find_page(path, request_method)
-      matched_routes = matched_routes_by_resource(path, request_method)
+      matched_routes = matched_routes_by_page_type(path, request_method)
 
       conditions = []
 
@@ -83,7 +93,7 @@ module Router
       [locale, path]
     end
 
-    def matched_routes_by_resource(path, request_method)
+    def matched_routes_by_page_type(path, request_method)
       Page::EMBEDDABLE_TYPES.each_with_object({}) do |page_type, routes|
         controller_class = controller_class_from_page_type(page_type)
         next if controller_class.nil?
@@ -105,7 +115,7 @@ module Router
     end
 
     def normalize_path(path)
-      path.to_s.sub(%r{\A[/]+}, '')
+      path.to_s.sub(/\A[\/]+/, '')
     end
 
     def valid_locale?(locale)
