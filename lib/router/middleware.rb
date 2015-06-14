@@ -1,39 +1,45 @@
 module Router
   class Middleware
+    include ActiveSupport::Benchmarkable
+
     def initialize(app)
       @app = app
       @available_locales = I18n.available_locales.map(&:to_s)
     end
 
     def call(env)
+      page = nil
       request_path = normalize_path(env['REQUEST_PATH'])
 
-      path = request_path
-      slugs = path.split(File::SEPARATOR)
-      locale = slugs.pop
-      if valid_locale?(locale)
-        path = slugs.join(File::SEPARATOR)
-      else
-        locale = nil
+      benchmark "Find Route: /#{request_path}" do
+        path = request_path
+        slugs = path.split(File::SEPARATOR)
+        locale = slugs.pop
+        if valid_locale?(locale)
+          path = slugs.join(File::SEPARATOR)
+        else
+          locale = nil
+        end
+
+        page, path_params = find_page(path, env['REQUEST_METHOD'])
+        if page
+          env['cms.page.instance'] = page
+
+          subpath = normalize_path(
+            request_path.sub(/\A#{Regexp.escape(page.path)}/, '')
+          )
+
+          request = Rack::Request.new(env)
+          request.update_param('locale', locale)
+          request.update_param('path', page.path)
+          request.update_param('subpath', subpath)
+          path_params.each do |key, value|
+            request.update_param(key, value)
+          end
+        end
       end
 
-      page, path_params = find_page(path, env['REQUEST_METHOD'])
       return @app.call(env) if page.nil?
-
-      env['cms.page.instance'] = page
-
-      subpath = normalize_path(
-        request_path.sub(/\A#{Regexp.escape(page.path)}/, '')
-      )
-
-      request = Rack::Request.new(env)
-      request.update_param('locale', locale)
-      request.update_param('path', page.path)
-      request.update_param('subpath', subpath)
-      path_params.each do |key, value|
-        request.update_param(key, value)
-      end
-
       controller_class = controller_class_from_page_type(page.embeddable_type)
       controller_class.action(:show).call(env)
     end
@@ -44,8 +50,13 @@ module Router
       matched_routes = matched_routes_by_resource(path, request_method)
 
       conditions = []
-      conditions << Page.arel_table[:path].eq(path)
-        .and(Page.arel_table[:embeddable_type].not_in(matched_routes.keys))
+
+      base_condition = Page.arel_table[:path].eq(path)
+      base_condition = base_condition.and(
+        Page.arel_table[:embeddable_type].not_in(matched_routes.keys)
+      ) if matched_routes.any?
+
+      conditions << base_condition
       conditions += matched_routes.collect do |page_type, matched_route|
         Page.arel_table[:path].eq(matched_route[:path])
         .and(Page.arel_table[:embeddable_type].eq(page_type))
@@ -53,6 +64,7 @@ module Router
 
       page = Page.find_by(conditions.reduce(:or))
       return nil if page.nil?
+
       matched_route = matched_routes[page.embeddable_type] || {}
       path_params = matched_route[:path_params] || {}
       [page, path_params.with_indifferent_access]
@@ -85,6 +97,10 @@ module Router
 
     def controller_class_from_page_type(page_type)
       "#{page_type.pluralize}Controller".safe_constantize
+    end
+
+    def logger
+      Rails.logger
     end
   end
 end
