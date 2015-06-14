@@ -1,6 +1,7 @@
 module RouteHelper
   def change_locale_path(locale)
-    url_for(path: @page.try(:path), locale: locale)
+    '#'
+    # url_for(path: @page.try(:path), locale: locale)
   end
 
   def image_asset_path(image, style)
@@ -43,18 +44,19 @@ module RouteHelper
   private
 
   def _page_url(suffix, *args)
-    options = args.extract_options!
-    page = args.first
-    if page.nil? || page.try(:root?)
-      public_send("root_page_#{suffix}", options)
-    elsif page.respond_to?(:path)
-      public_send("#{page.embeddable_class.model_name.element}_#{suffix}",
-                  options.merge(path: page.path))
-    else
-      root_path = public_send("root_page_#{suffix}",
-                              locale: options.fetch(:locale, I18n.locale))
-      path = page.to_s.gsub(/\A\//, '')
-      File.join(root_path, path)
-    end
+    '#'
+    # options = args.extract_options!
+    # page = args.first
+    # if page.nil? || page.try(:root?)
+    #   public_send("root_page_#{suffix}", options)
+    # elsif page.respond_to?(:path)
+    #   public_send("#{page.embeddable_class.model_name.element}_#{suffix}",
+    #               options.merge(path: page.path))
+    # else
+    #   root_path = public_send("root_page_#{suffix}",
+    #                           locale: options.fetch(:locale, I18n.locale))
+    #   path = page.to_s.gsub(/\A\//, '')
+    #   File.join(root_path, path)
+    # end
   end
 end

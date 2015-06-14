@@ -2,9 +2,6 @@ module Router
   class Middleware
     include ActiveSupport::Benchmarkable
 
-    IGNORED_PATHS = %w(assets) +
-                    Dir.chdir("#{Rails.root}/public") { Dir.glob('*') }
-
     def initialize(app)
       @app = app
       @available_locales = I18n.available_locales.map(&:to_s)
@@ -12,7 +9,6 @@ module Router
 
     def call(env)
       request_path = normalize_path(env['REQUEST_PATH'])
-      return @app.call(env) if ignored_path?(request_path)
 
       page, action = nil
       request = Rack::Request.new(env)
@@ -40,12 +36,6 @@ module Router
     end
 
     private
-
-    def ignored_path?(request_path)
-      IGNORED_PATHS.any? do |ignored_path|
-        request_path.start_with?(ignored_path)
-      end
-    end
 
     def find_page(path, request_method)
       matched_routes = matched_routes_by_page_type(path, request_method)

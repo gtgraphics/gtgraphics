@@ -26,7 +26,7 @@ class Page::ApplicationController < ApplicationController
   protected
 
   def render_page(options = {})
-    render template_path, options
+    render template: template_path
   end
 
   def respond_with_page
@@ -42,7 +42,8 @@ class Page::ApplicationController < ApplicationController
   end
 
   def template_path
-    "#{@page.embeddable_type.underscore.pluralize}/templates/#{template_file}"
+    File.join(@page.embeddable_type.underscore.pluralize,
+              'templates', template_file)
   end
 
   private
@@ -59,9 +60,9 @@ class Page::ApplicationController < ApplicationController
   end
 
   def load_menu_items
-    # @menu_items = Page.primary.published.menu_items
-    #               .accessible_by(current_ability)
-    #               .with_translations_for_current_locale
+    @menu_items = Page.primary.published.menu_items
+                  .accessible_by(current_ability)
+                  .with_translations_for_current_locale
   end
 
   def increment_hits
@@ -80,7 +81,7 @@ class Page::ApplicationController < ApplicationController
       locale = http_accept_language
                .compatible_language_from(I18n.available_locales)
       locale = I18n.default_locale if locale.blank?
-      redirect_to "#{locale}/#{params[:path]}" # TODO: Use url helper
+      redirect_to "/#{File.join(*[locale.to_s, params[:path].presence].compact)}" # TODO: Use url helper
 
       # redirect_to params.to_h.with_indifferent_access.merge(
       #   locale: locale.to_s)
