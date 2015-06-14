@@ -1,13 +1,12 @@
 module Router
   class Registry
-    attr_reader :routes
-
-    def initialize(routes)
-      @routes = routes
+    def initialize(controller)
+      @controller = controller
+      @routes = @controller.registered_routes
     end
 
     def match(path, options = {})
-      @routes << Route.new(path, options)
+      @routes << Route.new(@controller, path, options)
     end
 
     %i(get post patch put delete head).each do |accept_method|

@@ -1,7 +1,7 @@
 class Page::ContentsController < Page::ApplicationController
   BRICK_PAGE_SIZE = 16
 
-  before_action :load_child_pages, only: :show
+  before_action :load_child_pages
 
   def default
     @child_pages = @child_pages.menu_items
@@ -16,6 +16,7 @@ class Page::ContentsController < Page::ApplicationController
 
   def gallery
     @image_pages = @child_pages.images.preload(embeddable: :image)
+
     unless params[:format] == 'rss'
       # OPTIMIZE: if request.format.html? caused problems for some crawlers
       @image_pages = @image_pages.page(params[:page]).per(BRICK_PAGE_SIZE)
@@ -30,6 +31,7 @@ class Page::ContentsController < Page::ApplicationController
         end
       end
     end
+
     respond_with_page do |format|
       format.rss { render template_path }
     end

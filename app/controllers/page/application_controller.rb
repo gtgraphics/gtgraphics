@@ -5,7 +5,6 @@ class Page::ApplicationController < ApplicationController
 
   before_action :load_page
   before_action :load_template
-
   before_action :increment_hits
 
   attr_reader :page
@@ -13,19 +12,15 @@ class Page::ApplicationController < ApplicationController
   helper_method :page, :template_file
 
   breadcrumbs do |b|
-    pages = @page.self_and_ancestors.accessible_by(current_ability)
-            .with_translations_for_current_locale
-    pages.each do |page|
-      b.append page.title, page
-    end
+    # pages = @page.self_and_ancestors.accessible_by(current_ability)
+    #         .with_translations_for_current_locale
+    # pages.each do |page|
+    #   b.append page.title, page
+    # end
   end
 
   def show
-    if respond_to?(@template.filename)
-      send(@template.filename)
-    else
-      respond_with_page
-    end
+    respond_with_page
   end
 
   protected
@@ -54,7 +49,7 @@ class Page::ApplicationController < ApplicationController
 
   def load_page
     @page = env['cms.page.instance']
-    fail ActiveRecord::RecordNotFound if cannot? :read, @page
+    # fail ActiveRecord::RecordNotFound if cannot? :read, @page
   end
 
   def load_template
@@ -64,9 +59,9 @@ class Page::ApplicationController < ApplicationController
   end
 
   def load_menu_items
-    @menu_items = Page.primary.published.menu_items
-                  .accessible_by(current_ability)
-                  .with_translations_for_current_locale
+    # @menu_items = Page.primary.published.menu_items
+    #               .accessible_by(current_ability)
+    #               .with_translations_for_current_locale
   end
 
   def increment_hits
@@ -85,9 +80,10 @@ class Page::ApplicationController < ApplicationController
       locale = http_accept_language
                .compatible_language_from(I18n.available_locales)
       locale = I18n.default_locale if locale.blank?
+      redirect_to "#{locale}/#{params[:path]}" # TODO: Use url helper
 
-      redirect_to params.to_h.with_indifferent_access.merge(
-        locale: locale.to_s, id: params[:id].presence)
+      # redirect_to params.to_h.with_indifferent_access.merge(
+      #   locale: locale.to_s)
     end
   end
 end

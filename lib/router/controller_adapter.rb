@@ -3,16 +3,17 @@ module Router
     extend ActiveSupport::Concern
 
     included do
-      class_attribute :registered_routes
+      class_attribute :registered_routes, instance_accessor: false
       self.registered_routes = []
     end
 
     module ClassMethods
       def routes(&block)
         self.registered_routes = registered_routes.dup
-        registry = Router::Registry.new(registered_routes)
-        registry.instance_exec(&block)
+        Registry.new(self).instance_exec(&block)
       end
     end
+
+    # TODO: Put route path helpers here
   end
 end

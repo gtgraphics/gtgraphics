@@ -4,8 +4,8 @@ class Page::ImagesController < Page::ApplicationController
 
   routes do
     get :buy, as: :buy_image
-    post :buy, action: :request_purchase
-    get 'download/:style_id(/:dimensions)', action: :download,
+    post :buy, to: :request_purchase
+    get 'download/:style_id(/:dimensions)', to: :download,
                                             as: :download_image
   end
 
