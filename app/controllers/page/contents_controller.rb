@@ -3,6 +3,10 @@ class Page::ContentsController < Page::ApplicationController
 
   before_action :load_child_pages
 
+  routes do
+    post
+  end
+
   def default
     @child_pages = @child_pages.menu_items
     respond_with_page

@@ -2,6 +2,8 @@ module Router
   class Middleware
     include ActiveSupport::Benchmarkable
 
+    DEFAULT_FORMAT = 'html'
+
     def initialize(app)
       @app = app
       @available_locales = I18n.available_locales.map(&:to_s)
@@ -10,12 +12,12 @@ module Router
     def call(env)
       request_path = normalize_path(env['REQUEST_PATH'])
 
-      page, action = nil
+      page, action, format = nil
       request = Rack::Request.new(env)
 
       benchmark 'Find Route' do
         path = request_path
-        locale, path = extract_locale_from_path(path)
+        locale, path, format = extract_locale_and_format_from_path(path)
         page, route_name, action, path_params =
           find_page(path, env['REQUEST_METHOD'])
         if page
@@ -34,6 +36,8 @@ module Router
       controller_class = controller_class_from_page_type(page.embeddable_type)
       request.update_param('controller', controller_class.controller_name)
       request.update_param('action', action)
+      request.update_param('format', format)
+
       controller_class.action(action.to_sym).call(env)
     end
 
@@ -64,21 +68,24 @@ module Router
       route_definition = matched_route[:definition]
       if route_definition
         action = route_definition.action
+        action ||= page.template.filename if page.support_templates?
+        action ||= route_definition.path
         route_name = route_definition.name
       elsif request_method.downcase == 'get'
         action = page.template.filename if page.support_templates?
-        if action.nil? || !controller_class_from_page_type(page.embeddable_type)
-                           .action_methods.include?(action)
-          action = 'show'
-        end
       else
         page = nil
+      end
+
+      if action.nil? || !controller_class_from_page_type(page.embeddable_type)
+                         .action_methods.include?(action)
+        action = 'show'
       end
 
       [page, route_name, action, path_params.with_indifferent_access]
     end
 
-    def extract_locale_from_path(path)
+    def extract_locale_and_format_from_path(path)
       slugs = path.split(File::SEPARATOR)
       locale = slugs.shift
       if valid_locale?(locale)
@@ -86,7 +93,10 @@ module Router
       else
         locale = nil
       end
-      [locale, path]
+      format = path.match(/\.(.*)\z/).try(:captures).try(:first)
+      format ||= DEFAULT_FORMAT
+      path.sub!(/\.#{Regexp.escape(format)}\z/, '') if format
+      [locale, path, format]
     end
 
     def matched_routes_by_page_type(path, request_method)

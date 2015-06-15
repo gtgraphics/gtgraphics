@@ -43,7 +43,7 @@ gem 'jbuilder', '~> 1.2'
 gem 'liquid'
 gem 'builder'
 gem 'coffeebeans'
-gem 'turbolinks'
+gem 'turbolinks', '~> 2.5.3'
 gem 'country_select'
 gem 'nprogress-rails'
 

@@ -1,29 +1,46 @@
 module Router
   module Subroute
     class Definition
-      attr_reader :path, :controller, :action, :name, :request_methods
+      attr_reader :path, :controller, :action, :name,
+                  :request_methods, :defaults
 
       def initialize(controller, path, options = {})
+        options.assert_valid_keys(:to, :via, :as, :defaults)
+
         @controller = controller
 
         @path = path.to_s
         @request_methods = Array(options[:via]).map(&:to_s)
         validate_request_methods!
+        if main? && request_methods.include?('get')
+          fail 'Primary route cannot be redefined'
+        end
 
-        @action = (options[:to] || path).to_s
-        @name = options[:as]
+        @action = options[:to]
+        @name = options[:as].try(:to_sym)
+
+        @defaults = (options[:defaults] || {}).with_indifferent_access
+      end
+
+      def main?
+        path.blank?
       end
 
       def match(path, request_method)
         match_path(path) if via?(request_method)
       end
 
+      def path_parameter_names
+        Pattern.build(path).names
+      end
+
       def via?(request_method)
         request_methods.include?(request_method.to_s.downcase)
       end
 
-      def interpolate(params = {})
-        build_pattern(path).build_formatter.evaluate(params)
+      def interpolate(params)
+        params = params.reverse_merge(defaults)
+        Pattern.build(path).build_formatter.evaluate(params)
       end
 
       private
@@ -31,17 +48,8 @@ module Router
       def match_path(path)
         pattern_string = '*path'
         pattern_string << "/#{self.path}" if self.path.present?
-        match = build_pattern(pattern_string).match(path)
-        match.names.zip(match.captures).to_h if match
-      end
-
-      def build_pattern(pattern_string)
-        pattern_class = ActionDispatch::Journey::Path::Pattern
-        if pattern_class.respond_to?(:from_string)
-          pattern_class.from_string(pattern_string)
-        else
-          pattern_class.new(pattern_string)
-        end
+        pattern_string << '(.:format)'
+        Pattern.extract_params(path, pattern_string)
       end
 
       def validate_request_methods!

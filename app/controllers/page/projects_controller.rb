@@ -1,5 +1,5 @@
 class Page::ProjectsController < Page::ApplicationController
-  before_action :load_project, only: %i(show show_image)
+  before_action :load_project
 
   def default
     @project_images = @project.project_images.order(:position).includes(:image)

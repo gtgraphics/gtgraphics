@@ -75,16 +75,10 @@ class Page::ApplicationController < ApplicationController
     if locale && locale.in?(available_locales)
       Globalize.locale = I18n.locale = locale.to_sym
     else
-      # if user is logged in his preferred locale will be used
-      # if none of the above is set the locale will be determined through the
-      # HTTP Accept Language header from the browser
       locale = http_accept_language
                .compatible_language_from(I18n.available_locales)
       locale = I18n.default_locale if locale.blank?
-      redirect_to "/#{File.join(*[locale.to_s, params[:path].presence].compact)}" # TODO: Use url helper
-
-      # redirect_to params.to_h.with_indifferent_access.merge(
-      #   locale: locale.to_s)
+      redirect_to current_page_url(locale: locale)
     end
   end
 end

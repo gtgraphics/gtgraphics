@@ -39,11 +39,15 @@ module Router
     end
 
     def current_page_path(*args)
-      page_path(env.fetch('cms.page.instance'), env['cms.page.route'], *args)
+      options = args.extract_options!
+      route = args.shift || env['cms.page.route']
+      page_path(env.fetch('cms.page.instance'), route, *args, options)
     end
 
     def current_page_url(*args)
-      page_url(env.fetch('cms.page.instance'), env['cms.page.route'], *args)
+      options = args.extract_options!
+      route = args.shift || env['cms.page.route']
+      page_url(env.fetch('cms.page.instance'), route, *args, options)
     end
   end
 end

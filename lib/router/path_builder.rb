@@ -1,6 +1,6 @@
 module Router
   class PathBuilder
-    attr_reader :controller, :path, :locale, :format, :params, :route
+    attr_reader :controller, :path, :locale, :format, :params, :subroute
 
     def initialize(controller, page_or_path, *args)
       @controller = controller
@@ -14,23 +14,24 @@ module Router
 
       @locale = options.fetch(:locale) { I18n.locale }.try(:to_s)
       @format = options[:format]
-      @params = options.except(:locale, :format, :protocol)
+      @params = options.except(:locale, :format).with_indifferent_access
 
-      route_name = args.first.try(:to_sym)
-      return if route_name.nil?
-      @route = controller.class.registered_routes.find do |route|
-        route.name == route_name
+      subroute_name = args.first.try(:to_sym)
+      return if subroute_name.nil?
+      @subroute = controller.class.registered_routes.find do |subroute|
+        subroute.name == subroute_name
       end
-      fail ArgumentError, "Sub route not found: :#{route_name} " \
-        "(in #{controller.class.name})" if @route.nil?
+      fail ArgumentError, "Sub route not found: :#{subroute_name} " \
+        "(in #{controller.class.name})" if @subroute.nil?
     end
 
     def path_parameters
-      params # TODO
+      return {} if subroute.nil?
+      params.slice(*subroute.path_parameter_names)
     end
 
     def query_parameters
-      params # TODO
+      params.except(*path_parameters.keys)
     end
 
     def query_string
@@ -45,7 +46,7 @@ module Router
       path_segments = []
       path_segments << locale if locale.present?
       path_segments << path if path.present?
-      path_segments << route.interpolate(path_parameters) if route
+      path_segments << subroute.interpolate(path_parameters) if subroute
       format_string = ".#{format}" if format.present? && !default_format?
       "/#{File.join(path_segments)}#{format_string}#{query_string}"
     end
