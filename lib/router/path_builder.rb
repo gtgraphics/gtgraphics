@@ -2,19 +2,27 @@ module Router
   class PathBuilder
     attr_reader :controller, :path, :locale, :format, :params, :route
 
-    def initialize(controller, *args)
+    def initialize(controller, page_or_path, *args)
       @controller = controller
 
       options = args.extract_options!
-      @path = extract_path(args.first)
+      if page_or_path.respond_to?(:path)
+        @path = page_or_path.path.to_s
+      else
+        @path = page_or_path.to_s
+      end
+
       @locale = options.fetch(:locale) { I18n.locale }.try(:to_s)
       @format = options[:format]
-      @params = options.except(:locale, :format, :route_name, :protocol)
+      @params = options.except(:locale, :format, :protocol)
 
-      route_name = options[:route_name].try(:to_sym)
+      route_name = args.first.try(:to_sym)
+      return if route_name.nil?
       @route = controller.class.registered_routes.find do |route|
         route.name == route_name
       end
+      fail ArgumentError, "Sub route not found: :#{route_name} " \
+        "(in #{controller.class.name})" if @route.nil?
     end
 
     def path_parameters
@@ -36,24 +44,10 @@ module Router
     def to_s
       path_segments = []
       path_segments << locale if locale.present?
-      path_segments << path
+      path_segments << path if path.present?
       path_segments << route.interpolate(path_parameters) if route
       format_string = ".#{format}" if format.present? && !default_format?
       "/#{File.join(path_segments)}#{format_string}#{query_string}"
-    end
-
-    private
-
-    def extract_path(page_or_path)
-      if page_or_path.nil?
-        page = controller.env['cms.page.instance']
-        fail ArgumentError, 'Current page not set' if page.nil?
-        page.path.to_s
-      elsif page_or_path.respond_to?(:path)
-        page_or_path.path.to_s
-      else
-        page_or_path.to_s
-      end
     end
   end
 end

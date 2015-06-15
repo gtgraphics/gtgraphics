@@ -57,7 +57,7 @@
                   %ul.dropdown-menu{role: 'menu', :'aria-labelledby' => 'image_download_dropdown'}
                     - image.styles.each do |style|
                       %li
-                        = link_to download_image_path(style_id: style.position, format: style.format), class: 'download', data: { no_turbolink: true } do
+                        = link_to current_page_path(:download_image, format: style.format, style_id: style.position), class: 'download', data: { no_turbolink: true } do
                           = style.title
 
               - if buyable
@@ -147,7 +147,7 @@
                         %h3= prepend_icon :download, translate('helpers.links.download'), fixed_width: true
                         %ul.list-unstyled.image-styles
                           - image.styles.each do |style|
-                            %li= link_to style.title, download_image_path(style_id: style.position, format: style.format), data: { no_turbolink: true }
+                            %li= link_to style.title, current_page_path(:download_image, format: style.format, style_id: style.position), data: { no_turbolink: true }
 
               / Comments
               .page-body.lightbox-comments.js-only#comments

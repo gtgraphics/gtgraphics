@@ -12,7 +12,7 @@ class Page::ImagesController < Page::ApplicationController
   breadcrumbs do |b|
     if action_name.in? %w(buy request_purchase)
       b.append translate('views.images.buy', image: @image.title),
-               buy_image_path(@page.path)
+               page_path(@page, :buy_image)
     end
   end
 

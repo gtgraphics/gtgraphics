@@ -16,7 +16,7 @@
               = image_tag attached_asset_path(@image, :brick), class: 'img-responsive', alt: @image.title
 
           .col-sm-8
-            = simple_form_for @message, as: :message, url: request_image_purchase_path(@page.path), wrapper: :vertical_form, defaults: { input_html: { class: 'input-lg' }} do |form|
+            = simple_form_for @message, as: :message, url: current_page_path, wrapper: :vertical_form, defaults: { input_html: { class: 'input-lg' }} do |form|
               .content.form-inputs
                 = form.input :first_sender_name, label: false, input_html: { autofocus: true }
                 = form.input :last_sender_name, label: false

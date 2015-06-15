@@ -201,7 +201,7 @@ GtGraphics::Application.routes.draw do
       }
 
       # Permalinks
-      # get ':id' => 'page/permalinks#show', as: :page_permalink, id: /[A-Z0-9]{6}/i
+      get ':id' => 'page/permalinks#show', as: :page_permalink, id: /[A-Z0-9]{6}/i
     end
   end
 

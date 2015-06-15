@@ -41,18 +41,20 @@ module Taggable
     end
 
     private
+
     def tagged_all(tokens)
-      conditions = tokens.map do |token|
-        arel_table[:id].in(
-          Tagging.joins(:tag).where(tags: { label: token }).
-          select(Tagging.arel_table[:taggable_id]).ast
-        )
-      end.reduce(:and)
-      joins(:tags).readonly(false).uniq.where(conditions)
+      tokens.inject(all) do |scope, token|
+        scope.where(id:
+          Tagging.where(taggable_type: name)
+          .joins(:tag).where(tags: { label: token })
+          .select(:taggable_id))
+      end
     end
 
     def tagged_any(tokens)
-      joins(:tags).where(tags: { label: tokens }).readonly(false).uniq
+      subquery = Tagging.where(taggable_type: name).select(:taggable_id)
+                 .joins(:tag).where(tags: { label: tokens })
+      where(id: subquery)
     end
   end
 

@@ -84,7 +84,7 @@ class ImagePresenter < ApplicationPresenter
 
   def shop_url(name)
     if name.to_s == 'gtgraphics'
-      h.buy_image_path(template.page.path)
+      h.page_path(template.page.path, :buy_image)
     else
       image.shop_urls[name]
     end

@@ -34,7 +34,7 @@ class UserPresenter < ApplicationPresenter
       h.concat h.content_tag(:div, name, class: 'author-name')
     end
     h.content_tag :div, details, class: 'author-info' unless about_page?
-    h.link_to details, path, class: 'author-info'
+    h.link_to_unless path.nil?, details, path, class: 'author-info'
   end
 
   def info_icon

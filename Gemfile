@@ -1,7 +1,6 @@
 source 'http://rubygems.org'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.0'
+gem 'rails', '4.2.1'
 
 # Database
 gem 'pg'
@@ -21,7 +20,6 @@ gem 'acts_as_list'
 gem 'acts_as_sanitizable'
 gem 'acts_as_tree'
 gem 'awesome_nested_set', '3.0.1'
-gem 'annotate'
 gem 'bcrypt-ruby'
 gem 'email_validator'
 gem 'globalize'
@@ -31,6 +29,7 @@ gem 'virtus'
 gem 'rmagick'
 gem 'carrierwave'
 gem 'paperclip'
+gem 'annotate', group: :development
 
 # Presenters
 gem 'actionpresenter'
@@ -60,7 +59,7 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'jquery-turbolinks'
 gem 'jquery-fileupload-rails'
-gem 'compass-rails'
+gem 'compass-rails', github: 'Compass/compass-rails', branch: 'master'
 gem 'bootstrap-sass'
 gem 'select2-bootstrap-css'
 gem 'underscore-rails', github: 'rweng/underscore-rails', tag: 'v1.6.0'
@@ -84,7 +83,7 @@ gem 'daemons'
 gem 'whenever'
 gem 'request_store'
 gem 'nokogiri'
-gem 'exception_notification', group: [:staging, :production]
+gem 'exception_notification', group: %i(staging production)
 gem 'pry-rails'
 gem 'countries'
 gem 'faker'
@@ -103,11 +102,4 @@ group :development do
 end
 
 # Testing and Debugging
-group :development, :test do
-  gem 'pry-byebug'
-end
-
-group :doc do
-  # bundle exec rake doc:rails generates the API under doc/api.
-  gem 'sdoc', require: false
-end
+gem 'pry-byebug', group: %i(development test)

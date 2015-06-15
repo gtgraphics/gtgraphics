@@ -3,7 +3,7 @@
 // Carets
 
 .caret-down {
-  @extend .caret;
+  @include caret-down;
 }
 
 .caret-right {

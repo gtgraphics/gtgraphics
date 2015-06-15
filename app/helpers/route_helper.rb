@@ -1,6 +1,7 @@
 module RouteHelper
   def change_locale_path(locale)
-    url_for(path: @page.try(:path), locale: locale)
+    '#'
+    # url_for(path: @page.try(:path), locale: locale)
   end
 
   def image_asset_path(image, style)

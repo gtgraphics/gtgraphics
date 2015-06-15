@@ -13,12 +13,14 @@ module Router
       page, action = nil
       request = Rack::Request.new(env)
 
-      benchmark "Find Route: /#{request_path}" do
+      benchmark 'Find Route' do
         path = request_path
         locale, path = extract_locale_from_path(path)
-        page, action, path_params = find_page(path, env['REQUEST_METHOD'])
+        page, route_name, action, path_params =
+          find_page(path, env['REQUEST_METHOD'])
         if page
           env['cms.page.instance'] = page
+          env['cms.page.route'] = route_name
           request.update_param('locale', locale)
           request.update_param('path', page.path)
           path_params.each do |key, value|
@@ -59,17 +61,21 @@ module Router
       matched_route = matched_routes[page.embeddable_type] || {}
       path_params = matched_route[:path_params] || {}
 
-      if matched_route[:action]
-        action = matched_route[:action]
-      else
+      route_definition = matched_route[:definition]
+      if route_definition
+        action = route_definition.action
+        route_name = route_definition.name
+      elsif request_method.downcase == 'get'
         action = page.template.filename if page.support_templates?
         if action.nil? || !controller_class_from_page_type(page.embeddable_type)
                            .action_methods.include?(action)
           action = 'show'
         end
+      else
+        page = nil
       end
 
-      [page, action, path_params.with_indifferent_access]
+      [page, route_name, action, path_params.with_indifferent_access]
     end
 
     def extract_locale_from_path(path)
@@ -99,7 +105,7 @@ module Router
         next if path_params.nil?
         path_params = path_params.with_indifferent_access
         routes[page_type] = { page_type: page_type, path: path_params[:path],
-                              action: found_route.action,
+                              definition: found_route,
                               path_params: path_params.except(:path) }
       end
     end
