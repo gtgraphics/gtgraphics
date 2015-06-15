@@ -43,7 +43,8 @@ class Admin::User::UpdateForm < Form
   end
 
   def send_generated_password
-    Admin::User::PasswordMailer.changed_password_email(user, password).deliver
+    Admin::User::PasswordMailer
+      .changed_password_email(user, password).deliver_now
   end
 
   def verify_email_uniqueness

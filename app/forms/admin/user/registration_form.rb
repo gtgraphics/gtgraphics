@@ -41,7 +41,8 @@ class Admin::User::RegistrationForm < Form
   end
 
   def send_generated_password
-    Admin::User::PasswordMailer.initial_password_email(user, password).deliver
+    Admin::User::PasswordMailer
+      .initial_password_email(user, password).deliver_now
   end
 
   def verify_email_uniqueness

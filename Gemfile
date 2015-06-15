@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.8'
+gem 'rails', '4.2.0'
 
 # Database
 gem 'pg'
@@ -12,6 +12,7 @@ gem 'cancan'
 
 # Controller
 gem 'rack-encoding_guard', '0.1.2'
+gem 'responders'
 gem 'user_agent'
 gem 'http_accept_language'
 
@@ -78,7 +79,7 @@ group :development do
   gem 'thin'
   gem 'rubocop', require: false
 end
-gem 'delayed_job_active_record'
+# gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'whenever'
 gem 'request_store'
@@ -87,6 +88,8 @@ gem 'exception_notification', group: [:staging, :production]
 gem 'pry-rails'
 gem 'countries'
 gem 'faker'
+gem 'spring', group: :development
+gem 'web-console', '~> 2.0', group: :development
 
 # Image Processing
 gem 'mini_exiftool'

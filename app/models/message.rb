@@ -59,7 +59,7 @@ class Message < ActiveRecord::Base
 
   def notify!
     fail 'Message#notify! requires the message to be saved' unless persisted?
-    MessageNotificationMailer.notification_email(self).deliver
+    MessageNotificationMailer.notification_email(self).deliver_now
   end
 
   protected
