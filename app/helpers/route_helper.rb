@@ -1,7 +1,6 @@
 module RouteHelper
   def change_locale_path(locale)
-    '#'
-    # url_for(path: @page.try(:path), locale: locale)
+    url_for(path: @page.try(:path), locale: locale)
   end
 
   def image_asset_path(image, style)
@@ -12,51 +11,50 @@ module RouteHelper
     request.protocol + request.host_with_port + image_asset_path(image, style)
   end
 
-  def page_path(*args)
-    _page_url(:path, *args)
-  end
+  # def page_path(*args)
+  #   _page_url(:path, *args)
+  # end
 
-  def page_url(*args)
-    _page_url(:url, *args)
-  end
+  # def page_url(*args)
+  #   _page_url(:url, *args)
+  # end
 
-  def root_page_path(options = {})
-    page_path(options)
-  end
+  # def root_page_path(options = {})
+  #   page_path(options)
+  # end
 
-  def root_path(options = {})
-    root_page_path(options)
-  end
+  # def root_path(options = {})
+  #   root_page_path(options)
+  # end
 
-  def root_page_url(options = {})
-    page_url(options)
-  end
+  # def root_page_url(options = {})
+  #   page_url(options)
+  # end
 
-  def static_page_path(path, options = {})
-    path = "/#{path}" unless path.start_with?('/')
-    locale = options.delete(:locale) { I18n.locale }
-    uri = URI.parse(path)
-    uri.path = "/#{locale}#{uri.path}"
-    uri.query = options.to_query.presence
-    uri.to_s
-  end
+  # def static_page_path(path, options = {})
+  #   path = "/#{path}" unless path.start_with?('/')
+  #   locale = options.delete(:locale) { I18n.locale }
+  #   uri = URI.parse(path)
+  #   uri.path = "/#{locale}#{uri.path}"
+  #   uri.query = options.to_query.presence
+  #   uri.to_s
+  # end
 
-  private
+  # private
 
-  def _page_url(suffix, *args)
-    '#'
-    # options = args.extract_options!
-    # page = args.first
-    # if page.nil? || page.try(:root?)
-    #   public_send("root_page_#{suffix}", options)
-    # elsif page.respond_to?(:path)
-    #   public_send("#{page.embeddable_class.model_name.element}_#{suffix}",
-    #               options.merge(path: page.path))
-    # else
-    #   root_path = public_send("root_page_#{suffix}",
-    #                           locale: options.fetch(:locale, I18n.locale))
-    #   path = page.to_s.gsub(/\A\//, '')
-    #   File.join(root_path, path)
-    # end
-  end
+  # def _page_url(suffix, *args)
+  #   options = args.extract_options!
+  #   page = args.first
+  #   if page.nil? || page.try(:root?)
+  #     public_send("root_page_#{suffix}", options)
+  #   elsif page.respond_to?(:path)
+  #     public_send("#{page.embeddable_class.model_name.element}_#{suffix}",
+  #                 options.merge(path: page.path))
+  #   else
+  #     root_path = public_send("root_page_#{suffix}",
+  #                             locale: options.fetch(:locale, I18n.locale))
+  #     path = page.to_s.gsub(/\A\//, '')
+  #     File.join(root_path, path)
+  #   end
+  # end
 end

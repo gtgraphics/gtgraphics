@@ -12,11 +12,11 @@ class Page::ApplicationController < ApplicationController
   helper_method :page, :template_file
 
   breadcrumbs do |b|
-    # pages = @page.self_and_ancestors.accessible_by(current_ability)
-    #         .with_translations_for_current_locale
-    # pages.each do |page|
-    #   b.append page.title, page
-    # end
+    pages = @page.self_and_ancestors.accessible_by(current_ability)
+            .with_translations_for_current_locale
+    pages.each do |page|
+      b.append page.title, page
+    end
   end
 
   def show
@@ -26,7 +26,7 @@ class Page::ApplicationController < ApplicationController
   protected
 
   def render_page(options = {})
-    render template: template_path
+    render template_path, options
   end
 
   def respond_with_page
