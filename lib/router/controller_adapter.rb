@@ -3,8 +3,8 @@ module Router
     extend ActiveSupport::Concern
 
     included do
-      class_attribute :registered_routes, instance_accessor: false
-      self.registered_routes = []
+      class_attribute :subroutes, instance_accessor: false
+      self.subroutes = []
 
       helper_method :root_path, :root_url, :page_path, :page_url,
                     :current_page_path, :current_page_url
@@ -12,7 +12,7 @@ module Router
 
     module ClassMethods
       def routes(&block)
-        self.registered_routes = registered_routes.dup
+        self.subroutes = subroutes.dup
         Subroute::Registry.new(self).instance_exec(&block)
       end
     end

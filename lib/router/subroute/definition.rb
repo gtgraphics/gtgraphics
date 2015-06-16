@@ -1,7 +1,7 @@
 module Router
   module Subroute
     class Definition
-      attr_reader :path, :controller, :action, :name,
+      attr_reader :path, :pattern, :controller, :action, :name,
                   :request_methods, :defaults
 
       def initialize(controller, path, options = {})
@@ -9,11 +9,13 @@ module Router
 
         @controller = controller
 
-        @path = path.to_s
-        @request_methods = Array(options[:via]).map(&:to_s)
-        validate_request_methods!
-        if main? && request_methods.include?('get')
-          fail 'Primary route cannot be redefined'
+        @path = Path.normalize(path)
+        @request_methods = Array(options[:via]).map { |rm| rm.to_s.downcase }
+        if request_methods.empty?
+          fail ArgumentError, 'No request method defined'
+        end
+        if via?(:get) && root?
+          fail ArgumentError, 'Primary route cannot be redefined'
         end
 
         @action = options[:to]
@@ -22,16 +24,17 @@ module Router
         @defaults = (options[:defaults] || {}).with_indifferent_access
       end
 
-      def main?
+      def root?
         path.blank?
       end
 
       def match(path, request_method)
-        match_path(path) if via?(request_method)
-      end
-
-      def path_parameter_names
-        Pattern.build(path).names
+        return nil unless via?(request_method)
+        return { path: path }.with_indifferent_access if root?
+        pattern_string = '(*path/)'
+        pattern_string << "#{self.path}" if self.path.present?
+        match = Path.build_pattern(pattern_string).match(path)
+        match.names.zip(match.captures).to_h.with_indifferent_access if match
       end
 
       def via?(request_method)
@@ -39,22 +42,8 @@ module Router
       end
 
       def interpolate(params)
-        params = params.reverse_merge(defaults)
-        Pattern.build(path).build_formatter.evaluate(params)
-      end
-
-      private
-
-      def match_path(path)
-        pattern_string = '*path'
-        pattern_string << "/#{self.path}" if self.path.present?
-        pattern_string << '(.:format)'
-        Pattern.extract_params(path, pattern_string)
-      end
-
-      def validate_request_methods!
-        return if request_methods.any?
-        fail ArgumentError, 'No request method defined'
+        Path.build_pattern(path).build_formatter
+          .evaluate(params.reverse_merge(defaults))
       end
     end
   end
