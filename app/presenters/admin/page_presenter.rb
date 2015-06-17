@@ -2,7 +2,7 @@ class Admin::PagePresenter < Admin::ApplicationPresenter
   presents :page
 
   def author
-    present super, with: Admin::UserPresenter 
+    present super, with: Admin::UserPresenter
   end
 
   def author_name(*args)
@@ -74,7 +74,7 @@ class Admin::PagePresenter < Admin::ApplicationPresenter
     available_locales = I18n.available_locales.sort_by { |locale| I18n.translate(locale, scope: :languages) }
     h.content_tag :ul, class: 'list-inline translations' do
       available_locales.each do |locale|
-        url = h.page_path(page, locale: locale, translations: nil)
+        url = h.page_path(page, locale: locale)
         human_name = I18n.translate(locale, scope: :languages)
         link = h.link_to url, hreflang: locale, title: human_name, data: { no_turbolink: true, toggle: 'tooltip', container: 'body' } do
           h.prepend_flag_icon locale, human_name, fixed_width: true, size: 16, caption_html: { class: 'sr-only' }

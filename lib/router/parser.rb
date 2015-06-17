@@ -10,10 +10,6 @@ module Router
       @request_method = request_method.to_s.downcase
     end
 
-    def self.available_locales
-      @available_locales ||= I18n.available_locales.map(&:to_s)
-    end
-
     def invalid_request?
       request_ignored? || !valid_request_method? || page.nil? || controller.nil?
     end
@@ -110,7 +106,7 @@ module Router
     # Subroutes
 
     def subroute_info
-      matching_subroutes[page.embeddable_type]
+      matching_subroutes[page.embeddable_type] if page
     end
 
     def matching_subroutes
@@ -139,7 +135,7 @@ module Router
         path = request_path
         slugs = path.split(File::SEPARATOR)
         locale = slugs.shift
-        if valid_locale?(locale)
+        if LocaleConstraint.valid_locale?(locale)
           path = slugs.join(File::SEPARATOR)
         else
           locale = nil
@@ -147,11 +143,6 @@ module Router
         format = extract_format!(path)
         { locale: locale, path: path, format: format }
       end
-    end
-
-    def valid_locale?(locale)
-      return false if locale.blank?
-      locale.length == 2 && Parser.available_locales.include?(locale)
     end
 
     def extract_format!(path)

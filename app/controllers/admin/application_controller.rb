@@ -1,4 +1,6 @@
 class Admin::ApplicationController < ApplicationController
+  include Router::ControllerAdapter
+
   skip_maintenance_check
 
   force_ssl if: :production?

@@ -41,7 +41,7 @@ GtGraphics::Application.routes.draw do
   end
 
   scope '(:locale)', constraints: { locale: /[a-z]{2}/ } do
-    scope constraints: Routing::LocaleConstraint.new do
+    scope constraints: Router::LocaleConstraint.new do
       namespace :admin do
         scope controller: :sessions do
           get :login, action: :new
@@ -50,7 +50,7 @@ GtGraphics::Application.routes.draw do
         end
 
         scope '(:translations)', constraints: { translations: /[a-z]{2}/ } do
-          scope constraints: Routing::LocaleConstraint.new(:translations) do
+          scope constraints: Router::LocaleConstraint.new(:translations) do
             get :search, controller: :search, action: :show
 
             namespace :editor do
@@ -178,14 +178,12 @@ GtGraphics::Application.routes.draw do
         end
       end
 
-      # Routing::Cms::PageRouter.insert(self)
-
       # Legacy URLs that have changed permanently (HTTP 301)
-      get 'image/:slug', constraints: Routing::Legacy::ImageConstraint.new, to: redirect { |params, request|
+      get 'image/:slug', constraints: Router::Legacy::ImageConstraint.new, to: redirect { |params, request|
         page = Page.images.find_by!(slug: params[:slug])
         "/#{page.path}"
       }
-      get 'category/:slug(/:page)', constraints: Routing::Legacy::CategoryConstraint.new,
+      get 'category/:slug(/:page)', constraints: Router::Legacy::CategoryConstraint.new,
                                     page: /\d/, to: redirect { |params, request|
                                       slug = params[:slug].split(',').first
                                       page = Page.find_by!(slug: slug)

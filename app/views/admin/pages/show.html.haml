@@ -33,7 +33,7 @@
           - if can? :read, @page
             %li.divider
             %li
-              = link_to page_path(@page, locale: Globalize.locale, translations: nil), accesskey: 'V' do
+              = link_to page_path(@page, locale: Globalize.locale), accesskey: 'V' do
                 = prepend_icon :file_picture, translate('helpers.links.view'), fixed_width: true, outline: true
 
           - if can? :destroy, @page
