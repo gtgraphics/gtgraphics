@@ -1,6 +1,7 @@
 module Router
   class Parser
-    DEFAULT_FORMAT = 'html'
+    DEFAULT_REQUEST_METHODS = %w(get head)
+    IGNORED_PATHS = %w(assets)
 
     attr_reader :request_path, :request_method
 
@@ -9,11 +10,34 @@ module Router
       @request_method = request_method.to_s.downcase
     end
 
+    def self.available_locales
+      @available_locales ||= I18n.available_locales.map(&:to_s)
+    end
+
+    def invalid_request?
+      request_ignored? || !valid_request_method? || page.nil? || controller.nil?
+    end
+
+    def request_ignored?
+      IGNORED_PATHS.any? do |ignored_path|
+        request_path.start_with?(ignored_path)
+      end
+    end
+
+    def allowed_request_methods
+      return DEFAULT_REQUEST_METHODS if subroute.nil?
+      subroute.request_methods
+    end
+
+    def valid_request_method?
+      allowed_request_methods.include?(request_method)
+    end
+
     def page
       @page ||= begin
         conditions = []
 
-        base_condition = Page.arel_table[:path].eq(request_path)
+        base_condition = Page.arel_table[:path].eq(fullpath)
         base_condition = base_condition.and(
           Page.arel_table[:embeddable_type].not_in(matching_subroutes.keys)
         ) if matching_subroutes.any?
@@ -26,6 +50,21 @@ module Router
 
         Page.find_by(conditions.reduce(:or))
       end
+    end
+
+    def controller
+      infer_controller_class(page.embeddable_type)
+    end
+
+    def action
+      action = nil
+      if subroute
+        action ||= subroute.action.try(:to_sym)
+        action ||= subroute.path.to_sym if action_exists?(subroute.path)
+      end
+      template_file = page.template.try(:file_name)
+      action ||= template_file.to_sym if action_exists?(template_file)
+      action || :show
     end
 
     def locale
@@ -59,6 +98,15 @@ module Router
 
     private
 
+    def action_exists?(name)
+      return false if name.blank?
+      controller.action_methods.include?(name.to_s)
+    end
+
+    def infer_controller_class(page_type)
+      "#{page_type.to_s.pluralize}Controller".safe_constantize
+    end
+
     # Subroutes
 
     def subroute_info
@@ -68,7 +116,7 @@ module Router
     def matching_subroutes
       @matching_subroutes ||= begin
         Page::EMBEDDABLE_TYPES.each_with_object({}) do |page_type, subroutes|
-          controller_class = "#{page_type.pluralize}Controller".safe_constantize
+          controller_class = infer_controller_class(page_type)
           next if controller_class.nil?
           result = nil
           controller_class.subroutes.each do |subroute|
@@ -103,13 +151,13 @@ module Router
 
     def valid_locale?(locale)
       return false if locale.blank?
-      locale.length == 2 && @available_locales.include?(locale)
+      locale.length == 2 && Parser.available_locales.include?(locale)
     end
 
     def extract_format!(path)
-      format = path.match(/\.(.*)\z/).try(:captures).try(:first)
+      format = path.match(/\.(.*)\z/).try(:captures).try(:first).try(:downcase)
       path.sub!(/\.#{Regexp.escape(format)}\z/, '') if format
-      format || DEFAULT_FORMAT
+      format || Path::DEFAULT_FORMAT
     end
   end
 end

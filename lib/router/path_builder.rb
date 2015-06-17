@@ -18,7 +18,7 @@ module Router
 
       subroute_name = args.first.try(:to_sym)
       return if subroute_name.nil?
-      @subroute = controller.class.registered_routes.find do |subroute|
+      @subroute = controller.class.subroutes.find do |subroute|
         subroute.name == subroute_name
       end
       fail ArgumentError, "Sub route not found: :#{subroute_name} " \
@@ -26,8 +26,8 @@ module Router
     end
 
     def path_parameters
-      return {} if subroute.nil?
-      params.slice(*subroute.path_parameter_names)
+      return {}.with_indifferent_access if subroute.nil?
+      params.slice(*subroute.parameter_names)
     end
 
     def query_parameters
@@ -39,7 +39,7 @@ module Router
     end
 
     def default_format?
-      format.to_s == 'html'
+      format.to_s.downcase == Path::DEFAULT_FORMAT
     end
 
     def to_s

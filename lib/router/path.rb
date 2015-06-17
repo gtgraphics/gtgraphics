@@ -1,5 +1,7 @@
 module Router
   module Path
+    DEFAULT_FORMAT = 'html'
+
     module_function
 
     def build_pattern(path)

@@ -6,7 +6,8 @@ module Router
       class_attribute :subroutes, instance_accessor: false
       self.subroutes = []
 
-      helper_method :root_path, :root_url, :page_path, :page_url,
+      helper_method :current_page, :current_subroute,
+                    :root_path, :root_url, :page_path, :page_url,
                     :current_page_path, :current_page_url
     end
 
@@ -17,7 +18,15 @@ module Router
       end
     end
 
-    private
+    protected
+
+    def current_page
+      env['cms.page']
+    end
+
+    def current_subroute
+      env['cms.subroute']
+    end
 
     def root_path(options = {})
       page_path(nil, options)
@@ -40,14 +49,14 @@ module Router
 
     def current_page_path(*args)
       options = args.extract_options!
-      route = args.shift || env['cms.page.route']
-      page_path(env.fetch('cms.page.instance'), route, *args, options)
+      subroute = args.shift || current_subroute.try(:name)
+      page_path(current_page, subroute, *args, options)
     end
 
     def current_page_url(*args)
       options = args.extract_options!
-      route = args.shift || env['cms.page.route']
-      page_url(env.fetch('cms.page.instance'), route, *args, options)
+      subroute = args.shift || current_subroute.try(:name)
+      page_url(current_page, subroute, *args, options)
     end
   end
 end

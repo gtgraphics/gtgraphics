@@ -10,7 +10,7 @@ module Router
         @controller = controller
 
         @path = Path.normalize(path)
-        @request_methods = Array(options[:via]).map { |rm| rm.to_s.downcase }
+        @request_methods = Array(options[:via]).map { |m| m.to_s.downcase }
         if request_methods.empty?
           fail ArgumentError, 'No request method defined'
         end
@@ -28,12 +28,14 @@ module Router
         path.blank?
       end
 
+      def parameter_names
+        pattern.names.map(&:to_sym)
+      end
+
       def match(path, request_method)
         return nil unless via?(request_method)
         return { path: path }.with_indifferent_access if root?
-        pattern_string = '(*path/)'
-        pattern_string << "#{self.path}" if self.path.present?
-        match = Path.build_pattern(pattern_string).match(path)
+        match = pattern.match(path)
         match.names.zip(match.captures).to_h.with_indifferent_access if match
       end
 
@@ -44,6 +46,14 @@ module Router
       def interpolate(params)
         Path.build_pattern(path).build_formatter
           .evaluate(params.reverse_merge(defaults))
+      end
+
+      private
+
+      def pattern
+        pattern_string = '(*path/)'
+        pattern_string << "#{path}" if path.present?
+        Path.build_pattern(pattern_string)
       end
     end
   end

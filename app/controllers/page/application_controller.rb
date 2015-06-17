@@ -49,13 +49,13 @@ class Page::ApplicationController < ApplicationController
   private
 
   def load_page
-    @page = env['cms.page.instance']
-    # fail ActiveRecord::RecordNotFound if cannot? :read, @page
+    @page = current_page
+    authorize! :read, @page
   end
 
   def load_template
-    return unless @page.support_templates?
-    @template = @page.template
+    return unless current_page.support_templates?
+    @template = current_page.template
     @region_definitions = @template.region_definitions
   end
 
