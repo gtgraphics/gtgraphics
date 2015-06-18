@@ -1,9 +1,4 @@
 module Page::MenuHelper
-  HASH_BUILDER = lambda do |hash, page|
-    active = @page.self_and_ancestors.include?(page)
-    hash.merge!(page => active)
-  end
-
   def menu_items(parent_page = nil)
     pages = parent_page.nil? ? Page.primary : parent_page.children
     pages.published.menu_items.accessible_by(current_ability)

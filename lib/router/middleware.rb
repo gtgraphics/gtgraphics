@@ -1,7 +1,5 @@
 module Router
   class Middleware
-    DEFAULT_FORMAT = 'html'
-
     def initialize(app)
       @app = app
     end
@@ -20,13 +18,14 @@ module Router
     private
 
     def prepare_request(env, parser)
-      request = Rack::Request.new(env)
-      request.update_param('locale', parser.locale)
-      request.update_param('path', parser.path)
-      request.update_param('subpath', parser.subpath)
-      parser.path_parameters.each do |key, value|
-        request.update_param(key, value)
-      end
+      params = parser.path_parameters.dup
+      params[:locale] = parser.locale
+      params[:path] = parser.path
+      params[:subpath] = parser.subpath
+
+      request = ActionDispatch::Request.new(env)
+      request.params.merge!(params)
+      request.path_parameters.merge!(params)
     end
 
     def method_not_allowed_response(allowed_request_methods)

@@ -84,7 +84,7 @@ module Router
     end
 
     def path_parameters
-      return {}.with_indifferent_access if subroute_info.nil?
+      return ActiveSupport::HashWithIndifferentAccess.new if subroute_info.nil?
       subroute_info[:params].with_indifferent_access
     end
 

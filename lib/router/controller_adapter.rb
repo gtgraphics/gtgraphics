@@ -8,7 +8,7 @@ module Router
 
       helper_method :current_page, :current_subroute,
                     :root_path, :root_url, :page_path, :page_url,
-                    :current_page_path, :current_page_url
+                    :current_page_path, :current_page_url, :change_locale_path
     end
 
     module ClassMethods
@@ -37,14 +37,12 @@ module Router
     end
 
     def page_path(*args)
-      PathBuilder.new(self, *args).to_s
+      options = args.extract_options!.merge(only_path: true)
+      page_url(*args, options)
     end
 
     def page_url(*args)
-      options = args.extract_options!.dup
-      protocol = "#{options.delete(:protocol)}://" if options.key?(:protocol)
-      protocol ||= request.protocol
-      "#{protocol}#{request.host_with_port}" + page_path(*args, options)
+      UrlBuilder.new(self, *args).to_s
     end
 
     def current_page_path(*args)
@@ -54,9 +52,12 @@ module Router
     end
 
     def current_page_url(*args)
-      options = args.extract_options!
-      subroute = args.shift || current_subroute.try(:name)
-      page_url(current_page, subroute, *args, options)
+      options = args.extract_options!.merge(only_path: true)
+      current_page_path(current_page, *args, options)
+    end
+
+    def change_locale_path(locale)
+      current_page_path(locale: locale)
     end
   end
 end
