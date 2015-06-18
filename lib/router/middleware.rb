@@ -27,10 +27,5 @@ module Router
       request.params.merge!(params)
       request.path_parameters.merge!(params)
     end
-
-    def method_not_allowed_response(allowed_request_methods)
-      allowed = Array(allowed_request_methods).map { |m| m.to_s.upcase } * ', '
-      [405, { 'Allow' => allowed }, []]
-    end
   end
 end
