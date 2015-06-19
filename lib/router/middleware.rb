@@ -26,6 +26,7 @@ module Router
       request = ActionDispatch::Request.new(env)
       request.params.merge!(params)
       request.path_parameters.merge!(params)
+      request
     end
   end
 end

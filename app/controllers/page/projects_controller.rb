@@ -1,4 +1,8 @@
 class Page::ProjectsController < Page::ApplicationController
+  routes do
+    get ':image_id', to: :show_image, as: :show_project_image
+  end
+
   before_action :load_project
 
   def default

@@ -1,13 +1,13 @@
 class Page::ImagesController < Page::ApplicationController
-  before_action :load_image
-  before_action :load_image_styles, only: :show
-
   routes do
     get :buy, as: :buy_image
     post :buy, to: :request_purchase
     get 'download/:style_id(/:dimensions)', to: :download,
                                             as: :download_image
   end
+  
+  before_action :load_image
+  before_action :load_image_styles, only: :show
 
   breadcrumbs do |b|
     if action_name.in? %w(buy request_purchase)

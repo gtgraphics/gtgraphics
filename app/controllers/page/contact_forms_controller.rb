@@ -1,9 +1,9 @@
 class Page::ContactFormsController < Page::ApplicationController
-  before_action :load_contact_form
-
   routes do
     post to: :send_message
   end
+  
+  before_action :load_contact_form
 
   def show
     @message = @contact_form.messages.new
