@@ -14,7 +14,11 @@ module Router
     end
 
     def normalize(path)
-      path.to_s.sub(/\A[\/]+/, '')
+      separator = Regexp.escape(File::SEPARATOR)
+      path = path.to_s
+      path.sub!(/\A#{separator}+/, '')
+      path.sub!(/#{separator}+\z/, '')
+      path
     end
   end
 end

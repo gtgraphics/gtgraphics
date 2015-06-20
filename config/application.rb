@@ -2,6 +2,8 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 require './lib/router/middleware'
+require './lib/router/error_handler'
+require './lib/router/error_handler/middleware'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -13,6 +15,7 @@ module GtGraphics
     config.middleware.use 'Rack::EncodingGuard::Middleware', :reject
     config.middleware.use 'Router::Middleware'
     config.middleware.use 'JQuery::FileUpload::Rails::Middleware'
+    config.exceptions_app = Router::ErrorHandler::Middleware.new
 
     # Autoload files in root of lib folder
     config.autoload_paths << Rails.root.join('lib')

@@ -5,28 +5,13 @@ module Router
 
     attr_reader :request_path, :request_method
 
+    def self.from_env(env)
+      new(env['REQUEST_PATH'], env['REQUEST_METHOD'])
+    end
+
     def initialize(request_path, request_method)
       @request_path = Path.normalize(request_path)
       @request_method = request_method.to_s.downcase
-    end
-
-    def invalid_request?
-      request_ignored? || !valid_request_method? || page.nil? || controller.nil?
-    end
-
-    def request_ignored?
-      IGNORED_PATHS.any? do |ignored_path|
-        request_path.start_with?(ignored_path)
-      end
-    end
-
-    def allowed_request_methods
-      return DEFAULT_REQUEST_METHODS if subroute.nil?
-      subroute.request_methods
-    end
-
-    def valid_request_method?
-      allowed_request_methods.include?(request_method)
     end
 
     def page
@@ -90,6 +75,27 @@ module Router
 
     def subroute
       subroute_info[:definition] if subroute_info
+    end
+
+    # Request Validation
+
+    def invalid_request?
+      request_ignored? || !valid_request_method? || page.nil? || controller.nil?
+    end
+
+    def request_ignored?
+      IGNORED_PATHS.any? do |ignored_path|
+        request_path.start_with?(ignored_path)
+      end
+    end
+
+    def allowed_request_methods
+      return DEFAULT_REQUEST_METHODS if subroute.nil?
+      subroute.request_methods
+    end
+
+    def valid_request_method?
+      allowed_request_methods.include?(request_method)
     end
 
     private

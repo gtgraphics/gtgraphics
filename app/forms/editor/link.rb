@@ -27,6 +27,7 @@ class Editor::Link < EditorForm
   def internal?
     !external?
   end
+
   alias_method :internal, :internal?
 
   def persisted?
@@ -37,10 +38,10 @@ class Editor::Link < EditorForm
     href = external? ? url : page_path(page, locale: locale)
     options = { href: href }
     options[:target] = target if target.present?
-    if internal? and page_id.present?
+    if internal? && page_id.present?
       data = { page_id: page_id }
       if locale.present?
-        data[:locale] = locale 
+        data[:locale] = locale
         options[:hreflang] = locale
       end
       options[:data] = data
@@ -53,9 +54,10 @@ class Editor::Link < EditorForm
   end
 
   private
+
   def set_defaults
     if persisted?
-      if internal? and page.nil?
+      if internal? && page.nil?
         self.page_id = nil
         self.external = true
       end

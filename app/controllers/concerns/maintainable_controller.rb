@@ -8,7 +8,6 @@ module MaintainableController
   included do
     unless Rails.application.config.consider_all_requests_local
       before_action :check_for_maintenance
-      rescue_from(Maintained) { render_error :service_unavailable }
     end
   end
 

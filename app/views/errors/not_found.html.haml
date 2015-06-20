@@ -1,4 +1,7 @@
-- cache [:error, response.status, I18n.locale, @suggested_pages.count, @suggested_pages.maximum(:updated_at)] do
+- content_for :title do
+  = status_code
+
+- cache [:error, status_code, I18n.locale, @suggested_pages.count, @suggested_pages.maximum(:updated_at)] do
   .container
     .row
       .col-sm-8.col-sm-offset-2.col-lg-6.col-lg-offset-3
@@ -13,7 +16,7 @@
           .page-header
             .error-code
               = icon :warning, fixed_width: true
-              = response.status
+              = status_code
             %h1= translate('views.errors.not_found.title')
 
           .page-body

@@ -1,6 +1,6 @@
 class Admin::PageTree
   include Rails.application.routes.url_helpers
-  include RouteHelper
+  include Admin::RouteHelper
 
   def initialize(pages, options = {})
     @pages_by_parents = pages.group_by(&:parent_id)
@@ -13,6 +13,7 @@ class Admin::PageTree
   end
 
   private
+
   def serialize_pages(parent_id = nil)
     pages = @pages_by_parents[parent_id]
     pages.collect do |page|
