@@ -15,15 +15,16 @@ module Router
     end
 
     def page
-      @page ||= begin
+      unless defined?(@page)
         conditions = []
         conditions << Page.arel_table[:path].eq(fullpath)
         conditions += matching_subroutes.collect do |page_type, subroute|
           Page.arel_table[:path].eq(subroute[:path])
           .and(Page.arel_table[:embeddable_type].eq(page_type))
         end
-        Page.find_by(conditions.reduce(:or))
+        @page = Page.find_by(conditions.reduce(:or))
       end
+      @page
     end
 
     def controller
@@ -138,7 +139,7 @@ module Router
 
     def path_parts
       @path_parts ||= begin
-        path = request_path
+        path = request_path.dup
         slugs = path.split(File::SEPARATOR)
         locale = slugs.shift
         if LocaleConstraint.valid_locale?(locale)

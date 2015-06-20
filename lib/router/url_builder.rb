@@ -32,7 +32,7 @@ module Router
       @subroute_name = args.first.try(:to_sym)
       @locale = options.fetch(:locale) { I18n.locale }.try(:to_s)
       @format = options[:format]
-      @only_path = options.fetch(:only_path, true)
+      @only_path = options.fetch(:only_path, false)
       @protocol = options.fetch(:protocol) { controller.request.protocol }.to_s
       unless @protocol.ends_with?(PROTOCOL_SUFFIX)
         @protocol = "#{@protocol}#{PROTOCOL_SUFFIX}"

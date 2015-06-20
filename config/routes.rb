@@ -32,8 +32,8 @@ GtGraphics::Application.routes.draw do
     end
   end
 
-  get 'sitemap.:format', to: 'sitemaps#index', as: :sitemaps
-  get 'sitemap.:page.:format', to: 'sitemaps#show', as: :sitemap
+  get 'sitemap(.:format)', to: 'sitemaps#index', as: :sitemaps
+  get 'sitemap.:page(.:format)', to: 'sitemaps#show', as: :sitemap
 
   scope 'files', constraints: { filename: /.*/ } do
     get 'download/:filename' => 'attachments#download', as: :download_attachment

@@ -12,20 +12,19 @@ module Router
         env['error.status_code'] = status_code
         status_name = Utils.status_symbol(status_code)
 
-        prepare_request(env, parser, status_name)
-
+        prepare_request(env, parser)
         ErrorsController.action(status_name).call(env)
       end
 
       private
 
-      def prepare_request(env, parser, status_name)
-        params = parser.path_parameters.merge(locale: parser.locale)
+      def prepare_request(env, parser)
+        params = parser.path_parameters.dup
+        params[:locale] = parser.locale
+        params[:format] = parser.format
 
         request = ActionDispatch::Request.new(env)
         request.params.merge!(params)
-        request.params[:controller] = 'errors'
-        request.params[:action] = status_name.to_s
         request.path_parameters.merge!(params)
         request
       end

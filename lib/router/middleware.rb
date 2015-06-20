@@ -18,14 +18,10 @@ module Router
     private
 
     def prepare_request(env, parser)
-      params = parser.path_parameters.merge(locale: parser.locale)
-
       request = ActionDispatch::Request.new(env)
-      request.params.merge!(params)
-      request.params[:controller] = parser.controller.controller_name
-      request.params[:action] = parser.action.to_s
-      request.path_parameters.merge!(params)
-
+      request.params[:locale] = parser.locale
+      request.params[:format] = parser.format
+      request.path_parameters[:locale] = parser.locale
       request
     end
   end

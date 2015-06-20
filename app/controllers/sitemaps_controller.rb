@@ -1,5 +1,5 @@
 class SitemapsController < ActionController::Base
-  include ErrorHandlingController
+  include Router::ControllerAdapter
 
   def index
     @sitemaps = Sitemap.all
