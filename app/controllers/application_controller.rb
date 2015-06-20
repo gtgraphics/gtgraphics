@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception unless Rails.env.development?
+  protect_from_forgery with: :exception
 
   before_action :set_current_user
   before_action :set_locale
@@ -8,13 +8,9 @@ class ApplicationController < ActionController::Base
   include ErrorHandlingController
   include FlashableController
   include MaintainableController
-  include RouteHelper
+  include ImageRouteExtensibleController
 
   protected
-
-  def default_url_options(_options = nil)
-    { locale: I18n.locale }
-  end
 
   def live?
     Rails.env.in? %w(production staging)
@@ -24,6 +20,13 @@ class ApplicationController < ActionController::Base
     Rails.env.production?
   end
 
+  protected
+
+  def localized_request_url(locale)
+    url_for(params.to_h.with_indifferent_access
+            .merge(locale: locale, id: params[:id].presence))
+  end
+
   private
 
   def set_current_user
@@ -31,20 +34,14 @@ class ApplicationController < ActionController::Base
   end
 
   def set_locale
+    locale = params[:locale].try(:to_s)
     available_locales = I18n.available_locales.map(&:to_s)
-    locale = params[:locale]
-    if locale && locale.in?(available_locales)
+
+    if locale.present? && locale.in?(available_locales)
       Globalize.locale = I18n.locale = locale.to_sym
     else
-      # if user is logged in his preferred locale will be used
-      # if none of the above is set the locale will be determined through the
-      # HTTP Accept Language header from the browser
-      locale = http_accept_language
-               .compatible_language_from(I18n.available_locales)
-      locale = I18n.default_locale if locale.blank?
-
-      redirect_to params.to_h.with_indifferent_access.merge(
-        locale: locale.to_s, id: params[:id].presence)
+      locale = http_accept_language.compatible_language_from(available_locales)
+      redirect_to localized_request_url(locale || I18n.default_locale)
     end
   end
 end

@@ -12,9 +12,9 @@ class Admin::ApplicationController < ApplicationController
 
   protected
 
-  def default_url_options(options = nil)
+  def default_url_options(_options = nil)
     translated_locale = Globalize.locale != I18n.locale ? Globalize.locale : nil
-    super.merge(translations: translated_locale)
+    { locale: I18n.locale, translations: translated_locale }
   end
 
   def not_authenticated

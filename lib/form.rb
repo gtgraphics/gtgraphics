@@ -21,11 +21,9 @@ class Form
     def attribute_with_form(name, *args)
       attribute_without_form(name, *args)
       return if method_defined?("#{name}?")
-      class_eval <<-RUBY
-        def #{name}?
-          #{name}.present?
-        end
-      RUBY
+      define_method "#{name}?" do
+        public_send(name).present?
+      end
     end
 
     alias_method_chain :attribute, :form
@@ -68,7 +66,10 @@ class Form
   end
 
   def submit!(options = {})
-    fail FormInvalid.new(self) unless perform_validations(options)
+    unless perform_validations(options)
+      fail FormInvalid.new(self),
+           "Validation failed: #{errors.full_messages.join(', ')}"
+    end
     run_callbacks :submit do
       perform
       true
@@ -104,6 +105,7 @@ class Form
   private
 
   def perform_validations(options = {})
-    options[:validate] == false || valid?(options[:context])
+    return if options[:validate] == false
+    valid?(options[:context])
   end
 end

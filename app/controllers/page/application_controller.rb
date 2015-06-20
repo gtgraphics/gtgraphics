@@ -46,6 +46,12 @@ class Page::ApplicationController < ApplicationController
               'templates', template_file)
   end
 
+  protected
+
+  def localized_request_url(locale)
+    current_page_path(request.query_parameters.merge(locale: locale))
+  end
+
   private
 
   def load_page
@@ -67,18 +73,5 @@ class Page::ApplicationController < ApplicationController
 
   def increment_hits
     @page.increment_hits!
-  end
-
-  def set_locale
-    available_locales = I18n.available_locales.map(&:to_s)
-    locale = params[:locale]
-    if locale && locale.in?(available_locales)
-      Globalize.locale = I18n.locale = locale.to_sym
-    else
-      locale = http_accept_language
-               .compatible_language_from(I18n.available_locales)
-      locale = I18n.default_locale if locale.blank?
-      redirect_to current_page_url(locale: locale)
-    end
   end
 end

@@ -3,7 +3,7 @@ module MaintainableController
 
   class Maintained < StandardError; end
 
-  MAINTENANCE_FILE = Rails.root.join('public', 'system', '.maintenance')
+  MAINTENANCE_FILE = Rails.root.join('public', 'system', 'maintenance')
 
   included do
     unless Rails.application.config.consider_all_requests_local

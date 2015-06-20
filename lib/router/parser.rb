@@ -118,7 +118,9 @@ module Router
           controller_class.subroutes.each do |subroute|
             params = subroute.match(fullpath, request_method)
             next if params.nil?
-            subpath = Path.normalize(fullpath.sub(/\A#{Regexp.escape(params[:path].to_s)}/, ''))
+            subpath = Path.normalize(
+              fullpath.sub(/\A#{Regexp.escape(params[:path].to_s)}/, '')
+            )
             result = { definition: subroute, path: params[:path],
                        subpath: subpath, params: params.except(:path) }
             break
