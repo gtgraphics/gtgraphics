@@ -1,5 +1,6 @@
 class Page::ProjectsController < Page::ApplicationController
   routes do
+    # TODO: This does not yet work
     get ':image_id', to: :show_image, as: :show_project_image
   end
 

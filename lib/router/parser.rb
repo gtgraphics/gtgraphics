@@ -17,18 +17,11 @@ module Router
     def page
       @page ||= begin
         conditions = []
-
-        base_condition = Page.arel_table[:path].eq(fullpath)
-        base_condition = base_condition.and(
-          Page.arel_table[:embeddable_type].not_in(matching_subroutes.keys)
-        ) if matching_subroutes.any?
-
-        conditions << base_condition
+        conditions << Page.arel_table[:path].eq(fullpath)
         conditions += matching_subroutes.collect do |page_type, subroute|
           Page.arel_table[:path].eq(subroute[:path])
           .and(Page.arel_table[:embeddable_type].eq(page_type))
         end
-
         Page.find_by(conditions.reduce(:or))
       end
     end
@@ -112,7 +105,12 @@ module Router
     # Subroutes
 
     def subroute_info
-      matching_subroutes[page.embeddable_type] if page
+      return nil if page.nil?
+      info = matching_subroutes[page.embeddable_type]
+      # Something with the route parsing may have gone wrong. So ensure here
+      # that the detected paths are equal. Otherwise, discard subrouting by not
+      # returning the detected subroute info.
+      info if info && page.path == info[:path]
     end
 
     def matching_subroutes
