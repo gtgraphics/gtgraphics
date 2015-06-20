@@ -24,12 +24,9 @@
     <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js" type="text/javascript"></script>
     <![endif]-->
-    = i18n_javascript_file
     = yield :javascripts
 
   %body{id: yield(:body_id).presence, class: body_css, style: body_styles, data: { namespace: controller_namespace, controller: controller_name, action: action_name, locale: I18n.locale }}
-    = i18n_javascript
-
     - if content_for? :content
       = yield :content
     - else

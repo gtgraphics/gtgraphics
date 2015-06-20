@@ -57,7 +57,8 @@ module Router
     end
 
     def change_locale_path(locale)
-      current_page_path(locale: locale)
+      parameters = params.except(:controller, :action).merge(locale: locale)
+      current_page_path(parameters)
     end
   end
 end

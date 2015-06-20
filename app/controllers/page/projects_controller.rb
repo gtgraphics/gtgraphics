@@ -18,13 +18,17 @@ class Page::ProjectsController < Page::ApplicationController
                      .find_by!(position: params[:image_id])
     @image = @project_image.image
 
-    next_project_image = @project_image.higher_item
-    @previous_page = show_project_image_path(
-      @page.path, next_project_image.position) if next_project_image
+    prev_project_image = @project_image.higher_item
+    if prev_project_image
+      @previous_page = current_page_path(:show_project_image,
+                                         image_id: prev_project_image.position)
+    end
 
-    prev_project_image = @project_image.lower_item
-    @next_page = show_project_image_path(
-      @page.path, prev_project_image.position) if prev_project_image
+    next_project_image = @project_image.lower_item
+    if next_project_image
+      @next_page = current_page_path(:show_project_image,
+                                     image_id: next_project_image.position)
+    end
 
     respond_to do |format|
       format.html { render layout: 'page/images' }

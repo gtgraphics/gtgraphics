@@ -44,8 +44,12 @@ module Router
       end
 
       def interpolate(params)
-        Path.build_pattern(path).build_formatter
-          .evaluate(params.reverse_merge(defaults))
+        params = params.reverse_merge(defaults)
+        pattern = Path.build_pattern(path)
+        missing_params = pattern.required_names - params.keys
+        fail UrlGenerationError, 'Sub route parameters undefined: ' +
+          missing_params.join(', ') if missing_params.any?
+        pattern.build_formatter.evaluate(params)
       end
 
       private

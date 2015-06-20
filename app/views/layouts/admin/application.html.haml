@@ -1,3 +1,6 @@
+- content_for :head do
+  = i18n_javascript_data
+
 - content_for :stylesheets do
   = stylesheet_link_tag 'admin', media: 'all', data: { turbolinks_track: true }
   = yield :admin_stylesheets
@@ -10,6 +13,8 @@
   = ([translate('views.admin.title')] + breadcrumbs.collect(&:caption).drop(1)).join(' &middot; ').html_safe
 
 - content_for :content do
+  = i18n_javascript
+
   :coffee
     Editor.defaults.stylesheetFile = '#{asset_path("editor.css")}'
     Editor.Control.Image.dialogUrl = '#{admin_editor_image_path}'
