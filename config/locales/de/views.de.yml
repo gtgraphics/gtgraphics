@@ -105,7 +105,7 @@ de:
         posterlounge: PosterLounge
 
     images:
-      buy: '%{image} erwerben'
+      buy: 'Bild erwerben: %{image}'
 
     messages:
       security_questions:

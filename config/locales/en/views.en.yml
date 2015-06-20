@@ -49,7 +49,7 @@ en:
         posterlounge: PosterLounge
 
     images:
-      buy: 'Buy %{image}'
+      buy: 'Buy Image: %{image}'
 
     messages:
       security_questions:
