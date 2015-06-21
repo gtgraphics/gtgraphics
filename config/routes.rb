@@ -180,12 +180,12 @@ GtGraphics::Application.routes.draw do
 
       # Legacy URLs that have changed permanently (HTTP 301)
       get 'image/:slug', to: redirect { |params, request|
-        page = Page.images.find_by!(slug: params[:slug])
+        page = Page.images.find_by!('slug = ?', params[:slug])
         "/#{page.path}"
       }
       get 'category/:slug(/:page)', page: /\d/, to: redirect { |params, request|
                                       slug = params[:slug].split(',').first
-                                      page = Page.find_by!(slug: slug)
+                                      page = Page.contents.find_by!('slug = ?', slug)
                                       url = "/#{page.path}"
                                       page_index = params[:page].to_i
                                       url << "?page=#{page_index}" if page_index > 1
