@@ -8,12 +8,12 @@ class ErrorsController < ApplicationController
   end
 
   def not_found
-    @suggested_pages = Page.primary.visible
+    @suggested_pages = Page.where(depth: [0, 1]).visible
 
     respond_with_error do |format|
       format.jpeg do
         send_file "#{Rails.root}/app/assets/images/errors/hint.jpg",
-                  disposition: :inline
+                  disposition: :inline, status: status
       end
     end
   end

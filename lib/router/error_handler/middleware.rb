@@ -2,7 +2,6 @@ module Router
   module ErrorHandler
     class Middleware
       def call(env)
-
         exception = env['action_dispatch.exception']
         fail 'No exception caught' if exception.nil?
 
