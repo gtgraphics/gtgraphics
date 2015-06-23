@@ -6,7 +6,8 @@ A project presentation and portfolio web site.
 
 ## Requirements
 
-* Ruby 2.1.0
+* Ruby 2.2.2
+* Rails 4.2.2
 * PostgreSQL
 * ImageMagick
 * ExifTool
@@ -14,8 +15,9 @@ A project presentation and portfolio web site.
 ## Setup
 
 1. Make sure you have PostgreSQL and RVM installed
-2. Install Ruby 2.1.0: `rvm install 2.1.0`
+2. Install Ruby 2.2.2: `rvm install 2.2.2`
 2. Install ImageMagick:  `sudo apt-get install imagemagick libmagickwand libmagickwand-dev`
 2. Install ExifTool: `sudo apt-get install libimage-exiftool-perl perl-doc`
 3. `bundle`
-4. `rails s`
+4. `rake db:setup`
+5. `rails s`
