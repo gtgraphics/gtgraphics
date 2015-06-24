@@ -16,7 +16,7 @@ class Page < ActiveRecord::Base
       validates :slug, presence: { unless: :root? }, exclusion: { in: RESERVED_SLUGS, allow_blank: true }, uniqueness: { scope: :parent, if: :slug_changed? }
       validates :path, presence: { unless: :root? }, exclusion: { in: RESERVED_PATHS, allow_blank: true }, uniqueness: { if: :path_changed? }
       validates :permalink, presence: true, length: { is: PERMALINK_LENGTH, allow_blank: true }, strict: true
-   
+
       before_validation :set_path, if: :generate_path?
       before_validation :set_permalink, unless: :permalink?, on: :create
       around_save :update_descendants_paths
@@ -29,7 +29,7 @@ class Page < ActiveRecord::Base
     end
 
     def set_next_available_slug(slug = self.generate_slug)
-      raise 'no initial slug defined' if slug.nil?
+      fail 'no initial slug defined' if slug.nil?
       self.slug = slug
       while self.class.where(parent_id: parent_id, slug: self.slug).exists?
         self.slug = self.slug.next
@@ -45,6 +45,7 @@ class Page < ActiveRecord::Base
     end
 
     private
+
     def generate_path
       if parent.present?
         path_parts = parent.self_and_ancestors.pluck(:slug) << slug.to_s
@@ -56,11 +57,11 @@ class Page < ActiveRecord::Base
     end
 
     def generate_path?
-      slug_changed? or parent_id_changed?
+      slug_changed? || parent_id_changed?
     end
 
     def generate_slug?
-      new_record? and slug.blank? and title(I18n.default_locale).present?
+      new_record? && slug.blank? && title(I18n.default_locale).present?
     end
 
     def set_path

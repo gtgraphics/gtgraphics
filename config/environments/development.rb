@@ -33,7 +33,7 @@ GtGraphics::Application.configure do
   config.assets.debug = true
 
   # config.assets.debug = false
-  # config.serve_static_assets = false
+  # config.serve_static_files = false
   # config.assets.js_compressor = :uglifier
   # config.assets.precompile += %w(admin.js admin.css)
 end

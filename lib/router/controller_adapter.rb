@@ -9,6 +9,8 @@ module Router
       helper_method :current_page, :current_subroute,
                     :root_path, :root_url, :page_path, :page_url,
                     :current_page_path, :current_page_url, :change_locale_path
+
+      include UrlHelpers
     end
 
     module ClassMethods
@@ -26,23 +28,6 @@ module Router
 
     def current_subroute
       env['cms.subroute']
-    end
-
-    def root_path(options = {})
-      page_path(nil, options)
-    end
-
-    def root_url(options = {})
-      page_url(nil, options)
-    end
-
-    def page_path(*args)
-      options = args.extract_options!.merge(only_path: true)
-      page_url(*args, options)
-    end
-
-    def page_url(*args)
-      UrlBuilder.new(self, *args).to_s
     end
 
     def current_page_path(*args)

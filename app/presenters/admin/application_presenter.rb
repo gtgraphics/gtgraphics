@@ -82,8 +82,7 @@ class Admin::ApplicationPresenter < ActionPresenter::Base
   def destroy_button(options = {})
     button_options = {
       active: destroyable?, method: :delete,
-      type: :danger, active: destroyable?,
-      icon: :trash, icon_options: { outline: true },
+      type: :danger, icon: :trash, icon_options: { outline: true },
       data: { confirm: I18n.translate('helpers.confirmations.destroy',
                                       model: object.class.model_name.human) }
     }
@@ -106,6 +105,7 @@ class Admin::ApplicationPresenter < ActionPresenter::Base
   end
 
   protected
+
   def button(type, options = {})
     active = options.delete(:active) { true }
     caption = options.delete(:caption) { type }

@@ -1,7 +1,7 @@
 class MessageNotificationMailer < ApplicationMailer
   layout 'admin/mailer'
 
-  helper :route
+  helper Router::UrlHelpers
   helper :attached_asset
 
   def notification_email(message)
