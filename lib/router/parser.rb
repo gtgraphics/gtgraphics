@@ -5,10 +5,6 @@ module Router
 
     attr_reader :request_path, :request_method
 
-    def self.from_env(env)
-      new(env['PATH_INFO'], env['REQUEST_METHOD'])
-    end
-
     def initialize(request_path, request_method)
       @request_path = Path.normalize(request_path)
       @request_method = request_method.to_s.downcase

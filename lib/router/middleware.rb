@@ -5,7 +5,7 @@ module Router
     end
 
     def call(env)
-      parser = Parser.from_env(env)
+      parser = Parser.new(env['PATH_INFO'], env['REQUEST_METHOD'])
       return @app.call(env) if parser.invalid_request?
 
       env['cms.page'] = parser.page

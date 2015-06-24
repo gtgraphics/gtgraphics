@@ -71,7 +71,12 @@ class Message < ActiveRecord::Base
   def sanitize_attributes
     %w(first_sender_name last_sender_name sender_email
        subject body).each do |attribute|
-      public_send("#{attribute}=", public_send(attribute).try(:strip))
+      value = public_send(attribute)
+      if value.respond_to?(:valid_encoding?) && !value.valid_encoding?
+        value = value.encode(Encoding::UTF_8, Encoding::BINARY,
+                             invalid: :replace, undef: :replace, replace: '')
+      end
+      public_send("#{attribute}=", value.try(:strip))
     end
   end
 
