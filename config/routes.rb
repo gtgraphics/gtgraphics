@@ -1,4 +1,4 @@
-GtGraphics::Application.routes.draw do
+Rails.application.routes.draw do
   concern :autocompletable do
     collection do
       get :autocomplete
