@@ -21,6 +21,10 @@ GtGraphics::Application.configure do
   config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
 
+  # Explicitly set a default host, as it is else inferred from the HTTP_HOST
+  # environment variable.
+  config.action_controller.default_url_options = { host: 'gtgraphics.de' }
+
   # Enable Rack::Cache to put a simple HTTP cache in front of your application
   # Add `rack-cache` to your Gemfile before enabling this.
   # For large-scale production use, consider using a caching reverse proxy like
