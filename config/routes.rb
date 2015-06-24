@@ -32,8 +32,8 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'sitemap(.:format)', to: 'sitemaps#index', as: :sitemaps
-  get 'sitemap.:page(.:format)', to: 'sitemaps#show', as: :sitemap
+  get 'sitemap.xml', to: 'sitemaps#index', as: :sitemaps, format: 'xml'
+  get 'sitemap.:page.xml', to: 'sitemaps#show', as: :sitemap, format: 'xml'
 
   scope 'files', constraints: { filename: /.*/ } do
     get 'download/:filename' => 'attachments#download', as: :download_attachment
