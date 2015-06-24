@@ -193,7 +193,7 @@ Rails.application.routes.draw do
                                     }
 
       get 'pic-:slug.:format', to: redirect { |params, request|
-        page = Page.images.find_by!(slug: params[:slug])
+        page = Page.images.find_by!('slug = ?', params[:slug])
         page.image.asset.url(:public)
       }
 
