@@ -1,7 +1,6 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
-require './lib/encoding_sanitizer'
 require './lib/router/middleware'
 require './lib/router/error_handler'
 require './lib/router/error_handler/middleware'
