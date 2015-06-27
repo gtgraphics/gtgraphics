@@ -203,7 +203,7 @@ GEM
       cocaine
       color
       oily_png
-    multi_json (1.11.0)
+    multi_json (1.11.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     net-scp (1.2.1)
@@ -245,7 +245,10 @@ GEM
       pry (>= 0.9.10)
     quiet_assets (1.0.2)
       railties (>= 3.1, < 5.0)
-    rack (1.5.2)
+    rack (1.5.5)
+    rack-encoding_guard (0.1.2)
+      activesupport (>= 3.0.0)
+      rack
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.0.8)
@@ -334,7 +337,7 @@ GEM
       polyglot (>= 0.3.1)
     turbolinks (2.2.1)
       coffee-rails
-    tzinfo (0.3.43)
+    tzinfo (0.3.44)
     uglifier (2.5.3)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
@@ -404,6 +407,7 @@ DEPENDENCIES
   pry-byebug
   pry-rails
   quiet_assets
+  rack-encoding_guard (= 0.1.2)
   rails (= 4.0.8)
   rails-erd
   ransack
@@ -426,3 +430,6 @@ DEPENDENCIES
   user_agent
   virtus
   whenever
+
+BUNDLED WITH
+   1.10.4

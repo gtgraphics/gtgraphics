@@ -11,6 +11,7 @@ gem 'sorcery'
 gem 'cancan'
 
 # Controller
+gem 'rack-encoding_guard', '0.1.2'
 gem 'user_agent'
 gem 'http_accept_language'
 

@@ -8,7 +8,8 @@ Bundler.require(:default, Rails.env)
 
 module GtGraphics
   class Application < Rails::Application
-    config.middleware.use JQuery::FileUpload::Rails::Middleware
+    config.middleware.use 'Rack::EncodingGuard::Middleware', :reject
+    config.middleware.use 'JQuery::FileUpload::Rails::Middleware'
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
