@@ -1,5 +1,6 @@
 class ErrorsController < ApplicationController
   self.enforce_redirect_to_localized_url = false
+  skip_before_action :verify_authenticity_token
 
   helper_method :status_code, :status, :caught_exception
 
