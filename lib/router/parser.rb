@@ -10,6 +10,10 @@ module Router
       @request_method = request_method.to_s.downcase
     end
 
+    def self.from_env(env)
+      new(env['PATH_INFO'], env['REQUEST_METHOD'])
+    end
+
     def page
       unless defined?(@page)
         conditions = []

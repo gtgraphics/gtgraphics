@@ -26,6 +26,10 @@ class ErrorsController < ApplicationController
     respond_with_error
   end
 
+  def bad_request
+    respond_with_error
+  end
+
   private
 
   def status_code
@@ -40,9 +44,9 @@ class ErrorsController < ApplicationController
     env['action_dispatch.exception']
   end
 
-  def respond_with_error
+  def respond_with_error(html_options = {})
     respond_to do |format|
-      format.html { render status: status }
+      format.html { render html_options.merge(status: status) }
       yield(format) if block_given?
       format.all { head status }
     end
