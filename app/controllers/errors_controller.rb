@@ -10,6 +10,7 @@ class ErrorsController < ApplicationController
 
   def not_found
     @suggested_pages = Page.where(depth: [0, 1]).visible
+                       .with_translations(Globalize.locale)
 
     respond_with_error do |format|
       format.jpeg do

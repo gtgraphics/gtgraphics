@@ -5,7 +5,7 @@ module Router
     end
 
     def call(env)
-      parser = Parser.new(env['PATH_INFO'], env['REQUEST_METHOD'])
+      parser = Parser.from_env(env)
 
       return @app.call(env) if parser.invalid_request?
       if parser.page.nil?

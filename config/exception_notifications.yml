@@ -1,0 +1,6 @@
+development:
+  email:
+    email_prefix: '[Development] ',
+      sender_address: '"GTGRAPHICS Exception Notifier" <noreply@gtgraphics.de>'
+      exception_recipients:
+        - webmaster@gtgraphics.de

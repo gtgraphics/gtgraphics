@@ -83,7 +83,7 @@ gem 'daemons'
 gem 'whenever'
 gem 'request_store'
 gem 'nokogiri'
-gem 'exception_notification', group: %i(staging production)
+gem 'exception_notification', group: %i(staging production development)
 gem 'pry-rails'
 gem 'countries'
 gem 'faker'
