@@ -175,7 +175,7 @@ class Admin::PagesController < Admin::ApplicationController
 
   def move
     target_page = Page.find(params[:to])
-    if Page::MoveStrategy.move(@page, target_page, params[:position])
+    if Page::MoveService.call(@page, target_page, params[:position])
       respond_to do |format|
         format.html { head :ok }
       end

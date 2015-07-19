@@ -21,7 +21,7 @@ module GtGraphics
     config.autoload_paths << Rails.root.join('lib')
     config.autoload_paths << Rails.root.join('app', 'presenters', 'concerns')
     config.autoload_paths << Rails.root.join('app', 'uploaders', 'concerns')
-    config.autoload_paths << Rails.root.join('app', 'strategies', 'concerns')
+    config.autoload_paths << Rails.root.join('app', 'services', 'concerns')
 
     config.active_record.raise_in_transactional_callbacks = true
 
