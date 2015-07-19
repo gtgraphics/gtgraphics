@@ -3,6 +3,9 @@ module Router
     class Middleware
       def call(env)
         exception = env['action_dispatch.exception']
+
+        binding.pry
+
         fail 'No exception caught' if exception.nil?
 
         status_code = ErrorHandler.config.handlers[exception.class.name]
