@@ -29,7 +29,7 @@ module I18nHelper
       locales = Array(I18n.locale)
     end
 
-    locale_files = Dir.glob("#{Rails.root}/config/locales/**/*.yml")
+    locale_files = Dir.glob("#{Rails.root}/config/locales/**/javascript.*.yml")
     translations = locale_files.each_with_object({}) do |file, translated|
       translated.deep_merge!(YAML.load_file(file))
     end

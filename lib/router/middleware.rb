@@ -6,7 +6,13 @@ module Router
 
     def call(env)
       parser = Parser.new(env['PATH_INFO'], env['REQUEST_METHOD'])
+
       return @app.call(env) if parser.invalid_request?
+      if parser.page.nil?
+        return [404, {}, []] if parser.root?
+        return @app.call(env)
+      end
+      return @app.call(env) if parser.controller.nil?
 
       env['cms.page'] = parser.page
       env['cms.subroute'] = parser.subroute

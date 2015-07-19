@@ -10,10 +10,6 @@ module Router
       @request_method = request_method.to_s.downcase
     end
 
-    def self.from_env(env)
-      new(env['PATH_INFO'], env['REQUEST_METHOD'])
-    end
-
     def page
       unless defined?(@page)
         conditions = []
@@ -25,6 +21,10 @@ module Router
         @page = Page.find_by(conditions.reduce(:or))
       end
       @page
+    end
+
+    def root?
+      request_path.empty?
     end
 
     def controller
@@ -74,7 +74,7 @@ module Router
     # Request Validation
 
     def invalid_request?
-      request_ignored? || !valid_request_method? || page.nil? || controller.nil?
+      request_ignored? || !valid_request_method?
     end
 
     def request_ignored?

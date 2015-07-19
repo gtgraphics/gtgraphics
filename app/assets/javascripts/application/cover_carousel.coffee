@@ -90,11 +90,13 @@ class CoverCarousel
     itemOrIndex
 
   nextItem: ($item = @$currentItem) ->
+    return null unless $item
     $nextItem = $item.next(CoverCarousel.ITEM_SELECTOR)
     $nextItem = @$items.first() unless $nextItem.length
     $nextItem
 
   prevItem: ($item = @$currentItem) ->
+    return null unless $item
     $prevItem = $item.prev(CoverCarousel.ITEM_SELECTOR)
     $prevItem = @$items.last() unless $prevItem.length
     $prevItem
