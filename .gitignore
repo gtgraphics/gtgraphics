@@ -27,5 +27,8 @@
 erd.pdf
 public/tmp
 
+# Ignore locally compiled assets.
+public/assets
+
 # Ignore mail config.
 /config/mail.yml

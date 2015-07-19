@@ -9,8 +9,10 @@ module Sluggable
       self.slug_options = options.reverse_merge(param: true)
       self.slug_attribute = args.first || :slug
 
-      composed_of slug_attribute, mapping: [slug_attribute, 'to_s'],
-                                  allow_nil: true, converter: :new
+      composed_of slug_attribute, class_name: 'Slug',
+                                  mapping: [slug_attribute, 'to_s'],
+                                  constructor: :new, converter: :new,
+                                  allow_nil: true
 
       include Extensions
     end
@@ -35,7 +37,7 @@ module Sluggable
       end
     end
 
-    def generate_slug
+    def obtain_slug
       source_attribute = self.class.slug_options[:from]
       return unless source_attribute
       source_proc = case source_attribute
@@ -55,7 +57,7 @@ module Sluggable
     def set_slug
       source_attribute = self.class.slug_options[:from]
       return unless source_attribute
-      send("#{self.class.slug_attribute}=", generate_slug)
+      send("#{self.class.slug_attribute}=", obtain_slug)
     end
   end
 end

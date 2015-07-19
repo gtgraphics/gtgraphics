@@ -26,7 +26,7 @@
               - active = user.id == params[:author_id].to_i
               = active_link_to active ? params.except(:page, :author_id) : params.except(:page).merge(author_id: user.to_param), class: 'list-group-item', active: active do
                 %span.avatar
-                  %span.icon= user_thumbnail_image_tag user, size: 24, class: 'img-circle', scope: :admin
+                  %span.icon= user_thumbnail_image_tag user, size: 24, class: 'img-circle img-responsive', scope: :admin
                   %span.caption= user.name
                 - if active
                   .pull-right

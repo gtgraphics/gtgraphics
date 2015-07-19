@@ -1,13 +1,13 @@
 source 'http://rubygems.org'
 
-gem 'rails', '4.2.1'
+gem 'rails', '4.2.3'
 
 # Database
 gem 'pg'
 
 # Authentication & Authorization
 gem 'sorcery'
-gem 'cancan'
+gem 'cancancan'
 
 # Controller
 gem 'rack-encoding_guard', '0.1.2'
@@ -53,8 +53,8 @@ gem 'sprockets-rails'
 gem 'execjs'
 gem 'therubyracer'
 gem 'sass-rails'
-gem 'coffee-rails' #, '~> 4.0.3'
-gem 'uglifier' #, '>= 1.3.0'
+gem 'coffee-rails'
+gem 'uglifier'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'jquery-turbolinks'

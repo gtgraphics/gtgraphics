@@ -13,7 +13,6 @@
 
 class Attachment < ActiveRecord::Base
   class Translation < Globalize::ActiveRecord::Translation
-    include GlobalizedModelTouchable
     include UniquelyTranslated
 
     acts_as_uniquely_translated :attachment_id

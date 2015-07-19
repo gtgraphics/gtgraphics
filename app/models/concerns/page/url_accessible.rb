@@ -11,11 +11,19 @@ class Page < ActiveRecord::Base
     included do
       include Sluggable
 
-      has_slug :slug, param: false, from: -> { root? ? '' : title(I18n.default_locale) }, if: :generate_slug?
+      has_slug :slug, param: false,
+                      from: -> { root? ? '' : title(I18n.default_locale) },
+                      if: :generate_slug?
 
-      validates :slug, presence: { unless: :root? }, exclusion: { in: RESERVED_SLUGS, allow_blank: true }, uniqueness: { scope: :parent, if: :slug_changed? }
-      validates :path, presence: { unless: :root? }, exclusion: { in: RESERVED_PATHS, allow_blank: true }, uniqueness: { if: :path_changed? }
-      validates :permalink, presence: true, length: { is: PERMALINK_LENGTH, allow_blank: true }, strict: true
+      validates :slug, presence: { unless: :root? },
+                       exclusion: { in: RESERVED_SLUGS, allow_blank: true },
+                       uniqueness: { scope: :parent, if: :slug_changed? }
+      validates :path, presence: { unless: :root? },
+                       exclusion: { in: RESERVED_PATHS, allow_blank: true },
+                       uniqueness: { if: :path_changed? }
+      validates :permalink, presence: true,
+                            length: { is: PERMALINK_LENGTH, allow_blank: true },
+                            strict: true
 
       before_validation :set_path, if: :generate_path?
       before_validation :set_permalink, unless: :permalink?, on: :create
@@ -28,10 +36,11 @@ class Page < ActiveRecord::Base
       end
     end
 
-    def set_next_available_slug(slug = self.generate_slug)
+    def set_next_available_slug(slug = obtain_slug)
       fail 'no initial slug defined' if slug.nil?
       self.slug = slug
-      while self.class.where(parent_id: parent_id, slug: self.slug).exists?
+      binding.pry
+      while self.class.exists?(parent_id: parent_id, slug: self.slug.to_s)
         self.slug = self.slug.next
       end
     end
@@ -52,7 +61,7 @@ class Page < ActiveRecord::Base
       else
         path_parts = [slug.to_s]
       end
-      path_parts.reject!(&:blank?)
+      path_parts.delete_if(&:blank?)
       File.join(path_parts)
     end
 

@@ -12,6 +12,7 @@ class Admin::MultiplePageCreationForm < Form
   end
 
   protected
+
   def create_pages_for(page_type)
     pages.clear
 
@@ -21,7 +22,7 @@ class Admin::MultiplePageCreationForm < Form
     Page.transaction do
       object_ids.each_with_index do |object_id, index|
         # preserves order
-        object = objects.detect { |object| object.id == object_id }
+        object = objects.find { |obj| obj.id == object_id }
 
         page = parent_page.children.public_send(page_type).new
         page.build_embeddable(template_id: template_id)
@@ -32,7 +33,7 @@ class Admin::MultiplePageCreationForm < Form
         if object.respond_to?(:translations)
           object.translations.each do |translation|
             Globalize.with_locale(translation.locale) do
-              page.meta_description = HTML::FullSanitizer.new.sanitize(
+              page.meta_description = Rails::Html::FullSanitizer.new.sanitize(
                 translation.description
               )
             end

@@ -8,6 +8,7 @@ class Slug < String
   def initialize(str, options = {})
     @separator = options.fetch(:separator, DEFAULT_SEPARATOR)
     super(str.parameterize(@separator))
+    freeze
   end
 
   def inspect

@@ -31,7 +31,6 @@ class Page < ActiveRecord::Base
   include Page::Abstract
   include Page::MenuContainable
   include Page::Templatable
-  include Page::RouteCacheable
   include Page::UrlAccessible
   include PersistenceContextTrackable
   include Publishable

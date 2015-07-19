@@ -20,3 +20,5 @@ staging:
 
 production:
   <<: *defaults
+  host: localhost
+  database: gtgraphics_development

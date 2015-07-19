@@ -13,7 +13,6 @@
 class Page < ActiveRecord::Base
   class Region < ActiveRecord::Base
     class Translation < Globalize::ActiveRecord::Translation
-      include GlobalizedModelTouchable
       include UniquelyTranslated
 
       acts_as_uniquely_translated :page_region_id
