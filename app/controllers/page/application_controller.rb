@@ -54,7 +54,8 @@ class Page::ApplicationController < ApplicationController
 
   def load_page
     @page = current_page
-    authorize! :read, @page
+    return @page if can?(:read, @page)
+    fail ActionController::RoutingError, 'Page is invisible'
   end
 
   def load_template
