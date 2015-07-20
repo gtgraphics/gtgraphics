@@ -1,4 +1,4 @@
-= paginator.render do
-  #pagination.btn-group
-    = prev_page_tag
-    = next_page_tag
+#pagination.btn-group
+  = button_link_to_unless current_page.first?, icon(:angle, direction: :left, fixed_width: true), current_page_path(page: current_page - 1), id: 'prev_page', rel: 'prev', title: translate('views.pagination.previous'), type: :page_foot, size: :lg, data: { toggle: 'tooltip', placement: 'top', container: 'body' }
+
+  = button_link_to_unless current_page.last?, icon(:angle, direction: :right, fixed_width: true), current_page_path(page: current_page + 1), id: 'next_page', rel: 'next', title: translate('views.pagination.next'), type: :page_foot, size: :lg, data: { toggle: 'tooltip', placement: 'top', container: 'body' }
