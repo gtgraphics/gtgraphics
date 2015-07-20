@@ -42,8 +42,9 @@ module Router
     end
 
     def change_locale_path(locale)
-      query_params = request.query_parameters.merge(locale: locale)
-      current_page_path(query_params)
+      url_params = request.path_parameters.merge(request.query_parameters)
+                   .merge(locale: locale)
+      current_page_path(url_params)
     end
   end
 end

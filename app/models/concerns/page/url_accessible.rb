@@ -39,7 +39,6 @@ class Page < ActiveRecord::Base
     def set_next_available_slug(slug = obtain_slug)
       fail 'no initial slug defined' if slug.nil?
       self.slug = slug
-      binding.pry
       while self.class.exists?(parent_id: parent_id, slug: self.slug.to_s)
         self.slug = self.slug.next
       end

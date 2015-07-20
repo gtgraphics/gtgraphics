@@ -24,7 +24,7 @@ module PagePropagatable
     transaction do
       pages.each do |page|
         page.title = title
-        page.meta_description = HTML::FullSanitizer.new.sanitize(description)
+        page.meta_description = Rails::Html::FullSanitizer.new.sanitize(description)
         page.save!
       end
     end
