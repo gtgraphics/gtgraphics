@@ -82,10 +82,10 @@ gem 'daemons'
 gem 'whenever'
 gem 'request_store'
 gem 'nokogiri'
-gem 'exception_notification', group: %i(staging production development)
+gem 'exception_notification', group: %i(staging production)
 gem 'pry-rails'
 gem 'countries'
-gem 'faker'
+gem 'faker', group: %i(development test)
 gem 'spring', group: :development
 gem 'web-console', '~> 2.0', group: :development
 
