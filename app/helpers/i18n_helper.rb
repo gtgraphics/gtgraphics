@@ -11,18 +11,7 @@ module I18nHelper
     end
   end
 
-  def i18n_javascript_file(*locales)
-    fallbacks = I18n.try(:fallbacks)
-    locales = locales.flatten.sort
-    if locales.empty?
-      locales = Array(fallbacks ? fallbacks[I18n.locale] : I18n.locale).sort
-    end
-    path = "static/locales/#{locales.join('+')}.js"
-    timestamp = File.mtime(File.join("#{Rails.root}/public/#{path}")).to_i
-    javascript_include_tag("/#{path}?#{timestamp}")
-  end
-
-  def i18n_javascript_data
+  def i18n_javascript
     if I18n.respond_to?(:fallbacks)
       locales = Array(I18n.fallbacks[I18n.locale])
     else
@@ -34,9 +23,15 @@ module I18nHelper
       translated.deep_merge!(YAML.load_file(file))
     end
 
+    fallbacks = I18n.try(:fallbacks)
+
     js = StringIO.new
+
     js.write(<<-JAVASCRIPT.strip_heredoc)
       window.I18n || (window.I18n = {});
+      I18n.defaultLocale = #{I18n.default_locale.to_json};
+      I18n.fallbacks = #{fallbacks.to_h.to_json};
+      I18n.locale = #{I18n.locale.to_json};
       I18n.translations || (I18n.translations = {});
     JAVASCRIPT
 
@@ -49,15 +44,5 @@ module I18nHelper
     end
 
     javascript_tag(js.string)
-  end
-
-  def i18n_javascript
-    fallbacks = I18n.try(:fallbacks)
-    javascript_tag <<-JAVASCRIPT.strip_heredoc
-      window.I18n || (window.I18n = {});
-      I18n.defaultLocale = #{I18n.default_locale.to_json};
-      I18n.fallbacks = #{fallbacks.to_h.to_json};
-      I18n.locale = #{I18n.locale.to_json};
-    JAVASCRIPT
   end
 end

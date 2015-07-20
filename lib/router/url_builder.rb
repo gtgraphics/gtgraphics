@@ -57,6 +57,7 @@ module Router
 
       @params = options.except(:protocol, :host, :port, :locale,
                                :format, :only_path)
+      @params.delete_if { |_, value| value.nil? }
     end
 
     def only_path?
