@@ -2,12 +2,6 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in
   # config/application.rb.
 
-  config.middleware.use ExceptionNotification::Rack, email: {
-    email_prefix: '[Staging] ',
-    sender_address: %("GTGRAPHICS Exception Notifier" <noreply@gtgraphics.de>),
-    exception_recipients: %w(webmaster@gtgraphics.de)
-  }
-
   # Code is not reloaded between requests.
   config.cache_classes = true
 
