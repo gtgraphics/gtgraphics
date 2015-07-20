@@ -37,8 +37,7 @@ set :linked_dirs, %w(log tmp/pids tmp/cache tmp/sockets vendor/bundle
 # set :keep_releases, 5
 
 # Custom Roles
-set :assets_roles, [:web, :app]
-set :delayed_job_server_role, :worker
+set :assets_roles, %i(web app)
 
 # Cronjobs
 set :whenever_identifier, -> { "#{fetch(:application)}_#{fetch(:stage)}" }
@@ -53,7 +52,6 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       execute :touch, release_path.join('tmp/restart.txt')
     end
-    invoke 'delayed_job:restart'
   end
 
   after :publishing, :restart
@@ -63,7 +61,6 @@ namespace :deploy do
       within release_path do
         execute :chmod, 700, :'bin/bundle'
         execute :chmod, 700, :'bin/rails'
-        execute :chmod, 700, :'bin/delayed_job'
         execute :chmod, 700, :'bin/rake'
       end
     end

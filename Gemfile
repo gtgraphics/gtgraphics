@@ -78,7 +78,6 @@ group :development do
   gem 'thin'
   gem 'rubocop', require: false
 end
-# gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'whenever'
 gem 'request_store'
