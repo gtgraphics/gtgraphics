@@ -9,10 +9,6 @@ module Router
     attr_reader :page, :protocol, :host, :port, :path, :subroute_name,
                 :locale, :format, :params
 
-    def self.default_url_options
-      Rails.application.config.action_controller.default_url_options || {}
-    end
-
     ##
     # Initializes the {UrlBuilder}.
     #
@@ -37,13 +33,15 @@ module Router
         @path = @page.path
       end
 
-      @protocol = options.fetch(:protocol) do
-        UrlBuilder.default_url_options[:protocol] || DEFAULT_PROTOCOL
-      end.to_s
+      @protocol = options.fetch(:protocol, DEFAULT_PROTOCOL).to_s
       @protocol << PROTOCOL_SUFFIX unless @protocol.ends_with?(PROTOCOL_SUFFIX)
 
-      @host = options.fetch(:host) { UrlBuilder.default_url_options[:host] }
-      @port = options.fetch(:port) { UrlBuilder.default_url_options[:port] }
+      @host = options.fetch(:host)
+      if @host =~ /(.*)\:([0-9]+)/
+        @host = $1
+        @port = $2.to_i
+      end
+      @port ||= options[:port]
 
       @subroute_name = args.first.try(:to_sym)
       if subroute_name.present? && page.nil?

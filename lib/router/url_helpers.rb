@@ -17,13 +17,17 @@ module Router
 
     def page_url(*args)
       options = args.extract_options!.dup
-      if respond_to?(:request)
+      if respond_to?(:request) && !request.nil?
         options[:protocol] = request.protocol
         options[:host] = request.host
         options[:port] = request.port
       end
       if respond_to?(:default_url_options)
-        options.reverse_merge!(default_url_options)
+        options.reverse_merge!(default_url_options || {})
+      elsif respond_to?(:mailer)
+        options.reverse_merge!(mailer.default_url_options || {})
+      elsif respond_to?(:controller)
+        options.reverse_merge!(controller.default_url_options || {})
       end
       UrlBuilder.new(*args, options).to_s
     end

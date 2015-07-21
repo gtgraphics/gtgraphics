@@ -5,7 +5,7 @@ class Page::ImagesController < Page::ApplicationController
     get 'download/:style_id(/:dimensions)', to: :download,
                                             as: :download_image
   end
-  
+
   before_action :load_image
   before_action :load_image_styles, only: :show
 
@@ -63,7 +63,7 @@ class Page::ImagesController < Page::ApplicationController
 
       flash_for @message
       respond_to do |format|
-        format.html { redirect_to buy_image_path(@page.path) }
+        format.html { redirect_to page_path(@page, :buy_image) }
       end
     else
       flash.now.alert = @message.errors[:base].to_sentence
