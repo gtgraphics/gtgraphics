@@ -94,7 +94,7 @@ class Admin::UsersController < Admin::ApplicationController
 
   def redirect_to_account_page_if_current_user
     return if @user.nil? || @user != current_user
-    redirect_to params.slice(:action).merge(controller: 'accounts')
+    redirect_to controller: 'accounts', action: action_name
   end
 
   def user_params
