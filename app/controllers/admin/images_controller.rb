@@ -189,8 +189,8 @@ class Admin::ImagesController < Admin::ApplicationController
       format.js { redirect_via_turbolinks_to location }
     end
   end
-  private :destroy_multiple # invoked through :batch_process
 
+  private :destroy_multiple # invoked through :batch_process
 
   # Owner Assignment
 
@@ -203,16 +203,17 @@ class Admin::ImagesController < Admin::ApplicationController
       format.js { render :assign_owner }
     end
   end
+
   private :assign_owner # invoked through :batch_process
 
   def associate_owner
-    @image_owner_assignment_form = Admin::ImageOwnerAssignmentForm.submit(image_owner_assignment_params)
+    @image_owner_assignment_form = Admin::ImageOwnerAssignmentForm
+                                   .submit(image_owner_assignment_params)
 
     respond_to do |format|
       format.js
     end
   end
-
 
   # Attachment Conversion
 
@@ -243,7 +244,8 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def image_customization_params
     params.require(:image).permit(:cropped, :crop_x, :crop_y, :crop_width,
-      :crop_height, :resized, :resize_width, :resize_height)
+                                  :crop_height, :resized, :resize_width,
+                                  :resize_height)
   end
 
   def image_upload_params

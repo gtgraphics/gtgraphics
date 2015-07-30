@@ -11,14 +11,13 @@
           = panel prepend_icon(:tags, Tag.model_name.human(count: 2), fixed_width: true), body: false do
             .list-group#tags
               - @tags.each do |tag, taggings_count|
-                - selected_tags = Array(params[:tag])
                 - if selected_tags.include?(tag.label)
-                  = link_to params.except(:page).merge(tag: (selected_tags - [tag.label]).presence), class: 'list-group-item active' do
+                  = link_to remove_tag_path(tag), class: 'list-group-item active' do
                     = tag.label
                     .pull-right
                       = prepend_icon :times, translate('helpers.links.remove'), caption_html: { class: 'sr-only' }
                 - else
-                  = link_to tag.label, params.except(:page).merge(tag: (selected_tags + [tag.label]).presence), class: 'list-group-item'
+                  = link_to tag.label, add_tag_path(tag), class: 'list-group-item'
 
         = panel prepend_icon(:user, Image.human_attribute_name(:author_id), fixed_width: true), body: false do
           .list-group#author

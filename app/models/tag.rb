@@ -20,6 +20,7 @@ class Tag < ActiveRecord::Base
   class << self
     def applied_to(*records)
       options = records.extract_options!
+      records = records.to_a.flatten
       if options.fetch(:any, false)
         applied_to_any(records)
       else
@@ -71,7 +72,7 @@ class Tag < ActiveRecord::Base
 
     def applied_to_any(records)
       taggings = Tagging.arel_table
-      conditions = records.flatten.map do |record|
+      conditions = records.map do |record|
         taggings[:taggable_id].eq(record.id)
         .and(taggings[:taggable_type].eq(record.class.name))
       end.reduce(:or)
@@ -80,13 +81,13 @@ class Tag < ActiveRecord::Base
 
     def applied_to_all(records)
       taggings = Tagging.arel_table
-      conditions = records.flatten.map do |record|
+      conditions = records.map do |record|
         Tag.arel_table[:id].in(
           Tagging.where(
             taggings[:taggable_type].eq(record.class.name).and(
               taggings[:taggable_id].eq(record.id)
             )
-          ).select(taggings[:tag_id]).ast
+          ).select(taggings[:tag_id]).project
         )
       end.reduce(:and)
       where(conditions)

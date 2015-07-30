@@ -10,6 +10,8 @@ class ApplicationController < ActionController::Base
   before_action :set_current_user
   before_action :set_locale
 
+  helper_method :safe_params
+
   protected
 
   def live?
@@ -47,6 +49,10 @@ class ApplicationController < ActionController::Base
     end
 
     Globalize.locale = I18n.locale = locale.to_sym
+  end
+
+  def safe_params
+    request.query_parameters.merge(request.path_parameters)
   end
 
   private
