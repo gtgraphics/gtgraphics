@@ -20,16 +20,8 @@ class Page::ContentsController < Page::ApplicationController
     unless params[:format] == 'rss'
       # OPTIMIZE: if request.format.html? caused problems for some crawlers
       @image_pages = @image_pages.page(params[:page]).per(BRICK_PAGE_SIZE)
-      total_pages = @image_pages.total_pages
-      if @image_pages.current_page < 1
-        return redirect_to current_page_path(page: nil)
-      elsif total_pages > 0 && @image_pages.current_page > total_pages
-        if total_pages == 1
-          return redirect_to current_page_path(page: nil)
-        else
-          return redirect_to current_page_path(page: total_pages)
-        end
-      end
+      fixed_path = fixed_page_path_for(@image_pages)
+      return redirect_to(fixed_path) if fixed_path
     end
 
     respond_with_page do |format|
@@ -61,20 +53,11 @@ class Page::ContentsController < Page::ApplicationController
 
   def showcase
     @project_pages = @child_pages.projects.preload(embeddable: :project)
-    unless params[:format] == 'rss'
-      # OPTIMIZE: if request.format.html? caused problems for some crawlers
-      @project_pages = @project_pages.page(params[:page]).per(BRICK_PAGE_SIZE)
-      total_pages = @project_pages.total_pages
-      if @project_pages.current_page < 1
-        return redirect_to params.to_h.merge(page: nil)
-      elsif total_pages > 0 && @project_pages.current_page > total_pages
-        if total_pages == 1
-          return redirect_to params.to_h.merge(page: nil)
-        else
-          return redirect_to params.to_h.merge(page: total_pages)
-        end
-      end
-    end
+                     .page(params[:page]).per(BRICK_PAGE_SIZE)
+
+    fixed_path = fixed_page_path_for(@project_pages)
+    return redirect_to(fixed_path) if fixed_path
+
     respond_with_page
   end
 
@@ -92,5 +75,18 @@ class Page::ContentsController < Page::ApplicationController
   def load_child_pages
     @child_pages = @page.children.accessible_by(current_ability).visible
                    .with_translations_for_current_locale
+  end
+
+  def fixed_page_path_for(scope)
+    total_pages = scope.total_pages
+    if scope.current_page < 1
+      current_page_path(page: nil)
+    elsif total_pages > 0 && scope.current_page > total_pages
+      if total_pages == 1
+        current_page_path(page: nil)
+      else
+        current_page_path(page: total_pages)
+      end
+    end
   end
 end
