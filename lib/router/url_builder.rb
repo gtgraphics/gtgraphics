@@ -33,15 +33,18 @@ module Router
         @path = @page.path
       end
 
-      @protocol = options.fetch(:protocol, DEFAULT_PROTOCOL).to_s
-      @protocol << PROTOCOL_SUFFIX unless @protocol.ends_with?(PROTOCOL_SUFFIX)
+      @only_path = options.fetch(:only_path, false)
 
-      @host = options.fetch(:host)
-      if @host =~ /(.*)\:([0-9]+)/
-        @host = $1
-        @port = $2.to_i
+      unless @only_path
+        @protocol = options.fetch(:protocol, DEFAULT_PROTOCOL).to_s
+        unless @protocol.ends_with?(PROTOCOL_SUFFIX)
+          @protocol << PROTOCOL_SUFFIX
+        end
+
+        @host = options.fetch(:host) { fail ArgumentError, 'No host specified' }
+        @host, @port = $1, $2.to_i if @host =~ /(.*)\:([0-9]+)/
+        @port ||= options[:port]
       end
-      @port ||= options[:port]
 
       @subroute_name = args.first.try(:to_sym)
       if subroute_name.present? && page.nil?
@@ -51,7 +54,6 @@ module Router
 
       @locale = options.fetch(:locale) { I18n.locale }.try(:to_s)
       @format = options[:format].try(:to_s).try(:downcase)
-      @only_path = options.fetch(:only_path, false)
 
       @params = options.except(:protocol, :host, :port, :locale,
                                :format, :only_path)

@@ -33,9 +33,12 @@ module Editor
     end
 
     def to_html
-      href = external? ? url : Router::Path.for_page(page, locale: locale)
-      options = { href: href }
+      url = self.url
+      url = Router::UrlHelpers.page_path(page, locale: locale) if internal?
+
+      options = { href: url }
       options[:target] = target if target.present?
+
       if internal? && page_id.present?
         data = { page_id: page_id }
         if locale.present?
@@ -47,6 +50,7 @@ module Editor
       else
         content = url
       end
+
       content = self.content.presence || content
       content_tag(:a, content.html_safe, options).html_safe
     end
