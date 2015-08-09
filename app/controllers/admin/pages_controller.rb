@@ -38,8 +38,7 @@ class Admin::PagesController < Admin::ApplicationController
           if page_id_or_ids.is_a?(Array)
             @pages = Page.where(id: page_id_or_ids)
           else
-            redirect_to params.merge(action: :show)
-            return
+            return redirect_to safe_params.merge(action: :show)
           end
         else
           @pages = Page.search(params[:query])

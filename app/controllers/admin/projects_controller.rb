@@ -27,7 +27,7 @@ class Admin::ProjectsController < Admin::ApplicationController
 
     project_ids = Array(params[:id])
     if project_ids.any?
-      return redirect_to params.merge(action: :show) if project_ids.one?
+      return redirect_to safe_params.merge(action: :show) if project_ids.one?
       @projects.where!(id: project_ids)
     else
       @projects = @projects.search(params[:query])

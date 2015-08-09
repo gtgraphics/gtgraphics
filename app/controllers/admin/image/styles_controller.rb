@@ -19,7 +19,7 @@ class Admin::Image::StylesController < Admin::ApplicationController
     style_ids = Array(params[:id])
     if style_ids.any?
       if style_ids.one?
-        redirect_to params.merge(action: :show) && return
+        return redirect_to safe_params.merge(action: :show)
       else
         @image_styles = @image.styles.where(id: image_style_id_or_ids)
       end

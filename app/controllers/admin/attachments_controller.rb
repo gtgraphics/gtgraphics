@@ -17,7 +17,7 @@ class Admin::AttachmentsController < Admin::ApplicationController
     attachment_ids = Array(params[:id])
     if attachment_ids.any?
       if attachment_ids.one?
-        redirect_to params.merge(action: :show) and return
+        return redirect_to safe_params.merge(action: :show)
       else
         @attachments = @attachments.where(id: attachment_id_or_ids)
       end
@@ -29,12 +29,12 @@ class Admin::AttachmentsController < Admin::ApplicationController
     end
 
     @users = User.order(:first_name, :last_name)
-    
+
     @attachments.where!(author_id: params[:author_id]) if params[:author_id].present?
     @attachments = @attachments.created(params[:period]) if params[:period].present?
     @attachments.where!(content_type: params[:content_type]) if params[:content_type].present?
     @attachments = @attachments.page(params[:page])
-  
+
     respond_with :admin, @attachments do |format|
       format.json
     end
