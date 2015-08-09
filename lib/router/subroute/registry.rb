@@ -5,7 +5,7 @@ module Router
 
       def initialize(controller)
         @controller = controller
-        @definitions = @controller.subroutes
+        @definitions = controller.subroutes
       end
 
       def match(*args)

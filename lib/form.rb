@@ -4,8 +4,12 @@ class Form
   include Virtus.model
   extend ActiveModel::Callbacks
 
-  include Form::EmbedsOneExtension
-  include Form::EmbedsManyExtension
+  autoload :EmbedsOneExtension, 'form/embeds_one_extension'
+  autoload :EmbedsManyExtension, 'form/embeds_many_extension'
+  autoload :FormInvalid, 'form/form_invalid'
+
+  include EmbedsOneExtension
+  include EmbedsManyExtension
 
   define_model_callbacks :initialize, :validation, :submit
   class_attribute :handled_object_name, instance_accessor: false
