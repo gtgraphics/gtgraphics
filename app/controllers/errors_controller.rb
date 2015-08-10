@@ -14,8 +14,7 @@ class ErrorsController < ApplicationController
 
     respond_with_error do |format|
       format.jpeg do
-        send_file "#{Rails.root}/app/assets/images/errors/hint.jpg",
-                  disposition: :inline, status: status
+        send_file "#{Rails.root}/public/404.jpg", disposition: :inline
       end
     end
   end
