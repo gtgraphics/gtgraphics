@@ -19,9 +19,9 @@ module Router
       options = args.extract_options!.dup
       unless options[:only_path]
         if respond_to?(:request) && !request.nil?
-          options[:protocol] = request.protocol
-          options[:host] = request.host
-          options[:port] = request.port
+          options[:protocol] ||= request.protocol
+          options[:host] ||= request.host
+          options[:port] ||= request.port
         end
         if respond_to?(:default_url_options)
           options.reverse_merge!(default_url_options || {})
