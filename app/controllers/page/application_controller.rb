@@ -1,6 +1,8 @@
 class Page::ApplicationController < ApplicationController
   respond_to :html
 
+  # before_action :restrict_secure_connection
+
   before_action :load_page
   before_action :load_template
   before_action :increment_hits
@@ -72,5 +74,9 @@ class Page::ApplicationController < ApplicationController
 
   def increment_hits
     @page.increment_hits!
+  end
+
+  def restrict_secure_connection
+    fail ActionController::RoutingError, 'SSL not permitted' if request.ssl?
   end
 end
