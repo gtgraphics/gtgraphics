@@ -1,14 +1,12 @@
 class Twitter
-  @initialized = false
-
   constructor: ->
-    @load()
+    @loaded = false
 
   load: ->
-    return if Twitter.initialized
-    jQuery.getScript '//platform.twitter.com/widgets.js', =>
-      @bindEvents()
-      Twitter.initialized = true
+    return @init() if @loaded
+    jQuery.getScript 'https://platform.twitter.com/widgets.js', =>
+      @init()
+      @loaded = true
 
   init: ->
     $('.twitter-share-button').each ->
@@ -17,9 +15,7 @@ class Twitter
       $button.attr('data-text', document.title) unless $button.data('text')?
     twttr.widgets.load()
 
-  bindEvents: ->
-    $(document).on 'page:load', =>
-      @init()
-
+twitter = new Twitter
 $(document).ready ->
-  new Twitter
+  twitter.load()
+  console.debug 'Social plugin loaded: Twitter'

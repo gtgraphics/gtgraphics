@@ -1,31 +1,31 @@
 class Facebook
-  @initialized = false
-
   constructor: ->
+    @loaded = false
     @appId = $('meta[property="fb:app_id"]').attr('content')
-    if I18n.locale == 'de'
-      @locale = 'de_DE'
-    else
-      @locale = 'en_US'
     @$fbRoot = null
-    @load()
 
   load: ->
-    return if Facebook.initialized
-    jQuery.getScript "//connect.facebook.net/#{@locale}/all.js#xfbml=1", =>
+    return @init() if @loaded
+    locale = @determineLocale()
+    jQuery.getScript "//connect.facebook.net/#{locale}/all.js#xfbml=1", =>
       @init()
+      @bindEvents()
+      @loaded = true
 
   init: ->
-    return if Facebook.initialized
     FB.init(appId: @appId, status: true, cookie: true, xfbml: true)
-    @bindEvents()
-    Facebook.initialized = true
 
   bindEvents: ->
     $(document)
       .on('page:fetch', @saveFacebookRoot)
       .on('page:change', @restoreFacebookRoot)
       .on('page:load', @parseElements)
+
+  determineLocale: ->
+    if I18n.locale == 'de'
+      'de_DE'
+    else
+      'en_US'
 
   parseElements: ->
     FB?.XFBML.parse()
@@ -40,5 +40,7 @@ class Facebook
     else
       $('body').append(@$fbRoot)
 
+facebook = new Facebook
 $(document).ready ->
-  new Facebook
+  facebook.load()
+  console.debug 'Social plugin loaded: Facebook'

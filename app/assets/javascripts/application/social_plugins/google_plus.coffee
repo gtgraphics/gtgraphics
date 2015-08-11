@@ -1,24 +1,23 @@
 class GooglePlus
-  @initialized = false
-
   constructor: ->
+    @loaded = false
     if I18n.locale == 'de'
       @locale = 'de'
     else
       @locale = 'en_US'
     @load()
 
-  load: (callback) ->
-    if GooglePlus.initialized
+  load: ->
+    return @init() if @loaded
+    window.___gcfg = { lang: @locale, parsetags: 'explicit' }
+    jQuery.getScript 'https://apis.google.com/js/plusone.js', =>
       @init()
-    else
-      window.___gcfg = { lang: @locale, parsetags: 'explicit' }
-      jQuery.getScript 'https://apis.google.com/js/plusone.js', =>
-        @init()
+      @loaded = true
 
   init: ->
     gapi.plusone.go()
-    GooglePlus.initialized = true
 
+gplus = new GooglePlus
 $(document).ready ->
-  new GooglePlus
+  gplus.load()
+  console.debug 'Social plugin loaded: Google Plus'
