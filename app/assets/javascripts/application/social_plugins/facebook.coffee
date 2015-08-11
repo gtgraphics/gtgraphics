@@ -1,7 +1,6 @@
 class Facebook
   constructor: ->
     @loaded = false
-    @appId = $('meta[property="fb:app_id"]').attr('content')
     @$fbRoot = null
 
   load: ->
@@ -13,7 +12,8 @@ class Facebook
       @loaded = true
 
   init: ->
-    FB.init(appId: @appId, status: true, cookie: true, xfbml: true)
+    appId = $('meta[property="fb:app_id"]').attr('content')
+    FB.init(appId: appId, status: true, cookie: true, xfbml: true)
 
   bindEvents: ->
     $(document)
