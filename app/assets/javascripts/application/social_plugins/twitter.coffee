@@ -5,6 +5,7 @@ class Twitter
   load: ->
     @init()
     jQuery.getScript('https://platform.twitter.com/widgets.js')
+    @loaded = true
 
   init: ->
     $('.twitter-share-button').each ->
