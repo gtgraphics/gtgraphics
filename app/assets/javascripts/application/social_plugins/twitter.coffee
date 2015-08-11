@@ -10,7 +10,7 @@ class Twitter
 
   init: ->
     $('.twitter-share-button').each ->
-      $button = $(this)
+      $button = $(@)
       $button.attr('data-url', document.location.href) unless $button.data('url')?
       $button.attr('data-text', document.title) unless $button.data('text')?
     twttr.widgets.load()

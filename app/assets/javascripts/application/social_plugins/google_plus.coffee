@@ -1,11 +1,6 @@
 class GooglePlus
   constructor: ->
     @loaded = false
-    if I18n.locale == 'de'
-      @locale = 'de'
-    else
-      @locale = 'en_US'
-    @load()
 
   load: ->
     return @init() if @loaded

@@ -1,19 +1,17 @@
 class Facebook
   constructor: ->
     @loaded = false
+
     @$fbRoot = null
 
   load: ->
-    return @init() if @loaded
+    return if @loaded
     locale = @determineLocale()
-    jQuery.getScript "//connect.facebook.net/#{locale}/all.js#xfbml=1", =>
-      @init()
+    jQuery.getScript "https://connect.facebook.net/#{locale}/all.js#xfbml=1", =>
+      appId = $('meta[property="fb:app_id"]').attr('content')
+      FB.init(appId: appId, status: true, cookie: true, xfbml: true)
       @bindEvents()
       @loaded = true
-
-  init: ->
-    appId = $('meta[property="fb:app_id"]').attr('content')
-    FB.init(appId: appId, status: true, cookie: true, xfbml: true)
 
   bindEvents: ->
     $(document)
