@@ -4,7 +4,7 @@ class PagePresenter < ApplicationPresenter
   delegate_presented :embeddable
 
   def permalink
-    h.page_permalink_url(page.permalink, locale: nil)
+    h.page_permalink_url(page.permalink, protocol: :http, locale: nil)
   end
 
   def social_uri
@@ -12,7 +12,7 @@ class PagePresenter < ApplicationPresenter
   end
 
   def url
-    h.page_url(page)
+    h.page_url(page, protocol: :http)
   end
 
   # Facebook Integration
