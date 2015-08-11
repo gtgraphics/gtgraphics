@@ -1,7 +1,6 @@
 class Facebook
   constructor: ->
     @loaded = false
-
     @$fbRoot = null
 
   load: ->
