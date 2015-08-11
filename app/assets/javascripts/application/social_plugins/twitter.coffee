@@ -3,7 +3,7 @@ class Twitter
     @loaded = false
 
   load: ->
-    return @init() if @loaded
+    # return @init() if @loaded
     jQuery.getScript 'https://platform.twitter.com/widgets.js', =>
       @init()
       @loaded = true
