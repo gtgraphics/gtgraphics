@@ -74,6 +74,13 @@
                       = icon :shopping_cart, size: :lg, fixed_width: true
                       %span.sr-only= translate('helpers.links.buy')
 
+            - if details
+              #nav_lightbox_social_buttons.js-only
+                %ul.clearfix.hidden-xs.hidden-sm
+                  %li= page.facebook_like_button
+                  %li= page.google_plus_like_button
+                  %li= page.twitter_share_button
+
       #lightbox{class: ['lightbox', details ? 'lightbox-with-details' : 'lightbox-without-details']}
         .lightbox-image-container
           .lightbox-background.hidden-xs.hidden-sm{style: background_css(attached_asset_path(@image, :brick))}
@@ -104,9 +111,12 @@
                   %h1= image.title
 
                   #social_buttons.btn-toolbar.js-only
-                    .btn-group= page.facebook_like_button
-                    .btn-group= page.google_plus_like_button
-                    .btn-group= page.twitter_share_button
+                    .btn-group.hidden-md.hidden-lg
+                      = page.facebook_like_button
+                    .btn-group.hidden-md.hidden-lg
+                      = page.google_plus_like_button
+                    .btn-group.hidden-md.hidden-lg
+                      = page.twitter_share_button
 
                 .page-body
                   .info-bar

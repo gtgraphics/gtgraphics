@@ -464,3 +464,26 @@ $lightbox-height-sm: 450px;
     }
   }
 }
+
+#nav_lightbox_social_buttons {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+
+  ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 0;
+  }
+
+  li {
+    display: block;
+    float: left;
+    margin: 18px 8px;
+  }
+
+  &:after {
+    clear: both;
+  }
+}
