@@ -1,7 +1,11 @@
 module Social::TwitterHelper
   def twitter_share_button(*args)
-    options = args.extract_options!.reverse_merge(count: false)
-    count = options[:count] == false ? 'none' : options[:count].to_s
+    options = args.extract_options!.reverse_merge(count: true)
+    count = case options[:count]
+            when true then nil
+            when false, nil then 'none'
+            else options[:count].to_s
+            end
 
     link_to 'https://twitter.com/share',
             class: 'twitter-share-button',

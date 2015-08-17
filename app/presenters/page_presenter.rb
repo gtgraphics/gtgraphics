@@ -50,8 +50,8 @@ class PagePresenter < ApplicationPresenter
       fail "Not supported for #{embeddable_type}"
     end
     image = embeddable.image
-    options = options.merge(url: permalink, description: image.title)
+    options = options.merge(description: image.title)
     image_url = h.attached_asset_url(image, :public, timestamp: false)
-    h.pinterest_share_button(image_url, options)
+    h.pinterest_share_button(url, image_url, options)
   end
 end
