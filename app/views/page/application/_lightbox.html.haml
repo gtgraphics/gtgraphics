@@ -77,9 +77,10 @@
             - if details
               #nav_lightbox_social_buttons.js-only
                 %ul.clearfix.hidden-xs.hidden-sm
-                  %li= page.facebook_like_button
-                  %li= page.google_plus_like_button
-                  %li= page.twitter_share_button
+                  %li.facebook-like= page.facebook_like_button(share_button: true)
+                  %li.twitter-share= page.twitter_share_button
+                  %li.pinterest-share= page.pinterest_share_button
+                  %li.google-plus-one= page.google_plus_like_button
 
       #lightbox{class: ['lightbox', details ? 'lightbox-with-details' : 'lightbox-without-details']}
         .lightbox-image-container
@@ -111,12 +112,14 @@
                   %h1= image.title
 
                   #social_buttons.btn-toolbar.js-only
-                    .btn-group.hidden-md.hidden-lg
-                      = page.facebook_like_button
-                    .btn-group.hidden-md.hidden-lg
-                      = page.google_plus_like_button
-                    .btn-group.hidden-md.hidden-lg
+                    .facebook-like.btn-group.hidden-md.hidden-lg
+                      = page.facebook_like_button(share_button: true)
+                    .twitter-share.btn-group.hidden-md.hidden-lg
                       = page.twitter_share_button
+                    .pinterest-share.btn-group.hidden-md.hidden-lg
+                      = page.pinterest_share_button
+                    .google-plus-one.btn-group.hidden-md.hidden-lg
+                      = page.google_plus_like_button
 
                 .page-body
                   .info-bar

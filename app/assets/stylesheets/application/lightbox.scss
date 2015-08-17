@@ -475,12 +475,17 @@ $lightbox-height-sm: 450px;
     display: inline-block;
     list-style-type: none;
     padding: 0;
+    margin: 0;
   }
 
   li {
     display: block;
     float: left;
     margin: 18px 8px;
+
+    &.facebook-like {
+      margin-top: 16px;
+    }
   }
 
   &:after {
