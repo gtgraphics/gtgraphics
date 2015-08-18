@@ -1,7 +1,7 @@
 module Social
   module PinterestHelper
     def pinterest_share_button(url, image_url, options = {})
-      options = options.reverse_merge(size: 20, annotation: nil, color: :red)
+      options = options.reverse_merge(size: 20, annotation: false, color: :red)
 
       annotation = options[:annotation]
       annotation = 'beside' if annotation.nil?
