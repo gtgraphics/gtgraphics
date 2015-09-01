@@ -55,7 +55,7 @@ module ImageUploadable
   def resize
     return unless resized?
     manipulate! do |img|
-      img.resize!(model.resize_width, model.resize_height)
+      img.thumbnail!(model.resize_width, model.resize_height)
       img = yield(img) if block_given?
       img
     end
