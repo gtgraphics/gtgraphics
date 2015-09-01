@@ -41,6 +41,6 @@ class User::SocialLink < ActiveRecord::Base
   private
 
   def set_default_protocol
-    self.url = "http://#{url}" if url != %r{\A(http|https)\://}
+    self.url = "http://#{url}" if url !~ %r{\A(http|https)\://}
   end
 end
