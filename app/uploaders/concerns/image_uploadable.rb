@@ -11,7 +11,7 @@ module ImageUploadable
     version :custom do
       process :crop
       process :resize
-      process :strip
+      # process :strip # This removes color profiles, so leave it out for now
 
       def full_filename(file)
         "custom/#{file}"
