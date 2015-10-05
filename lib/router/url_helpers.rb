@@ -23,9 +23,7 @@ module Router
           options[:host] = request.host if request.host.present?
           options[:port] = request.port if request.port.present?
         end
-        if respond_to?(:default_url_options)
-          options.reverse_merge!(default_url_options || {})
-        elsif respond_to?(:mailer)
+        if respond_to?(:mailer)
           options.reverse_merge!(mailer.default_url_options || {})
         elsif respond_to?(:controller)
           options.reverse_merge!(controller.default_url_options || {})
