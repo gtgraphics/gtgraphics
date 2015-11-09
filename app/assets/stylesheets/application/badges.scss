@@ -1,0 +1,41 @@
+@import 'bootstrap_config';
+
+a {
+  .activity-badge-container {
+    float: right;
+    margin-top: -1px;
+
+    .badge {
+      transition: all 200ms ease;
+      background-color: white;
+      color: $brand-primary;
+      border-radius: 12px;
+    }
+  }
+
+  &:hover, &:focus {
+    .activity-badge-container .badge {
+      background-color: $brand-primary;
+      color: white;
+    }
+  }
+
+  &.active {
+    .activity-badge-container .badge {
+      background-color: white;
+      color: $gray-dark;
+    }
+  }
+}
+
+.badge {
+  &.badge--popup {
+    animation: badge-popup-zoom 400ms ease;
+  }
+}
+
+@keyframes badge-popup-zoom {
+  0% { transform: scale(0); }
+  75% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}

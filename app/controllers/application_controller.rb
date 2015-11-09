@@ -12,7 +12,11 @@ class ApplicationController < ActionController::Base
 
   helper_method :safe_params
 
-  protected
+  class_attribute :enforce_redirect_to_localized_url, :detect_locale_from_headers
+  self.enforce_redirect_to_localized_url = true
+  self.detect_locale_from_headers = true
+
+  private
 
   def live?
     Rails.env.in? %w(production staging)
@@ -21,12 +25,6 @@ class ApplicationController < ActionController::Base
   def production?
     Rails.env.production?
   end
-
-  private
-
-  class_attribute :enforce_redirect_to_localized_url, :detect_locale_from_headers
-  self.enforce_redirect_to_localized_url = true
-  self.detect_locale_from_headers = true
 
   def localized_request_url(locale)
     params = request.path_parameters.merge(request.query_parameters)
@@ -55,8 +53,6 @@ class ApplicationController < ActionController::Base
   def safe_params
     request.query_parameters.merge(request.path_parameters)
   end
-
-  private
 
   def set_current_user
     User.current = current_user

@@ -43,6 +43,11 @@ Rails.application.routes.draw do
   end
 
   scope '(:locale)', constraints: { locale: /[a-z]{2}/ } do
+    namespace :ajax do
+      get 'activity_badges/:page_id', to: 'activity_badges#show',
+                                      as: :activity_badge
+    end
+
     scope constraints: Router::LocaleConstraint.new do
       namespace :admin do
         scope controller: :sessions do

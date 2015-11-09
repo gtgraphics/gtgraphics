@@ -1,7 +1,5 @@
 #nav_content
-
   %nav.navbar.navbar-top#navbar_primary{role: 'navigation', class: secondary_menu_items.any? ? 'has-submenu' : nil}
-
     .navbar-header
       - unless page.root?
         %button.navbar-toggle.btn.btn-header.pull-right{type: 'button', data: { toggle: 'collapse', target: '.navbar-collapse' }}
@@ -19,6 +17,8 @@
           - primary_menu_items.each do |page|
             = active_link_to page, wrap_tag: :li, active: @page.self_and_ancestors.include?(page) do
               = page.title
+              - if page.template_file.in? %w(gallery gallery_hub showcase showcase_hub)
+                .activity-badge-container{data: { load: 'content', url: ajax_activity_badge_path(page_id: page) }}
 
         / Additional Items (Only Mobile)
         %ul.nav.navbar-nav.visible-xs#nav_xs_menu_items

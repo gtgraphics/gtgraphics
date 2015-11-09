@@ -58,6 +58,10 @@ class Page < ActiveRecord::Base
       embeddable_class.try(:support_templates?) || false
     end
 
+    def template_file
+      template.file_name.to_s.inquiry
+    end
+
     def template_class
       embeddable.class.template_class if support_templates?
     end
