@@ -3,13 +3,13 @@
 a {
   .activity-badge-container {
     float: right;
-    margin-top: -1px;
+    margin-top: -2px;
 
     .badge {
       transition: all 200ms ease;
       background-color: white;
       color: $brand-primary;
-      border-radius: 12px;
+      border-radius: 3px;
     }
   }
 
