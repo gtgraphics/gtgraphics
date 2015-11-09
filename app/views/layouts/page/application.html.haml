@@ -6,8 +6,8 @@
 
 - content_for :head do
   - if action_name == 'show'
-    %meta{name: 'description', content: @page.meta_description || ''}
-    %meta{name: 'keywords', content: @page.meta_keywords || ''}
+    %meta{name: 'description', content: @page.meta_description.to_s}
+    %meta{name: 'keywords', content: @page.meta_keywords.to_s}
     %meta{name: 'robots', content: @page.indexable? ? 'index,follow' : 'noindex,follow'}
 
   - # Meta Elements for OpenGraph/Social Media integration
@@ -15,7 +15,7 @@
     = yield :social_meta_tags
   - else
     - if action_name == 'show'
-      %meta{property: 'og:description', content: @page.meta_description || ''}
+      %meta{property: 'og:description', content: @page.meta_description.to_s}
     %meta{property: 'og:image', content: asset_url('social_icon.png')}
     %meta{property: 'og:image:type', content: 'image/png'}
     %meta{property: 'og:image:width', content: 600}

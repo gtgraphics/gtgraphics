@@ -5,9 +5,9 @@ class CreateSnippets < ActiveRecord::Migration
       t.timestamps
     end
 
-    reversible do |dir|
-      dir.up { Snippet.create_translation_table! name: :string, body: :text }
-      dir.down { Snippet.drop_translation_table! }
-    end
+    # reversible do |dir|
+    #   dir.up { Snippet.create_translation_table! name: :string, body: :text }
+    #   dir.down { Snippet.drop_translation_table! }
+    # end
   end
 end
