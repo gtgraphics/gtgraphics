@@ -27,7 +27,6 @@ class Image < ActiveRecord::Base
   include Image::Resizable
   include Image::ProjectAssignable
   include Image::ExifStorable
-  include Image::Buyable
 
   include Filterable
   include Ownable
@@ -53,6 +52,8 @@ class Image < ActiveRecord::Base
                           foreign_key: :delegator_id, dependent: :destroy
   has_many :shop_links, class_name: 'Image::ShopLink', inverse_of: :image,
                         dependent: :delete_all
+  has_many :buy_requests, class_name: 'Message::BuyRequest',
+                          foreign_key: :delegator_id, dependent: :destroy
 
   has_image
   acts_as_croppable
