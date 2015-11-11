@@ -12,35 +12,27 @@
 #  updated_at  :datetime
 #
 
-class User::SocialLink < ActiveRecord::Base
-  belongs_to :user, touch: true
-  belongs_to :provider
+class User < ActiveRecord::Base
+  class SocialLink < ActiveRecord::Base
+    include UrlContainable
 
-  acts_as_list scope: [:user, :shop]
+    belongs_to :user, required: true, touch: true
+    belongs_to :provider, required: true
 
-  default_scope -> { order(:position) }
+    delegate :name, :logo, to: :provider, prefix: true, allow_nil: true
 
-  validates :user, presence: true, strict: true
-  validates :provider, presence: true,
-                       uniqueness: { scope: [:user, :shop], allow_blank: true }
-  validates :url, presence: true, url: true
+    acts_as_list scope: %i(user shop)
 
-  scope :networks, -> { where(shop: false) }
-  scope :shops, -> { where(shop: true) }
+    default_scope -> { order(:position) }
 
-  delegate :name, to: :provider, prefix: true, allow_nil: true
+    validates :provider, uniqueness: { scope: %i(user shop),
+                                       allow_blank: true }
 
-  sanitizes :url, with: :strip
+    scope :networks, -> { where(shop: false) }
+    scope :shops, -> { where(shop: true) }
 
-  before_validation :set_default_protocol, if: :url?
-
-  def to_param
-    "#{id}-#{provider.name.parameterize}"
-  end
-
-  private
-
-  def set_default_protocol
-    self.url = "http://#{url}" if url !~ %r{\A(http|https)\://}
+    def to_param
+      [id, provider_name.try(:parameterize)].compact.join('-')
+    end
   end
 end

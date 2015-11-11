@@ -12,6 +12,7 @@
 #
 
 class Provider < ActiveRecord::Base
+  has_many :shop_links, class_name: 'Image::ShopLink', dependent: :delete_all
   has_many :social_links, class_name: 'User::SocialLink', dependent: :destroy
   has_many :users, through: :user_providers
 
@@ -21,7 +22,6 @@ class Provider < ActiveRecord::Base
   before_save :set_logo_updated_at, if: [:logo?, :logo_changed?]
 
   validates :name, presence: true
-  validates :logo, presence: true
 
   sanitizes :name, with: :strip
 
