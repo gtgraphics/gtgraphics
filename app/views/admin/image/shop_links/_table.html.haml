@@ -1,0 +1,11 @@
+- shop_links = local_assigns.fetch(:shop_links, @shop_links)
+
+- if shop_links.any?
+  %table.table#image_shop_links
+    %tbody
+      - shop_links.each do |shop_link|
+        = render 'admin/image/shop_links/shop_link', shop_link: shop_link
+
+- else
+  .panel-body.text-center
+    = translate 'views.hints.empty', model: Image::ShopLink.model_name.human(count: 2)

@@ -12,12 +12,6 @@
           = image_tag attached_asset_path(@image, :thumbnail), alt: @image.title, class: 'img-circle'
       = form.input :asset, input_html: { title: translate('helpers.links.browse') }
 
-  %fieldset
-    %legend= Image.human_attribute_name :shop_urls
-    .fields
-      - Image.available_shop_providers.each do |shop_provider|
-        = form.input :"#{shop_provider}_url", as: :affixed_string, input_html: { class: 'shop-provider-input', prefix: shop_provider_icon(shop_provider) }
-
   - if @image.pages.any?
     %fieldset
       %legend= Image.human_attribute_name :pages

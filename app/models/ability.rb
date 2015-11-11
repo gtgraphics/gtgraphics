@@ -65,6 +65,7 @@ class Ability
       can :manage, User
       can :manage, Provider
       can :manage, User::SocialLink
+      can :manage, Image::ShopLink
     end
   end
 end

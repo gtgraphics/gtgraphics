@@ -2,16 +2,20 @@ class Admin::Image::StylesController < Admin::ApplicationController
   respond_to :html, :js
 
   before_action :load_image
-  before_action :load_image_style, only: %i(show edit update customize apply_customization move_up move_down destroy)
+  before_action :load_image_style, only: %i(show edit update customize
+                                            apply_customization move_up
+                                            move_down destroy)
 
   breadcrumbs do |b|
     b.append ::Image.model_name.human(count: 2), :admin_images
     b.append @image.title, [:admin, @image]
     if action_name.in? %w(new upload)
-      b.append translate('breadcrumbs.new', model: ::Image::Style.model_name.human), [:new, :admin, @image, :style]
+      b.append translate('breadcrumbs.new', model: ::Image::Style.model_name.human),
+               [:new, :admin, @image, :style]
     end
     if action_name.in? %w(edit crop update)
-      b.append translate('breadcrumbs.edit', model: ::Image::Style.model_name.human), edit_admin_image_style_path(@image, @image_style)
+      b.append translate('breadcrumbs.edit', model: ::Image::Style.model_name.human),
+               edit_admin_image_style_path(@image, @image_style)
     end
   end
 

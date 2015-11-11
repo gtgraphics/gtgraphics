@@ -331,6 +331,9 @@ de:
       image/style/attachment:
         one: Externe Bearbeitung
         other: Externe Bearbeitungen
+      image/shop_link:
+        one: Shop-Link
+        other: Shop-Links
       menu_item:
         one: Menüeintrag
         other: Menüeinträge

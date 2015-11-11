@@ -6,6 +6,10 @@
   .thumbnail-cell {
     width: 62px;
     text-align: center;
+
+    &.thumbnail-cell--narrow {
+      width: 48px;
+    }
   }
   .actions {
     .btn-toolbar {

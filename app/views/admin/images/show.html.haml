@@ -107,12 +107,15 @@
           = image.list_item :taken_at if image.taken_at.present?
           = image.list_item :pages_count, true
 
-      - if image.shop_urls.values.any?(&:present?)
-        / Shops
-        = panel prepend_icon(:dollar, translate('views.admin.images.headlines.shops'), fixed_width: true), body: false do
-          .list-group#shop_providers
-            - image.shop_urls.each do |provider, url|
-              - if url.present?
-                = link_to url, target: '_blank', class: ['list-group-item', 'shop-provider', provider] do
-                  = shop_provider_icon(provider)
-                  = Image.human_attribute_name(:"#{provider}_url")
+      / Shops
+      .panel.panel-default
+        .panel-heading
+          %h4.panel-title
+            = prepend_icon :dollar, Image::ShopLink.model_name.human(count: 2), fixed_width: true
+
+        = render 'admin/image/shop_links/table'
+
+        - if can? :create, Image::ShopLink
+          .panel-footer.clearfix
+            = button_link_to [:new, :admin, @image, :shop_link], type: :success, block: true, remote: true do
+              = prepend_icon :plus, translate('helpers.links.new', model: Image::ShopLink.model_name.human)

@@ -1,0 +1,11 @@
+- present shop_link, with: Admin::Image::ShopLinkPresenter do |shop_link|
+  = content_tag_for :tr, shop_link do
+    %td.thumbnail-cell.thumbnail-cell--narrow
+      - if shop_link.provider.logo?
+        = image_tag attached_asset_path(shop_link.provider, :thumbnail, from: :logo), class: 'img-circle', alt: translate('views.admin.images.original'), width: 16
+    %td
+      = link_to shop_link.provider_name, shop_link.url, target: '_blank'
+    %td.actions
+      = shop_link.action_buttons only: %i(edit destroy), icon_only: true, remote: true
+
+

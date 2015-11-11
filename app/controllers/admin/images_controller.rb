@@ -68,6 +68,8 @@ class Admin::ImagesController < Admin::ApplicationController
   end
 
   def show
+    @shop_links = @image.shop_links.eager_load(:provider)
+              .order('providers.name')
     @tags = @image.tags.order(:label)
 
     respond_with :admin, @image do |format|

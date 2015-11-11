@@ -117,6 +117,7 @@ Rails.application.routes.draw do
               resources :attachments, as: :attachments, controller: :'image/attachments', concerns: %i(movable batch_processable) do
                 match :upload, on: :collection, via: %i(post patch)
               end
+              resources :shop_links, controller: :'image/shop_links', except: %i(index show)
               collection do
                 match :upload, via: %i(post patch)
                 patch :associate_owner, action: :associate_owner, as: :associate_owner_with
