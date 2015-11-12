@@ -19,47 +19,40 @@ module Admin
         @shop_link = @image.shop_links.new
 
         respond_to do |format|
-          format.html
+          format.js
         end
       end
 
       def create
-        @shop_link = @image.shop_links.new(shop_link_params)
+        @shop_link = @image.shop_links.create(shop_link_params)
+        load_shop_links
 
-        if @shop_link.save
-          respond_to do |format|
-            format.html
-          end
-        else
-          respond_to do |format|
-            format.html { render :edit }
-          end
+        respond_to do |format|
+          format.js
         end
       end
 
       def edit
         respond_to do |format|
-          format.html
+          format.js
         end
       end
 
       def update
-        if @shop_link.update(shop_link_params)
-          respond_to do |format|
-            format.html
-          end
-        else
-          respond_to do |format|
-            format.html { render :edit }
-          end
+        @shop_link.update(shop_link_params)
+        load_shop_links
+
+        respond_to do |format|
+          format.js
         end
       end
 
       def destroy
         @shop_link.destroy
+        load_shop_links
 
         respond_to do |format|
-          format.html
+          format.js
         end
       end
 
@@ -74,7 +67,12 @@ module Admin
       end
 
       def shop_link_params
-        params.require(:shop_link).permit! # TODO
+        params.require(:image_shop_link).permit(:provider_id, :url)
+      end
+
+      def load_shop_links
+        @shop_links = @image.shop_links.eager_load(:provider)
+                      .order('providers.name')
       end
     end
   end

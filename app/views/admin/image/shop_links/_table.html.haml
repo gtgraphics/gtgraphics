@@ -7,5 +7,5 @@
         = render 'admin/image/shop_links/shop_link', shop_link: shop_link
 
 - else
-  .panel-body.text-center
+  #image_shop_links.panel-body.text-center
     = translate 'views.hints.empty', model: Image::ShopLink.model_name.human(count: 2)

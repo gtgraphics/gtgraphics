@@ -7,6 +7,8 @@ class Image < ActiveRecord::Base
 
     delegate :name, :logo, to: :provider, prefix: true, allow_nil: true
 
+    validates :provider, uniqueness: { scope: :image }
+
     def to_param
       [id, provider_name.try(:parameterize)].compact.join('-')
     end

@@ -7,11 +7,11 @@ module Admin
       self.action_buttons = %i(edit destroy)
 
       def destroy_path
-        h.admin_image_style_path(image, shop_link)
+        h.admin_image_shop_link_path(image, shop_link)
       end
 
       def edit_path
-        h.edit_admin_image_style_path(image, shop_link)
+        h.edit_admin_image_shop_link_path(image, shop_link)
       end
     end
   end

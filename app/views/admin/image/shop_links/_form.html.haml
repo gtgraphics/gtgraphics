@@ -1,0 +1,10 @@
+= simple_form_for @shop_link, url: @shop_link.new_record? ? admin_image_shop_links_path(@image) : admin_image_shop_link_path(@image, @shop_link), remote: true, html: { class: 'form-horizontal' } do |form|
+
+  .modal-body
+    = form.association :provider, collection: Provider.order(:name).to_a - (@image.shop_links.collect(&:provider) - [@shop_link.provider])
+    = form.input :url
+
+  .modal-footer
+    = form.button :button, type: 'submit', class: 'btn-primary' do
+      = prepend_icon :save, translate('helpers.links.save')
+    = button_tag translate('helpers.links.close'), type: 'button', class: 'btn btn-default', data: { dismiss: 'modal' }
