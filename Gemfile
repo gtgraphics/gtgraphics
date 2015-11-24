@@ -88,6 +88,7 @@ gem 'countries'
 gem 'faker', group: %i(development test)
 gem 'spring', group: :development
 gem 'web-console', '~> 2.0', group: :development
+gem 'vnstat-ruby'
 
 # Image Processing
 gem 'mini_exiftool'
