@@ -5,13 +5,13 @@
     - breadcrumbs.each do |breadcrumb|
       - if breadcrumb.last?
         %li.active
-          - if breadcrumb.first? and toolbar
+          - if breadcrumb.first? && toolbar
             = icon(:home, fixed_width: true)
           - else
             = breadcrumb.caption
       - else
         %li
-          - if breadcrumb.first? and toolbar
+          - if breadcrumb.first? && toolbar
             = link_to breadcrumb.destination, title: translate('breadcrumbs.home'), class: 'gtg-admin-breadcrumb-home', data: { toggle: 'tooltip', placement: 'bottom', container: '#toolbar' } do
               = icon(:home, fixed_width: true)
               .sr-only= translate('breadcrumbs.home')

@@ -1,0 +1,80 @@
+- if @interface
+  .panel.panel-default
+    .panel-heading
+      %h3.panel-title
+        Gesamt
+        %span.text-muted
+          (seit #{localize(@interface.created_on)})
+    .panel-body
+      %dl.dl-horizontal
+        %dt Empfangen
+        %dd= number_to_human_size @total_traffic.bytes_received, strip_insignificant_zeros: false, precision: 3
+        %dt Gesendet
+        %dd= number_to_human_size @total_traffic.bytes_sent, strip_insignificant_zeros: false, precision: 3
+        %dt Insgesamt
+        %dd= number_to_human_size @total_traffic.bytes_transmitted, strip_insignificant_zeros: false, precision: 3
+
+  .panel.panel-default
+    .panel-heading
+      %h3.panel-title Monate
+    -# .panel-body
+    -#   Zur Zeit noch nicht unterstützt.
+    %table.table.table-hover
+      %thead
+        %tr
+          %th Zeitraum
+          %th Empfangen
+          %th Gesendet
+          %th Insgesamt
+      %tbody
+        - @monthly_traffic.each do |result|
+          %tr
+            %td
+              = translate('date.month_names')[result.month]
+              = result.year
+            %td= number_to_human_size result.bytes_received, strip_insignificant_zeros: false, precision: 3
+            %td= number_to_human_size result.bytes_sent, strip_insignificant_zeros: false, precision: 3
+            %td= number_to_human_size result.bytes_transmitted, strip_insignificant_zeros: false, precision: 3
+
+  .panel.panel-default
+    .panel-heading
+      %h3.panel-title Tage
+    -# .panel-body
+    -#   Zur Zeit noch nicht unterstützt.
+    %table.table.table-hover
+      %thead
+        %tr
+          %th Zeitraum
+          %th Empfangen
+          %th Gesendet
+          %th Insgesamt
+      %tbody
+        - @daily_traffic.each do |result|
+          %tr
+            %td= localize result.date
+            %td= number_to_human_size result.bytes_received, strip_insignificant_zeros: false, precision: 3
+            %td= number_to_human_size result.bytes_sent, strip_insignificant_zeros: false, precision: 3
+            %td= number_to_human_size result.bytes_transmitted, strip_insignificant_zeros: false, precision: 3
+
+  .panel.panel-default
+    .panel-heading
+      %h3.panel-title Stunden
+    -# .panel-body
+    -#   Zur Zeit noch nicht unterstützt.
+    %table.table.table-hover
+      %thead
+        %tr
+          %th Zeitraum
+          %th Empfangen
+          %th Gesendet
+          %th Insgesamt
+      %tbody
+        - @hourly_traffic.each do |result|
+          %tr
+            %td= localize result.time, format: :hour_interval
+            %td= number_to_human_size result.bytes_received, strip_insignificant_zeros: false, precision: 3
+            %td= number_to_human_size result.bytes_sent, strip_insignificant_zeros: false, precision: 3
+            %td= number_to_human_size result.bytes_transmitted, strip_insignificant_zeros: false, precision: 3
+
+- else
+  Keine Netzwerkschnittstelle gefunden.

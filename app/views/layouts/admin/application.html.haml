@@ -6,6 +6,8 @@
   = javascript_include_tag 'admin', data: { turbolinks_track: true }
   = yield :admin_javascripts
 
+  <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']}]}"></script>
+
 - content_for :title do
   = ([translate('views.admin.title')] + breadcrumbs.collect(&:caption).drop(1)).join(' &middot; ').html_safe
 
@@ -42,12 +44,26 @@
 
           / Main Menu
           %ul.nav.navbar-nav#nav_primary
-            = active_link_to Page.model_name.human(count: 2), :admin_pages, wrap_tag: :li, accesskey: 'P'
+            %li.dropdown{class: request.path =~ /pages|templates/ && 'active'}
+              = link_to :admin_pages, wrap_tag: :li, class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+                = Page.model_name.human(count: 2)
+                = caret
+              %ul.dropdown-menu
+                = active_link_to Page.model_name.human(count: 2), :admin_pages, wrap_tag: :li, accesskey: 'P'
+                = active_link_to ::Template.model_name.human(count: 2), :admin_templates, wrap_tag: :li, accesskey: 'T'
+
             = active_link_to Image.model_name.human(count: 2), :admin_images, wrap_tag: :li, accesskey: 'I'
             = active_link_to Project.model_name.human(count: 2), :admin_projects, wrap_tag: :li, accesskey: 'R'
             = active_link_to Attachment.model_name.human(count: 2), :admin_attachments, wrap_tag: :li, accesskey: 'A'
-            = active_link_to ::Template.model_name.human(count: 2), :admin_templates, wrap_tag: :li, accesskey: 'T'
             = active_link_to Provider.model_name.human(count: 2), :admin_providers, wrap_tag: :li
+
+            %li.dropdown{class: request.path.include?('stats') && 'active'}
+              = link_to '#', wrap_tag: :li, class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+                = translate('views.admin.nav.stats')
+                = caret
+              %ul.dropdown-menu
+                = active_link_to translate('views.admin.nav.stats/traffic'), :admin_stats_traffic, wrap_tag: :li, active: request.path.include?('stats/traffic')
+
             = active_link_to User.model_name.human(count: 2), :admin_users, wrap_tag: :li, accesskey: 'U'
 
           %ul.nav.navbar-nav.navbar-right#nav_secondary
@@ -63,7 +79,7 @@
                     = prepend_flag_icon locale, translate(locale, scope: :languages), size: 16, fixed_width: true
 
             / User Menu
-            %li.dropdown{class: request.path =~ /account|messages/ ? 'active' : nil}
+            %li.dropdown{class: request.path =~ /account|messages/ && 'active'}
               = active_link_to :admin_account, id: 'nav_account', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
                 %span.avatar
                   %span.icon
@@ -100,7 +116,7 @@
           = yield :admin_content
         - else
           = render_flashes
-          = render 'breadcrumbs'
+          = render 'admin/application/breadcrumbs'
           = yield
 
 = render template: 'layouts/application'
