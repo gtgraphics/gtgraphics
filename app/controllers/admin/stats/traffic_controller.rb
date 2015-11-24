@@ -11,7 +11,9 @@ module Admin
         @total_traffic = @interface.total
         @monthly_traffic = @interface.months.sort.reverse
         @daily_traffic = @interface.days.sort.reverse
-        @hourly_traffic = @interface.hours.sort.reverse
+        @hourly_traffic = @interface.hours.sort.reverse.group_by do |result|
+          result.time.to_date
+        end
 
         respond_to :html
       end

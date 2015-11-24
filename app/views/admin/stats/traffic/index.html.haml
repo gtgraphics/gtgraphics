@@ -61,20 +61,23 @@
       %h3.panel-title Stunden
     -# .panel-body
     -#   Zur Zeit noch nicht unterstützt.
-    %table.table.table-hover
+    %table.table
       %thead
         %tr
-          %th Zeitraum
+          %th{colspan: 2} Zeitraum
           %th Empfangen
           %th Gesendet
           %th Insgesamt
       %tbody
-        - @hourly_traffic.each do |result|
-          %tr
-            %td= localize result.time, format: :hour_interval
-            %td= number_to_human_size result.bytes_received, strip_insignificant_zeros: false, precision: 3
-            %td= number_to_human_size result.bytes_sent, strip_insignificant_zeros: false, precision: 3
-            %td= number_to_human_size result.bytes_transmitted, strip_insignificant_zeros: false, precision: 3
+        - @hourly_traffic.each do |date, results|
+          - results.each_with_index do |result, index|
+            %tr
+              - if index.zero?
+                %td{rowspan: results.count}= localize date
+              %td= localize result.time, format: :hour_interval
+              %td= number_to_human_size result.bytes_received, strip_insignificant_zeros: false, precision: 3
+              %td= number_to_human_size result.bytes_sent, strip_insignificant_zeros: false, precision: 3
+              %td= number_to_human_size result.bytes_transmitted, strip_insignificant_zeros: false, precision: 3
 
 - else
   Keine Netzwerkschnittstelle gefunden.
