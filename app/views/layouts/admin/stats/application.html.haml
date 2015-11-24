@@ -1,0 +1,20 @@
+- content_for :admin_content do
+  = render_flashes
+  = render 'admin/application/breadcrumbs'
+
+  .page-header
+    %h1= translate('views.admin.nav.stats')
+
+  .row
+    .col-sm-3
+      .panel.panel-default
+        .list-group
+          = active_link_to translate('views.admin.nav.stats/traffic'), :admin_stats_traffic, class: 'list-group-item', active: request.path.include?('stats/traffic')
+
+    .col-sm-9
+      - if content_for? :stats_content
+        = yield :stats_content
+      - else
+        = yield
+
+= render template: 'layouts/admin/application'

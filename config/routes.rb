@@ -60,6 +60,13 @@ Rails.application.routes.draw do
               end
             end
 
+            namespace :stats do
+              scope :traffic, controller: :traffic do
+                root action: :index, as: :traffic
+                patch :reset, as: :reset_traffic
+              end
+            end
+
             resource :account, except: [:new, :create] do
               get :edit_password
               patch :update_password

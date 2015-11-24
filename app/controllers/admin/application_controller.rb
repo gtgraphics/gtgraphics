@@ -1,39 +1,41 @@
-class Admin::ApplicationController < ApplicationController
-  skip_maintenance_check
+module Admin
+  class ApplicationController < ::ApplicationController
+    skip_maintenance_check
 
-  force_ssl if: :production?
+    force_ssl if: :production?
 
-  before_action :require_login
-  before_action :set_translation_locale
+    before_action :require_login
+    before_action :set_translation_locale
 
-  reset_breadcrumbs
+    reset_breadcrumbs
 
-  protected
+    protected
 
-  def default_url_options(_options = nil)
-    translated_locale = Globalize.locale != I18n.locale ? Globalize.locale : nil
-    { locale: I18n.locale, translations: translated_locale }
-  end
-
-  def not_authenticated
-    respond_to do |format|
-      format.html do
-        redirect_to :admin_login,
-                    alert: translate('helpers.flash.user.not_authenticated')
-      end
-      format.any { head :unauthorized }
+    def default_url_options(_options = nil)
+      translated_locale = Globalize.locale != I18n.locale ? Globalize.locale : nil
+      { locale: I18n.locale, translations: translated_locale }
     end
-  end
 
-  private
+    def not_authenticated
+      respond_to do |format|
+        format.html do
+          redirect_to :admin_login,
+                      alert: translate('helpers.flash.user.not_authenticated')
+        end
+        format.any { head :unauthorized }
+      end
+    end
 
-  def set_translation_locale
-    available_locales = I18n.available_locales.map(&:to_s)
-    locale = params[:translations]
-    if locale && locale.in?(available_locales)
-      Globalize.locale = locale
-    else
-      Globalize.locale = I18n.locale
+    private
+
+    def set_translation_locale
+      available_locales = I18n.available_locales.map(&:to_s)
+      locale = params[:translations]
+      if locale && locale.in?(available_locales)
+        Globalize.locale = locale
+      else
+        Globalize.locale = I18n.locale
+      end
     end
   end
 end

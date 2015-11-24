@@ -27,6 +27,9 @@ de:
 
     admin:
       title: GTGRAPHICS Administration
+      nav:
+        stats: Statistiken
+        stats/traffic: Datenübertragung
       account:
         breadcrumbs:
           my_account: Ich
