@@ -6,13 +6,25 @@
         %span.text-muted
           (seit #{localize(@interface.created_on)})
     .panel-body
-      %dl.dl-horizontal
-        %dt Empfangen
-        %dd= number_to_human_size @total_traffic.bytes_received, strip_insignificant_zeros: false, precision: 3
-        %dt Gesendet
-        %dd= number_to_human_size @total_traffic.bytes_sent, strip_insignificant_zeros: false, precision: 3
-        %dt Insgesamt
-        %dd= number_to_human_size @total_traffic.bytes_transmitted, strip_insignificant_zeros: false, precision: 3
+      .row
+        .col-sm-6
+          %dl.dl-horizontal
+            %dt Empfangen
+            %dd= number_to_human_size @total_traffic.bytes_received, strip_insignificant_zeros: false, precision: 3
+            %dt Gesendet
+            %dd= number_to_human_size @total_traffic.bytes_sent, strip_insignificant_zeros: false, precision: 3
+            %dt Insgesamt
+            %dd= number_to_human_size @total_traffic.bytes_transmitted, strip_insignificant_zeros: false, precision: 3
+        .col-sm-6
+          .progress
+            .progress-bar{class: @monthly_traffic_used >= @monthly_traffic_max && 'progress-bar-danger', role: 'progressbar', style: @monthly_traffic_used >= @monthly_traffic_max ? 'min-width: 3em; width: 100%' : "min-width: 3em; width: #{(@monthly_traffic_used * 100 / @monthly_traffic_max.to_f).round}%"}
+              = number_to_percentage (@monthly_traffic_used * 100 / @monthly_traffic_max.to_f).round, precision: 1
+          .text-center
+            %strong
+            = number_to_human_size @monthly_traffic_used, strip_insignificant_zeros: false, precision: 3
+            von
+            = number_to_human_size @monthly_traffic_max, strip_insignificant_zeros: false, precision: 3
+            verbraucht in diesem Monat
 
   .panel.panel-default
     .panel-heading

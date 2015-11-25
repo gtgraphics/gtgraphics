@@ -14,6 +14,9 @@ module Admin
             @daily_traffic = @interface.days.sort.reverse
             @hourly_traffic = @interface.hours.sort.reverse
             @top_traffic = @interface.tops.sort_by(&:bytes_transmitted).reverse
+
+            @monthly_traffic_used = @interface.months[Date.today.year, Date.today.month].bytes_transmitted
+            @monthly_traffic_max = 1000 * (1024 ** 3)
           else
             @error_message = 'Keine Netzwerkschnittstelle gefunden.'
           end
