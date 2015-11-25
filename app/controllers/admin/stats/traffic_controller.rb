@@ -1,35 +1,43 @@
 module Admin
   module Stats
     class TrafficController < Admin::Stats::ApplicationController
-      before_action :load_interface
-
       breadcrumbs do |b|
         b.append translate('views.admin.stats/traffic'), :admin_stats_traffic
       end
 
       def index
-        @total_traffic = @interface.total
-        @monthly_traffic = @interface.months.sort.reverse
-        @daily_traffic = @interface.days.sort.reverse
-        @hourly_traffic = @interface.hours.sort.reverse.group_by do |result|
-          result.time.to_date
+        begin
+          @interface = Vnstat.interfaces.first
+          if @interface
+            @total_traffic = @interface.total
+            @monthly_traffic = @interface.months.sort.reverse
+            @daily_traffic = @interface.days.sort.reverse
+            @hourly_traffic = @interface.hours.sort.reverse
+          else
+            @error_message = 'Keine Netzwerkschnittstelle gefunden.'
+          end
+        rescue Vnstat::Error => error
+          @error_message = error.message
         end
 
         respond_to :html
       end
 
       def reset
-        @interface.reset
+        begin
+          interface = Vnstat.interfaces.first
+          interface.reset
 
-        respond_to do |format|
-          format.html { redirect_to :admin_stats_traffic }
+          respond_to do |format|
+            format.html { redirect_to :admin_stats_traffic }
+          end
+        rescue Vnstat::Error
+          respond_to do |format|
+            format.html do
+              redirect_to :back, alert: 'Konnte Statistik nicht zurücksetzen.'
+            end
+          end
         end
-      end
-
-      private
-
-      def load_interface
-        @interface = Vnstat.interfaces.first
       end
     end
   end
