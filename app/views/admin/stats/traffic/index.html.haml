@@ -17,8 +17,8 @@
   .panel.panel-default
     .panel-heading
       %h3.panel-title Monate
-    -# .panel-body
-    -#   Zur Zeit noch nicht unterstützt.
+    .panel-body
+      = monthly_traffic_chart(@monthly_traffic)
     %table.table.table-hover
       %thead
         %tr
@@ -39,8 +39,8 @@
   .panel.panel-default
     .panel-heading
       %h3.panel-title Tage
-    -# .panel-body
-    -#   Zur Zeit noch nicht unterstützt.
+    .panel-body
+      = daily_traffic_chart(@daily_traffic)
     %table.table.table-hover
       %thead
         %tr
@@ -59,8 +59,8 @@
   .panel.panel-default
     .panel-heading
       %h3.panel-title Stunden
-    -# .panel-body
-    -#   Zur Zeit noch nicht unterstützt.
+    .panel-body
+      = hourly_traffic_chart(@hourly_traffic)
     %table.table.table-hover
       %thead
         %tr
@@ -72,6 +72,26 @@
         - @hourly_traffic.each do |result|
           %tr
             %td= localize result.time, format: :hour_interval
+            %td= number_to_human_size result.bytes_received, strip_insignificant_zeros: false, precision: 3
+            %td= number_to_human_size result.bytes_sent, strip_insignificant_zeros: false, precision: 3
+            %td= number_to_human_size result.bytes_transmitted, strip_insignificant_zeros: false, precision: 3
+
+  .panel.panel-default
+    .panel-heading
+      %h3.panel-title Top 10
+    %table.table.table-hover
+      %thead
+        %tr
+          %th Pos.
+          %th Datum
+          %th Empfangen
+          %th Gesendet
+          %th Insgesamt
+      %tbody
+        - @top_traffic.each_with_index do |result, index|
+          %tr
+            %td= index.next
+            %td= localize result.time, format: :short
             %td= number_to_human_size result.bytes_received, strip_insignificant_zeros: false, precision: 3
             %td= number_to_human_size result.bytes_sent, strip_insignificant_zeros: false, precision: 3
             %td= number_to_human_size result.bytes_transmitted, strip_insignificant_zeros: false, precision: 3

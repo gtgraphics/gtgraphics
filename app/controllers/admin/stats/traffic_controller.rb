@@ -13,6 +13,7 @@ module Admin
             @monthly_traffic = @interface.months.sort.reverse
             @daily_traffic = @interface.days.sort.reverse
             @hourly_traffic = @interface.hours.sort.reverse
+            @top_traffic = @interface.tops.sort_by(&:bytes_transmitted).reverse
           else
             @error_message = 'Keine Netzwerkschnittstelle gefunden.'
           end

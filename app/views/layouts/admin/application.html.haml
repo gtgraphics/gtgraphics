@@ -3,10 +3,11 @@
   = yield :admin_stylesheets
 
 - content_for :javascripts do
+  :javascript
+    var Chartkick = {"language": #{I18n.locale.to_json}};
+  = javascript_include_tag '//www.google.com/jsapi', 'chartkick'
   = javascript_include_tag 'admin', data: { turbolinks_track: true }
   = yield :admin_javascripts
-
-  <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']}]}"></script>
 
 - content_for :title do
   = ([translate('views.admin.title')] + breadcrumbs.collect(&:caption).drop(1)).join(' &middot; ').html_safe
