@@ -18,7 +18,7 @@
         .col-sm-6
           .progress
             .progress-bar{class: @monthly_traffic_used >= @monthly_traffic_max && 'progress-bar-danger', role: 'progressbar', style: @monthly_traffic_used >= @monthly_traffic_max ? 'min-width: 3em; width: 100%' : "min-width: 3em; width: #{(@monthly_traffic_used * 100 / @monthly_traffic_max.to_f).round}%"}
-              = number_to_percentage (@monthly_traffic_used * 100 / @monthly_traffic_max.to_f).round, precision: 1
+              = number_to_percentage @monthly_traffic_used * 100 / @monthly_traffic_max.to_f, precision: 1
           .text-center
             %strong
             = number_to_human_size @monthly_traffic_used, strip_insignificant_zeros: false, precision: 3
@@ -29,9 +29,10 @@
   .panel.panel-default
     .panel-heading
       %h3.panel-title Monate
-    .panel-body
-      = monthly_traffic_chart(@monthly_traffic)
-    %table.table.table-hover
+    #monthly_traffic.diagram-container.panel-body
+      .diagram-container__loader.text-center.text-muted
+        = loader
+    %table.table.table-hover{data: { provides: 'traffic-table', timespan: 'monthly', target: '#monthly_traffic', caption: { time: 'Zeit', bytes_received: 'Empfangen', bytes_sent: 'Gesendet', v_axis: 'MB' }}}
       %thead
         %tr
           %th Zeitraum
@@ -40,7 +41,7 @@
           %th Insgesamt
       %tbody
         - @monthly_traffic.each do |result|
-          %tr
+          %tr{data: { time: "#{translate('date.month_names')[result.month]} #{result.year}", bytes_received: result.bytes_received, bytes_sent: result.bytes_sent }}
             %td
               = translate('date.month_names')[result.month]
               = result.year
@@ -51,9 +52,10 @@
   .panel.panel-default
     .panel-heading
       %h3.panel-title Tage
-    .panel-body
-      = daily_traffic_chart(@daily_traffic)
-    %table.table.table-hover
+    #daily_traffic.diagram-container.panel-body
+      .diagram-container__loader.text-center.text-muted
+        = loader
+    %table.table.table-hover{data: { provides: 'traffic-table', timespan: 'daily', target: '#daily_traffic', caption: { time: 'Zeit', bytes_received: 'Empfangen', bytes_sent: 'Gesendet', v_axis: 'MB' }}}
       %thead
         %tr
           %th Zeitraum
@@ -62,7 +64,7 @@
           %th Insgesamt
       %tbody
         - @daily_traffic.each do |result|
-          %tr
+          %tr{data: { time: localize(result.date, format: :without_year), bytes_received: result.bytes_received, bytes_sent: result.bytes_sent }}
             %td= localize result.date
             %td= number_to_human_size result.bytes_received, strip_insignificant_zeros: false, precision: 3
             %td= number_to_human_size result.bytes_sent, strip_insignificant_zeros: false, precision: 3
@@ -71,9 +73,10 @@
   .panel.panel-default
     .panel-heading
       %h3.panel-title Stunden
-    .panel-body
-      = hourly_traffic_chart(@hourly_traffic)
-    %table.table.table-hover
+    #hourly_traffic.diagram-container.panel-body
+      .diagram-container__loader.text-center.text-muted
+        = loader
+    %table.table.table-hover{data: { provides: 'traffic-table', timespan: 'hourly', target: '#hourly_traffic', caption: { time: 'Zeit', bytes_received: 'Empfangen', bytes_sent: 'Gesendet', v_axis: 'MB' }}}
       %thead
         %tr
           %th Zeitraum
@@ -82,7 +85,7 @@
           %th Insgesamt
       %tbody
         - @hourly_traffic.each do |result|
-          %tr
+          %tr{data: { time: localize(result.time, format: :hour), bytes_received: result.bytes_received, bytes_sent: result.bytes_sent }}
             %td= localize result.time, format: :hour_interval
             %td= number_to_human_size result.bytes_received, strip_insignificant_zeros: false, precision: 3
             %td= number_to_human_size result.bytes_sent, strip_insignificant_zeros: false, precision: 3
