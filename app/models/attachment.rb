@@ -16,8 +16,8 @@
 #
 
 class Attachment < ActiveRecord::Base
+  include CounterIncrementable
   include FileAttachable
-  include HitCountable
   include Ownable
   include PeriodFilterable
   include PersistenceContextTrackable

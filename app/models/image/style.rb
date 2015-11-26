@@ -18,6 +18,7 @@
 #  position              :integer          not null
 #  original_filename     :string(255)
 #  asset_token           :string(255)      not null
+#  downloads_count       :integer          not null
 #
 
 class Image < ActiveRecord::Base
@@ -27,6 +28,7 @@ class Image < ActiveRecord::Base
     include Image::Resizable
     include Image::ExifAnalyzable
 
+    include CounterIncrementable
     include PersistenceContextTrackable
     include TitleSearchable
     include Translatable

@@ -65,6 +65,8 @@ Rails.application.routes.draw do
                 root action: :index, as: :traffic
                 patch :reset, as: :reset_traffic
               end
+
+              get :downloads, controller: :downloads, action: :index
             end
 
             resource :account, except: [:new, :create] do

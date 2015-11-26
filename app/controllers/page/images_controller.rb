@@ -26,7 +26,7 @@ class Page::ImagesController < Page::ApplicationController
 
     respond_to do |format|
       format.html { render_page }
-      format.send(@image.format) { render_image(@image) }
+      format.send(@image.format) { send_image(@image) }
     end
   end
 
@@ -34,7 +34,9 @@ class Page::ImagesController < Page::ApplicationController
 
   def download
     @image_style = @image.styles.find_by!(position: params[:style_id])
-    render_image(@image_style, :attachment)
+    @image_style.increment_counter!(:downloads)
+
+    send_image(@image_style, :attachment)
   end
 
   def buy
@@ -92,7 +94,7 @@ class Page::ImagesController < Page::ApplicationController
                                     :sender_email, :body, :security_answer)
   end
 
-  def render_image(image, disposition = :inline)
+  def send_image(image, disposition = :inline)
     path = image.asset.versions[:public].path
     send_file path, filename: image.virtual_filename,
                     content_type: image.content_type,

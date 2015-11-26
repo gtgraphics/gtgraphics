@@ -73,7 +73,7 @@ class Page::ApplicationController < ApplicationController
   end
 
   def increment_hits
-    @page.increment_hits!
+    @page.increment_counter!(:hits)
   end
 
   def restrict_secure_connection

@@ -5,7 +5,7 @@
 - content_for :javascripts do
   :javascript
     var Chartkick = {"language": #{I18n.locale.to_json}};
-  = javascript_include_tag '//www.google.com/jsapi', 'chartkick'
+  = javascript_include_tag '//www.google.com/jsapi'
   = javascript_include_tag 'admin', data: { turbolinks_track: true }
   = yield :admin_javascripts
 
@@ -64,6 +64,7 @@
                 = caret
               %ul.dropdown-menu
                 = active_link_to translate('views.admin.nav.stats/traffic'), :admin_stats_traffic, wrap_tag: :li, active: request.path.include?('stats/traffic')
+                = active_link_to translate('views.admin.nav.stats/downloads'), :admin_stats_downloads, wrap_tag: :li, active: request.path.include?('stats/downloads')
 
             = active_link_to User.model_name.human(count: 2), :admin_users, wrap_tag: :li, accesskey: 'U'
 

@@ -30,6 +30,7 @@ de:
       nav:
         stats: Statistiken
         stats/traffic: Datenübertragung
+        stats/downloads: Downloads
       account:
         breadcrumbs:
           my_account: Ich

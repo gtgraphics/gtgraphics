@@ -10,6 +10,7 @@
       .panel.panel-default
         .list-group
           = active_link_to translate('views.admin.nav.stats/traffic'), :admin_stats_traffic, class: 'list-group-item', active: request.path.include?('stats/traffic')
+          = active_link_to translate('views.admin.nav.stats/downloads'), :admin_stats_downloads, class: 'list-group-item', active: request.path.include?('stats/downloads')
 
     .col-sm-9
       - if content_for? :stats_content

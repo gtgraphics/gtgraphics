@@ -24,8 +24,8 @@
 #
 
 class Page < ActiveRecord::Base
+  include CounterIncrementable
   include Excludable
-  include HitCountable
   include NestedSetRepresentable
   include Ownable
   include Page::Abstract
