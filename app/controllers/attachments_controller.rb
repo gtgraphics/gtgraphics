@@ -13,7 +13,7 @@ class AttachmentsController < ApplicationController
 
   def send_attachment(disposition)
     attachment = Attachment.find_by!(asset: params[:filename])
-    attachment.increment_counter!(:hits)
+    attachment.increment_counter!(:downloads)
     send_file attachment.asset.path, filename: attachment.original_filename,
                                      content_type: attachment.content_type,
                                      disposition: disposition,
