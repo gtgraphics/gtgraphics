@@ -7,7 +7,7 @@
         %th= Image::Style.human_attribute_name :title
         %th.actions
     %tbody
-      - @image.downloads.order(:position).each do |image_download|
+      - @image.downloads.each do |image_download|
         = render 'admin/image/downloads/image_download', image_download: image_download
 - else
   .panel-body.text-center

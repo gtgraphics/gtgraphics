@@ -48,17 +48,23 @@
                     = icon :comment, size: :lg, fixed_width: true
                     %span.sr-only= translate('helpers.links.comment')
 
-              - if image.styles.any? && display_styles
+              - if display_styles && (@image_styles.any? || @image_downloads.any?)
                 %li.dropdown.hidden-sm.js-only
                   = link_to '#', id: 'image_download_dropdown', title: translate('helpers.links.download'), class: 'dropdown-toggle', :'aria-haspopup' => 'true', data: { toggle: 'dropdown' } do
                     = icon :download, size: :lg, fixed_width: true
                     = caret
                     %span.sr-only= translate('helpers.links.download')
                   %ul.dropdown-menu{role: 'menu', :'aria-labelledby' => 'image_download_dropdown'}
-                    - image.styles.each do |style|
+                    - present_collection(@image_styles).each do |style|
+                      %li= link_to style.title, current_page_path(:download_image, format: style.format, style_id: style.position), class: 'download', data: { no_turbolink: true }
+                    - if @image_styles.any? && @image_downloads.any?
+                      %li.divider
+                    - present_collection(@image_downloads).each do |download|
                       %li
-                        = link_to current_page_path(:download_image, format: style.format, style_id: style.position), class: 'download', data: { no_turbolink: true } do
-                          = style.title
+                        = link_to download.url, data: { no_turbolink: true } do
+                          .download-title= download.title
+                          .download-details
+                            %small.weak= download.content_type
 
               - if buyable
                 %li.dropdown.hidden-sm
@@ -154,13 +160,22 @@
                         %ul.list-unstyled.shop-providers
                           = image.shop_links
 
-                    - if image.styles.any?
-                      / Download
+                    - if display_styles && (@image_styles.any? || @image_downloads.any?)
                       .col-xs-12.col-sm-6
+                        / Downloadable Styles
                         %h3= prepend_icon :download, translate('helpers.links.download'), fixed_width: true
-                        %ul.list-unstyled.image-styles
-                          - image.styles.each do |style|
-                            %li= link_to style.title, current_page_path(:download_image, format: style.format, style_id: style.position), data: { no_turbolink: true }
+
+                        - if @image_styles.any?
+                          %ul.list-unstyled.image-styles
+                            - present_collection(@image_styles).each do |style|
+                              %li= link_to style.title, current_page_path(:download_image, format: style.format, style_id: style.position), data: { no_turbolink: true }
+
+                        - if @image_downloads.any?
+                          %ul.list-unstyled.image-downloads
+                            - present_collection(@image_downloads).each do |download|
+                              %li
+                                = link_to attachment_path(download.attachment, locale: nil), data: { no_turbolink: true } do
+                                  #{download.title} (#{download.content_type})
 
               / Comments
               .page-body.lightbox-comments.js-only#comments

@@ -42,6 +42,8 @@ class Image < ActiveRecord::Base
 
     acts_as_list scope: :image_id
 
+    default_scope -> { order(:position) }
+
     has_image
     acts_as_croppable
     acts_as_resizable

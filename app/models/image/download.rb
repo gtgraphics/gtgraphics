@@ -15,6 +15,8 @@ class Image < ActiveRecord::Base
     belongs_to :image, required: true, touch: true
     belongs_to :attachment, required: true
 
-    delegate :title, :original_filename, to: :attachment
+    default_scope -> { order(:position) }
+
+    delegate :title, :asset, :original_filename, :content_type, to: :attachment
   end
 end

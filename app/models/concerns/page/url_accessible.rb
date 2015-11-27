@@ -4,8 +4,6 @@ class Page < ActiveRecord::Base
 
     RESERVED_SLUGS = [].freeze
     RESERVED_PATHS = %w(401 404 500 system public assets files static).freeze
-
-    PERMALINK_CHARS = [('A'..'Z'), ('a'..'z'), ('0'..'9')].freeze
     PERMALINK_LENGTH = 6
 
     included do
@@ -32,7 +30,7 @@ class Page < ActiveRecord::Base
 
     module ClassMethods
       def generate_permalink
-        RandomString.generate(PERMALINK_LENGTH, chars: PERMALINK_CHARS)
+        RandomString.generate(length: PERMALINK_LENGTH)
       end
     end
 
