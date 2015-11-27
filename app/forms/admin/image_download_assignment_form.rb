@@ -4,14 +4,23 @@ module Admin
 
     attr_accessor :image
 
+    def attachment_ids=(attachment_ids)
+      if attachment_ids.is_a?(String)
+        attachment_ids = attachment_ids.split(',')
+                         .map(&:to_i).reject(&:zero?)
+      end
+      super(attachment_ids)
+    end
+
     validates :image, presence: true, strict: true
     validates :attachment_ids, presence: true
 
     def perform
-      attachments.each do |attachment|
-        image.downloads.build(attachment: attachment)
+      ::Image::Download.transaction do
+        attachment_ids.each do |attachment_id|
+          image.downloads.create!(attachment_id: attachment_id)
+        end
       end
-      image.save!
     end
   end
 end

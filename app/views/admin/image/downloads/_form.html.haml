@@ -1,7 +1,7 @@
 = simple_form_for @image_download_assignment_form, as: :image_download_assignment, url: admin_image_attachments_path(@image), remote: true, html: { class: 'form-horizontal' } do |form|
 
   .modal-body
-    = form.input :attachment_ids, collection: Attachment.all, as: :check_boxes, wrapper: :horizontal_radio_and_checkboxes, input_html: { autofocus: true }
+    = form.input :attachment_ids, as: :attachment_select, multiple: true, input_html: { autofocus: true }
 
   .modal-footer
     = form.button :button, type: 'submit', class: 'btn-primary' do

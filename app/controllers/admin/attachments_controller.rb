@@ -40,6 +40,10 @@ class Admin::AttachmentsController < Admin::ApplicationController
     end
   end
 
+  def show
+    respond_to :json
+  end
+
   def new
     @attachment = Attachment.new
     @attachment.translations.build(locale: I18n.locale)

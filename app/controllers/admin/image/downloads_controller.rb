@@ -82,7 +82,7 @@ module Admin
       end
 
       def image_download_params
-        params.require(:image_download_assignment).permit(attachment_ids: [])
+        params.require(:image_download_assignment).permit(:attachment_ids)
       end
 
       def image_download_upload_params

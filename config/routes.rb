@@ -75,7 +75,7 @@ Rails.application.routes.draw do
               patch :update_preferences
             end
 
-            resources :attachments, except: :show, concerns: :batch_processable do
+            resources :attachments, concerns: :batch_processable do
               collection do
                 patch :upload
               end
