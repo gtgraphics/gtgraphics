@@ -4,14 +4,14 @@
 #
 #  id                   :integer          not null, primary key
 #  project_id           :integer          not null
-#  locale               :string(255)      not null
-#  created_at           :datetime
-#  updated_at           :datetime
-#  title                :string(255)
+#  locale               :string           not null
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  title                :string
 #  description          :text
-#  url                  :string(255)
-#  project_translations :string(255)
-#  project_type         :string(255)
+#  url                  :string
+#  project_translations :string
+#  project_type         :string
 #
 
 class Project< ActiveRecord::Base

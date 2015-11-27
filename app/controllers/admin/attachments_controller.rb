@@ -56,6 +56,7 @@ class Admin::AttachmentsController < Admin::ApplicationController
     @attachment = Attachment.new(attachment_upload_params)
     @attachment.author = current_user
     @attachment.save!
+
     respond_to do |format|
       format.js
     end
@@ -120,6 +121,7 @@ class Admin::AttachmentsController < Admin::ApplicationController
   private :destroy_multiple # invoked through :batch_process
 
   private
+
   def attachment_params
     params.require(:attachment).permit(:asset, :author_id, translations_attributes: [:_destroy, :id, :locale, :title, :description])
   end

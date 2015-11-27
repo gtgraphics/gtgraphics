@@ -3,9 +3,9 @@
 # Table name: clients
 #
 #  id          :integer          not null, primary key
-#  name        :string(255)
+#  name        :string
 #  country     :string(2)
-#  website_url :string(255)
+#  website_url :string
 #
 
 class Client < ActiveRecord::Base

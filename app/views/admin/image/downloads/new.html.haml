@@ -1,0 +1,4 @@
+- content_for :title, translate('breadcrumbs.assign', model: Attachment.model_name.human)
+
+- content_for :content do
+  = render 'form'

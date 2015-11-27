@@ -46,16 +46,18 @@ module FileAttachable
       end
     end
 
-    protected
+    private
 
     def generate_asset_token
       return if !respond_to?(:asset_token) || asset_token?
       original_filename = asset.file.try(:original_filename)
+      token = RandomString.generate
       if original_filename
-        name = File.basename(original_filename, '.*').slice(0...32)
-        self.asset_token = "#{SecureRandom.uuid}-#{name.parameterize}"
+        name = File.basename(original_filename, '.*')
+               .slice(0...40).parameterize.dasherize
+        self.asset_token = "#{name}-#{token}"
       else
-        self.asset_token = SecureRandom.uuid
+        self.asset_token = token
       end
     end
 
@@ -72,8 +74,6 @@ module FileAttachable
     def set_file_size
       self.file_size = asset.file.size
     end
-
-    private
 
     def set_asset_updated_at
       self.asset_updated_at = DateTime.now

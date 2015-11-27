@@ -3,11 +3,11 @@
 # Table name: templates
 #
 #  id          :integer          not null, primary key
-#  file_name   :string(255)
-#  type        :string(255)
+#  file_name   :string
+#  type        :string
 #  created_at  :datetime
 #  updated_at  :datetime
-#  name        :string(255)
+#  name        :string
 #  description :text
 #  position    :integer          not null
 #

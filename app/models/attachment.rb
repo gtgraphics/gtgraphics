@@ -3,16 +3,16 @@
 # Table name: attachments
 #
 #  id                :integer          not null, primary key
-#  asset             :string(255)
-#  content_type      :string(255)
+#  asset             :string
+#  content_type      :string
 #  file_size         :integer
 #  asset_updated_at  :datetime
 #  created_at        :datetime
 #  updated_at        :datetime
 #  author_id         :integer
-#  original_filename :string(255)
-#  asset_token       :string(255)      not null
-#  hits_count        :integer          default(0), not null
+#  original_filename :string
+#  asset_token       :string           not null
+#  downloads_count   :integer          default(0), not null
 #
 
 class Attachment < ActiveRecord::Base
@@ -28,6 +28,9 @@ class Attachment < ActiveRecord::Base
 
   has_attachment
   has_owner :author, default_owner_to_current_user: false
+
+  has_many :image_downloads, class_name: 'Image::Download',
+                             inverse_of: :attachment, dependent: :destroy
 
   validates :asset, presence: true
 

@@ -3,10 +3,10 @@
 # Table name: providers
 #
 #  id              :integer          not null, primary key
-#  name            :string(255)
-#  logo            :string(255)
+#  name            :string
+#  logo            :string
 #  logo_updated_at :datetime
-#  asset_token     :string(255)
+#  asset_token     :string
 #  created_at      :datetime
 #  updated_at      :datetime
 #

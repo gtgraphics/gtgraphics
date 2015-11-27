@@ -3,15 +3,15 @@
 # Table name: messages
 #
 #  id                :integer          not null, primary key
-#  first_sender_name :string(255)
-#  last_sender_name  :string(255)
-#  sender_email      :string(255)
-#  subject           :string(255)
+#  first_sender_name :string
+#  last_sender_name  :string
+#  sender_email      :string
+#  subject           :string
 #  body              :text
 #  created_at        :datetime
 #  delegator_id      :integer
-#  type              :string(255)      not null
-#  ip                :string(255)
+#  type              :string           not null
+#  ip                :string
 #
 
 class Message < ActiveRecord::Base

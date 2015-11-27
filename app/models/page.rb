@@ -3,17 +3,17 @@
 # Table name: pages
 #
 #  id              :integer          not null, primary key
-#  slug            :string(255)
+#  slug            :string
 #  author_id       :integer
 #  created_at      :datetime
 #  updated_at      :datetime
-#  path            :string(255)
+#  path            :string
 #  parent_id       :integer
 #  lft             :integer
 #  rgt             :integer
 #  depth           :integer
 #  embeddable_id   :integer
-#  embeddable_type :string(255)
+#  embeddable_type :string
 #  menu_item       :boolean          default(TRUE), not null
 #  indexable       :boolean          default(TRUE), not null
 #  children_count  :integer          default(0), not null

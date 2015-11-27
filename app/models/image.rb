@@ -3,8 +3,8 @@
 # Table name: images
 #
 #  id                    :integer          not null, primary key
-#  asset                 :string(255)
-#  content_type          :string(255)
+#  asset                 :string
+#  content_type          :string
 #  file_size             :integer
 #  asset_updated_at      :datetime
 #  original_width        :integer
@@ -16,10 +16,9 @@
 #  customization_options :text
 #  width                 :integer
 #  height                :integer
-#  original_filename     :string(255)
-#  asset_token           :string(255)      not null
+#  original_filename     :string
+#  asset_token           :string           not null
 #  shop_urls             :text
-#  dominant_colors       :text
 #
 
 class Image < ActiveRecord::Base
@@ -45,6 +44,8 @@ class Image < ActiveRecord::Base
 
   has_many :styles, class_name: 'Image::Style', inverse_of: :image,
                     dependent: :destroy
+  has_many :downloads, class_name: 'Image::Download', inverse_of: :image,
+                       dependent: :destroy
   has_many :image_pages, class_name: 'Page::Image', inverse_of: :image,
                          dependent: :destroy
   has_many :pages, through: :image_pages

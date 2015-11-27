@@ -3,7 +3,7 @@
 # Table name: tags
 #
 #  id    :integer          not null, primary key
-#  label :string(255)
+#  label :string           not null
 #
 
 class Tag < ActiveRecord::Base

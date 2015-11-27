@@ -23,7 +23,7 @@
 
 .panel-title {
   font-weight: 500;
-  
+
   label.checkbox {
     padding: 0 !important;
     min-height: auto;
@@ -35,4 +35,8 @@
       }
     }
   }
+}
+
+.panel-table-container > .table {
+  margin-bottom: 0;
 }

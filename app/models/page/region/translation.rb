@@ -4,9 +4,9 @@
 #
 #  id             :integer          not null, primary key
 #  page_region_id :integer          not null
-#  locale         :string(255)      not null
-#  created_at     :datetime
-#  updated_at     :datetime
+#  locale         :string           not null
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
 #  body           :text
 #
 

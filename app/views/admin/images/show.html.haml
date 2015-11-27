@@ -30,6 +30,7 @@
         = link_to attached_asset_path(image, :public), target: '_blank' do
           = image_tag attached_asset_path(image, :custom), class: 'img-responsive img-editable img-rounded center-block', alt: image.title
 
+      / Styles
       #image_style_upload_dropzone
         = form_tag batch_process_admin_image_styles_path(@image), method: :patch, remote: true do
           .panel.panel-default
@@ -49,6 +50,28 @@
                 .btn-group
                   = button_link_to new_admin_image_style_path(@image), remote: true do
                     = prepend_icon :plus, translate('helpers.links.new', model: Image::Style.model_name.human)
+
+      / Downloads
+      #image_style_upload_dropzone
+        = form_tag batch_process_admin_image_attachments_path(@image), method: :patch, remote: true do
+          .panel.panel-default
+            .panel-heading
+              %h4.panel-title= prepend_icon :paperclip, Image::Download.model_name.human(count: 2), fixed_width: true
+            #image_downloads.panel-table-container
+              = render 'admin/image/downloads/table'
+            .panel-footer.clearfix
+              .btn-toolbar.pull-left
+                .btn-group
+                  = button_tag name: 'destroy', class: 'btn btn-danger deactivatable-batch-control', data: { hotkey: 'del', confirm: translate('helpers.confirmations.destroy_selected', model: Image::Style.model_name.human(count: 2)) } do
+                    = prepend_icon :trash, translate('helpers.links.destroy_selected'), outline: true
+              .btn-toolbar.pull-right
+                .btn-group.only-js
+                  .btn.btn-success.btn-file
+                    = prepend_icon :upload, translate('helpers.links.upload', model: Image::Download.model_name.human)
+                    = file_field_tag :image_download_upload, name: 'image_download[asset]', multiple: true, data: { url: upload_admin_image_attachments_path(@image), bfi_disabled: true }
+                .btn-group
+                  = button_link_to new_admin_image_attachment_path(@image), remote: true do
+                    = prepend_icon :plus, translate('helpers.links.assign', model: Attachment.model_name.human)
 
     .col-lg-4
       .panel.panel-invisible

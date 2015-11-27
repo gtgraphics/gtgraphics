@@ -94,6 +94,9 @@ Rails.application.routes.draw do
                   delete :destroy_multiple
                 end
               end
+              resources :downloads, as: :attachments, controller: :'image/downloads', concerns: [:movable, :batch_processable] do
+                post :upload, on: :collection
+              end
               collection do
                 patch :upload
                 patch :associate_owner, action: :associate_owner, as: :associate_owner_with

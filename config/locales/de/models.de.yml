@@ -78,6 +78,8 @@ de:
         remove_photo: Foto entfernen
       admin/user/account_update_form:
         current_password: Aktuelles Passwort
+      admin/image_download_assignment_form:
+        attachment_ids: Dateien
       admin/image_page_creation_form:
         image_ids: Bilder
         image_id_tokens: Bilder
@@ -311,6 +313,9 @@ de:
       image:
         one: Bild
         other: Bilder
+      image/download:
+        one: Anhang
+        other: Anhänge
       image/style:
         one: Bildformat
         other: Bildformate
