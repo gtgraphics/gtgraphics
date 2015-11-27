@@ -78,7 +78,7 @@ de:
         remove_photo: Foto entfernen
       admin/user/account_update_form:
         current_password: Aktuelles Passwort
-      admin/image_download_assignment_form:
+      admin/image/attachment_assignment_form:
         attachment_ids: Dateien
       admin/image_page_creation_form:
         image_ids: Bilder

@@ -5,28 +5,31 @@ module Admin
       before_action :load_image_download, only: %i(move_up move_down destroy)
 
       def new
-        @image_download_assignment_form = ImageDownloadAssignmentForm.new
-        @image_download_assignment_form.image = @image
+        @attachment_assignment_form = Admin::Image::AttachmentAssignmentForm.new
+        @attachment_assignment_form.image = @image
 
         respond_to :js
       end
 
       def create
-        @image_download_assignment_form = ImageDownloadAssignmentForm.new
-        @image_download_assignment_form.image = @image
-        @image_download_assignment_form.attributes = image_download_params
-        @image_download_assignment_form.submit
+        @attachment_assignment_form = Admin::Image::AttachmentAssignmentForm.new
+        @attachment_assignment_form.image = @image
+        @attachment_assignment_form.attributes =
+          image_attachment_assignment_params
+        @attachment_assignment_form.submit
 
         respond_to :js
       end
 
       def upload
-        @image_download = @image.downloads.create!(image_download_upload_params)
-        @image_download.with_lock do
-          @image_download.update_column(:position, @image.downloads.count)
-        end
+        @attachment_upload_form = Admin::Image::AttachmentUploadForm.new
+        @attachment_upload_form.image = @image
+        @attachment_upload_form.attributes = image_attachment_upload_params
+        @attachment_upload_form.submit
 
-        respond_to :js
+        respond_to do |format|
+          format.js { render :refresh }
+        end
       end
 
       def destroy
@@ -81,12 +84,12 @@ module Admin
         @image_download = @image.downloads.find(params[:id])
       end
 
-      def image_download_params
-        params.require(:image_download_assignment).permit(:attachment_ids)
+      def image_attachment_assignment_params
+        params.require(:image_attachment_assignment).permit(:attachment_ids)
       end
 
-      def image_download_upload_params
-        params.require(:image_download).permit(:asset)
+      def image_attachment_upload_params
+        params.require(:image_attachment_upload).permit(:asset)
       end
 
       def destroy_multiple

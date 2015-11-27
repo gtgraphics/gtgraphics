@@ -69,6 +69,7 @@ class Admin::ImagesController < Admin::ApplicationController
 
   def show
     @tags = @image.tags.order(:label)
+
     respond_with :admin, @image do |format|
       format.json
     end

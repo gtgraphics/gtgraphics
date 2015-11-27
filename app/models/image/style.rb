@@ -48,8 +48,6 @@ class Image < ActiveRecord::Base
 
     validates :image_id, presence: true, strict: true
 
-    default_scope -> { order(:position) }
-
     def virtual_filename
       I18n.with_locale(I18n.default_locale) do
         if title.present?

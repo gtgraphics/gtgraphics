@@ -22,5 +22,5 @@
         %td.actions
           = image.action_buttons only: [:edit, :customize], icon_only: true
 
-      - image.styles.each do |image_style|
+      - @image.styles.order(:position).each do |image_style|
         = render 'admin/image/styles/image_style', image_style: image_style

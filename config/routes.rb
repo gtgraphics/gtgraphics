@@ -46,7 +46,7 @@ Rails.application.routes.draw do
         scope controller: :sessions do
           get :login, action: :new
           post :login, action: :create
-          match :logout, action: :destroy, via: [:get, :delete]
+          match :logout, action: :destroy, via: %i(get delete)
         end
 
         scope '(:translations)', constraints: { translations: /[a-z]{2}/ } do
@@ -69,7 +69,7 @@ Rails.application.routes.draw do
               get :downloads, controller: :downloads, action: :index
             end
 
-            resource :account, except: [:new, :create] do
+            resource :account, except: %i(new create) do
               get :edit_password
               patch :update_password
               patch :update_preferences
@@ -77,7 +77,7 @@ Rails.application.routes.draw do
 
             resources :attachments, concerns: :batch_processable do
               collection do
-                patch :upload
+                match :upload, via: %i(post patch)
               end
               member do
                 get :download
@@ -85,20 +85,20 @@ Rails.application.routes.draw do
               patch :convert_to_image, on: :member
             end
 
-            resources :clients, only: [:index, :edit, :update]
+            resources :clients, only: %i(index edit update)
 
-            resources :images, except: [:new, :create], concerns: [:autocompletable,:customizable, :batch_processable, :taggable] do
+            resources :images, except: %i(new create), concerns: [:autocompletable,:customizable, :batch_processable, :taggable] do
               resources :styles, controller: :'image/styles', concerns: [:customizable, :movable, :batch_processable] do
                 collection do
-                  match :upload, via: [:post, :patch]
+                  match :upload, via: %i(post patch)
                   delete :destroy_multiple
                 end
               end
               resources :downloads, as: :attachments, controller: :'image/downloads', concerns: [:movable, :batch_processable] do
-                post :upload, on: :collection
+                match :upload, on: :collection, via: %i(post patch)
               end
               collection do
-                patch :upload
+                match :upload, via: %i(post patch)
                 patch :associate_owner, action: :associate_owner, as: :associate_owner_with
                 patch :associate_tags, action: :associate_tags, as: :associate_tags_with
               end
@@ -113,7 +113,7 @@ Rails.application.routes.draw do
             resources :projects, concerns: [:autocompletable, :batch_processable, :taggable] do
               resources :images, controller: :'project/images', only: :destroy, concerns: [:movable, :batch_processable] do
                 collection do
-                  patch :upload
+                  match :upload, via: %i(post patch)
                 end
               end
               member do
@@ -142,9 +142,9 @@ Rails.application.routes.draw do
               resources :regions, controller: :'page/regions', only: [:index, :edit, :update, :destroy] do
                 patch :update_multiple, on: :collection
               end
-              resource :image, controller: :'page/images', only: [:new, :create]
+              resource :image, controller: :'page/images', only: %i(new create)
               resource :contact_form, controller: :'page/contact_forms', only: [:edit, :update]
-              resource :project, controller: :'page/projects', only: [:new, :create]
+              resource :project, controller: :'page/projects', only: %i(new create)
               resource :redirection, controller: :'page/redirections', only: [:edit, :update]
               collection do
                 get :tree

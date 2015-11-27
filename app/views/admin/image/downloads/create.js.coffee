@@ -1,4 +1,4 @@
-<% if @image_download_assignment_form.errors.empty? %>
+<% if @attachment_assignment_form.errors.empty? %>
 
 $modal = $('#modal')
 $modal.one 'hidden.bs.modal', ->
