@@ -29,4 +29,4 @@
                   = form.input :security_answer, label: false
               .content.form-group
                 = form.button :submit, class: 'btn-primary btn-lg'
-
+                = button_link_to translate('helpers.links.cancel'), @page, as: :link, size: :lg

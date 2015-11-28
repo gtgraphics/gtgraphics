@@ -134,7 +134,7 @@ class Admin::Image::StylesController < Admin::ApplicationController
   def destroy_multiple
     image_style_ids = Array(params[:image_style_ids]).map(&:to_i).reject(&:zero?)
     ::Image::Style.accessible_by(current_ability).destroy_all(id: image_style_ids)
-    flash_for ::Image, :destroyed, multiple: true
+    flash_for ::Image::Style, :destroyed, multiple: true
     location = request.referer || [:admin, @image]
     respond_to do |format|
       format.html { redirect_to location }

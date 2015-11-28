@@ -5,7 +5,7 @@
 #  id                  :integer          not null, primary key
 #  external            :boolean          default(FALSE), not null
 #  destination_page_id :integer
-#  destination_url     :string(255)
+#  destination_url     :string
 #  permanent           :boolean          default(FALSE), not null
 #
 

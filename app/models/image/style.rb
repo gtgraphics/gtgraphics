@@ -6,8 +6,8 @@
 #  image_id              :integer
 #  created_at            :datetime
 #  updated_at            :datetime
-#  asset                 :string(255)
-#  content_type          :string(255)
+#  asset                 :string
+#  content_type          :string
 #  file_size             :integer
 #  asset_updated_at      :datetime
 #  original_width        :integer
@@ -16,9 +16,9 @@
 #  width                 :integer
 #  height                :integer
 #  position              :integer          not null
-#  original_filename     :string(255)
-#  asset_token           :string(255)      not null
-#  downloads_count       :integer          not null
+#  original_filename     :string
+#  asset_token           :string           not null
+#  downloads_count       :integer          default(0), not null
 #
 
 class Image < ActiveRecord::Base
@@ -42,13 +42,13 @@ class Image < ActiveRecord::Base
 
     acts_as_list scope: :image_id
 
+    default_scope -> { order(:position) }
+
     has_image
     acts_as_croppable
     acts_as_resizable
 
     validates :image_id, presence: true, strict: true
-
-    default_scope -> { order(:position) }
 
     def virtual_filename
       I18n.with_locale(I18n.default_locale) do

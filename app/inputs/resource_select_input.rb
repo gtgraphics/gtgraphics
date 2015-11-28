@@ -2,7 +2,7 @@ class ResourceSelectInput < SimpleForm::Inputs::StringInput
   def input_html_classes
     super.push('resource-combobox')
   end
-  
+
   def input_html_options
     opts = super
     include_blank = opts.delete(:include_blank) { false }
@@ -20,7 +20,8 @@ class ResourceSelectInput < SimpleForm::Inputs::StringInput
     }.deep_merge(opts)
   end
 
-  protected
+  private
+
   def formatter
     # raise NotImplementedError
   end

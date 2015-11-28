@@ -20,6 +20,9 @@ class Page::ImagesController < Page::ApplicationController
     @parents = @page.ancestors.published.offset(1).to_a
     @gallery_page = @parents.last
 
+    @image_styles = @image.styles
+    @image_downloads = @image.downloads.includes(:attachment)
+
     siblings = @page.siblings.published.menu_items.order(:lft)
     @previous_page = siblings.where('lft < ?', @page.lft).last
     @next_page = siblings.where('lft > ?', @page.lft).first

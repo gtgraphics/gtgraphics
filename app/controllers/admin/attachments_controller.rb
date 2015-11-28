@@ -40,6 +40,10 @@ class Admin::AttachmentsController < Admin::ApplicationController
     end
   end
 
+  def show
+    respond_to :json
+  end
+
   def new
     @attachment = Attachment.new
     @attachment.translations.build(locale: I18n.locale)
@@ -56,6 +60,7 @@ class Admin::AttachmentsController < Admin::ApplicationController
     @attachment = Attachment.new(attachment_upload_params)
     @attachment.author = current_user
     @attachment.save!
+
     respond_to do |format|
       format.js
     end
@@ -120,6 +125,7 @@ class Admin::AttachmentsController < Admin::ApplicationController
   private :destroy_multiple # invoked through :batch_process
 
   private
+
   def attachment_params
     params.require(:attachment).permit(:asset, :author_id, translations_attributes: [:_destroy, :id, :locale, :title, :description])
   end

@@ -3,29 +3,29 @@
 # Table name: users
 #
 #  id                              :integer          not null, primary key
-#  first_name                      :string(255)
-#  last_name                       :string(255)
+#  first_name                      :string
+#  last_name                       :string
 #  created_at                      :datetime
 #  updated_at                      :datetime
 #  preferences                     :text
-#  email                           :string(255)      not null
-#  crypted_password                :string(255)      not null
-#  salt                            :string(255)      not null
-#  remember_me_token               :string(255)
+#  email                           :string           not null
+#  crypted_password                :string           not null
+#  salt                            :string           not null
+#  remember_me_token               :string
 #  remember_me_token_expires_at    :datetime
-#  reset_password_token            :string(255)
+#  reset_password_token            :string
 #  reset_password_token_expires_at :datetime
 #  reset_password_email_sent_at    :datetime
 #  failed_logins_count             :integer          default(0)
 #  lock_expires_at                 :datetime
-#  unlock_token                    :string(255)
+#  unlock_token                    :string
 #  last_login_at                   :datetime
 #  last_logout_at                  :datetime
 #  last_activity_at                :datetime
-#  last_login_from_ip_address      :string(255)
-#  twitter_username                :string(255)
-#  asset_token                     :string(255)
-#  photo                           :string(255)
+#  last_login_from_ip_address      :string
+#  twitter_username                :string
+#  asset_token                     :string
+#  photo                           :string
 #  photo_updated_at                :datetime
 #
 

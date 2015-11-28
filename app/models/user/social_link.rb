@@ -5,7 +5,7 @@
 #  id          :integer          not null, primary key
 #  user_id     :integer
 #  provider_id :integer
-#  url         :string(255)
+#  url         :string
 #  shop        :boolean          default(FALSE), not null
 #  position    :integer
 #  created_at  :datetime

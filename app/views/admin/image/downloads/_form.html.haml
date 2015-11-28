@@ -1,0 +1,9 @@
+= simple_form_for @attachment_assignment_form, as: :image_attachment_assignment, url: admin_image_attachments_path(@image), remote: true, html: { class: 'form-horizontal' } do |form|
+
+  .modal-body
+    = form.input :attachment_ids, as: :attachment_select, multiple: true, input_html: { autofocus: true }
+
+  .modal-footer
+    = form.button :button, type: 'submit', class: 'btn-primary' do
+      = prepend_icon :save, translate('helpers.links.save')
+    = button_tag translate('helpers.links.close'), type: 'button', class: 'btn btn-default', data: { dismiss: 'modal' }

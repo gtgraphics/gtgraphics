@@ -3,7 +3,7 @@ de:
     default: '%{extension}-Datei'
     unknown: Unbekannter Dateityp
     'application/pdf': PDF-Dokument
-    'application/zip': ZIP-Ordner
+    'application/zip': ZIP-Archiv
     'image/jpeg': JPEG-Bilddatei
     'image/png': PNG-Bilddatei
     'image/gif': GIF-Bilddatei

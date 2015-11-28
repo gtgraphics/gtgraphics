@@ -1,13 +1,10 @@
 class Admin::AttachmentPresenter < Admin::ApplicationPresenter
+  include DownloadCountablePresenter
   include FileAttachablePresenter
 
   presents :attachment
 
   self.action_buttons = [:show, :download, :convert_to_image, :edit, :destroy]
-
-  def hits_count
-    h.number_with_delimiter super
-  end
 
   # Buttons
 

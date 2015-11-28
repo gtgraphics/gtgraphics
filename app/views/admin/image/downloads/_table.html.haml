@@ -1,0 +1,14 @@
+- if @image.downloads.any?
+  %table.table
+    %thead
+      %tr
+        %th.checkbox-cell
+          %input{type: 'checkbox', class: 'js-only table-checkbox-all'}
+        %th= Image::Style.human_attribute_name :title
+        %th.actions
+    %tbody
+      - @image.downloads.each do |image_download|
+        = render 'admin/image/downloads/image_download', image_download: image_download
+- else
+  .panel-body.text-center
+    = translate('views.hints.empty', model: Image::Download.model_name.human(count: 2 ))

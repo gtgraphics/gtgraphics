@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: template_region_definitions
+#
+#  id          :integer          not null, primary key
+#  template_id :integer
+#  label       :string
+#  created_at  :datetime
+#  updated_at  :datetime
+#  name        :string
+#  position    :integer          not null
+#  region_type :string           default("full")
+#
+
 ## == Schema Information
 #
 # Table name: template_region_definitions
