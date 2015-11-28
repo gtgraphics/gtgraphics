@@ -1,0 +1,19 @@
+- if @attachments.any?
+  %table.table.table-hover
+    %thead
+      %tr
+        %th= Attachment::Translation.human_attribute_name(:title)
+        %th= Attachment.human_attribute_name(:file_size)
+        %th= Attachment.human_attribute_name(:downloads_count)
+    %tbody
+      - present_collection(@attachments, with: Admin::AttachmentPresenter).each do |attachment|
+        = content_tag_for :tr, attachment do
+          %td
+            = link_to attachment.title, attachment.show_path
+            %br
+            %span.text-muted.ignored= attachment.content_type
+          %td= attachment.file_size
+          %td= attachment.downloads_count
+- else
+  .panel-body.text-center
+    Bislang wurden keine Downloads festgestellt.

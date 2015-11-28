@@ -1,6 +1,7 @@
 module Admin
   module Image
     class DownloadPresenter < Admin::ApplicationPresenter
+      include DownloadCountablePresenter
       include FileAttachablePresenter
       include Admin::MovableResourcePresenter
 

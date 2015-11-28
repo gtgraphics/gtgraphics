@@ -9,7 +9,8 @@
       %span.text-muted.ignored= attachment.content_type
     %td= attachment.file_size
     %td= attachment.downloads_count
-    %td= attachment.updated_at
+    - if local_assigns.fetch(:time, true)
+      %td= attachment.updated_at
     - if local_assigns.fetch(:actions, true)
       %td.actions
         = attachment.action_buttons icon_only: true

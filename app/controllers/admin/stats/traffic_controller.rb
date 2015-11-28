@@ -2,7 +2,8 @@ module Admin
   module Stats
     class TrafficController < Admin::Stats::ApplicationController
       breadcrumbs do |b|
-        b.append translate('views.admin.stats/traffic'), :admin_stats_traffic
+        b.append translate('views.admin.stats.traffic'),
+                 :admin_stats_traffic
       end
 
       def index

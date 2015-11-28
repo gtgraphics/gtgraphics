@@ -66,7 +66,14 @@ Rails.application.routes.draw do
                 patch :reset, as: :reset_traffic
               end
 
-              get :downloads, controller: :downloads, action: :index
+              scope :downloads, controller: :downloads do
+                root action: :index, as: :downloads
+                get :attachments, action: :attachments,
+                                  as: :downloaded_attachments
+                get :images, action: :images, as: :downloaded_images
+                get :image_styles, action: :image_styles,
+                                   as: :downloaded_image_styles
+              end
             end
 
             resource :account, except: %i(new create) do

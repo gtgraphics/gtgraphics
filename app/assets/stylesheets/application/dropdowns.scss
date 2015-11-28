@@ -14,6 +14,9 @@
 }
 
 .dropdown-menu {
+  max-height: 400px;
+  overflow: auto;
+
   > li {
     &.divider {
       background-color: $gray-dark;
