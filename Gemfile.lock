@@ -384,7 +384,7 @@ GEM
       coercible (~> 1.0)
       descendants_tracker (~> 0.0.1)
       equalizer (~> 0.0.7)
-    vnstat-ruby (1.0.4)
+    vnstat-ruby (1.0.5)
       nokogiri (~> 1.6)
     web-console (2.1.2)
       activemodel (>= 4.0)
@@ -471,7 +471,7 @@ DEPENDENCIES
   underscore-string-rails
   user_agent
   virtus
-  vnstat-ruby
+  vnstat-ruby (= 1.0.5)
   web-console (~> 2.0)
   whenever
 

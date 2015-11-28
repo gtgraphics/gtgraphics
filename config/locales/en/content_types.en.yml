@@ -1,5 +1,11 @@
 en:
   content_types:
+    default: '%{extension} File'
+    unknown: Unknown File Type
+    'application/pdf': PDF Docment
+    'application/zip': ZIP Archive
     'image/jpeg': JPEG Image
     'image/png': PNG Image
     'image/gif': GIF Image
+    'text/html': HTML Document
+    'text/plain': Text File
