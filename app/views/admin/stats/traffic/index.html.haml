@@ -32,7 +32,7 @@
     #monthly_traffic.diagram-container.panel-body
       .diagram-container__loader.text-center.text-muted
         = loader
-    %table.table.table-hover{data: { provides: 'traffic-table', timespan: 'monthly', target: '#monthly_traffic', caption: { time: 'Zeit', bytes_received: 'Empfangen', bytes_sent: 'Gesendet', v_axis: 'MB' }}}
+    %table.table.table-hover{data: { provides: 'traffic-table', timespan: 'monthly', unit: 3, target: '#monthly_traffic', caption: { time: 'Zeit', bytes_received: 'Empfangen', bytes_sent: 'Gesendet', v_axis: 'GB' }}}
       %thead
         %tr
           %th Zeitraum

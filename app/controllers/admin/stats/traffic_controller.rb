@@ -22,6 +22,7 @@ module Admin
             @error_message = 'Keine Netzwerkschnittstelle gefunden.'
           end
         rescue Vnstat::Error => error
+          ExceptionNotifier.notify_exception(error)
           @error_message = error.message
         end
 
@@ -37,6 +38,8 @@ module Admin
             format.html { redirect_to :admin_stats_traffic }
           end
         rescue Vnstat::Error
+          ExceptionNotifier.notify_exception(error)
+
           respond_to do |format|
             format.html do
               redirect_to :back, alert: 'Konnte Statistik nicht zurücksetzen.'

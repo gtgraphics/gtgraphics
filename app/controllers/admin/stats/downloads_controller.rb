@@ -3,14 +3,14 @@ module Admin
     class DownloadsController < Admin::Stats::ApplicationController
       PAGE_SIZE = 40
 
+      before_action :load_attachments, only: %i(index attachments)
+      before_action :load_images, only: %i(index images)
+      before_action :load_image_styles, only: %i(index image_styles)
+
       breadcrumbs do |b|
         b.append translate('views.admin.stats.downloads'),
                  :admin_stats_downloads
       end
-
-      before_action :load_attachments, only: %i(index attachments)
-      before_action :load_images, only: %i(index images)
-      before_action :load_image_styles, only: %i(index image_styles)
 
       def index
         @downloads_count = calculate_sum(:downloads_count)
