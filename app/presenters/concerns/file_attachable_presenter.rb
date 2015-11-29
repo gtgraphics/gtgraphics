@@ -14,7 +14,8 @@ module FileAttachablePresenter
                              extension: file.file_extension.upcase,
                              default: I18n.translate('content_types.default')
       )
-      I18n.translate(super, scope: :content_types, default: file_type)
+      I18n.translate(file.content_type, scope: :content_types,
+                                        default: file_type)
     end
   end
 
