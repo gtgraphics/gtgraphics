@@ -70,11 +70,6 @@ Rails.application.routes.draw do
 
               scope :downloads, controller: :downloads do
                 root action: :index, as: :downloads
-                get :attachments, action: :attachments,
-                                  as: :downloaded_attachments
-                get :images, action: :images, as: :downloaded_images
-                get :image_styles, action: :image_styles,
-                                   as: :downloaded_image_styles
               end
             end
 
