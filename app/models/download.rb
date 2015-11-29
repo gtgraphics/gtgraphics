@@ -11,9 +11,14 @@
 #
 
 class Download < ActiveRecord::Base
+  include TimeFilterable
+
   COUNTER_CACHE = :downloads_count
 
   belongs_to :downloadable, required: true, polymorphic: true
+
+  delegate :asset, :title, :file_size, :content_type, :file_extension,
+           to: :downloadable
 
   after_create :increment_downloads_count, if: :downloadable_has_counter_cache?
   after_destroy :decrement_downloads_count, if: :downloadable_has_counter_cache?
