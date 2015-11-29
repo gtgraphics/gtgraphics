@@ -7,6 +7,7 @@
 #  downloadable_type :string           not null
 #  created_at        :datetime         not null
 #  referer           :string
+#  user_agent        :string
 #
 
 class Download < ActiveRecord::Base

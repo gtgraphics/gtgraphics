@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 20151129040719) do
     t.string   "downloadable_type", null: false
     t.datetime "created_at",        null: false
     t.string   "referer"
+    t.string   "user_agent"
   end
 
   add_index "downloads", ["downloadable_type", "downloadable_id"], name: "index_downloads_on_downloadable_type_and_downloadable_id", using: :btree
