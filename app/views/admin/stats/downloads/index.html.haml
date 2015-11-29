@@ -7,33 +7,42 @@
 
 / Total
 .panel.panel-default
-  .panel-heading
-    .panel-title
+  .panel-heading.clearfix
+    .panel-title.pull-left
       %h3.panel-title
         Gesamt
         %span.text-muted
           = surround '(', ')' do
             = number_with_delimiter @downloads.size
-  = render 'table', downloads: @grouped_downloads
+    - if @downloads.size > 0
+      .pull-right
+        = link_to 'Alle anzeigen', :admin_stats_total_downloads
+  = render 'table', downloads: @downloads.limit(10)
 
 / Current Month
 .panel.panel-default
-  .panel-heading
-    .panel-title
+  .panel-heading.clearfix
+    .panel-title.pull-left
       %h3.panel-title
         Aktueller Monat
         %span.text-muted
           = surround '(', ')' do
             = number_with_delimiter @downloads.in_current_month.size
-  = render 'table', downloads: @grouped_downloads.in_current_month
+    - if @downloads.in_current_month.size > 0
+      .pull-right
+        = link_to 'Alle anzeigen', admin_stats_monthly_downloads_path(year: Date.today.year, month: Date.today.month)
+  = render 'table', downloads: @downloads.in_current_month.limit(10)
 
 / Previous Month
 .panel.panel-default
-  .panel-heading
-    .panel-title
+  .panel-heading.clearfix
+    .panel-title.pull-left
       %h3.panel-title
         Vorheriger Monat
         %span.text-muted
           = surround '(', ')' do
             = number_with_delimiter @downloads.in_previous_month.size
-  = render 'table', downloads: @grouped_downloads.in_previous_month
+    - if @downloads.in_previous_month.size > 0
+      .pull-right
+        = link_to 'Alle anzeigen', admin_stats_monthly_downloads_path(year: (Date.today - 1.month).year, month: (Date.today - 1.month).month)
+  = render 'table', downloads: @downloads.in_previous_month.limit(10)

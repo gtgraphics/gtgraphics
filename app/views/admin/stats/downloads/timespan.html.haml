@@ -1,0 +1,18 @@
+.panel.panel-default
+  .panel-heading.clearfix
+    .panel-title.pull-left
+      %h3.panel-title
+        - if @year && @month
+          = translate('date.month_names')[@month]
+          = @year
+        - elsif @year
+          = @year
+        - else
+          Gesamt
+        %span.text-muted
+          = surround '(', ')' do
+            = number_with_delimiter @downloads.total_count
+
+  = render 'table', downloads: @downloads
+
+  = paginate @downloads
