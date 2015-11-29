@@ -14,6 +14,7 @@ module FileAttachablePresenter
                              extension: file.file_extension.upcase,
                              default: I18n.translate('content_types.default')
       )
+      return file_type if file.content_type.blank?
       I18n.translate(file.content_type, scope: :content_types,
                                         default: file_type)
     end
