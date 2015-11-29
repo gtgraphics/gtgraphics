@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151126195740) do
+ActiveRecord::Schema.define(version: 20151129011750) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,14 +78,14 @@ ActiveRecord::Schema.define(version: 20151126195740) do
 
   add_index "homepage_pages", ["template_id"], name: "index_homepage_pages_on_template_id", using: :btree
 
-  create_table "image_downloads", force: :cascade do |t|
+  create_table "image_attachments", force: :cascade do |t|
     t.integer "image_id"
     t.integer "attachment_id"
     t.integer "position",      null: false
   end
 
-  add_index "image_downloads", ["attachment_id"], name: "index_image_downloads_on_attachment_id", using: :btree
-  add_index "image_downloads", ["image_id"], name: "index_image_downloads_on_image_id", using: :btree
+  add_index "image_attachments", ["attachment_id"], name: "index_image_attachments_on_attachment_id", using: :btree
+  add_index "image_attachments", ["image_id"], name: "index_image_attachments_on_image_id", using: :btree
 
   create_table "image_pages", force: :cascade do |t|
     t.integer "template_id"
@@ -428,6 +428,6 @@ ActiveRecord::Schema.define(version: 20151126195740) do
   add_index "users", ["remember_me_token"], name: "index_users_on_remember_me_token", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", using: :btree
 
-  add_foreign_key "image_downloads", "attachments"
-  add_foreign_key "image_downloads", "images"
+  add_foreign_key "image_attachments", "attachments"
+  add_foreign_key "image_attachments", "images"
 end

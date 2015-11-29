@@ -102,7 +102,7 @@ Rails.application.routes.draw do
                   delete :destroy_multiple
                 end
               end
-              resources :downloads, as: :attachments, controller: :'image/downloads', concerns: [:movable, :batch_processable] do
+              resources :attachments, as: :attachments, controller: :'image/attachments', concerns: %i(movable batch_processable) do
                 match :upload, on: :collection, via: %i(post patch)
               end
               collection do

@@ -21,7 +21,7 @@ class Page::ImagesController < Page::ApplicationController
     @gallery_page = @parents.last
 
     @image_styles = @image.styles
-    @image_downloads = @image.downloads.includes(:attachment)
+    @image_attachments = @image.image_attachments.includes(:attachment)
 
     siblings = @page.siblings.published.menu_items.order(:lft)
     @previous_page = siblings.where('lft < ?', @page.lft).last

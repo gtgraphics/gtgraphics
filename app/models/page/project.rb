@@ -26,3 +26,5 @@ class Page < ActiveRecord::Base
     end
   end
 end
+
+require_dependency 'project'

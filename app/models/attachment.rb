@@ -29,8 +29,8 @@ class Attachment < ActiveRecord::Base
   has_attachment
   has_owner :author, default_owner_to_current_user: false
 
-  has_many :image_downloads, class_name: 'Image::Download',
-                             inverse_of: :attachment, dependent: :destroy
+  has_many :image_attachments, class_name: 'Image::Attachment',
+                               inverse_of: :attachment, dependent: :destroy
 
   validates :asset, presence: true
 
@@ -67,3 +67,5 @@ class Attachment < ActiveRecord::Base
     self.title = File.basename(original_filename, '.*').titleize
   end
 end
+
+require_dependency 'image/attachment'

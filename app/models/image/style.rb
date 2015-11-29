@@ -71,3 +71,5 @@ class Image < ActiveRecord::Base
     end
   end
 end
+
+require_dependency 'image'

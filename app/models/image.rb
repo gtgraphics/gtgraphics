@@ -44,8 +44,8 @@ class Image < ActiveRecord::Base
 
   has_many :styles, class_name: 'Image::Style', inverse_of: :image,
                     dependent: :destroy
-  has_many :downloads, class_name: 'Image::Download', inverse_of: :image,
-                       dependent: :destroy
+  has_many :image_attachments, class_name: 'Image::Attachment',
+                               inverse_of: :image, dependent: :destroy
   has_many :image_pages, class_name: 'Page::Image', inverse_of: :image,
                          dependent: :destroy
   has_many :pages, through: :image_pages
@@ -141,3 +141,6 @@ class Image < ActiveRecord::Base
     styles.destroy_all
   end
 end
+
+require_dependency 'page/image'
+require_dependency 'project/image'

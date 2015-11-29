@@ -6,18 +6,18 @@ module Admin
       validates :image, presence: true, strict: true
 
       before_validation do
-        downloads.clear
+        image_attachments.clear
       end
 
-      def downloads
-        @downloads ||= []
+      def image_attachments
+        @image_attachments ||= []
       end
 
       private
 
-      def recalculate_position!(download)
-        download.with_lock do
-          download.update_column(:position, image.downloads.count)
+      def recalculate_position!(attachment)
+        attachment.with_lock do
+          attachment.update_column(:position, image.image_attachments.count)
         end
       end
     end

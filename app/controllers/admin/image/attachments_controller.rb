@@ -1,8 +1,8 @@
 module Admin
   module Image
-    class DownloadsController < Admin::ApplicationController
+    class AttachmentsController < Admin::ApplicationController
       before_action :load_image
-      before_action :load_image_download, only: %i(move_up move_down destroy)
+      before_action :load_image_attachment, only: %i(move_up move_down destroy)
 
       def new
         @attachment_assignment_form = Admin::Image::AttachmentAssignmentForm.new
@@ -33,7 +33,7 @@ module Admin
       end
 
       def destroy
-        @image_download.destroy
+        @image_attachment.destroy
 
         respond_to do |format|
           format.js { render :refresh }
@@ -43,8 +43,8 @@ module Admin
       # Position Change
 
       def move_up
-        @image_download.with_lock do
-          @image_download.move_higher
+        @image_attachment.with_lock do
+          @image_attachment.move_higher
         end
 
         respond_to do |format|
@@ -53,8 +53,8 @@ module Admin
       end
 
       def move_down
-        @image_download.with_lock do
-          @image_download.move_lower
+        @image_attachment.with_lock do
+          @image_attachment.move_lower
         end
 
         respond_to do |format|
@@ -80,8 +80,8 @@ module Admin
         @image = ::Image.find(params[:image_id])
       end
 
-      def load_image_download
-        @image_download = @image.downloads.find(params[:id])
+      def load_image_attachment
+        @image_attachment = @image.image_attachments.find(params[:id])
       end
 
       def image_attachment_assignment_params
@@ -93,10 +93,10 @@ module Admin
       end
 
       def destroy_multiple
-        ids = Array(params[:image_download_ids]).map(&:to_i).reject(&:zero?)
-        ::Image::Download.accessible_by(current_ability).destroy_all(id: ids)
+        ids = Array(params[:image_attachment_ids]).map(&:to_i).reject(&:zero?)
+        ::Image::Attachment.accessible_by(current_ability).destroy_all(id: ids)
 
-        flash_for ::Image::Download, :destroyed, multiple: true
+        flash_for ::Image::Attachment, :destroyed, multiple: true
         location = request.referer || [:admin, @image]
 
         respond_to do |format|

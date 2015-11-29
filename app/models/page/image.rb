@@ -10,7 +10,7 @@
 class Page < ActiveRecord::Base
   class Image < ActiveRecord::Base
     include Page::Concrete
-    
+
     acts_as_concrete_page
 
     belongs_to :image, class_name: '::Image', inverse_of: :image_pages
@@ -43,3 +43,5 @@ class Page < ActiveRecord::Base
     end
   end
 end
+
+require_dependency 'image'

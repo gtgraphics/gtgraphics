@@ -48,18 +48,18 @@
                     = icon :comment, size: :lg, fixed_width: true
                     %span.sr-only= translate('helpers.links.comment')
 
-              - if display_styles && (@image_styles.any? || @image_downloads.any?)
+              - if display_styles && (@image_styles.any? || @image_attachments.any?)
                 %li.dropdown.hidden-sm.js-only
-                  = link_to '#', id: 'image_download_dropdown', title: translate('helpers.links.download'), class: 'dropdown-toggle', :'aria-haspopup' => 'true', data: { toggle: 'dropdown' } do
+                  = link_to '#', id: 'image_attachment_dropdown', title: translate('helpers.links.download'), class: 'dropdown-toggle', :'aria-haspopup' => 'true', data: { toggle: 'dropdown' } do
                     = icon :download, size: :lg, fixed_width: true
                     = caret
                     %span.sr-only= translate('helpers.links.download')
-                  %ul.dropdown-menu{role: 'menu', :'aria-labelledby' => 'image_download_dropdown'}
+                  %ul.dropdown-menu{role: 'menu', :'aria-labelledby' => 'image_attachment_dropdown'}
                     - present_collection(@image_styles).each do |style|
                       %li= link_to style.title, current_page_path(:download_image, format: style.format, style_id: style.position), class: 'download', data: { no_turbolink: true }
-                    - if @image_styles.any? && @image_downloads.any?
+                    - if @image_styles.any? && @image_attachments.any?
                       %li.divider
-                    - present_collection(@image_downloads).each do |download|
+                    - present_collection(@image_attachments).each do |download|
                       %li
                         = link_to download.url, data: { no_turbolink: true } do
                           .download-title= download.title
@@ -160,7 +160,7 @@
                         %ul.list-unstyled.shop-providers
                           = image.shop_links
 
-                    - if display_styles && (@image_styles.any? || @image_downloads.any?)
+                    - if display_styles && (@image_styles.any? || @image_attachments.any?)
                       .col-xs-12.col-sm-6
                         / Downloadable Styles
                         %h3= prepend_icon :download, translate('helpers.links.download'), fixed_width: true
@@ -170,9 +170,9 @@
                             - present_collection(@image_styles).each do |style|
                               %li= link_to style.title, current_page_path(:download_image, format: style.format, style_id: style.position), data: { no_turbolink: true }
 
-                        - if @image_downloads.any?
+                        - if @image_attachments.any?
                           %ul.list-unstyled.image-downloads
-                            - present_collection(@image_downloads).each do |download|
+                            - present_collection(@image_attachments).each do |download|
                               %li
                                 = link_to attachment_path(download.attachment, locale: nil), data: { no_turbolink: true } do
                                   #{download.title} (#{download.content_type})
