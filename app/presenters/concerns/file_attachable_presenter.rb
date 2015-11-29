@@ -6,15 +6,13 @@ module FileAttachablePresenter
   end
 
   def content_type
-    extension = File.extname(original_filename).to_s.from(1)
-
-    if file.content_type.blank? && extension.blank?
+    if file.content_type.blank? && file.file_extension.blank?
       I18n.translate('content_types.unknown')
     else
       file_type = I18n.translate(
-        extension, scope: :content_types,
-                   extension: extension.upcase,
-                   default: I18n.translate('content_types.default')
+        file.file_extension, scope: :content_types,
+                             extension: file.file_extension.upcase,
+                             default: I18n.translate('content_types.default')
       )
       I18n.translate(super, scope: :content_types, default: file_type)
     end
