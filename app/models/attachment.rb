@@ -16,7 +16,7 @@
 #
 
 class Attachment < ActiveRecord::Base
-  include CounterIncrementable
+  include Downloadable
   include FileAttachable
   include Ownable
   include PeriodFilterable

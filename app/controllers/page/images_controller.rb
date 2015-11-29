@@ -37,8 +37,7 @@ class Page::ImagesController < Page::ApplicationController
 
   def download
     @image_style = @image.styles.find_by!(position: params[:style_id])
-    @image_style.increment_counter!(:downloads)
-
+    @image_style.track_download!(referer: request.referer)
     send_image(@image_style, :attachment)
   end
 

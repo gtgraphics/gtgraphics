@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151129011750) do
+ActiveRecord::Schema.define(version: 20151129040719) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,6 +71,15 @@ ActiveRecord::Schema.define(version: 20151129011750) do
   end
 
   add_index "content_pages", ["template_id"], name: "index_content_pages_on_template_id", using: :btree
+
+  create_table "downloads", force: :cascade do |t|
+    t.integer  "downloadable_id",   null: false
+    t.string   "downloadable_type", null: false
+    t.datetime "created_at",        null: false
+    t.string   "referer"
+  end
+
+  add_index "downloads", ["downloadable_type", "downloadable_id"], name: "index_downloads_on_downloadable_type_and_downloadable_id", using: :btree
 
   create_table "homepage_pages", force: :cascade do |t|
     t.integer "template_id"

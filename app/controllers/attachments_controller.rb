@@ -17,7 +17,7 @@ class AttachmentsController < ApplicationController
   private
 
   def send_attachment(disposition)
-    @attachment.increment_counter!(:downloads)
+    @attachment.track_download!(referer: request.referer)
     send_file @attachment.asset.path, filename: @attachment.original_filename,
                                       content_type: @attachment.content_type,
                                       disposition: disposition,

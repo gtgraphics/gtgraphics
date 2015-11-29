@@ -28,7 +28,7 @@ class Image < ActiveRecord::Base
     include Image::Resizable
     include Image::ExifAnalyzable
 
-    include CounterIncrementable
+    include Downloadable
     include PersistenceContextTrackable
     include TitleSearchable
     include Translatable
