@@ -17,10 +17,8 @@ class AttachmentsController < ApplicationController
   private
 
   def send_attachment(disposition)
-    @attachment.track_download! do |download|
-      download.referer = request.referer
-      download.user_agent = request.user_agent
-    end
+    @attachment.track_download!(request)
+
     send_file @attachment.asset.path, filename: @attachment.original_filename,
                                       content_type: @attachment.content_type,
                                       disposition: disposition,

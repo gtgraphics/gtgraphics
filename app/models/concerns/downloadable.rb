@@ -5,10 +5,10 @@ module Downloadable
     has_many :downloads, as: :downloadable, dependent: :delete_all
   end
 
-  def track_download!(attributes = {}, &block)
+  def track_download!(request)
     Download.create!(downloadable: self) do |download|
-      download.attributes = attributes
-      yield(download) if block_given?
+      download.referer = request.referer
+      download.user_agent = request.user_agent
     end
   end
 end
