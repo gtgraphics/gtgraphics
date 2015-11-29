@@ -1,12 +1,23 @@
 module FileAttachablePresenter
+  extend ActiveSupport::Concern
+
+  included do
+    alias_method :file, :object
+  end
+
   def content_type
-    file_extension = File.extname(original_filename).from(1).upcase
-    return I18n.translate('content_types.unknown') if object.content_type.blank?
-    default_translation = I18n.translate('content_types.default',
-                                         extension: file_extension,
-                                         default: object.content_type).presence
-    I18n.translate(object.content_type, scope: :content_types,
-                                        default: default_translation)
+    extension = File.extname(original_filename).to_s.from(1)
+
+    if file.content_type.blank? && extension.blank?
+      I18n.translate('content_types.unknown')
+    else
+      file_type = I18n.translate(
+        extension, scope: :content_types,
+                   extension: extension.upcase,
+                   default: I18n.translate('content_types.default')
+      )
+      I18n.translate(super, scope: :content_types, default: file_type)
+    end
   end
 
   def file_size

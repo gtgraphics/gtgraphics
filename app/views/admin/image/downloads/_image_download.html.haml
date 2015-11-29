@@ -5,5 +5,8 @@
         = check_box_tag 'image_download_ids[]', image_download.id, false, class: 'table-checkbox', id: nil, data: { behavior: 'tableCheckbox' }
     %td
       = link_to image_download.title, image_download.show_path
+      %br
+      %span.text-muted.ignored
+        = image_download.content_type
     %td.actions
       = image_download.action_buttons remote: true, icon_only: true

@@ -1,7 +1,7 @@
 de:
   content_types:
-    default: '%{extension}-Datei'
     unknown: Unbekannter Dateityp
+    default: '%{extension}-Datei'
     'application/pdf': PDF-Dokument
     'application/zip': ZIP-Archiv
     'image/jpeg': JPEG-Bilddatei
@@ -9,3 +9,4 @@ de:
     'image/gif': GIF-Bilddatei
     'text/html': HTML-Dokument
     'text/plain': Textdokument
+    themepack: Windows-Themepack
