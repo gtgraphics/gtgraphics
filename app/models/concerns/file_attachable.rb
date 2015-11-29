@@ -23,6 +23,10 @@ module FileAttachable
       end
     end
 
+    def file_extension
+      File.extname(original_filename).to_s.from(1).inquiry
+    end
+
     def mime_type
       Mime::Type.parse(content_type).first
     end

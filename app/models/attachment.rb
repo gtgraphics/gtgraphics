@@ -40,6 +40,8 @@ class Attachment < ActiveRecord::Base
     content_type.in?(Image.permitted_content_types)
   end
 
+  delegate :themepack?, to: :file_extension
+
   def to_image
     fail 'cannot be converted to Image' unless image?
     Image.new do |image|
