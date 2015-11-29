@@ -1,0 +1,24 @@
+- if downloads.any?
+  %table.table.table-hover
+    %thead
+      %tr
+        %th.thumbnail-cell
+        %th= Download.human_attribute_name(:title)
+        %th= Download.human_attribute_name(:file_size)
+        %th= Download.human_attribute_name(:last_downloaded_at)
+        %th= Download.human_attribute_name(:count)
+    %tbody
+      - present_collection(downloads, with: Admin::DownloadPresenter).each do |download|
+        = content_tag_for :tr, download do
+          %td.thumbnail-cell
+            = download.thumbnail
+          %td
+            = link_to download.title, download.download_path
+            %br
+            %span.text-muted= download.subtitle
+          %td= download.file_size
+          %td= download.last_downloaded_at
+          %td= download.count
+- else
+  .panel-body.text-center
+    In diesem Zeitraum wurden keine Downloads festgestellt.

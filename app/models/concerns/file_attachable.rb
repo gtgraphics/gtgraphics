@@ -55,14 +55,16 @@ module FileAttachable
     def generate_asset_token
       return if !respond_to?(:asset_token) || asset_token?
       original_filename = asset.file.try(:original_filename)
-      token = RandomString.generate
-      if original_filename
-        name = File.basename(original_filename, '.*')
-               .slice(0...40).parameterize.dasherize
-        self.asset_token = "#{name}-#{token}"
-      else
-        self.asset_token = token
-      end
+      prefix = asset_token_prefix(original_filename)
+      self.asset_token = [
+        prefix.try(:parameterize).try(:dasherize),
+        RandomString.generate
+      ].compact.join('-')
+    end
+
+    def asset_token_prefix(original_filename)
+      return nil if original_filename.nil?
+      File.basename(original_filename, '.*').slice(0...40)
     end
 
     def set_original_filename

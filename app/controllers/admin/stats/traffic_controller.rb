@@ -9,6 +9,7 @@ module Admin
       def index
         begin
           @interface = Vnstat.interfaces.first
+
           if @interface
             @total_traffic = @interface.total
             @monthly_traffic = @interface.months.sort.reverse

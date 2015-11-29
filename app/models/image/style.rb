@@ -69,6 +69,12 @@ class Image < ActiveRecord::Base
     rescue MiniExiftool::Error => error
       logger.error "Error writing Exif data: #{error.message}"
     end
+
+    private
+
+    def asset_token_prefix(original_filename)
+      super || super(image.original_filename)
+    end
   end
 end
 

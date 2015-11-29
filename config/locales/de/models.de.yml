@@ -120,6 +120,9 @@ de:
       client:
         country: Land
         website_url: Website
+      download:
+        count: Anzahl
+        last_downloaded_at: Letzter Download
       image:
         author: Urheber
         author_name: Urheber

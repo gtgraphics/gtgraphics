@@ -31,6 +31,11 @@ class Admin::Image::StylePresenter < Admin::ApplicationPresenter
     h.admin_image_style_path(image, image_style)
   end
 
+  def download_path
+    h.download_image_style_path(image_style.asset.filename, locale: nil,
+                                                            translations: nil)
+  end
+
   def edit_path
     h.edit_admin_image_style_path(image, image_style)
   end
