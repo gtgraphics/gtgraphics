@@ -40,22 +40,6 @@ class Admin::AttachmentsController < Admin::ApplicationController
     end
   end
 
-  def show
-    respond_to :json
-  end
-
-  def new
-    @attachment = Attachment.new
-    @attachment.translations.build(locale: I18n.locale)
-    respond_with :admin, @attachment
-  end
-
-  def create
-    @attachment = Attachment.create(attachment_params)
-    flash_for @attachment
-    respond_with :admin, @attachment, location: :admin_attachments
-  end
-
   def upload
     @attachment = Attachment.new(attachment_upload_params)
     @attachment.author = current_user
@@ -122,12 +106,13 @@ class Admin::AttachmentsController < Admin::ApplicationController
       format.js { redirect_via_turbolinks_to location }
     end
   end
+
   private :destroy_multiple # invoked through :batch_process
 
   private
 
   def attachment_params
-    params.require(:attachment).permit(:asset, :author_id, translations_attributes: [:_destroy, :id, :locale, :title, :description])
+    params.require(:attachment).permit(:title, :author_id, :description)
   end
 
   def attachment_upload_params

@@ -82,7 +82,8 @@ Rails.application.routes.draw do
               patch :update_preferences
             end
 
-            resources :attachments, concerns: :batch_processable do
+            resources :attachments, except: %i(new create show),
+                                    concerns: :batch_processable do
               collection do
                 match :upload, via: %i(post patch)
               end
