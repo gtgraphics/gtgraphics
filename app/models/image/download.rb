@@ -17,6 +17,7 @@ class Image < ActiveRecord::Base
 
     default_scope -> { order(:position) }
 
-    delegate :title, :asset, :original_filename, :content_type, to: :attachment
+    delegate :title, :asset, :original_filename, :content_type, :file_extension,
+             to: :attachment
   end
 end
