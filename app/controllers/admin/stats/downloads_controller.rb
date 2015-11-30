@@ -106,10 +106,12 @@ module Admin
       end
 
       def filter_by_time(scope)
-        begins_at = DateTime.new(@year, @month, 1, 0, 0, 0, DateTime.now.offset)
+        default_args = [1, 0, 0, 0, DateTime.now.offset]
         if @month
+          begins_at = DateTime.new(@year, @month, *default_args)
           ends_at = begins_at.end_of_month
         elsif @year
+          begins_at = DateTime.new(@year, 1, *default_args)
           ends_at = begins_at.end_of_year
         end
         return scope if begins_at.nil? || ends_at.nil?
