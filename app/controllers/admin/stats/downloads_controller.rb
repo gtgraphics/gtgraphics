@@ -120,7 +120,7 @@ module Admin
           ends_at = begins_at.end_of_year
         end
         return scope if begins_at.nil? || ends_at.nil?
-        if scope.klass <= ::Image
+        if @type == 'images'
           scope.having('MAX(downloads.created_at) BETWEEN ? AND ?',
                        begins_at, ends_at)
         else
