@@ -74,13 +74,7 @@ module Admin
           .select('MAX(downloads.created_at) AS last_downloaded_at')
           .order('COUNT(downloads.id) DESC')
         )
-        if @year && @month
-          @downloads_count = Download.image_styles.by_month(@year, @month).count
-        elsif @year
-          @downloads_count = Download.image_styles.by_year(@year).count
-        else
-          @downloads_count = Download.image_styles.count
-        end
+        @downloads_count = filter_by_time(Download.image_styles).count
       end
 
       def load_generic_downloads
