@@ -1,7 +1,7 @@
 module Admin
   module Stats
     class DownloadsController < Admin::Stats::ApplicationController
-      PAGE_SIZE = 40
+      PAGE_SIZE = 25
 
       before_action :set_year, only: %i(year month)
       before_action :set_month, only: :month
@@ -106,11 +106,10 @@ module Admin
       end
 
       def filter_by_time(scope)
-        if @year && @month
-          begins_at = DateTime.new(@year, @month).in_time_zone
+        begins_at = DateTime.new(@year, @month, 1, 0, 0, 0, DateTime.now.offset)
+        if @month
           ends_at = begins_at.end_of_month
         elsif @year
-          begins_at = DateTime.new(@year).in_time_zone
           ends_at = begins_at.end_of_year
         end
         return scope if begins_at.nil? || ends_at.nil?
