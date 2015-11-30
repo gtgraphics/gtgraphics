@@ -1,4 +1,4 @@
-class Image
+class Image < ActiveRecord::Base
   class StylesController < DownloadsController
     before_action :load_image_style
 
