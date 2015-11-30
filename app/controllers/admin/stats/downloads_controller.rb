@@ -57,28 +57,41 @@ module Admin
         if @type == 'images'
           load_image_downloads
         else
-          partition = 'OVER (PARTITION BY downloadable_type, downloadable_id)'
-          @downloads =
-            Download.uniq.select(:downloadable_id, :downloadable_type)
-            .select("COUNT(id) #{partition} AS count")
-            .select("MAX(created_at) #{partition} AS last_downloaded_at")
-            .order('count DESC').preload(downloadable: :translations)
-            .public_send(@type || 'all')
+          load_generic_downloads
         end
       end
 
       def load_image_downloads
-        @downloads = ::Image.joins(:styles)
-                     .joins(%{
-                       INNER JOIN downloads
-                       ON downloads.downloadable_id = image_styles.id
-                       AND downloads.downloadable_type = 'Image::Style'
-                     })
-                     .group('images.id').select('images.*')
-                     .select('COUNT(downloads.id) AS count')
-                     .select('MAX(downloads.created_at) AS last_downloaded_at')
-                     .order('COUNT(downloads.id) DESC')
-        @downloads_count = Download.image_styles.count
+        @downloads = filter_by_time(
+          ::Image.joins(:styles)
+          .joins(%{
+            INNER JOIN downloads
+            ON downloads.downloadable_id = image_styles.id
+            AND downloads.downloadable_type = 'Image::Style'
+          })
+          .group('images.id').select('images.*')
+          .select('COUNT(downloads.id) AS count')
+          .select('MAX(downloads.created_at) AS last_downloaded_at')
+          .order('COUNT(downloads.id) DESC')
+        )
+        if @year && @month
+          @downloads_count = Download.image_styles.by_month(@year, @month).count
+        elsif @year
+          @downloads_count = Download.image_styles.by_year(@year).count
+        else
+          @downloads_count = Download.image_styles.count
+        end
+      end
+
+      def load_generic_downloads
+        partition = 'OVER (PARTITION BY downloadable_type, downloadable_id)'
+        @downloads = filter_by_time(
+          Download.uniq.select(:downloadable_id, :downloadable_type)
+          .select("COUNT(id) #{partition} AS count")
+          .select("MAX(created_at) #{partition} AS last_downloaded_at")
+          .order('count DESC').preload(downloadable: :translations)
+          .public_send(@type || 'all')
+        )
       end
 
       def calculate_sum(aggregation)
@@ -96,6 +109,23 @@ module Admin
 
       def set_month
         @month = params[:month].to_i
+      end
+
+      def filter_by_time(scope)
+        if @year && @month
+          begins_at = DateTime.new(@year, @month).in_time_zone
+          ends_at = begins_at.end_of_month
+        elsif @year
+          begins_at = DateTime.new(@year).in_time_zone
+          ends_at = begins_at.end_of_year
+        end
+        return scope if begins_at.nil? || ends_at.nil?
+        if scope.klass <= ::Image
+          scope.having('MAX(downloads.created_at) BETWEEN ? AND ?',
+                       begins_at, ends_at)
+        else
+          scope.where(created_at: begins_at..ends_at)
+        end
       end
     end
   end
