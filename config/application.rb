@@ -14,6 +14,7 @@ module GtGraphics
 
     # Load some middlewares
     config.middleware.use 'Rack::EncodingGuard::Middleware', :reject
+    config.middleware.use 'SlashBuster'
     config.middleware.use 'Router::Middleware'
     config.middleware.use 'JQuery::FileUpload::Rails::Middleware'
     config.exceptions_app = Router::ErrorHandler::Middleware.new
