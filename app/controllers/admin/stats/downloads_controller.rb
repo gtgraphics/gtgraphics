@@ -55,12 +55,7 @@ module Admin
 
       def load_downloads
         if @type == 'images'
-          @downloads = ::Image.joins(:styles)
-                       .group('images.id')
-                       .select('images.*')
-                       .select('SUM(image_styles.downloads_count) AS count')
-                       .order('SUM(image_styles.downloads_count) DESC')
-          @downloads_count = Download.image_styles.count
+          load_image_downloads
         else
           partition = 'OVER (PARTITION BY downloadable_type, downloadable_id)'
           @downloads =
@@ -70,6 +65,20 @@ module Admin
             .order('count DESC').preload(downloadable: :translations)
             .public_send(@type || 'all')
         end
+      end
+
+      def load_image_downloads
+        @downloads = ::Image.joins(:styles)
+                     .joins(%{
+                       INNER JOIN downloads
+                       ON downloads.downloadable_id = image_styles.id
+                       AND downloads.downloadable_type = 'Image::Style'
+                     })
+                     .group('images.id').select('images.*')
+                     .select('COUNT(downloads.id) AS count')
+                     .select('MAX(downloads.created_at) AS last_downloaded_at')
+                     .order('COUNT(downloads.id) DESC')
+        @downloads_count = Download.image_styles.count
       end
 
       def calculate_sum(aggregation)
