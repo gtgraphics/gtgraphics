@@ -5,18 +5,40 @@ module Admin
     presents :download
 
     def downloadable
-      @downloadable ||= present [:admin, super]
+      @downloadable ||= present [:admin, download.downloadable] unless image?
     end
 
-    delegate :title, :show_path, :download_path, to: :downloadable
+    def title
+      downloadable.try(:title) || download.try(:title)
+    end
 
     def subtitle
-      return content_type if download.attachment?
-      downloadable.image.title
+      if image?
+        "#{image.styles.size} #{::Image::Style.model_name.human(count: image.styles.size)}"
+      elsif download.attachment?
+        content_type
+      else
+        image.title
+      end
+    end
+
+    def thumbnail
+      html_options = { class: 'img-circle', alt: title, width: 45, height: 45 }
+      if download.is_a?(::Image)
+        h.link_to show_path, target: '_blank' do
+          h.image_tag h.attached_asset_path(image, :thumbnail), html_options
+        end
+      else
+        return nil unless download.image_style?
+        h.link_to show_path, target: '_blank' do
+          h.image_tag h.attached_asset_path(downloadable, :thumbnail), html_options
+        end
+      end
     end
 
     def count
-      h.number_with_delimiter(super)
+      return nil unless download.respond_to?(:count)
+      h.number_with_delimiter(download.count)
     end
 
     def last_downloaded_at
@@ -24,16 +46,26 @@ module Admin
       I18n.localize(super.in_time_zone, format: :short)
     end
 
-    def thumbnail
-      return nil unless download.image_style?
-      h.link_to show_path, target: '_blank' do
-        h.image_tag h.attached_asset_path(downloadable, :thumbnail), class: 'img-circle', alt: title, width: 45, height: 45
-      end
+    def show_path
+      return h.admin_image_path(image) if image?
+      return downloadable.show_path if download.attachment?
+      h.admin_image_path(image)
     end
 
-    def show_path
-      return downloadable.show_path if download.attachment?
-      h.admin_image_path(downloadable.image)
+    def download_path
+      fail 'No download path available for image' if image?
+      downloadable.download_path
+    end
+
+    def image?
+      download.is_a?(::Image)
+    end
+
+    private
+
+    def image
+      return download if image?
+      downloadable.image
     end
   end
 end

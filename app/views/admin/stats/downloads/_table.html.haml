@@ -4,7 +4,8 @@
       %tr
         %th.thumbnail-cell
         %th= Download.human_attribute_name(:title)
-        %th= Download.human_attribute_name(:file_size)
+        - if @type != 'images'
+          %th= Download.human_attribute_name(:file_size)
         %th= Download.human_attribute_name(:last_downloaded_at)
         %th= Download.human_attribute_name(:count)
     %tbody
@@ -13,10 +14,11 @@
           %td.thumbnail-cell
             = download.thumbnail
           %td
-            = link_to download.title, download.download_path
+            = link_to download.title, download.image? ? download.show_path : download.download_path
             %br
             %span.text-muted= download.subtitle
-          %td= download.file_size
+          - if @type != 'images'
+            %td= download.file_size
           %td= download.last_downloaded_at
           %td= download.count
 - else

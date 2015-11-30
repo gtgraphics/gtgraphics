@@ -70,9 +70,11 @@ Rails.application.routes.draw do
 
               scope :downloads, controller: :downloads do
                 root action: :index, as: :downloads
-                get :total, as: :total_downloads
-                get ':year/:month', action: :month, as: :monthly_downloads, year: /[0-9]+/, month: /[0-9]+/
-                get ':year', action: :year, as: :yearly_downloads, year: /[0-9]+/
+                scope '(:type)' do
+                  get :total, as: :total_downloads
+                  get ':year/:month', action: :month, as: :monthly_downloads, year: /[0-9]+/, month: /[0-9]+/
+                  get ':year', action: :year, as: :yearly_downloads, year: /[0-9]+/
+                end
               end
             end
 

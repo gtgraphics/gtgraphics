@@ -23,8 +23,8 @@ class Download < ActiveRecord::Base
   after_create :increment_downloads_count, if: :downloadable_has_counter_cache?
   after_destroy :decrement_downloads_count, if: :downloadable_has_counter_cache?
 
-  scope :attachment, -> { where(downloadable_type: 'Attachment') }
-  scope :image_style, -> { where(downloadable_type: 'Image::Style') }
+  scope :attachments, -> { where(downloadable_type: 'Attachment') }
+  scope :image_styles, -> { where(downloadable_type: 'Image::Style') }
 
   def self.in_current_month
     date = Date.today
