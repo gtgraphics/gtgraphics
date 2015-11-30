@@ -48,7 +48,7 @@ class Ability
       end
 
       can :manage, Attachment
-      can :manage, [Image, Image::Style, Image::Download]
+      can :manage, [Image, Image::Style, Image::Attachment]
       can :manage, [Project, Project::Image]
 
       can [:read, :create, :update], Page

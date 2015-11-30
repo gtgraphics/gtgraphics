@@ -21,7 +21,7 @@ class Page::ImagesController < Page::ApplicationController
     @gallery_page = @parents.last
 
     @image_styles = @image.styles
-    @image_downloads = @image.downloads.includes(:attachment)
+    @image_attachments = @image.image_attachments.includes(:attachment)
 
     siblings = @page.siblings.published.menu_items.order(:lft)
     @previous_page = siblings.where('lft < ?', @page.lft).last
@@ -37,7 +37,7 @@ class Page::ImagesController < Page::ApplicationController
 
   def download
     @image_style = @image.styles.find_by!(position: params[:style_id])
-    @image_style.increment_counter!(:downloads)
+    @image_style.track_download!(request)
 
     send_image(@image_style, :attachment)
   end

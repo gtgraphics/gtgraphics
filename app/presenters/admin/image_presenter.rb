@@ -45,10 +45,14 @@ class Admin::ImagePresenter < Admin::ApplicationPresenter
 
   def file_size(include_styles = false)
     h.capture do
-      h.concat h.number_to_human_size(image.file_size)
+      h.concat h.number_to_human_size(
+        image.file_size, strip_insignificant_zeros: false, precision: 3
+      )
       if include_styles && image.styles.any?
         total_size = image.file_size + image.styles.sum(:file_size)
-        human_size = h.number_to_human_size(total_size)
+        human_size = h.number_to_human_size(
+          total_size, strip_insignificant_zeros: false, precision: 3
+        )
         h.concat " (#{human_size})"
       end
     end

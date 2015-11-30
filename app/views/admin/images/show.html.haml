@@ -56,18 +56,18 @@
         = form_tag batch_process_admin_image_attachments_path(@image), method: :patch, remote: true do
           .panel.panel-default
             .panel-heading
-              %h4.panel-title= prepend_icon :paperclip, Image::Download.model_name.human(count: 2), fixed_width: true
-            #image_downloads.panel-table-container
-              = render 'admin/image/downloads/table'
+              %h4.panel-title= prepend_icon :paperclip, Image::Attachment.model_name.human(count: 2), fixed_width: true
+            #image_attachments.panel-table-container
+              = render 'admin/image/attachments/table'
             .panel-footer.clearfix
               .btn-toolbar.pull-left
                 .btn-group
-                  = button_tag name: 'destroy', class: 'btn btn-danger deactivatable-batch-control', data: { hotkey: 'del', confirm: translate('helpers.confirmations.destroy_selected', model: Image::Download.model_name.human(count: 2)) } do
+                  = button_tag name: 'destroy', class: 'btn btn-danger deactivatable-batch-control', data: { hotkey: 'del', confirm: translate('helpers.confirmations.destroy_selected', model: Image::Attachment.model_name.human(count: 2)) } do
                     = prepend_icon :trash, translate('helpers.links.destroy_selected'), outline: true
               .btn-toolbar.pull-right
                 .btn-group.only-js
                   .btn.btn-success.btn-file
-                    = prepend_icon :upload, translate('helpers.links.upload', model: Image::Download.model_name.human)
+                    = prepend_icon :upload, translate('helpers.links.upload', model: Image::Attachment.model_name.human)
                     = file_field_tag :image_attachment_upload, name: 'image_attachment_upload[asset]', multiple: true, data: { url: upload_admin_image_attachments_path(@image), bfi_disabled: true }
                 .btn-group
                   = button_link_to new_admin_image_attachment_path(@image), remote: true do

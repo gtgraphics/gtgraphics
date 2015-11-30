@@ -21,6 +21,7 @@ module FileAttachablePresenter
   end
 
   def file_size
-    h.number_to_human_size(super)
+    h.number_to_human_size file.file_size, strip_insignificant_zeros: false,
+                                           precision: 3
   end
 end

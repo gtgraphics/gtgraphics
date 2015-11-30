@@ -1,0 +1,14 @@
+- if @image.image_attachments.any?
+  %table.table
+    %thead
+      %tr
+        %th.checkbox-cell
+          %input{type: 'checkbox', class: 'js-only table-checkbox-all'}
+        %th= Image::Style.human_attribute_name :title
+        %th.actions
+    %tbody
+      - @image.image_attachments.each do |image_attachment|
+        = render 'admin/image/attachments/image_attachment', image_attachment: image_attachment
+- else
+  .panel-body.text-center
+    = translate('views.hints.empty', model: Image::Attachment.model_name.human(count: 2 ))

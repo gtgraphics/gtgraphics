@@ -1,0 +1,12 @@
+- present image_attachment, with: Admin::Image::AttachmentPresenter do |image_attachment|
+  = content_tag_for :tr, image_attachment do
+    - if local_assigns.fetch(:checkboxes, true)
+      %td.checkbox-cell
+        = check_box_tag 'image_attachment_ids[]', image_attachment.id, false, class: 'table-checkbox', id: nil, data: { behavior: 'tableCheckbox' }
+    %td
+      = link_to image_attachment.title, image_attachment.show_path
+      %br
+      %span.text-muted.ignored
+        = image_attachment.content_type
+    %td.actions
+      = image_attachment.action_buttons remote: true, icon_only: true

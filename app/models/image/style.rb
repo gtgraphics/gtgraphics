@@ -28,7 +28,7 @@ class Image < ActiveRecord::Base
     include Image::Resizable
     include Image::ExifAnalyzable
 
-    include CounterIncrementable
+    include Downloadable
     include PersistenceContextTrackable
     include TitleSearchable
     include Translatable
@@ -69,5 +69,13 @@ class Image < ActiveRecord::Base
     rescue MiniExiftool::Error => error
       logger.error "Error writing Exif data: #{error.message}"
     end
+
+    private
+
+    def asset_token_prefix(original_filename)
+      super || super(image.original_filename)
+    end
   end
 end
+
+require_dependency 'image'

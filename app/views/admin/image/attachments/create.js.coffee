@@ -2,8 +2,8 @@
 
 $modal = $('#modal')
 $modal.one 'hidden.bs.modal', ->
-  $container = $('#image_downloads')
-  $container.html("<%= j render('admin/image/downloads/table') %>")
+  $container = $('#image_attachments')
+  $container.html("<%= j render('admin/image/attachments/table') %>")
   $container.prepare()
 
 $modal.modal('hide')

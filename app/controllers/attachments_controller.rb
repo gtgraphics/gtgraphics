@@ -1,28 +1,19 @@
-class AttachmentsController < ApplicationController
-  skip_before_action :set_locale
+class AttachmentsController < DownloadsController
   before_action :load_attachment
 
   def show
     if @attachment.image?
-      send_attachment :inline
+      send_attachment @attachment, :inline
     else
       download
     end
   end
 
   def download
-    send_attachment :attachment
+    send_attachment @attachment, :attachment
   end
 
   private
-
-  def send_attachment(disposition)
-    @attachment.increment_counter!(:downloads)
-    send_file @attachment.asset.path, filename: @attachment.original_filename,
-                                      content_type: @attachment.content_type,
-                                      disposition: disposition,
-                                      x_sendfile: true
-  end
 
   def load_attachment
     @attachment = Attachment.find_by!(asset: params[:filename])

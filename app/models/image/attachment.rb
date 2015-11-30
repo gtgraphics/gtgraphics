@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: image_downloads
+# Table name: image_attachments
 #
 #  id            :integer          not null, primary key
 #  image_id      :integer
@@ -9,11 +9,11 @@
 #
 
 class Image < ActiveRecord::Base
-  class Download < ActiveRecord::Base
+  class Attachment < ActiveRecord::Base
     acts_as_list scope: :image_id
 
     belongs_to :image, required: true, touch: true
-    belongs_to :attachment, required: true
+    belongs_to :attachment, class_name: '::Attachment', required: true
 
     default_scope -> { order(:position) }
 
@@ -21,3 +21,6 @@ class Image < ActiveRecord::Base
              to: :attachment
   end
 end
+
+require_dependency 'image'
+require_dependency 'attachment'

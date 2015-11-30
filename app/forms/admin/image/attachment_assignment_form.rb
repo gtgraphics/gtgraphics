@@ -14,11 +14,12 @@ module Admin
       end
 
       def perform
-        ::Image::Download.transaction do
+        ::Image::Attachment.transaction do
           attachment_ids.each do |attachment_id|
-            download = image.downloads.create!(attachment_id: attachment_id)
-            recalculate_position!(download)
-            downloads << download
+            image_attachment =
+              image.image_attachments.create!(attachment_id: attachment_id)
+            recalculate_position!(image_attachment)
+            image_attachments << image_attachment
           end
         end
       end

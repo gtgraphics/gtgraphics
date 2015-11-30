@@ -35,7 +35,9 @@ Rails.application.routes.draw do
   get 'sitemap.xml', to: 'sitemaps#index', as: :sitemaps, format: 'xml'
   get 'sitemap.:page.xml', to: 'sitemaps#show', as: :sitemap, format: 'xml'
 
+  # Downloads
   scope 'files', constraints: { filename: /.*/ } do
+    get 'images/download/:filename' => 'image/styles#download', as: :download_image_style
     get 'download/:filename' => 'attachments#download', as: :download_attachment
     get ':filename' => 'attachments#show', as: :attachment
   end
@@ -68,11 +70,11 @@ Rails.application.routes.draw do
 
               scope :downloads, controller: :downloads do
                 root action: :index, as: :downloads
-                get :attachments, action: :attachments,
-                                  as: :downloaded_attachments
-                get :images, action: :images, as: :downloaded_images
-                get :image_styles, action: :image_styles,
-                                   as: :downloaded_image_styles
+                scope '(:type)' do
+                  get :total, as: :total_downloads
+                  get ':year/:month', action: :month, as: :monthly_downloads, year: /[0-9]+/, month: /[0-9]+/
+                  get ':year', action: :year, as: :yearly_downloads, year: /[0-9]+/
+                end
               end
             end
 
@@ -102,7 +104,7 @@ Rails.application.routes.draw do
                   delete :destroy_multiple
                 end
               end
-              resources :downloads, as: :attachments, controller: :'image/downloads', concerns: [:movable, :batch_processable] do
+              resources :attachments, as: :attachments, controller: :'image/attachments', concerns: %i(movable batch_processable) do
                 match :upload, on: :collection, via: %i(post patch)
               end
               collection do

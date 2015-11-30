@@ -1,0 +1,24 @@
+%ul.nav.nav-pills#toolbar
+  = active_link_to 'Alle Downloads', url_for(type: nil), wrap_tag: :li, active: @type.nil?
+  = active_link_to Image.model_name.human(count: 2), url_for(type: 'images'), wrap_tag: :li, active: @type == 'images'
+  = active_link_to Image::Style.model_name.human(count: 2), url_for(type: 'image_styles'), wrap_tag: :li, active: @type == 'image_styles'
+  = active_link_to Attachment.model_name.human(count: 2), url_for(type: 'attachments'), wrap_tag: :li, active: @type == 'attachments'
+
+.panel.panel-default
+  .panel-heading.clearfix
+    .panel-title.pull-left
+      %h3.panel-title
+        - if @year && @month
+          = translate('date.month_names')[@month]
+          = @year
+        - elsif @year
+          = @year
+        - else
+          Gesamt
+        %span.text-muted
+          = surround '(', ')' do
+            = number_with_delimiter(@downloads_count || @downloads.total_count)
+
+  = render 'table', downloads: @downloads
+
+  = paginate @downloads

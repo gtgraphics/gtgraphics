@@ -6,11 +6,12 @@ module Admin
       validates :asset, presence: true
 
       def perform
-        ::Image::Download.transaction do
+        ::Image::Attachment.transaction do
           attachment = Attachment.create!(asset: asset)
-          download = image.downloads.create!(attachment: attachment)
-          recalculate_position!(download)
-          downloads << download
+          image_attachment =
+            image.image_attachments.create!(attachment: attachment)
+          recalculate_position!(image_attachment)
+          image_attachments << image_attachment
         end
       end
     end

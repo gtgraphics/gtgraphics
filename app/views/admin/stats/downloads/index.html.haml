@@ -1,40 +1,48 @@
 = panel 'Downloads' do
   %dl.dl-horizontal
-    %dt Gesamtzahl
-    %dd
-      = number_with_delimiter @downloads_count
-      Downloads
     %dt Belegter Speicher
     %dd= number_to_human_size @bytes_total, strip_insignificant_zeros: false, precision: 3
     %dt Gesendete Daten
     %dd= number_to_human_size @bytes_sent, strip_insignificant_zeros: false, precision: 3
 
-/ Attachments
+/ Total
 .panel.panel-default
   .panel-heading.clearfix
-    %h3.panel-title.pull-left
-      = Attachment.model_name.human(count: 2)
-    - if @attachments.any?
+    .panel-title.pull-left
+      %h3.panel-title
+        Gesamt
+        %span.text-muted
+          = surround '(', ')' do
+            = number_with_delimiter @downloads.size
+    - if @downloads.size > 0
       .pull-right
-        = link_to 'Alle anzeigen', :admin_stats_downloaded_attachments
-  = render 'attachments_table'
+        = link_to 'Alle anzeigen', :admin_stats_total_downloads
+  = render 'table', downloads: @downloads.limit(10)
 
-/ Images
+/ Current Month
 .panel.panel-default
   .panel-heading.clearfix
-    %h3.panel-title.pull-left
-      = Image.model_name.human(count: 2)
-    - if @images.any?
+    .panel-title.pull-left
+      %h3.panel-title
+        Aktueller Monat
+        %span.text-muted
+          = surround '(', ')' do
+            = number_with_delimiter @downloads.in_current_month.size
+    - if @downloads.in_current_month.size > 0
       .pull-right
-        = link_to 'Alle anzeigen', :admin_stats_downloaded_images
-  = render 'images_table'
+        = link_to 'Alle anzeigen', admin_stats_monthly_downloads_path(year: Date.today.year, month: Date.today.month)
+  = render 'table', downloads: @downloads.in_current_month.limit(10)
 
-/ Image Styles
+/ Previous Month
 .panel.panel-default
   .panel-heading.clearfix
-    %h3.panel-title.pull-left
-      = Image::Style.model_name.human(count: 2)
-    - if @image_styles.any?
+    .panel-title.pull-left
+      %h3.panel-title
+        Vorheriger Monat
+        %span.text-muted
+          = surround '(', ')' do
+            = number_with_delimiter @downloads.in_previous_month.size
+    - if @downloads.in_previous_month.size > 0
       .pull-right
-        = link_to 'Alle anzeigen', :admin_stats_downloaded_image_styles
-  = render 'image_styles_table'
+        = link_to 'Alle anzeigen', admin_stats_monthly_downloads_path(year: (Date.today - 1.month).year, month: (Date.today - 1.month).month)
+  = render 'table', downloads: @downloads.in_previous_month.limit(10)

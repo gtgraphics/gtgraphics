@@ -1,12 +1,12 @@
 module Admin
   module Image
-    class DownloadPresenter < Admin::ApplicationPresenter
+    class AttachmentPresenter < Admin::ApplicationPresenter
       include DownloadCountablePresenter
       include FileAttachablePresenter
       include Admin::MovableResourcePresenter
 
-      presents :image_download
-      delegate :title, :image, to: :image_download
+      presents :image_attachment
+      delegate :title, :image, to: :image_attachment
       delegate_presented :attachment, with: 'Admin::AttachmentPresenter'
 
       self.action_buttons = %i(download move_up move_down destroy)
@@ -23,19 +23,19 @@ module Admin
       delegate :show_path, :download_path, to: :attachment
 
       def destroy_path
-        h.admin_image_attachment_path(image, image_download)
+        h.admin_image_attachment_path(image, image_attachment)
       end
 
       def edit_path
-        h.edit_admin_image_attachment_path(image, image_download)
+        h.edit_admin_image_attachment_path(image, image_attachment)
       end
 
       def move_down_path
-        h.move_down_admin_image_attachment_path(image, image_download)
+        h.move_down_admin_image_attachment_path(image, image_attachment)
       end
 
       def move_up_path
-        h.move_up_admin_image_attachment_path(image, image_download)
+        h.move_up_admin_image_attachment_path(image, image_attachment)
       end
     end
   end

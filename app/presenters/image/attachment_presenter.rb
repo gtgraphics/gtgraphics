@@ -1,15 +1,15 @@
 class Image < ActiveRecord::Base
-  class DownloadPresenter < ApplicationPresenter
+  class AttachmentPresenter < ApplicationPresenter
     include FileAttachablePresenter
 
-    presents :download
+    presents :attachment
 
     def title
       super.presence || filename
     end
 
     def filename
-      download.asset.filename
+      attachment.asset.filename
     end
 
     def url
