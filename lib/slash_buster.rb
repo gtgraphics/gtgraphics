@@ -9,9 +9,11 @@ class SlashBuster
     return @app.call(env) if %w(GET HEAD).exclude?(env['REQUEST_METHOD'])
 
     uri = URI.parse(env['REQUEST_URI'])
-    return @app.call(env) unless uri.path.end_with?(SLASH)
+    return @app.call(env) if  uri.path.end_with?(SLASH)
 
     uri.path = uri.path.sub(/#{Regexp.escape(SLASH)}+\z/, '')
+
+    binding.pry
 
     Rails.logger.info "Busting slashes and redirecting to: #{uri.to_s}"
 
