@@ -104,6 +104,8 @@ module Admin
 
       def load_referers
         @referers = Download.group(:referer).order('count_all DESC')
+                    .where('referer IS NULL OR (referer NOT ILIKE ? AND referer NOT ILIKE ?)',
+                           '%localhost%', '%gtgraphics%')
       end
 
       def calculate_sum(aggregation)
