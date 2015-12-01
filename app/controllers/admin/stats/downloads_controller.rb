@@ -103,9 +103,10 @@ module Admin
       end
 
       def load_referers
+        excluded_url = Rails.env.in?(%w(development test)) ? 'localhost' : 'gtgraphics.de'
         @referers = Download.group(:referer).order('count_all DESC')
-                    .where('referer IS NULL OR (referer NOT ILIKE ? AND referer NOT ILIKE ?)',
-                           '%localhost%', '%gtgraphics%')
+                    .where('referer IS NULL OR referer NOT ILIKE ?',
+                           "%#{excluded_url}%")
       end
 
       def calculate_sum(aggregation)
