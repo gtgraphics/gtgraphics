@@ -1,7 +1,7 @@
 module SlashBuster
+  ##
+  # The middleware which rewrites URLs with unnecessary slashes in it.
   class Middleware
-    SLASH = '/'
-
     def initialize(app)
       @app = app
     end
