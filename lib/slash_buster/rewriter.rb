@@ -45,6 +45,7 @@ module SlashBuster
     end
 
     def redirect(uri)
+      Rails.logger.info "Busted slashes and redirected: #{uri}"
       [301, { 'Location' => uri.to_s }, []]
     end
 
