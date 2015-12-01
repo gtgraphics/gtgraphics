@@ -75,18 +75,15 @@ group :development do
   gem 'rails-erd'
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'thin'
+  gem 'puma'
   gem 'rubocop', require: false
 end
-gem 'daemons'
 gem 'whenever'
 gem 'request_store'
 gem 'nokogiri'
 gem 'exception_notification'
 gem 'pry-rails'
 gem 'countries'
-gem 'faker', group: %i(development test)
-gem 'spring', group: :development
 gem 'web-console', '~> 2.0', group: :development
 gem 'vnstat-ruby', '1.0.5'
 
@@ -102,4 +99,8 @@ group :development do
 end
 
 # Testing and Debugging
-gem 'pry-byebug', group: %i(development test)
+group :development, :test do
+  gem 'pry-byebug'
+  gem 'spring'
+end
+gem 'rspec-rails', group: :test

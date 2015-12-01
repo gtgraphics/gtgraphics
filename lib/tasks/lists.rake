@@ -14,7 +14,7 @@ namespace :lists do
           end
         end
       end
-      puts 'Fixes Project::Image positions'
+      puts 'Fixed Project::Image positions'
     end
 
     desc 'Refreshes list positions of Image::Styles'
@@ -24,7 +24,7 @@ namespace :lists do
           style.update_columns(position: index.next, updated_at: Time.now)
         end
       end
-      puts 'Fixes Image::Style positions'
+      puts 'Fixed Image::Style positions'
     end
 
     desc 'Refreshes list positions of User::SocialLinks'
@@ -34,7 +34,7 @@ namespace :lists do
           sl.update_columns(position: index.next, updated_at: Time.now)
         end
       end
-      puts 'Fixes User::SocialLink positions'
+      puts 'Fixed User::SocialLink positions'
     end
   end
 end
