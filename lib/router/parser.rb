@@ -1,7 +1,7 @@
 module Router
   class Parser
     DEFAULT_REQUEST_METHODS = %w(get head)
-    IGNORED_PATHS = %w(assets)
+    IGNORED_PATHS = %w(assets admin)
 
     attr_reader :request_path, :request_method
 

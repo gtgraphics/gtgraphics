@@ -17,7 +17,7 @@
     - if @downloads.size > 0
       .pull-right
         = link_to 'Alle anzeigen', :admin_stats_total_downloads
-  = render 'table', downloads: @downloads.limit(10)
+  = render 'table', downloads: @downloads.limit(5)
 
 / Current Month
 .panel.panel-default
@@ -31,7 +31,7 @@
     - if @downloads.in_current_month.size > 0
       .pull-right
         = link_to 'Alle anzeigen', admin_stats_monthly_downloads_path(year: Date.today.year, month: Date.today.month)
-  = render 'table', downloads: @downloads.in_current_month.limit(10)
+  = render 'table', downloads: @downloads.in_current_month.limit(5)
 
 / Previous Month
 .panel.panel-default
@@ -45,4 +45,13 @@
     - if @downloads.in_previous_month.size > 0
       .pull-right
         = link_to 'Alle anzeigen', admin_stats_monthly_downloads_path(year: (Date.today - 1.month).year, month: (Date.today - 1.month).month)
-  = render 'table', downloads: @downloads.in_previous_month.limit(10)
+  = render 'table', downloads: @downloads.in_previous_month.limit(5)
+
+- if @referers.any?
+  .panel.panel-default
+    .panel-heading.clearfix
+      .panel-title.pull-left
+        %h3.panel-title Referenzierende Seiten
+      .pull-right
+        = link_to 'Alle anzeigen', :admin_stats_download_referers
+    = render 'referers_table'

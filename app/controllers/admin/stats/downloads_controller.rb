@@ -7,6 +7,7 @@ module Admin
       before_action :set_month, only: :month
       before_action :set_type, only: %i(total year month)
       before_action :load_downloads
+      before_action :load_referers, only: %i(index referers)
 
       breadcrumbs do |b|
         b.append translate('views.admin.stats.downloads'),
@@ -14,15 +15,28 @@ module Admin
         if action_name == 'total'
           b.append 'Gesamt', :admin_stats_total_downloads
         end
+        if action_name == 'referers'
+          b.append 'Referenzierende Seiten', :admin_stats_download_referers
+        end
         if @year
           b.append @year, admin_stats_yearly_downloads_path(year: @year)
-          b.append translate('date.month_names')[@month], admin_stats_monthly_downloads_path(year: @year, month: @month) if @month
+          if @month
+            b.append translate('date.month_names')[@month],
+                     admin_stats_monthly_downloads_path(year: @year, month: @month)
+          end
         end
       end
 
       def index
         @bytes_total = calculate_sum(:file_size)
         @bytes_sent = calculate_sum('downloads_count * file_size')
+        @referers = @referers.limit(PAGE_SIZE)
+
+        respond_to :html
+      end
+
+      def referers
+        @referers = @referers.page(params[:page]).per(PAGE_SIZE)
 
         respond_to :html
       end
@@ -86,6 +100,10 @@ module Admin
           .order('count DESC').preload(downloadable: :translations)
           .public_send(@type || 'all')
         )
+      end
+
+      def load_referers
+        @referers = Download.group(:referer).order('count_all DESC')
       end
 
       def calculate_sum(aggregation)

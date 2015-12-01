@@ -1,0 +1,14 @@
+%table.table.table-hover
+  %thead
+    %tr
+      %th= Download.human_attribute_name(:referer)
+      %th= Download.human_attribute_name(:count)
+  %tbody
+    - @referers.count.each do |url, count|
+      %tr
+        %td
+          - if url.blank?
+            Unbekannte Quelle
+          - else
+            = link_to url.truncate(80), url, target: '_blank', title: url
+        %td= number_with_delimiter(count)

@@ -75,6 +75,7 @@ Rails.application.routes.draw do
                   get ':year/:month', action: :month, as: :monthly_downloads, year: /[0-9]+/, month: /[0-9]+/
                   get ':year', action: :year, as: :yearly_downloads, year: /[0-9]+/
                 end
+                get :referers, as: :download_referers
               end
             end
 
