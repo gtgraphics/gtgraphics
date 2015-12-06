@@ -18,7 +18,11 @@ module SlashBuster
       @app = app
       @env = env
       @request = Rack::Request.new(env)
-      @uri = URI.parse(request.url)
+      begin
+        @uri = URI.parse(request.url)
+      rescue URI::InvalidURIError
+        @uri = nil
+      end
     end
 
     ##
@@ -32,7 +36,7 @@ module SlashBuster
     ##
     # @return [Array] Rack response being forwarded to Rack by the middleware.
     def call
-      return cascade unless valid_request?
+      return cascade unless processible_request?
       new_uri = sanitize_path
       return redirect(new_uri) if uri.path != new_uri.path
       cascade
@@ -57,8 +61,8 @@ module SlashBuster
       new_uri
     end
 
-    def valid_request?
-      !root? && (request.get? || request.head?)
+    def processible_request?
+      uri && !root? && (request.get? || request.head?)
     end
 
     def root?
