@@ -63,6 +63,8 @@ Rails.application.routes.draw do
             end
 
             namespace :stats do
+              get 'disk_usage', to: 'disk_usage#index', as: :disk_usage
+
               scope :traffic, controller: :traffic do
                 root action: :index, as: :traffic
                 patch :reset, as: :reset_traffic

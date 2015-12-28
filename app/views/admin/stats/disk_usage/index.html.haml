@@ -1,0 +1,9 @@
+= panel translate('views.admin.nav.stats/disk_usage') do
+  %dl.dl-horizontal
+    %dt Gesamt
+    %dd= number_to_human_size @bytes_total, strip_insignificant_zeros: false, precision: 3
+    %dt Belegt
+    %dd
+      = number_to_human_size @bytes_used, strip_insignificant_zeros: false, precision: 3
+      = surround '(', ')' do
+        = number_to_percentage(@bytes_used * 100 / @bytes_total.to_f)

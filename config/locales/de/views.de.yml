@@ -34,6 +34,7 @@ de:
         stats: Statistiken
         stats/traffic: Datenübertragung
         stats/downloads: Downloads
+        stats/disk_usage: Speicherverbrauch
       account:
         breadcrumbs:
           my_account: Ich
