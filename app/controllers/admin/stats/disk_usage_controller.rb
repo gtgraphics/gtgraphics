@@ -1,6 +1,6 @@
 module Admin
   module Stats
-    class DiskUsageController < ApplicationController
+    class DiskUsageController < Admin::Stats::ApplicationController
       def index
         file_system = Sys::Filesystem.stat('/')
 
