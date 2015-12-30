@@ -1,9 +1,20 @@
 = panel translate('views.admin.nav.stats/disk_usage') do
-  %dl.dl-horizontal
-    %dt Gesamt
-    %dd= number_to_human_size @bytes_total, strip_insignificant_zeros: false, precision: 3
-    %dt Belegt
-    %dd
-      = number_to_human_size @bytes_used, strip_insignificant_zeros: false, precision: 3
-      = surround '(', ')' do
-        = number_to_percentage(@bytes_used * 100 / @bytes_total.to_f)
+  .panel-body
+    #disk_usage_chart.diagram-container
+      .diagram-container__loader.text-center.text-muted
+        = loader
+    %dl.dl-horizontal{data: { provides: 'disk-usage', target: '#disk_usage_chart', caption: { bytesUsed: 'Belegt', bytesFree: 'Frei' } }}
+      %dt Gesamt
+      %dd
+        %span{data: { contains: 'bytes-total', value: @bytes_total }}
+          = number_to_human_size @bytes_total, strip_insignificant_zeros: false, precision: 3
+        = surround '(', ')' do
+          = number_to_percentage(@bytes_used * 100 / @bytes_total.to_f)
+      %dt Belegt
+      %dd
+        %span{data: { contains: 'bytes-used', value: @bytes_used }}
+          = number_to_human_size @bytes_used, strip_insignificant_zeros: false, precision: 3
+      %dt Frei
+      %dd
+        %span{data: { contains: 'bytes-free', value: @bytes_free }}
+          = number_to_human_size @bytes_free, strip_insignificant_zeros: false, precision: 3
