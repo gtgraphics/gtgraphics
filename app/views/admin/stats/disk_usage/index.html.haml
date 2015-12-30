@@ -8,13 +8,15 @@
       %dd
         %span{data: { contains: 'bytes-total', value: @bytes_total }}
           = number_to_human_size @bytes_total, strip_insignificant_zeros: false, precision: 3
-        = surround '(', ')' do
-          = number_to_percentage(@bytes_used * 100 / @bytes_total.to_f)
       %dt Belegt
       %dd
         %span{data: { contains: 'bytes-used', value: @bytes_used }}
           = number_to_human_size @bytes_used, strip_insignificant_zeros: false, precision: 3
+        = surround '(', ')' do
+          = number_to_percentage @quote_used
       %dt Frei
       %dd
         %span{data: { contains: 'bytes-free', value: @bytes_free }}
           = number_to_human_size @bytes_free, strip_insignificant_zeros: false, precision: 3
+        = surround '(', ')' do
+          = number_to_percentage @quote_free
