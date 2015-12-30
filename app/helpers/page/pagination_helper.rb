@@ -15,11 +15,12 @@ class Page
       end
     end
 
-    def paginated_url_for_current_page(options = {})
-      options = options.reverse_merge(page: params[:page])
+    def paginated_url_for_current_page(*args)
+      options = args.extract_options!.reverse_merge(params.permit!.to_h)
+      subroute = args.first || current_subroute.try(:name)
       page = options[:page].to_i
       options.delete(:page) if page <= 1
-      current_page_url(options)
+      current_page_url(subroute, options)
     end
   end
 end

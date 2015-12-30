@@ -32,7 +32,7 @@ module Router
 
     def current_page_path(*args)
       options = args.extract_options!.merge(only_path: true)
-      current_page_url(current_page, *args, options)
+      current_page_url(*args, options)
     end
 
     def current_page_url(*args)

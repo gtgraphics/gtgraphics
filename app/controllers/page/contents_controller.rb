@@ -19,7 +19,7 @@ class Page::ContentsController < Page::ApplicationController
 
     unless params[:format] == 'rss'
       # OPTIMIZE: if request.format.html? caused problems for some crawlers
-      @image_pages = @image_pages.page(params[:page]).per(1)
+      @image_pages = @image_pages.page(params[:page]).per(BRICK_PAGE_SIZE)
       sanitized_response = sanitize_paginated_response(@image_pages)
       return sanitized_response if sanitized_response
     end
@@ -78,12 +78,15 @@ class Page::ContentsController < Page::ApplicationController
   end
 
   def sanitize_paginated_response(relation)
+    total_pages = relation.total_pages
+    return if total_pages.zero?
+
     if params[:page].present? && params[:page].to_i <= 1
       return redirect_to current_page_path(page: nil),
                          status: :moved_permanently
     end
 
-    return if relation.current_page.in?(1..relation.total_pages)
+    return if relation.current_page.in?(1..total_pages)
     fail Router::RouteNotFound,
          "Page index out of bounds: #{relation.current_page}"
   end

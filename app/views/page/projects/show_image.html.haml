@@ -1,4 +1,4 @@
-- content_for :head do
+- content_for :meta_robots do
   %meta{name: 'robots', content: 'noindex,follow'}
 
 = render 'lightbox', page: @page, image: @image, close_url: @page, previous_page_url: @previous_page, next_page_url: @next_page, details: false, buyable: false, styles: false
