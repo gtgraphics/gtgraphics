@@ -359,6 +359,8 @@ GEM
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     state_machine (1.2.0)
+    sys-filesystem (1.1.5)
+      ffi
     therubyracer (0.12.1)
       libv8 (~> 3.16.14.0)
       ref
@@ -458,6 +460,7 @@ DEPENDENCIES
   spring
   sprockets-rails
   state_machine
+  sys-filesystem
   therubyracer
   turbolinks (~> 2.5.3)
   uglifier

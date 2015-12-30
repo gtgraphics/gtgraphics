@@ -8,6 +8,7 @@ module Router
       parser = Parser.from_env(env)
 
       return @app.call(env) if parser.invalid_request?
+
       if parser.page.nil?
         return [404, {}, []] if parser.root?
         return @app.call(env)

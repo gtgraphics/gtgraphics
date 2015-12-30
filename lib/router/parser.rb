@@ -1,7 +1,7 @@
 module Router
   class Parser
     DEFAULT_REQUEST_METHODS = %w(get head)
-    IGNORED_PATHS = %w(assets admin)
+    IGNORED_PATHS = [/\Aassets/, /admin/]
 
     attr_reader :request_path, :request_method
 
@@ -78,12 +78,16 @@ module Router
     # Request Validation
 
     def invalid_request?
-      request_ignored? || !valid_request_method?
+      ignored_request? || !valid_request_method?
     end
 
-    def request_ignored?
+    def ignored_request?
       IGNORED_PATHS.any? do |ignored_path|
-        request_path.start_with?(ignored_path)
+        if ignored_path.respond_to?(:match)
+          ignored_path.match(request_path)
+        else
+          request_path == ignored_path
+        end
       end
     end
 

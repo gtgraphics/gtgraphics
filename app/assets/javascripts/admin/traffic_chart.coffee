@@ -1,8 +1,6 @@
 bytesToMBs = (bytes) ->
   Math.round(bytes / Math.pow(1024, 2))
 
-google.load('visualization', '1', packages: ['corechart'])
-
 setupCharts = ->
   $('[data-provides="traffic-table"]').each ->
     $table = $(@)
@@ -23,9 +21,9 @@ setupCharts = ->
     $table.find('[data-time]').each ->
       $row = $(@)
       time = $row.data('time')
-      bytesReceived = bytesToMBs($row.data('bytesReceived'))
-      bytesSent = bytesToMBs($row.data('bytesSent'))
-      results.unshift([time, bytesReceived, bytesSent])
+      received = bytesToMBs($row.data('bytesReceived'))
+      sent = bytesToMBs($row.data('bytesSent'))
+      results.unshift([time, received, sent])
 
     results.unshift([captions.time, captions.bytesReceived, captions.bytesSent])
 

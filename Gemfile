@@ -85,6 +85,7 @@ gem 'pry-rails'
 gem 'countries'
 gem 'web-console', '~> 2.0', group: :development
 gem 'vnstat-ruby', '1.0.5'
+gem 'sys-filesystem'
 
 # Image Processing
 gem 'mini_exiftool'
