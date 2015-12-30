@@ -56,12 +56,12 @@
                     %span.sr-only= translate('helpers.links.download')
                   %ul.dropdown-menu{role: 'menu', :'aria-labelledby' => 'image_attachment_dropdown'}
                     - present_collection(@image_styles).each do |style|
-                      %li= link_to style.title, current_page_path(:download_image, format: style.format, style_id: style.position), class: 'download', data: { no_turbolink: true }
+                      %li= link_to style.title, current_page_path(:download_image, format: style.format, style_id: style.position), class: 'download', rel: 'nofollow', data: { no_turbolink: true }
                     - if @image_styles.any? && @image_attachments.any?
                       %li.divider
                     - present_collection(@image_attachments).each do |download|
                       %li
-                        = link_to download.url, data: { no_turbolink: true } do
+                        = link_to download.url, rel: 'nofollow', data: { no_turbolink: true } do
                           .download-title= download.title
                           .download-details
                             %small.weak= download.content_type
