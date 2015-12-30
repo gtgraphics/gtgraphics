@@ -31,14 +31,14 @@ module Router
     end
 
     def current_page_path(*args)
-      options = args.extract_options!
-      subroute = args.shift || current_subroute.try(:name)
-      page_path(current_page, subroute, *args, options)
+      options = args.extract_options!.merge(only_path: true)
+      current_page_url(current_page, *args, options)
     end
 
     def current_page_url(*args)
-      options = args.extract_options!.merge(only_path: true)
-      current_page_path(current_page, *args, options)
+      options = args.extract_options!
+      subroute = args.shift || current_subroute.try(:name)
+      page_url(current_page, subroute, *args, options)
     end
 
     def change_locale_path(locale)

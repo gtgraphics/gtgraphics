@@ -20,13 +20,13 @@
     %meta{property: 'og:image:type', content: 'image/png'}
     %meta{property: 'og:image:width', content: 600}
     %meta{property: 'og:image:height', content: 600}
-  %meta{property: 'og:url', content: current_page_url}
+  %meta{property: 'og:url', content: paginated_url_for_current_page}
 
   - # References to other translations
-  %link{rel: 'canonical', href: current_page_url}
+  %link{rel: 'canonical', href: paginated_url_for_current_page}
   - I18n.available_locales.each do |locale|
     - if locale != I18n.locale
-      %link{rel: 'alternate', hreflang: locale, href: current_page_url(locale: locale)}
+      %link{rel: 'alternate', hreflang: locale, href: paginated_url_for_current_page(locale: locale)}
 
 - content_for :content do
   = facebook_sdk_anchor

@@ -1,3 +1,6 @@
+- content_for :head do
+  = pagination_link_tags @project_pages
+
 = render 'breadcrumbs'
 
 %h1.sr-only= page.title

@@ -19,9 +19,9 @@ class Page::ContentsController < Page::ApplicationController
 
     unless params[:format] == 'rss'
       # OPTIMIZE: if request.format.html? caused problems for some crawlers
-      @image_pages = @image_pages.page(params[:page]).per(BRICK_PAGE_SIZE)
-      fixed_path = fixed_page_path_for(@image_pages)
-      return redirect_to(fixed_path) if fixed_path
+      @image_pages = @image_pages.page(params[:page]).per(1)
+      sanitized_response = sanitize_paginated_response(@image_pages)
+      return sanitized_response if sanitized_response
     end
 
     respond_with_page do |format|
@@ -55,8 +55,8 @@ class Page::ContentsController < Page::ApplicationController
     @project_pages = @child_pages.projects.preload(embeddable: :project)
                      .page(params[:page]).per(BRICK_PAGE_SIZE)
 
-    fixed_path = fixed_page_path_for(@project_pages)
-    return redirect_to(fixed_path) if fixed_path
+    sanitized_response = sanitize_paginated_response(@project_pages)
+    return sanitized_response if sanitized_response
 
     respond_with_page
   end
@@ -77,16 +77,14 @@ class Page::ContentsController < Page::ApplicationController
                    .with_translations_for_current_locale
   end
 
-  def fixed_page_path_for(scope)
-    total_pages = scope.total_pages
-    if scope.current_page < 1
-      current_page_path(page: nil)
-    elsif total_pages > 0 && scope.current_page > total_pages
-      if total_pages == 1
-        current_page_path(page: nil)
-      else
-        current_page_path(page: total_pages)
-      end
+  def sanitize_paginated_response(relation)
+    if params[:page].present? && params[:page].to_i <= 1
+      return redirect_to current_page_path(page: nil),
+                         status: :moved_permanently
     end
+
+    return if relation.current_page.in?(1..relation.total_pages)
+    fail Router::RouteNotFound,
+         "Page index out of bounds: #{relation.current_page}"
   end
 end
