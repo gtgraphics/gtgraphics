@@ -1,8 +1,6 @@
 bytesToMBs = (bytes) ->
   Math.round(bytes / Math.pow(1024, 2))
 
-google.load('visualization', '1', packages: ['corechart'])
-
 setupCharts = ->
   $('[data-provides="traffic-table"]').each ->
     $table = $(@)
