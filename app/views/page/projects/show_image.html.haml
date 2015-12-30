@@ -1,4 +1,7 @@
 - content_for :meta_robots do
   %meta{name: 'robots', content: 'noindex,follow'}
 
+- content_for :project_social_meta_tags do
+  = render 'image_head_tags'
+
 = render 'lightbox', page: @page, image: @image, close_url: @page, previous_page_url: @previous_page, next_page_url: @next_page, details: false, buyable: false, styles: false
