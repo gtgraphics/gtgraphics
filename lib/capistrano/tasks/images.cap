@@ -2,7 +2,7 @@ namespace :deploy do
   namespace :images do
     desc 'Recreates all Image versions'
     task recreate: [:set_rails_env] do
-      on roles(:app) do |host|
+      on roles(:app) do
         within release_path do
           with rails_env: fetch(:rails_env) do
             execute :rake, 'gtg:images:recreate_assets'

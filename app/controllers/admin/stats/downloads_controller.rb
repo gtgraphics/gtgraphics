@@ -29,7 +29,7 @@ module Admin
 
       def index
         @bytes_total = calculate_sum(:file_size)
-        @bytes_sent = calculate_sum('downloads_count * file_size')
+        @bytes_sent = calculate_sum('downloads_count * file_size::bigint')
         @referers = @referers.limit(PAGE_SIZE)
 
         respond_to :html
