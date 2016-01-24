@@ -5,7 +5,7 @@ module Admin
     presents :download
 
     def downloadable
-      @downloadable ||= present [:admin, download.downloadable] unless image?
+      @downloadable ||= present [:admin, download.hittable] unless image?
     end
 
     def title

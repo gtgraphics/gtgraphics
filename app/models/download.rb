@@ -15,20 +15,21 @@
 class Download < Hit
   self.counter_cache = :downloads_count
 
-  delegate :asset, :title, :file_size, :content_type, :file_extension,
-           to: :downloadable
-
-  scope :attachments, -> { where(downloadable_type: 'Attachment') }
-  scope :image_styles, -> { where(downloadable_type: 'Image::Style') }
+  scope :attachments, -> { where(hittable_type: 'Attachment') }
+  scope :image_styles, -> { where(hittable_type: 'Image::Style') }
 
   alias_attribute :downloadable_type, :hittable_type
   alias_attribute :downloadable_id, :hittable_id
+  alias_method :downloadable, :hittable
+
+  delegate :asset, :title, :file_size, :content_type, :file_extension,
+           to: :downloadable
 
   def attachment?
-    downloadable_type == 'Attachment'
+    hittable_type == 'Attachment'
   end
 
   def image_style?
-    downloadable_type == 'Image::Style'
+    hittable_type == 'Image::Style'
   end
 end

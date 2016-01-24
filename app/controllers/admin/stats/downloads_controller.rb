@@ -78,26 +78,29 @@ module Admin
       def load_image_downloads
         @downloads = filter_by_time(
           ::Image.joins(:styles)
-          .joins(%{
-            INNER JOIN downloads
-            ON downloads.downloadable_id = image_styles.id
-            AND downloads.downloadable_type = 'Image::Style'
-          })
+          .joins(
+            <<-SQL.strip_heredoc
+              INNER JOIN hits
+              ON hits.type = 'Download'
+              AND hits.hittable_id = image_styles.id
+              AND hits.hittable_type = 'Image::Style'
+            SQL
+          )
           .group('images.id').select('images.*')
-          .select('COUNT(downloads.id) AS count')
-          .select('MAX(downloads.created_at) AS last_downloaded_at')
-          .order('COUNT(downloads.id) DESC')
+          .select('COUNT(hits.id) AS count')
+          .select('MAX(hits.created_at) AS last_downloaded_at')
+          .order('COUNT(hits.id) DESC')
         )
         @downloads_count = filter_by_time(Download.image_styles).count
       end
 
       def load_generic_downloads
-        partition = 'OVER (PARTITION BY downloadable_type, downloadable_id)'
+        partition = 'OVER (PARTITION BY hittable_type, hittable_id)'
         @downloads = filter_by_time(
-          Download.uniq.select(:downloadable_id, :downloadable_type)
+          Download.uniq.select(:hittable_id, :hittable_type)
           .select("COUNT(id) #{partition} AS count")
           .select("MAX(created_at) #{partition} AS last_downloaded_at")
-          .order('count DESC').preload(downloadable: :translations)
+          .order('count DESC').preload(hittable: :translations)
           .public_send(@type || 'all')
         )
       end

@@ -14,4 +14,8 @@
 
 class Visit < Hit
   self.counter_cache = :visits_count
+
+  alias_attribute :visitable_type, :hittable_type
+  alias_attribute :visitable_id, :hittable_id
+  alias_method :visitable, :hittable
 end
