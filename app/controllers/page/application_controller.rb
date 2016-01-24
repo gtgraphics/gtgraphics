@@ -25,6 +25,8 @@ class Page::ApplicationController < ApplicationController
 
   private
 
+  # Rendering
+
   def render_page(options = {})
     render template_path, options
   end
@@ -46,10 +48,7 @@ class Page::ApplicationController < ApplicationController
               'templates', template_file)
   end
 
-  def localized_request_url(locale)
-    params = request.query_parameters.merge(locale: locale)
-    current_page_path(params)
-  end
+  # Filters
 
   def load_page
     @page = current_page
@@ -71,6 +70,13 @@ class Page::ApplicationController < ApplicationController
 
   def track_hit
     @page.track_visit! if current_subroute.nil?
+  end
+
+  # Helpers
+
+  def localized_request_url(locale)
+    params = request.query_parameters.merge(locale: locale)
+    current_page_path(params)
   end
 
   def restrict_secure_connection
