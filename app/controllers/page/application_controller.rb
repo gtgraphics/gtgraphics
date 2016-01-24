@@ -8,7 +8,7 @@ class Page::ApplicationController < ApplicationController
   before_action :track_hit
 
   attr_reader :page
-  private :page
+  protected :page
   helper_method :page, :template_file
 
   breadcrumbs do |b|
