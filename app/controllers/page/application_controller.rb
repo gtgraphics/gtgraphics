@@ -5,10 +5,10 @@ class Page::ApplicationController < ApplicationController
 
   before_action :load_page
   before_action :load_template
-  before_action :increment_hits
+  before_action :track_hit
 
   attr_reader :page
-  protected :page
+  private :page
   helper_method :page, :template_file
 
   breadcrumbs do |b|
@@ -23,7 +23,7 @@ class Page::ApplicationController < ApplicationController
     respond_with_page
   end
 
-  protected
+  private
 
   def render_page(options = {})
     render template_path, options
@@ -46,13 +46,10 @@ class Page::ApplicationController < ApplicationController
               'templates', template_file)
   end
 
-  protected
-
   def localized_request_url(locale)
-    current_page_path(request.query_parameters.merge(locale: locale))
+    params = request.query_parameters.merge(locale: locale)
+    current_page_path(params)
   end
-
-  private
 
   def load_page
     @page = current_page
@@ -72,8 +69,8 @@ class Page::ApplicationController < ApplicationController
                   .with_translations_for_current_locale
   end
 
-  def increment_hits
-    @page.increment_counter!(:hits)
+  def track_hit
+    @page.track_visit! if current_subroute.nil?
   end
 
   def restrict_secure_connection

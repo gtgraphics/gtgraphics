@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
     Rails.env.production?
   end
 
-  protected
+  private
 
   class_attribute :enforce_redirect_to_localized_url, :detect_locale_from_headers
   self.enforce_redirect_to_localized_url = true

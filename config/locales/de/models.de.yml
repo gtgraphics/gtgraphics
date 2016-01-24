@@ -116,7 +116,7 @@ de:
         author: Urheber
         author_name: Urheber
         original_filename: Dateiname
-        hits_count: Dateiaufrufe
+        downloads_count: Dateiaufrufe
       client:
         country: Land
         website_url: Website
@@ -213,7 +213,7 @@ de:
         state: Status
         meta_description: Meta-Beschreibung
         meta_keywords: Meta-Schlüsselwörter
-        hits_count: Seitenaufrufe
+        visits_count: Seitenaufrufe
         author_name: Autor
         aliases: Aliase
       page/content:

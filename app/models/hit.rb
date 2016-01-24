@@ -15,7 +15,13 @@
 class Hit < ActiveRecord::Base
   include TimeFilterable
 
+  TYPES = %w(
+    Visit
+    Download
+  )
+
   class_attribute :counter_cache
+  self.counter_cache = :hits_count
 
   belongs_to :hittable, required: true, polymorphic: true
 
@@ -30,6 +36,14 @@ class Hit < ActiveRecord::Base
   def self.in_previous_month
     date = Date.today - 1.month
     by_month(date.year, date.month)
+  end
+
+  TYPES.each do |type|
+    scope type.underscore.pluralize, -> { where(type: type) }
+
+    define_method(type.underscore) do
+      self.type == type
+    end
   end
 
   private

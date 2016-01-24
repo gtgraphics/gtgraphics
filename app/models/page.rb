@@ -24,8 +24,8 @@
 #
 
 class Page < ActiveRecord::Base
-  include CounterIncrementable
   include Excludable
+  include Hittable
   include NestedSetRepresentable
   include Ownable
   include Page::Abstract
@@ -40,6 +40,7 @@ class Page < ActiveRecord::Base
   sanitizes :title, with: :squish
 
   has_owner :author
+  track_hits_as :visit
 
   has_many :redirections, class_name: 'Page::Redirection', foreign_key: :destination_page_id,
                           inverse_of: :destination_page, dependent: :destroy

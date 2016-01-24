@@ -38,9 +38,10 @@ class Admin::PagePresenter < Admin::ApplicationPresenter
     page.embeddable_class.model_name.human
   end
 
-  def hits_count
-    hits_count = h.number_with_delimiter(super)
-    I18n.translate('views.admin.pages.hits_since', count: hits_count, date: created_on)
+  def visits_count
+    visits_count = h.number_with_delimiter(super)
+    I18n.translate('views.admin.pages.hits_since', count: visits_count,
+                                                   date: created_on)
   end
 
   def indexable

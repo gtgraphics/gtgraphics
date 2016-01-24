@@ -16,8 +16,8 @@
 #
 
 class Attachment < ActiveRecord::Base
-  include Downloadable
   include FileAttachable
+  include Hittable
   include Ownable
   include PeriodFilterable
   include PersistenceContextTrackable
@@ -28,6 +28,7 @@ class Attachment < ActiveRecord::Base
 
   has_attachment
   has_owner :author, default_owner_to_current_user: false
+  track_hits_as :download
 
   has_many :image_attachments, class_name: 'Image::Attachment',
                                inverse_of: :attachment, dependent: :destroy
@@ -43,7 +44,7 @@ class Attachment < ActiveRecord::Base
   delegate :themepack?, to: :file_extension
 
   def to_image
-    fail 'cannot be converted to Image' unless image?
+    fail 'Unable to convert Attachment into Image' unless image?
     Image.new do |image|
       image.asset = asset
       image.original_filename = original_filename
