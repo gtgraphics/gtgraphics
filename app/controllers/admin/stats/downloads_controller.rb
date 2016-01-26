@@ -1,10 +1,10 @@
 module Admin
   module Stats
     class DownloadsController < Admin::Stats::ApplicationController
+      include Admin::Stats::TimeFilterableController
+
       PAGE_SIZE = 25
 
-      before_action :set_year, only: %i(year month)
-      before_action :set_month, only: :month
       before_action :set_type, only: %i(total year month)
       before_action :load_downloads
       before_action :load_referers, only: %i(index referers)
@@ -119,14 +119,6 @@ module Admin
 
       def set_type
         @type = params[:type].presence_in(%w(images image_styles attachments))
-      end
-
-      def set_year
-        @year = params[:year].to_i
-      end
-
-      def set_month
-        @month = params[:month].to_i
       end
 
       def filter_by_time(scope)

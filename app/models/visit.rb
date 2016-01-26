@@ -18,4 +18,14 @@ class Visit < Hit
   alias_attribute :visitable_type, :hittable_type
   alias_attribute :visitable_id, :hittable_id
   alias_method :visitable, :hittable
+
+  belongs_to :page, foreign_key: :hittable_id
+
+  after_initialize :set_default_hittable_type
+
+  private
+
+  def set_default_hittable_type
+    self.hittable_type = 'Page'
+  end
 end

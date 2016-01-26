@@ -79,6 +79,10 @@ Rails.application.routes.draw do
                 end
                 get :referers, as: :download_referers
               end
+
+              scope :visits, controller: :visits do
+                root action: :index, as: :visits
+              end
             end
 
             resource :account, except: %i(new create) do
