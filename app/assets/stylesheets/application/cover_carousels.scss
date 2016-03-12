@@ -50,14 +50,13 @@
       }
 
       &.active {
-        z-index: 2;
+        z-index: 10;
 
         &.loaded {
           pointer-events: auto;
         }
 
         .cover {
-          opacity: 1;
           animation: cover-zoom 12s ease-out;
         }
       }
