@@ -20,6 +20,7 @@
       top: 0;
       bottom: 0;
       pointer-events: none;
+      z-index: 1;
 
       .cover {
         pointer-events: none;
@@ -38,16 +39,24 @@
         }
       }
 
-      &.prev .cover {
-        opacity: 1;
+      &.prev {
+        z-index: 2;
+
+        .cover {
+          opacity: 1;
+        }
       }
 
-      &.next .cover {
+      &.next {
         z-index: 4;
+
+        .cover {
+          z-index: 4;
+        }
       }
 
       &.active {
-        z-index: 5;
+        z-index: 3;
       }
 
       &.active.loaded {
