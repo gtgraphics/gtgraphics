@@ -20,13 +20,19 @@
       top: 0;
       bottom: 0;
       pointer-events: none;
-      z-index: 1;
+      z-index: 2;
+      visibility: hidden;
+
+      &.prev, &.next, &.active {
+        &.loaded {
+          visibility: visible;
+        }
+      }
 
       .cover {
         pointer-events: none;
         position: absolute;
         opacity: 0;
-        z-index: 3;
         left: 0;
         right: 0;
         top: 0;
@@ -40,33 +46,27 @@
       }
 
       &.prev {
-        z-index: 2;
+        z-index: 1;
 
         .cover {
           opacity: 1;
-        }
-      }
-
-      &.next {
-        z-index: 4;
-
-        .cover {
-          z-index: 4;
         }
       }
 
       &.active {
-        z-index: 3;
+        z-index: 2;
+
+        &.loaded {
+          pointer-events: auto;
+          .cover {
+            opacity: 1;
+            animation: cover-zoom 12s ease-out;
+          }
+        }
       }
 
-      &.active.loaded {
-        pointer-events: auto;
-
-        .cover {
-          opacity: 1;
-          z-index: 4;
-          animation: cover-zoom 12s ease-out;
-        }
+      &.next {
+        z-index: 3;
       }
     }
   }
