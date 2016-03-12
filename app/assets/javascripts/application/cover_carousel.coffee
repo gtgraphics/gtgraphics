@@ -138,6 +138,7 @@ class CoverCarousel
       $cover = $('<div />', class: CoverCarousel.COVER_CLASS).prependTo($item)
 
     $image = $(new Image())
+    $image.hide()
     imageSrc = $item.data('cover')
 
     loaded = (success) ->
@@ -150,6 +151,7 @@ class CoverCarousel
 
     $image.load ->
       $cover.css(backgroundImage: "url(#{imageSrc})")
+      $image.show()
       loaded(true)
     $image.error ->
       loaded(false)
