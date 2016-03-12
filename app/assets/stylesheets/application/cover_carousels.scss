@@ -20,14 +20,8 @@
       top: 0;
       bottom: 0;
       pointer-events: none;
-      z-index: 2;
+      z-index: 1;
       visibility: hidden;
-
-      &.prev, &.next, &.active {
-        &.loaded {
-          visibility: visible;
-        }
-      }
 
       .cover {
         pointer-events: none;
@@ -45,28 +39,30 @@
         }
       }
 
-      &.prev {
-        z-index: 1;
-
-        .cover {
-          opacity: 1;
+      &.loaded {
+        &.prev, &.next, &.active {
+          visibility: visible;
         }
-      }
 
-      &.active {
-        z-index: 2;
+        &.prev {
+          z-index: 2;
+          .cover {
+            opacity: 1;
+          }
+        }
 
-        &.loaded {
+        &.active {
+          z-index: 3;
           pointer-events: auto;
           .cover {
             opacity: 1;
             animation: cover-zoom 12s ease-out;
           }
         }
-      }
 
-      &.next {
-        z-index: 3;
+        &.next {
+          z-index: 4;
+        }
       }
     }
   }
