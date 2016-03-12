@@ -44,15 +44,18 @@
       }
 
       &.prev {
-        z-index: 1;
         .cover {
           opacity: 1;
         }
       }
 
       &.active {
-        z-index: 3;
-        pointer-events: auto;
+        z-index: 2;
+
+        &.loaded {
+          pointer-events: auto;
+        }
+
         .cover {
           opacity: 1;
           animation: cover-zoom 12s ease-out;
@@ -60,7 +63,6 @@
       }
 
       &.next {
-        z-index: 4;
       }
     }
   }
