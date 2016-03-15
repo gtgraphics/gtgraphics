@@ -121,7 +121,7 @@ module Admin
         @type = params[:type].presence_in(%w(images image_styles attachments))
       end
 
-      def filter_by_time(scope)
+      def filter_by_time(relation)
         default_args = [1, 0, 0, 0, DateTime.now.offset]
         if @month
           begins_at = DateTime.new(@year, @month, *default_args)
@@ -130,8 +130,8 @@ module Admin
           begins_at = DateTime.new(@year, 1, *default_args)
           ends_at = begins_at.end_of_year
         end
-        return scope if begins_at.nil? || ends_at.nil?
-        scope.where(downloads: { created_at: begins_at..ends_at })
+        return relation if begins_at.nil? || ends_at.nil?
+        relation.where(created_at: begins_at..ends_at)
       end
     end
   end

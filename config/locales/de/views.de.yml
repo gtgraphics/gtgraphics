@@ -33,8 +33,9 @@ de:
       nav:
         stats: Statistiken
         stats/traffic: Datenübertragung
-        stats/downloads: Downloads
         stats/disk_usage: Speicherverbrauch
+        stats/visits: Besuche
+        stats/downloads: Downloads
       account:
         breadcrumbs:
           my_account: Ich

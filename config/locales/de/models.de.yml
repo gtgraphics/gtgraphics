@@ -123,6 +123,9 @@ de:
       download:
         count: Anzahl
         last_downloaded_at: Letzter Download
+      visit:
+        count: Anzahl
+        last_visited_at: Letzter Besuch
       image:
         author: Urheber
         author_name: Urheber
