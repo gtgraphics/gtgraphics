@@ -17,8 +17,10 @@ module Admin
             @hourly_traffic = @interface.hours.sort.reverse
             @top_traffic = @interface.tops.sort_by(&:bytes_transmitted).reverse
 
-            @monthly_traffic_used = @interface.months[Date.today.year, Date.today.month].bytes_transmitted
-            @monthly_traffic_max = 1000 * (1024 ** 3)
+            date = Date.today
+            @monthly_traffic_used = @interface.months[date.year, date.month]
+                                    .try(:bytes_transmitted) || 0
+            @monthly_traffic_max = 1000 * (1024**3)
           else
             @error_message = 'Keine Netzwerkschnittstelle gefunden.'
           end
