@@ -92,7 +92,7 @@
 
   .panel.panel-default
     .panel-heading
-      %h3.panel-title Top 10
+      %h3.panel-title Top-Tage
     %table.table.table-hover
       %thead
         %tr
@@ -105,7 +105,7 @@
         - @top_traffic.each_with_index do |result, index|
           %tr
             %td= index.next
-            %td= localize result.time, format: :short
+            %td= localize result.time.in_time_zone.to_date
             %td= number_to_human_size result.bytes_received, strip_insignificant_zeros: false, precision: 3
             %td= number_to_human_size result.bytes_sent, strip_insignificant_zeros: false, precision: 3
             %td= number_to_human_size result.bytes_transmitted, strip_insignificant_zeros: false, precision: 3
