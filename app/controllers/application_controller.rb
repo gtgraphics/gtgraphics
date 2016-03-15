@@ -22,15 +22,16 @@ class ApplicationController < ActionController::Base
     Rails.env.production?
   end
 
-  protected
+  private
 
   class_attribute :enforce_redirect_to_localized_url, :detect_locale_from_headers
   self.enforce_redirect_to_localized_url = true
   self.detect_locale_from_headers = true
 
   def localized_request_url(locale)
-    url_for(params.to_h.with_indifferent_access
-            .merge(locale: locale, id: params[:id].presence))
+    params = request.path_parameters.merge(request.query_parameters)
+    params.merge!(locale: locale, id: params[:id].presence)
+    url_for(params)
   end
 
   def set_locale

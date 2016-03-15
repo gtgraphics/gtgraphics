@@ -1,0 +1,30 @@
+-# = panel 'Besuche' do
+-#   Bla
+
+/ Total
+.panel.panel-default
+  .panel-heading.clearfix
+    .panel-title.pull-left
+      %h3.panel-title
+        Gesamt
+        %span.text-muted
+          = surround '(', ')' do
+            = number_with_delimiter @visits.size
+    - if @visits.size > 0
+      .pull-right
+        -# = link_to 'Alle anzeigen', :admin_stats_total_visits
+  = render 'table', visits: @visits.limit(5)
+
+/ Current Month
+.panel.panel-default
+  .panel-heading.clearfix
+    .panel-title.pull-left
+      %h3.panel-title
+        Aktueller Monat
+        %span.text-muted
+          = surround '(', ')' do
+            = number_with_delimiter @visits.in_current_month.size
+    - if @visits.in_current_month.size > 0
+      .pull-right
+        -# = link_to 'Alle anzeigen', admin_stats_monthly_visits_path(year: Date.today.year, month: Date.today.month)
+  = render 'table', visits: @visits.in_current_month.limit(5)

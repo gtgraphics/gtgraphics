@@ -3,7 +3,7 @@
 # Table name: message_sender_infos
 #
 #  id         :integer          not null, primary key
-#  ip         :string
+#  ip         :string(11)
 #  created_at :datetime
 #
 

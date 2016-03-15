@@ -11,6 +11,7 @@
         .list-group
           = active_link_to translate('views.admin.nav.stats/disk_usage'), :admin_stats_disk_usage, class: 'list-group-item', active: request.path.include?('stats/disk_usage')
           = active_link_to translate('views.admin.nav.stats/traffic'), :admin_stats_traffic, class: 'list-group-item', active: request.path.include?('stats/traffic')
+          = active_link_to translate('views.admin.nav.stats/visits'), :admin_stats_visits, class: 'list-group-item', active: request.path.include?('stats/visits')
           = active_link_to translate('views.admin.nav.stats/downloads'), :admin_stats_downloads, class: 'list-group-item', active: request.path.include?('stats/downloads')
 
     .col-sm-9

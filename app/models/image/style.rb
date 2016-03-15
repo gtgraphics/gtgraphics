@@ -28,7 +28,7 @@ class Image < ActiveRecord::Base
     include Image::Resizable
     include Image::ExifAnalyzable
 
-    include Downloadable
+    include Hittable
     include PersistenceContextTrackable
     include TitleSearchable
     include Translatable
@@ -41,6 +41,7 @@ class Image < ActiveRecord::Base
     translates :title, fallbacks_for_empty_translations: true
 
     acts_as_list scope: :image_id
+    track_hits_as :download
 
     default_scope -> { order(:position) }
 

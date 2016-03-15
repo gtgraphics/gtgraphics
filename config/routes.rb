@@ -79,6 +79,13 @@ Rails.application.routes.draw do
                 end
                 get :referers, as: :download_referers
               end
+
+              scope :visits, controller: :visits do
+                root action: :index, as: :visits
+                get :total, as: :total_visits
+                get ':year/:month', action: :month, as: :monthly_visits, year: /[0-9]+/, month: /[0-9]+/
+                get ':year', action: :year, as: :yearly_visits, year: /[0-9]+/
+              end
             end
 
             resource :account, except: %i(new create) do

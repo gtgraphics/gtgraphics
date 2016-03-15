@@ -116,13 +116,16 @@ de:
         author: Urheber
         author_name: Urheber
         original_filename: Dateiname
-        hits_count: Dateiaufrufe
+        downloads_count: Dateiaufrufe
       client:
         country: Land
         website_url: Website
       download:
         count: Anzahl
         last_downloaded_at: Letzter Download
+      visit:
+        count: Anzahl
+        last_visited_at: Letzter Besuch
       image:
         author: Urheber
         author_name: Urheber
@@ -213,7 +216,7 @@ de:
         state: Status
         meta_description: Meta-Beschreibung
         meta_keywords: Meta-Schlüsselwörter
-        hits_count: Seitenaufrufe
+        visits_count: Seitenaufrufe
         author_name: Autor
         aliases: Aliase
       page/content:

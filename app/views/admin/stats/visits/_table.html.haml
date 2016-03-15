@@ -1,0 +1,16 @@
+- if visits.any?
+  %table.table.table-hover
+    %thead
+      %tr
+        %th= Visit.human_attribute_name(:title)
+        %th= Visit.human_attribute_name(:last_visited_at)
+        %th= Visit.human_attribute_name(:count)
+    %tbody
+      - visits.each do |visit|
+        = content_tag_for :tr, visit do
+          %td= link_to visit.page, [:admin, visit.page]
+          %td= localize(visit.last_visited_at, format: :short)
+          %td= visit.count
+- else
+  .panel-body.text-center
+    In diesem Zeitraum wurden keine Besuche festgestellt.

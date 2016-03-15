@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151129203143) do
+ActiveRecord::Schema.define(version: 20160124174116) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,15 +72,18 @@ ActiveRecord::Schema.define(version: 20151129203143) do
 
   add_index "content_pages", ["template_id"], name: "index_content_pages_on_template_id", using: :btree
 
-  create_table "downloads", force: :cascade do |t|
-    t.integer  "downloadable_id",   null: false
-    t.string   "downloadable_type", null: false
-    t.datetime "created_at",        null: false
+  create_table "hits", force: :cascade do |t|
+    t.integer  "hittable_id",              null: false
+    t.string   "hittable_type",            null: false
+    t.datetime "created_at",               null: false
     t.string   "referer"
     t.string   "user_agent"
+    t.string   "type"
+    t.string   "ip",            limit: 11
   end
 
-  add_index "downloads", ["downloadable_type", "downloadable_id"], name: "index_downloads_on_downloadable_type_and_downloadable_id", using: :btree
+  add_index "hits", ["hittable_type", "hittable_id"], name: "index_hits_on_hittable_type_and_hittable_id", using: :btree
+  add_index "hits", ["type"], name: "index_hits_on_type", using: :btree
 
   create_table "homepage_pages", force: :cascade do |t|
     t.integer "template_id"
@@ -184,7 +187,7 @@ ActiveRecord::Schema.define(version: 20151129203143) do
   add_index "message_recipiences", ["recipient_id"], name: "index_message_recipiences_on_recipient_id", using: :btree
 
   create_table "message_sender_infos", force: :cascade do |t|
-    t.string   "ip"
+    t.string   "ip",         limit: 11
     t.datetime "created_at"
   end
 
@@ -257,7 +260,7 @@ ActiveRecord::Schema.define(version: 20151129203143) do
     t.boolean  "indexable",                 default: true, null: false
     t.integer  "children_count",            default: 0,    null: false
     t.boolean  "published",                 default: true, null: false
-    t.integer  "hits_count",                default: 0,    null: false
+    t.integer  "visits_count",              default: 0,    null: false
     t.string   "permalink",       limit: 6,                null: false
     t.text     "metadata"
   end

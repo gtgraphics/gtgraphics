@@ -1,10 +1,10 @@
 module Admin
   module Stats
     class DownloadsController < Admin::Stats::ApplicationController
+      include Admin::Stats::TimeFilterableController
+
       PAGE_SIZE = 25
 
-      before_action :set_year, only: %i(year month)
-      before_action :set_month, only: :month
       before_action :set_type, only: %i(total year month)
       before_action :load_downloads
       before_action :load_referers, only: %i(index referers)
@@ -78,26 +78,29 @@ module Admin
       def load_image_downloads
         @downloads = filter_by_time(
           ::Image.joins(:styles)
-          .joins(%{
-            INNER JOIN downloads
-            ON downloads.downloadable_id = image_styles.id
-            AND downloads.downloadable_type = 'Image::Style'
-          })
+          .joins(
+            <<-SQL.strip_heredoc
+              INNER JOIN hits
+              ON hits.type = 'Download'
+              AND hits.hittable_id = image_styles.id
+              AND hits.hittable_type = 'Image::Style'
+            SQL
+          )
           .group('images.id').select('images.*')
-          .select('COUNT(downloads.id) AS count')
-          .select('MAX(downloads.created_at) AS last_downloaded_at')
-          .order('COUNT(downloads.id) DESC')
+          .select('COUNT(hits.id) AS count')
+          .select('MAX(hits.created_at) AS last_downloaded_at')
+          .order('COUNT(hits.id) DESC')
         )
         @downloads_count = filter_by_time(Download.image_styles).count
       end
 
       def load_generic_downloads
-        partition = 'OVER (PARTITION BY downloadable_type, downloadable_id)'
+        partition = 'OVER (PARTITION BY hittable_type, hittable_id)'
         @downloads = filter_by_time(
-          Download.uniq.select(:downloadable_id, :downloadable_type)
+          Download.uniq.select(:hittable_id, :hittable_type)
           .select("COUNT(id) #{partition} AS count")
           .select("MAX(created_at) #{partition} AS last_downloaded_at")
-          .order('count DESC').preload(downloadable: :translations)
+          .order('count DESC').preload(hittable: :translations)
           .public_send(@type || 'all')
         )
       end
@@ -118,15 +121,7 @@ module Admin
         @type = params[:type].presence_in(%w(images image_styles attachments))
       end
 
-      def set_year
-        @year = params[:year].to_i
-      end
-
-      def set_month
-        @month = params[:month].to_i
-      end
-
-      def filter_by_time(scope)
+      def filter_by_time(relation)
         default_args = [1, 0, 0, 0, DateTime.now.offset]
         if @month
           begins_at = DateTime.new(@year, @month, *default_args)
@@ -135,8 +130,8 @@ module Admin
           begins_at = DateTime.new(@year, 1, *default_args)
           ends_at = begins_at.end_of_year
         end
-        return scope if begins_at.nil? || ends_at.nil?
-        scope.where(downloads: { created_at: begins_at..ends_at })
+        return relation if begins_at.nil? || ends_at.nil?
+        relation.where(created_at: begins_at..ends_at)
       end
     end
   end
