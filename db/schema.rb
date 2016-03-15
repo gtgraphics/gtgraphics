@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160124174116) do
+ActiveRecord::Schema.define(version: 20160315232546) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(version: 20160124174116) do
     t.string   "referer"
     t.string   "user_agent"
     t.string   "type"
-    t.string   "ip",            limit: 11
+    t.string   "ip",            limit: 15
   end
 
   add_index "hits", ["hittable_type", "hittable_id"], name: "index_hits_on_hittable_type_and_hittable_id", using: :btree

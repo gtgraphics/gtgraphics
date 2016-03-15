@@ -9,7 +9,7 @@
 #  referer       :string
 #  user_agent    :string
 #  type          :string
-#  ip            :string(11)
+#  ip            :string(15)
 #
 
 class Visit < Hit

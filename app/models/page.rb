@@ -18,7 +18,7 @@
 #  indexable       :boolean          default(TRUE), not null
 #  children_count  :integer          default(0), not null
 #  published       :boolean          default(TRUE), not null
-#  hits_count      :integer          default(0), not null
+#  visits_count    :integer          default(0), not null
 #  permalink       :string(6)        not null
 #  metadata        :text
 #
