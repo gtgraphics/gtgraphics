@@ -23,6 +23,7 @@ class CoverCarousel
 
     @refreshCarouselSize()
     @applyCarouselResizerEvent()
+    @applyCarouselVisibilityEvent()
 
     @pause()
     _this = @
@@ -116,9 +117,12 @@ class CoverCarousel
     $(document).on 'click', @getIndicatorSelector(), @indicatorEventHandler
 
   applyCarouselResizerEvent: ->
-    @resizeEventHandler = =>
-      @refreshCarouselSize()
+    @resizeEventHandler = => @refreshCarouselSize()
     $(window).resize(@resizeEventHandler)
+
+  applyCarouselVisibilityEvent: ->
+    @visibilityEventHandler = => @refreshCarouselSize()
+    document.addEventListener('visibilitychange', @visibilityEventHandler, false)
 
   loadItem: (item, callback) ->
     $item = @extractItem(item)
