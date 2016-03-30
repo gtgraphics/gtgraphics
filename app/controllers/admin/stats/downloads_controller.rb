@@ -101,7 +101,7 @@ module Admin
           .select("COUNT(id) #{partition} AS count")
           .select("MAX(created_at) #{partition} AS last_downloaded_at")
           .order('count DESC').preload(hittable: :translations)
-          .public_send(@type || 'all')
+          .public_send(@type || :all)
         )
       end
 
@@ -131,7 +131,7 @@ module Admin
           ends_at = begins_at.end_of_year
         end
         return relation if begins_at.nil? || ends_at.nil?
-        relation.where(created_at: begins_at..ends_at)
+        relation.where(hits: { created_at: begins_at..ends_at })
       end
     end
   end
