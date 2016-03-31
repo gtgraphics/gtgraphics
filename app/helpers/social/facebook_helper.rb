@@ -36,7 +36,7 @@ module Social::FacebookHelper
   def facebook_like_button(url, options = {})
     options = options.reverse_merge(
       width: '100%', style: :button_count, label: :like,
-      show_faces: true, share_button: false
+      show_faces: true, share_button: false, width: 200
     )
     content_tag :div, nil, class: 'fb-like', data: {
       href: url,
