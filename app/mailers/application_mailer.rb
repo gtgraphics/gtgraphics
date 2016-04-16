@@ -1,3 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: %{"GTGRAPHICS" <noreply@gtgraphics.de>}
+  DEFAULT_SENDER = %("GTGRAPHICS" <noreply@gtgraphics.de>).freeze
+
+  default from: DEFAULT_SENDER, sender: DEFAULT_SENDER
 end
