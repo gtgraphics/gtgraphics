@@ -4,4 +4,4 @@ en:
       send_notification_email:
         buy_request_caption: '%{name} wants to buy the following picture:'
         buy_request_caption_html: '<strong>%{name}</strong> wants to buy the following picture:'
-        signature: Sent via GTGRAPHICS
+        signature: 'Sent from %{email} via GTGRAPHICS'

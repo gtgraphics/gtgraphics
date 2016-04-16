@@ -4,7 +4,7 @@ de:
       send_notification_email:
         buy_request_caption: '%{name} möchte folgendes Bild kaufen:'
         buy_request_caption_html: '<strong>%{name}</strong> möchte folgendes Bild kaufen:'
-        signature: Versendet über GTGRAPHICS
+        signature: 'Versendet von %{email} über GTGRAPHICS'
     password_mailer:
       send_initial_password_email:
         subject: Dein Passwort für GTGRAPHICS

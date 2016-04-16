@@ -13,4 +13,4 @@
 ---------------------------------------------------------
 <% end %>
 
-<%= translate('mailers.message_notification_mailer.send_notification_email.signature') %>
+<%= translate('mailers.message_notification_mailer.send_notification_email.signature', email: @message.sender_email) %>
